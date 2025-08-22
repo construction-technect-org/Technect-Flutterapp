@@ -1,0 +1,75 @@
+# GetX CLI Configuration
+# This file configures how GetX CLI generates code
+
+# Project structure
+structure:
+  # Base directory for modules
+  base: "lib/app/modules"
+  # Base directory for core utilities
+  core: "lib/app/core"
+  # Base directory for shared widgets
+  widgets: "lib/app/widgets"
+  # Base directory for data layer
+  data: "lib/app/data"
+  # Base directory for routes
+  routes: "lib/app/routes"
+
+# File naming conventions
+naming:
+  # Controller naming
+  controller: "{name}_controller"
+  # View naming
+  view: "{name}_view"
+  # Binding naming
+  binding: "{name}_binding"
+  # Model naming
+  model: "{name}_model"
+  # Service naming
+  service: "{name}_service"
+  # Repository naming
+  repository: "{name}_repository"
+
+# Code generation settings
+generation:
+  # Generate bindings automatically
+  bindings: true
+  # Generate routes automatically
+  routes: true
+  # Generate translations automatically
+  translations: false
+  # Generate tests automatically
+  tests: false
+  # Generate documentation automatically
+  docs: false
+
+# Import settings
+imports:
+  # Common imports to include in generated files
+  common:
+    - "package:construction_technect/utils/imports.dart"
+  # Controller imports
+  controller:
+    - "package:get/get.dart"
+  # View imports
+  view:
+    - "package:flutter/material.dart"
+    - "package:get/get.dart"
+  # Binding imports
+  binding:
+    - "package:get/get.dart"
+
+# Template settings
+templates:
+  # Use custom templates
+  custom: false
+  # Template directory
+  directory: "templates"
+
+# Code style
+style:
+  # Indentation
+  indent: 2
+  # Line ending
+  lineEnding: "\n"
+  # File encoding
+  encoding: "utf-8" 
