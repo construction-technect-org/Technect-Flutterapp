@@ -1,7 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
-class MyTexts extends TextTheme {
+class MyTexts {
   static const String Lato = 'Lato';
+  static const String Inter = 'Inter';
 
   //bool Ukr = 'Ukr';
 
@@ -43,6 +44,13 @@ class MyTexts extends TextTheme {
   static TextStyle get light16 => TextStyle(
     fontFamily: Lato,
     fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+    color: MyColors.black,
+  );
+
+  static TextStyle get light18 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 18.sp,
     fontWeight: FontWeight.w400,
     color: MyColors.black,
   );

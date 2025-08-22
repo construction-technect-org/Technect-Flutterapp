@@ -38,7 +38,7 @@ class SplashView extends GetView<SplashController> {
               ),
               const Spacer(),
               const Spacer(),
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 strokeWidth: 3,
                 valueColor: AlwaysStoppedAnimation<Color>(MyColors.primary),
               ),
