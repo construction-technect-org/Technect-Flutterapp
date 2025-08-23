@@ -1,7 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/login/controllers/login_controller.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -10,7 +8,6 @@ class LoginView extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Dismiss keyboard when tapping outside
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
@@ -79,6 +76,7 @@ class LoginView extends GetView<LoginController> {
                             // Text field
                             Expanded(
                               child: TextField(
+                                controller: controller.mobileController,
                                 keyboardType: TextInputType.phone,
                                 style: MyTexts.extraBold16.copyWith(
                                   height: 36 / 16,
@@ -138,6 +136,7 @@ class LoginView extends GetView<LoginController> {
                             // Text field
                             Expanded(
                               child: TextField(
+                                controller: controller.passwordController,
                                 obscureText: true,
                                 style: MyTexts.extraBold16.copyWith(
                                   color: MyColors.primary,
@@ -196,7 +195,9 @@ class LoginView extends GetView<LoginController> {
                             ],
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.toNamed(Routes.FORGOT_PASSWORD);
+                            },
                             child: Text(
                               'Forgot Password?',
                               style: MyTexts.medium14.copyWith(color: Colors.red),
@@ -205,7 +206,12 @@ class LoginView extends GetView<LoginController> {
                         ],
                       ),
                       SizedBox(height: 2.sh),
-                      const RoundedButton(buttonName: 'LOGIN'),
+                      RoundedButton(
+                        buttonName: 'LOGIN',
+                        onTap: () {
+                          controller.login();
+                        },
+                      ),
                       SizedBox(height: 2.sh),
                       Row(
                         children: [
@@ -270,17 +276,22 @@ class LoginView extends GetView<LoginController> {
                         ],
                       ),
                       SizedBox(height: 2.5.sh),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Don't have an account? ", style: MyTexts.light16),
-                          Text(
-                            " Sign-up",
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlueSecond,
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.SIGN_UP_ROLE);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Don't have an account? ", style: MyTexts.light16),
+                            Text(
+                              "Sign-up",
+                              style: MyTexts.light16.copyWith(
+                                color: MyColors.lightBlueSecond,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(height: 4.sh),
                     ],

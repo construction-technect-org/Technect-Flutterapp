@@ -20,7 +20,17 @@ class MyColors {
   static const Color lightBlueSecond = Color(0xFF3D41A7);
   static const Color fontBlack = Color(0xFF000000);
   static const Color red = Color(0xFFD83F3F);
-  
+  static const Color greyDetails = Color(0xFF7D7D7D);
+  static const Color warning = Color(0xFFEB842A);
+  static const Color menuTile = Color(0xFFF7FAFF);
+  static const Color profileFill = Color(0xFFFFB26E);
+  static const Color profileRemaining = Color(0xFF2F4479);
+  static const Color iconColor = Color(0xFF999999);
+  static const Color progressFill = Color(0xFFEB842A);
+  static const Color progressRemaining = Color(0xFFD9D9D9);
+  static const Color metricBackground = Color(0xFFEFEFEF);
+  static const Color textGrey = Color(0xFF505050);
+
   // Text field colors
   static const Color textFieldBorder = Color(0xFFA0A0A0);
   static const Color textFieldDivider = Color(0xFF9F9F9F);

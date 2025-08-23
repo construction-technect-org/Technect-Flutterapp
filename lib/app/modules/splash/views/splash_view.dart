@@ -14,38 +14,29 @@ class SplashView extends GetView<SplashController> {
     }
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(Asset.bricksBackground),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: MyColors.custom('F4F0E4').withOpacity(0.5),
           ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 10.h),
-              Image.asset(Asset.splashLogo, fit: BoxFit.contain),
-              SizedBox(height: 1.h),
-              Text(Constants.constructionTechnect, style: MyTexts.extraBold20),
-              SizedBox(height: 0.3.h),
-              Text(
-                Constants.connectingConstructionWorldwide,
-                style: MyTexts.medium14,
-              ),
-              const Spacer(),
-              const Spacer(),
-              const CircularProgressIndicator(
-                strokeWidth: 3,
-                valueColor: AlwaysStoppedAnimation<Color>(MyColors.primary),
-              ),
-              const Spacer(),
-            ],
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(Asset.logoWithoutBack, fit: BoxFit.contain),
+                Transform.translate(
+                  offset: const Offset(0, -40),
+                  child: Text(
+                    'Connecting Construction WorldWide',
+                    style: MyTexts.medium16,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

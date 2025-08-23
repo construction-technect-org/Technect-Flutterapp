@@ -2,7 +2,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 
 class MyTexts {
   static const String Lato = 'Lato';
-  static const String Inter = 'Inter';
+  static const String Roboto = 'Roboto';
 
   //bool Ukr = 'Ukr';
 
@@ -62,6 +62,20 @@ class MyTexts {
     color: MyColors.black,
   );
 
+  static TextStyle get medium18 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w500,
+    color: MyColors.black,
+  );
+
+  static TextStyle get medium22 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 22.sp,
+    fontWeight: FontWeight.w500,
+    color: MyColors.black,
+  );
+
   static TextStyle get light24 => TextStyle(
     fontFamily: Lato,
     fontSize: 24.sp,
@@ -72,6 +86,34 @@ class MyTexts {
   static TextStyle get light22 => TextStyle(
     fontFamily: Lato,
     fontSize: 22.sp,
+    fontWeight: FontWeight.w400,
+    color: MyColors.black,
+  );
+
+  static TextStyle get regular20 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w400,
+    color: MyColors.black,
+  );
+
+  static TextStyle get regular18 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w400,
+    color: MyColors.black,
+  );
+
+  static TextStyle get regular14 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: MyColors.black,
+  );
+
+  static TextStyle get regular12 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: MyColors.black,
   );
