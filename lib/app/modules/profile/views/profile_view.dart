@@ -29,7 +29,7 @@ class ProfileView extends GetView<ProfileController> {
     ),
     TextButton.icon(
   onPressed: () {
-    Get.toNamed(Routes.EDITPROFILE);
+    Get.toNamed(Routes.EDIT_PROFILE);
   },
     icon: SvgPicture.asset(
       Asset.editIcon,

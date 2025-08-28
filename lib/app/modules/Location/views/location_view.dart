@@ -129,7 +129,7 @@ class LocationView extends GetView<LocationController> {
                       children: [
                         ListTile(
                           onTap: () {
-                            Get.toNamed(Routes.ADDLOCATIONMANUALLY);
+                            Get.toNamed(Routes.ADD_LOCATION_MANUALLY);
                           },
                           leading: const Icon(
                             Icons.add,

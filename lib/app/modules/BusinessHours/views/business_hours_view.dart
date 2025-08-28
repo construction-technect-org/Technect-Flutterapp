@@ -291,7 +291,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
               RoundedButton(
                 buttonName: 'SUBMIT',
                 onTap: () {
-                  Get.toNamed(Routes.UPDATEYOURCERTIFICATION);
+                  Get.toNamed(Routes.UPDATE_YOUR_CERTIFICATION);
                 },
               ),
             ],

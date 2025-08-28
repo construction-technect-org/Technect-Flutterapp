@@ -157,7 +157,7 @@ class EditProfileView extends GetView<EditProfileController> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.toNamed(Routes.BUSINESSHOURS);
+                          Get.toNamed(Routes.BUSINESS_HOURS);
                           // controller.addBusinessHours("9:00 AM - 6:00 PM");
                         },
                         child: Text(

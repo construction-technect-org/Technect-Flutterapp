@@ -76,17 +76,17 @@ class AppPages {
       binding: ProfileBinding(),
     ),
     GetPage(
-      name: _Paths.EDITPROFILE,
+      name: _Paths.EDIT_PROFILE,
       page: () => const EditProfileView(),
       binding: EditProfileBinding(),
     ),
      GetPage(
-      name: _Paths.BUSINESSHOURS,
+      name: _Paths.BUSINESS_HOURS,
       page: () => const BusinessHoursView(),
       binding: BusinessHoursBinding(),
     ),
      GetPage(
-      name: _Paths.UPDATEYOURCERTIFICATION,
+      name: _Paths.UPDATE_YOUR_CERTIFICATION,
       page: () => const UpdateYourCertificationsView(),
       binding: UpdateYourCertificationsBinding(),
     ),
@@ -97,7 +97,7 @@ class AppPages {
     ),
 
     GetPage(
-      name: _Paths.ADDLOCATIONMANUALLY,
+      name: _Paths.ADD_LOCATION_MANUALLY,
       page: () => const AddLocationManuallyView(),
       binding:  AddLocationBinding(),
     ),

@@ -13,11 +13,11 @@ abstract class Routes {
   static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
   static const MAIN = _Paths.MAIN;
   static const PROFILE = _Paths.PROFILE;
-  static const EDITPROFILE = _Paths.EDITPROFILE;
-  static const BUSINESSHOURS = _Paths.BUSINESSHOURS;
-  static const UPDATEYOURCERTIFICATION = _Paths.UPDATEYOURCERTIFICATION;
+  static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
+  static const BUSINESS_HOURS = _Paths.BUSINESS_HOURS;
+  static const UPDATE_YOUR_CERTIFICATION = _Paths.UPDATE_YOUR_CERTIFICATION;
   static const LOCATION = _Paths.LOCATION;
-  static const ADDLOCATIONMANUALLY = _Paths.ADDLOCATIONMANUALLY;
+  static const ADD_LOCATION_MANUALLY = _Paths.ADD_LOCATION_MANUALLY;
 
 
 }
@@ -34,10 +34,10 @@ abstract class _Paths {
   static const FORGOT_PASSWORD = '/forgot-password';
   static const MAIN = '/main';
   static const PROFILE = '/profile';
-  static const EDITPROFILE = '/editprofile';
-  static const BUSINESSHOURS = '/businessHours';
-  static const UPDATEYOURCERTIFICATION = '/updateYourCertifications';
+  static const EDIT_PROFILE = '/edit-profile';
+  static const BUSINESS_HOURS = '/business-hours';
+  static const UPDATE_YOUR_CERTIFICATION = '/update-your-certification';
   static const LOCATION = '/location';
-  static const ADDLOCATIONMANUALLY = '/addLocationManually';
+  static const ADD_LOCATION_MANUALLY = '/add-location-manually';
 
 }
