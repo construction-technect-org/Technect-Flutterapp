@@ -36,6 +36,44 @@ class Asset {
   static const String identityIcon = 'assets/images/identity.svg';
   static const String businessLiIcon = 'assets/images/businessLi.svg';
   static const String qualityIcon = 'assets/images/quality.svg';
+   static const String profil = 'assets/images/profil.png';
+
+  // Edit
+  static const String editIcon = 'assets/images/edit.svg';
+  static const String closeIcon = 'assets/images/close.svg';
+ static const String updownIcon = 'assets/images/updownicon.png';
+
+
+ //Home
+ static const String searchIcon = 'assets/images/search.svg';
+static const String filterIcon = 'assets/images/filter.svg';
+static const String profileIcon = 'assets/images/profil.svg';
+ static const String location = 'assets/images/location.svg';
+ static const String notifications = 'assets/images/notification.svg';
+
+// 📦 Business modules (new)
+  static const String marketplaceIcon = 'assets/images/marketpalce.png';
+  static const String erpIcon = 'assets/images/erp.png';
+  static const String crmIcon = 'assets/images/crm.png';
+  static const String ovpIcon = 'assets/images/ovp.png';
+  static const String hrmsIcon = 'assets/images/hrms.png';
+  static const String projectManagementIcon = 'assets/images/project_management.png';
+  static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
+  static const String team = 'assets/images/team.png';
+
+
+
+  //Statistics
+  static const String noOfUsers = 'assets/images/no_of_users.svg';
+  static const String totalProducts = 'assets/images/total_products.svg';
+
+
+//Location
+
+  static const String Locationon = 'assets/images/Locationon.svg';
+
+
+
 }
 
 class Constants {

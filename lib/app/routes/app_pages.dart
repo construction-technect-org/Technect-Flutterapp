@@ -1,11 +1,22 @@
+import 'package:construction_technect/app/modules/AddLocationManually/bindings/add_location_manually_binding.dart';
+import 'package:construction_technect/app/modules/AddLocationManually/views/add_location_manually_view.dart';
+import 'package:construction_technect/app/modules/BusinessHours/bindings/business_hours_bindings.dart';
+import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
+import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
+import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
+import 'package:construction_technect/app/modules/location/bindings/location_bindings.dart';
+import 'package:construction_technect/app/modules/location/views/location_view.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/bindings/sign_up_details_binding.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_up_password_binding.dart';
 import 'package:construction_technect/app/modules/SignUpPassword/views/sign_up_password_view.dart';
 import 'package:construction_technect/app/modules/SignUpRole/bindings/sign_up_role_binding.dart';
 import 'package:construction_technect/app/modules/SignUpRole/views/sign_up_role_view.dart';
+import 'package:construction_technect/app/modules/UpdateYourCertifications/bindings/update_your_certifications_binding.dart';
+import 'package:construction_technect/app/modules/UpdateYourCertifications/views/update_your_certifications_view.dart';
 import 'package:construction_technect/app/modules/forgotPassword/bindings/forgot_password_binding.dart';
 import 'package:construction_technect/app/modules/forgotPassword/views/forgot_password_view.dart';
+
 import 'package:construction_technect/app/modules/login/bindings/login_binding.dart';
 import 'package:construction_technect/app/modules/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/main/bindings/main_binding.dart';
@@ -64,5 +75,32 @@ class AppPages {
       page: () => const ProfileView(),
       binding: ProfileBinding(),
     ),
+    GetPage(
+      name: _Paths.EDITPROFILE,
+      page: () => const EditProfileView(),
+      binding: EditProfileBinding(),
+    ),
+     GetPage(
+      name: _Paths.BUSINESSHOURS,
+      page: () => const BusinessHoursView(),
+      binding: BusinessHoursBinding(),
+    ),
+     GetPage(
+      name: _Paths.UPDATEYOURCERTIFICATION,
+      page: () => const UpdateYourCertificationsView(),
+      binding: UpdateYourCertificationsBinding(),
+    ),
+      GetPage(
+      name: _Paths.LOCATION,
+      page: () => const LocationView(),
+      binding: LocationBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.ADDLOCATIONMANUALLY,
+      page: () => const AddLocationManuallyView(),
+      binding:  AddLocationBinding(),
+    ),
+  
   ];
 }

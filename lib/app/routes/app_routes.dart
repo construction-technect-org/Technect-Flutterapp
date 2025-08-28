@@ -13,6 +13,13 @@ abstract class Routes {
   static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
   static const MAIN = _Paths.MAIN;
   static const PROFILE = _Paths.PROFILE;
+  static const EDITPROFILE = _Paths.EDITPROFILE;
+  static const BUSINESSHOURS = _Paths.BUSINESSHOURS;
+  static const UPDATEYOURCERTIFICATION = _Paths.UPDATEYOURCERTIFICATION;
+  static const LOCATION = _Paths.LOCATION;
+  static const ADDLOCATIONMANUALLY = _Paths.ADDLOCATIONMANUALLY;
+
+
 }
 
 abstract class _Paths {
@@ -27,4 +34,10 @@ abstract class _Paths {
   static const FORGOT_PASSWORD = '/forgot-password';
   static const MAIN = '/main';
   static const PROFILE = '/profile';
+  static const EDITPROFILE = '/editprofile';
+  static const BUSINESSHOURS = '/businessHours';
+  static const UPDATEYOURCERTIFICATION = '/updateYourCertifications';
+  static const LOCATION = '/location';
+  static const ADDLOCATIONMANUALLY = '/addLocationManually';
+
 }

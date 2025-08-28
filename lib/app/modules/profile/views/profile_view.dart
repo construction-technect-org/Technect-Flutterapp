@@ -20,7 +20,34 @@ class ProfileView extends GetView<ProfileController> {
           icon: const Icon(Icons.arrow_back, color: MyColors.primary),
           onPressed: () => Get.back(),
         ),
-        title: Text('Profile', style: MyTexts.bold18.copyWith(color: MyColors.primary)),
+        title: Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Text(
+      'Profile',
+      style: MyTexts.bold18.copyWith(color: MyColors.primary),
+    ),
+    TextButton.icon(
+  onPressed: () {
+    Get.toNamed(Routes.EDITPROFILE);
+  },
+    icon: SvgPicture.asset(
+      Asset.editIcon,
+      width: 12,
+      height: 12,
+      color: MyColors.primary, // 👈 optional: match text color
+    ),
+  label: Text(
+    "Edit Profile",
+    style: MyTexts.bold14.copyWith(
+      color: MyColors.primary,
+      decoration: TextDecoration.underline, // underline under text
+    ),
+  ),
+),
+
+  ],
+),
         centerTitle: false,
       ),
       body: Padding(
