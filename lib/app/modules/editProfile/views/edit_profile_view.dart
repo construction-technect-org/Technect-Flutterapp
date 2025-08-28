@@ -26,7 +26,7 @@ class EditProfileView extends GetView<EditProfileController> {
                 children: [StepperEditProfileWidget(currentStep: 1)],
               ),
 
-              const SizedBox(height: 24),
+               SizedBox(height: 2.h),
 
               Column(
                 key: controller.titleKey, // 👈 important
@@ -34,26 +34,18 @@ class EditProfileView extends GetView<EditProfileController> {
                 children: [
                   Text(
                     "EDIT PROFILE",
-                    style: MyTexts.bold18.copyWith(
-                      color: MyColors.primary,
-                      fontSize: 24,
-                      fontFamily: MyTexts.Roboto,
-                      fontWeight: FontWeight.w500,
-                    ),
+                 style: MyTexts.light22.copyWith(color: MyColors.textFieldBackground),
                   ),
-                  const SizedBox(height: 4),
+                   SizedBox(height: 1.h),
                   Text(
                     "Update your Business Details",
-                    style: MyTexts.bold18.copyWith(
-                      color: MyColors.greyDetails,
-                      fontSize: 14,
-                      fontFamily: MyTexts.Roboto,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
+
+                
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
+              SizedBox(height: 2.h),
 
               Row(
                 children: [
@@ -158,27 +150,21 @@ class EditProfileView extends GetView<EditProfileController> {
                           controller.businessHours.value.isEmpty
                               ? "Business Hours*"
                               : controller.businessHours.value,
-                          style: MyTexts.bold18.copyWith(
+                          style: MyTexts.bold16.copyWith(
                             color: MyColors.progressFill,
-                            fontSize: 16,
-                            fontFamily: MyTexts.Roboto,
-                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
                           Get.toNamed(Routes.BUSINESSHOURS);
-
                           // controller.addBusinessHours("9:00 AM - 6:00 PM");
                         },
                         child: Text(
                           "+ADD",
-                          style: MyTexts.bold18.copyWith(
+                          style: MyTexts.bold16.copyWith(
                             color: MyColors.progressFill,
-                            fontSize: 16,
-                            fontFamily: MyTexts.Roboto,
-                            fontWeight: FontWeight.w400,
+                          
                             decoration:
                                 TextDecoration.underline, // underline ON
                             decorationColor:

@@ -21,8 +21,7 @@ class SplashView extends GetView<SplashController> {
               const SizedBox(height: 20),
               Text(
                 'Welcome to Construction Technect (Web)',
-                style: MyTexts.medium16,
-              ),
+style: MyTexts.light22              ),
             ],
           ),
         ),

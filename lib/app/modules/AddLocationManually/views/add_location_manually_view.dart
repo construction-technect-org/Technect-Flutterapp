@@ -12,7 +12,7 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
+      backgroundColor: MyColors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -31,67 +31,81 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                           child: const Icon(Icons.arrow_back_ios,
                               size: 20, color: Colors.black),
                         ),
-                        const SizedBox(width: 8),
+                         SizedBox(width: 0.8.h),
                         Text("Add Location Manually",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.fontBlack,
-                              fontFamily: MyTexts.Roboto,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            )),
+                            style: MyTexts.medium18.copyWith(
+                        color: MyColors.fontBlack,
+                      ),),
                       ],
                     ),
-                  const SizedBox(height: 4),
+                   SizedBox(height: 0.4.h),
                     Padding(
                       padding: const EdgeInsets.only(left: 30),
                       child: Text(
                         "Select your location for better tracking",
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.shadeOfGray,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 11,
-                        ),
+                       style: MyTexts.medium14.copyWith(
+                      color: MyColors.shadeOfGray,
+                    ),
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                     SizedBox(height: 4.h),
 
                     // Search Bar
-                    TextField(
-                      style: const TextStyle(fontSize: 14),
-                      decoration: InputDecoration(
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.only(left: 18, right: 8),
-                          child: SvgPicture.asset(
-                            Asset.searchIcon,
-                            height: 16,
-                            width: 16,
-                          ),
-                        ),
-                        prefixIconConstraints: const BoxConstraints(
-                          minWidth: 36,
-                          minHeight: 36,
-                        ),
-                        hintText: 'Search for area, street name..',
-                        hintStyle: MyTexts.medium16.copyWith(
-                          color: MyColors.darkGrayishRed,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                        ),
-                        filled: true,
-                        fillColor: MyColors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(22.5),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-
+                              Container(
+  decoration: BoxDecoration(
+    color: MyColors.white,
+    borderRadius: BorderRadius.circular(22.5),
+    boxShadow: const [
+      BoxShadow(
+        color: Color(0x1A000000), // light shadow (10% black)
+        blurRadius: 8,           // soften the shadow
+        offset: Offset(0, 4),    // move shadow down
+      ),
+    ],
+  ),
+  child: TextField(
+    decoration: InputDecoration(
+      prefixIcon: Padding(
+        padding: const EdgeInsets.only(left: 18, right: 8),
+        child: SvgPicture.asset(
+          Asset.searchIcon,
+          height: 16,
+          width: 16,
+        ),
+      ),
+      prefixIconConstraints: const BoxConstraints(
+        minWidth: 36,
+        minHeight: 36,
+      ),
+      hintText: 'Search',
+      hintStyle: MyTexts.medium16.copyWith(
+        color: MyColors.darkGray,
+      
+      ),
+      filled: true,
+      fillColor: MyColors.white,
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 12,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(22.5),
+        borderSide: BorderSide.none,
+      ),
+      suffixIcon: Padding(
+        padding: const EdgeInsets.all(14),
+        child: SvgPicture.asset(
+          Asset.filterIcon,
+          height: 20,
+          width: 20,
+        ),
+      ),
+    ),
+  ),
+),
+  
                     SizedBox(height: 2.h),
-                    // Address Line 1
-                       SizedBox(height: 2.h),
 
                     // Example repeated fields
                     Row(
@@ -159,7 +173,7 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
 
                         Padding(
                 padding:
-                     const EdgeInsets.symmetric(horizontal: 26, vertical: 25),
+                     const EdgeInsets.symmetric(vertical: 25),
                 child: RoundedButton(
                   buttonName: 'SUBMIT',
                   onTap: () => controller.submitLocation(),

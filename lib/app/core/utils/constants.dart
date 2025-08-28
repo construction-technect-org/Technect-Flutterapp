@@ -71,6 +71,8 @@ static const String profileIcon = 'assets/images/profil.svg';
 //Location
 
   static const String Locationon = 'assets/images/Locationon.svg';
+  static const String Map = 'assets/images/map.png';
+
 
 
 

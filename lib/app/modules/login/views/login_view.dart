@@ -35,7 +35,7 @@ class LoginView extends GetView<LoginController> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(height: 4.h),
-                      Text('LOGIN', style: MyTexts.light22),
+                      Text('LOGIN', style: MyTexts.light22  ),
                       SizedBox(height: 3.h),
                       Row(
                         children: [

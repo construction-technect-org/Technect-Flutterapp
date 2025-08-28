@@ -41,21 +41,15 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                     children: [
                       Text(
                         "BUSINESS HOURS",
-                        style: MyTexts.bold18.copyWith(
-                          color: MyColors.primary,
-                          fontSize: 24,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w500,
+                        style: MyTexts.light22.copyWith(
+                          color: MyColors.textFieldBackground,
                         ),
                       ),
-                      SizedBox(height: 0.3.h),
+                      SizedBox(height: 1.h),
                       Text(
                         "Update your Working Hours",
-                        style: MyTexts.bold18.copyWith(
+                        style: MyTexts.light16.copyWith(
                           color: MyColors.greyDetails,
-                          fontSize: 14,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -63,7 +57,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                 ],
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 2.h),
 
               // Enable toggle
               Row(
@@ -74,20 +68,14 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                     children: [
                       Text(
                         "Enable",
-                        style: MyTexts.bold18.copyWith(
+                        style: MyTexts.bold16.copyWith(
                           color: MyColors.fontBlack,
-                          fontSize: 14,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
                         "Quickly Enable or Disable business hours",
-                        style: MyTexts.bold18.copyWith(
+                        style: MyTexts.bold12.copyWith(
                           color: MyColors.graniteGray,
-                          fontSize: 9,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
@@ -104,7 +92,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                   ),
                 ],
               ),
-              const Divider(height: 30),
+              Divider(height: 2.h),
 
               // Timezone dropdown (static here)
               Row(
@@ -115,20 +103,14 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                     children: [
                       Text(
                         "Timezone",
-                        style: MyTexts.bold18.copyWith(
+                        style: MyTexts.bold16.copyWith(
                           color: MyColors.fontBlack,
-                          fontSize: 14,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
                         "Set your timezone",
-                        style: MyTexts.bold18.copyWith(
+                        style: MyTexts.bold12.copyWith(
                           color: MyColors.graniteGray,
-                          fontSize: 9,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
@@ -145,12 +127,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           "(UTC-8:00) Pacific Time",
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: MyTexts.Roboto,
+                          style: MyTexts.bold14.copyWith(
                             color: MyColors.fontBlack,
                           ),
                         ),
@@ -165,7 +144,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
+              SizedBox(height: 1.h),
               const Divider(height: 40),
               // Days List
               Obx(() {
@@ -192,10 +171,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                             Expanded(
                               child: Text(
                                 day,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                 style: MyTexts.bold16.copyWith(
+                            color: MyColors.fontBlack,
+                          ),
                               ),
                             ),
                             if (enabled) ...[
@@ -209,6 +187,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                       true, // set false if you want disabled
                                   decoration: InputDecoration(
                                     hintText: "From",
+                                    helperStyle: MyTexts.bold14.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
                                     contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 10,
                                       vertical: 8,
@@ -219,21 +200,22 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: const BorderSide(
-                                        color: MyColors.textFieldBorder // default border color
+                                        color: MyColors
+                                            .textFieldBorder, // default border color
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: const BorderSide(
-                                                                               color: MyColors.textFieldBorder // default border color
-
+                                        color: MyColors
+                                            .textFieldBorder, // default border color
                                       ),
                                     ),
                                     disabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: const BorderSide(
-                                                                               color: MyColors.textFieldBorder // default border color
-
+                                        color: MyColors
+                                            .textFieldBorder, // default border color
                                       ),
                                     ),
                                   ),
@@ -247,6 +229,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                   controller: controller.toControllers[day],
                                   decoration: InputDecoration(
                                     hintText: "To",
+                                    helperStyle: MyTexts.bold14.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
                                     contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 10,
                                       vertical: 8,
@@ -265,8 +250,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: MyColors.textFieldBorder // default border color
-
+                                    color: MyColors
+                                        .textFieldBorder, // default border color
                                   ),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -282,11 +267,10 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                       const SizedBox(
                                         width: 6,
                                       ), // spacing between icon & text
-                                      const Text(
+                                      Text(
                                         "Closed",
-                                        style: TextStyle(
+                                        style: MyTexts.bold14.copyWith(
                                           color: MyColors.red,
-                                          fontSize: 14,
                                         ),
                                       ),
                                     ],
@@ -302,16 +286,14 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                 );
               }),
 
-
               // Submit button
-               SizedBox(height: 4.h),
-                    RoundedButton(
-                      buttonName: 'SUBMIT',
-                      onTap: () {
-                     Get.toNamed(Routes.UPDATEYOURCERTIFICATION);
-
-                      },
-                    ),
+              SizedBox(height: 4.h),
+              RoundedButton(
+                buttonName: 'SUBMIT',
+                onTap: () {
+                  Get.toNamed(Routes.UPDATEYOURCERTIFICATION);
+                },
+              ),
             ],
           ),
         ),

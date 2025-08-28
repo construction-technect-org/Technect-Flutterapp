@@ -19,7 +19,7 @@ class UpdateYourCertificationsView
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [StepperEditProfileWidget(currentStep: 1)],
             ),
-            const SizedBox(height: 24),
+             SizedBox(height: 2.h),
 
             Padding(
               padding: const EdgeInsets.only(left: 16),
@@ -31,22 +31,16 @@ class UpdateYourCertificationsView
                   children: [
                     Text(
                       "EDIT PROFILE",
-                      style: MyTexts.bold18.copyWith(
-                        color: MyColors.primary,
-                        fontSize: 24,
-                        fontFamily: MyTexts.Roboto,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: MyTexts.light22.copyWith(
+                          color: MyColors.textFieldBackground,
+                        ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       "Update your Business Details",
-                      style: MyTexts.bold18.copyWith(
-                        color: MyColors.greyDetails,
-                        fontSize: 14,
-                        fontFamily: MyTexts.Roboto,
-                        fontWeight: FontWeight.w500,
-                      ),
+                     style: MyTexts.light16.copyWith(
+                          color: MyColors.greyDetails,
+                        ),
                     ),
                     const SizedBox(height: 20),
                   ],

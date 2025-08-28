@@ -14,7 +14,7 @@ class MainTabBarView extends GetView<MainController> {
       body: Obx(() {
         switch (controller.currentIndex.value) {
           case 0:
-            return    HomeView();
+            return HomeView();
           case 1:
             return const WishlistView();
           case 2:
@@ -22,7 +22,7 @@ class MainTabBarView extends GetView<MainController> {
           case 3:
             return const SettingsView();
           default:
-            return    HomeView();
+            return HomeView();
         }
       }),
       bottomNavigationBar: Container(

@@ -20,16 +20,16 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
+      backgroundColor: MyColors.white,
 
       /// ✅ Custom AppBar
       appBar: AppBar(
-        backgroundColor: MyColors.backgroundColor,
+        backgroundColor: MyColors.white,
         elevation: 0,
         title: Row(
           children: [
             Image.asset(Asset.profil, height: 40, width: 40),
-            const SizedBox(width: 10),
+             SizedBox(width: 1.h),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -37,9 +37,7 @@ class HomeView extends StatelessWidget {
                   "Welcome Vaishnavi!",
                   style: MyTexts.medium16.copyWith(
                     color: MyColors.fontBlack,
-                    fontFamily: MyTexts.Roboto,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
+                    
                   ),
                 ),
                 GestureDetector(
@@ -50,14 +48,12 @@ class HomeView extends StatelessWidget {
                   child: Row(
                     children: [
                       SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                      const SizedBox(width: 2),
+                       SizedBox(width: 0.4.h),
                       Text(
                         "Sadashiv Peth, Pune",
-                        style: MyTexts.medium16.copyWith(
+                        style: MyTexts.medium14.copyWith(
                           color: MyColors.textFieldBackground,
-                          fontFamily: MyTexts.Roboto,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
+                          
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -117,149 +113,160 @@ class HomeView extends StatelessWidget {
                   horizontal: 16,
                   vertical: 13,
                 ),
-                child: TextField(
-                  style: const TextStyle(fontSize: 14),
-                  decoration: InputDecoration(
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.only(left: 18, right: 8),
-                      child: SvgPicture.asset(
-                        Asset.searchIcon,
-                        height: 16,
-                        width: 16,
-                      ),
-                    ),
-                    prefixIconConstraints: const BoxConstraints(
-                      minWidth: 36,
-                      minHeight: 36,
-                    ),
-                    hintText: 'Search',
-                    hintStyle: MyTexts.medium16.copyWith(
-                      color: MyColors.darkGrayishRed,
-                      fontFamily: MyTexts.Roboto,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                    ),
-                    filled: true,
-                    fillColor: MyColors.white,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 12,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(22.5),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: SvgPicture.asset(
-                        Asset.filterIcon,
-                        height: 20,
-                        width: 20,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+                child: Container(
+  decoration: BoxDecoration(
+    color: MyColors.white,
+    borderRadius: BorderRadius.circular(22.5),
+    boxShadow: const [
+      BoxShadow(
+        color: Color(0x1A000000), // light shadow (10% black)
+        blurRadius: 8,           // soften the shadow
+        offset: Offset(0, 4),    // move shadow down
+      ),
+    ],
+  ),
+  child: TextField(
+    decoration: InputDecoration(
+      prefixIcon: Padding(
+        padding: const EdgeInsets.only(left: 18, right: 8),
+        child: SvgPicture.asset(
+          Asset.searchIcon,
+          height: 16,
+          width: 16,
+        ),
+      ),
+      prefixIconConstraints: const BoxConstraints(
+        minWidth: 36,
+        minHeight: 36,
+      ),
+      hintText: 'Search',
+      hintStyle: MyTexts.medium16.copyWith(
+        color: MyColors.darkGray,
+      
+      ),
+      filled: true,
+      fillColor: MyColors.white,
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 12,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(22.5),
+        borderSide: BorderSide.none,
+      ),
+      suffixIcon: Padding(
+        padding: const EdgeInsets.all(14),
+        child: SvgPicture.asset(
+          Asset.filterIcon,
+          height: 20,
+          width: 20,
+        ),
+      ),
+    ),
+  ),
+)
+  ),
 
-              const SizedBox(height: 20),
+               SizedBox(height: 2.h),
 
               /// Features title
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "Features",
-                  style: MyTexts.medium16.copyWith(
+                  style: MyTexts.extraBold18.copyWith(
                     color: MyColors.textFieldBackground,
-                    fontFamily: MyTexts.Roboto,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
+                   
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+               SizedBox(height: 1.h),
 
               /// ✅ FIXED GridView
-              Transform.translate(
-                offset: const Offset(
-                  0,
-                  0,
-                ), // 👈 replaces margin: left -1, top 172
-                child: Container(
-                  height: 237,
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 0,
-                          childAspectRatio: 0.80,
-                        ),
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: Wrap(
-                          spacing: 6,
-                          direction: Axis.vertical,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 70,
-                              width: 65,
-                              child: Stack(
-                                clipBehavior: Clip.none,
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    width: 65,
-                                    height: 65,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFFFFEB3B),
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: -15,
-                                    left: 0,
-                                    right: 0,
-                                    child: Image.asset(
-                                      items[index]["icon"]!,
-                                      height: 73,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 30, // enough space for 2 lines
-                              child: Text(
-                                items[index]["label"]!,
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: MyTexts.medium16.copyWith(
-                                  color: MyColors.textFieldBackground,
-                                  fontFamily: MyTexts.Roboto,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 9,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+Container(
+  height: 240,
+  decoration: BoxDecoration(
+    color: MyColors.white,
+    borderRadius: BorderRadius.circular(12),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.1),
+        spreadRadius: 2,
+        blurRadius: 6,
+        offset: const Offset(0, 3),
+      ),
+    ],
+  ),
+  child: GridView.builder(
+  shrinkWrap: true,
+  physics: const NeverScrollableScrollPhysics(),
+  padding: const EdgeInsets.only(
+    left: 16,
+    right: 16,
+    top: 4,
+    bottom: 22, // 👈 extra bottom space
+  ),
+  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 4,
+    crossAxisSpacing: 20,
+    mainAxisSpacing: 12,
+    childAspectRatio: 0.80,
+  ),
+  itemCount: items.length,
+  itemBuilder: (context, index) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 70,
+          width: 65,
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 65,
+                height: 65,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFFEB3B),
+                  shape: BoxShape.circle,
                 ),
               ),
-
-              const SizedBox(height: 15),
+              Positioned(
+                bottom: -15,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  items[index]["icon"]!,
+                  height: 73,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 0.7.h),
+        SizedBox(
+          child: Text(
+            items[index]["label"]!,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textHeightBehavior: const TextHeightBehavior(
+              applyHeightToFirstAscent: false,
+              applyHeightToLastDescent: false,
+            ),
+            style: MyTexts.medium12.copyWith(
+              height: 1.2,
+              color: MyColors.textFieldBackground,
+            ),
+          ),
+        ),
+      ],
+    );
+  },
+),
+),
+ SizedBox(height: 1.h),
               Padding(
                 padding: const EdgeInsets.only(left: 25, right: 24, top: 15),
                 child: Row(
@@ -267,20 +274,16 @@ class HomeView extends StatelessWidget {
                   children: [
                     Text(
                       "Team",
-                      style: MyTexts.medium16.copyWith(
+                      style: MyTexts.medium18.copyWith(
                         color: MyColors.textFieldBackground,
-                        fontFamily: MyTexts.Roboto,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
+                      
                       ),
                     ),
                     Text(
                       "View All",
-                      style: MyTexts.medium16.copyWith(
+                      style: MyTexts.medium12.copyWith(
                         color: MyColors.textFieldBackground,
-                        fontFamily: MyTexts.Roboto,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 10,
+                      
                       ),
                     ),
                   ],
@@ -320,11 +323,9 @@ class HomeView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "Statistics",
-                  style: MyTexts.medium16.copyWith(
+                  style: MyTexts.medium18.copyWith(
                     color: MyColors.textFieldBackground,
-                    fontFamily: MyTexts.Roboto,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
+                   
                   ),
                 ),
               ),
@@ -342,7 +343,6 @@ class HomeView extends StatelessWidget {
                       value: "34",
                     ),
 
-                    const SizedBox(width: 12),
 
                     // Total Products Card (Material Icon)
                     _buildInfoCard(
@@ -363,7 +363,14 @@ class HomeView extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
+                    boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x33000000), // subtle black shadow (20%)
+                      blurRadius: 4,           // smooth edges
+                      offset: Offset(0, 2),    // shadow below bar
+                    ),
+                  ],
+                    color: MyColors.white,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,30 +381,24 @@ class HomeView extends StatelessWidget {
                         children: [
                           Text(
                             'Interests',
-                            style: MyTexts.medium16.copyWith(
+                            style: MyTexts.medium14.copyWith(
                               color: MyColors.textFieldBackground,
-                              fontFamily: MyTexts.Roboto,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 13,
-                            ),
+                            )
                           ),
                           Row(
                             children: [
                               Text(
                                 '2024-25',
-                                style: MyTexts.medium16.copyWith(
+                                style: MyTexts.medium12.copyWith(
                                   color: MyColors.textFieldBackground,
-                                  fontFamily: MyTexts.Roboto,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                ),
+                                )
                               ),
                               const Icon(Icons.keyboard_arrow_down_outlined),
                             ],
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                       SizedBox(height: 2.h),
 
                       /// Chart Container
                       Row(
@@ -425,14 +426,13 @@ class HomeView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                const SizedBox(height: 6),
+                                 SizedBox(height: 0.6.h),
                                 Text(
                                   _monthNames[monthIndex],
-                                  style: MyTexts.medium16.copyWith(
+                                  style: MyTexts.extraBold12.copyWith(
                                     color: MyColors.textFieldBackground,
-                                    fontFamily: MyTexts.Roboto,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 7,
+                                   
+                                 
                                   ),
                                 ),
                               ],
@@ -451,55 +451,62 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard({
-    required Widget icon, // 👈 change to Widget
-    required String title,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 18, top: 12),
-      child: Container(
-        width: 169,
-        height: 89,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                icon, // 👈 directly place widget
-                const SizedBox(width: 6),
-                Text(
-                  title,
-                  style: MyTexts.medium16.copyWith(
-                    color: MyColors.textFieldBackground,
-                    fontFamily: MyTexts.Roboto,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: MyTexts.medium16.copyWith(
-                color: MyColors.textFieldBackground,
-                fontFamily: MyTexts.Roboto,
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-              ),
-            ),
-          ],
-        ),
+ Widget _buildInfoCard({
+  required Widget icon, // 👈 change to Widget
+  required String title,
+  required String value,
+}) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 18, top: 12),
+    child: Container(
+      width: 169,
+      height: 89,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08), // 👈 subtle shadow
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: const Offset(0, 3), // 👈 downward shadow
+          ),
+        ],
       ),
-    );
-  }
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              icon,
+               SizedBox(width: 0.6.h),
+              Text(
+                title,
+                style: MyTexts.medium16.copyWith(
+                  color: MyColors.textFieldBackground,
+                 
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+           SizedBox(height: 0.8.h),
+          Text(
+            value,
+            style: MyTexts.extraBold18.copyWith(
+              color: MyColors.textFieldBackground,
+             
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+
 }
 
 List<String> _monthNames = [
