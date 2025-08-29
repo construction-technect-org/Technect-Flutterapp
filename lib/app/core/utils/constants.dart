@@ -68,10 +68,18 @@ static const String profileIcon = 'assets/images/profil.svg';
   static const String totalProducts = 'assets/images/total_products.svg';
 
 
-//Location
-
+ //Location
   static const String Locationon = 'assets/images/Locationon.svg';
   static const String Map = 'assets/images/map.png';
+
+  //Product 
+  static const String Product = 'assets/images/product.png';
+  static const String TotalInterests = 'assets/images/TotalInterests.svg';
+  static const String TotalProducts = 'assets/images/TotalProducts.svg';
+  static const String LowStock = 'assets/images/LowStock.svg';
+  static const String Featured = 'assets/images/Featured.svg';
+  static const String price = 'assets/images/price.png';
+  static const String gst = 'assets/images/gst.png';
 
 
 

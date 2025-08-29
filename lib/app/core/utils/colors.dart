@@ -36,8 +36,17 @@ class MyColors {
   static const Color backgroundColor = Color(0xFFF7F7F7);
   static const Color  hexGray92 = Color(0xFFEBEBEB);
   static const Color  shadeOfGray = Color(0xFF7C7A7A);
-
-
+  static const Color  americanSilver = Color(0xFFD0D0D0);
+  static const Color  davysGrey = Color(0xFF5D5D5D);
+  static const Color  green = Color(0xFF3DA741);
+  static const Color  paleGreen = Color(0xFFDAFFDB);
+  static const Color  platinumGray = Color(0xFF797979);
+  static const Color  graniteg = Color(0xFF656565 );
+  static const Color  silver = Color(0xFF5C5C5C);
+  static const Color  yellowundertones = Color(0xFFD4FFC6);
+  static const Color  verypaleBlue = Color(0xFFCDDBFF);
+  static const Color  paleRed = Color(0xFFFFC4C4);
+  static const Color  warmOrange = Color(0xFFFBDFC7);
 
   // Text field colors
   static const Color textFieldBorder = Color(0xFFA0A0A0);

@@ -1,5 +1,7 @@
 import 'package:construction_technect/app/modules/AddLocationManually/bindings/add_location_manually_binding.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/views/add_location_manually_view.dart';
+import 'package:construction_technect/app/modules/AddProduct/bindings/add_product_binding.dart';
+import 'package:construction_technect/app/modules/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/BusinessHours/bindings/business_hours_bindings.dart';
 import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
@@ -100,6 +102,11 @@ class AppPages {
       name: _Paths.ADD_LOCATION_MANUALLY,
       page: () => const AddLocationManuallyView(),
       binding:  AddLocationBinding(),
+    ),
+     GetPage(
+      name: _Paths.ADDP_PRODUCT,
+      page: () => const AddProductView(),
+      binding:  AddProductBinding(),
     ),
   
   ];

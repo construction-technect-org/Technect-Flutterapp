@@ -18,6 +18,8 @@ abstract class Routes {
   static const UPDATE_YOUR_CERTIFICATION = _Paths.UPDATE_YOUR_CERTIFICATION;
   static const LOCATION = _Paths.LOCATION;
   static const ADD_LOCATION_MANUALLY = _Paths.ADD_LOCATION_MANUALLY;
+  static const ADDP_PRODUCT = _Paths.ADDP_PRODUCT;
+
 
 
 }
@@ -39,5 +41,7 @@ abstract class _Paths {
   static const UPDATE_YOUR_CERTIFICATION = '/update-your-certification';
   static const LOCATION = '/location';
   static const ADD_LOCATION_MANUALLY = '/add-location-manually';
+  static const ADDP_PRODUCT = '/Add-product';
+
 
 }

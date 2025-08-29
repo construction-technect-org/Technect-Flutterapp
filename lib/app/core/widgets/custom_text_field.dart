@@ -8,6 +8,9 @@ class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
   final Widget? suffix;
+  final Widget? prefix; // 👈 Added for start icon
+    final int maxLines;    // 👈 NEW for multi-line
+
 
   const CustomTextField({
     super.key,
@@ -18,6 +21,9 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.suffix,
+    this.prefix,
+      this.maxLines = 1,
+
   });
 
   @override
@@ -38,6 +44,8 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         onChanged: onChanged,
+        maxLines: maxLines,
+
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: hintText != null
@@ -45,6 +53,11 @@ class CustomTextField extends StatelessWidget {
               : null,
           border: InputBorder.none,
           suffixIcon: suffix,
+          prefixIcon: prefix,
+          prefixIconConstraints: const BoxConstraints(
+            minWidth: 10,  // 👈 shrink width
+            minHeight: 10, // 👈 shrink height
+          ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 12,
             vertical: 12,
@@ -55,3 +68,4 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+

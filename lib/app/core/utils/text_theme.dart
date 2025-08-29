@@ -111,6 +111,14 @@ class MyTexts {
     color: MyColors.black,
   );
 
+
+   static TextStyle get regular16 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+    color: MyColors.black,
+  );
+
   static TextStyle get regular12 => TextStyle(
     fontFamily: Lato,
     fontSize: 12.sp,

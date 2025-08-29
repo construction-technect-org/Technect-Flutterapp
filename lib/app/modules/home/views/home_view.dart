@@ -24,36 +24,34 @@ class HomeView extends StatelessWidget {
 
       /// ✅ Custom AppBar
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+
         backgroundColor: MyColors.white,
         elevation: 0,
         title: Row(
           children: [
             Image.asset(Asset.profil, height: 40, width: 40),
-             SizedBox(width: 1.h),
+            SizedBox(width: 1.h),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "Welcome Vaishnavi!",
-                  style: MyTexts.medium16.copyWith(
-                    color: MyColors.fontBlack,
-                    
-                  ),
+                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                 ),
                 GestureDetector(
                   onTap: () {
                     // 👇 Navigate to new screen
-                     Get.toNamed(Routes.LOCATION);
+                    Get.toNamed(Routes.LOCATION);
                   },
                   child: Row(
                     children: [
                       SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                       SizedBox(width: 0.4.h),
+                      SizedBox(width: 0.4.h),
                       Text(
                         "Sadashiv Peth, Pune",
                         style: MyTexts.medium14.copyWith(
                           color: MyColors.textFieldBackground,
-                          
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -114,60 +112,59 @@ class HomeView extends StatelessWidget {
                   vertical: 13,
                 ),
                 child: Container(
-  decoration: BoxDecoration(
-    color: MyColors.white,
-    borderRadius: BorderRadius.circular(22.5),
-    boxShadow: const [
-      BoxShadow(
-        color: Color(0x1A000000), // light shadow (10% black)
-        blurRadius: 8,           // soften the shadow
-        offset: Offset(0, 4),    // move shadow down
-      ),
-    ],
-  ),
-  child: TextField(
-    decoration: InputDecoration(
-      prefixIcon: Padding(
-        padding: const EdgeInsets.only(left: 18, right: 8),
-        child: SvgPicture.asset(
-          Asset.searchIcon,
-          height: 16,
-          width: 16,
-        ),
-      ),
-      prefixIconConstraints: const BoxConstraints(
-        minWidth: 36,
-        minHeight: 36,
-      ),
-      hintText: 'Search',
-      hintStyle: MyTexts.medium16.copyWith(
-        color: MyColors.darkGray,
-      
-      ),
-      filled: true,
-      fillColor: MyColors.white,
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 10,
-        horizontal: 12,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(22.5),
-        borderSide: BorderSide.none,
-      ),
-      suffixIcon: Padding(
-        padding: const EdgeInsets.all(14),
-        child: SvgPicture.asset(
-          Asset.filterIcon,
-          height: 20,
-          width: 20,
-        ),
-      ),
-    ),
-  ),
-)
-  ),
+                  decoration: BoxDecoration(
+                    color: MyColors.white,
+                    borderRadius: BorderRadius.circular(22.5),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x1A000000), // light shadow (10% black)
+                        blurRadius: 8, // soften the shadow
+                        offset: Offset(0, 4), // move shadow down
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(left: 18, right: 8),
+                        child: SvgPicture.asset(
+                          Asset.searchIcon,
+                          height: 16,
+                          width: 16,
+                        ),
+                      ),
+                      prefixIconConstraints: const BoxConstraints(
+                        minWidth: 36,
+                        minHeight: 36,
+                      ),
+                      hintText: 'Search',
+                      hintStyle: MyTexts.medium16.copyWith(
+                        color: MyColors.darkGray,
+                      ),
+                      filled: true,
+                      fillColor: MyColors.white,
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 12,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(22.5),
+                        borderSide: BorderSide.none,
+                      ),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: SvgPicture.asset(
+                          Asset.filterIcon,
+                          height: 20,
+                          width: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
 
-               SizedBox(height: 2.h),
+              SizedBox(height: 2.h),
 
               /// Features title
               Padding(
@@ -176,97 +173,95 @@ class HomeView extends StatelessWidget {
                   "Features",
                   style: MyTexts.extraBold18.copyWith(
                     color: MyColors.textFieldBackground,
-                   
                   ),
                 ),
               ),
-               SizedBox(height: 1.h),
+              SizedBox(height: 1.h),
 
               /// ✅ FIXED GridView
-Container(
-  height: 240,
-  decoration: BoxDecoration(
-    color: MyColors.white,
-    borderRadius: BorderRadius.circular(12),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.1),
-        spreadRadius: 2,
-        blurRadius: 6,
-        offset: const Offset(0, 3),
-      ),
-    ],
-  ),
-  child: GridView.builder(
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  padding: const EdgeInsets.only(
-    left: 16,
-    right: 16,
-    top: 4,
-    bottom: 22, // 👈 extra bottom space
-  ),
-  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 4,
-    crossAxisSpacing: 20,
-    mainAxisSpacing: 12,
-    childAspectRatio: 0.80,
-  ),
-  itemCount: items.length,
-  itemBuilder: (context, index) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 70,
-          width: 65,
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.center,
-            children: [
               Container(
-                width: 65,
-                height: 65,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFEB3B),
-                  shape: BoxShape.circle,
+                height: 237,
+                decoration: BoxDecoration(
+                  color: MyColors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 4,
+                    bottom: 20, // 👈 extra bottom space
+                  ),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 20,
+                    childAspectRatio: 0.80,
+                  ),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 70,
+                          width: 65,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: 65,
+                                height: 65,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFFEB3B),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: -15,
+                                left: 0,
+                                right: 0,
+                                child: Image.asset(
+                                  items[index]["icon"]!,
+                                  height: 73,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 0.7.h),
+                        SizedBox(
+                          child: Text(
+                            items[index]["label"]!,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textHeightBehavior: const TextHeightBehavior(
+                              applyHeightToFirstAscent: false,
+                              applyHeightToLastDescent: false,
+                            ),
+                            style: MyTexts.medium12.copyWith(
+                              height: 1.2,
+                              color: MyColors.textFieldBackground,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
-              Positioned(
-                bottom: -15,
-                left: 0,
-                right: 0,
-                child: Image.asset(
-                  items[index]["icon"]!,
-                  height: 73,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 0.7.h),
-        SizedBox(
-          child: Text(
-            items[index]["label"]!,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textHeightBehavior: const TextHeightBehavior(
-              applyHeightToFirstAscent: false,
-              applyHeightToLastDescent: false,
-            ),
-            style: MyTexts.medium12.copyWith(
-              height: 1.2,
-              color: MyColors.textFieldBackground,
-            ),
-          ),
-        ),
-      ],
-    );
-  },
-),
-),
- SizedBox(height: 1.h),
+              SizedBox(height: 1.h),
               Padding(
                 padding: const EdgeInsets.only(left: 25, right: 24, top: 15),
                 child: Row(
@@ -276,14 +271,12 @@ Container(
                       "Team",
                       style: MyTexts.medium18.copyWith(
                         color: MyColors.textFieldBackground,
-                      
                       ),
                     ),
                     Text(
                       "View All",
                       style: MyTexts.medium12.copyWith(
                         color: MyColors.textFieldBackground,
-                      
                       ),
                     ),
                   ],
@@ -325,7 +318,6 @@ Container(
                   "Statistics",
                   style: MyTexts.medium18.copyWith(
                     color: MyColors.textFieldBackground,
-                   
                   ),
                 ),
               ),
@@ -342,7 +334,6 @@ Container(
                       title: "No of Users",
                       value: "34",
                     ),
-
 
                     // Total Products Card (Material Icon)
                     _buildInfoCard(
@@ -364,12 +355,12 @@ Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x33000000), // subtle black shadow (20%)
-                      blurRadius: 4,           // smooth edges
-                      offset: Offset(0, 2),    // shadow below bar
-                    ),
-                  ],
+                      BoxShadow(
+                        color: Color(0x33000000), // subtle black shadow (20%)
+                        blurRadius: 4, // smooth edges
+                        offset: Offset(0, 2), // shadow below bar
+                      ),
+                    ],
                     color: MyColors.white,
                   ),
                   child: Column(
@@ -383,7 +374,7 @@ Container(
                             'Interests',
                             style: MyTexts.medium14.copyWith(
                               color: MyColors.textFieldBackground,
-                            )
+                            ),
                           ),
                           Row(
                             children: [
@@ -391,14 +382,14 @@ Container(
                                 '2024-25',
                                 style: MyTexts.medium12.copyWith(
                                   color: MyColors.textFieldBackground,
-                                )
+                                ),
                               ),
                               const Icon(Icons.keyboard_arrow_down_outlined),
                             ],
                           ),
                         ],
                       ),
-                       SizedBox(height: 2.h),
+                      SizedBox(height: 2.h),
 
                       /// Chart Container
                       Row(
@@ -426,13 +417,11 @@ Container(
                                       ),
                                     ),
                                   ),
-                                 SizedBox(height: 0.6.h),
+                                SizedBox(height: 0.6.h),
                                 Text(
                                   _monthNames[monthIndex],
                                   style: MyTexts.extraBold12.copyWith(
                                     color: MyColors.textFieldBackground,
-                                   
-                                 
                                   ),
                                 ),
                               ],
@@ -451,62 +440,59 @@ Container(
     );
   }
 
- Widget _buildInfoCard({
-  required Widget icon, // 👈 change to Widget
-  required String title,
-  required String value,
-}) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 18, top: 12),
-    child: Container(
-      width: 169,
-      height: 89,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08), // 👈 subtle shadow
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: const Offset(0, 3), // 👈 downward shadow
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              icon,
-               SizedBox(width: 0.6.h),
-              Text(
-                title,
-                style: MyTexts.medium16.copyWith(
-                  color: MyColors.textFieldBackground,
-                 
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-           SizedBox(height: 0.8.h),
-          Text(
-            value,
-            style: MyTexts.extraBold18.copyWith(
-              color: MyColors.textFieldBackground,
-             
+  Widget _buildInfoCard({
+    required Widget icon, // 👈 change to Widget
+    required String title,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 18, top: 12),
+      child: Container(
+        width: 169,
+        height: 89,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08), // 👈 subtle shadow
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3), // 👈 downward shadow
             ),
-          ),
-        ],
+          ],
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                icon,
+                SizedBox(width: 0.6.h),
+                Text(
+                  title,
+                  style: MyTexts.medium16.copyWith(
+                    color: MyColors.textFieldBackground,
+
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 0.8.h),
+            Text(
+              value,
+              style: MyTexts.extraBold18.copyWith(
+                color: MyColors.textFieldBackground,
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
-
-
+    );
+  }
 }
 
 List<String> _monthNames = [
@@ -522,9 +508,3 @@ List<String> _monthNames = [
   "Feb",
   "Mar",
 ];
-
-
-
-
-
-
