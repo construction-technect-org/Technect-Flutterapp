@@ -84,7 +84,7 @@ class AppPages {
     ),
      GetPage(
       name: _Paths.BUSINESS_HOURS,
-      page: () => const BusinessHoursView(),
+      page: () =>  BusinessHoursView(),
       binding: BusinessHoursBinding(),
     ),
      GetPage(

@@ -1,6 +1,3 @@
-// import 'package:construction_technect/app/core/utils/imports.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
 
 
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -8,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddProductController extends GetxController {
-  // Existing
   final productNameController = TextEditingController();
   final uomController = TextEditingController();
   final priceController = TextEditingController();
@@ -16,7 +12,6 @@ class AddProductController extends GetxController {
   final gstPriceController = TextEditingController();
   final termsController = TextEditingController();
 
-  // New controllers
   final packageSizeController = TextEditingController();
   final shapeController = TextEditingController();
   final textureController = TextEditingController();
@@ -33,9 +28,16 @@ class AddProductController extends GetxController {
   final zoneController = TextEditingController();
 
   RxList<String> categories = <String>["Electronics", "Construction", "Furniture"].obs;
-RxList<String> subCategories = <String>[].obs;
-RxList<String> uomList = <String>["Kg", "Liters", "Pieces"].obs;
+  RxList<String> subCategories = <String>[].obs;
+  RxList<String> uomList = <String>["Kg", "Liters", "Pieces"].obs;
 
+  // Nullable selections
+  Rxn<String> selectedCategory = Rxn<String>();
+  Rxn<String> selectedSubCategory = Rxn<String>();
+  Rxn<String> selectedUom = Rxn<String>();
+
+  RxBool showExtraFields = false.obs;
+  RxString pickedFileName = "Img45.jpg".obs;
 
   @override
   void onClose() {
@@ -47,34 +49,29 @@ RxList<String> uomList = <String>["Kg", "Liters", "Pieces"].obs;
     super.onClose();
   }
 
-  // Control stepper/slider state
-  RxBool showExtraFields = false.obs;
-    RxString selectedCategory = "Fine Aggregate".obs;
-  RxString selectedSubCategory = "Sand".obs;
-  Rxn<String> selectedUom = Rxn<String>();
-
   void submitProduct() {
-    showExtraFields.value = true; // show new section instead of navigation
+    showExtraFields.value = true;
   }
 
-  RxString pickedFileName = "Img45.jpg".obs;
-
-    Future<void> pickFile() async {
+  Future<void> pickFile() async {
     // TODO: Add File Picker logic
     pickedFileName.value = "MyNewFile.png";
   }
 
+  void loadSubCategories(String? category) {
+    if (category == null) {
+      subCategories.clear();
+      selectedSubCategory.value = null;
+      return;
+    }
 
-  void loadSubCategories(String category) {
-  if (category == "Electronics") {
-    subCategories.value = ["Wires", "Switches", "Bulbs"];
-  } else if (category == "Construction") {
-    subCategories.value = ["Cement", "Bricks", "Steel"];
-  } else {
-    subCategories.value = ["Chairs", "Tables", "Beds"];
+    if (category == "Electronics") {
+      subCategories.value = ["Wires", "Switches", "Bulbs"];
+    } else if (category == "Construction") {
+      subCategories.value = ["Cement", "Bricks", "Steel"];
+    } else {
+      subCategories.value = ["Chairs", "Tables", "Beds"];
+    }
+    selectedSubCategory.value = null; // reset on category change
   }
-  selectedSubCategory.value = "";
 }
-
-}
-
