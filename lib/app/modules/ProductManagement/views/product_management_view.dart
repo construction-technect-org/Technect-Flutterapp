@@ -2,6 +2,8 @@ import 'package:construction_technect/app/core/utils/colors.dart';
 import 'package:construction_technect/app/core/utils/constants.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/text_theme.dart';
+import 'package:construction_technect/app/modules/ProductManagement/components/product_card.dart';
+import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart'; // 👈 For Get.toNamed
@@ -177,7 +179,7 @@ class ProductManagementHomeView extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: _StatCard(
+                          child: StatCard(
                             title: 'Total Products',
                             value: '04',
                             icon: SvgPicture.asset(Asset.TotalProducts),
@@ -186,7 +188,7 @@ class ProductManagementHomeView extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: _StatCard(
+                          child: StatCard(
                             title: 'Featured',
                             value: '02',
                             icon: SvgPicture.asset(Asset.Featured),
@@ -199,7 +201,7 @@ class ProductManagementHomeView extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: _StatCard(
+                          child: StatCard(
                             title: 'Low Stock',
                             value: '04',
                             icon: SvgPicture.asset(Asset.LowStock),
@@ -208,7 +210,7 @@ class ProductManagementHomeView extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: _StatCard(
+                          child: StatCard(
                             title: 'Total Interests',
                             value: '02',
                             icon: SvgPicture.asset(Asset.TotalInterests),
@@ -224,317 +226,63 @@ class ProductManagementHomeView extends StatelessWidget {
               const SizedBox(height: 16),
 
               /// ✅ Product Cards
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    _ProductCard(
-                      statusText: 'Active',
-                      statusColor: Color(0xFF10B981),
-                      productName: 'Premium M Sand',
-                      companyName: 'M M manufacturers',
-                      brandName: 'SV Manufacturers',
-                      locationText: 'Vasai Virar, Mahab Chowpatty',
-                      pricePerUnit: 123.00,
-                      stockCount: 45,
-                      imageAsset: Asset.Product,
-                    ),
-                    SizedBox(height: 12),
-                    _ProductCard(
-                      statusText: 'Active',
-                      statusColor: Color(0xFF10B981),
-                      productName: 'Premium M Sand',
-                      companyName: 'M M manufacturers',
-                      brandName: 'SV Manufacturers',
-                      locationText: 'Vasai Virar, Mahab Chowpatty',
-                      pricePerUnit: 123.00,
-                      stockCount: 45,
-                      imageAsset: Asset.Product,
-                    ),
-                  ],
+              // Inside your widget
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 5,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                     Get.toNamed(Routes.PRODUCT_DETAILS);
+
+                      },
+                      child: ProductCard(
+                        statusText: 'Active',
+                        statusColor: const Color(0xFF10B981),
+                        productName: 'Premium M Sand ${index + 1}',
+                        companyName: 'M M manufacturers',
+                        brandName: 'SV Manufacturers',
+                        locationText: 'Vasai Virar, Mahab Chowpatty',
+                        pricePerUnit: 123.00,
+                        stockCount: 45,
+                        imageAsset: Asset.Product,
+                      ),
+                    );
+                  },
                 ),
               ),
 
               const SizedBox(height: 20),
 
               SizedBox(height: 2.h),
-            Center(
-  child: RoundedButton(
-    onTap: () {
-                                   Get.toNamed(Routes.ADDP_PRODUCT);
-
-    },
-    buttonName: '',
-    borderRadius: 12,
-    width: 50.w,
-    height: 45,
-    verticalPadding: 0,
-    horizontalPadding: 0,
-    child: Center(
-      child: Text(
-        '+ Add Certification',
-        style: MyTexts.medium16.copyWith(
-          color: MyColors.white,
-          fontFamily: MyTexts.Roboto,
-        ),
-      ),
-    ),
-  ),
-)
-
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.icon,
-    required this.iconBackground,
-  });
-
-  final String title;
-  final String value;
-  final Widget icon;
-  final Color iconBackground;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 84,
-      decoration: BoxDecoration(
-        color: MyColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: MyColors.americanSilver),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: iconBackground,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            padding: const EdgeInsets.all(10),
-            child: SizedBox(height: 36, width: 36, child: icon),
-          ),
-          SizedBox(width: 1.h),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: MyTexts.regular14.copyWith(color: MyColors.davysGrey),
-                ),
-                SizedBox(height: 0.4.h),
-                Text(
-                  value,
-                  style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProductCard extends StatelessWidget {
-  const _ProductCard({
-    required this.statusText,
-    required this.statusColor,
-    required this.productName,
-    required this.companyName,
-    required this.brandName,
-    required this.locationText,
-    required this.pricePerUnit,
-    required this.stockCount,
-    required this.imageAsset, // ✅ Changed to asset
-  });
-
-  final String statusText;
-  final Color statusColor;
-  final String productName;
-  final String companyName;
-  final String brandName;
-  final String locationText;
-  final double pricePerUnit;
-  final int stockCount;
-  final String imageAsset; // ✅ asset path instead of URL
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: MyColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: MyColors.americanSilver),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Top row image + content
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    imageAsset,
-                    width: 56,
-                    height: 57,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(width: 1.h),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Title + status pill
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              productName,
-                              style: MyTexts.bold16.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: MyColors.paleGreen,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  statusText,
-                                  style: MyTexts.regular12.copyWith(
-                                    color: MyColors.green,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+              Center(
+                child: RoundedButton(
+                  onTap: () {
+                    Get.toNamed(Routes.ADDP_PRODUCT);
+                  },
+                  buttonName: '',
+                  borderRadius: 12,
+                  width: 50.w,
+                  height: 45,
+                  verticalPadding: 0,
+                  horizontalPadding: 0,
+                  child: Center(
+                    child: Text(
+                      '+ Add Certification',
+                      style: MyTexts.medium16.copyWith(
+                        color: MyColors.white,
+                        fontFamily: MyTexts.Roboto,
                       ),
-                      SizedBox(height: 0.4.h),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Company: ',
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.platinumGray,
-                              ),
-                            ),
-                            TextSpan(
-                              text: companyName,
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 0.2.h),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Brand: ',
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.primary,
-                              ),
-                            ),
-                            TextSpan(
-                              text: brandName,
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 1.h),
-            Row(
-              children: [
-                const Icon(
-                  Icons.place_outlined,
-                  size: 16,
-                  color: Color(0xFF6B7280),
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    locationText,
-                    style: MyTexts.regular14.copyWith(color: MyColors.graniteg),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 0.7.h),
-            Text(
-              '₹ ${pricePerUnit.toStringAsFixed(2)}/unit',
-              style: MyTexts.extraBold20.copyWith(color: MyColors.primary),
-            ),
-            const SizedBox(height: 6),
-
-            SizedBox(height: 0.8.h),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'In Stock: ',
-                    style: MyTexts.regular12.copyWith(color: MyColors.silver),
-                  ),
-                  TextSpan(
-                    text: '45',
-                    style: MyTexts.regular12.copyWith(
-                      color: MyColors.fontBlack,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-            SizedBox(height: 0.8.h),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Specifications',
-                  style: MyTexts.regular14.copyWith(color: MyColors.warning),
-                ),
-                SizedBox(width: 0.6.h),
-                const Icon(
-                  Icons.keyboard_arrow_down,
-                  size: 20,
-                  color: MyColors.warning,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

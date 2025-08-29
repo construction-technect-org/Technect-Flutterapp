@@ -81,7 +81,11 @@ static const String profileIcon = 'assets/images/profil.svg';
   static const String price = 'assets/images/price.png';
   static const String gst = 'assets/images/gst.png';
 
+//Product details
 
+
+  static const String productDetails = 'assets/images/product_details.png';
+  static const String virify = 'assets/images/virify.png';
 
 
 }

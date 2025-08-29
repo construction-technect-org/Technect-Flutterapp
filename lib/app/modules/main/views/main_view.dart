@@ -36,7 +36,7 @@ class MainTabBarView extends GetView<MainController> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildTabItem(0, Asset.homeIcon, 'Home'),
-            _buildTabItem(1, Asset.wishlistIcon, 'Product Managemen'),
+            _buildTabItem(1, Asset.wishlistIcon, 'Wishlist'),
             _buildTabItem(2, Asset.supportIcon, 'Support'),
             _buildTabItem(3, Asset.settingsIcon, 'Settings'),
           ],

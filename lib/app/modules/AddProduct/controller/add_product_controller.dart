@@ -74,4 +74,19 @@ class AddProductController extends GetxController {
     }
     selectedSubCategory.value = null; // reset on category change
   }
+
+ 
+  RxBool isEnabled = false.obs;
+
+  // If editing, you can set it from arguments
+  @override
+  void onInit() {
+    super.onInit();
+
+    final args = Get.arguments;
+    if (args != null) {
+      // For edit case → prefill
+      isEnabled.value = args["isEnabled"] ?? false;
+    }
+  }
 }

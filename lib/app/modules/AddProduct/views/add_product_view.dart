@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_button.dart';
+import 'package:construction_technect/app/core/utils/custom_switch.dart';
 import 'package:construction_technect/app/core/utils/dashed_circle.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/stepper_widget_add_product.dart';
@@ -14,6 +15,7 @@ class AddProductView extends GetView<AddProductController> {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
+final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
 
     return Scaffold(
       backgroundColor: MyColors.white,
@@ -39,7 +41,7 @@ class AddProductView extends GetView<AddProductController> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    "ADD PRODUCT",
+                    isEdit ? "EDIT PRODUCT" : "ADD PRODUCT", // 👈 dynamic title
                     style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
                   ),
                 ],
@@ -516,6 +518,122 @@ class AddProductView extends GetView<AddProductController> {
                   CustomTextField(controller: controller.zoneController),
 
                   SizedBox(height: 2.h),
+                  Obx(
+  () {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: MyColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: controller.isEnabled.value
+              ? MyColors.green.withOpacity(0.6)
+              : MyColors.red.withOpacity(0.6),
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            controller.isEnabled.value ? "Active" : "Inactive",
+            style: MyTexts.medium16.copyWith(
+              color: controller.isEnabled.value
+                  ? MyColors.green
+                  : MyColors.red,
+            ),
+          ),
+          CustomSwitch(
+            value: controller.isEnabled.value,
+            onChanged: (val) async {
+              final result = await Get.bottomSheet<bool>(
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: MyColors.white,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        val ? Icons.check_circle : Icons.cancel,
+                        color: val ? MyColors.green : MyColors.red,
+                        size: 40,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        val ? "Activate Product" : "Deactivate Product",
+                        style: MyTexts.medium18,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        val
+                            ? "Are you sure you want to mark this product as Active?"
+                            : "Are you sure you want to mark this product as Inactive?",
+                        style: MyTexts.regular14.copyWith(
+                          color: MyColors.shadeOfGray,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                       SizedBox(height: 2.h),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () => Get.back(result: false),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: MyColors.fontBlack,
+                                side: const BorderSide(color: Colors.grey),
+                              ),
+                              child: const Text("Cancel"),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: MyColors.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () => Get.back(result: true),
+                              child: Text("Yes, Confirm", style: MyTexts.light16.copyWith(
+                          color: MyColors.white,
+                        ),
+),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+
+              if (result == true) {
+                controller.isEnabled.value = val;
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  },
+),
+
+                       SizedBox(height: 2.h),
 
                   Center(
                     child: RoundedButton(

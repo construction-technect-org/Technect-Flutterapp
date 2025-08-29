@@ -47,7 +47,12 @@ class MyColors {
   static const Color  verypaleBlue = Color(0xFFCDDBFF);
   static const Color  paleRed = Color(0xFFFFC4C4);
   static const Color  warmOrange = Color(0xFFFBDFC7);
-   static const Color  spanishGray = Color(0xFFB9B9B9);
+  static const Color  spanishGray = Color(0xFFB9B9B9);
+  static const Color  veryPaleBlue = Color(0xFFE6EDFF);
+  static const Color  darkCharcoal = Color(0xFF484848);
+  static const Color  philippineGray = Color(0xFF918F8F);
+  static const Color  veryPaleOrange = Color(0xFFFFEFE0);
+
 
   // Text field colors
   static const Color textFieldBorder = Color(0xFFA0A0A0);

@@ -4,6 +4,8 @@ import 'package:construction_technect/app/modules/AddProduct/bindings/add_produc
 import 'package:construction_technect/app/modules/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/BusinessHours/bindings/business_hours_bindings.dart';
 import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
+import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
+import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
 import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
 import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
 import 'package:construction_technect/app/modules/location/bindings/location_bindings.dart';
@@ -108,6 +110,10 @@ class AppPages {
       page: () => const AddProductView(),
       binding:  AddProductBinding(),
     ),
-  
+   GetPage(
+      name: _Paths.PRODUCT_DETAILS,
+      page: () =>  ProductDetailsView(),
+      binding:  ProductDetailsBinding(),
+    ),
   ];
 }

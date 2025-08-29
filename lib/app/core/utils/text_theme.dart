@@ -69,9 +69,21 @@ class MyTexts {
     color: MyColors.black,
   );
 
+  static TextStyle get medium20 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+    color: MyColors.black,
+  );
   static TextStyle get medium22 => TextStyle(
     fontFamily: Lato,
     fontSize: 22.sp,
+    fontWeight: FontWeight.w500,
+    color: MyColors.black,
+  );
+   static TextStyle get medium24 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 24.sp,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
   );
@@ -152,6 +164,7 @@ class MyTexts {
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
+
 
   static TextStyle get extraBold20 => TextStyle(
     fontFamily: Lato,

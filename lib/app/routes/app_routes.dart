@@ -19,6 +19,8 @@ abstract class Routes {
   static const LOCATION = _Paths.LOCATION;
   static const ADD_LOCATION_MANUALLY = _Paths.ADD_LOCATION_MANUALLY;
   static const ADDP_PRODUCT = _Paths.ADDP_PRODUCT;
+  static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
+
 
 
 
@@ -42,6 +44,8 @@ abstract class _Paths {
   static const LOCATION = '/location';
   static const ADD_LOCATION_MANUALLY = '/add-location-manually';
   static const ADDP_PRODUCT = '/Add-product';
+  static const PRODUCT_DETAILS = '/product-details';
+
 
 
 }

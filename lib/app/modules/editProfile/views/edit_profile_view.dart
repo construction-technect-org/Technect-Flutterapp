@@ -40,8 +40,6 @@ class EditProfileView extends GetView<EditProfileController> {
                   Text(
                     "Update your Business Details",
                   style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
-
-                
                   ),
                 ],
               ),

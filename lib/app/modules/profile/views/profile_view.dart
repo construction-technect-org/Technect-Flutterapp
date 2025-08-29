@@ -21,33 +21,32 @@ class ProfileView extends GetView<ProfileController> {
           onPressed: () => Get.back(),
         ),
         title: Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Text(
-      'Profile',
-      style: MyTexts.bold18.copyWith(color: MyColors.primary),
-    ),
-    TextButton.icon(
-  onPressed: () {
-    Get.toNamed(Routes.EDIT_PROFILE);
-  },
-    icon: SvgPicture.asset(
-      Asset.editIcon,
-      width: 12,
-      height: 12,
-      color: MyColors.primary, // 👈 optional: match text color
-    ),
-  label: Text(
-    "Edit Profile",
-    style: MyTexts.bold14.copyWith(
-      color: MyColors.primary,
-      decoration: TextDecoration.underline, // underline under text
-    ),
-  ),
-),
-
-  ],
-),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Profile',
+              style: MyTexts.bold18.copyWith(color: MyColors.primary),
+            ),
+            TextButton.icon(
+              onPressed: () {
+                Get.toNamed(Routes.EDIT_PROFILE);
+              },
+              icon: SvgPicture.asset(
+                Asset.editIcon,
+                width: 12,
+                height: 12,
+                color: MyColors.primary, // 👈 optional: match text color
+              ),
+              label: Text(
+                "Edit Profile",
+                style: MyTexts.bold14.copyWith(
+                  color: MyColors.primary,
+                  decoration: TextDecoration.underline, // underline under text
+                ),
+              ),
+            ),
+          ],
+        ),
         centerTitle: false,
       ),
       body: Padding(
@@ -87,7 +86,9 @@ class ProfileView extends GetView<ProfileController> {
                   value: 0.36,
                   strokeWidth: 6,
                   backgroundColor: MyColors.profileRemaining,
-                  valueColor: AlwaysStoppedAnimation<Color>(MyColors.profileFill),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    MyColors.profileFill,
+                  ),
                 ),
               ),
               Text(
