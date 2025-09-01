@@ -284,32 +284,37 @@ class HomeView extends StatelessWidget {
               ),
               SizedBox(
                 height: 130,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 7,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 15),
-                      child: Column(
-                        children: [
-                          const CircleAvatar(
-                            radius: 35,
-                            backgroundImage: AssetImage(Asset.team),
-                          ),
-                          SizedBox(height: 1.h),
-                          Text(
-                            'Mohan Sau',
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.dimGray,
-                              fontFamily: MyTexts.Roboto,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.ROLE_MANAGEMENT);
                   },
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 7,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 15),
+                        child: Column(
+                          children: [
+                            const CircleAvatar(
+                              radius: 35,
+                              backgroundImage: AssetImage(Asset.team),
+                            ),
+                            SizedBox(height: 1.h),
+                            Text(
+                              'Mohan Sau',
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.dimGray,
+                                fontFamily: MyTexts.Roboto,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               Padding(

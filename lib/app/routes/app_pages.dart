@@ -2,10 +2,17 @@ import 'package:construction_technect/app/modules/AddLocationManually/bindings/a
 import 'package:construction_technect/app/modules/AddLocationManually/views/add_location_manually_view.dart';
 import 'package:construction_technect/app/modules/AddProduct/bindings/add_product_binding.dart';
 import 'package:construction_technect/app/modules/AddProduct/views/add_product_view.dart';
+import 'package:construction_technect/app/modules/AddRole/bindings/add_role_binding.dart';
+import 'package:construction_technect/app/modules/AddRole/views/add_role_view.dart';
+import 'package:construction_technect/app/modules/AddTeam/bindings/add_team_binding.dart';
+import 'package:construction_technect/app/modules/AddTeam/views/add_team_view.dart';
+import 'package:construction_technect/app/modules/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
+import 'package:construction_technect/app/modules/ApprovalInbox/views/approval_Inbox_view.dart';
 import 'package:construction_technect/app/modules/BusinessHours/bindings/business_hours_bindings.dart';
 import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
+import 'package:construction_technect/app/modules/RoleManagement%20/views/role_management_view.dart';
 import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
 import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
 import 'package:construction_technect/app/modules/location/bindings/location_bindings.dart';
@@ -20,7 +27,7 @@ import 'package:construction_technect/app/modules/UpdateYourCertifications/bindi
 import 'package:construction_technect/app/modules/UpdateYourCertifications/views/update_your_certifications_view.dart';
 import 'package:construction_technect/app/modules/forgotPassword/bindings/forgot_password_binding.dart';
 import 'package:construction_technect/app/modules/forgotPassword/views/forgot_password_view.dart';
-
+import 'package:construction_technect/app/modules/RoleManagement%20/bindings/role_management_binding.dart';
 import 'package:construction_technect/app/modules/login/bindings/login_binding.dart';
 import 'package:construction_technect/app/modules/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/main/bindings/main_binding.dart';
@@ -114,6 +121,26 @@ class AppPages {
       name: _Paths.PRODUCT_DETAILS,
       page: () =>  ProductDetailsView(),
       binding:  ProductDetailsBinding(),
+    ),
+     GetPage(
+      name: _Paths.ROLE_MANAGEMENT,
+      page: () =>  const RoleManagementView(),
+      binding:  RoleManagementBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_ROLE,
+      page: () =>  const AddRoleView(),
+      binding:  AddRoleBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_TEAM,
+      page: () =>  const AddTeamView(),
+      binding:  AddTeamBinding(),
+    ),
+     GetPage(
+      name: _Paths.APPROVAL_INBOX,
+      page: () =>  const ApprovalInboxView(),
+      binding:  ApprovalInboxBinding(),
     ),
   ];
 }

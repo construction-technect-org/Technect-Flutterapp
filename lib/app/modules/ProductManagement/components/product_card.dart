@@ -92,24 +92,24 @@ class ProductCard extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 0.4.h),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Company: ',
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.platinumGray,
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Company: ',
+                                style: MyTexts.regular14.copyWith(
+                                  color: MyColors.platinumGray,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: companyName,
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.fontBlack,
+                              TextSpan(
+                                text: companyName,
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.fontBlack,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
                       SizedBox(height: 0.2.h),
                       RichText(
                         text: TextSpan(

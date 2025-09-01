@@ -20,6 +20,10 @@ abstract class Routes {
   static const ADD_LOCATION_MANUALLY = _Paths.ADD_LOCATION_MANUALLY;
   static const ADDP_PRODUCT = _Paths.ADDP_PRODUCT;
   static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
+  static const ROLE_MANAGEMENT = _Paths.ROLE_MANAGEMENT;
+  static const ADD_ROLE = _Paths.ADD_ROLE;
+  static const ADD_TEAM = _Paths.ADD_TEAM;
+  static const APPROVAL_INBOX = _Paths.APPROVAL_INBOX;
 
 
 
@@ -45,6 +49,11 @@ abstract class _Paths {
   static const ADD_LOCATION_MANUALLY = '/add-location-manually';
   static const ADDP_PRODUCT = '/Add-product';
   static const PRODUCT_DETAILS = '/product-details';
+  static const ROLE_MANAGEMENT = '/role-management';
+  static const ADD_ROLE = '/add-role';
+  static const ADD_TEAM = '/add-team';
+  static const APPROVAL_INBOX = '/approval-inbox';
+
 
 
 

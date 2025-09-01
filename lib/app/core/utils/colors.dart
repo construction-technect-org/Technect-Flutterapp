@@ -52,6 +52,24 @@ class MyColors {
   static const Color  darkCharcoal = Color(0xFF484848);
   static const Color  philippineGray = Color(0xFF918F8F);
   static const Color  veryPaleOrange = Color(0xFFFFEFE0);
+  static const Color  gray32 = Color(0xFF525252);
+  static const Color  whiteBlue = Color(0xFFE7EEFF);
+  static const Color  mediumSeaGreen = Color(0xFF3DA741);
+  static const Color   lightGray = Color(0xFF3E3E3E);
+  static const Color   mutedGreen = Color(0xFF3DA741);
+  static const Color   darkSilver = Color(0xFF6D6D6D);
+  static const Color   veryLightGrey = Color(0xFFCDCDCD);
+  static const Color   paleMagentaGreen = Color(0xFFD1FFC8);
+  static const Color   mistyRosecolor = Color(0xFFFFE8E8);
+  static const Color   oldLacelight = Color(0xFFFFF5E4);
+  static const Color   paleBluecolor = Color(0xFFDAE4FF);
+
+
+
+
+
+
+
 
 
   // Text field colors
