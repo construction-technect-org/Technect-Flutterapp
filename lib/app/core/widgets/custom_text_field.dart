@@ -9,8 +9,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? suffix;
   final Widget? prefix; // 👈 Added for start icon
-    final int maxLines;    // 👈 NEW for multi-line
-
+  final int maxLines; // 👈 NEW for multi-line
 
   const CustomTextField({
     super.key,
@@ -22,8 +21,7 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.suffix,
     this.prefix,
-      this.maxLines = 1,
-
+    this.maxLines = 1,
   });
 
   @override
@@ -36,10 +34,7 @@ class CustomTextField extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
-        style: MyTexts.extraBold16.copyWith(
-          height: 36 / 16,
-          color: MyColors.primary,
-        ),
+        style: MyTexts.extraBold16.copyWith(height: 36 / 16, color: MyColors.primary),
         cursorHeight: 20,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
@@ -55,17 +50,13 @@ class CustomTextField extends StatelessWidget {
           suffixIcon: suffix,
           prefixIcon: prefix,
           prefixIconConstraints: const BoxConstraints(
-            minWidth: 10,  // 👈 shrink width
+            minWidth: 10, // 👈 shrink width
             minHeight: 10, // 👈 shrink height
           ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 12,
-          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           isDense: true,
         ),
       ),
     );
   }
 }
-

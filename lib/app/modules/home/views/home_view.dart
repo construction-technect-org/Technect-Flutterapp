@@ -1,8 +1,4 @@
-import 'package:construction_technect/app/core/utils/colors.dart';
-import 'package:construction_technect/app/core/utils/constants.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});
@@ -107,10 +103,7 @@ class HomeView extends StatelessWidget {
             children: [
               /// Search bar
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 13,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
@@ -127,20 +120,14 @@ class HomeView extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(
-                          Asset.searchIcon,
-                          height: 16,
-                          width: 16,
-                        ),
+                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                       ),
                       prefixIconConstraints: const BoxConstraints(
                         minWidth: 36,
                         minHeight: 36,
                       ),
                       hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(
-                        color: MyColors.darkGray,
-                      ),
+                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                       filled: true,
                       fillColor: MyColors.white,
                       contentPadding: const EdgeInsets.symmetric(
@@ -153,11 +140,7 @@ class HomeView extends StatelessWidget {
                       ),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(
-                          Asset.filterIcon,
-                          height: 20,
-                          width: 20,
-                        ),
+                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
                       ),
                     ),
                   ),
@@ -231,10 +214,7 @@ class HomeView extends StatelessWidget {
                                 bottom: -15,
                                 left: 0,
                                 right: 0,
-                                child: Image.asset(
-                                  items[index]["icon"]!,
-                                  height: 73,
-                                ),
+                                child: Image.asset(items[index]["icon"]!, height: 73),
                               ),
                             ],
                           ),
@@ -321,9 +301,7 @@ class HomeView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "Statistics",
-                  style: MyTexts.medium18.copyWith(
-                    color: MyColors.textFieldBackground,
-                  ),
+                  style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground),
                 ),
               ),
               Center(
@@ -331,11 +309,7 @@ class HomeView extends StatelessWidget {
                   children: [
                     // No of Users Card (SVG icon)
                     _buildInfoCard(
-                      icon: SvgPicture.asset(
-                        Asset.noOfUsers,
-                        height: 11.7,
-                        width: 12.39,
-                      ),
+                      icon: SvgPicture.asset(Asset.noOfUsers, height: 11.7, width: 12.39),
                       title: "No of Users",
                       value: "34",
                     ),
@@ -399,18 +373,14 @@ class HomeView extends StatelessWidget {
                       /// Chart Container
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
-                        children: List.generate(_monthNames.length, (
-                          monthIndex,
-                        ) {
+                        children: List.generate(_monthNames.length, (monthIndex) {
                           return Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 for (int i = 0; i < 4; i++)
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 2,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(vertical: 2),
                                     child: Container(
                                       width: 10,
                                       height: 20,
@@ -489,9 +459,7 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(
-                color: MyColors.textFieldBackground,
-              ),
+              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
             ),
           ],
         ),

@@ -12,11 +12,8 @@ import 'package:construction_technect/app/modules/BusinessHours/bindings/busines
 import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
+import 'package:construction_technect/app/modules/RoleManagement%20/bindings/role_management_binding.dart';
 import 'package:construction_technect/app/modules/RoleManagement%20/views/role_management_view.dart';
-import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
-import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
-import 'package:construction_technect/app/modules/location/bindings/location_bindings.dart';
-import 'package:construction_technect/app/modules/location/views/location_view.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/bindings/sign_up_details_binding.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_up_password_binding.dart';
@@ -25,17 +22,20 @@ import 'package:construction_technect/app/modules/SignUpRole/bindings/sign_up_ro
 import 'package:construction_technect/app/modules/SignUpRole/views/sign_up_role_view.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/bindings/update_your_certifications_binding.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/views/update_your_certifications_view.dart';
+import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
+import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
 import 'package:construction_technect/app/modules/forgotPassword/bindings/forgot_password_binding.dart';
 import 'package:construction_technect/app/modules/forgotPassword/views/forgot_password_view.dart';
-import 'package:construction_technect/app/modules/RoleManagement%20/bindings/role_management_binding.dart';
+import 'package:construction_technect/app/modules/location/bindings/location_bindings.dart';
+import 'package:construction_technect/app/modules/location/views/location_view.dart';
 import 'package:construction_technect/app/modules/login/bindings/login_binding.dart';
 import 'package:construction_technect/app/modules/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/main/bindings/main_binding.dart';
 import 'package:construction_technect/app/modules/main/views/main_view.dart';
-import 'package:construction_technect/app/modules/splash/bindings/splash_binding.dart';
-import 'package:construction_technect/app/modules/splash/views/splash_view.dart';
 import 'package:construction_technect/app/modules/profile/bindings/profile_binding.dart';
 import 'package:construction_technect/app/modules/profile/views/profile_view.dart';
+import 'package:construction_technect/app/modules/splash/bindings/splash_binding.dart';
+import 'package:construction_technect/app/modules/splash/views/splash_view.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -51,11 +51,7 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(
-      name: _Paths.LOGIN,
-      page: () => const LoginView(),
-      binding: LoginBinding(),
-    ),
+    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -91,17 +87,17 @@ class AppPages {
       page: () => const EditProfileView(),
       binding: EditProfileBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.BUSINESS_HOURS,
-      page: () =>  BusinessHoursView(),
+      page: () => BusinessHoursView(),
       binding: BusinessHoursBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.UPDATE_YOUR_CERTIFICATION,
       page: () => const UpdateYourCertificationsView(),
       binding: UpdateYourCertificationsBinding(),
     ),
-      GetPage(
+    GetPage(
       name: _Paths.LOCATION,
       page: () => const LocationView(),
       binding: LocationBinding(),
@@ -110,37 +106,37 @@ class AppPages {
     GetPage(
       name: _Paths.ADD_LOCATION_MANUALLY,
       page: () => const AddLocationManuallyView(),
-      binding:  AddLocationBinding(),
+      binding: AddLocationBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.ADDP_PRODUCT,
       page: () => const AddProductView(),
-      binding:  AddProductBinding(),
+      binding: AddProductBinding(),
     ),
-   GetPage(
+    GetPage(
       name: _Paths.PRODUCT_DETAILS,
-      page: () =>  ProductDetailsView(),
-      binding:  ProductDetailsBinding(),
+      page: () => ProductDetailsView(),
+      binding: ProductDetailsBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.ROLE_MANAGEMENT,
-      page: () =>  const RoleManagementView(),
-      binding:  RoleManagementBinding(),
+      page: () => const RoleManagementView(),
+      binding: RoleManagementBinding(),
     ),
     GetPage(
       name: _Paths.ADD_ROLE,
-      page: () =>  const AddRoleView(),
-      binding:  AddRoleBinding(),
+      page: () => const AddRoleView(),
+      binding: AddRoleBinding(),
     ),
     GetPage(
       name: _Paths.ADD_TEAM,
-      page: () =>  const AddTeamView(),
-      binding:  AddTeamBinding(),
+      page: () => const AddTeamView(),
+      binding: AddTeamBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.APPROVAL_INBOX,
-      page: () =>  const ApprovalInboxView(),
-      binding:  ApprovalInboxBinding(),
+      page: () => const ApprovalInboxView(),
+      binding: ApprovalInboxBinding(),
     ),
   ];
 }

@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:flutter/foundation.dart'; // for kIsWeb
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/splash/controllers/splash_controller.dart';
 
@@ -19,9 +19,7 @@ class SplashView extends GetView<SplashController> {
             children: [
               Image.asset(Asset.logoWithoutBack, fit: BoxFit.contain, width: 250),
               const SizedBox(height: 20),
-              Text(
-                'Welcome to Construction Technect (Web)',
-style: MyTexts.light22              ),
+              Text('Welcome to Construction Technect (Web)', style: MyTexts.light22),
             ],
           ),
         ),
@@ -59,8 +57,6 @@ style: MyTexts.light22              ),
     }
 
     // ✅ Fallback for tablets / desktop (non-web)
-    return const Scaffold(
-      body: Center(child: Text("Unsupported device")),
-    );
+    return const Scaffold(body: Center(child: Text("Unsupported device")));
   }
 }
