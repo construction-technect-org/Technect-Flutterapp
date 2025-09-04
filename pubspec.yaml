@@ -19,6 +19,8 @@ dependencies:
   dotted_border: ^2.1.0
   pin_code_fields: ^8.0.1
   auto_route: ^10.1.2 
+  get_storage: ^2.1.1
+  http: ^1.5.0
 
 dev_dependencies:
   flutter_test:

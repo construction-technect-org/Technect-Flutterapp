@@ -71,7 +71,9 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                     RoundedButton(
                       buttonName: 'PROCEED',
                       onTap: () {
-                        Get.toNamed(Routes.SIGN_UP_DETAILS);
+                        if (controller.selectedRole.value > 0) {
+                          Get.toNamed(Routes.SIGN_UP_DETAILS);
+                        }
                       },
                     ),
                     SizedBox(height: 2.5.sh),
@@ -104,11 +106,13 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
   Widget _buildRoleCard(int index, String imagePath, String roleName) {
     return Expanded(
       child: GestureDetector(
-        onTap: () => controller.selectRole(index),
+        onTap: () {
+          controller.selectRole(controller.roleId[index]);
+        },
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: controller.selectedRole.value == index
+              color: controller.selectedRole.value - 1 == index
                   ? MyColors.lightBlueSecond
                   : const Color(0xFFA0A0A0),
             ),
@@ -127,7 +131,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                   ],
                 ),
               ),
-              if (controller.selectedRole.value == index)
+              if (controller.selectedRole.value - 1 == index)
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(

@@ -103,9 +103,13 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Center(
-                                child: Text(
-                                  'Verify',
-                                  style: MyTexts.medium16.copyWith(color: MyColors.white),
+                                child: Obx(
+                                  () => Text(
+                                    controller.otpSend.value ? "Resend" : 'Verify',
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

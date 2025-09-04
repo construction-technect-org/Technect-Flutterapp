@@ -23,9 +23,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
             child: Container(
               decoration: BoxDecoration(
                 color: MyColors.white,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(43),
-                ),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(43)),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 6.sw),
@@ -40,9 +38,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                     Text('SIGN UP', style: MyTexts.light22),
                     Text(
                       'Create Password',
-                      style: MyTexts.light16.copyWith(
-                        color: MyColors.greyDetails,
-                      ),
+                      style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
                     ),
                     SizedBox(height: 2.h),
                     // Password
@@ -50,18 +46,16 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                       children: [
                         Text(
                           'Create Password',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
+                          style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                         ),
-                        Text(
-                          '*',
-                          style: MyTexts.light16.copyWith(color: MyColors.red),
-                        ),
+                        Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                       ],
                     ),
                     SizedBox(height: 1.h),
-                    CustomTextField(controller: controller.passwordController),
+                    CustomTextField(
+                      controller: controller.passwordController,
+                      obscureText: true,
+                    ),
                     SizedBox(height: 1.h),
                     Row(
                       children: [
@@ -74,9 +68,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                         Expanded(
                           child: Text(
                             'Eg: one uppercase, one number and lowercase',
-                            style: MyTexts.light14.copyWith(
-                              color: MyColors.warning,
-                            ),
+                            style: MyTexts.light14.copyWith(color: MyColors.warning),
                           ),
                         ),
                       ],
@@ -86,27 +78,29 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                       children: [
                         Text(
                           'Confirm Password',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
+                          style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                         ),
-                        Text(
-                          '*',
-                          style: MyTexts.light16.copyWith(color: MyColors.red),
-                        ),
+                        Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                       ],
                     ),
                     SizedBox(height: 1.h),
                     CustomTextField(
                       controller: controller.confirmPasswordController,
+                      obscureText: true,
                     ),
 
                     SizedBox(height: 6.h),
-                    RoundedButton(
-                      buttonName: 'SUBMIT',
-                      onTap: () {
-                        controller.completeSignUp();
-                      },
+                    Obx(
+                      () => RoundedButton(
+                        buttonName: controller.isLoading.value
+                            ? 'CREATING ACCOUNT...'
+                            : 'SUBMIT',
+                        onTap: controller.isLoading.value
+                            ? null
+                            : () {
+                                controller.completeSignUp();
+                              },
+                      ),
                     ),
 
                     SizedBox(height: 5.sh),

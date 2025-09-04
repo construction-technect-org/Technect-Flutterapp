@@ -12,6 +12,8 @@ class SignUpRoleController extends GetxController {
     'Other',
   ];
 
+  List roleId = [1, 2, 3, 4, 5, 6];
+
   final roleImages = [
     Asset.merchantIcon,
     Asset.civilIcon,

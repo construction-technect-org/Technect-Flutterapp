@@ -10,12 +10,14 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffix;
   final Widget? prefix; // 👈 Added for start icon
   final int maxLines; // 👈 NEW for multi-line
+  final bool? obscureText; // 👈 NEW for multi-line
 
   const CustomTextField({
     super.key,
     this.hintText,
     this.keyboardType,
     this.inputFormatters,
+    this.obscureText,
     this.controller,
     this.onChanged,
     this.validator,
@@ -34,6 +36,7 @@ class CustomTextField extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
+        obscureText: obscureText ?? false,
         style: MyTexts.extraBold16.copyWith(height: 36 / 16, color: MyColors.primary),
         cursorHeight: 20,
         keyboardType: keyboardType,

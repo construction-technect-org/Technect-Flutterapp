@@ -26,7 +26,9 @@ class LoginView extends GetView<LoginController> {
               child: Container(
                 decoration: BoxDecoration(
                   color: MyColors.white,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(43)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(43),
+                  ),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 6.sw),
@@ -35,15 +37,20 @@ class LoginView extends GetView<LoginController> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(height: 4.h),
-                      Text('LOGIN', style: MyTexts.light22  ),
+                      Text('LOGIN', style: MyTexts.light22),
                       SizedBox(height: 3.h),
                       Row(
                         children: [
                           Text(
                             'Enter Your Mobile Number',
-                            style: MyTexts.light18.copyWith(color: MyColors.lightBlue),
+                            style: MyTexts.light18.copyWith(
+                              color: MyColors.lightBlue,
+                            ),
                           ),
-                          Text('*', style: MyTexts.light18.copyWith(color: Colors.red)),
+                          Text(
+                            '*',
+                            style: MyTexts.light18.copyWith(color: Colors.red),
+                          ),
                         ],
                       ),
                       SizedBox(height: 2.h),
@@ -56,7 +63,9 @@ class LoginView extends GetView<LoginController> {
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               child: SvgPicture.asset(
                                 Asset.phoneIcon,
                                 width: 20,
@@ -83,7 +92,9 @@ class LoginView extends GetView<LoginController> {
                                   color: MyColors.primary,
                                 ),
                                 cursorHeight: 20,
-                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
                                 decoration: InputDecoration(
                                   hintText: 'Enter mobile number',
                                   hintStyle: MyTexts.medium16.copyWith(
@@ -104,7 +115,9 @@ class LoginView extends GetView<LoginController> {
                       SizedBox(height: 4.sh),
                       Text(
                         'Password*',
-                        style: MyTexts.light18.copyWith(color: MyColors.lightBlue),
+                        style: MyTexts.light18.copyWith(
+                          color: MyColors.lightBlue,
+                        ),
                       ),
                       SizedBox(height: 1.sh),
                       Container(
@@ -116,7 +129,9 @@ class LoginView extends GetView<LoginController> {
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               child: SvgPicture.asset(
                                 Asset.lockIcon,
                                 width: 20,
@@ -135,38 +150,48 @@ class LoginView extends GetView<LoginController> {
                             ),
                             // Text field
                             Expanded(
-                              child: TextField(
-                                controller: controller.passwordController,
-                                obscureText: true,
-                                style: MyTexts.extraBold16.copyWith(
-                                  color: MyColors.primary,
-                                  height: 36 / 16,
-                                ),
-                                cursorHeight: 20,
-                                decoration: InputDecoration(
-                                  hintText: 'Enter password',
-                                  hintStyle: MyTexts.medium16.copyWith(
-                                    color: MyColors.grey,
+                              child: Obx(
+                                () => TextField(
+                                  controller: controller.passwordController,
+                                  obscureText:
+                                      !controller.isPasswordVisible.value,
+                                  style: MyTexts.extraBold16.copyWith(
+                                    color: MyColors.primary,
+                                    height: 36 / 16,
                                   ),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 12,
+                                  cursorHeight: 20,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter password',
+                                    hintStyle: MyTexts.medium16.copyWith(
+                                      color: MyColors.grey,
+                                    ),
+                                    border: InputBorder.none,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 12,
+                                    ),
+                                    isDense: true,
                                   ),
-                                  isDense: true,
                                 ),
                               ),
                             ),
                             // Eye icon
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: SvgPicture.asset(
-                                Asset.eyeIcon,
-                                width: 18,
-                                height: 18,
-                                colorFilter: const ColorFilter.mode(
-                                  MyColors.primary,
-                                  BlendMode.srcIn,
+                            GestureDetector(
+                              onTap: () {
+                                controller.togglePasswordVisibility();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: SvgPicture.asset(
+                                  Asset.eyeIcon,
+                                  width: 18,
+                                  height: 18,
+                                  colorFilter: const ColorFilter.mode(
+                                    MyColors.primary,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                               ),
                             ),
@@ -179,18 +204,38 @@ class LoginView extends GetView<LoginController> {
                         children: [
                           Row(
                             children: [
-                              Container(
-                                width: 18,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(3),
-                                  border: Border.all(color: MyColors.grey),
+                              Obx(
+                                () => GestureDetector(
+                                  onTap: () {
+                                    controller.rememberMe.value =
+                                        !controller.rememberMe.value;
+                                  },
+                                  child: Container(
+                                    width: 18,
+                                    height: 18,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(3),
+                                      border: Border.all(color: MyColors.grey),
+                                      color: controller.rememberMe.value
+                                          ? MyColors.primary
+                                          : Colors.transparent,
+                                    ),
+                                    child: controller.rememberMe.value
+                                        ? const Icon(
+                                            Icons.check,
+                                            size: 14,
+                                            color: Colors.white,
+                                          )
+                                        : null,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 'Remember Me',
-                                style: MyTexts.medium14.copyWith(color: MyColors.grey),
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.grey,
+                                ),
                               ),
                             ],
                           ),
@@ -200,17 +245,25 @@ class LoginView extends GetView<LoginController> {
                             },
                             child: Text(
                               'Forgot Password?',
-                              style: MyTexts.medium14.copyWith(color: Colors.red),
+                              style: MyTexts.medium14.copyWith(
+                                color: Colors.red,
+                              ),
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: 2.sh),
-                      RoundedButton(
-                        buttonName: 'LOGIN',
-                        onTap: () {
-                          controller.login();
-                        },
+                      Obx(
+                        () => RoundedButton(
+                          buttonName: controller.isLoading.value
+                              ? 'LOGGING IN...'
+                              : 'LOGIN',
+                          onTap: controller.isLoading.value
+                              ? null
+                              : () {
+                                  controller.login();
+                                },
+                        ),
                       ),
                       SizedBox(height: 2.sh),
                       Row(
@@ -283,7 +336,10 @@ class LoginView extends GetView<LoginController> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Don't have an account? ", style: MyTexts.light16),
+                            Text(
+                              "Don't have an account? ",
+                              style: MyTexts.light16,
+                            ),
                             Text(
                               "Sign-up",
                               style: MyTexts.light16.copyWith(

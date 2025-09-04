@@ -1,6 +1,16 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
-void main() {
+late AppSharedPreference myPref;
+
+Future<void> initService() async {
+  await Get.putAsync(() {
+    return AppSharedPreference().initializeStorage();
+  });
+  myPref = Get.find();
+}
+
+Future<void> main() async {
+  await initService();
   runApp(
     ResponsiveSizer(
       builder: (context, orientation, screenType) {
@@ -10,6 +20,7 @@ void main() {
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,
           defaultTransition: Transition.fadeIn,
+          initialBinding: InitialBinding(),
           // Web-specific configurations
           builder: (context, child) {
             return MediaQuery(
@@ -21,4 +32,11 @@ void main() {
       },
     ),
   );
+}
+
+class InitialBinding implements Bindings {
+  @override
+  void dependencies() {
+    myPref = Get.find();
+  }
 }

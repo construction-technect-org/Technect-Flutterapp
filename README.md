@@ -326,3 +326,8 @@ For support and questions:
 ---
 
 **Built with ❤️ using Flutter and GetX**
+
+flutter clean
+flutter pub get
+cs ios
+pod install
