@@ -26,11 +26,12 @@ class SettingsView extends StatelessWidget {
             SizedBox(height: 1.h),
             _buildMenuItem('Approval Inbox', true),
             SizedBox(height: 1.h),
-            _buildMenuItem('Role Management', false,
-            onTap: (){
-             Get.toNamed(Routes.ROLE_MANAGEMENT);
-
-            }
+            _buildMenuItem(
+              'Role Management',
+              false,
+              onTap: () {
+                Get.toNamed(Routes.ROLE_MANAGEMENT);
+              },
             ),
             SizedBox(height: 1.h),
             _buildMenuItem('Support Ticket', true),
@@ -42,13 +43,11 @@ class SettingsView extends StatelessWidget {
                 Get.toNamed(Routes.PROFILE);
               },
             ),
-          
-                // 🔹 Section Separator
+
+            // 🔹 Section Separator
             SizedBox(height: 3.h),
             Divider(color: Colors.grey.shade300, thickness: 1),
             SizedBox(height: 2.h),
-
-            // 🔴 Logout (text button style)
             _buildMenuItem(
               'Log Out',
               false,
@@ -61,8 +60,8 @@ class SettingsView extends StatelessWidget {
                   message: "Are you sure you want to log out?",
                   confirmText: "Log Out",
                   onConfirm: () {
-                    // TODO: Implement logout logic
-                    Get.back(); // Close dialog
+                    myPref.logout();
+                    Get.offAllNamed(Routes.LOGIN);
                   },
                 );
               },
@@ -76,7 +75,7 @@ class SettingsView extends StatelessWidget {
               false,
               isDestructive: false,
               highlight: true,
-               icon: Icons.delete_forever, // 👈 Material delete icon
+              icon: Icons.delete_forever, // 👈 Material delete icon
               onTap: () {
                 _showConfirmDialog(
                   context,
@@ -91,85 +90,80 @@ class SettingsView extends StatelessWidget {
                 );
               },
             ),
-         
           ],
         ),
       ),
     );
   }
 
-Widget _buildMenuItem(
-  String title,
-  bool hasNotification, {
-  VoidCallback? onTap,
-  bool? isDestructive,
-  bool? highlight,
-  IconData? icon, // 👈 optional icon
-}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      decoration: BoxDecoration(
-        color: MyColors.menuTile,
-        borderRadius: BorderRadius.circular(7),
-      ),
-      child: Row(
-        children: [
-          // 👉 Only show icon if passed
-          if (icon != null) ...[
-            Icon(
-              icon,
-              size: 24,
-              color: isDestructive == true ? MyColors.red : MyColors.primary,
-            ),
-          ],
+  Widget _buildMenuItem(
+    String title,
+    bool hasNotification, {
+    VoidCallback? onTap,
+    bool? isDestructive,
+    bool? highlight,
+    IconData? icon, // 👈 optional icon
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        decoration: BoxDecoration(
+          color: MyColors.menuTile,
+          borderRadius: BorderRadius.circular(7),
+        ),
+        child: Row(
+          children: [
+            if (icon != null) ...[
+              Icon(
+                icon,
+                size: 24,
+                color: isDestructive == true ? MyColors.red : MyColors.primary,
+              ),
+            ],
 
-          // 👉 Notification / Default SVG (only if no icon is passed)
-          if (icon == null)
-            Stack(
-              children: [
-                SvgPicture.asset(
-                  Asset.menuSettingIcon,
-                  width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    MyColors.primary,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                if (hasNotification)
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
+            if (icon == null)
+              Stack(
+                children: [
+                  SvgPicture.asset(
+                    Asset.menuSettingIcon,
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      MyColors.primary,
+                      BlendMode.srcIn,
                     ),
                   ),
-              ],
-            ),
+                  if (hasNotification)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
 
-          SizedBox(width: 4.w),
-          Text(
-            title,
-            style: MyTexts.medium16.copyWith(
-              color: isDestructive == true ? MyColors.red : MyColors.primary,
-              fontWeight: highlight == true ? FontWeight.w600 : FontWeight.w800,
+            SizedBox(width: 4.w),
+            Text(
+              title,
+              style: MyTexts.medium16.copyWith(
+                color: isDestructive == true ? MyColors.red : MyColors.primary,
+                fontWeight: highlight == true ? FontWeight.w600 : FontWeight.w800,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-
-
+    );
+  }
 }
 
 /// Modern Confirmation Dialog
@@ -187,8 +181,6 @@ void _showConfirmDialog(
       titlePadding: const EdgeInsets.all(20),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-
-      // ===== Title with Icon =====
       title: Row(
         children: [
           const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
@@ -208,10 +200,7 @@ void _showConfirmDialog(
       // ===== Message =====
       content: Text(
         message,
-        style: MyTexts.regular14.copyWith(
-          color: Colors.black87,
-          height: 1.4,
-        ),
+        style: MyTexts.regular16.copyWith(color: Colors.black87, height: 1.4),
       ),
 
       // ===== Actions =====
@@ -227,10 +216,7 @@ void _showConfirmDialog(
         ),
         ElevatedButton.icon(
           icon: const Icon(Icons.logout, size: 18, color: Colors.white),
-          label: Text(
-            confirmText,
-            style: const TextStyle(color: Colors.white),
-          ),
+          label: Text(confirmText, style: const TextStyle(color: Colors.white)),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             elevation: 0,
@@ -244,4 +230,3 @@ void _showConfirmDialog(
     barrierDismissible: false,
   );
 }
-

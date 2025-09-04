@@ -67,20 +67,11 @@ class AppSharedPreference {
     storage.erase();
   }
 
-  // Logout method - clears token and user data but keeps credentials if remember me is enabled
   void logout() {
-    token.val = '';
-    userModel.val = {};
-    // Don't clear credentials if remember me is enabled
-  }
-
-  // Complete logout - clears everything including credentials
-  void completeLogout() {
     token.val = '';
     userModel.val = {};
     addressData.val = {};
     profileData.val = {};
-    clearCredentials();
   }
 
   // Address data storage

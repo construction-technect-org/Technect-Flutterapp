@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/login/services/LoginService.dart';
-import 'package:construction_technect/main.dart';
 
 class LoginController extends GetxController {
   final mobileController = TextEditingController();
@@ -71,7 +70,6 @@ class LoginController extends GetxController {
           myPref.clearCredentials();
         }
 
-        // SnackBars.successSnackBar(content: 'Login successful!');
         Get.offAllNamed(Routes.MAIN);
       } else {
         SnackBars.errorSnackBar(content: loginResponse.message ?? 'Login failed');
@@ -81,12 +79,5 @@ class LoginController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }
-
-  @override
-  void onClose() {
-    mobileController.dispose();
-    passwordController.dispose();
-    super.onClose();
   }
 }

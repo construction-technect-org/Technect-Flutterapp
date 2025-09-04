@@ -1,6 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/main.dart';
 
 class SplashController extends GetxController {
   String? token;
