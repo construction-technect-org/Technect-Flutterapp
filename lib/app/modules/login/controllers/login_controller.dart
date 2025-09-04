@@ -65,21 +65,16 @@ class LoginController extends GetxController {
 
         // Save credentials if remember me is checked
         if (rememberMe.value) {
-          myPref.saveCredentials(
-            mobileController.text,
-            passwordController.text,
-          );
+          myPref.saveCredentials(mobileController.text, passwordController.text);
         } else {
           // Clear saved credentials if remember me is unchecked
           myPref.clearCredentials();
         }
 
-        SnackBars.successSnackBar(content: 'Login successful!');
+        // SnackBars.successSnackBar(content: 'Login successful!');
         Get.offAllNamed(Routes.MAIN);
       } else {
-        SnackBars.errorSnackBar(
-          content: loginResponse.message ?? 'Login failed',
-        );
+        SnackBars.errorSnackBar(content: loginResponse.message ?? 'Login failed');
       }
     } catch (e) {
       // Error is already shown by ApiManager
