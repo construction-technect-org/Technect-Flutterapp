@@ -8,7 +8,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ApiManager {
-  static const String baseUrl = "http://192.168.1.66:3000/api/";
+  // Local
+  // static const String baseUrl = "http://192.168.1.66:3000/api/";
+  // Live
+  static const String baseUrl = "http://43.205.117.97/api/";
 
   /// POST method for JSON body requests
   Future<dynamic> postObject({required String url, required Object body}) async {
