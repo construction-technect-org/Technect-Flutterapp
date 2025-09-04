@@ -26,6 +26,9 @@ class HomeController extends GetxController {
   Rx<ProfileModel> profileData = ProfileModel().obs;
   AddressModel addressData = AddressModel();
 
+  // Flag to track if profile dialog has been shown in this session
+  bool _profileDialogShown = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -75,18 +78,26 @@ class HomeController extends GetxController {
     Get.printInfo(info: '📊 Profile data: ${profileData.value.toJson()}');
 
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
+        0;
     hasProfileComplete.value = completionPercentage >= 90;
     Get.printInfo(
       info:
           '📊 Profile completion: $completionPercentage%, Complete: ${hasProfileComplete.value}',
     );
 
-    if (!hasProfileComplete.value) {
+    // Only show dialog if profile is incomplete AND dialog is not already open AND not shown in this session
+    if (!hasProfileComplete.value &&
+        Get.isDialogOpen != true &&
+        !_profileDialogShown) {
       Get.printInfo(info: '🚨 Profile incomplete, showing dialog...');
+      _profileDialogShown = true; // Mark as shown
       _showProfileCompletionDialog();
     } else {
-      Get.printInfo(info: '✅ Profile complete, no dialog needed');
+      Get.printInfo(
+        info:
+            '✅ Profile complete, dialog already open, or already shown in this session',
+      );
     }
   }
 
@@ -129,7 +140,9 @@ class HomeController extends GetxController {
                   const SizedBox(height: 12),
                   Text(
                     'Complete your Profile',
-                    style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground),
+                    style: MyTexts.medium18.copyWith(
+                      color: MyColors.textFieldBackground,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -151,18 +164,82 @@ class HomeController extends GetxController {
   // Handle profile dialog tap based on completion percentage
   void _handleProfileDialogTap() {
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
+        0;
 
-    Get.printInfo(info: '🎯 Profile dialog tapped - Completion: $completionPercentage%');
+    Get.printInfo(
+      info: '🎯 Profile dialog tapped - Completion: $completionPercentage%',
+    );
 
+    // Don't close the dialog here - let it stay open
+    // Just navigate to the appropriate screen
     if (completionPercentage == 0) {
       // If percentage is 0, navigate to EDIT_PROFILE
       Get.printInfo(info: '📝 Navigating to EDIT_PROFILE (0% completion)');
       Get.toNamed(Routes.EDIT_PROFILE);
     } else {
       // If percentage is more than 0, navigate to PROFILE
-      Get.printInfo(info: '👤 Navigating to PROFILE ($completionPercentage% completion)');
+      Get.printInfo(
+        info: '👤 Navigating to PROFILE ($completionPercentage% completion)',
+      );
       Get.toNamed(Routes.PROFILE);
+    }
+  }
+
+  // Reset profile dialog flag (call this when user returns from edit profile)
+  void resetProfileDialogFlag() {
+    _profileDialogShown = false;
+    Get.printInfo(info: '🔄 Profile dialog flag reset');
+  }
+
+  // Manually trigger profile completion check (useful for testing or manual refresh)
+  void checkProfileCompletionManually() {
+    _profileDialogShown = false; // Reset flag to allow showing dialog again
+    _checkProfileCompletion();
+  }
+
+  // Handle when user returns from edit profile screen
+  void onReturnFromEditProfile() {
+    Get.printInfo(info: '🔄 User returned from edit profile');
+
+    // Don't reset the dialog flag here - let it stay open if profile is still incomplete
+    // Only reset if profile is actually completed
+
+    // Refresh profile data to get updated completion percentage
+    _fetchProfileData();
+
+    // Check profile completion after a delay to allow data to load
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      _checkProfileCompletionAfterEdit();
+    });
+  }
+
+  // Check profile completion after returning from edit profile
+  void _checkProfileCompletionAfterEdit() {
+    Get.printInfo(info: '🔍 Checking profile completion after edit...');
+
+    final completionPercentage =
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
+        0;
+    hasProfileComplete.value = completionPercentage >= 90;
+
+    Get.printInfo(
+      info:
+          '📊 Profile completion after edit: $completionPercentage%, Complete: ${hasProfileComplete.value}',
+    );
+
+    if (hasProfileComplete.value) {
+      // Profile is now complete, close dialog and reset flag
+      if (Get.isDialogOpen == true) {
+        Get.back();
+        Get.printInfo(info: '✅ Profile complete, closing dialog');
+      }
+      resetProfileDialogFlag();
+    } else {
+      // Profile is still incomplete, keep dialog open and allow clicking again
+      Get.printInfo(info: '⚠️ Profile still incomplete, keeping dialog open');
+      // Reset the flag so dialog can be clicked again
+      _profileDialogShown = false;
     }
   }
 
@@ -221,7 +298,8 @@ class HomeController extends GetxController {
     try {
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true && profileResponse.data?.user != null) {
+      if (profileResponse.success == true &&
+          profileResponse.data?.user != null) {
         profileData.value = profileResponse;
 
         // Cache profile data for home screen only
@@ -295,7 +373,9 @@ class HomeController extends GetxController {
         Get.printError(info: 'Error refreshing home data: $e');
       }
     } else {
-      Get.printInfo(info: '📱 Home: Using cached address data, no API call needed');
+      Get.printInfo(
+        info: '📱 Home: Using cached address data, no API call needed',
+      );
     }
   }
 

@@ -11,6 +11,7 @@ class SnackBars {
       margin: const EdgeInsets.all(15),
       borderRadius: 10,
       duration: Duration(seconds: time ?? 3),
+      snackPosition: SnackPosition.TOP,
     );
   }
 
@@ -23,6 +24,7 @@ class SnackBars {
       backgroundColor: Colors.green.withOpacity(0.8),
       margin: const EdgeInsets.all(15),
       borderRadius: 10,
+      snackPosition: SnackPosition.TOP,
     );
   }
 }
