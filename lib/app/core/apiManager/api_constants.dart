@@ -10,4 +10,7 @@ class APIConstants {
   static const String verifyOtp = "auth/verify-otp";
   static const String signup = "auth/signup";
   static const String login = "auth/login";
+  static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
+  static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
+  static const String forgotPasswordReset = "auth/forgot-password/reset";
 }

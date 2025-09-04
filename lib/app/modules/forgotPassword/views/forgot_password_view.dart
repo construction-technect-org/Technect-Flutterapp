@@ -56,7 +56,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                           margin: const EdgeInsets.only(right: 8),
                           child: GestureDetector(
                             onTap: () {
-                              controller.getOTP();
+                              controller.sendOtp();
                             },
                             child: Container(
                               width: 100,
@@ -67,9 +67,13 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
-                                child: Text(
-                                  'Get OTP',
-                                  style: MyTexts.medium16.copyWith(color: MyColors.white),
+                                child: Obx(
+                                  () => Text(
+                                    controller.otpSend.value ? "Resend" : 'Verify',
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
