@@ -13,4 +13,6 @@ class APIConstants {
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
   static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
   static const String forgotPasswordReset = "auth/forgot-password/reset";
+  static const String profile = "auth/profile";
+  static const String address = "address";
 }

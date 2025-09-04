@@ -1,12 +1,6 @@
-import 'package:construction_technect/app/core/utils/colors.dart';
-import 'package:construction_technect/app/core/utils/constants.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/text_theme.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/product_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart'; // 👈 For Get.toNamed
 
 class ProductManagementHomeView extends StatelessWidget {
   const ProductManagementHomeView({super.key});
@@ -35,7 +29,7 @@ class ProductManagementHomeView extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     // 👇 Navigate to new screen
-                    Get.toNamed(Routes.LOCATION);
+                    Get.toNamed(Routes.ADDRESS);
                   },
                   child: Row(
                     children: [
@@ -100,10 +94,7 @@ class ProductManagementHomeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 13,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
@@ -120,20 +111,14 @@ class ProductManagementHomeView extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(
-                          Asset.searchIcon,
-                          height: 16,
-                          width: 16,
-                        ),
+                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                       ),
                       prefixIconConstraints: const BoxConstraints(
                         minWidth: 36,
                         minHeight: 36,
                       ),
                       hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(
-                        color: MyColors.darkGray,
-                      ),
+                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                       filled: true,
                       fillColor: MyColors.white,
                       contentPadding: const EdgeInsets.symmetric(
@@ -146,11 +131,7 @@ class ProductManagementHomeView extends StatelessWidget {
                       ),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(
-                          Asset.filterIcon,
-                          height: 20,
-                          width: 20,
-                        ),
+                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
                       ),
                     ),
                   ),
@@ -164,9 +145,7 @@ class ProductManagementHomeView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
                   "Product Management",
-                  style: MyTexts.extraBold18.copyWith(
-                    color: MyColors.fontBlack,
-                  ),
+                  style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
                 ),
               ),
               SizedBox(height: 2.h),
@@ -237,8 +216,7 @@ class ProductManagementHomeView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                     Get.toNamed(Routes.PRODUCT_DETAILS);
-
+                        Get.toNamed(Routes.PRODUCT_DETAILS);
                       },
                       child: ProductCard(
                         statusText: 'Active',

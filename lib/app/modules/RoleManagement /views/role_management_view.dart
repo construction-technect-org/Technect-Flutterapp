@@ -1,12 +1,6 @@
-import 'package:construction_technect/app/core/utils/colors.dart';
-import 'package:construction_technect/app/core/utils/constants.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/text_theme.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/RoleManagement%20/controllers/role_management%20_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 class RoleManagementView extends GetView<RoleManagementController> {
   const RoleManagementView({super.key});
@@ -33,7 +27,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(Routes.LOCATION);
+                    Get.toNamed(Routes.ADDRESS);
                   },
                   child: Row(
                     children: [
@@ -93,10 +87,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 13,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
@@ -113,16 +104,10 @@ class RoleManagementView extends GetView<RoleManagementController> {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(
-                          Asset.searchIcon,
-                          height: 16,
-                          width: 16,
-                        ),
+                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                       ),
                       hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(
-                        color: MyColors.darkGray,
-                      ),
+                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                       filled: true,
                       fillColor: MyColors.white,
                       border: OutlineInputBorder(
@@ -131,11 +116,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                       ),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(
-                          Asset.filterIcon,
-                          height: 20,
-                          width: 20,
-                        ),
+                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
                       ),
                     ),
                   ),
@@ -166,9 +147,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                       child: Center(
                         child: Text(
                           '+ Add New Role',
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.white,
-                          ),
+                          style: MyTexts.medium14.copyWith(color: MyColors.white),
                         ),
                       ),
                     ),
@@ -254,9 +233,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                         child: Center(
                           child: Text(
                             '+ Add New Team',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.white,
-                            ),
+                            style: MyTexts.medium14.copyWith(color: MyColors.white),
                           ),
                         ),
                       ),
@@ -307,11 +284,9 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                         width: 16,
                                         height: 16,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                          color: MyColors
-                                              .primary, // background with opacity
+                                          borderRadius: BorderRadius.circular(8),
+                                          color:
+                                              MyColors.primary, // background with opacity
                                         ),
                                         child: Center(
                                           child: Icon(
@@ -331,9 +306,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: MyColors.mediumSeaGreen,
-                                          borderRadius: BorderRadius.circular(
-                                            14.5,
-                                          ),
+                                          borderRadius: BorderRadius.circular(14.5),
                                         ),
                                         child: Text(
                                           "Admin",
@@ -400,11 +373,7 @@ class RoleCardsPage extends StatelessWidget {
       RoleData(
         title: 'Admin',
         icon: SvgPicture.asset(Asset.Admin), // ✅ SVG works
-        points: const [
-          'Full system access',
-          'Manage all members',
-          'Configure settings',
-        ],
+        points: const ['Full system access', 'Manage all members', 'Configure settings'],
         userCount: 12,
       ),
       RoleData(
@@ -466,9 +435,7 @@ class RoleCard extends StatelessWidget {
                         height: 27, // 👈 fixed height
                         decoration: BoxDecoration(
                           color: MyColors.paleBluecolor, // 👈 background color
-                          borderRadius: BorderRadius.circular(
-                            9,
-                          ), // 👈 rounded rectangle
+                          borderRadius: BorderRadius.circular(9), // 👈 rounded rectangle
                         ),
                         child: Center(
                           child: SizedBox(
@@ -523,10 +490,7 @@ class RoleCard extends StatelessWidget {
                   // Users pill
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 4.w,
-                      vertical: 1.5.h,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
                     decoration: BoxDecoration(
                       color: MyColors.whiteBlue,
                       borderRadius: BorderRadius.circular(11),
@@ -536,15 +500,11 @@ class RoleCard extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: 'Users: ',
-                            style: MyTexts.regular14.copyWith(
-                              color: MyColors.fontBlack,
-                            ),
+                            style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
                           ),
                           TextSpan(
                             text: '${role.userCount}',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.fontBlack,
-                            ),
+                            style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                           ),
                         ],
                       ),
@@ -561,9 +521,9 @@ class RoleCard extends StatelessWidget {
             top: 2.h,
             child: GestureDetector(
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Edit ${role.title} tapped')),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text('Edit ${role.title} tapped')));
               },
               child: Container(
                 width: 27, // 👈 fixed width

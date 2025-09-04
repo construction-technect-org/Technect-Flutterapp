@@ -81,7 +81,7 @@ class MyTexts {
     fontWeight: FontWeight.w500,
     color: MyColors.black,
   );
-   static TextStyle get medium24 => TextStyle(
+  static TextStyle get medium24 => TextStyle(
     fontFamily: Lato,
     fontSize: 24.sp,
     fontWeight: FontWeight.w500,
@@ -123,8 +123,7 @@ class MyTexts {
     color: MyColors.black,
   );
 
-
-   static TextStyle get regular16 => TextStyle(
+  static TextStyle get regular16 => TextStyle(
     fontFamily: Lato,
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
@@ -165,6 +164,12 @@ class MyTexts {
     color: MyColors.black,
   );
 
+  static TextStyle get bold20 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+    color: MyColors.black,
+  );
 
   static TextStyle get extraBold20 => TextStyle(
     fontFamily: Lato,

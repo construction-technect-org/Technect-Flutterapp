@@ -15,6 +15,10 @@ class AppSharedPreference {
   final savedMobileNumber = ''.val('savedMobileNumber');
   final savedPassword = ''.val('savedPassword');
   final rememberMe = false.val('rememberMe');
+  final addressData = <String, dynamic>{}.val('addressData');
+  final profileData = <String, dynamic>{}.val('profileData');
+  final addressDataTimestamp = 0.val('addressDataTimestamp');
+  final profileDataTimestamp = 0.val('profileDataTimestamp');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -74,6 +78,48 @@ class AppSharedPreference {
   void completeLogout() {
     token.val = '';
     userModel.val = {};
+    addressData.val = {};
+    profileData.val = {};
     clearCredentials();
+  }
+
+  // Address data storage
+  void setAddressData(Map<String, dynamic> address) {
+    addressData.val = address;
+    addressDataTimestamp.val = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  Map<String, dynamic>? getAddressData() {
+    final data = addressData.val;
+    if (data.isNotEmpty) {
+      return Map<String, dynamic>.from(data);
+    }
+    return null;
+  }
+
+  int getAddressDataTimestamp() {
+    return addressDataTimestamp.val;
+  }
+
+  void clearAddressData() {
+    addressData.val = {};
+    addressDataTimestamp.val = 0;
+  }
+
+  // Profile data storage
+  void setProfileData(Map<String, dynamic> profile) {
+    profileData.val = profile;
+  }
+
+  Map<String, dynamic>? getProfileData() {
+    final data = profileData.val;
+    if (data.isNotEmpty) {
+      return Map<String, dynamic>.from(data);
+    }
+    return null;
+  }
+
+  void clearProfileData() {
+    profileData.val = {};
   }
 }

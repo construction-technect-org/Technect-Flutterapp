@@ -36,22 +36,21 @@ class Asset {
   static const String identityIcon = 'assets/images/identity.svg';
   static const String businessLiIcon = 'assets/images/businessLi.svg';
   static const String qualityIcon = 'assets/images/quality.svg';
-   static const String profil = 'assets/images/profil.png';
+  static const String profil = 'assets/images/profil.png';
 
   // Edit
   static const String editIcon = 'assets/images/edit.svg';
   static const String closeIcon = 'assets/images/close.svg';
- static const String updownIcon = 'assets/images/updownicon.png';
+  static const String updownIcon = 'assets/images/updownicon.png';
 
+  //Home
+  static const String searchIcon = 'assets/images/search.svg';
+  static const String filterIcon = 'assets/images/filter.svg';
+  static const String profileIcon = 'assets/images/profil.svg';
+  static const String location = 'assets/images/location.svg';
+  static const String notifications = 'assets/images/notification.svg';
 
- //Home
- static const String searchIcon = 'assets/images/search.svg';
-static const String filterIcon = 'assets/images/filter.svg';
-static const String profileIcon = 'assets/images/profil.svg';
- static const String location = 'assets/images/location.svg';
- static const String notifications = 'assets/images/notification.svg';
-
-// 📦 Business modules (new)
+  // 📦 Business modules (new)
   static const String marketplaceIcon = 'assets/images/marketpalce.png';
   static const String erpIcon = 'assets/images/erp.png';
   static const String crmIcon = 'assets/images/crm.png';
@@ -61,18 +60,16 @@ static const String profileIcon = 'assets/images/profil.svg';
   static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
   static const String team = 'assets/images/team.png';
 
-
-
   //Statistics
   static const String noOfUsers = 'assets/images/no_of_users.svg';
   static const String totalProducts = 'assets/images/total_products.svg';
 
-
- //Location
+  //Location
   static const String Locationon = 'assets/images/Locationon.svg';
   static const String Map = 'assets/images/map.png';
+  static const String locationComplete = 'assets/images/locationComplete.png';
 
-  //Product 
+  //Product
   static const String Product = 'assets/images/product.png';
   static const String TotalInterests = 'assets/images/TotalInterests.svg';
   static const String TotalProducts = 'assets/images/TotalProducts.svg';
@@ -81,16 +78,13 @@ static const String profileIcon = 'assets/images/profil.svg';
   static const String price = 'assets/images/price.png';
   static const String gst = 'assets/images/gst.png';
 
-//Product details
+  //Product details
   static const String productDetails = 'assets/images/product_details.png';
   static const String virify = 'assets/images/virify.png';
 
-  //Role management 
-    static const String Admin = 'assets/images/Admin.svg';
-    static const String user = 'assets/images/user.svg';
-
-
-
+  //Role management
+  static const String Admin = 'assets/images/Admin.svg';
+  static const String user = 'assets/images/user.svg';
 }
 
 class Constants {

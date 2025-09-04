@@ -329,5 +329,6 @@ For support and questions:
 
 flutter clean
 flutter pub get
-cs ios
+cd ios
 pod install
+cd ..

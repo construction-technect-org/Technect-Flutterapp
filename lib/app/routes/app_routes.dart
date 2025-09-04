@@ -16,7 +16,7 @@ abstract class Routes {
   static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
   static const BUSINESS_HOURS = _Paths.BUSINESS_HOURS;
   static const UPDATE_YOUR_CERTIFICATION = _Paths.UPDATE_YOUR_CERTIFICATION;
-  static const LOCATION = _Paths.LOCATION;
+  static const ADDRESS = _Paths.ADDRESS;
   static const ADD_LOCATION_MANUALLY = _Paths.ADD_LOCATION_MANUALLY;
   static const ADDP_PRODUCT = _Paths.ADDP_PRODUCT;
   static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
@@ -24,10 +24,6 @@ abstract class Routes {
   static const ADD_ROLE = _Paths.ADD_ROLE;
   static const ADD_TEAM = _Paths.ADD_TEAM;
   static const APPROVAL_INBOX = _Paths.APPROVAL_INBOX;
-
-
-
-
 }
 
 abstract class _Paths {
@@ -45,7 +41,7 @@ abstract class _Paths {
   static const EDIT_PROFILE = '/edit-profile';
   static const BUSINESS_HOURS = '/business-hours';
   static const UPDATE_YOUR_CERTIFICATION = '/update-your-certification';
-  static const LOCATION = '/location';
+  static const ADDRESS = '/address';
   static const ADD_LOCATION_MANUALLY = '/add-location-manually';
   static const ADDP_PRODUCT = '/Add-product';
   static const PRODUCT_DETAILS = '/product-details';
@@ -53,8 +49,4 @@ abstract class _Paths {
   static const ADD_ROLE = '/add-role';
   static const ADD_TEAM = '/add-team';
   static const APPROVAL_INBOX = '/approval-inbox';
-
-
-
-
 }

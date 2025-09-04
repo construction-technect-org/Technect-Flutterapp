@@ -1,17 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 
 class HomeView extends StatelessWidget {
-  HomeView({super.key});
-
-  final List<Map<String, String>> items = [
-    {"icon": Asset.marketplaceIcon, "label": "Marketplace"},
-    {"icon": Asset.erpIcon, "label": "ERP"},
-    {"icon": Asset.crmIcon, "label": "CRM"},
-    {"icon": Asset.ovpIcon, "label": "OVP"},
-    {"icon": Asset.hrmsIcon, "label": "HRMS"},
-    {"icon": Asset.projectManagementIcon, "label": "Project\nManagement"},
-    {"icon": Asset.portfolioManagementIcon, "label": "Portfolio\nManagement"},
-  ];
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +22,26 @@ class HomeView extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Welcome Vaishnavi!",
-                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
+                Obx(
+                  () => Text(
+                    'Welcome ${controller.profileData.value.data?.user?.firstName}!',
+                    style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
-                    // 👇 Navigate to new screen
-                    Get.toNamed(Routes.LOCATION);
+                    controller.navigateToEditAddress();
                   },
                   child: Row(
                     children: [
                       SvgPicture.asset(Asset.location, width: 9, height: 12.22),
                       SizedBox(width: 0.4.h),
-                      Text(
-                        "Sadashiv Peth, Pune",
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.textFieldBackground,
+                      Obx(
+                        () => Text(
+                          controller.getCurrentAddress(),
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.textFieldBackground,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -190,7 +184,7 @@ class HomeView extends StatelessWidget {
                     crossAxisSpacing: 20,
                     childAspectRatio: 0.80,
                   ),
-                  itemCount: items.length,
+                  itemCount: controller.items.length,
                   itemBuilder: (context, index) {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -214,7 +208,10 @@ class HomeView extends StatelessWidget {
                                 bottom: -15,
                                 left: 0,
                                 right: 0,
-                                child: Image.asset(items[index]["icon"]!, height: 73),
+                                child: Image.asset(
+                                  controller.items[index]["icon"]!,
+                                  height: 73,
+                                ),
                               ),
                             ],
                           ),
@@ -222,7 +219,7 @@ class HomeView extends StatelessWidget {
                         SizedBox(height: 0.7.h),
                         SizedBox(
                           child: Text(
-                            items[index]["label"]!,
+                            controller.items[index]["label"]!,
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
