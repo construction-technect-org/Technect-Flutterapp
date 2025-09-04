@@ -1,5 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/services/address_service.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 
 class AddLocationController extends GetxController {
   // Form controllers
@@ -18,7 +20,7 @@ class AddLocationController extends GetxController {
 
   // Service
   final AddressService _addressService = AddressService();
-
+  HomeController homeController = Get.find<HomeController>();
   @override
   void onInit() {
     super.onInit();
@@ -59,6 +61,25 @@ class AddLocationController extends GetxController {
       _prefillForm(locationData);
     }
     // Coordinates are handled in the submit method
+  }
+
+  // Fetch and store address data after successful save
+  Future<void> _fetchAndStoreAddressData() async {
+    try {
+      // Import the home service to call get address API
+      final homeService = HomeService();
+      final addressResponse = await homeService.getAddress();
+
+      if (addressResponse.success == true) {
+        // Store the updated address data in local storage
+        myPref.setAddressData(addressResponse.toJson());
+        Get.printInfo(
+          info: '💾 Manual Address: Fetched and cached updated address data',
+        );
+      }
+    } catch (e) {
+      Get.printError(info: 'Error fetching address data: $e');
+    }
   }
 
   @override
@@ -133,11 +154,16 @@ class AddLocationController extends GetxController {
       if (response['success'] == true) {
         locationAdded.value = true;
 
+        // Call get address API to fetch updated address data
+        await _fetchAndStoreAddressData();
+
         await Future.delayed(const Duration(seconds: 2));
         Get.offAllNamed(Routes.MAIN);
       } else {
         locationAdded.value = false;
-        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to save address');
+        SnackBars.errorSnackBar(
+          content: response['message'] ?? 'Failed to save address',
+        );
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error saving address: $e');
