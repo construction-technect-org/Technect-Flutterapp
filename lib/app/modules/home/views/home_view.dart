@@ -263,7 +263,7 @@ class HomeView extends StatelessWidget {
                 height: 130,
                 child: GestureDetector(
                   onTap: () {
-                    Get.toNamed(Routes.ROLE_MANAGEMENT);
+                 //   Get.toNamed(Routes.ROLE_MANAGEMENT);
                   },
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
