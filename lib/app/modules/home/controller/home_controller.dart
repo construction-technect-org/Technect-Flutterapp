@@ -20,6 +20,7 @@ class HomeController extends GetxController {
   // State management
   final isLoading = false.obs;
   final hasAddress = false.obs;
+  final hasProfileComplete = false.obs;
 
   // Data
   Rx<ProfileModel> profileData = ProfileModel().obs;
@@ -34,8 +35,12 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    // Refresh data when returning to home screen
     _refreshHomeData();
+
+    // Check profile completion after UI is ready
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _checkProfileCompletion();
+    });
   }
 
   Future<void> _initializeHomeData() async {
@@ -62,6 +67,103 @@ class HomeController extends GetxController {
   bool _hasCachedProfileData() {
     final cachedData = myPref.getProfileData();
     return cachedData != null && cachedData.isNotEmpty;
+  }
+
+  // Check profile completion percentage
+  void _checkProfileCompletion() {
+    Get.printInfo(info: '🔍 Checking profile completion...');
+    Get.printInfo(info: '📊 Profile data: ${profileData.value.toJson()}');
+
+    final completionPercentage =
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+    hasProfileComplete.value = completionPercentage >= 90;
+    Get.printInfo(
+      info:
+          '📊 Profile completion: $completionPercentage%, Complete: ${hasProfileComplete.value}',
+    );
+
+    if (!hasProfileComplete.value) {
+      Get.printInfo(info: '🚨 Profile incomplete, showing dialog...');
+      _showProfileCompletionDialog();
+    } else {
+      Get.printInfo(info: '✅ Profile complete, no dialog needed');
+    }
+  }
+
+  // Show profile completion dialog
+  void _showProfileCompletionDialog() {
+    Get.printInfo(info: '🎯 Showing profile completion dialog...');
+
+    // Check if dialog is already open
+    if (Get.isDialogOpen == true) {
+      Get.printInfo(info: '⚠️ Dialog already open, skipping...');
+      return;
+    }
+
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+        child: GestureDetector(
+          onTap: () {
+            _handleProfileDialogTap();
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(13),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(Asset.pendingIcon, height: 80),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Complete your Profile',
+                    style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Profile Pending',
+                    style: MyTexts.medium16.copyWith(color: MyColors.warning),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: false, // Non-closable dialog
+    );
+
+    Get.printInfo(info: '✅ Profile completion dialog displayed');
+  }
+
+  // Handle profile dialog tap based on completion percentage
+  void _handleProfileDialogTap() {
+    final completionPercentage =
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+
+    Get.printInfo(info: '🎯 Profile dialog tapped - Completion: $completionPercentage%');
+
+    if (completionPercentage == 0) {
+      // If percentage is 0, navigate to EDIT_PROFILE
+      Get.printInfo(info: '📝 Navigating to EDIT_PROFILE (0% completion)');
+      Get.toNamed(Routes.EDIT_PROFILE);
+    } else {
+      // If percentage is more than 0, navigate to PROFILE
+      Get.printInfo(info: '👤 Navigating to PROFILE ($completionPercentage% completion)');
+      Get.toNamed(Routes.PROFILE);
+    }
   }
 
   // Load cached data for instant display on home screen

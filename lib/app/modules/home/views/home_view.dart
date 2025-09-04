@@ -6,6 +6,10 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _buildMainContent();
+  }
+
+  Widget _buildMainContent() {
     return Scaffold(
       backgroundColor: MyColors.white,
 
@@ -97,7 +101,10 @@ class HomeView extends StatelessWidget {
             children: [
               /// Search bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 13,
+                ),
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
@@ -114,14 +121,20 @@ class HomeView extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                        child: SvgPicture.asset(
+                          Asset.searchIcon,
+                          height: 16,
+                          width: 16,
+                        ),
                       ),
                       prefixIconConstraints: const BoxConstraints(
                         minWidth: 36,
                         minHeight: 36,
                       ),
                       hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                      hintStyle: MyTexts.medium16.copyWith(
+                        color: MyColors.darkGray,
+                      ),
                       filled: true,
                       fillColor: MyColors.white,
                       contentPadding: const EdgeInsets.symmetric(
@@ -134,7 +147,11 @@ class HomeView extends StatelessWidget {
                       ),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
+                        child: SvgPicture.asset(
+                          Asset.filterIcon,
+                          height: 20,
+                          width: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -239,172 +256,226 @@ class HomeView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 1.h),
-              Padding(
-                padding: const EdgeInsets.only(left: 25, right: 24, top: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Team",
-                      style: MyTexts.medium18.copyWith(
-                        color: MyColors.textFieldBackground,
-                      ),
-                    ),
-                    Text(
-                      "View All",
-                      style: MyTexts.medium12.copyWith(
-                        color: MyColors.textFieldBackground,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 130,
-                child: GestureDetector(
-                  onTap: () {
-                 //   Get.toNamed(Routes.ROLE_MANAGEMENT);
-                  },
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 7,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 15),
-                        child: Column(
+              Obx(() {
+                if (controller.hasProfileComplete.value) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 25,
+                          right: 24,
+                          top: 15,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const CircleAvatar(
-                              radius: 35,
-                              backgroundImage: AssetImage(Asset.team),
-                            ),
-                            SizedBox(height: 1.h),
                             Text(
-                              'Mohan Sau',
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.dimGray,
-                                fontFamily: MyTexts.Roboto,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11,
+                              "Team",
+                              style: MyTexts.medium18.copyWith(
+                                color: MyColors.textFieldBackground,
+                              ),
+                            ),
+                            Text(
+                              "View All",
+                              style: MyTexts.medium12.copyWith(
+                                color: MyColors.textFieldBackground,
                               ),
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Statistics",
-                  style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground),
-                ),
-              ),
-              Center(
-                child: Row(
-                  children: [
-                    // No of Users Card (SVG icon)
-                    _buildInfoCard(
-                      icon: SvgPicture.asset(Asset.noOfUsers, height: 11.7, width: 12.39),
-                      title: "No of Users",
-                      value: "34",
-                    ),
-
-                    // Total Products Card (Material Icon)
-                    _buildInfoCard(
-                      icon: SvgPicture.asset(
-                        Asset.totalProducts,
-                        height: 11.7,
-                        width: 12.39,
                       ),
-                      title: "Total Products",
-                      value: "104",
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x33000000), // subtle black shadow (20%)
-                        blurRadius: 4, // smooth edges
-                        offset: Offset(0, 2), // shadow below bar
-                      ),
-                    ],
-                    color: MyColors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// Top Row (Title + Dropdown)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Interests',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.textFieldBackground,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                '2024-25',
-                                style: MyTexts.medium12.copyWith(
-                                  color: MyColors.textFieldBackground,
+                      SizedBox(
+                        height: 130,
+                        child: GestureDetector(
+                          onTap: () {
+                            //   Get.toNamed(Routes.ROLE_MANAGEMENT);
+                          },
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 7,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 20,
+                                  top: 15,
                                 ),
-                              ),
-                              const Icon(Icons.keyboard_arrow_down_outlined),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 2.h),
-
-                      /// Chart Container
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: List.generate(_monthNames.length, (monthIndex) {
-                          return Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                for (int i = 0; i < 4; i++)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 2),
-                                    child: Container(
-                                      width: 10,
-                                      height: 20,
-                                      decoration: BoxDecoration(
-                                        color: (i.isEven || monthIndex % 2 == 0)
-                                            ? MyColors.warning
-                                            : MyColors.progressRemaining,
-                                        borderRadius: BorderRadius.circular(12),
+                                child: Column(
+                                  children: [
+                                    const CircleAvatar(
+                                      radius: 35,
+                                      backgroundImage: AssetImage(Asset.team),
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Text(
+                                      'Mohan Sau',
+                                      style: MyTexts.medium16.copyWith(
+                                        color: MyColors.dimGray,
+                                        fontFamily: MyTexts.Roboto,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 11,
                                       ),
                                     ),
-                                  ),
-                                SizedBox(height: 0.6.h),
-                                Text(
-                                  _monthNames[monthIndex],
-                                  style: MyTexts.extraBold12.copyWith(
-                                    color: MyColors.textFieldBackground,
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          "Statistics",
+                          style: MyTexts.medium18.copyWith(
+                            color: MyColors.textFieldBackground,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Row(
+                          children: [
+                            // No of Users Card (SVG icon)
+                            _buildInfoCard(
+                              icon: SvgPicture.asset(
+                                Asset.noOfUsers,
+                                height: 11.7,
+                                width: 12.39,
+                              ),
+                              title: "No of Users",
+                              value: "34",
                             ),
-                          );
-                        }),
+
+                            // Total Products Card (Material Icon)
+                            _buildInfoCard(
+                              icon: SvgPicture.asset(
+                                Asset.totalProducts,
+                                height: 11.7,
+                                width: 12.39,
+                              ),
+                              title: "Total Products",
+                              value: "104",
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(
+                                  0x33000000,
+                                ), // subtle black shadow (20%)
+                                blurRadius: 4, // smooth edges
+                                offset: Offset(0, 2), // shadow below bar
+                              ),
+                            ],
+                            color: MyColors.white,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              /// Top Row (Title + Dropdown)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Interests',
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.textFieldBackground,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '2024-25',
+                                        style: MyTexts.medium12.copyWith(
+                                          color: MyColors.textFieldBackground,
+                                        ),
+                                      ),
+                                      const Icon(
+                                        Icons.keyboard_arrow_down_outlined,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 2.h),
+
+                              /// Chart Container
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: List.generate(_monthNames.length, (
+                                  monthIndex,
+                                ) {
+                                  return Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        for (int i = 0; i < 4; i++)
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 2,
+                                            ),
+                                            child: Container(
+                                              width: 10,
+                                              height: 20,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    (i.isEven ||
+                                                        monthIndex % 2 == 0)
+                                                    ? MyColors.warning
+                                                    : MyColors
+                                                          .progressRemaining,
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                          ),
+                                        SizedBox(height: 0.6.h),
+                                        Text(
+                                          _monthNames[monthIndex],
+                                          style: MyTexts.extraBold12.copyWith(
+                                            color: MyColors.textFieldBackground,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
-                  ),
-                ),
-              ),
+                  );
+                } else {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text("Statistics", style: MyTexts.medium18),
+                      ),
+                      SizedBox(height: 1.h),
+                      Center(child: Image.asset(Asset.worldMap, width: 90.w)),
+                      SizedBox(height: 2.h),
+                      Center(
+                        child: Text(
+                          "Connecting Construction World-wide with AI",
+                          textAlign: TextAlign.center,
+                          style: MyTexts.bold16,
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              }),
             ],
           ),
         ),
@@ -456,7 +527,9 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
+              style: MyTexts.extraBold18.copyWith(
+                color: MyColors.textFieldBackground,
+              ),
             ),
           ],
         ),

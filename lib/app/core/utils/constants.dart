@@ -48,7 +48,9 @@ class Asset {
   static const String filterIcon = 'assets/images/filter.svg';
   static const String profileIcon = 'assets/images/profil.svg';
   static const String location = 'assets/images/location.svg';
+  static const String pendingIcon = 'assets/images/pending.png';
   static const String notifications = 'assets/images/notification.svg';
+  static const String worldMap = 'assets/images/worldMap.png';
 
   // 📦 Business modules (new)
   static const String marketplaceIcon = 'assets/images/marketpalce.png';
@@ -56,8 +58,10 @@ class Asset {
   static const String crmIcon = 'assets/images/crm.png';
   static const String ovpIcon = 'assets/images/ovp.png';
   static const String hrmsIcon = 'assets/images/hrms.png';
-  static const String projectManagementIcon = 'assets/images/project_management.png';
-  static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
+  static const String projectManagementIcon =
+      'assets/images/project_management.png';
+  static const String portfolioManagementIcon =
+      'assets/images/portfolio_management.png';
   static const String team = 'assets/images/team.png';
 
   //Statistics

@@ -8,9 +8,9 @@ import 'package:http/http.dart' as http;
 
 class ApiManager {
   // Local
-  static const String baseUrl = "http://192.168.1.66:3000/api/";
+  // static const String baseUrl = "http://192.168.1.66:3000/api/";
   // Live
-  //   static const String baseUrl = "http://43.205.117.97/api/";
+  static const String baseUrl = "http://43.205.117.97/api/";
 
   /// Check if response contains invalid/expired token
   void _checkTokenValidity(dynamic response) {

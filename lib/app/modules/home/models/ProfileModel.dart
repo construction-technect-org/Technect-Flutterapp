@@ -16,17 +16,223 @@ class ProfileModel {
 
 class Data {
   UserModel? user;
-  dynamic merchantProfile;
+  MerchantProfile? merchantProfile;
 
   Data({this.user, this.merchantProfile});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
-    merchantProfile: json["merchantProfile"],
+    merchantProfile: json["merchantProfile"] == null
+        ? null
+        : MerchantProfile.fromJson(json["merchantProfile"]),
   );
 
   Map<String, dynamic> toJson() => {
     "user": user?.toJson(),
-    "merchantProfile": merchantProfile,
+    "merchantProfile": merchantProfile?.toJson(),
+  };
+}
+
+class MerchantProfile {
+  int? id;
+  String? businessName;
+  String? businessEmail;
+  String? businessContactNumber;
+  int? yearsInBusiness;
+  int? projectsCompleted;
+  int? profileCompletionPercentage;
+  bool? isProfileComplete;
+  bool? identityVerified;
+  bool? businessLicense;
+  bool? qualityAssurance;
+  VerificationStatus? verificationStatus;
+  String? trustScore;
+  String? marketplaceTier;
+  String? memberSince;
+  List<BusinessHours>? businessHours;
+  List<Documents>? documents;
+  String? createdAt;
+  String? updatedAt;
+
+  MerchantProfile({
+    this.id,
+    this.businessName,
+    this.businessEmail,
+    this.businessContactNumber,
+    this.yearsInBusiness,
+    this.projectsCompleted,
+    this.profileCompletionPercentage,
+    this.isProfileComplete,
+    this.identityVerified,
+    this.businessLicense,
+    this.qualityAssurance,
+    this.verificationStatus,
+    this.trustScore,
+    this.marketplaceTier,
+    this.memberSince,
+    this.businessHours,
+    this.documents,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory MerchantProfile.fromJson(Map<String, dynamic> json) =>
+      MerchantProfile(
+        id: json["id"],
+        businessName: json["businessName"],
+        businessEmail: json["businessEmail"],
+        businessContactNumber: json["businessContactNumber"],
+        yearsInBusiness: json["yearsInBusiness"],
+        projectsCompleted: json["projectsCompleted"],
+        profileCompletionPercentage: json["profileCompletionPercentage"],
+        isProfileComplete: json["isProfileComplete"],
+        identityVerified: json["identityVerified"],
+        businessLicense: json["businessLicense"],
+        qualityAssurance: json["qualityAssurance"],
+        verificationStatus: json["verificationStatus"] == null
+            ? null
+            : VerificationStatus.fromJson(json["verificationStatus"]),
+        trustScore: json["trustScore"],
+        marketplaceTier: json["marketplaceTier"],
+        memberSince: json["memberSince"],
+        businessHours: json["businessHours"] == null
+            ? []
+            : List<BusinessHours>.from(
+                json["businessHours"]!.map((x) => BusinessHours.fromJson(x)),
+              ),
+        documents: json["documents"] == null
+            ? []
+            : List<Documents>.from(
+                json["documents"]!.map((x) => Documents.fromJson(x)),
+              ),
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "businessName": businessName,
+    "businessEmail": businessEmail,
+    "businessContactNumber": businessContactNumber,
+    "yearsInBusiness": yearsInBusiness,
+    "projectsCompleted": projectsCompleted,
+    "profileCompletionPercentage": profileCompletionPercentage,
+    "isProfileComplete": isProfileComplete,
+    "identityVerified": identityVerified,
+    "businessLicense": businessLicense,
+    "qualityAssurance": qualityAssurance,
+    "verificationStatus": verificationStatus?.toJson(),
+    "trustScore": trustScore,
+    "marketplaceTier": marketplaceTier,
+    "memberSince": memberSince,
+    "businessHours": businessHours == null
+        ? []
+        : List<dynamic>.from(businessHours!.map((x) => x.toJson())),
+    "documents": documents == null
+        ? []
+        : List<dynamic>.from(documents!.map((x) => x.toJson())),
+    "createdAt": createdAt,
+    "updatedAt": updatedAt,
+  };
+}
+
+class VerificationStatus {
+  bool? identityVerified;
+  bool? businessLicense;
+  bool? qualityAssurance;
+
+  VerificationStatus({
+    this.identityVerified,
+    this.businessLicense,
+    this.qualityAssurance,
+  });
+
+  factory VerificationStatus.fromJson(Map<String, dynamic> json) =>
+      VerificationStatus(
+        identityVerified: json["identityVerified"],
+        businessLicense: json["businessLicense"],
+        qualityAssurance: json["qualityAssurance"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "identityVerified": identityVerified,
+    "businessLicense": businessLicense,
+    "qualityAssurance": qualityAssurance,
+  };
+}
+
+class BusinessHours {
+  int? id;
+  bool? isOpen;
+  String? dayName;
+  String? openTime;
+  String? closeTime;
+  int? dayOfWeek;
+
+  BusinessHours({
+    this.id,
+    this.isOpen,
+    this.dayName,
+    this.openTime,
+    this.closeTime,
+    this.dayOfWeek,
+  });
+
+  factory BusinessHours.fromJson(Map<String, dynamic> json) => BusinessHours(
+    id: json["id"],
+    isOpen: json["is_open"],
+    dayName: json["day_name"],
+    openTime: json["open_time"],
+    closeTime: json["close_time"],
+    dayOfWeek: json["day_of_week"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "is_open": isOpen,
+    "day_name": dayName,
+    "open_time": openTime,
+    "close_time": closeTime,
+    "day_of_week": dayOfWeek,
+  };
+}
+
+class Documents {
+  int? id;
+  String? filePath;
+  int? fileSize;
+  String? mimeType;
+  bool? isVerified;
+  String? documentName;
+  String? documentType;
+
+  Documents({
+    this.id,
+    this.filePath,
+    this.fileSize,
+    this.mimeType,
+    this.isVerified,
+    this.documentName,
+    this.documentType,
+  });
+
+  factory Documents.fromJson(Map<String, dynamic> json) => Documents(
+    id: json["id"],
+    filePath: json["file_path"],
+    fileSize: json["file_size"],
+    mimeType: json["mime_type"],
+    isVerified: json["is_verified"],
+    documentName: json["document_name"],
+    documentType: json["document_type"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "file_path": filePath,
+    "file_size": fileSize,
+    "mime_type": mimeType,
+    "is_verified": isVerified,
+    "document_name": documentName,
+    "document_type": documentType,
   };
 }

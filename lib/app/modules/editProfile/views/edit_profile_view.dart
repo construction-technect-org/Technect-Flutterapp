@@ -1,11 +1,7 @@
-import 'package:construction_technect/app/core/utils/colors.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/text_theme.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/core/widgets/stepper_edit_profile_widget.dart';
 import 'package:construction_technect/app/modules/editProfile/controller/edit_profile_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class EditProfileView extends GetView<EditProfileController> {
   const EditProfileView({super.key});
@@ -16,30 +12,29 @@ class EditProfileView extends GetView<EditProfileController> {
       backgroundColor: MyColors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          controller: controller.scrollController, // 👈 attach controller
-          padding: const EdgeInsets.all(29),
+          controller: controller.scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 1.h),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [StepperEditProfileWidget(currentStep: 1)],
               ),
-
-               SizedBox(height: 2.h),
-
+              SizedBox(height: 2.h),
               Column(
-                key: controller.titleKey, // 👈 important
+                key: controller.titleKey,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "EDIT PROFILE",
-                 style: MyTexts.light22.copyWith(color: MyColors.textFieldBackground),
+                    style: MyTexts.light22.copyWith(color: MyColors.textFieldBackground),
                   ),
-                   SizedBox(height: 1.h),
+                  SizedBox(height: 1.h),
                   Text(
                     "Update your Business Details",
-                  style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
+                    style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
                   ),
                 ],
               ),
@@ -51,10 +46,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     'Business Name',
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
-                  Text(
-                    '*',
-                    style: MyTexts.light16.copyWith(color: MyColors.red),
-                  ),
+                  Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                 ],
               ),
               SizedBox(height: 1.h),
@@ -67,10 +59,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     'Business Email',
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
-                  Text(
-                    '*',
-                    style: MyTexts.light16.copyWith(color: MyColors.red),
-                  ),
+                  Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                 ],
               ),
               SizedBox(height: 1.h),
@@ -83,10 +72,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     'Business Contact Number',
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
-                  Text(
-                    '*',
-                    style: MyTexts.light16.copyWith(color: MyColors.red),
-                  ),
+                  Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                 ],
               ),
               SizedBox(height: 1.h),
@@ -99,10 +85,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     'Years in Business',
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
-                  Text(
-                    '*',
-                    style: MyTexts.light16.copyWith(color: MyColors.red),
-                  ),
+                  Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                 ],
               ),
               SizedBox(height: 1.h),
@@ -115,26 +98,18 @@ class EditProfileView extends GetView<EditProfileController> {
                     'Projects Completed',
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
-                  Text(
-                    '*',
-                    style: MyTexts.light16.copyWith(color: MyColors.red),
-                  ),
+                  Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                 ],
               ),
               SizedBox(height: 1.h),
-              CustomTextField(
-                controller: controller.projectsCompletedController,
-              ),
+              CustomTextField(controller: controller.projectsCompletedController),
               SizedBox(height: 2.h),
               // New Password
 
               /// Business Hours
               Obx(
                 () => Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                    horizontal: 16,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                   decoration: BoxDecoration(
                     color: MyColors.oldLace,
                     borderRadius: BorderRadius.circular(8),
@@ -148,9 +123,7 @@ class EditProfileView extends GetView<EditProfileController> {
                           controller.businessHours.value.isEmpty
                               ? "Business Hours*"
                               : controller.businessHours.value,
-                          style: MyTexts.bold16.copyWith(
-                            color: MyColors.progressFill,
-                          ),
+                          style: MyTexts.bold16.copyWith(color: MyColors.progressFill),
                         ),
                       ),
                       GestureDetector(
@@ -162,11 +135,9 @@ class EditProfileView extends GetView<EditProfileController> {
                           "+ADD",
                           style: MyTexts.bold16.copyWith(
                             color: MyColors.progressFill,
-                          
-                            decoration:
-                                TextDecoration.underline, // underline ON
-                            decorationColor:
-                                MyColors.progressFill, // underline color
+
+                            decoration: TextDecoration.underline, // underline ON
+                            decorationColor: MyColors.progressFill, // underline color
                           ),
                         ),
                       ),
