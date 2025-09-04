@@ -78,8 +78,7 @@ class HomeController extends GetxController {
     Get.printInfo(info: '📊 Profile data: ${profileData.value.toJson()}');
 
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
-        0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
     hasProfileComplete.value = completionPercentage >= 90;
     Get.printInfo(
       info:
@@ -87,16 +86,13 @@ class HomeController extends GetxController {
     );
 
     // Only show dialog if profile is incomplete AND dialog is not already open AND not shown in this session
-    if (!hasProfileComplete.value &&
-        Get.isDialogOpen != true &&
-        !_profileDialogShown) {
+    if (!hasProfileComplete.value && Get.isDialogOpen != true && !_profileDialogShown) {
       Get.printInfo(info: '🚨 Profile incomplete, showing dialog...');
       _profileDialogShown = true; // Mark as shown
       _showProfileCompletionDialog();
     } else {
       Get.printInfo(
-        info:
-            '✅ Profile complete, dialog already open, or already shown in this session',
+        info: '✅ Profile complete, dialog already open, or already shown in this session',
       );
     }
   }
@@ -140,9 +136,7 @@ class HomeController extends GetxController {
                   const SizedBox(height: 12),
                   Text(
                     'Complete your Profile',
-                    style: MyTexts.medium18.copyWith(
-                      color: MyColors.textFieldBackground,
-                    ),
+                    style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -164,24 +158,19 @@ class HomeController extends GetxController {
   // Handle profile dialog tap based on completion percentage
   void _handleProfileDialogTap() {
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
-        0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
 
-    Get.printInfo(
-      info: '🎯 Profile dialog tapped - Completion: $completionPercentage%',
-    );
+    Get.printInfo(info: '🎯 Profile dialog tapped - Completion: $completionPercentage%');
 
     // Don't close the dialog here - let it stay open
     // Just navigate to the appropriate screen
     if (completionPercentage == 0) {
       // If percentage is 0, navigate to EDIT_PROFILE
       Get.printInfo(info: '📝 Navigating to EDIT_PROFILE (0% completion)');
-      Get.toNamed(Routes.EDIT_PROFILE);
+      Get.toNamed(Routes.PROFILE);
     } else {
       // If percentage is more than 0, navigate to PROFILE
-      Get.printInfo(
-        info: '👤 Navigating to PROFILE ($completionPercentage% completion)',
-      );
+      Get.printInfo(info: '👤 Navigating to PROFILE ($completionPercentage% completion)');
       Get.toNamed(Routes.PROFILE);
     }
   }
@@ -219,8 +208,7 @@ class HomeController extends GetxController {
     Get.printInfo(info: '🔍 Checking profile completion after edit...');
 
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
-        0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
     hasProfileComplete.value = completionPercentage >= 90;
 
     Get.printInfo(
@@ -298,8 +286,7 @@ class HomeController extends GetxController {
     try {
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true &&
-          profileResponse.data?.user != null) {
+      if (profileResponse.success == true && profileResponse.data?.user != null) {
         profileData.value = profileResponse;
 
         // Cache profile data for home screen only
@@ -373,9 +360,7 @@ class HomeController extends GetxController {
         Get.printError(info: 'Error refreshing home data: $e');
       }
     } else {
-      Get.printInfo(
-        info: '📱 Home: Using cached address data, no API call needed',
-      );
+      Get.printInfo(info: '📱 Home: Using cached address data, no API call needed');
     }
   }
 

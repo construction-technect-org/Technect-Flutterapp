@@ -66,70 +66,75 @@ class ProfileView extends GetView<ProfileController> {
   }
 
   Widget _buildProfileBanner() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        color: MyColors.primary,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          // Progress Circle
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              const SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(
-                  value: 0.36,
-                  strokeWidth: 6,
-                  backgroundColor: MyColors.profileRemaining,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    MyColors.profileFill,
-                  ),
-                ),
-              ),
-              Text(
-                '36%',
-                style: MyTexts.medium16.copyWith(
-                  color: MyColors.white,
-                  fontFamily: MyTexts.Roboto,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(width: 4.w),
-          // Text Content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Obx(() {
+      final completionPercentage = controller.profileCompletionPercentage;
+      final progressValue = completionPercentage / 100.0;
+
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          color: MyColors.primary,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            // Progress Circle
+            Stack(
+              alignment: Alignment.center,
               children: [
-                Text(
-                  'Complete your Profile',
-                  style: MyTexts.medium18.copyWith(
-                    color: MyColors.white,
-                    fontSize: 17.sp,
-                    fontFamily: MyTexts.Roboto,
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CircularProgressIndicator(
+                    value: progressValue,
+                    strokeWidth: 6,
+                    backgroundColor: MyColors.profileRemaining,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      MyColors.profileFill,
+                    ),
                   ),
                 ),
-                SizedBox(height: 0.5.h),
                 Text(
-                  'Profile Pending',
-                  style: MyTexts.medium14.copyWith(
+                  '$completionPercentage%',
+                  style: MyTexts.medium16.copyWith(
                     color: MyColors.white,
                     fontFamily: MyTexts.Roboto,
                   ),
                 ),
               ],
             ),
-          ),
-          // Profile Emoji
-          Image.asset(Asset.profileEmoji, width: 80, height: 80),
-        ],
-      ),
-    );
+            SizedBox(width: 4.w),
+            // Text Content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Complete your Profile',
+                    style: MyTexts.medium18.copyWith(
+                      color: MyColors.white,
+                      fontSize: 17.sp,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                  ),
+                  SizedBox(height: 0.5.h),
+                  Text(
+                    'Profile Pending',
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.white,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Profile Emoji
+            Image.asset(Asset.profileEmoji, width: 80, height: 80),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildTabBar() {

@@ -1,7 +1,10 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 
 class InfoMetricsComponent extends StatelessWidget {
   const InfoMetricsComponent({super.key});
+
+  ProfileController get controller => Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -72,40 +75,59 @@ class InfoMetricsComponent extends StatelessWidget {
                             color: const Color(0xFFFFED29),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Icon(Icons.camera_alt, size: 12, color: MyColors.black),
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 12,
+                            color: MyColors.black,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(width: 3.w),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Rachita Sdisd',
-                          style: MyTexts.medium16.copyWith(
-                            color: MyColors.black,
-                            fontFamily: MyTexts.Roboto,
+                    child: Obx(() {
+                      final userData = controller.userData;
+                      final merchantProfile = controller.merchantProfile;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${userData?.firstName ?? ''} ${userData?.lastName ?? ''}'
+                                    .trim()
+                                    .isEmpty
+                                ? 'User Name'
+                                : '${userData?.firstName ?? ''} ${userData?.lastName ?? ''}'
+                                      .trim(),
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.black,
+                              fontFamily: MyTexts.Roboto,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 0.5.h),
-                        Text(
-                          'Premium construction materials supplier serving the greater metropolitan area for over 15 years.',
-                          style: MyTexts.regular14.copyWith(
-                            color: const Color(0xFF838383),
-                            fontFamily: MyTexts.Roboto,
+                          SizedBox(height: 0.5.h),
+                          Text(
+                            merchantProfile?.businessName ??
+                                'Business name not available',
+                            style: MyTexts.regular14.copyWith(
+                              color: const Color(0xFF838383),
+                              fontFamily: MyTexts.Roboto,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      );
+                    }),
                   ),
                 ],
               ),
             ],
           ),
           SizedBox(height: 1.h),
-          Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
+          Container(
+            width: double.infinity,
+            height: 1,
+            color: const Color(0xFFD9D9D9),
+          ),
           SizedBox(height: 1.h),
           Text(
             'Contact Details',
@@ -115,18 +137,31 @@ class InfoMetricsComponent extends StatelessWidget {
             ),
           ),
           SizedBox(height: 1.h),
-          _buildContactItem(
-            Icons.location_on,
-            '123 Industrial Blvd, Construction City, CC 12345',
+          Obx(() {
+            final userData = controller.userData;
+            final merchantProfile = controller.merchantProfile;
+
+            return Column(
+              children: [
+                if (userData?.mobileNumber != null)
+                  _buildContactItem(Icons.phone, userData!.mobileNumber!),
+                if (userData?.mobileNumber != null) SizedBox(height: 1.h),
+                if (merchantProfile?.businessEmail != null)
+                  _buildContactItem(
+                    Icons.email,
+                    merchantProfile!.businessEmail!,
+                  ),
+                if (merchantProfile?.businessEmail != null)
+                  SizedBox(height: 1.h),
+              ],
+            );
+          }),
+          SizedBox(height: 1.h),
+          Container(
+            width: double.infinity,
+            height: 1,
+            color: const Color(0xFFD9D9D9),
           ),
-          SizedBox(height: 1.h),
-          _buildContactItem(Icons.phone, '+1 (555) 123-4567'),
-          SizedBox(height: 1.h),
-          _buildContactItem(Icons.email, 'contact@probuilder.com'),
-          SizedBox(height: 1.h),
-          _buildContactItem(Icons.language, 'www.probuilder.com'),
-          SizedBox(height: 1.h),
-          Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
           SizedBox(height: 1.h),
           // Business Hours Section
           Text(
@@ -137,11 +172,35 @@ class InfoMetricsComponent extends StatelessWidget {
             ),
           ),
           SizedBox(height: 1.h),
-          _buildBusinessHourItem('Monday - Friday', '7:00 AM - 6:00 PM'),
-          SizedBox(height: 0.5.h),
-          _buildBusinessHourItem('Saturday', '7:00 AM - 6:00 PM'),
-          SizedBox(height: 0.5.h),
-          _buildBusinessHourItem('Sunday', 'Closed'),
+          Obx(() {
+            final businessHours = controller.businessHours;
+
+            if (businessHours.isEmpty) {
+              return Text(
+                'No business hours set',
+                style: MyTexts.regular14.copyWith(
+                  color: const Color(0xFF838383),
+                  fontFamily: MyTexts.Roboto,
+                ),
+              );
+            }
+
+            return Column(
+              children: businessHours.map((hours) {
+                final dayName = _getDayName(hours.dayOfWeek ?? 0);
+                final timeText = (hours.isOpen == true)
+                    ? '${hours.openTime} - ${hours.closeTime}'
+                    : 'Closed';
+
+                return Column(
+                  children: [
+                    _buildBusinessHourItem(dayName, timeText),
+                    if (hours != businessHours.last) SizedBox(height: 0.5.h),
+                  ],
+                );
+              }).toList(),
+            );
+          }),
         ],
       ),
     );
@@ -214,13 +273,34 @@ class InfoMetricsComponent extends StatelessWidget {
             ),
           ),
           SizedBox(height: 2.h),
-          _buildMetricItem('Years in Business', '15+'),
-          SizedBox(height: 1.h),
-          _buildMetricItem('Projects Completed', '12+'),
-          SizedBox(height: 1.h),
-          _buildMetricItem('Customer Rating', '4.9/5'),
-          SizedBox(height: 1.h),
-          _buildMetricItem('Response Time', '< 2 hours'),
+          Obx(() {
+            final merchantProfile = controller.merchantProfile;
+
+            return Column(
+              children: [
+                if (merchantProfile?.yearsInBusiness != null)
+                  _buildMetricItem(
+                    'Years in Business',
+                    '${merchantProfile!.yearsInBusiness}+',
+                  ),
+                if (merchantProfile?.yearsInBusiness != null)
+                  SizedBox(height: 1.h),
+                if (merchantProfile?.projectsCompleted != null)
+                  _buildMetricItem(
+                    'Projects Completed',
+                    '${merchantProfile!.projectsCompleted}+',
+                  ),
+                if (merchantProfile?.projectsCompleted != null)
+                  SizedBox(height: 1.h),
+                _buildMetricItem('Customer Rating', '4.9/5'), // Static for now
+                SizedBox(height: 1.h),
+                _buildMetricItem(
+                  'Response Time',
+                  '< 2 hours',
+                ), // Static for now
+              ],
+            );
+          }),
         ],
       ),
     );
@@ -254,5 +334,26 @@ class InfoMetricsComponent extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getDayName(int dayOfWeek) {
+    switch (dayOfWeek) {
+      case 1:
+        return 'Monday';
+      case 2:
+        return 'Tuesday';
+      case 3:
+        return 'Wednesday';
+      case 4:
+        return 'Thursday';
+      case 5:
+        return 'Friday';
+      case 6:
+        return 'Saturday';
+      case 7:
+        return 'Sunday';
+      default:
+        return 'Unknown';
+    }
   }
 }

@@ -1,8 +1,11 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 class CertificationsComponent extends StatelessWidget {
   const CertificationsComponent({super.key});
+
+  ProfileController get controller => Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +27,47 @@ class CertificationsComponent extends StatelessWidget {
           ],
         ),
         SizedBox(height: 2.h),
-        _buildCertificationItem(
-          'FSSAI License',
-          'International Organization for Standardization',
-          'Expires on 12/12/2025',
-        ),
-        SizedBox(height: 1.7.h),
-        _buildCertificationItem(
-          'FSSAI License',
-          'International Organization for Standardization',
-          'Expires on 12/12/2025',
-        ),
+        Obx(() {
+          final documents = controller.documents;
+
+          if (documents.isEmpty) {
+            return Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: MyColors.white,
+                border: Border.all(color: const Color(0xFFD0D0D0)),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                'No certifications uploaded yet',
+                style: MyTexts.regular14.copyWith(
+                  color: const Color(0xFF838383),
+                  fontFamily: MyTexts.Roboto,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+
+          return Column(
+            children: documents.asMap().entries.map((entry) {
+              final index = entry.key;
+              final document = entry.value;
+
+              return Column(
+                children: [
+                  _buildCertificationItem(
+                    document.documentType ?? 'Document',
+                    document.documentName ?? 'Document Name',
+                    'Uploaded',
+                  ),
+                  if (index < documents.length - 1) SizedBox(height: 1.7.h),
+                ],
+              );
+            }).toList(),
+          );
+        }),
         SizedBox(height: 3.h),
         Center(
           child: RoundedButton(

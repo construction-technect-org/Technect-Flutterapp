@@ -1,7 +1,10 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 
 class MarketplacePerformanceComponent extends StatelessWidget {
   const MarketplacePerformanceComponent({super.key});
+
+  ProfileController get controller => Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -71,44 +74,54 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 1.5.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Profile Completeness',
-                    style: MyTexts.regular14.copyWith(
-                      color: MyColors.textGrey,
-                      fontFamily: MyTexts.Roboto,
+              Obx(() {
+                final completionPercentage =
+                    controller.profileCompletionPercentage;
+                final progressValue = completionPercentage / 100.0;
+
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Profile Completeness',
+                          style: MyTexts.regular14.copyWith(
+                            color: MyColors.textGrey,
+                            fontFamily: MyTexts.Roboto,
+                          ),
+                        ),
+                        Text(
+                          '$completionPercentage%',
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.black,
+                            fontFamily: MyTexts.Roboto,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    '36%',
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.black,
-                      fontFamily: MyTexts.Roboto,
+                    SizedBox(height: 1.h),
+                    Container(
+                      width: double.infinity,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: MyColors.progressRemaining,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: FractionallySizedBox(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: progressValue,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: MyColors.progressFill,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 1.h),
-              Container(
-                width: double.infinity,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: MyColors.progressRemaining,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: FractionallySizedBox(
-                  alignment: Alignment.centerLeft,
-                  widthFactor: 0.36,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: MyColors.progressFill,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                ),
-              ),
+                  ],
+                );
+              }),
               SizedBox(height: 1.5.h),
               // Metrics Row
               Row(
@@ -130,11 +143,18 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                   ),
                   SizedBox(width: 1.w),
                   Expanded(
-                    child: _buildPerformanceMetricItem(
-                      'Member Since',
-                      '02 January 2025',
-                      MyColors.black,
-                    ),
+                    child: Obx(() {
+                      final userData = controller.userData;
+                      final memberSince = userData?.createdAt != null
+                          ? _formatDate(userData!.createdAt!)
+                          : 'Unknown';
+
+                      return _buildPerformanceMetricItem(
+                        'Member Since',
+                        memberSince,
+                        MyColors.black,
+                      );
+                    }),
                   ),
                 ],
               ),
@@ -215,5 +235,28 @@ class MarketplacePerformanceComponent extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatDate(String dateString) {
+    try {
+      final date = DateTime.parse(dateString);
+      final months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      return '${date.day.toString().padLeft(2, '0')} ${months[date.month - 1]} ${date.year}';
+    } catch (e) {
+      return 'Unknown';
+    }
   }
 }
