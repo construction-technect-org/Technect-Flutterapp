@@ -1,6 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/AddRole/controllers/add_role_controller.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/RoleManagement%20/controllers/role_management%20_controller.dart';
+import 'package:construction_technect/app/modules/RoleManagement%20/models/GetAllRoleModel.dart';
 
 class RoleManagementView extends GetView<RoleManagementController> {
   const RoleManagementView({super.key});
@@ -87,7 +89,10 @@ class RoleManagementView extends GetView<RoleManagementController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 13,
+                ),
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
@@ -104,10 +109,16 @@ class RoleManagementView extends GetView<RoleManagementController> {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                        child: SvgPicture.asset(
+                          Asset.searchIcon,
+                          height: 16,
+                          width: 16,
+                        ),
                       ),
                       hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                      hintStyle: MyTexts.medium16.copyWith(
+                        color: MyColors.darkGray,
+                      ),
                       filled: true,
                       fillColor: MyColors.white,
                       border: OutlineInputBorder(
@@ -116,7 +127,11 @@ class RoleManagementView extends GetView<RoleManagementController> {
                       ),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
+                        child: SvgPicture.asset(
+                          Asset.filterIcon,
+                          height: 20,
+                          width: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -147,7 +162,9 @@ class RoleManagementView extends GetView<RoleManagementController> {
                       child: Center(
                         child: Text(
                           '+ Add New Role',
-                          style: MyTexts.medium14.copyWith(color: MyColors.white),
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -206,7 +223,35 @@ class RoleManagementView extends GetView<RoleManagementController> {
                 ),
               ),
               SizedBox(height: 2.h),
-              const RoleCardsPage(),
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (controller.roles.isEmpty) {
+                  return const Center(child: Text("No roles found"));
+                }
+
+                return GestureDetector(
+                  onTap: (){
+                                              Get.toNamed(Routes.ROLE_DETAILS);
+
+                  },
+                  child: SizedBox(
+                    height: 26.h,
+                    child: ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.roles.length,
+                      separatorBuilder: (_, __) => SizedBox(width: 4.w),
+                      itemBuilder: (context, index) {
+                        final role = controller.roles[index];
+                        return RoleCard(role: role);
+                      },
+                    ),
+                  ),
+                );
+              }),
               SizedBox(height: 2.h),
               Padding(
                 padding: const EdgeInsets.only(left: 25, right: 24, top: 15),
@@ -233,7 +278,9 @@ class RoleManagementView extends GetView<RoleManagementController> {
                         child: Center(
                           child: Text(
                             '+ Add New Team',
-                            style: MyTexts.medium14.copyWith(color: MyColors.white),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -251,105 +298,115 @@ class RoleManagementView extends GetView<RoleManagementController> {
                     itemCount: controller.users.length,
                     itemBuilder: (context, index) {
                       final user = controller.users[index];
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: MyColors.white, // 👈 background color
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: MyColors.americanSilver),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 24,
-                              backgroundImage: NetworkImage(user["image"]!),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        user["name"]!,
-                                        style: MyTexts.extraBold20.copyWith(
-                                          color: MyColors.fontBlack,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Container(
-                                        width: 16,
-                                        height: 16,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                          color:
-                                              MyColors.primary, // background with opacity
-                                        ),
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.edit,
-                                            size:
-                                                10, // smaller so it fits inside 14x14 box
-                                            color: MyColors.white,
-                                          ),
-                                        ),
-                                      ),
-
-                                      const Spacer(),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: MyColors.mediumSeaGreen,
-                                          borderRadius: BorderRadius.circular(14.5),
-                                        ),
-                                        child: Text(
-                                          "Admin",
-                                          style: MyTexts.extraBold14.copyWith(
-                                            color: MyColors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    user["role"]!,
-                                    style: MyTexts.regular16.copyWith(
-                                      color: MyColors.fontBlack,
-                                    ),
-                                  ),
-                                  Text(
-                                    "@ ${user["email"]!}",
-                                    style: MyTexts.regular14.copyWith(
-                                      color: MyColors.lightGray,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_today,
-                                        size: 16,
-                                        color: Colors.green,
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        user["status"]!,
-                                        style: MyTexts.regular14.copyWith(
-                                          color: MyColors.mutedGreen,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                      return GestureDetector(
+                        onTap: () {
+                          // 👇 Navigate to new screen & pass user data
+                          Get.toNamed(Routes.TEAM_DETAILS);
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: MyColors.white, // 👈 background color
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: MyColors.americanSilver),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 24,
+                                backgroundImage: NetworkImage(user["image"]!),
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          user["name"]!,
+                                          style: MyTexts.extraBold20.copyWith(
+                                            color: MyColors.fontBlack,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Container(
+                                          width: 16,
+                                          height: 16,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            color: MyColors
+                                                .primary, // background with opacity
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.edit,
+                                              size:
+                                                  10, // smaller so it fits inside 14x14 box
+                                              color: MyColors.white,
+                                            ),
+                                          ),
+                                        ),
+
+                                        const Spacer(),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: MyColors.mediumSeaGreen,
+                                            borderRadius: BorderRadius.circular(
+                                              14.5,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Admin",
+                                            style: MyTexts.extraBold14.copyWith(
+                                              color: MyColors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      user["role"]!,
+                                      style: MyTexts.regular16.copyWith(
+                                        color: MyColors.fontBlack,
+                                      ),
+                                    ),
+                                    Text(
+                                      "@ ${user["email"]!}",
+                                      style: MyTexts.regular14.copyWith(
+                                        color: MyColors.lightGray,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_today,
+                                          size: 16,
+                                          color: Colors.green,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          user["status"]!,
+                                          style: MyTexts.regular14.copyWith(
+                                            color: MyColors.mutedGreen,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -364,93 +421,58 @@ class RoleManagementView extends GetView<RoleManagementController> {
   }
 }
 
-class RoleCardsPage extends StatelessWidget {
-  const RoleCardsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final roles = <RoleData>[
-      RoleData(
-        title: 'Admin',
-        icon: SvgPicture.asset(Asset.Admin), // ✅ SVG works
-        points: const ['Full system access', 'Manage all members', 'Configure settings'],
-        userCount: 12,
-      ),
-      RoleData(
-        title: 'User',
-        icon: SvgPicture.asset(
-          Asset.user,
-          height: 12.12,
-          width: 12.78,
-        ), // ✅ user icon fixed
-        points: const ['View content', 'Limited access', 'Basic settings only'],
-        userCount: 25,
-      ),
-    ];
-
-    return SizedBox(
-      height: 26.h, // responsive height
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 4.w),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          final role = roles[index];
-          return RoleCard(role: role);
-        },
-        separatorBuilder: (_, __) => SizedBox(width: 4.w),
-        itemCount: roles.length,
-      ),
-    );
-  }
-}
-
 class RoleCard extends StatelessWidget {
-  final RoleData role;
+  final GetAllRole role;
+
   const RoleCard({super.key, required this.role});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 65.w, // 👈 responsive width
+      width: 65.w,
       child: Stack(
         children: [
-          // Card body
           Container(
             decoration: BoxDecoration(
               color: MyColors.white,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: MyColors.americanSilver, width: 1.2),
+              border: Border.all(color: MyColors.americanSilver),
             ),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(5.w, 3.h, 5.w, 3.h),
+              padding: EdgeInsets.fromLTRB(5.w, 2.h, 5.w, 3.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header row (icon + title)
+                  // header row
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        width: 27, // 👈 fixed width
-                        height: 27, // 👈 fixed height
+                        width: 30,
+                        height: 3.h,
                         decoration: BoxDecoration(
-                          color: MyColors.paleBluecolor, // 👈 background color
-                          borderRadius: BorderRadius.circular(9), // 👈 rounded rectangle
+                          color: MyColors.paleBluecolor, // background color
+                          borderRadius: BorderRadius.circular(9),
                         ),
                         child: Center(
-                          child: SizedBox(
-                            width: 16, // 👈 control icon size inside
-                            height: 16,
-                            child: role.icon,
+                          child: SvgPicture.asset(
+                            Asset.Admin,
+                            width: 14.54, // scale as needed
+                            height: 13,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
                       SizedBox(width: 3.w),
-                      Text(
-                        role.title,
-                        style: MyTexts.medium20.copyWith(
-                          color: MyColors.fontBlack,
-                          fontFamily: MyTexts.Roboto,
+                      Expanded(
+                        // 👈 this fixes overflow issue
+                        child: Text(
+                          role.roleTitle,
+                          style: MyTexts.medium20.copyWith(
+                            color: MyColors.fontBlack,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
                         ),
                       ),
                     ],
@@ -458,55 +480,51 @@ class RoleCard extends StatelessWidget {
 
                   SizedBox(height: 2.h),
 
-                  // Bullet points
-                  ...role.points.map(
-                    (p) => Padding(
-                      padding: EdgeInsets.only(bottom: 1.h),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '•  ',
-                            style: TextStyle(
-                              height: 1.3,
-                              fontSize: 12.sp,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              p,
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.gray32,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                          ),
-                        ],
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 6,
+                        height: 6,
+                        margin: const EdgeInsets.only(
+                          top: 6,
+                          right: 6,
+                        ), // space between dot & text
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: MyColors
+                              .philippineGray, // 👈 change color if needed
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        child: Text(
+                          role.roleDescription,
+                          style: MyTexts.regular14.copyWith(
+                            color: MyColors.gray32,
+                          ),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
 
-                  // Users pill
+                  const Spacer(),
+
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 4.w,
+                      vertical: 1.5.h,
+                    ),
                     decoration: BoxDecoration(
                       color: MyColors.whiteBlue,
                       borderRadius: BorderRadius.circular(11),
                     ),
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Users: ',
-                            style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
-                          ),
-                          TextSpan(
-                            text: '${role.userCount}',
-                            style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
-                          ),
-                        ],
+                    child: Text(
+                      "Users: ${role.id} ",
+                      style: MyTexts.regular14.copyWith(
+                        color: MyColors.fontBlack,
                       ),
                     ),
                   ),
@@ -515,28 +533,37 @@ class RoleCard extends StatelessWidget {
             ),
           ),
 
-          // ✅ Edit button (top-right with border + background circle)
+          // Edit Button
           Positioned(
             right: 3.w,
-            top: 2.h,
+            top: 3.h,
             child: GestureDetector(
-              onTap: () {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('Edit ${role.title} tapped')));
-              },
+              // Inside RoleCard
+// onTap: () {
+//   final controller = Get.put(AddRoleController());
+//   controller.loadRoleData(role); // pass role model from API
+//   Get.toNamed(Routes.ADD_ROLE);
+// },
+
+// inside RoleCard
+onTap: () {
+  final controller = Get.put(AddRoleController());
+  controller.loadRoleData(role); // pass selected role
+  Get.toNamed(Routes.ADD_ROLE);
+},
+
+
+            
+
+
               child: Container(
-                width: 27, // 👈 fixed width
-                height: 26, // 👈 fixed height
+                width: 27,
+                height: 26,
                 decoration: BoxDecoration(
-                  color: MyColors.primary, // 👈 background color
-                  borderRadius: BorderRadius.circular(8), // 👈 rounded corners
+                  color: MyColors.primary,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  Icons.edit,
-                  size: 16, // 👈 adjust icon size
-                  color: MyColors.white,
-                ),
+                child: const Icon(Icons.edit, size: 16, color: Colors.white),
               ),
             ),
           ),
@@ -544,18 +571,4 @@ class RoleCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class RoleData {
-  final String title;
-  final Widget icon;
-  final List<String> points;
-  final int userCount;
-
-  RoleData({
-    required this.title,
-    required this.icon,
-    required this.points,
-    required this.userCount,
-  });
 }

@@ -187,4 +187,6 @@ class CertificationsComponent extends StatelessWidget {
       ),
     );
   }
+
+
 }

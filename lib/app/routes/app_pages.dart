@@ -1,3 +1,5 @@
+import 'package:construction_technect/app/modules/%20RoleDetails/bindings/%20role_details_binding.dart';
+import 'package:construction_technect/app/modules/%20RoleDetails/views/%20role_details_view.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/bindings/add_location_manually_binding.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/views/add_location_manually_view.dart';
 import 'package:construction_technect/app/modules/AddProduct/bindings/add_product_binding.dart';
@@ -22,6 +24,8 @@ import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_u
 import 'package:construction_technect/app/modules/SignUpPassword/views/sign_up_password_view.dart';
 import 'package:construction_technect/app/modules/SignUpRole/bindings/sign_up_role_binding.dart';
 import 'package:construction_technect/app/modules/SignUpRole/views/sign_up_role_view.dart';
+import 'package:construction_technect/app/modules/TeamDetails/bindings/team_details_binding.dart';
+import 'package:construction_technect/app/modules/TeamDetails/views/team_details_view.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/bindings/update_your_certifications_binding.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/views/update_your_certifications_view.dart';
 import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
@@ -141,6 +145,16 @@ class AppPages {
       name: _Paths.APPROVAL_INBOX,
       page: () => const ApprovalInboxView(),
       binding: ApprovalInboxBinding(),
+    ),
+    GetPage(
+      name: _Paths.ROLE_DETAILS,
+      page: () => const RoleDetailsView(),
+      binding: RoleDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.TEAM_DETAILS,
+      page: () => const TeamDetailsView(),
+      binding: TeamDetailsBinding(),
     ),
   ];
 }
