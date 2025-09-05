@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -19,6 +20,8 @@ class AppSharedPreference {
   final profileData = <String, dynamic>{}.val('profileData');
   final addressDataTimestamp = 0.val('addressDataTimestamp');
   final profileDataTimestamp = 0.val('profileDataTimestamp');
+  final rolesData = <String, dynamic>{}.val('rolesData');
+  final rolesDataTimestamp = 0.val('rolesDataTimestamp');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -72,6 +75,7 @@ class AppSharedPreference {
     userModel.val = {};
     addressData.val = {};
     profileData.val = {};
+    rolesData.val = {};
   }
 
   // Address data storage
@@ -112,5 +116,56 @@ class AppSharedPreference {
 
   void clearProfileData() {
     profileData.val = {};
+  }
+
+  // Roles data storage
+  void setRolesData(Map<String, dynamic> roles) {
+    rolesData.val = roles;
+    rolesDataTimestamp.val = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  Map<String, dynamic>? getRolesData() {
+    final data = rolesData.val;
+    if (data.isNotEmpty) {
+      return Map<String, dynamic>.from(data);
+    }
+    return null;
+  }
+
+  int getRolesDataTimestamp() {
+    return rolesDataTimestamp.val;
+  }
+
+  void clearRolesData() {
+    rolesData.val = {};
+    rolesDataTimestamp.val = 0;
+  }
+
+  // Helper methods for roles
+  Future<void> saveRoles(List<GetAllRole> roles) async {
+    try {
+      final rolesJson = roles.map((role) => role.toJson()).toList();
+      setRolesData({
+        'data': rolesJson,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    } catch (e) {
+      print('Error saving roles: $e');
+    }
+  }
+
+  List<GetAllRole>? getRoles() {
+    try {
+      final data = getRolesData();
+      if (data != null && data['data'] != null) {
+        final rolesList = (data['data'] as List)
+            .map((roleJson) => GetAllRole.fromJson(roleJson))
+            .toList();
+        return rolesList;
+      }
+    } catch (e) {
+      print('Error getting roles: $e');
+    }
+    return null;
   }
 }

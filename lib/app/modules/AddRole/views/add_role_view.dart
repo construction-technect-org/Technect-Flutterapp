@@ -1,4 +1,3 @@
-import 'package:construction_technect/app/core/utils/common_button.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/AddRole/controllers/add_role_controller.dart';
@@ -29,7 +28,7 @@ class AddRoleView extends GetView<AddRoleController> {
               ),
               const SizedBox(width: 8),
               Text(
-                controller.isEdit ? "EDIT ROLE" : "ADD ROLE", // ✅ Dynamic title
+                controller.isEdit ? "EDIT ROLE" : "ADD ROLE",
                 style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
               ),
             ],
@@ -54,18 +53,13 @@ class AddRoleView extends GetView<AddRoleController> {
                 style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
               ),
               SizedBox(height: 1.h),
-              CustomTextField(
-                controller: controller.roleDescription,
-                maxLines: 3,
-              ),
+              CustomTextField(controller: controller.roleDescription, maxLines: 3),
               SizedBox(height: 2.h),
-
               Text(
                 'Functionalities',
                 style: MyTexts.regular16.copyWith(color: MyColors.darkSilver),
               ),
               SizedBox(height: 1.h),
-
               Wrap(
                 spacing: 16,
                 runSpacing: 16,
@@ -90,9 +84,7 @@ class AddRoleView extends GetView<AddRoleController> {
                   ),
                 ],
               ),
-
               const Spacer(),
-
               Center(
                 child: Obx(() {
                   return RoundedButton(
@@ -100,7 +92,7 @@ class AddRoleView extends GetView<AddRoleController> {
                         ? 'Loading...'
                         : controller.isEdit
                         ? 'UPDATE'
-                        : 'SUBMIT', // ✅ Dynamic button
+                        : 'SUBMIT',
                     onTap: controller.isLoading.value
                         ? null
                         : () => controller.saveRole(),
