@@ -1,8 +1,4 @@
-
-
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AddProductController extends GetxController {
   final productNameController = TextEditingController();
@@ -75,7 +71,6 @@ class AddProductController extends GetxController {
     selectedSubCategory.value = null; // reset on category change
   }
 
- 
   RxBool isEnabled = false.obs;
 
   // If editing, you can set it from arguments

@@ -137,9 +137,20 @@ class BusinessHoursController extends GetxController {
 
     // Create business hours data
     final List<Map<String, dynamic>> businessHoursData = [];
-    int dayOfWeek = 1;
+    // Map day names to correct day_of_week values (0=Sunday, 1=Monday, etc.)
+    final Map<String, int> dayToWeekMap = {
+      "Monday": 1,
+      "Tuesday": 2,
+      "Wednesday": 3,
+      "Thursday": 4,
+      "Friday": 5,
+      "Saturday": 6,
+      "Sunday": 0,
+    };
 
     for (final day in daysEnabled.keys) {
+      final dayOfWeek = dayToWeekMap[day]!;
+
       if (daysEnabled[day]!.value &&
           fromControllers[day]?.text.isNotEmpty == true &&
           toControllers[day]?.text.isNotEmpty == true) {
@@ -157,16 +168,12 @@ class BusinessHoursController extends GetxController {
           "day_of_week": dayOfWeek,
           "day_name": day,
           "is_open": false,
-          "open_time": "Closed",
-          "close_time": "Closed",
+          "open_time": "",
+          "close_time": "",
         });
       }
-      dayOfWeek++;
     }
 
-    // Return data to edit profile controller
     Get.back(result: businessHoursData);
-
-    SnackBars.successSnackBar(content: "Business hours saved successfully");
   }
 }

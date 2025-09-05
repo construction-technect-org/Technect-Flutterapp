@@ -9,14 +9,14 @@ class DashedCircle extends StatelessWidget {
   final String assetImage;
 
   const DashedCircle({
-    Key? key,
+    super.key,
     this.size = 100,
     this.color = Colors.grey,
     this.strokeWidth = 1.5,
     this.dashLength = 6,
     this.dashGap = 4,
     required this.assetImage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +35,7 @@ class DashedCircle extends StatelessWidget {
         ),
         // Rounded image from assets inside
         ClipOval(
-          child: Image.asset(
-            assetImage,
-           width: 67,
-              height: 67,
-              fit: BoxFit.cover,
-           
-          ),
+          child: Image.asset(assetImage, width: 67, height: 67, fit: BoxFit.cover),
         ),
       ],
     );
@@ -68,13 +62,13 @@ class _DashedCirclePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
 
-   final double radius = size.width / 2;
-   final double circumference = 2 * 3.14159265359 * radius;
-   final double dashCount = circumference / (dashLength + dashGap);
-   final  double radiansPerDash = (2 * 3.14159265359) / dashCount;
+    final double radius = size.width / 2;
+    final double circumference = 2 * 3.14159265359 * radius;
+    final double dashCount = circumference / (dashLength + dashGap);
+    final double radiansPerDash = (2 * 3.14159265359) / dashCount;
 
     for (int i = 0; i < dashCount; i++) {
-     final double startAngle = i * radiansPerDash;
+      final double startAngle = i * radiansPerDash;
       canvas.drawArc(
         Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: radius),
         startAngle,

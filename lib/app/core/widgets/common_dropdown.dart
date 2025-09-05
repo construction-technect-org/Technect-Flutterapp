@@ -12,14 +12,13 @@ class CommonDropdown<T> extends StatelessWidget {
   final Widget? suffix;
 
   const CommonDropdown({
-    Key? key,
     required this.hintText,
     required this.items,
     required this.selectedValue,
     required this.itemLabel,
     this.prefix,
     this.suffix,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,21 +37,21 @@ class CommonDropdown<T> extends StatelessWidget {
             hint: Text(
               hintText,
               style: hintText != null
-              ? MyTexts.medium16.copyWith(color: MyColors.grey)
-              : null,
+                  ? MyTexts.medium16.copyWith(color: MyColors.grey)
+                  : null,
             ),
-            icon: suffix ??
-                const Icon(Icons.keyboard_arrow_down,
-                    size: 28, color: Colors.black),
+            icon:
+                suffix ??
+                const Icon(Icons.keyboard_arrow_down, size: 28, color: Colors.black),
             items: items.map((T item) {
               return DropdownMenuItem<T>(
                 value: item,
                 child: Text(
                   itemLabel(item),
-                   style: MyTexts.extraBold16.copyWith(
-          height: 36 / 16,
-          color: MyColors.primary,
-        ),
+                  style: MyTexts.extraBold16.copyWith(
+                    height: 36 / 16,
+                    color: MyColors.primary,
+                  ),
                 ),
               );
             }).toList(),

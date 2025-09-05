@@ -1,19 +1,24 @@
+import 'dart:convert';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:construction_technect/app/core/apiManager/api_constants.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/editProfile/services/EditProfileService.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:file_picker/file_picker.dart';
 
 class EditProfileController extends GetxController {
-  /// TextEditingControllers
   final businessNameController = TextEditingController();
   final businessEmailController = TextEditingController();
   final businessContactController = TextEditingController();
   final yearsInBusinessController = TextEditingController();
   final projectsCompletedController = TextEditingController();
 
-  /// Scroll Controller + GlobalKey
+  EditProfileService editProfileService = EditProfileService();
+
   final scrollController = ScrollController();
   final titleKey = GlobalKey();
+
+  final isLoading = false.obs;
 
   RxString businessHours = "".obs;
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
@@ -21,34 +26,56 @@ class EditProfileController extends GetxController {
   final currentStep = 1.obs;
   final totalSteps = 2;
 
-  /// Document selection tracking - stores file objects for API upload
   final selectedDocuments = <String, PlatformFile>{}.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _populateExistingData();
+  }
+
+  void _populateExistingData() {
+    try {
+      final homeController = Get.find<HomeController>();
+      final merchantProfile = homeController.profileData.value.data?.merchantProfile;
+
+      if (merchantProfile != null) {
+        // Populate text fields
+        businessNameController.text = merchantProfile.businessName ?? '';
+        businessEmailController.text = merchantProfile.businessEmail ?? '';
+        businessContactController.text = merchantProfile.businessContactNumber ?? '';
+        yearsInBusinessController.text =
+            merchantProfile.yearsInBusiness?.toString() ?? '';
+        projectsCompletedController.text =
+            merchantProfile.projectsCompleted?.toString() ?? '';
+
+        // Populate business hours
+        if (merchantProfile.businessHours?.isNotEmpty == true) {
+          final hoursList = merchantProfile.businessHours!
+              .map(
+                (hour) => {
+                  'day_of_week': hour.dayOfWeek,
+                  'day_name': hour.dayName,
+                  'is_open': hour.isOpen,
+                  'open_time': hour.openTime,
+                  'close_time': hour.closeTime,
+                },
+              )
+              .toList();
+          businessHoursData.value = hoursList;
+        }
+      }
+    } catch (e) {
+      Get.printError(info: 'Error populating existing data: $e');
+    }
+  }
 
   void addBusinessHours(String hours) {
     businessHours.value = hours;
   }
 
-  /// Handle business hours data from business hours screen
   void handleBusinessHoursData(List<Map<String, dynamic>> data) {
     businessHoursData.value = data;
-
-    // Create display string for business hours
-    if (data.isNotEmpty) {
-      String displayText = "";
-      for (int i = 0; i < data.length; i++) {
-        final day = data[i];
-        if (day['is_open'] == true) {
-          displayText +=
-              "${day['day_name']}         ${day['open_time']} - ${day['close_time']}";
-        } else {
-          displayText += "${day['day_name']}         Closed";
-        }
-        if (i < data.length - 1) displayText += "\n";
-      }
-      businessHours.value = displayText;
-    }
-
-    Get.printInfo(info: '📅 Business hours updated: ${businessHours.value}');
   }
 
   void scrollToTitle() {
@@ -65,7 +92,6 @@ class EditProfileController extends GetxController {
   void nextStep() {
     if (currentStep.value < totalSteps) {
       currentStep.value++;
-      // Scroll to top when changing steps
       Future.delayed(const Duration(milliseconds: 100), () {
         scrollController.animateTo(
           0,
@@ -79,7 +105,6 @@ class EditProfileController extends GetxController {
   void previousStep() {
     if (currentStep.value > 1) {
       currentStep.value--;
-      // Scroll to top when changing steps
       Future.delayed(const Duration(milliseconds: 100), () {
         scrollController.animateTo(
           0,
@@ -129,100 +154,122 @@ class EditProfileController extends GetxController {
   }
 
   void _submitProfile() {
-    _submitMerchantData();
+    _handleMerchantData();
   }
 
-  /// Submit merchant data to API
-  Future<void> _submitMerchantData() async {
+  Future<void> _handleMerchantData() async {
     try {
-      // Validate required documents
-      if (!isDocumentSelected('GST') || !isDocumentSelected('UDYAM')) {
-        SnackBars.errorSnackBar(
-          content: "Please upload all required documents",
-        );
+      isLoading.value = true;
+
+      // Check if this is update or submit based on merchant ID
+      final homeController = Get.find<HomeController>();
+      final merchantProfile = homeController.profileData.value.data?.merchantProfile;
+      final isUpdate = merchantProfile?.id != null;
+
+      // For new profiles, validate required documents
+      if (!isUpdate && (!isDocumentSelected('GST') || !isDocumentSelected('UDYAM'))) {
+        SnackBars.errorSnackBar(content: "Please upload all required documents");
         return;
       }
 
-      // Prepare form data
-      final formData = <String, dynamic>{
+      final formFields = <String, dynamic>{
         'business_name': businessNameController.text.trim(),
         'business_email': businessEmailController.text.trim(),
         'business_contact_number': businessContactController.text.trim(),
         'years_in_business': yearsInBusinessController.text.trim(),
         'projects_completed': projectsCompletedController.text.trim(),
-        'business_hours': businessHoursData.toList().toString(),
+        'business_hours': json.encode(businessHoursData.toList()),
       };
 
-      // Add files
+      final files = <String, String>{};
       final gstFile = getSelectedDocument('GST');
       final udyamFile = getSelectedDocument('UDYAM');
 
+      // Only include files if they are newly selected
       if (gstFile?.path != null) {
-        formData['business_license'] = gstFile!.path;
+        files['business_license'] = gstFile!.path!;
       }
       if (udyamFile?.path != null) {
-        formData['identity_certificate'] = udyamFile!.path;
+        files['identity_certificate'] = udyamFile!.path!;
       }
 
-      // Call API
-      final response = await ApiManager().postObject(
-        url: APIConstants.merchantSubmit,
-        body: formData,
-      );
+      // Call appropriate API based on merchant ID
+      final response = isUpdate
+          ? await editProfileService.updateMerchantData(
+              formFields: formFields,
+              files: files.isNotEmpty ? files : null,
+            )
+          : await editProfileService.submitMerchantData(
+              formFields: formFields,
+              files: files.isNotEmpty ? files : null,
+            );
 
       if (response['success'] == true) {
-        SnackBars.successSnackBar(content: "Profile Updated Successfully!");
-
-        // Notify home controller that user is returning from edit profile
         try {
-          final homeController = Get.find<HomeController>();
-          homeController.onReturnFromEditProfile();
+          final commonController = Get.find<CommonController>();
+
+          if (isUpdate) {
+            await homeController.fetchProfileData();
+            final updatedProfile = homeController.profileData.value.data?.merchantProfile;
+            if (updatedProfile?.profileCompletionPercentage != null &&
+                updatedProfile!.profileCompletionPercentage! < 80) {
+              commonController.hasProfileComplete.value = false;
+            }
+            if (commonController.hasProfileComplete.value == false) {
+              commonController.hasProfileComplete.value = true;
+              Get.offAllNamed(Routes.MAIN);
+            } else {
+              Get.back();
+            }
+          } else {
+            if (commonController.hasProfileComplete.value == false) {
+              commonController.hasProfileComplete.value = true;
+              Get.offAllNamed(Routes.MAIN);
+            } else {
+              homeController.onReturnFromEditProfile();
+              Get.back();
+            }
+          }
         } catch (e) {
           Get.printError(info: 'Could not notify home controller: $e');
+          Get.back();
         }
-
-        Get.back(); // Go back to previous screen
       } else {
         SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to update profile',
+          content:
+              response['message'] ??
+              'Failed to ${isUpdate ? 'update' : 'submit'} profile',
         );
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error updating profile: $e');
+      SnackBars.errorSnackBar(content: 'An error occurred: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  /// Add selected document
   void addSelectedDocument(String certificationType, PlatformFile file) {
     selectedDocuments[certificationType] = file;
-    Get.printInfo(
-      info: '📄 Added document for $certificationType: ${file.name}',
-    );
   }
 
-  /// Get selected document
   PlatformFile? getSelectedDocument(String certificationType) {
     return selectedDocuments[certificationType];
   }
 
-  /// Get selected document file path
   String? getSelectedDocumentPath(String certificationType) {
     final file = selectedDocuments[certificationType];
     return file?.path;
   }
 
-  /// Get selected document name
   String? getSelectedDocumentName(String certificationType) {
     final file = selectedDocuments[certificationType];
     return file?.name;
   }
 
-  /// Check if document is selected
   bool isDocumentSelected(String certificationType) {
     return selectedDocuments.containsKey(certificationType);
   }
 
-  /// Pick file using file_picker
   Future<void> pickFile(String certificationType) async {
     try {
       final FilePickerResult? result = await FilePicker.platform.pickFiles(

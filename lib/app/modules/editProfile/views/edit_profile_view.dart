@@ -9,88 +9,100 @@ class EditProfileView extends GetView<EditProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.white,
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Obx(
-            () => Row(
-              children: [
-                if (controller.currentStep.value > 1) ...[
-                  Expanded(
-                    child: RoundedButton(
-                      buttonName: 'BACK',
-                      onTap: () {
-                        controller.previousStep();
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 2.w),
-                ],
-                Expanded(
-                  child: RoundedButton(
-                    buttonName: controller.currentStep.value == 1 ? 'NEXT' : 'UPDATE',
-                    onTap: () {
-                      controller.updateProfile();
-                    },
-                  ),
-                ),
-              ],
-            ).paddingOnly(bottom: 30, right: 20, left: 20),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          controller: controller.scrollController,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return LoaderWrapper(
+      isLoading: controller.isLoading,
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          backgroundColor: MyColors.white,
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 1.h),
               Obx(
                 () => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    StepperEditProfileWidget(currentStep: controller.currentStep.value),
-                  ],
-                ),
-              ),
-              SizedBox(height: 2.h),
-              Obx(
-                () => Column(
-                  key: controller.titleKey,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "EDIT PROFILE",
-                      style: MyTexts.light22.copyWith(
-                        color: MyColors.textFieldBackground,
+                    if (controller.currentStep.value > 1) ...[
+                      Expanded(
+                        child: RoundedButton(
+                          buttonName: 'BACK',
+                          onTap: () {
+                            controller.previousStep();
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 2.w),
+                    ],
+                    Expanded(
+                      child: RoundedButton(
+                        buttonName: controller.currentStep.value == 1
+                            ? 'NEXT'
+                            : 'UPDATE',
+                        onTap: () {
+                          controller.updateProfile();
+                        },
                       ),
                     ),
-                    SizedBox(height: 1.h),
-                    Text(
-                      controller.currentStep.value == 1
-                          ? "Update your Business Details"
-                          : "Update your Certifications",
-                      style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
-                    ),
-                    // Progress Bar
                   ],
-                ),
+                ).paddingOnly(bottom: 30, right: 20, left: 20),
               ),
-              SizedBox(height: 2.h),
-
-              // Step 1: Business Details
-              Obx(
-                () => controller.currentStep.value == 1
-                    ? _buildBusinessDetailsStep()
-                    : _buildCertificationsStep(),
-              ),
-
-              SizedBox(height: 4.h),
             ],
+          ),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              controller: controller.scrollController,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 1.h),
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        StepperEditProfileWidget(
+                          currentStep: controller.currentStep.value,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Obx(
+                    () => Column(
+                      key: controller.titleKey,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "EDIT PROFILE",
+                          style: MyTexts.light22.copyWith(
+                            color: MyColors.textFieldBackground,
+                          ),
+                        ),
+                        SizedBox(height: 1.h),
+                        Text(
+                          controller.currentStep.value == 1
+                              ? "Update your Business Details"
+                              : "Update your Certifications",
+                          style: MyTexts.light16.copyWith(
+                            color: MyColors.greyDetails,
+                          ),
+                        ),
+                        // Progress Bar
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+
+                  // Step 1: Business Details
+                  Obx(
+                    () => controller.currentStep.value == 1
+                        ? _buildBusinessDetailsStep()
+                        : _buildCertificationsStep(),
+                  ),
+
+                  SizedBox(height: 4.h),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -112,7 +124,10 @@ class EditProfileView extends GetView<EditProfileController> {
           ],
         ),
         SizedBox(height: 1.h),
-        CustomTextField(controller: controller.businessNameController),
+        CustomTextField(
+          controller: controller.businessNameController,
+          hintText: 'Enter business name',
+        ),
         SizedBox(height: 2.h),
 
         Row(
@@ -125,7 +140,11 @@ class EditProfileView extends GetView<EditProfileController> {
           ],
         ),
         SizedBox(height: 1.h),
-        CustomTextField(controller: controller.businessEmailController),
+        CustomTextField(
+          controller: controller.businessEmailController,
+          keyboardType: TextInputType.emailAddress,
+          hintText: 'Enter business email',
+        ),
         SizedBox(height: 2.h),
 
         Row(
@@ -138,7 +157,11 @@ class EditProfileView extends GetView<EditProfileController> {
           ],
         ),
         SizedBox(height: 1.h),
-        CustomTextField(controller: controller.businessContactController),
+        CustomTextField(
+          controller: controller.businessContactController,
+          keyboardType: TextInputType.phone,
+          hintText: 'Enter contact number',
+        ),
         SizedBox(height: 2.h),
 
         Row(
@@ -151,7 +174,15 @@ class EditProfileView extends GetView<EditProfileController> {
           ],
         ),
         SizedBox(height: 1.h),
-        CustomTextField(controller: controller.yearsInBusinessController),
+        CustomTextField(
+          controller: controller.yearsInBusinessController,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(2),
+          ],
+          hintText: 'Enter years in business',
+        ),
         SizedBox(height: 2.h),
 
         Row(
@@ -164,7 +195,15 @@ class EditProfileView extends GetView<EditProfileController> {
           ],
         ),
         SizedBox(height: 1.h),
-        CustomTextField(controller: controller.projectsCompletedController),
+        CustomTextField(
+          controller: controller.projectsCompletedController,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(4),
+          ],
+          hintText: 'Enter number of projects completed',
+        ),
         SizedBox(height: 2.h),
         Obx(
           () => Container(
@@ -173,7 +212,7 @@ class EditProfileView extends GetView<EditProfileController> {
               color: MyColors.oldLace,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: controller.businessHours.value.isEmpty
+                color: controller.businessHoursData.isEmpty
                     ? MyColors.textFieldBorder
                     : MyColors.primary.withOpacity(0.3),
               ),
@@ -183,43 +222,112 @@ class EditProfileView extends GetView<EditProfileController> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.access_time, color: Colors.orange, size: 20),
+                    const Icon(
+                      Icons.access_time,
+                      color: Colors.orange,
+                      size: 20,
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         "Business Hours*",
-                        style: MyTexts.bold16.copyWith(color: MyColors.progressFill),
+                        style: MyTexts.bold16.copyWith(
+                          color: MyColors.progressFill,
+                        ),
                       ),
                     ),
                     GestureDetector(
                       onTap: () async {
                         // Pass previous business hours data if available
-                        final previousData = controller.businessHoursData.toList();
+                        final previousData = controller.businessHoursData
+                            .toList();
                         final result = await Get.toNamed(
                           Routes.BUSINESS_HOURS,
-                          arguments: previousData.isNotEmpty ? previousData : null,
+                          arguments: previousData.isNotEmpty
+                              ? previousData
+                              : null,
                         );
-                        if (result != null && result is List<Map<String, dynamic>>) {
+                        if (result != null &&
+                            result is List<Map<String, dynamic>>) {
                           controller.handleBusinessHoursData(result);
                         }
                       },
                       child: Text(
-                        controller.businessHours.value.isEmpty ? "ADD" : "EDIT",
-                        style: MyTexts.bold16.copyWith(color: MyColors.progressFill),
+                        controller.businessHoursData.isEmpty ? "ADD" : "EDIT",
+                        style: MyTexts.bold16.copyWith(
+                          color: MyColors.progressFill,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                if (controller.businessHours.value.isNotEmpty) ...[
+                if (controller.businessHoursData.isNotEmpty) ...[
                   const SizedBox(height: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        controller.businessHours.value,
-                        style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: MyColors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: MyColors.textFieldBorder.withOpacity(0.3),
                       ),
-                    ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: controller.businessHoursData.map((dayData) {
+                        final dayName = dayData['day_name'] ?? '';
+                        final isOpen = dayData['is_open'] == true;
+                        final openTime = dayData['open_time'] ?? '';
+                        final closeTime = dayData['close_time'] ?? '';
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 6.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  dayName,
+                                  style: MyTexts.regular14.copyWith(
+                                    color: MyColors.fontBlack,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    if (isOpen) ...[
+                                      const Icon(
+                                        Icons.access_time,
+                                        size: 14,
+                                        color: MyColors.primary,
+                                      ),
+                                      const SizedBox(width: 4),
+                                    ],
+                                    Text(
+                                      isOpen
+                                          ? '$openTime - $closeTime'
+                                          : 'Closed',
+                                      style: MyTexts.regular14.copyWith(
+                                        color: isOpen
+                                            ? MyColors.fontBlack
+                                            : MyColors.grey,
+                                        fontWeight: isOpen
+                                            ? FontWeight.w500
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ],
@@ -302,7 +410,9 @@ class EditProfileView extends GetView<EditProfileController> {
                       ),
                     ),
                     Text(
-                      (isSelected && fileName != null) ? fileName : organization,
+                      (isSelected && fileName != null)
+                          ? fileName
+                          : organization,
                       style: MyTexts.regular14.copyWith(
                         color: const Color(0xFF717171),
                         fontFamily: MyTexts.Roboto,

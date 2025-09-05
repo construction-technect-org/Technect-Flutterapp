@@ -1,11 +1,8 @@
-import 'package:construction_technect/app/core/utils/common_button.dart';
 import 'package:construction_technect/app/core/utils/dashed_circle.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/AddTeam/controllers/add_team_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AddTeamView extends GetView<AddTeamController> {
   const AddTeamView({super.key});
@@ -15,7 +12,7 @@ class AddTeamView extends GetView<AddTeamController> {
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: AppBar(
-          scrolledUnderElevation: 0.0,
+        scrolledUnderElevation: 0.0,
 
         automaticallyImplyLeading: false, // remove default back button
         backgroundColor: MyColors.white,
@@ -61,9 +58,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     padding: const EdgeInsets.only(left: 10),
                     child: Text(
                       "Profile Photo",
-                      style: MyTexts.regular16.copyWith(
-                        color: MyColors.darkSilver,
-                      ),
+                      style: MyTexts.regular16.copyWith(color: MyColors.darkSilver),
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -124,9 +119,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'Full Name ',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -138,9 +131,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'Email ID',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -152,9 +143,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'Phone Number',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -166,9 +155,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'Address',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -181,9 +168,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'State',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -195,9 +180,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'City',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -209,9 +192,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'Pincode',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -223,9 +204,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'Documents',
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.fontBlack,
-                        ),
+                        style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                       ),
                     ],
                   ),
@@ -236,9 +215,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'Aadhar Card',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -251,9 +228,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'PAN Card',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -267,9 +242,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     padding: const EdgeInsets.only(left: 10),
                     child: Text(
                       "Aadhar Card",
-                      style: MyTexts.regular16.copyWith(
-                        color: MyColors.darkSilver,
-                      ),
+                      style: MyTexts.regular16.copyWith(color: MyColors.darkSilver),
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -331,9 +304,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     padding: const EdgeInsets.only(left: 10),
                     child: Text(
                       "PAN Card",
-                      style: MyTexts.regular16.copyWith(
-                        color: MyColors.darkSilver,
-                      ),
+                      style: MyTexts.regular16.copyWith(color: MyColors.darkSilver),
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -389,11 +360,7 @@ class AddTeamView extends GetView<AddTeamController> {
                   ),
                   SizedBox(height: 3.h),
 
-                  const Divider(
-                    color: MyColors.veryLightGrey,
-                    indent: 5,
-                    endIndent: 5,
-                  ),
+                  const Divider(color: MyColors.veryLightGrey, indent: 5, endIndent: 5),
 
                   SizedBox(height: 2.h),
 
@@ -401,9 +368,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     children: [
                       Text(
                         'User Role',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -418,11 +383,7 @@ class AddTeamView extends GetView<AddTeamController> {
 
                   SizedBox(height: 3.h),
 
-                  const Divider(
-                    color: MyColors.veryLightGrey,
-                    indent: 5,
-                    endIndent: 5,
-                  ),
+                  const Divider(color: MyColors.veryLightGrey, indent: 5, endIndent: 5),
 
                   SizedBox(height: 2.h),
                   Center(

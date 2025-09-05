@@ -1,15 +1,10 @@
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class CustomSwitch extends StatefulWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
 
-  const CustomSwitch({
-    super.key,
-    required this.value,
-    required this.onChanged,
-  });
+  const CustomSwitch({super.key, required this.value, required this.onChanged});
 
   @override
   State<CustomSwitch> createState() => _CustomSwitchState();
@@ -32,18 +27,14 @@ class _CustomSwitchState extends State<CustomSwitch> {
         child: AnimatedAlign(
           duration: const Duration(milliseconds: 250),
           curve: Curves.easeInOut,
-          alignment:
-              widget.value ? Alignment.centerRight : Alignment.centerLeft,
+          alignment: widget.value ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
             width: 24,
             height: 24,
             decoration: BoxDecoration(
               color: MyColors.white,
               shape: BoxShape.circle,
-              border: Border.all(
-                color:  MyColors.white ,
-                width: 2,
-              ),
+              border: Border.all(color: MyColors.white, width: 2),
             ),
           ),
         ),

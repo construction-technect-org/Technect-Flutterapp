@@ -1,8 +1,4 @@
-
-
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AddTeamController extends GetxController {
   final fullNameController = TextEditingController();
@@ -16,7 +12,6 @@ class AddTeamController extends GetxController {
   final pinCodeController = TextEditingController();
   final aadharCardController = TextEditingController();
   final panCardController = TextEditingController();
-
 
   RxList<String> categories = <String>["PanCard", "AadharCard", "DrivingLicen"].obs;
 
@@ -53,10 +48,6 @@ class AddTeamController extends GetxController {
       return;
     }
 
-  
     selectedSubCategory.value = null; // reset on category change
   }
-
- 
-
 }

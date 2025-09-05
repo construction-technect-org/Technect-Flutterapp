@@ -1,16 +1,12 @@
-import 'package:construction_technect/app/core/utils/common_button.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/AddRole/controllers/add_role_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AddRoleView extends GetView<AddRoleController> {
   const AddRoleView({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: AppBar(
@@ -53,9 +49,7 @@ class AddRoleView extends GetView<AddRoleController> {
                     'Role Title',
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
-                  CustomTextField(
-                    controller: controller.roleController,
-                  ),
+                  CustomTextField(controller: controller.roleController),
                   SizedBox(height: 2.h),
 
                   // Role Description
@@ -64,10 +58,7 @@ class AddRoleView extends GetView<AddRoleController> {
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
                   SizedBox(height: 1.h),
-                  CustomTextField(
-                    controller: controller.roleDescription,
-                    maxLines: 3,
-                  ),
+                  CustomTextField(controller: controller.roleDescription, maxLines: 3),
                   SizedBox(height: 2.h),
 
                   // Permissions section title
@@ -104,17 +95,11 @@ class AddRoleView extends GetView<AddRoleController> {
 
                   // NEXT button
                   Center(
-                    child: RoundedButton(
-                      buttonName: 'SUBMIT',
-                      onTap: () {
-                      
-                      },
-                    ),
+                    child: RoundedButton(buttonName: 'SUBMIT', onTap: () {}),
                   ),
                 ],
               ),
             ),
-
           ],
         ),
       ),
@@ -122,15 +107,11 @@ class AddRoleView extends GetView<AddRoleController> {
   }
 }
 
-Widget _buildChip({
-  required String label,
-  required IconData icon,
-  required Color color,
-}) {
+Widget _buildChip({required String label, required IconData icon, required Color color}) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     decoration: BoxDecoration(
-      border: Border.all(color: color,),
+      border: Border.all(color: color),
       borderRadius: BorderRadius.circular(30),
     ),
     child: Row(
@@ -138,11 +119,7 @@ Widget _buildChip({
       children: [
         Icon(icon, color: color, size: 22),
         const SizedBox(width: 8),
-        Text(
-          label,
-          style: MyTexts.regular16.copyWith(color: color),
-
-        ),
+        Text(label, style: MyTexts.regular16.copyWith(color: color)),
       ],
     ),
   );

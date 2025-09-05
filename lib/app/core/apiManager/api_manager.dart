@@ -5,10 +5,11 @@ import 'package:construction_technect/app/core/apiManager/api_exception.dart';
 import 'package:construction_technect/app/core/apiManager/error_model.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class ApiManager {
   // Local
-  // static const String baseUrl = "http://192.168.1.66:3000/api/";
+  // static const String baseUrl = "http://localhost:3000/api/";
   // Live
   static const String baseUrl = "http://43.205.117.97/api/";
 
@@ -86,7 +87,10 @@ class ApiManager {
   }
 
   /// POST method for JSON body requests
-  Future<dynamic> postObject({required String url, required Object body}) async {
+  Future<dynamic> postObject({
+    required String url,
+    required Object body,
+  }) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -167,6 +171,213 @@ class ApiManager {
     }
   }
 
+  /// POST method for multipart form data requests (file uploads)
+  Future<dynamic> postMultipart({
+    required String url,
+    required Map<String, dynamic> fields,
+    Map<String, String>? files,
+  }) async {
+    try {
+      final request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
+
+      // Add authorization header
+      request.headers['Authorization'] = 'Bearer ${myPref.getToken()}';
+
+      // Add form fields
+      fields.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+
+      // Add files
+      if (files != null) {
+        for (final entry in files.entries) {
+          final file = File(entry.value);
+          final fileName = file.path.split('/').last;
+          final fileExtension = fileName.split('.').last.toLowerCase();
+
+          // Determine MIME type based on file extension
+          String? mimeType;
+          switch (fileExtension) {
+            case 'pdf':
+              mimeType = 'application/pdf';
+            case 'jpg':
+            case 'jpeg':
+              mimeType = 'image/jpeg';
+            case 'png':
+              mimeType = 'image/png';
+            case 'doc':
+              mimeType = 'application/msword';
+            case 'docx':
+              mimeType =
+                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            default:
+              mimeType = 'application/octet-stream';
+          }
+
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              entry.key,
+              entry.value,
+              filename: fileName,
+              contentType: MediaType.parse(mimeType),
+            ),
+          );
+        }
+      }
+
+      Get.printInfo(info: '🌐 API POST Multipart Request:');
+      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   Headers: ${request.headers}');
+      Get.printInfo(info: '   Fields: $fields');
+      Get.printInfo(info: '   Files: $files');
+
+      final http.StreamedResponse response = await request.send();
+
+      Get.printInfo(info: '📡 API Response:');
+      Get.printInfo(info: '   Status: ${response.statusCode}');
+      Get.printInfo(info: '   Headers: ${response.headers}');
+
+      final map = _returnResponse(response);
+
+      // Check for invalid/expired token in response body
+      _checkTokenValidity(map);
+
+      Get.printInfo(info: '✅ Parsed Response: $map');
+      return map;
+    } on SocketException {
+      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      SnackBars.errorSnackBar(content: 'No Internet Connection');
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      Get.printInfo(info: '❌ Unexpected Error: $e');
+      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      throw FetchDataException('Unexpected error: $e');
+    }
+  }
+
+  /// PUT method for multipart form data requests (file uploads)
+  Future<dynamic> putMultipart({
+    required String url,
+    required Map<String, dynamic> fields,
+    Map<String, String>? files,
+  }) async {
+    try {
+      final request = http.MultipartRequest('PUT', Uri.parse(baseUrl + url));
+
+      // Add authorization header
+      request.headers['Authorization'] = 'Bearer ${myPref.getToken()}';
+
+      // Add form fields
+      fields.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+
+      // Add files
+      if (files != null) {
+        for (final entry in files.entries) {
+          final file = File(entry.value);
+          final fileName = file.path.split('/').last;
+          final fileExtension = fileName.split('.').last.toLowerCase();
+
+          // Determine MIME type based on file extension
+          String? mimeType;
+          switch (fileExtension) {
+            case 'pdf':
+              mimeType = 'application/pdf';
+            case 'jpg':
+            case 'jpeg':
+              mimeType = 'image/jpeg';
+            case 'png':
+              mimeType = 'image/png';
+            case 'doc':
+              mimeType = 'application/msword';
+            case 'docx':
+              mimeType =
+                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            default:
+              mimeType = 'application/octet-stream';
+          }
+
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              entry.key,
+              entry.value,
+              filename: fileName,
+              contentType: MediaType.parse(mimeType),
+            ),
+          );
+        }
+      }
+
+      Get.printInfo(info: '🌐 API PUT Multipart Request:');
+      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   Headers: ${request.headers}');
+      Get.printInfo(info: '   Fields: $fields');
+      Get.printInfo(info: '   Files: $files');
+
+      final http.StreamedResponse response = await request.send();
+
+      Get.printInfo(info: '📡 API Response:');
+      Get.printInfo(info: '   Status: ${response.statusCode}');
+      Get.printInfo(info: '   Headers: ${response.headers}');
+
+      final map = _returnResponse(response);
+
+      // Check for invalid/expired token in response body
+      _checkTokenValidity(map);
+
+      Get.printInfo(info: '✅ Parsed Response: $map');
+      return map;
+    } on SocketException {
+      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      SnackBars.errorSnackBar(content: 'No Internet Connection');
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      Get.printInfo(info: '❌ Unexpected Error: $e');
+      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      throw FetchDataException('Unexpected error: $e');
+    }
+  }
+
+  /// DELETE method for requests with authorization header
+  Future<dynamic> delete({required String url}) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${myPref.getToken()}',
+      };
+
+      Get.printInfo(info: '🌐 API DELETE Request:');
+      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   Headers: $headers');
+
+      final request = http.Request('DELETE', Uri.parse(baseUrl + url));
+      request.headers.addAll(headers);
+
+      final http.StreamedResponse response = await request.send();
+
+      Get.printInfo(info: '📡 API Response:');
+      Get.printInfo(info: '   Status: ${response.statusCode}');
+      Get.printInfo(info: '   Headers: ${response.headers}');
+
+      final map = _returnResponse(response);
+
+      // Check for invalid/expired token in response body
+      _checkTokenValidity(map);
+
+      Get.printInfo(info: '✅ Parsed Response: $map');
+      return map;
+    } on SocketException {
+      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      SnackBars.errorSnackBar(content: 'No Internet Connection');
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      Get.printInfo(info: '❌ Unexpected Error: $e');
+      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      throw FetchDataException('Unexpected error: $e');
+    }
+  }
+
   /// Handle HTTP response and return parsed data
   dynamic _returnResponse(http.StreamedResponse response) async {
     final responseString = await response.stream.bytesToString();
@@ -189,10 +400,12 @@ class ApiManager {
       case 400:
         SnackBars.errorSnackBar(
           content:
-              ErrorModel.fromJson(json.decode(responseString)).message ?? 'Bad Request',
+              ErrorModel.fromJson(json.decode(responseString)).message ??
+              'Bad Request',
         );
         throw BadRequestException(
-          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Bad Request',
+          ErrorModel.fromJson(json.decode(responseString)).message ??
+              'Bad Request',
         );
 
       case 401:
@@ -215,19 +428,23 @@ class ApiManager {
       case 403:
         SnackBars.errorSnackBar(
           content:
-              ErrorModel.fromJson(json.decode(responseString)).message ?? 'Forbidden',
+              ErrorModel.fromJson(json.decode(responseString)).message ??
+              'Forbidden',
         );
         throw UnauthorisedException(
-          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Forbidden',
+          ErrorModel.fromJson(json.decode(responseString)).message ??
+              'Forbidden',
         );
 
       case 404:
         SnackBars.errorSnackBar(
           content:
-              ErrorModel.fromJson(json.decode(responseString)).message ?? 'Not Found',
+              ErrorModel.fromJson(json.decode(responseString)).message ??
+              'Not Found',
         );
         throw UnauthorisedException(
-          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Not Found',
+          ErrorModel.fromJson(json.decode(responseString)).message ??
+              'Not Found',
         );
 
       case 409:
@@ -237,7 +454,8 @@ class ApiManager {
               'Conflict Error',
         );
         throw BadRequestException(
-          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
+          ErrorModel.fromJson(json.decode(responseString)).message ??
+              'Conflict Error',
         );
 
       case 500:

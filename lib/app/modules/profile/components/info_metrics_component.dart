@@ -143,6 +143,12 @@ class InfoMetricsComponent extends StatelessWidget {
 
             return Column(
               children: [
+                if (controller.currentAddress != null)
+                  _buildContactItem(
+                    Icons.location_on,
+                    controller.currentAddress!,
+                  ),
+                if (controller.currentAddress != null) SizedBox(height: 1.h),
                 if (userData?.mobileNumber != null)
                   _buildContactItem(Icons.phone, userData!.mobileNumber!),
                 if (userData?.mobileNumber != null) SizedBox(height: 1.h),
@@ -153,6 +159,12 @@ class InfoMetricsComponent extends StatelessWidget {
                   ),
                 if (merchantProfile?.businessEmail != null)
                   SizedBox(height: 1.h),
+                if (controller.businessWebsite != null)
+                  _buildContactItem(
+                    Icons.language,
+                    controller.businessWebsite!,
+                  ),
+                if (controller.businessWebsite != null) SizedBox(height: 1.h),
               ],
             );
           }),
