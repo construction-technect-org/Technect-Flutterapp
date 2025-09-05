@@ -8,6 +8,7 @@ class Asset {
   static const String phoneIcon = 'assets/images/phone.svg';
   static const String lockIcon = 'assets/images/lock.svg';
   static const String eyeIcon = 'assets/images/eye.svg';
+  static const String delete = 'assets/images/delete.svg';
   static const String logo = 'assets/images/logo.png';
   static const String logoWithoutBack = 'assets/images/logoWithoutBack.png';
 
@@ -58,10 +59,8 @@ class Asset {
   static const String crmIcon = 'assets/images/crm.png';
   static const String ovpIcon = 'assets/images/ovp.png';
   static const String hrmsIcon = 'assets/images/hrms.png';
-  static const String projectManagementIcon =
-      'assets/images/project_management.png';
-  static const String portfolioManagementIcon =
-      'assets/images/portfolio_management.png';
+  static const String projectManagementIcon = 'assets/images/project_management.png';
+  static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
   static const String team = 'assets/images/team.png';
 
   //Statistics

@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
+import 'package:intl/intl.dart';
 
 class MarketplacePerformanceComponent extends StatelessWidget {
   const MarketplacePerformanceComponent({super.key});
@@ -38,11 +39,32 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 2.h),
-              _buildTrustSafetyItem(Asset.identityIcon, 'Identity Verified'),
+              Obx(
+                () => _buildTrustSafetyItem(
+                  Asset.identityIcon,
+                  'Identity Verified',
+                  controller.merchantProfile?.verificationStatus?.identityVerified ??
+                      false,
+                ),
+              ),
               SizedBox(height: 1.h),
-              _buildTrustSafetyItem(Asset.businessLiIcon, 'Business License'),
+              Obx(
+                () => _buildTrustSafetyItem(
+                  Asset.businessLiIcon,
+                  'Business License',
+                  controller.merchantProfile?.verificationStatus?.businessLicense ??
+                      false,
+                ),
+              ),
               SizedBox(height: 1.h),
-              _buildTrustSafetyItem(Asset.qualityIcon, 'Quality Assurance'),
+              Obx(
+                () => _buildTrustSafetyItem(
+                  Asset.qualityIcon,
+                  'Quality Assurance',
+                  controller.merchantProfile?.verificationStatus?.qualityAssurance ??
+                      false,
+                ),
+              ),
             ],
           ),
         ),
@@ -75,8 +97,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
               ),
               SizedBox(height: 1.5.h),
               Obx(() {
-                final completionPercentage =
-                    controller.profileCompletionPercentage;
+                final completionPercentage = controller.profileCompletionPercentage;
                 final progressValue = completionPercentage / 100.0;
 
                 return Column(
@@ -127,31 +148,34 @@ class MarketplacePerformanceComponent extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: _buildPerformanceMetricItem(
-                      'Trust Score',
-                      'Excellent',
-                      MyColors.primary,
+                    child: Obx(
+                      () => _buildPerformanceMetricItem(
+                        'Trust Score',
+                        controller.merchantProfile?.trustScore ?? 'No Score',
+                        MyColors.primary,
+                      ),
                     ),
                   ),
                   SizedBox(width: 1.w),
                   Expanded(
-                    child: _buildPerformanceMetricItem(
-                      'Marketplace Tier',
-                      'Premium',
-                      MyColors.progressFill,
+                    child: Obx(
+                      () => _buildPerformanceMetricItem(
+                        'Marketplace Tier',
+                        controller.merchantProfile?.marketplaceTier ?? 'No Tier',
+                        MyColors.progressFill,
+                      ),
                     ),
                   ),
                   SizedBox(width: 1.w),
                   Expanded(
                     child: Obx(() {
-                      final userData = controller.userData;
-                      final memberSince = userData?.createdAt != null
-                          ? _formatDate(userData!.createdAt!)
-                          : 'Unknown';
-
                       return _buildPerformanceMetricItem(
                         'Member Since',
-                        memberSince,
+                        controller.merchantProfile?.memberSince != null
+                            ? DateFormat('dd MM yyyy').format(
+                                DateTime.parse(controller.merchantProfile!.memberSince!),
+                              )
+                            : 'Unknown',
                         MyColors.black,
                       );
                     }),
@@ -165,7 +189,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildTrustSafetyItem(String iconPath, String title) {
+  Widget _buildTrustSafetyItem(String iconPath, String title, bool verified) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -189,22 +213,22 @@ class MarketplacePerformanceComponent extends StatelessWidget {
           Container(
             width: 16,
             height: 16,
-            decoration: const BoxDecoration(
-              color: MyColors.primary,
+            decoration: BoxDecoration(
+              color: verified ? MyColors.primary : MyColors.red,
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.check, size: 10, color: MyColors.white),
+            child: Icon(
+              verified ? Icons.check : Icons.close,
+              size: 10,
+              color: MyColors.white,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPerformanceMetricItem(
-    String label,
-    String value,
-    Color valueColor,
-  ) {
+  Widget _buildPerformanceMetricItem(String label, String value, Color valueColor) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(

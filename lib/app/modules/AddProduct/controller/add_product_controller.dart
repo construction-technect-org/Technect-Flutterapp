@@ -1,8 +1,4 @@
-
-
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AddProductController extends GetxController {
   final productNameController = TextEditingController();
@@ -30,11 +26,13 @@ class AddProductController extends GetxController {
   RxList<String> categories = <String>["Electronics", "Construction", "Furniture"].obs;
   RxList<String> subCategories = <String>[].obs;
   RxList<String> uomList = <String>["Kg", "Liters", "Pieces"].obs;
+  RxList<String> mianCategory = <String>["!", "2", "3"].obs;
 
   // Nullable selections
   Rxn<String> selectedCategory = Rxn<String>();
   Rxn<String> selectedSubCategory = Rxn<String>();
   Rxn<String> selectedUom = Rxn<String>();
+  Rxn<String> selectedmianCategory = Rxn<String>();
 
   RxBool showExtraFields = false.obs;
   RxString pickedFileName = "Img45.jpg".obs;
@@ -75,7 +73,6 @@ class AddProductController extends GetxController {
     selectedSubCategory.value = null; // reset on category change
   }
 
- 
   RxBool isEnabled = false.obs;
 
   // If editing, you can set it from arguments

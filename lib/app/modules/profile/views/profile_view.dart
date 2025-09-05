@@ -23,10 +23,7 @@ class ProfileView extends GetView<ProfileController> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Profile',
-              style: MyTexts.bold18.copyWith(color: MyColors.primary),
-            ),
+            Text('Profile', style: MyTexts.bold18.copyWith(color: MyColors.primary)),
             TextButton.icon(
               onPressed: () {
                 Get.toNamed(Routes.EDIT_PROFILE);
@@ -90,9 +87,7 @@ class ProfileView extends GetView<ProfileController> {
                     value: progressValue,
                     strokeWidth: 6,
                     backgroundColor: MyColors.profileRemaining,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      MyColors.profileFill,
-                    ),
+                    valueColor: const AlwaysStoppedAnimation<Color>(MyColors.profileFill),
                   ),
                 ),
                 Text(

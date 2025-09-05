@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 
 late AppSharedPreference myPref;
 
@@ -38,5 +39,6 @@ class InitialBinding implements Bindings {
   @override
   void dependencies() {
     myPref = Get.find();
+    Get.put(CommonController());
   }
 }

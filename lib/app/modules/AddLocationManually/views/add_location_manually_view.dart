@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/controller/add_location_manually_controller.dart';
-import 'package:flutter/services.dart';
 
 class AddLocationManuallyView extends GetView<AddLocationController> {
   const AddLocationManuallyView({super.key});
@@ -36,9 +35,7 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                         SizedBox(height: 1.h),
                         Text(
                           "Your location is successfully connected.",
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.grey1,
-                          ),
+                          style: MyTexts.medium14.copyWith(color: MyColors.grey1),
                         ),
                       ],
                     )
@@ -74,9 +71,7 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                           padding: const EdgeInsets.only(left: 30),
                           child: Text(
                             "Select your location for better tracking",
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.shadeOfGray,
-                            ),
+                            style: MyTexts.medium14.copyWith(color: MyColors.shadeOfGray),
                           ),
                         ),
                         SizedBox(height: 3.h),
@@ -84,78 +79,56 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                           children: [
                             Text(
                               'Address Line 1',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.lightBlue,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                             ),
                             Text(
                               '*',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.red,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.red),
                             ),
                           ],
                         ),
                         SizedBox(height: 1.h),
-                        CustomTextField(
-                          controller: controller.addressLine1Controller,
-                        ),
+                        CustomTextField(controller: controller.addressLine1Controller),
                         SizedBox(height: 2.h),
                         Row(
                           children: [
                             Text(
                               'Address Line 2',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.lightBlue,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                             ),
                             Text(
                               '*',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.red,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.red),
                             ),
                           ],
                         ),
                         SizedBox(height: 1.h),
-                        CustomTextField(
-                          controller: controller.addressLine2Controller,
-                        ),
+                        CustomTextField(controller: controller.addressLine2Controller),
                         SizedBox(height: 2.h),
                         Row(
                           children: [
                             Text(
                               'Landmark',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.lightBlue,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                             ),
                             Text(
                               '*',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.red,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.red),
                             ),
                           ],
                         ),
                         SizedBox(height: 1.h),
-                        CustomTextField(
-                          controller: controller.landmarkController,
-                        ),
+                        CustomTextField(controller: controller.landmarkController),
                         SizedBox(height: 2.h),
                         Row(
                           children: [
                             Text(
                               'City',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.lightBlue,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                             ),
                             Text(
                               '*',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.red,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.red),
                             ),
                           ],
                         ),
@@ -166,15 +139,11 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                           children: [
                             Text(
                               'State',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.lightBlue,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                             ),
                             Text(
                               '*',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.red,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.red),
                             ),
                           ],
                         ),
@@ -185,15 +154,11 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                           children: [
                             Text(
                               'Pin Code',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.lightBlue,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                             ),
                             Text(
                               '*',
-                              style: MyTexts.light16.copyWith(
-                                color: MyColors.red,
-                              ),
+                              style: MyTexts.light16.copyWith(color: MyColors.red),
                             ),
                           ],
                         ),

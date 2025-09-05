@@ -1,4 +1,3 @@
-import 'package:construction_technect/app/core/utils/common_button.dart';
 import 'package:construction_technect/app/core/utils/custom_switch.dart';
 import 'package:construction_technect/app/core/utils/dashed_circle.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -6,8 +5,6 @@ import 'package:construction_technect/app/core/utils/stepper_widget_add_product.
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/AddProduct/controller/add_product_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AddProductView extends GetView<AddProductController> {
   const AddProductView({super.key});
@@ -15,7 +12,7 @@ class AddProductView extends GetView<AddProductController> {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
+    final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
 
     return Scaffold(
       backgroundColor: MyColors.white,
@@ -77,9 +74,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     padding: const EdgeInsets.only(left: 10),
                     child: Text(
                       "Product Image",
-                      style: MyTexts.regular18.copyWith(
-                        color: MyColors.lightBlue,
-                      ),
+                      style: MyTexts.regular18.copyWith(color: MyColors.lightBlue),
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -90,8 +85,6 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                         size: 81,
                         color: MyColors.grey,
                         strokeWidth: 1.2,
-                        dashLength: 6,
-                        dashGap: 4,
                         assetImage: Asset.profil,
                       ),
                       const SizedBox(width: 12),
@@ -140,18 +133,31 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Product Name',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
-                      Text(
-                        '*',
-                        style: MyTexts.light16.copyWith(color: MyColors.red),
-                      ),
+                      Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                     ],
                   ),
                   SizedBox(height: 1.h),
                   CustomTextField(controller: controller.productNameController),
+ SizedBox(height: 2.h),
+
+                  Row(
+                    children: [
+                      Text(
+                        'Main Category',
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
+                      ),
+                      Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
+                    ],
+                  ),
+                  SizedBox(height: 1.h),
+                  CommonDropdown<String>(
+                    hintText: "Select Main Category",
+                    items: controller.categories,
+                    selectedValue: controller.selectedCategory,
+                    itemLabel: (item) => item,
+                  ),
                   SizedBox(height: 2.h),
 
                   // Category
@@ -159,9 +165,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Category',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -180,30 +184,25 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Sub-category',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
                   SizedBox(height: 1.h),
                   // Sub-category (auto loads when category changes)
-                   CommonDropdown<String>(
-                      hintText: "Select Sub category",
-                      items: controller.subCategories,
-                      selectedValue: controller.selectedSubCategory,
-                      itemLabel: (item) => item,
-                    ),
-                  
+                  CommonDropdown<String>(
+                    hintText: "Select Sub category",
+                    items: controller.subCategories,
+                    selectedValue: controller.selectedSubCategory,
+                    itemLabel: (item) => item,
+                  ),
 
                   SizedBox(height: 2.h),
                   Row(
                     children: [
                       Text(
                         'UOM',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -221,9 +220,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Price',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -239,9 +236,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'GST%',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -257,9 +252,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'GST Price',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -275,17 +268,12 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Terms & Conditions',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
                   SizedBox(height: 1.h),
-                  CustomTextField(
-                    controller: controller.termsController,
-                    maxLines: 3,
-                  ),
+                  CustomTextField(controller: controller.termsController, maxLines: 3),
 
                   SizedBox(height: 2.h), SizedBox(height: 2.h),
                   Center(
@@ -317,14 +305,9 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Package Size',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
-                      Text(
-                        '*',
-                        style: MyTexts.light16.copyWith(color: MyColors.red),
-                      ),
+                      Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                     ],
                   ),
                   SizedBox(height: 1.h),
@@ -334,9 +317,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Shape',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -347,9 +328,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Texture',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -360,9 +339,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Color',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -373,9 +350,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Package Type',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -386,9 +361,7 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Grain Size',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -400,25 +373,19 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Fineness Modulus',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
                   SizedBox(height: 1.h),
-                  CustomTextField(
-                    controller: controller.finenessModulusController,
-                  ),
+                  CustomTextField(controller: controller.finenessModulusController),
                   SizedBox(height: 2.h),
 
                   Row(
                     children: [
                       Text(
                         'Silt Content',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -430,57 +397,43 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Clay & Dust Content',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
                   SizedBox(height: 1.h),
-                  CustomTextField(
-                    controller: controller.clayDustContentController,
-                  ),
+                  CustomTextField(controller: controller.clayDustContentController),
                   SizedBox(height: 2.h),
 
                   Row(
                     children: [
                       Text(
                         'Moisture Content',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
                   SizedBox(height: 1.h),
-                  CustomTextField(
-                    controller: controller.moistureContentController,
-                  ),
+                  CustomTextField(controller: controller.moistureContentController),
                   SizedBox(height: 2.h),
 
                   Row(
                     children: [
                       Text(
                         'Specific Gravity',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
                   SizedBox(height: 1.h),
-                  CustomTextField(
-                    controller: controller.specificGravityController,
-                  ),
+                  CustomTextField(controller: controller.specificGravityController),
                   SizedBox(height: 2.h),
 
                   Row(
                     children: [
                       Text(
                         'Bulk Density',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -492,25 +445,19 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                     children: [
                       Text(
                         'Water Absorption',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
                   SizedBox(height: 1.h),
-                  CustomTextField(
-                    controller: controller.waterAbsorptionController,
-                  ),
+                  CustomTextField(controller: controller.waterAbsorptionController),
                   SizedBox(height: 2.h),
 
                   Row(
                     children: [
                       Text(
                         'Zone',
-                        style: MyTexts.light16.copyWith(
-                          color: MyColors.lightBlue,
-                        ),
+                        style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                       ),
                     ],
                   ),
@@ -518,122 +465,124 @@ final bool isEdit = (Get.arguments?['isEdit'] ?? false) as bool;
                   CustomTextField(controller: controller.zoneController),
 
                   SizedBox(height: 2.h),
-                  Obx(
-  () {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: MyColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: controller.isEnabled.value
-              ? MyColors.green.withOpacity(0.6)
-              : MyColors.red.withOpacity(0.6),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          )
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            controller.isEnabled.value ? "Active" : "Inactive",
-            style: MyTexts.medium16.copyWith(
-              color: controller.isEnabled.value
-                  ? MyColors.green
-                  : MyColors.red,
-            ),
-          ),
-          CustomSwitch(
-            value: controller.isEnabled.value,
-            onChanged: (val) async {
-              final result = await Get.bottomSheet<bool>(
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        val ? Icons.check_circle : Icons.cancel,
-                        color: val ? MyColors.green : MyColors.red,
-                        size: 40,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        val ? "Activate Product" : "Deactivate Product",
-                        style: MyTexts.medium18,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        val
-                            ? "Are you sure you want to mark this product as Active?"
-                            : "Are you sure you want to mark this product as Inactive?",
-                        style: MyTexts.regular14.copyWith(
-                          color: MyColors.shadeOfGray,
+                  Obx(() {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                        color: MyColors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: controller.isEnabled.value
+                              ? MyColors.green.withOpacity(0.6)
+                              : MyColors.red.withOpacity(0.6),
+                          width: 1.2,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                       SizedBox(height: 2.h),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () => Get.back(result: false),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: MyColors.fontBlack,
-                                side: const BorderSide(color: Colors.grey),
-                              ),
-                              child: const Text("Cancel"),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: MyColors.primary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: () => Get.back(result: true),
-                              child: Text("Yes, Confirm", style: MyTexts.light16.copyWith(
-                          color: MyColors.white,
-                        ),
-),
-                            ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
                           ),
                         ],
-                      )
-                    ],
-                  ),
-                ),
-              );
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            controller.isEnabled.value ? "Active" : "Inactive",
+                            style: MyTexts.medium16.copyWith(
+                              color: controller.isEnabled.value
+                                  ? MyColors.green
+                                  : MyColors.red,
+                            ),
+                          ),
+                          CustomSwitch(
+                            value: controller.isEnabled.value,
+                            onChanged: (val) async {
+                              final result = await Get.bottomSheet<bool>(
+                                Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: MyColors.white,
+                                    borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        val ? Icons.check_circle : Icons.cancel,
+                                        color: val ? MyColors.green : MyColors.red,
+                                        size: 40,
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        val ? "Activate Product" : "Deactivate Product",
+                                        style: MyTexts.medium18,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        val
+                                            ? "Are you sure you want to mark this product as Active?"
+                                            : "Are you sure you want to mark this product as Inactive?",
+                                        style: MyTexts.regular14.copyWith(
+                                          color: MyColors.shadeOfGray,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      SizedBox(height: 2.h),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: OutlinedButton(
+                                              onPressed: () => Get.back(result: false),
+                                              style: OutlinedButton.styleFrom(
+                                                foregroundColor: MyColors.fontBlack,
+                                                side: const BorderSide(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              child: const Text("Cancel"),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: MyColors.primary,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
+                                              onPressed: () => Get.back(result: true),
+                                              child: Text(
+                                                "Yes, Confirm",
+                                                style: MyTexts.light16.copyWith(
+                                                  color: MyColors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
 
-              if (result == true) {
-                controller.isEnabled.value = val;
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  },
-),
+                              if (result == true) {
+                                controller.isEnabled.value = val;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
 
-                       SizedBox(height: 2.h),
+                  SizedBox(height: 2.h),
 
                   Center(
                     child: RoundedButton(

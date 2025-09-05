@@ -1,9 +1,11 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 
 class HomeController extends GetxController {
+  CommonController commonController = Get.find();
   final List<Map<String, String>> items = [
     {"icon": Asset.marketplaceIcon, "label": "Marketplace"},
     {"icon": Asset.erpIcon, "label": "ERP"},
@@ -14,19 +16,14 @@ class HomeController extends GetxController {
     {"icon": Asset.portfolioManagementIcon, "label": "Portfolio\nManagement"},
   ];
 
-  // Services
   HomeService homeService = HomeService();
 
-  // State management
   final isLoading = false.obs;
   final hasAddress = false.obs;
-  final hasProfileComplete = false.obs;
 
-  // Data
   Rx<ProfileModel> profileData = ProfileModel().obs;
   AddressModel addressData = AddressModel();
 
-  // Flag to track if profile dialog has been shown in this session
   bool _profileDialogShown = false;
 
   @override
@@ -40,70 +37,44 @@ class HomeController extends GetxController {
     super.onReady();
     _refreshHomeData();
 
-    // Check profile completion after UI is ready
     Future.delayed(const Duration(milliseconds: 500), () {
       _checkProfileCompletion();
     });
   }
 
   Future<void> _initializeHomeData() async {
-    // Load from cache first
     _loadCachedData();
 
-    // Only call API if no cached data exists
     if (!_hasCachedAddressData()) {
       await _checkAddressAndNavigate();
     }
 
-    if (!_hasCachedProfileData()) {
-      await _fetchProfileData();
-    }
+    await fetchProfileData();
   }
 
-  // Check if cached address data exists
   bool _hasCachedAddressData() {
     final cachedData = myPref.getAddressData();
     return cachedData != null && cachedData.isNotEmpty;
   }
 
-  // Check if cached profile data exists
-  bool _hasCachedProfileData() {
-    final cachedData = myPref.getProfileData();
-    return cachedData != null && cachedData.isNotEmpty;
-  }
-
-  // Check profile completion percentage
   void _checkProfileCompletion() {
-    Get.printInfo(info: '🔍 Checking profile completion...');
-    Get.printInfo(info: '📊 Profile data: ${profileData.value.toJson()}');
-
     final completionPercentage =
         profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
-    hasProfileComplete.value = completionPercentage >= 90;
-    Get.printInfo(
-      info:
-          '📊 Profile completion: $completionPercentage%, Complete: ${hasProfileComplete.value}',
-    );
 
-    // Only show dialog if profile is incomplete AND dialog is not already open AND not shown in this session
-    if (!hasProfileComplete.value && Get.isDialogOpen != true && !_profileDialogShown) {
-      Get.printInfo(info: '🚨 Profile incomplete, showing dialog...');
-      _profileDialogShown = true; // Mark as shown
+    if (profileData.value.data?.merchantProfile != null) {
+      commonController.hasProfileComplete.value = completionPercentage >= 90;
+    }
+
+    if (!commonController.hasProfileComplete.value &&
+        Get.isDialogOpen != true &&
+        !_profileDialogShown) {
+      _profileDialogShown = true;
       _showProfileCompletionDialog();
-    } else {
-      Get.printInfo(
-        info: '✅ Profile complete, dialog already open, or already shown in this session',
-      );
     }
   }
 
-  // Show profile completion dialog
   void _showProfileCompletionDialog() {
-    Get.printInfo(info: '🎯 Showing profile completion dialog...');
-
-    // Check if dialog is already open
     if (Get.isDialogOpen == true) {
-      Get.printInfo(info: '⚠️ Dialog already open, skipping...');
       return;
     }
 
@@ -149,115 +120,79 @@ class HomeController extends GetxController {
           ),
         ),
       ),
-      barrierDismissible: false, // Non-closable dialog
+      barrierDismissible: false,
     );
-
-    Get.printInfo(info: '✅ Profile completion dialog displayed');
   }
 
-  // Handle profile dialog tap based on completion percentage
   void _handleProfileDialogTap() {
     final completionPercentage =
         profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
 
-    Get.printInfo(info: '🎯 Profile dialog tapped - Completion: $completionPercentage%');
-
-    // Don't close the dialog here - let it stay open
-    // Just navigate to the appropriate screen
     if (completionPercentage == 0) {
-      // If percentage is 0, navigate to EDIT_PROFILE
-      Get.printInfo(info: '📝 Navigating to EDIT_PROFILE (0% completion)');
       Get.toNamed(Routes.PROFILE);
     } else {
-      // If percentage is more than 0, navigate to PROFILE
-      Get.printInfo(info: '👤 Navigating to PROFILE ($completionPercentage% completion)');
       Get.toNamed(Routes.PROFILE);
     }
   }
 
-  // Reset profile dialog flag (call this when user returns from edit profile)
   void resetProfileDialogFlag() {
     _profileDialogShown = false;
-    Get.printInfo(info: '🔄 Profile dialog flag reset');
   }
 
-  // Manually trigger profile completion check (useful for testing or manual refresh)
   void checkProfileCompletionManually() {
-    _profileDialogShown = false; // Reset flag to allow showing dialog again
+    _profileDialogShown = false;
     _checkProfileCompletion();
   }
 
-  // Handle when user returns from edit profile screen
   void onReturnFromEditProfile() {
-    Get.printInfo(info: '🔄 User returned from edit profile');
+    if (!commonController.hasProfileComplete.value) {
+      _profileDialogShown = false;
+    }
 
-    // Don't reset the dialog flag here - let it stay open if profile is still incomplete
-    // Only reset if profile is actually completed
-
-    // Refresh profile data to get updated completion percentage
-    _fetchProfileData();
-
-    // Check profile completion after a delay to allow data to load
     Future.delayed(const Duration(milliseconds: 1000), () {
       _checkProfileCompletionAfterEdit();
     });
   }
 
-  // Check profile completion after returning from edit profile
   void _checkProfileCompletionAfterEdit() {
-    Get.printInfo(info: '🔍 Checking profile completion after edit...');
-
     final completionPercentage =
         profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
-    hasProfileComplete.value = completionPercentage >= 90;
 
-    Get.printInfo(
-      info:
-          '📊 Profile completion after edit: $completionPercentage%, Complete: ${hasProfileComplete.value}',
-    );
+    if (profileData.value.data?.merchantProfile != null) {
+      commonController.hasProfileComplete.value = completionPercentage >= 90;
+    }
 
-    if (hasProfileComplete.value) {
-      // Profile is now complete, close dialog and reset flag
+    if (commonController.hasProfileComplete.value) {
       if (Get.isDialogOpen == true) {
         Get.back();
-        Get.printInfo(info: '✅ Profile complete, closing dialog');
       }
       resetProfileDialogFlag();
     } else {
-      // Profile is still incomplete, keep dialog open and allow clicking again
-      Get.printInfo(info: '⚠️ Profile still incomplete, keeping dialog open');
-      // Reset the flag so dialog can be clicked again
       _profileDialogShown = false;
     }
   }
 
-  // Load cached data for instant display on home screen
   void _loadCachedData() {
-    // Load cached address data
     final cachedAddressData = myPref.getAddressData();
     if (cachedAddressData != null) {
       try {
         addressData = AddressModel.fromJson(cachedAddressData);
         hasAddress.value = addressData.data?.addresses?.isNotEmpty ?? false;
-        Get.printInfo(info: '📱 Home: Loaded cached address data');
       } catch (e) {
         Get.printError(info: 'Error loading cached address data: $e');
       }
     }
 
-    // Load cached profile data
     final cachedProfileData = myPref.getProfileData();
     if (cachedProfileData != null) {
       try {
         profileData.value = ProfileModel.fromJson(cachedProfileData);
-        Get.printInfo(info: '📱 Home: Loaded cached profile data');
       } catch (e) {
         Get.printError(info: 'Error loading cached profile data: $e');
       }
     }
   }
 
-  // Check address first, if not found navigate to location view
   Future<void> _checkAddressAndNavigate() async {
     try {
       final addressResponse = await homeService.getAddress();
@@ -267,9 +202,7 @@ class HomeController extends GetxController {
         hasAddress.value = true;
         addressData = addressResponse;
 
-        // Cache address data for home screen only
         myPref.setAddressData(addressResponse.toJson());
-        Get.printInfo(info: '💾 Home: Cached address data');
       } else {
         hasAddress.value = false;
         myPref.clearAddressData();
@@ -281,27 +214,6 @@ class HomeController extends GetxController {
     }
   }
 
-  // Fetch and save profile data
-  Future<void> _fetchProfileData() async {
-    try {
-      final profileResponse = await homeService.getProfile();
-
-      if (profileResponse.success == true && profileResponse.data?.user != null) {
-        profileData.value = profileResponse;
-
-        // Cache profile data for home screen only
-        myPref.setProfileData(profileResponse.toJson());
-        Get.printInfo(info: '💾 Home: Cached profile data');
-
-        // Update user data in shared preferences
-        myPref.setUserModel(profileResponse.data!.user!);
-      }
-    } catch (e) {
-      Get.printError(info: 'Error fetching profile: $e');
-    }
-  }
-
-  // Get current address for display
   String getCurrentAddress() {
     if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
       final currentAddress = addressData.data!.addresses!.first;
@@ -310,7 +222,6 @@ class HomeController extends GetxController {
     return 'No address found';
   }
 
-  // Navigate to address view with existing data
   void navigateToEditAddress() {
     if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
       final currentAddress = addressData.data!.addresses!.first;
@@ -332,26 +243,21 @@ class HomeController extends GetxController {
         'is_default': currentAddress.isDefault,
       };
 
-      // Navigate to address view with existing address data
       Get.toNamed(Routes.ADDRESS, arguments: addressDataMap);
     } else {
       Get.toNamed(Routes.ADDRESS);
     }
   }
 
-  // Refresh home data when returning to home screen
   Future<void> _refreshHomeData() async {
-    // Only refresh if no cached data exists
     if (!_hasCachedAddressData()) {
       try {
-        // Refresh address data
         final addressResponse = await homeService.getAddress();
         if (addressResponse.success == true &&
             (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
           hasAddress.value = true;
           addressData = addressResponse;
           myPref.setAddressData(addressResponse.toJson());
-          Get.printInfo(info: '🔄 Home: Refreshed address data');
         } else {
           hasAddress.value = false;
           myPref.clearAddressData();
@@ -359,24 +265,21 @@ class HomeController extends GetxController {
       } catch (e) {
         Get.printError(info: 'Error refreshing home data: $e');
       }
-    } else {
-      Get.printInfo(info: '📱 Home: Using cached address data, no API call needed');
     }
   }
 
-  // Public method to refresh data (only if no cached data exists)
-  Future<void> refreshData() async {
-    isLoading.value = true;
-
+  Future<void> fetchProfileData() async {
     try {
-      // Only call API if no cached data exists
-      if (!_hasCachedAddressData()) {
-        await _checkAddressAndNavigate();
-      }
+      isLoading.value = true;
+      final profileResponse = await homeService.getProfile();
 
-      if (!_hasCachedProfileData()) {
-        await _fetchProfileData();
+      if (profileResponse.success == true && profileResponse.data?.user != null) {
+        profileData.value = profileResponse;
+        myPref.setProfileData(profileResponse.toJson());
+        myPref.setUserModel(profileResponse.data!.user!);
       }
+    } catch (e) {
+      Get.printError(info: 'Error fetching profile: $e');
     } finally {
       isLoading.value = false;
     }

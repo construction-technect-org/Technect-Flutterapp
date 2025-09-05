@@ -14,7 +14,7 @@ class AddRoleService {
 
 
    // AddRolemodel
-  static Future<AddRolemodel?> createRole({
+   Future<AddRolemodel?> createRole({
     required int merchantProfileId,
     required String roleTitle,
     required String roleDescription,
@@ -53,14 +53,10 @@ class AddRoleService {
       );
     }
   }
-}
 
-// UpdateRoleService Api 
 
-class UpdateRoleService {
-  static final ApiManager _apiManager = ApiManager();
 
-  static Future<UpdatedRoleModel?> updateRole({
+   Future<UpdatedRoleModel?> updateRole({
     required int roleId,
     required int merchantProfileId,
     required String roleTitle,
@@ -102,8 +98,7 @@ class UpdateRoleService {
   }
 
 
+
 }
-
-
 
 

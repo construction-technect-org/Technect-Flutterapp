@@ -4,52 +4,6 @@ import 'package:construction_technect/app/modules/AddRole/service/AddRoleService
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// class AddRoleController extends GetxController {
-//   final roleController = TextEditingController();
-//   final roleDescription = TextEditingController();
-
-//   final selectedFunctionalities = <String>[].obs;
-//   final isLoading = false.obs;
-
-//   Future<void> createRole() async {
-//     if (roleController.text.isEmpty || roleDescription.text.isEmpty) {
-//       Get.snackbar("Error", "Please fill all fields");
-//       return;
-//     }
-
-//     isLoading.value = true;
-
-//     final result = await AddRoleService.createRole(
-//       merchantProfileId: 1, // replace with actual merchant id from session
-//       roleTitle: roleController.text,
-//       roleDescription: roleDescription.text,
-//       functionalities: selectedFunctionalities,
-//       isActive: true,
-//     );
-
-//     isLoading.value = false;
-
-//     if (result != null && result.success) {
-//       Get.back();
-//       Get.snackbar("Success", "Role created successfully!");
-//     } else {
-//       Get.snackbar("Failed", result?.message ?? "Something went wrong");
-//     }
-//   }
-
-//   void toggleFunctionality(String func) {
-//     if (selectedFunctionalities.contains(func)) {
-//       selectedFunctionalities.remove(func);
-//     } else {
-//       selectedFunctionalities.add(func);
-//     }
-//   }
-// }
-
-
-
-
-
 class AddRoleController extends GetxController {
   final roleController = TextEditingController();
   final roleDescription = TextEditingController();
@@ -88,7 +42,7 @@ void loadRoleData(dynamic role) {
 
     if (isEdit && roleId != null) {
       /// ✅ Update role API
-      final result = await UpdateRoleService.updateRole(
+      final result = await AddRoleService().updateRole(
         roleId: roleId!,
         merchantProfileId: 1, // replace with actual merchant id from session
         roleTitle: roleController.text,
@@ -107,7 +61,7 @@ void loadRoleData(dynamic role) {
       }
     } else {
       /// ✅ Create role API
-      final result = await AddRoleService.createRole(
+      final result = await AddRoleService().createRole(
         merchantProfileId: 1,
         roleTitle: roleController.text,
         roleDescription: roleDescription.text,

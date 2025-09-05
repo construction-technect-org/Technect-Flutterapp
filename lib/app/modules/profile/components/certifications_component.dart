@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 
@@ -12,7 +15,6 @@ class CertificationsComponent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header
         Row(
           children: [
             SvgPicture.asset(Asset.certificateIcon, width: 20, height: 20),
@@ -30,7 +32,15 @@ class CertificationsComponent extends StatelessWidget {
         Obx(() {
           final documents = controller.documents;
 
-          if (documents.isEmpty) {
+          // Filter out documents with null or invalid data
+          final validDocuments = documents.where((document) {
+            return document.id != null &&
+                document.documentType != null &&
+                document.documentName != null &&
+                document.filePath != null;
+          }).toList();
+
+          if (validDocuments.isEmpty) {
             return Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -49,45 +59,25 @@ class CertificationsComponent extends StatelessWidget {
               ),
             );
           }
-
           return Column(
-            children: documents.asMap().entries.map((entry) {
+            children: validDocuments.asMap().entries.map((entry) {
               final index = entry.key;
               final document = entry.value;
-
+              log(document.documentType ?? '');
               return Column(
                 children: [
                   _buildCertificationItem(
-                    document.documentType ?? 'Document',
+                    controller.getDocumentDisplayName(document.documentType),
                     document.documentName ?? 'Document Name',
                     'Uploaded',
+                    document,
                   ),
-                  if (index < documents.length - 1) SizedBox(height: 1.7.h),
+                  if (index < validDocuments.length - 1) SizedBox(height: 1.7.h),
                 ],
               );
             }).toList(),
           );
         }),
-        SizedBox(height: 3.h),
-        Center(
-          child: RoundedButton(
-            buttonName: '',
-            borderRadius: 12,
-            width: 50.w,
-            height: 45,
-            verticalPadding: 0,
-            horizontalPadding: 0,
-            child: Center(
-              child: Text(
-                '+ Add Certification',
-                style: MyTexts.medium16.copyWith(
-                  color: MyColors.white,
-                  fontFamily: MyTexts.Roboto,
-                ),
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -96,78 +86,104 @@ class CertificationsComponent extends StatelessWidget {
     String title,
     String organization,
     String expiryDate,
+    Documents document,
   ) {
     return DottedBorder(
       borderType: BorderType.RRect,
       radius: const Radius.circular(12),
       color: const Color(0xFF8C8C8C),
       dashPattern: const [5, 5],
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        decoration: BoxDecoration(
-          color: MyColors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: const Color(0xFFD9F0FF),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: SvgPicture.asset(
-                  Asset.certificateIcon,
-                  colorFilter: const ColorFilter.mode(
-                    MyColors.primary,
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 2.w),
-            // Content
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: MyTexts.medium22.copyWith(
-                    color: MyColors.black,
-                    fontFamily: MyTexts.Roboto,
-                  ),
-                ),
-                Text(
-                  organization,
-                  style: MyTexts.medium14.copyWith(
-                    color: const Color(0xFF717171),
-                    fontFamily: MyTexts.Roboto,
-                  ),
-                ),
-                SizedBox(height: 0.3.h),
-                Text(
-                  expiryDate,
-                  style: MyTexts.medium14.copyWith(
-                    color: const Color(0xFF717171),
-                    fontFamily: MyTexts.Roboto,
-                  ),
+      child: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            decoration: BoxDecoration(
+              color: MyColors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
-          ],
-        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD9F0FF),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: SvgPicture.asset(
+                      Asset.certificateIcon,
+                      colorFilter: const ColorFilter.mode(
+                        MyColors.primary,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 2.w),
+                // Content
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: MyTexts.medium22.copyWith(
+                        color: MyColors.black,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                    Text(
+                      organization,
+                      style: MyTexts.medium14.copyWith(
+                        color: const Color(0xFF717171),
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                    SizedBox(height: 0.3.h),
+                    Text(
+                      expiryDate,
+                      style: MyTexts.medium14.copyWith(
+                        color: const Color(0xFF717171),
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20, top: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () => controller.viewDocument(document),
+                  child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
+                ),
+                const SizedBox(width: 16),
+                GestureDetector(
+                  onTap: () => controller.showDeleteConfirmationDialog(
+                    document.id ?? 0,
+                    document.documentName ?? 'Document',
+                  ),
+                  child: SvgPicture.asset(Asset.delete, width: 20, height: 20),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
