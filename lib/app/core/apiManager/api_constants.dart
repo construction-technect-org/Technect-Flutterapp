@@ -17,4 +17,7 @@ class APIConstants {
   static const String profile = "auth/profile";
   static const String address = "address";
   static const String merchantSubmit = "merchant/submit";
+  static const String addRole = "merchant/role/create";
+  static const String getAllRole = "merchant/role/list";
+  static const String updateRole = "merchant/role";
 }

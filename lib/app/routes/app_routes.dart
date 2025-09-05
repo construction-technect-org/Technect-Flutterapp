@@ -24,6 +24,10 @@ abstract class Routes {
   static const ADD_ROLE = _Paths.ADD_ROLE;
   static const ADD_TEAM = _Paths.ADD_TEAM;
   static const APPROVAL_INBOX = _Paths.APPROVAL_INBOX;
+  static const ROLE_DETAILS = _Paths.ROLE_DETAILS;
+  static const TEAM_DETAILS = _Paths.TEAM_DETAILS;
+
+
 }
 
 abstract class _Paths {
@@ -49,4 +53,8 @@ abstract class _Paths {
   static const ADD_ROLE = '/add-role';
   static const ADD_TEAM = '/add-team';
   static const APPROVAL_INBOX = '/approval-inbox';
+  static const ROLE_DETAILS = '/role-details';
+  static const TEAM_DETAILS = '/team-details';
+
+
 }
