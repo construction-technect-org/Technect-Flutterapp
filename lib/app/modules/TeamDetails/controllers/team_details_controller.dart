@@ -1,18 +1,17 @@
+import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:get/get.dart';
-import '../../../core/utils/custom_snackbar.dart';
-import '../Service/team_detail_service.dart';
-import '../models/team_detail_model.dart';
 
 class TeamDetailsController extends GetxController {
-  /// Reactive data
   RxString userName = "Mike Junior".obs;
-  TeamDetailsModel? teamDetailsModel;
+  TeamListData teamDetailsModel = TeamListData();
   RxString teamId = "".obs;
   RxString userEmail = "mike@constructiontechnet.com".obs;
   RxString userRole = "Admin".obs;
   RxString userPhone = "8950482123".obs;
-  RxString userAddress = "12/45, East Street, Main Chowk, Dattawadi, "
-      "Mhasoba Chowk, Near Ajit Super Market, Pune, Maharashtra-411030".obs;
+  RxString userAddress =
+      "12/45, East Street, Main Chowk, Dattawadi, "
+              "Mhasoba Chowk, Near Ajit Super Market, Pune, Maharashtra-411030"
+          .obs;
   RxString userStatus = "Active".obs;
   RxString profileUrl = "https://via.placeholder.com/150".obs;
 
@@ -23,9 +22,6 @@ class TeamDetailsController extends GetxController {
 
   RxBool isLoading = false.obs;
 
-  // Create instance of service
-  TeamDetailsService teamDetailsService = TeamDetailsService();
-
   @override
   void onInit() {
     super.onInit();
@@ -34,81 +30,33 @@ class TeamDetailsController extends GetxController {
 
   void handlePassedData() {
     final arguments = Get.arguments;
-    teamId.value = arguments?['team_id']?.toString() ?? "";
-
-    if (teamId.value.isNotEmpty) {
-      teamDetail();
-    } else {
-      SnackBars.errorSnackBar(content: "No team ID provided");
-    }
-  }
-
-  Future<void> teamDetail() async {
-    isLoading.value = true;
-    try {
-      // Call instance method instead of static method
-      final teamDetails = await teamDetailsService.teamDetail(teamId.value);
-
-      if (teamDetails.success == true) {
-        teamDetailsModel = teamDetails;
-
-        // Update UI with actual API data
-        _updateUIWithTeamData();
-
-      } else {
-        SnackBars.errorSnackBar(
-          content: 'Failed to load team details',
-        );
-      }
-    } catch (e) {
-      SnackBars.errorSnackBar(
-        content: 'Failed to fetch team details: ${e.toString()}',
-      );
-    } finally {
-      isLoading.value = false;
+    if (arguments != null) {
+      teamDetailsModel = arguments?['team'] ?? "";
+      _updateUIWithTeamData();
     }
   }
 
   void _updateUIWithTeamData() {
-    if (teamDetailsModel?.data != null) {
-      final data = teamDetailsModel!.data!;
-
-      // Update user information
-      userName.value = data.fullName ?? userName.value;
-      userEmail.value = data.emailId ?? userEmail.value;
-      userRole.value = data.roleTitle ?? userRole.value;
-      userPhone.value = data.phoneNumber ?? userPhone.value;
-      userAddress.value = data.address ?? userAddress.value;
-      profileUrl.value = data.profilePhotoUrl ?? profileUrl.value;
-      userStatus.value = data.isActive == true ? "Active" : "Inactive";
-
-      // Update document information
-      aadhaarUrl.value = data.aadharCardPhotoUrl ?? "";
-      panUrl.value = data.panCardPhotoUrl ?? "";
-
-      // Update documents list for UI
-      documents.clear();
-      if (aadhaarUrl.value.isNotEmpty) {
-        documents.add({
-          "title": "Aadhaar Card",
-          "url": aadhaarUrl.value,
-          "type": "aadhaar"
-        });
-      }
-      if (panUrl.value.isNotEmpty) {
-        documents.add({
-          "title": "PAN Card",
-          "url": panUrl.value,
-          "type": "pan"
-        });
-      }
+    teamId.value = (teamDetailsModel.id ?? 0).toString();
+    userName.value = teamDetailsModel.fullName ?? userName.value;
+    userEmail.value = teamDetailsModel.emailId ?? userEmail.value;
+    userRole.value = teamDetailsModel.roleTitle ?? userRole.value;
+    userPhone.value = teamDetailsModel.phoneNumber ?? userPhone.value;
+    userAddress.value = teamDetailsModel.address ?? userAddress.value;
+    profileUrl.value = teamDetailsModel.profilePhotoUrl ?? profileUrl.value;
+    userStatus.value = teamDetailsModel.isActive == true ? "Active" : "Inactive";
+    aadhaarUrl.value = teamDetailsModel.aadharCardPhotoUrl ?? "";
+    panUrl.value = teamDetailsModel.panCardPhotoUrl ?? "";
+    documents.clear();
+    if (aadhaarUrl.value.isNotEmpty) {
+      documents.add({
+        "title": "Aadhaar Card",
+        "url": aadhaarUrl.value,
+        "type": "aadhaar",
+      });
     }
-  }
-
-  // Refresh team details
-  Future<void> refreshTeamDetails() async {
-    if (teamId.value.isNotEmpty) {
-      await teamDetail();
+    if (panUrl.value.isNotEmpty) {
+      documents.add({"title": "PAN Card", "url": panUrl.value, "type": "pan"});
     }
   }
 }

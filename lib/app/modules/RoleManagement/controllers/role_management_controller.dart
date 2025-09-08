@@ -117,14 +117,15 @@ class RoleManagementController extends GetxController {
     }
   }
 
-  // Method to refresh roles when returning from add/edit role screen
   Future<void> refreshRoles() async {
     await fetchRoles();
   }
 
-  // Method to refresh team data
   Future<void> refreshTeam() async {
     await fetchTeamList();
+  }
+
+  Future<void> refreshTeamStatsOverview() async {
     await fetchTeamStatsOverview();
   }
 }

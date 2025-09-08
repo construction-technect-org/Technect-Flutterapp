@@ -11,7 +11,7 @@ class RoleService {
   static Future<AddRolemodel?> createRole({
     required String roleTitle,
     required String roleDescription,
-    required List<String> functionalities,
+    required String functionalities,
     required bool isActive,
   }) async {
     try {
@@ -20,7 +20,7 @@ class RoleService {
         body: {
           "role_title": roleTitle,
           "role_description": roleDescription,
-          "functionalities": functionalities.join(","),
+          "functionalities": functionalities,
           "is_active": isActive,
         },
       );
@@ -44,7 +44,7 @@ class RoleService {
     required int roleId,
     required String roleTitle,
     required String roleDescription,
-    required List<String> functionalities,
+    required String functionalities,
     required bool isActive,
   }) async {
     try {
@@ -53,7 +53,7 @@ class RoleService {
         body: {
           "role_title": roleTitle,
           "role_description": roleDescription,
-          "functionalities": functionalities.join(","), // ✅ backend expects string
+          "functionalities": functionalities, // ✅ backend expects string
           "is_active": isActive,
         },
       );

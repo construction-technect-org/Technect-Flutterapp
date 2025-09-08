@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/photo_view.dart';
+import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/TeamDetails/controllers/team_details_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 
 class TeamDetailsView extends GetView<TeamDetailsController> {
   const TeamDetailsView({super.key});
@@ -15,72 +18,7 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
         backgroundColor: MyColors.white,
         elevation: 0,
         scrolledUnderElevation: 0.0,
-        title: Row(
-          children: [
-            Image.asset(Asset.profil, height: 5.h, width: 5.h),
-            SizedBox(width: 2.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Welcome Vaishnavi!",
-                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                ),
-                GestureDetector(
-                  onTap: () => Get.toNamed(Routes.ADDRESS),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        Asset.location,
-                        width: 2.w,
-                        height: 2.4.h,
-                      ),
-                      SizedBox(width: 1.w),
-                      Text(
-                        "Sadashiv Peth, Pune",
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.textFieldBackground,
-                        ),
-                      ),
-                      SizedBox(width: 1.w),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.black54,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                border: Border.all(color: MyColors.hexGray92),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  SvgPicture.asset(Asset.notifications, width: 28, height: 28),
-                  Positioned(
-                    right: 0,
-                    top: 3,
-                    child: Container(
-                      width: 6.19,
-                      height: 6.19,
-                      decoration: const BoxDecoration(
-                        color: MyColors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        title: WelcomeName(),
       ),
 
       body: SafeArea(
@@ -89,56 +27,7 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// Search bar
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(22.5),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x1A000000),
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.only(left: 4.w, right: 2.w),
-                        child: SvgPicture.asset(
-                          Asset.searchIcon,
-                          height: 2.h,
-                          width: 2.h,
-                        ),
-                      ),
-                      hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(
-                        color: MyColors.darkGray,
-                      ),
-                      filled: true,
-                      fillColor: MyColors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(22.5),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: Padding(
-                        padding: EdgeInsets.all(3.w),
-                        child: SvgPicture.asset(
-                          Asset.filterIcon,
-                          height: 3.h,
-                          width: 3.h,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               SizedBox(height: 1.h),
-
-              /// Team Details
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: Row(
@@ -146,15 +35,14 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
                   children: [
                     Text(
                       "Team Details",
-                      style: MyTexts.medium18.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
+                      style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.ADD_TEAM,arguments:  {"data":controller.teamDetailsModel})?.then((value) {
-                          controller.handlePassedData();
-                        },);
+                        Get.toNamed(
+                          Routes.ADD_TEAM,
+                          arguments: {"data": controller.teamDetailsModel},
+                        );
                       },
                       child: Container(
                         width: 7.w,
@@ -163,11 +51,7 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
                           color: MyColors.primary,
                           borderRadius: BorderRadius.circular(2.w),
                         ),
-                        child: const Icon(
-                          Icons.edit,
-                          size: 16,
-                          color: Colors.white,
-                        ),
+                        child: const Icon(Icons.edit, size: 16, color: Colors.white),
                       ),
                     ),
                   ],
@@ -190,9 +74,42 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
                           children: [
                             CircleAvatar(
                               radius: 4.h,
-                              backgroundImage:  NetworkImage(
-                                controller.profileUrl.value??
-                                "https://via.placeholder.com/150",
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: controller.profileUrl.value.isNotEmpty
+                                      ? controller.profileUrl.value
+                                      : "https://via.placeholder.com/150",
+                                  width: 8.h,
+                                  height: 8.h,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => Container(
+                                    width: 8.h,
+                                    height: 8.h,
+                                    decoration: const BoxDecoration(
+                                      color: MyColors.grey1,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Center(
+                                      child: CupertinoActivityIndicator(
+                                        color: MyColors.primary,
+                                        radius: 1.h,
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Container(
+                                    width: 8.h,
+                                    height: 8.h,
+                                    decoration: const BoxDecoration(
+                                      color: MyColors.grey1,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: MyColors.grey,
+                                      size: 3.h,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                             SizedBox(width: 3.w),
@@ -226,11 +143,7 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
                         const Divider(color: MyColors.hexGray92),
                         Row(
                           children: [
-                            const Icon(
-                              Icons.phone,
-                              size: 18,
-                              color: MyColors.primary,
-                            ),
+                            const Icon(Icons.phone, size: 18, color: MyColors.primary),
                             SizedBox(width: 2.w),
                             Text(
                               controller.userPhone.value,
@@ -279,24 +192,21 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
               SizedBox(height: 1.5.h),
 
               Obx(
-                () => controller.documents.isEmpty?
-                    const Center(child: Text('No Data Found !!')):
-                    Column(
-                  children: controller.documents.map((doc) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                        vertical: 1.h,
+                () => controller.documents.isEmpty
+                    ? const Center(child: Text('No Data Found !!'))
+                    : Column(
+                        children: controller.documents.map((doc) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                            child: _buildCertificationItem(
+                              doc["title"]!,
+                              doc["url"]!,
+                              doc["type"]!,
+                              context,
+                            ),
+                          );
+                        }).toList(),
                       ),
-                      child: _buildCertificationItem(
-                        doc["title"]!,
-                        doc["url"]!,
-                        doc["type"]!,
-                        context
-                      ),
-                    );
-                  }).toList(),
-                ),
               ),
             ],
           ),
@@ -334,7 +244,6 @@ Widget _buildCertificationItem(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// Icon box + actions
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -359,20 +268,20 @@ Widget _buildCertificationItem(
               Row(
                 children: [
                   InkWell(
-                      onTap: () {
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => PhotoView(image: organization),));
-                      },
-                      child: SvgPicture.asset(Asset.viewEye)),
-                  SizedBox(width: 3.w),
-                  SvgPicture.asset(Asset.Delete),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PhotoView(image: organization),
+                        ),
+                      );
+                    },
+                    child: SvgPicture.asset(Asset.viewEye),
+                  ),
                 ],
               ),
             ],
           ),
-          // organization.isNotEmpty?
-          // Image.network(
-          //   organization,
-          // ):
           SizedBox(height: 2.h),
 
           /// Content

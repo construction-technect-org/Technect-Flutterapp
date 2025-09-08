@@ -1,8 +1,6 @@
-// lib/app/modules/RoleDetails/views/role_details_view.dart
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/RoleDetails/controllers/role_details_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class RoleDetailsView extends GetView<RoleDetailsController> {
   const RoleDetailsView({super.key});
@@ -16,70 +14,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
         backgroundColor: MyColors.white,
         elevation: 0,
         scrolledUnderElevation: 0.0,
-        title: Row(
-          children: [
-            Image.asset(Asset.profil, height: 40, width: 40),
-            SizedBox(width: 1.h),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Welcome Vaishnavi!",
-                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(Routes.ADDRESS);
-                  },
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                      SizedBox(width: 0.4.h),
-                      Text(
-                        "Sadashiv Peth, Pune",
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.textFieldBackground,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.black54,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                border: Border.all(color: MyColors.hexGray92),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  SvgPicture.asset(Asset.notifications, width: 28, height: 28),
-                  Positioned(
-                    right: 0,
-                    top: 3,
-                    child: Container(
-                      width: 6.19,
-                      height: 6.19,
-                      decoration: const BoxDecoration(
-                        color: MyColors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        title: WelcomeName(),
       ),
 
       body: SafeArea(
@@ -89,55 +24,6 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 13,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(22.5),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x1A000000),
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(
-                          Asset.searchIcon,
-                          height: 16,
-                          width: 16,
-                        ),
-                      ),
-                      hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(
-                        color: MyColors.darkGray,
-                      ),
-                      filled: true,
-                      fillColor: MyColors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(22.5),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(
-                          Asset.filterIcon,
-                          height: 20,
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
                 padding: EdgeInsets.all(6.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,9 +32,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                       children: [
                         Text(
                           "Role Details",
-                          style: MyTexts.medium18.copyWith(
-                            color: MyColors.fontBlack,
-                          ),
+                          style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
                         ),
                         const Spacer(),
                         GestureDetector(
@@ -159,10 +43,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                 "isEdit": true,
                                 "data": controller.roleDetailsModel,
                               },
-                            )?.then((value) {
-                              controller.handlePassedData();
-                            });
-                            //Get.toNamed(Routes.ROLE_DETAILS);
+                            );
                           },
                           child: Container(
                             width: 27,
@@ -171,11 +52,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                               color: MyColors.primary,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Icon(
-                              Icons.edit,
-                              size: 16,
-                              color: Colors.white,
-                            ),
+                            child: const Icon(Icons.edit, size: 16, color: Colors.white),
                           ),
                         ),
                       ],
@@ -200,9 +77,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                   width: 30,
                                   height: 3.h,
                                   decoration: BoxDecoration(
-                                    color:
-                                        MyColors
-                                            .paleBluecolor, // background color
+                                    color: MyColors.paleBluecolor, // background color
                                     borderRadius: BorderRadius.circular(9),
                                   ),
                                   child: Center(
@@ -234,9 +109,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                             SizedBox(height: 0.5.h),
                             Text(
                               controller.roleDescription.toString(),
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.gray32,
-                              ),
+                              style: MyTexts.regular14.copyWith(color: MyColors.gray32),
                             ),
                             /*  ...controller.roleDescription
                                 .map(
@@ -270,13 +143,12 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                               onPressed: () {},
                               child: Text(
                                 controller.functionalities.toString(),
-                                style: MyTexts.regular16.copyWith(
-                                  color: MyColors.green,
-                                ),
+                                style: MyTexts.regular16.copyWith(color: MyColors.green),
                               ),
                             ),
                             SizedBox(height: 2.h),
-                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
                                   children: [
@@ -293,7 +165,9 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                         vertical: 1.h,
                                       ),
                                       decoration: BoxDecoration(
-                                        color:controller.roleStatus.value=='Active'? MyColors.green:MyColors.red,
+                                        color: controller.roleStatus.value == 'Active'
+                                            ? MyColors.green
+                                            : MyColors.red,
                                         borderRadius: BorderRadius.circular(30.sp),
                                       ),
                                       child: Text(
@@ -304,7 +178,8 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                       ),
                                     ),
                                   ],
-                                ),Column(
+                                ),
+                                Column(
                                   children: [
                                     Text(
                                       "Change Role Status:",
@@ -315,14 +190,15 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                     SizedBox(height: 1.h),
                                     Switch(
                                       activeColor: MyColors.green,
-                                      value: controller.roleStatus.value=='Active', onChanged: (value) {
-                                      if(value){
-                                        controller.roleStatus.value='Active';
-                                      }else{
-                                        controller.roleStatus.value='InActive';
-
-                                      }
-                                    },)
+                                      value: controller.roleStatus.value == 'Active',
+                                      onChanged: (value) {
+                                        if (value) {
+                                          controller.roleStatus.value = 'Active';
+                                        } else {
+                                          controller.roleStatus.value = 'InActive';
+                                        }
+                                      },
+                                    ),
                                   ],
                                 ),
                               ],
