@@ -390,12 +390,14 @@ class ApiManager {
         return responseJson;
 
       case 201:
-        final Map responseJson = json.decode(responseString);
-        if (responseJson['code'] == "0") {
-          SnackBars.errorSnackBar(content: responseJson['message']);
-          throw BadRequestException(responseJson['message']);
-        }
+        final responseJson = json.decode(responseString);
         return responseJson;
+        // final Map responseJson = json.decode(responseString);
+        // if (responseJson['code'] == "0") {
+        //   SnackBars.errorSnackBar(content: responseJson['message']);
+        //   throw BadRequestException(responseJson['message']);
+        // }
+        // return responseJson;
 
       case 400:
         SnackBars.errorSnackBar(
