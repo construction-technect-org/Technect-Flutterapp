@@ -24,6 +24,7 @@ class APIConstants {
   static const String getAllRole = "merchant/role/list";
   static const String updateRole = "merchant/role";
   static const String team = "merchant/team";
+  static const String teamStatsOverview = "merchant/team/stats/overview";
   static const String roleDetailById = "merchant/role";
   static const String teamDetail = "merchant/team";
   static const String getMainCategories = "/merchant/category/main";

@@ -1,4 +1,6 @@
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
+import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/RoleManagement/models/TeamStatsModel.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -22,6 +24,8 @@ class AppSharedPreference {
   final profileDataTimestamp = 0.val('profileDataTimestamp');
   final rolesData = <String, dynamic>{}.val('rolesData');
   final rolesDataTimestamp = 0.val('rolesDataTimestamp');
+  final teamData = <String, dynamic>{}.val('teamData');
+  final teamStatsData = <String, dynamic>{}.val('teamStatsData');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -76,6 +80,8 @@ class AppSharedPreference {
     addressData.val = {};
     profileData.val = {};
     rolesData.val = {};
+    teamData.val = {};
+    teamStatsData.val = {};
   }
 
   // Address data storage
@@ -165,6 +171,89 @@ class AppSharedPreference {
       }
     } catch (e) {
       print('Error getting roles: $e');
+    }
+    return null;
+  }
+
+  // Team data storage
+  void setTeamData(Map<String, dynamic> team) {
+    teamData.val = team;
+  }
+
+  Map<String, dynamic>? getTeamData() {
+    final data = teamData.val;
+    if (data.isNotEmpty) {
+      return Map<String, dynamic>.from(data);
+    }
+    return null;
+  }
+
+  void clearTeamData() {
+    teamData.val = {};
+  }
+
+  // Helper methods for team
+  Future<void> saveTeam(List<TeamListData> team) async {
+    try {
+      final teamJson = team.map((member) => member.toJson()).toList();
+      setTeamData({'data': teamJson, 'timestamp': DateTime.now().millisecondsSinceEpoch});
+    } catch (e) {
+      print('Error saving team: $e');
+    }
+  }
+
+  List<TeamListData>? getTeam() {
+    try {
+      final data = getTeamData();
+      if (data != null && data['data'] != null) {
+        final teamList = (data['data'] as List)
+            .map((memberJson) => TeamListData.fromJson(memberJson))
+            .toList();
+        return teamList;
+      }
+    } catch (e) {
+      print('Error getting team: $e');
+    }
+    return null;
+  }
+
+  // Team stats data storage
+  void setTeamStatsData(Map<String, dynamic> stats) {
+    teamStatsData.val = stats;
+  }
+
+  Map<String, dynamic>? getTeamStatsData() {
+    final data = teamStatsData.val;
+    if (data.isNotEmpty) {
+      return Map<String, dynamic>.from(data);
+    }
+    return null;
+  }
+
+  void clearTeamStatsData() {
+    teamStatsData.val = {};
+  }
+
+  // Helper methods for team stats
+  Future<void> saveTeamStats(TeamStatsModel stats) async {
+    try {
+      setTeamStatsData({
+        'data': stats.toJson(),
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    } catch (e) {
+      print('Error saving team stats: $e');
+    }
+  }
+
+  TeamStatsModel? getTeamStats() {
+    try {
+      final data = getTeamStatsData();
+      if (data != null && data['data'] != null) {
+        return TeamStatsModel.fromJson(data['data']);
+      }
+    } catch (e) {
+      print('Error getting team stats: $e');
     }
     return null;
   }

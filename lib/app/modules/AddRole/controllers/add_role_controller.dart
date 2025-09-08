@@ -9,23 +9,21 @@ import 'package:get/get.dart';
 class AddRoleController extends GetxController {
   final roleController = TextEditingController();
   final roleDescription = TextEditingController();
-final argument = Get.arguments;
+  final argument = Get.arguments;
   final selectedFunctionalities = <String>[].obs;
   final isLoading = false.obs;
   Rx<RoleDetailsModel> dataModel = RoleDetailsModel().obs;
 
   int? roleId;
-  RxBool isEdit = false.obs
-  ;
+  RxBool isEdit = false.obs;
 
   @override
   void onInit() {
-
-    if(argument!=null){
-      isEdit.value=argument["isEdit"];
+    if (argument != null) {
+      isEdit.value = argument["isEdit"];
       dataModel.value = argument["data"];
     }
-    if(isEdit.value){
+    if (isEdit.value) {
       loadRoleData(dataModel.value);
     }
     super.onInit();
@@ -40,10 +38,15 @@ final argument = Get.arguments;
 
     if (role.data?.functionalities is String) {
       selectedFunctionalities.assignAll(
-        (role.data?.functionalities??'').replaceAll('{', '').replaceAll('}', '').split(","),
+        (role.data?.functionalities ?? '')
+            .replaceAll('{', '')
+            .replaceAll('}', '')
+            .split(","),
       );
     } else if (role.data?.functionalities is List) {
-      selectedFunctionalities.assignAll(List<String>.from(role.data?.functionalities??[]));
+      selectedFunctionalities.assignAll(
+        List<String>.from(role.data?.functionalities ?? []),
+      );
     }
   }
 
@@ -103,6 +106,7 @@ final argument = Get.arguments;
       if (Get.isRegistered<RoleManagementController>()) {
         final roleManagementController = Get.find<RoleManagementController>();
         await roleManagementController.refreshRoles();
+        await roleManagementController.refreshTeam();
       }
     } catch (e) {
       // If controller is not found, it's okay - the roles will be refreshed when user navigates back
