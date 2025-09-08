@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomeView extends StatelessWidget {
   final HomeController controller = Get.put(HomeController());
@@ -256,61 +258,114 @@ class HomeView extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 25, right: 24, top: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        if (controller.teamList.isNotEmpty)
+                          Column(
                             children: [
-                              Text(
-                                "Team",
-                                style: MyTexts.medium18.copyWith(
-                                  color: MyColors.textFieldBackground,
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 25,
+                                  right: 24,
+                                  top: 15,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Team",
+                                      style: MyTexts.medium18.copyWith(
+                                        color: MyColors.textFieldBackground,
+                                      ),
+                                    ),
+                                    // Text(
+                                    //   "View All",
+                                    //   style: MyTexts.medium12.copyWith(
+                                    //     color: MyColors.textFieldBackground,
+                                    //   ),
+                                    // ),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                "View All",
-                                style: MyTexts.medium12.copyWith(
-                                  color: MyColors.textFieldBackground,
+                              SizedBox(
+                                height: 130,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // Get.toNamed(Routes.ROLE_MANAGEMENT);
+                                  },
+                                  child: Obx(() {
+                                    return ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: controller.teamList.length,
+                                      itemBuilder: (context, index) {
+                                        final teamMember = controller.teamList[index];
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 20,
+                                            top: 15,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 35,
+                                                child: ClipOval(
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        teamMember.profilePhotoUrl ?? '',
+                                                    width: 70,
+                                                    height: 70,
+                                                    fit: BoxFit.cover,
+                                                    placeholder: (context, url) =>
+                                                        Container(
+                                                          width: 70,
+                                                          height: 70,
+                                                          decoration: const BoxDecoration(
+                                                            color: MyColors.grey1,
+                                                            shape: BoxShape.circle,
+                                                          ),
+                                                          child: const Center(
+                                                            child:
+                                                                CupertinoActivityIndicator(
+                                                                  color: MyColors.primary,
+                                                                  radius: 15,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                    errorWidget: (context, url, error) =>
+                                                        Container(
+                                                          width: 70,
+                                                          height: 70,
+                                                          decoration: const BoxDecoration(
+                                                            color: MyColors.grey1,
+                                                            shape: BoxShape.circle,
+                                                          ),
+                                                          child: const Icon(
+                                                            Icons.person,
+                                                            color: MyColors.grey,
+                                                            size: 35,
+                                                          ),
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 1.h),
+                                              Text(
+                                                teamMember.fullName ?? 'Unknown',
+                                                style: MyTexts.medium16.copyWith(
+                                                  color: MyColors.dimGray,
+                                                  fontFamily: MyTexts.Roboto,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        SizedBox(
-                          height: 130,
-                          child: GestureDetector(
-                            onTap: () {
-                              //   Get.toNamed(Routes.ROLE_MANAGEMENT);
-                            },
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 7,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 20, top: 15),
-                                  child: Column(
-                                    children: [
-                                      const CircleAvatar(
-                                        radius: 35,
-                                        backgroundImage: AssetImage(Asset.team),
-                                      ),
-                                      SizedBox(height: 1.h),
-                                      Text(
-                                        'Mohan Sau',
-                                        style: MyTexts.medium16.copyWith(
-                                          color: MyColors.dimGray,
-                                          fontFamily: MyTexts.Roboto,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 11,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(

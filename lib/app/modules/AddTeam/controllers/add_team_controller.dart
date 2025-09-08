@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/AddTeam/service/add_team_servi
 import 'package:construction_technect/app/modules/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AddTeamController extends GetxController {
@@ -19,7 +20,8 @@ class AddTeamController extends GetxController {
   final panCardController = TextEditingController();
   AddTeamService addTeamService = AddTeamService();
   RxList<String> categories = <String>["PanCard", "AadharCard", "DrivingLicen"].obs;
-  RoleManagementController controller = Get.find();
+  RoleManagementController roleController = Get.find();
+  HomeController homeController = Get.find();
 
   // Nullable selections
   Rxn<String> selectedCategory = Rxn<String>();
@@ -165,14 +167,14 @@ class AddTeamController extends GetxController {
           files: selectedFiles,
           id: '${teamDetailsModel.value.id ?? ''}',
         );
-        await controller.fetchTeamList();
+        await homeController.refreshTeamList();
         isLoading.value = false;
         Get.back();
         Get.back();
       } else {
         await addTeamService.addTeam(fields: fields, files: selectedFiles);
-        await controller.fetchTeamList();
-        await controller.fetchTeamStatsOverview();
+        await homeController.refreshTeamList();
+        await roleController.fetchTeamStatsOverview();
         isLoading.value = false;
         Get.back();
       }
