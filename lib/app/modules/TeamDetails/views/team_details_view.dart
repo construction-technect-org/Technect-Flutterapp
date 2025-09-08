@@ -26,7 +26,7 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
                   "Welcome Vaishnavi!",
                   style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                 ),
-                GestureDetector(
+                GestureDetector( 
                   onTap: () => Get.toNamed(Routes.ADDRESS),
                   child: Row(
                     children: [

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
-import 'package:construction_technect/app/modules/AddRole/models/AddRoleModel.dart';
+import 'package:construction_technect/app/modules/AddRole/models/AddRolemodel.dart';
 import 'package:construction_technect/app/modules/AddRole/models/UpdatedRoleModel.dart';
 
 class RoleService {

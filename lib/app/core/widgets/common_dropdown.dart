@@ -10,6 +10,8 @@ class CommonDropdown<T> extends StatelessWidget {
   final String Function(T) itemLabel;
   final Widget? prefix;
   final Widget? suffix;
+  final ValueChanged<T?>? onChanged; // 🔹 added callback
+
 
   const CommonDropdown({
     required this.hintText,
@@ -18,6 +20,8 @@ class CommonDropdown<T> extends StatelessWidget {
     required this.itemLabel,
     this.prefix,
     this.suffix,
+    this.onChanged, // 🔹 added
+
   });
 
   @override
@@ -55,8 +59,11 @@ class CommonDropdown<T> extends StatelessWidget {
                 ),
               );
             }).toList(),
-            onChanged: (T? newValue) {
+             onChanged: (T? newValue) {
               selectedValue.value = newValue;
+              if (onChanged != null) {
+                onChanged!(newValue); // 🔹 fire callback
+              }
             },
             // Match same padding as CustomTextField
             dropdownColor: MyColors.white,
