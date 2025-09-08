@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class DashedCircle extends StatelessWidget {
@@ -7,6 +9,7 @@ class DashedCircle extends StatelessWidget {
   final double dashLength;
   final double dashGap;
   final String assetImage;
+  final String? file;
 
   const DashedCircle({
     super.key,
@@ -15,6 +18,7 @@ class DashedCircle extends StatelessWidget {
     this.strokeWidth = 1.5,
     this.dashLength = 6,
     this.dashGap = 4,
+    this.file ,
     required this.assetImage,
   });
 
@@ -34,7 +38,9 @@ class DashedCircle extends StatelessWidget {
           ),
         ),
         // Rounded image from assets inside
-        ClipOval(
+        if (file!=null&&file!.isNotEmpty) ClipOval(
+          child: file!.contains('http')?Image.network(file??'', width: 67, height: 67, fit: BoxFit.cover):Image.file(File(file??''), width: 67, height: 67, fit: BoxFit.cover),
+        ) else ClipOval(
           child: Image.asset(assetImage, width: 67, height: 67, fit: BoxFit.cover),
         ),
       ],

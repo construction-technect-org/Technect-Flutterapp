@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/photo_view.dart';
 import 'package:construction_technect/app/modules/TeamDetails/controllers/team_details_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 
@@ -150,7 +151,11 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(Routes.ADD_TEAM,arguments:  {"data":controller.teamDetailsModel})?.then((value) {
+                          controller.handlePassedData();
+                        },);
+                      },
                       child: Container(
                         width: 7.w,
                         height: 3.5.h,
@@ -185,7 +190,8 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
                           children: [
                             CircleAvatar(
                               radius: 4.h,
-                              backgroundImage: const NetworkImage(
+                              backgroundImage:  NetworkImage(
+                                controller.profileUrl.value??
                                 "https://via.placeholder.com/150",
                               ),
                             ),
@@ -273,7 +279,9 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
               SizedBox(height: 1.5.h),
 
               Obx(
-                () => Column(
+                () => controller.documents.isEmpty?
+                    const Center(child: Text('No Data Found !!')):
+                    Column(
                   children: controller.documents.map((doc) {
                     return Padding(
                       padding: EdgeInsets.symmetric(
@@ -282,8 +290,9 @@ class TeamDetailsView extends GetView<TeamDetailsController> {
                       ),
                       child: _buildCertificationItem(
                         doc["title"]!,
-                        doc["organization"]!,
-                        doc["expiry"]!,
+                        doc["url"]!,
+                        doc["type"]!,
+                        context
                       ),
                     );
                   }).toList(),
@@ -301,6 +310,7 @@ Widget _buildCertificationItem(
   String title,
   String organization,
   String expiryDate,
+  BuildContext context,
 ) {
   return DottedBorder(
     borderType: BorderType.RRect,
@@ -348,13 +358,21 @@ Widget _buildCertificationItem(
               ),
               Row(
                 children: [
-                  SvgPicture.asset(Asset.viewEye),
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => PhotoView(image: organization),));
+                      },
+                      child: SvgPicture.asset(Asset.viewEye)),
                   SizedBox(width: 3.w),
                   SvgPicture.asset(Asset.Delete),
                 ],
               ),
             ],
           ),
+          // organization.isNotEmpty?
+          // Image.network(
+          //   organization,
+          // ):
           SizedBox(height: 2.h),
 
           /// Content
@@ -365,6 +383,7 @@ Widget _buildCertificationItem(
               fontFamily: MyTexts.Roboto,
             ),
           ),
+
           Text(
             organization,
             style: MyTexts.medium14.copyWith(

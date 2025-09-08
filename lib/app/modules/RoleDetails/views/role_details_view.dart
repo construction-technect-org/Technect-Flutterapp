@@ -1,6 +1,6 @@
 // lib/app/modules/RoleDetails/views/role_details_view.dart
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/%20RoleDetails/controllers/%20role_details_controller.dart';
+import 'package:construction_technect/app/modules/RoleDetails/controllers/role_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -153,7 +153,16 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(Routes.ROLE_DETAILS);
+                            Get.toNamed(
+                              Routes.ADD_ROLE,
+                              arguments: {
+                                "isEdit": true,
+                                "data": controller.roleDetailsModel,
+                              },
+                            )?.then((value) {
+                              controller.handlePassedData();
+                            });
+                            //Get.toNamed(Routes.ROLE_DETAILS);
                           },
                           child: Container(
                             width: 27,
@@ -191,8 +200,9 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                   width: 30,
                                   height: 3.h,
                                   decoration: BoxDecoration(
-                                    color: MyColors
-                                        .paleBluecolor, // background color
+                                    color:
+                                        MyColors
+                                            .paleBluecolor, // background color
                                     borderRadius: BorderRadius.circular(9),
                                   ),
                                   child: Center(
@@ -222,7 +232,13 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                               ),
                             ),
                             SizedBox(height: 0.5.h),
-                            ...controller.roleDescription
+                            Text(
+                              controller.roleDescription.toString(),
+                              style: MyTexts.regular14.copyWith(
+                                color: MyColors.gray32,
+                              ),
+                            ),
+                            /*  ...controller.roleDescription
                                 .map(
                                   (desc) => Text(
                                     "• $desc",
@@ -231,7 +247,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                     ),
                                   ),
                                 )
-                                .toList(),
+                                .toList(),*/
                             SizedBox(height: 2.h),
                             Text(
                               "Functionality:",
@@ -240,59 +256,76 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                               ),
                             ),
                             SizedBox(height: 1.h),
-                            Wrap(
-                              spacing: 2.w,
-                              children: controller.functionalities
-                                  .map(
-                                    (func) => OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        side: const BorderSide(
-                                          color: MyColors.green,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            30.sp,
-                                          ),
-                                        ),
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 6.w,
-                                          vertical: 1.2.h,
-                                        ),
+                            OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(color: MyColors.green),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.sp),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 6.w,
+                                  vertical: 1.2.h,
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: Text(
+                                controller.functionalities.toString(),
+                                style: MyTexts.regular16.copyWith(
+                                  color: MyColors.green,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 2.h),
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  children: [
+                                    Text(
+                                      "Role Status:",
+                                      style: MyTexts.regular14.copyWith(
+                                        color: MyColors.fontBlack,
                                       ),
-                                      onPressed: () {},
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 5.w,
+                                        vertical: 1.h,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color:controller.roleStatus.value=='Active'? MyColors.green:MyColors.red,
+                                        borderRadius: BorderRadius.circular(30.sp),
+                                      ),
                                       child: Text(
-                                        func,
+                                        controller.roleStatus.value,
                                         style: MyTexts.regular16.copyWith(
-                                          color: MyColors.green,
+                                          color: MyColors.white,
                                         ),
                                       ),
                                     ),
-                                  )
-                                  .toList(),
-                            ),
-                            SizedBox(height: 2.h),
-                            Text(
-                              "Role Status:",
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                            SizedBox(height: 1.h),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 5.w,
-                                vertical: 1.h,
-                              ),
-                              decoration: BoxDecoration(
-                                color: MyColors.green,
-                                borderRadius: BorderRadius.circular(30.sp),
-                              ),
-                              child: Text(
-                                controller.roleStatus.value,
-                                style: MyTexts.regular16.copyWith(
-                                  color: MyColors.white,
+                                  ],
+                                ),Column(
+                                  children: [
+                                    Text(
+                                      "Change Role Status:",
+                                      style: MyTexts.regular14.copyWith(
+                                        color: MyColors.fontBlack,
+                                      ),
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Switch(
+                                      activeColor: MyColors.green,
+                                      value: controller.roleStatus.value=='Active', onChanged: (value) {
+                                      if(value){
+                                        controller.roleStatus.value='Active';
+                                      }else{
+                                        controller.roleStatus.value='InActive';
+
+                                      }
+                                    },)
+                                  ],
                                 ),
-                              ),
+                              ],
                             ),
                           ],
                         ),

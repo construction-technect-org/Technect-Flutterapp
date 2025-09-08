@@ -6,6 +6,7 @@ class RoundedButton extends StatelessWidget {
     this.borderColor,
     this.fontColor,
     this.onTap,
+    this.isLoading = false,
     this.fontSize,
     this.alignment,
     this.child,
@@ -29,6 +30,7 @@ class RoundedButton extends StatelessWidget {
   final TextAlign? textAlign;
   final Alignment? alignment;
   final Widget? child;
+  final bool? isLoading;
   final double? width;
   final double? height;
   final double? borderRadius;
@@ -46,9 +48,10 @@ class RoundedButton extends StatelessWidget {
         height: height ?? 60,
         decoration: BoxDecoration(
           color: color ?? MyColors.primary,
-          border: borderColor != null
-              ? Border.all(color: borderColor ?? MyColors.white)
-              : null,
+          border:
+              borderColor != null
+                  ? Border.all(color: borderColor ?? MyColors.white)
+                  : null,
           borderRadius: BorderRadius.circular(borderRadius ?? 50),
         ),
         alignment: alignment ?? Alignment.center,
@@ -57,17 +60,20 @@ class RoundedButton extends StatelessWidget {
           horizontal: horizontalPadding ?? 0,
         ),
         child:
-            child ??
-            Text(
-              buttonName,
-              textAlign: textAlign,
-              style:
-                  style ??
-                  MyTexts.bold18.copyWith(
-                    color: fontColor ?? MyColors.white,
-                    fontSize: fontSize ?? 18.sp,
-                  ),
-            ),
+            (child == null)
+                ? isLoading == true
+                    ? const CircularProgressIndicator()
+                    : Text(
+                      buttonName,
+                      textAlign: textAlign,
+                      style:
+                          style ??
+                          MyTexts.bold18.copyWith(
+                            color: fontColor ?? MyColors.white,
+                            fontSize: fontSize ?? 18.sp,
+                          ),
+                    )
+                : child,
       ),
     );
   }

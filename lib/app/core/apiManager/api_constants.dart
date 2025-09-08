@@ -12,17 +12,22 @@ class APIConstants {
   static const String signup = "auth/signup";
   static const String login = "auth/login";
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
-  static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
+  static const String forgotPasswordVerifyOtp =
+      "auth/forgot-password/verify-otp";
   static const String forgotPasswordReset = "auth/forgot-password/reset";
   static const String profile = "auth/profile";
   static const String address = "address";
   static const String merchantSubmit = "merchant/submit";
+  static const String deleteDocument = "merchant/documents/";
+  static const String merchantUpdate = "merchant/update";
   static const String addRole = "merchant/role/create";
   static const String getAllRole = "merchant/role/list";
   static const String updateRole = "merchant/role";
-  static const String deleteDocument = "merchant/documents/";
-  static const String merchantUpdate = "merchant/update";
-
-  //Add New Team
- static const String merchantTeam = "merchant/team";
+  static const String team = "merchant/team";
+  static const String roleDetailById = "merchant/role";
+  static const String teamDetail = "merchant/team";
+  static const String getMainCategories = "/merchant/category/main";
+  static const String getCategories = "merchant/category/sub?main_category_id=";
+  static const String getSubCategories =
+      "merchant/category/sub?main_category_id=";
 }

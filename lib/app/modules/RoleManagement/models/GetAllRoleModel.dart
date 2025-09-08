@@ -30,24 +30,24 @@ class GetAllRoleModel {
 }
 
 class GetAllRole {
-  final int id;
-  final int merchantProfileId;
-  final String roleTitle;
-  final String roleDescription;
-  final String functionalities;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int? id;
+  final int? merchantProfileId;
+  final String? roleTitle;
+  final String? roleDescription;
+  final String? functionalities;
+  final bool? isActive;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   GetAllRole({
-    required this.id,
-    required this.merchantProfileId,
-    required this.roleTitle,
-    required this.roleDescription,
-    required this.functionalities,
-    required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.merchantProfileId,
+    this.roleTitle,
+    this.roleDescription,
+    this.functionalities,
+    this.isActive,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory GetAllRole.fromJson(Map<String, dynamic> json) {
@@ -71,8 +71,8 @@ class GetAllRole {
       "role_description": roleDescription,
       "functionalities": functionalities,
       "is_active": isActive,
-      "created_at": createdAt.toIso8601String(),
-      "updated_at": updatedAt.toIso8601String(),
+      "created_at": createdAt?.toIso8601String(),
+      "updated_at": updatedAt?.toIso8601String(),
     };
   }
 }

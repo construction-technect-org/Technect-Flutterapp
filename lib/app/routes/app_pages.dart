@@ -1,5 +1,3 @@
-import 'package:construction_technect/app/modules/%20RoleDetails/bindings/%20role_details_binding.dart';
-import 'package:construction_technect/app/modules/%20RoleDetails/views/%20role_details_view.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/bindings/add_location_manually_binding.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/views/add_location_manually_view.dart';
 import 'package:construction_technect/app/modules/AddProduct/bindings/add_product_binding.dart';
@@ -16,8 +14,10 @@ import 'package:construction_technect/app/modules/BusinessHours/bindings/busines
 import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
-import 'package:construction_technect/app/modules/RoleManagement%20/bindings/role_management_binding.dart';
-import 'package:construction_technect/app/modules/RoleManagement%20/views/role_management_view.dart';
+import 'package:construction_technect/app/modules/RoleDetails/bindings/role_details_binding.dart';
+import 'package:construction_technect/app/modules/RoleDetails/views/role_details_view.dart';
+import 'package:construction_technect/app/modules/RoleManagement/bindings/role_management_binding.dart';
+import 'package:construction_technect/app/modules/RoleManagement/views/role_management_view.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/bindings/sign_up_details_binding.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_up_password_binding.dart';
@@ -55,11 +55,7 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(
-      name: _Paths.LOGIN,
-      page: () => const LoginView(),
-      binding: LoginBinding(),
-    ),
+    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
