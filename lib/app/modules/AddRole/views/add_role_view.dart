@@ -218,7 +218,7 @@ Widget _buildChip({
   return Obx(() {
     final isSelected = controller.selectedFunctionalities.contains(label);
     return InkWell(
-      onTap: () => controller.toggleFunctionality(label),
+      onTap: () => controller.selectedFunctionalities.value = label,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(

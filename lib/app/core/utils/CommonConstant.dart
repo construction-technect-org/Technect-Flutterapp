@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 
-import 'imports.dart';
-
-class CommonConstant{
+class CommonConstant {
   Future<File> compressImage(File file, {int maxSize = 1048576}) async {
     int quality = 90; // Start with high quality
     const int minQuality = 10; // Prevents excessive quality loss
@@ -61,17 +61,38 @@ class CommonConstant{
     return null;
   }
 
-  Future<XFile?> filePick() async{
+  Future<XFile?> filePick() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png'],
     );
     XFile? _file;
-    if(result!=null) {
+    if (result != null) {
       final newFile = await compressImage(File(result.files.first.path ?? ''));
-      _file =XFile( newFile.path);
+      _file = XFile(newFile.path);
     }
 
     return _file;
+  }
+
+  Future<XFile?> pickImageFromGallery() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        // Compress the image
+        final compressedFile = await compressImage(File(image.path));
+        return XFile(compressedFile.path);
+      }
+    } catch (e) {
+      debugPrint("Error picking image from gallery: $e");
+    }
+    return null;
   }
 }

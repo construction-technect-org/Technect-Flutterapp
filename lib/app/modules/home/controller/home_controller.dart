@@ -1,5 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/RoleManagement/services/GetAllRoleService.dart';
 import 'package:construction_technect/app/modules/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
@@ -17,12 +19,14 @@ class HomeController extends GetxController {
   ];
 
   HomeService homeService = HomeService();
+  GetAllRoleService roleService = GetAllRoleService();
 
   final isLoading = false.obs;
   final hasAddress = false.obs;
 
   Rx<ProfileModel> profileData = ProfileModel().obs;
   AddressModel addressData = AddressModel();
+  RxList<TeamListData> teamList = <TeamListData>[].obs;
 
   bool _profileDialogShown = false;
 
@@ -30,6 +34,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     _initializeHomeData();
+    _loadTeamFromStorage();
   }
 
   @override
@@ -283,5 +288,34 @@ class HomeController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> _loadTeamFromStorage() async {
+    final cachedTeam = myPref.getTeam();
+    if (cachedTeam != null && cachedTeam.isNotEmpty) {
+      teamList.assignAll(cachedTeam);
+    } else {
+      await fetchTeamList();
+    }
+  }
+
+  Future<void> fetchTeamList() async {
+    try {
+      isLoading.value = true;
+      final TeamListModel? result = await roleService.fetchAllTeam();
+      if (result?.success == true) {
+        teamList.clear();
+        teamList.addAll(result?.data ?? []);
+        await myPref.saveTeam(teamList.toList());
+      }
+    } catch (e) {
+      Get.printError(info: 'Error fetching team list: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> refreshTeamList() async {
+    await fetchTeamList();
   }
 }

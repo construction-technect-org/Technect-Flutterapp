@@ -1,18 +1,15 @@
-
-// ignore_for_file: prefer_typing_uninitialized_variables, type_annotate_public_apis
-
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddTeam/service/add_team_service.dart';
+import 'package:construction_technect/app/modules/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
-import 'package:construction_technect/app/modules/RoleManagement/services/GetAllRoleService.dart';
-import 'package:construction_technect/app/modules/TeamDetails/models/team_detail_model.dart';
+import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AddTeamController extends GetxController {
   final fullNameController = TextEditingController();
   final emialIdController = TextEditingController();
-  // ignore: non_constant_identifier_names
   final PhonenumberController = TextEditingController();
   final addressController = TextEditingController();
   final stateController = TextEditingController();
@@ -22,8 +19,9 @@ class AddTeamController extends GetxController {
   final aadharCardController = TextEditingController();
   final panCardController = TextEditingController();
   AddTeamService addTeamService = AddTeamService();
-  RxList<String> categories =
-      <String>["PanCard", "AadharCard", "DrivingLicen"].obs;
+  RxList<String> categories = <String>["PanCard", "AadharCard", "DrivingLicen"].obs;
+  RoleManagementController roleController = Get.find();
+  HomeController homeController = Get.find();
 
   // Nullable selections
   Rxn<String> selectedCategory = Rxn<String>();
@@ -38,61 +36,59 @@ class AddTeamController extends GetxController {
   RxString pickedFilePanCardPhotoName = "".obs;
   RxString pickedFilePanCardPhotoPath = "".obs;
   RxBool isLoading = false.obs;
-  final args = Get.arguments;
-  final Rx<TeamDetailsModel> teamDetailsModel = TeamDetailsModel().obs;
+  final Rx<TeamListData> teamDetailsModel = TeamListData().obs;
   RxBool isEdit = false.obs;
   RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<GetAllRole>? selectedRole = GetAllRole().obs;
-  final GetAllRoleService _service = GetAllRoleService();
+
+  // Store original photo paths for comparison during updates
+  String originalProfilePhotoPath = "";
+  String originalAadhaarCardPhotoPath = "";
+  String originalPanCardPhotoPath = "";
 
   @override
   void onInit() {
-    if (args != null) {
-      teamDetailsModel.value = args['data'];
+    _loadRolesFromStorage();
+    final arg = Get.arguments;
+    if (arg != null) {
+      teamDetailsModel.value = arg['data'];
       isEdit.value = true;
+      loadTeamData();
     }
-    loadRoles();
     super.onInit();
   }
 
-  Future<void> loadRoles() async {
-    try {
-      final result = await _service.fetchAllRoles();
-      if (result != null && result.success) {
-        roles.assignAll(result.data);
-        selectedRole!.value = roles.first;
-        if(isEdit.value){
-          loadTeamData(teamDetailsModel.value);
-
-        }
-        await _saveRolesToStorage();
-
-      }
-    } finally {}
+  Future<void> _loadRolesFromStorage() async {
+    final cachedRoles = myPref.getRoles();
+    if (cachedRoles != null && cachedRoles.isNotEmpty) {
+      roles.assignAll(cachedRoles);
+    }
   }
 
-  Future<void> _saveRolesToStorage() async {
-    await myPref.saveRoles(roles.toList());
-  }
-
-  void loadTeamData(TeamDetailsModel team) {
+  void loadTeamData() {
     isEdit.value = true;
-    teamDetailsModel.value = team;
-    fullNameController.text = team.data?.fullName ?? '';
-    emialIdController.text = team.data?.emailId ?? '';
-    PhonenumberController.text = team.data?.phoneNumber ?? '';
-    addressController.text = team.data?.address ?? '';
-    stateController.text = team.data?.state ?? '';
-    cityController.text = team.data?.city ?? '';
-    pinCodeController.text = team.data?.pincode ?? '';
-    aadharCardController.text = team.data?.aadharCardNumber ?? '';
-    panCardController.text = team.data?.panCardNumber ?? '';
-    pickedFileProfilePhotoPath.value = team.data?.profilePhotoUrl ?? '';
-    pickedFileAadhaarCardPhotoPath.value = team.data?.aadharCardPhotoUrl ?? '';
-    pickedFilePanCardPhotoPath.value = team.data?.panCardPhotoUrl ?? '';
-    selectedRole!.value = roles.value.firstWhere(
-      (element) => element.id == team.data?.teamRoleId,orElse: () {
-        return roles.value.first;
+    fullNameController.text = teamDetailsModel.value.fullName ?? '';
+    emialIdController.text = teamDetailsModel.value.emailId ?? '';
+    PhonenumberController.text = teamDetailsModel.value.phoneNumber ?? '';
+    addressController.text = teamDetailsModel.value.address ?? '';
+    stateController.text = teamDetailsModel.value.state ?? '';
+    cityController.text = teamDetailsModel.value.city ?? '';
+    pinCodeController.text = teamDetailsModel.value.pincode ?? '';
+    aadharCardController.text = teamDetailsModel.value.aadharCardNumber ?? '';
+    panCardController.text = teamDetailsModel.value.panCardNumber ?? '';
+    pickedFileProfilePhotoPath.value = teamDetailsModel.value.profilePhotoUrl ?? '';
+    pickedFileAadhaarCardPhotoPath.value =
+        teamDetailsModel.value.aadharCardPhotoUrl ?? '';
+    pickedFilePanCardPhotoPath.value = teamDetailsModel.value.panCardPhotoUrl ?? '';
+
+    // Store original photo paths for comparison during updates
+    originalProfilePhotoPath = teamDetailsModel.value.profilePhotoUrl ?? '';
+    originalAadhaarCardPhotoPath = teamDetailsModel.value.aadharCardPhotoUrl ?? '';
+    originalPanCardPhotoPath = teamDetailsModel.value.panCardPhotoUrl ?? '';
+    selectedRole!.value = roles.firstWhere(
+      (element) => element.id == teamDetailsModel.value.teamRoleId,
+      orElse: () {
+        return roles.first;
       },
     );
   }
@@ -107,24 +103,11 @@ class AddTeamController extends GetxController {
     super.onClose();
   }
 
-  void submitProduct() {
-    showExtraFields.value = true;
-  }
-
-  void loadSubCategories(String? category) {
-    if (category == null) {
-      selectedSubCategory.value = null;
-      return;
-    }
-
-    selectedSubCategory.value = null; // reset on category change
-  }
-
   Future<void> addTeam() async {
     isLoading.value = true;
-     Map<String, dynamic> fields ={};
+    Map<String, dynamic> fields = {};
     if (isEdit.value) {
-       fields = {
+      fields = {
         "full_name": fullNameController.text,
         "email_id": emialIdController.text,
         "phone_number": PhonenumberController.text,
@@ -153,68 +136,78 @@ class AddTeamController extends GetxController {
       };
       ;
     }
-    final Map<String, String> selectedFiles = {
-      "profile_photo": pickedFileProfilePhotoPath.value,
-      "aadhar_card_photo": pickedFileAadhaarCardPhotoPath.value,
-      "pan_card_photo": pickedFilePanCardPhotoPath.value,
-    };
-    try {
-      var  addTeamResponse;
-      if(isEdit.value){
-        addTeamResponse = await addTeamService.updateTeam(
-          fields: fields,
-          files: selectedFiles,
-          id: '${teamDetailsModel.value.data?.id??''}'
-        );
-      }else {
-        addTeamResponse = await addTeamService.addTeam(
-          fields: fields,
-          files: selectedFiles,
-        );
+    Map<String, String> selectedFiles = {};
+
+    if (isEdit.value) {
+      // For updates, only include photos that have been changed
+      if (pickedFileProfilePhotoPath.value != originalProfilePhotoPath &&
+          pickedFileProfilePhotoPath.value.isNotEmpty) {
+        selectedFiles["profile_photo"] = pickedFileProfilePhotoPath.value;
       }
-      if (addTeamResponse.success == true) {
+      if (pickedFileAadhaarCardPhotoPath.value != originalAadhaarCardPhotoPath &&
+          pickedFileAadhaarCardPhotoPath.value.isNotEmpty) {
+        selectedFiles["aadhar_card_photo"] = pickedFileAadhaarCardPhotoPath.value;
+      }
+      if (pickedFilePanCardPhotoPath.value != originalPanCardPhotoPath &&
+          pickedFilePanCardPhotoPath.value.isNotEmpty) {
+        selectedFiles["pan_card_photo"] = pickedFilePanCardPhotoPath.value;
+      }
+    } else {
+      // For new team members, include all photos
+      selectedFiles = {
+        "profile_photo": pickedFileProfilePhotoPath.value,
+        "aadhar_card_photo": pickedFileAadhaarCardPhotoPath.value,
+        "pan_card_photo": pickedFilePanCardPhotoPath.value,
+      };
+    }
+    try {
+      if (isEdit.value) {
+        await addTeamService.updateTeam(
+          fields: fields,
+          files: selectedFiles,
+          id: '${teamDetailsModel.value.id ?? ''}',
+        );
+        await homeController.refreshTeamList();
         isLoading.value = false;
         Get.back();
+        Get.back();
       } else {
+        await addTeamService.addTeam(fields: fields, files: selectedFiles);
+        await homeController.refreshTeamList();
+        await roleController.fetchTeamStatsOverview();
         isLoading.value = false;
-        SnackBars.errorSnackBar(
-          content: addTeamResponse.message ?? 'Something went wrong!!',
-        );
+        Get.back();
       }
     } catch (e) {
       // Error snackbar is already shown by ApiManager
-      // No need to show another one here
     }
-
   }
 
- Future<void> pickFile(String type) async {
+  Future<void> pickPhotoFromGallery(String type) async {
     try {
-      final XFile? result = await CommonConstant().filePick();
+      final XFile? result = await CommonConstant().pickImageFromGallery();
 
       if (result != null && result.path.isNotEmpty) {
         final XFile file = result;
         if (type == 'profile_photo') {
-          pickedFileProfilePhotoName.value = file.name ?? '';
-          pickedFileProfilePhotoPath.value = file.path ?? '';
+          pickedFileProfilePhotoName.value = file.name;
+          pickedFileProfilePhotoPath.value = file.path;
         }
         if (type == 'aadhar_card_photo') {
-          pickedFileAadhaarCardPhotoName.value = file.name ?? '';
-          pickedFileAadhaarCardPhotoPath.value = file.path ?? '';
+          pickedFileAadhaarCardPhotoName.value = file.name;
+          pickedFileAadhaarCardPhotoPath.value = file.path;
         }
         if (type == 'pan_card_photo') {
-          pickedFilePanCardPhotoName.value = file.name ?? '';
-          pickedFilePanCardPhotoPath.value = file.path ?? '';
+          pickedFilePanCardPhotoName.value = file.name;
+          pickedFilePanCardPhotoPath.value = file.path;
         }
-
-        // addSelectedDocument(certificationType, file);
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Failed to pick file: $e', time: 3);
+      SnackBars.errorSnackBar(content: 'Failed to pick photo from gallery: $e', time: 3);
     }
   }
 
-  void filedValidation() {
+  Future<void> filedValidation() async {
     final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
 
     // Validate Full Name
@@ -235,9 +228,7 @@ class AddTeamController extends GetxController {
     } else if (addressController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Address is required');
     } else if (addressController.text.length < 10) {
-      SnackBars.errorSnackBar(
-        content: 'Address must be at least 10 characters',
-      );
+      SnackBars.errorSnackBar(content: 'Address must be at least 10 characters');
     } else if (stateController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'State is required');
     } else if (cityController.text.isEmpty) {
@@ -262,21 +253,20 @@ class AddTeamController extends GetxController {
       SnackBars.errorSnackBar(content: 'Please enter a valid PAN number');
     } else if (selectedCategory.value == "") {
       SnackBars.errorSnackBar(content: 'User role is required');
-    } else if (pickedFileProfilePhotoPath.value.isEmpty ) {
-      SnackBars.errorSnackBar(
-        content: 'Profile photo Photo is required',
-      );
-    }else if (pickedFileAadhaarCardPhotoPath.value.isEmpty ) {
-      SnackBars.errorSnackBar(
-        content: 'Aadhar card Photo is required',
-      );
-    }else if (pickedFilePanCardPhotoPath.value.isEmpty ) {
-      SnackBars.errorSnackBar(
-        content: 'PAN card Photo is required',
-      );
+    } else if (!isEdit.value) {
+      // Photo validation only for new team members
+      if (pickedFileProfilePhotoPath.value.isEmpty) {
+        SnackBars.errorSnackBar(content: 'Profile photo Photo is required');
+      } else if (pickedFileAadhaarCardPhotoPath.value.isEmpty) {
+        SnackBars.errorSnackBar(content: 'Aadhar card Photo is required');
+      } else if (pickedFilePanCardPhotoPath.value.isEmpty) {
+        SnackBars.errorSnackBar(content: 'PAN card Photo is required');
+      } else {
+        await addTeam();
+      }
     } else {
-      addTeam();
-      // Get.toNamed(Routes.APPROVAL_INBOX);
+      // For updates, photos are optional
+      await addTeam();
     }
   }
 }
