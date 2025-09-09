@@ -52,10 +52,35 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             SizedBox(height: 1.h),
             _buildProfileBanner(),
-            SizedBox(height: 2.h),
-            _buildTabBar(),
             SizedBox(height: 1.h),
-            Expanded(child: _buildTabContent()),
+            Obx(() {
+              final completionPercentage = controller.profileCompletionPercentage;
+              if (completionPercentage > 90) {
+                return Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 1.h),
+                        const InfoMetricsComponent(),
+                        const CertificationsComponent(isDelete: false),
+                        SizedBox(height: 2.h),
+                        const MarketplacePerformanceComponent(),
+                        SizedBox(height: 3.h),
+                      ],
+                    ),
+                  ),
+                );
+              } else {
+                return Column(
+                  children: [
+                    SizedBox(height: 1.h),
+                    _buildTabBar(),
+                    SizedBox(height: 1.h),
+                    Expanded(child: _buildTabContent()),
+                  ],
+                );
+              }
+            }),
           ],
         ),
       ),
@@ -115,7 +140,7 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                   SizedBox(height: 0.5.h),
                   Text(
-                    'Profile Pending',
+                    completionPercentage > 90 ? "Profile Verified" : 'Profile Pending',
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.white,
                       fontFamily: MyTexts.Roboto,
@@ -183,7 +208,7 @@ class ProfileView extends GetView<ProfileController> {
       () => SingleChildScrollView(
         child: switch (controller.selectedTabIndex.value) {
           0 => const InfoMetricsComponent(),
-          1 => const CertificationsComponent(),
+          1 => const CertificationsComponent(isDelete: true),
           2 => const MarketplacePerformanceComponent(),
           _ => const InfoMetricsComponent(),
         },

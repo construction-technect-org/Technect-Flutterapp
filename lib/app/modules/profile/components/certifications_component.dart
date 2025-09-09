@@ -6,7 +6,9 @@ import 'package:construction_technect/app/modules/profile/controllers/profile_co
 import 'package:dotted_border/dotted_border.dart';
 
 class CertificationsComponent extends StatelessWidget {
-  const CertificationsComponent({super.key});
+  const CertificationsComponent({this.isDelete});
+
+  final bool? isDelete;
 
   ProfileController get controller => Get.find<ProfileController>();
 
@@ -173,13 +175,14 @@ class CertificationsComponent extends StatelessWidget {
                   child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
                 ),
                 const SizedBox(width: 16),
-                GestureDetector(
-                  onTap: () => controller.showDeleteConfirmationDialog(
-                    document.id ?? 0,
-                    document.documentName ?? 'Document',
+                if (isDelete ?? true)
+                  GestureDetector(
+                    onTap: () => controller.showDeleteConfirmationDialog(
+                      document.id ?? 0,
+                      document.documentName ?? 'Document',
+                    ),
+                    child: SvgPicture.asset(Asset.delete, width: 20, height: 20),
                   ),
-                  child: SvgPicture.asset(Asset.delete, width: 20, height: 20),
-                ),
               ],
             ),
           ),
@@ -187,6 +190,4 @@ class CertificationsComponent extends StatelessWidget {
       ),
     );
   }
-
-
 }
