@@ -1,14 +1,14 @@
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
-import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/TeamStatsModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/services/GetAllRoleService.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/main.dart';
 import 'package:get/get.dart';
 
 class RoleManagementController extends GetxController {
-  final roles = <GetAllRole>[].obs;
-  final RxList<TeamListData> teamList = <TeamListData>[].obs;
+  final RxList<GetAllRole> roles = <GetAllRole>[].obs;
   final Rx<TeamStatsModel?> teamStats = Rx<TeamStatsModel?>(null);
+  HomeController homeController = Get.find();
   final isLoading = false.obs;
   final isLoadingTeam = false.obs;
   final isLoadingTeamStats = false.obs;
@@ -19,7 +19,6 @@ class RoleManagementController extends GetxController {
   void onInit() {
     super.onInit();
     loadRoles();
-    loadTeamList();
     loadTeamStats();
   }
 
@@ -50,38 +49,6 @@ class RoleManagementController extends GetxController {
       }
     } finally {
       isLoading.value = false;
-    }
-  }
-
-  Future<void> loadTeamList() async {
-    await _loadTeamFromStorage();
-  }
-
-  Future<void> _loadTeamFromStorage() async {
-    final cachedTeam = myPref.getTeam();
-    if (cachedTeam != null && cachedTeam.isNotEmpty) {
-      teamList.assignAll(cachedTeam);
-    } else {
-      await fetchTeamList();
-    }
-  }
-
-  Future<void> _saveTeamToStorage() async {
-    await myPref.saveTeam(teamList.toList());
-  }
-
-  Future<void> fetchTeamList() async {
-    try {
-      isLoadingTeam.value = true;
-      final TeamListModel? result = await _service.fetchAllTeam();
-      if (result?.success == true) {
-        isLoadingTeam.value = false;
-        teamList.clear();
-        teamList.value.addAll(result?.data ?? []);
-        await _saveTeamToStorage();
-      }
-    } finally {
-      isLoadingTeam.value = false;
     }
   }
 
@@ -117,14 +84,11 @@ class RoleManagementController extends GetxController {
     }
   }
 
-  // Method to refresh roles when returning from add/edit role screen
   Future<void> refreshRoles() async {
     await fetchRoles();
   }
 
-  // Method to refresh team data
-  Future<void> refreshTeam() async {
-    await fetchTeamList();
+  Future<void> refreshTeamStatsOverview() async {
     await fetchTeamStatsOverview();
   }
 }

@@ -1,12 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:flutter/cupertino.dart';
 
 class RoleManagementView extends GetView<RoleManagementController> {
-  const RoleManagementView({super.key});
+  final HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -87,9 +90,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                       child: Center(
                         child: Text(
                           '+ Add New Role',
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.white,
-                          ),
+                          style: MyTexts.medium14.copyWith(color: MyColors.white),
                         ),
                       ),
                     ),
@@ -119,11 +120,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                             () => StatCard(
                               title: 'Total Team',
                               value:
-                                  controller
-                                      .teamStats
-                                      .value
-                                      ?.data
-                                      ?.totalTeamMembers ??
+                                  controller.teamStats.value?.data?.totalTeamMembers ??
                                   '0',
                               icon: SvgPicture.asset(Asset.Featured),
                               iconBackground: MyColors.verypaleBlue,
@@ -139,13 +136,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                           child: Obx(
                             () => StatCard(
                               title: 'Active Roles',
-                              value:
-                                  controller
-                                      .teamStats
-                                      .value
-                                      ?.data
-                                      ?.activeRoles ??
-                                  '0',
+                              value: controller.teamStats.value?.data?.activeRoles ?? '0',
                               icon: SvgPicture.asset(Asset.LowStock),
                               iconBackground: MyColors.paleRed,
                             ),
@@ -157,11 +148,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                             () => StatCard(
                               title: 'Active Team',
                               value:
-                                  controller
-                                      .teamStats
-                                      .value
-                                      ?.data
-                                      ?.activeTeamMembers ??
+                                  controller.teamStats.value?.data?.activeTeamMembers ??
                                   '0',
                               icon: SvgPicture.asset(Asset.TotalInterests),
                               iconBackground: MyColors.warmOrange,
@@ -196,7 +183,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                         onTap: () {
                           Get.toNamed(
                             Routes.ROLE_DETAILS,
-                            arguments: {"role_ID": role.id.toString()},
+                            arguments: {"getRole": role},
                           )?.then((value) {
                             controller.loadRoles();
                           });
@@ -222,9 +209,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                     Center(
                       child: RoundedButton(
                         onTap: () {
-                          Get.toNamed(Routes.ADD_TEAM)?.then((value) {
-                            controller.fetchTeamList();
-                          });
+                          Get.toNamed(Routes.ADD_TEAM);
                         },
                         buttonName: '',
                         borderRadius: 10,
@@ -235,9 +220,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                         child: Center(
                           child: Text(
                             '+ Add New Team',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.white,
-                            ),
+                            style: MyTexts.medium14.copyWith(color: MyColors.white),
                           ),
                         ),
                       ),
@@ -253,7 +236,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  if (controller.teamList.isEmpty) {
+                  if (homeController.teamList.isEmpty) {
                     return const Column(
                       children: [
                         SizedBox(height: 50),
@@ -265,17 +248,14 @@ class RoleManagementView extends GetView<RoleManagementController> {
                   return ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.teamList.length,
+                    itemCount: homeController.teamList.length,
                     itemBuilder: (context, index) {
-                      final TeamListData user = controller.teamList[index];
+                      final TeamListData user = homeController.teamList[index];
                       return GestureDetector(
                         onTap: () {
-                          // 👇 Navigate to new screen & pass user data
                           Get.toNamed(
                             Routes.TEAM_DETAILS,
-                            arguments: {
-                              "team_id": controller.teamList[index].id,
-                            },
+                            arguments: {"team": homeController.teamList[index]},
                           );
                         },
                         child: Container(
@@ -291,8 +271,40 @@ class RoleManagementView extends GetView<RoleManagementController> {
                             children: [
                               CircleAvatar(
                                 radius: 24,
-                                backgroundImage: NetworkImage(
-                                  user.profilePhotoUrl ?? '',
+                                child: ClipOval(
+                                  child: CachedNetworkImage(
+                                    imageUrl: user.profilePhotoUrl ?? '',
+                                    width: 48,
+                                    height: 48,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) => Container(
+                                      width: 48,
+                                      height: 48,
+                                      decoration: const BoxDecoration(
+                                        color: MyColors.grey1,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Center(
+                                        child: CupertinoActivityIndicator(
+                                          color: MyColors.primary,
+                                          radius: 12,
+                                        ),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) => Container(
+                                      width: 48,
+                                      height: 48,
+                                      decoration: const BoxDecoration(
+                                        color: MyColors.grey1,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.person,
+                                        color: MyColors.grey,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -313,9 +325,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                           width: 16,
                                           height: 16,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
+                                            borderRadius: BorderRadius.circular(8),
                                             color: MyColors
                                                 .primary, // background with opacity
                                           ),
@@ -337,9 +347,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                           ),
                                           decoration: BoxDecoration(
                                             color: MyColors.mediumSeaGreen,
-                                            borderRadius: BorderRadius.circular(
-                                              14.5,
-                                            ),
+                                            borderRadius: BorderRadius.circular(14.5),
                                           ),
                                           child: Text(
                                             "Admin",
@@ -372,9 +380,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                         ),
                                         const SizedBox(width: 6),
                                         Text(
-                                          user.isActive == true
-                                              ? 'Active'
-                                              : 'DeActive',
+                                          user.isActive == true ? 'Active' : 'DeActive',
                                           style: MyTexts.regular14.copyWith(
                                             color: MyColors.mutedGreen,
                                           ),
@@ -416,9 +422,7 @@ class RoleCard extends StatelessWidget {
               color: MyColors.white,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: role.isActive == true
-                    ? MyColors.green
-                    : MyColors.americanSilver,
+                color: role.isActive == true ? MyColors.green : MyColors.americanSilver,
               ),
             ),
             child: Padding(
@@ -450,9 +454,7 @@ class RoleCard extends StatelessWidget {
                         // 👈 this fixes overflow issue
                         child: Text(
                           role.roleTitle ?? '',
-                          style: MyTexts.medium20.copyWith(
-                            color: MyColors.fontBlack,
-                          ),
+                          style: MyTexts.medium20.copyWith(color: MyColors.fontBlack),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
@@ -475,16 +477,13 @@ class RoleCard extends StatelessWidget {
                         ), // space between dot & text
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          color: MyColors
-                              .philippineGray, // 👈 change color if needed
+                          color: MyColors.philippineGray, // 👈 change color if needed
                         ),
                       ),
                       Expanded(
                         child: Text(
                           role.roleDescription ?? '',
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.gray32,
-                          ),
+                          style: MyTexts.regular14.copyWith(color: MyColors.gray32),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -496,19 +495,14 @@ class RoleCard extends StatelessWidget {
 
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 4.w,
-                      vertical: 1.5.h,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
                     decoration: BoxDecoration(
                       color: MyColors.whiteBlue,
                       borderRadius: BorderRadius.circular(11),
                     ),
                     child: Text(
-                      "Users: ${role.id} ",
-                      style: MyTexts.regular14.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
+                      "Users: ${role.teamMemberCount ?? '0'} ",
+                      style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
                     ),
                   ),
                 ],

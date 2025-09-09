@@ -57,5 +57,11 @@
 	<string>This app needs access to location to show your current position on the map.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location to show your current position on the map.</string>
+	
+	<!-- Image picker permissions -->
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to camera to take photos for your profile and documents.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to photo library to select images for your profile and documents.</string>
 </dict>
 </plist>
