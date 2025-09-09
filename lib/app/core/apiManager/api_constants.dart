@@ -31,5 +31,7 @@ class APIConstants {
   static const String getMainCategories = "merchant/category/main";
   static const String getSubCategories = "merchant/category/sub?main_category_id=";
   static const String getProducts = "merchant/category/products/sub/";
- 
+  static const String getFilter = "merchant/category/filters/sub/";
+  static const String getProductList = "merchant/product/list";
+
 }

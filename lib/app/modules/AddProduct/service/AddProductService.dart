@@ -1,8 +1,9 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddProduct/models/MainCategoryModel.dart';
-import 'package:construction_technect/app/modules/AddProduct/models/ProductModel.dart';
+import 'package:construction_technect/app/modules/AddProduct/models/ProductModelForCategory.dart';
 import 'package:construction_technect/app/modules/AddProduct/models/SubCategoryModel.dart';
 import 'package:construction_technect/app/modules/AddProduct/models/create_product.dart';
+import 'package:construction_technect/app/modules/AddProduct/models/get_filter_model.dart';
 
 class AddProductService {
   ApiManager apiManager = ApiManager();
@@ -41,6 +42,15 @@ class AddProductService {
     } catch (e, st) {
       throw Exception('Error in productsBySubCategory: $e , $st');
     }
+  }  Future<GetFilterModel> getFilter(int subCategoryId) async {
+    try {
+      final response = await apiManager.get(
+        url: "${APIConstants.getFilter}$subCategoryId",
+      );
+      return GetFilterModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in productsBySubCategory: $e , $st');
+    }
   }
 
   Future<CreateProductModel> createProduct({
@@ -48,7 +58,7 @@ class AddProductService {
     Map<String, String>? files,
   }) async {
     try {
-      final response = await apiManager.putMultipart(
+      final response = await apiManager.postMultipart(
         url: '${APIConstants.createProduct}',
         fields: fields,
         files: files,
