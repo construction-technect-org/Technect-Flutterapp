@@ -19,6 +19,7 @@ class AddProductView extends GetView<AddProductController> {
       appBar: AppBar(
         automaticallyImplyLeading: false, // remove default back button
         backgroundColor: Colors.white,
+        toolbarHeight: 80,
         elevation: 0,
         flexibleSpace: Padding(
           padding: EdgeInsets.only(top: 6.h, left: 16, right: 16),
@@ -58,6 +59,7 @@ class AddProductView extends GetView<AddProductController> {
       body: SafeArea(
         child: PageView(
           controller: pageController,
+
           physics: const NeverScrollableScrollPhysics(), // user swipe disable
           children: [
             // ------------------- PAGE 1 -------------------
@@ -83,11 +85,14 @@ class AddProductView extends GetView<AddProductController> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const DashedCircle(
-                        size: 81,
-                        color: MyColors.grey,
-                        strokeWidth: 1.2,
-                        assetImage: Asset.profil,
+                      Obx(
+                      ()=> DashedCircle(
+                          size: 81,
+                          color: MyColors.grey,
+                          strokeWidth: 1.2,
+                          assetImage: Asset.profil,
+                          file: controller.pickedFilePath.value,
+                        ),
                       ),
                       const SizedBox(width: 12),
 
@@ -319,13 +324,15 @@ class AddProductView extends GetView<AddProductController> {
                   Center(
                     child: RoundedButton(
                       buttonName: 'NEXT',
-                      onTap: () {
-                        controller.showExtraFields.value = true;
-                        pageController.animateToPage(
-                          1,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
+                      onTap: () async {
+                        if (await controller.firstPartValidation()) {
+                          controller.showExtraFields.value = true;
+                          pageController.animateToPage(
+                            1,
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        }
                       },
                     ),
                   ),
@@ -357,6 +364,57 @@ class AddProductView extends GetView<AddProductController> {
                   ),
                   SizedBox(height: 1.h),
                   CustomTextField(controller: controller.packageSizeController),
+                  SizedBox(height: 2.h),
+                  Row(
+                    children: [
+                      Text(
+                        'Brand Name',
+                        style: MyTexts.light16.copyWith(
+                          color: MyColors.lightBlue,
+                        ),
+                      ),
+                      Text(
+                        '*',
+                        style: MyTexts.light16.copyWith(color: MyColors.red),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.h),
+                  CustomTextField(controller: controller.brandNameController),
+                  SizedBox(height: 2.h),
+                  Row(
+                    children: [
+                      Text(
+                        'Weight',
+                        style: MyTexts.light16.copyWith(
+                          color: MyColors.lightBlue,
+                        ),
+                      ),
+                      Text(
+                        '*',
+                        style: MyTexts.light16.copyWith(color: MyColors.red),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.h),
+                  CustomTextField(controller: controller.WeightController),
+                  SizedBox(height: 2.h),
+                  Row(
+                    children: [
+                      Text(
+                        'Size',
+                        style: MyTexts.light16.copyWith(
+                          color: MyColors.lightBlue,
+                        ),
+                      ),
+                      Text(
+                        '*',
+                        style: MyTexts.light16.copyWith(color: MyColors.red),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.h),
+                  CustomTextField(controller: controller.sizeController),
                   SizedBox(height: 2.h),
                   Row(
                     children: [
@@ -557,9 +615,10 @@ class AddProductView extends GetView<AddProductController> {
                         color: MyColors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: controller.isEnabled.value
-                              ? MyColors.green.withOpacity(0.6)
-                              : MyColors.red.withOpacity(0.6),
+                          color:
+                              controller.isEnabled.value
+                                  ? MyColors.green.withOpacity(0.6)
+                                  : MyColors.red.withOpacity(0.6),
                           width: 1.2,
                         ),
                         boxShadow: [
@@ -576,9 +635,10 @@ class AddProductView extends GetView<AddProductController> {
                           Text(
                             controller.isEnabled.value ? "Active" : "Inactive",
                             style: MyTexts.medium16.copyWith(
-                              color: controller.isEnabled.value
-                                  ? MyColors.green
-                                  : MyColors.red,
+                              color:
+                                  controller.isEnabled.value
+                                      ? MyColors.green
+                                      : MyColors.red,
                             ),
                           ),
                           CustomSwitch(
@@ -598,9 +658,8 @@ class AddProductView extends GetView<AddProductController> {
                                     children: [
                                       Icon(
                                         val ? Icons.check_circle : Icons.cancel,
-                                        color: val
-                                            ? MyColors.green
-                                            : MyColors.red,
+                                        color:
+                                            val ? MyColors.green : MyColors.red,
                                         size: 40,
                                       ),
                                       const SizedBox(height: 12),
@@ -625,8 +684,8 @@ class AddProductView extends GetView<AddProductController> {
                                         children: [
                                           Expanded(
                                             child: OutlinedButton(
-                                              onPressed: () =>
-                                                  Get.back(result: false),
+                                              onPressed:
+                                                  () => Get.back(result: false),
                                               style: OutlinedButton.styleFrom(
                                                 foregroundColor:
                                                     MyColors.fontBlack,
@@ -648,8 +707,8 @@ class AddProductView extends GetView<AddProductController> {
                                                       BorderRadius.circular(12),
                                                 ),
                                               ),
-                                              onPressed: () =>
-                                                  Get.back(result: true),
+                                              onPressed:
+                                                  () => Get.back(result: true),
                                               child: Text(
                                                 "Yes, Confirm",
                                                 style: MyTexts.light16.copyWith(
@@ -675,9 +734,12 @@ class AddProductView extends GetView<AddProductController> {
                   }),
                   SizedBox(height: 2.h),
                   Center(
-                    child: RoundedButton(
-                      buttonName: 'SUBMIT',
-                      onTap: controller.submitProduct,
+                    child: Obx(
+                      () =>  RoundedButton(
+                        buttonName: 'SUBMIT',
+                        isLoading: controller.isLoadingCreateProduct.value,
+                        onTap: controller.submitProduct,
+                      ),
                     ),
                   ),
                 ],

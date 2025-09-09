@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:construction_technect/app/modules/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/AddProduct/models/SubCategoryModel.dart';
@@ -16,8 +20,11 @@ class AddProductController extends GetxController {
   final termsController = TextEditingController();
 
   final packageSizeController = TextEditingController();
+  final brandNameController = TextEditingController();
+  final WeightController = TextEditingController();
   final shapeController = TextEditingController();
   final textureController = TextEditingController();
+  final sizeController = TextEditingController();
   final colorController = TextEditingController();
   final packageTypeController = TextEditingController();
   final grainSizeController = TextEditingController();
@@ -46,13 +53,18 @@ class AddProductController extends GetxController {
   Rxn<String> selectedMainCategory = Rxn<String>();
   Rxn<String> selectedSubCategory = Rxn<String>();
   Rxn<String> selectedProduct = Rxn<String>();
+  Rxn<String> selectedMainCategoryId = Rxn<String>();
+  Rxn<String> selectedSubCategoryId = Rxn<String>();
+  Rxn<String> selectedProductId = Rxn<String>();
   Rxn<String> selectedUom = Rxn<String>();
 
   // ---------------- State ----------------
   RxBool showExtraFields = false.obs;
-  RxString pickedFileName = "Img45.jpg".obs;
+  RxString pickedFileName = "".obs;
+  RxString pickedFilePath = "".obs;
   RxBool isEnabled = false.obs;
   RxBool isLoading = false.obs;
+  RxBool isLoadingCreateProduct = false.obs;
 
   final AddProductService _service = AddProductService();
 
@@ -91,7 +103,10 @@ class AddProductController extends GetxController {
 
     selectedMainCategory.value = categoryName;
 
-    final selected = mainCategories.firstWhereOrNull((c) => c.name == categoryName);
+    final selected = mainCategories.firstWhereOrNull(
+      (c) => c.name == categoryName,
+    );
+    selectedMainCategoryId.value = '${selected?.id ?? 0}';
     if (selected != null) {
       fetchSubCategories(selected.id);
     }
@@ -110,7 +125,11 @@ class AddProductController extends GetxController {
 
     selectedSubCategory.value = subCategoryName;
 
-    final selectedSub = subCategories.firstWhereOrNull((s) => s.name == subCategoryName);
+    final selectedSub = subCategories.firstWhereOrNull(
+      (s) => s.name == subCategoryName,
+    );
+    selectedSubCategoryId.value = '${selectedSub?.id ?? 0}';
+
     if (selectedSub != null) {
       fetchProducts(selectedSub.id);
     }
@@ -142,6 +161,10 @@ class AddProductController extends GetxController {
 
   void onProductSelected(String? productName) {
     selectedProduct.value = productName;
+    final selectedSub = productsList.firstWhereOrNull(
+      (s) => s.name == productName,
+    );
+    selectedProductId.value = '${selectedSub?.id ?? 0}';
   }
 
   // ---------------- API Calls ----------------
@@ -194,9 +217,163 @@ class AddProductController extends GetxController {
   // ---------------- Helpers ----------------
   void submitProduct() {
     showExtraFields.value = true;
+    createProductValidation();
   }
 
   Future<void> pickFile() async {
-    pickedFileName.value = "MyNewFile.png";
+    try {
+      final XFile? result = await CommonConstant().filePick();
+
+      if (result != null && result.path.isNotEmpty) {
+        final XFile file = result;
+        pickedFileName.value = file.name ?? '';
+        pickedFilePath.value = file.path ?? '';
+
+        // addSelectedDocument(certificationType, file);
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Failed to pick file: $e', time: 3);
+    }
+  }
+
+  Future<bool> firstPartValidation() async {
+    bool isRequired = false;
+    if (pickedFilePath.value.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Product image is required');
+      isRequired=false;
+    } else if (productNameController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Product name is required');
+      isRequired=false;
+
+    } else if (selectedMainCategoryId.value == null) {
+      SnackBars.errorSnackBar(content: 'Main category is required');
+      isRequired=false;
+
+    } else if (selectedSubCategoryId.value == null) {
+      SnackBars.errorSnackBar(content: 'Sub category is required');
+      isRequired=false;
+
+    } else if (selectedProductId.value == null) {
+      SnackBars.errorSnackBar(content: 'Product is required');
+      isRequired=false;
+
+    } else if (selectedUom.value == null) {
+      SnackBars.errorSnackBar(content: 'UOM is required');
+      isRequired=false;
+
+    } else if (priceController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Price is required');
+      isRequired=false;
+
+    } else if (gstController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'GST is required');
+      isRequired=false;
+
+    } else if (gstPriceController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'GST price is required');
+      isRequired=false;
+
+    } else if (termsController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Terms is required');
+      isRequired=false;
+
+    } else {
+      isRequired=true;
+
+    }
+    return isRequired;
+
+  }
+
+  createProductValidation() {
+   if (brandNameController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Brand name is required');
+    } else if (packageTypeController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Package type is required');
+    } else if (packageSizeController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Package size is required');
+    } else if (shapeController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Shape is required');
+    } else if (textureController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Texture is required');
+    } else if (colorController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Color is required');
+    } else if (sizeController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Size is required');
+    } else if (WeightController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Weight is required');
+    } else if (finenessModulusController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Fineness modulus is required');
+    } else if (specificGravityController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Specific gravity is required');
+    } else if (bulkDensityController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Bulk density is required');
+    } else if (waterAbsorptionController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Water absorption is required');
+    } else if (moistureContentController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Moisture content is required');
+    } else {
+      createProduct();
+    }
+  }
+
+  Future<void> createProduct() async {
+    isLoadingCreateProduct.value=true;
+    Map<String, dynamic> fields = {};
+    final Map<String, String> selectedFiles = {
+      "product_image": pickedFilePath.value,
+    };
+
+    var data = {
+      "fineness_modulus": finenessModulusController.text,
+      "specific_gravity": specificGravityController.text,
+      "bulk_density": bulkDensityController.text,
+      "water_absorption": waterAbsorptionController.text,
+      "moisture_content": moistureContentController.text,
+    };
+    fields = {
+      "product_name": productNameController.text,
+      "main_category_id": selectedMainCategoryId.value,
+      "sub_category_id": selectedSubCategoryId.value,
+      "category_product_id": selectedProductId.value,
+      "brand": brandNameController.text,
+      "uom": selectedUom.value,
+      "package_type": packageTypeController.text,
+      "package_size": packageSizeController.text,
+      "shape": shapeController.text,
+      "texture": textureController.text,
+      "colour": colorController.text,
+      "size": sizeController.text,
+      "weight": WeightController.text,
+      "is_active": isEnabled.value,
+      "is_featured": false,
+      "sort_order": "1",
+      "filter_values": json.encode(data),
+    };
+
+    try {
+      var addTeamResponse = await _service.createProduct(
+        fields: fields,
+        files: selectedFiles,
+      );
+
+      if (addTeamResponse.success == true) {
+        isLoadingCreateProduct.value=false;
+        SnackBars.successSnackBar(
+          content: addTeamResponse.message ?? 'Something went wrong!!',
+        );
+        Get.back();
+      } else {
+        isLoadingCreateProduct.value=true;
+        SnackBars.errorSnackBar(
+          content: addTeamResponse.message ?? 'Something went wrong!!',
+        );
+      }
+    } catch (e) {
+      isLoadingCreateProduct.value=true;
+
+      // Error snackbar is already shown by ApiManager
+      // No need to show another one here
+    }
   }
 }
