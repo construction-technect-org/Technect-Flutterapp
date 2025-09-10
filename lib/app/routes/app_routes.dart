@@ -18,7 +18,7 @@ abstract class Routes {
   static const UPDATE_YOUR_CERTIFICATION = _Paths.UPDATE_YOUR_CERTIFICATION;
   static const ADDRESS = _Paths.ADDRESS;
   static const ADD_LOCATION_MANUALLY = _Paths.ADD_LOCATION_MANUALLY;
-  static const ADDP_PRODUCT = _Paths.ADDP_PRODUCT;
+  static const ADD_PRODUCT = _Paths.ADD_PRODUCT;
   static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
   static const ROLE_MANAGEMENT = _Paths.ROLE_MANAGEMENT;
   static const ADD_ROLE = _Paths.ADD_ROLE;
@@ -27,7 +27,6 @@ abstract class Routes {
   static const ROLE_DETAILS = _Paths.ROLE_DETAILS;
   static const TEAM_DETAILS = _Paths.TEAM_DETAILS;
   static const MARKET_PLACE = _Paths.MARKET_PLACE;
-
 }
 
 abstract class _Paths {
@@ -47,7 +46,7 @@ abstract class _Paths {
   static const UPDATE_YOUR_CERTIFICATION = '/update-your-certification';
   static const ADDRESS = '/address';
   static const ADD_LOCATION_MANUALLY = '/add-location-manually';
-  static const ADDP_PRODUCT = '/Add-product';
+  static const ADD_PRODUCT = '/Add-product';
   static const PRODUCT_DETAILS = '/product-details';
   static const ROLE_MANAGEMENT = '/role-management';
   static const ADD_ROLE = '/add-role';
@@ -56,6 +55,4 @@ abstract class _Paths {
   static const ROLE_DETAILS = '/role-details';
   static const TEAM_DETAILS = '/team-details';
   static const MARKET_PLACE = '/market-place';
-
-
 }

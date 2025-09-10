@@ -1,297 +1,216 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/product_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/controllers/product_management_controller.dart';
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
 
-class ProductManagementHomeView extends StatefulWidget {
-  const ProductManagementHomeView({super.key});
+class ProductManagementView extends StatelessWidget {
+  final ProductManagementController controller = Get.put(ProductManagementController());
 
-  @override
-  State<ProductManagementHomeView> createState() => _ProductManagementHomeViewState();
-}
-
-class _ProductManagementHomeViewState extends State<ProductManagementHomeView> {
-
-
-
-
-  ProductManagementController controller = ProductManagementController();
-
-
-  @override
-  void initState() {
-     controller = Get.put(ProductManagementController());
-
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.white,
-
-      appBar: AppBar(
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
         backgroundColor: MyColors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0.0,
-
-        title: Row(
-          children: [
-            Image.asset(Asset.profil, height: 40, width: 40),
-            SizedBox(width: 1.h),
-            Column(
+        appBar: AppBar(
+          backgroundColor: MyColors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0.0,
+          title: WelcomeName(),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 24),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Welcome Vaishnavi!",
-                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // 👇 Navigate to new screen
-                    Get.toNamed(Routes.ADDRESS);
-                  },
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                      SizedBox(width: 0.4.h),
-                      Text(
-                        "Sadashiv Peth, Pune",
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.textFieldBackground,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: MyColors.white,
+                      borderRadius: BorderRadius.circular(22.5),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x1A000000),
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      onChanged: (value) {
+                        controller.searchProduct(value);
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(left: 18, right: 8),
+                          child: SvgPicture.asset(
+                            Asset.searchIcon,
+                            height: 16,
+                            width: 16,
+                          ),
+                        ),
+                        prefixIconConstraints: const BoxConstraints(
+                          minWidth: 36,
+                          minHeight: 36,
+                        ),
+                        hintText: 'Search',
+
+                        hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                        filled: true,
+                        fillColor: MyColors.white,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 12,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(22.5),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: SvgPicture.asset(
+                            Asset.filterIcon,
+                            height: 20,
+                            width: 20,
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.black54,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 1.h),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Text(
+                    "Product Management",
+                    style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Obx(
+                    () => Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: StatCard(
+                                title: 'Total Products',
+                                value:
+                                    '${controller.productModel.value.data?.statistics?.totalProducts ?? 0}',
+                                icon: SvgPicture.asset(Asset.TotalProducts),
+                                iconBackground: MyColors.yellowundertones,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: StatCard(
+                                title: 'Featured',
+                                value:
+                                    '${controller.productModel.value.data?.statistics?.featured ?? 0}',
+                                icon: SvgPicture.asset(Asset.Featured),
+                                iconBackground: MyColors.verypaleBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 1.h),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: StatCard(
+                                title: 'Low Stock',
+                                value:
+                                    '${controller.productModel.value.data?.statistics?.lowStock ?? 0}',
+                                icon: SvgPicture.asset(Asset.LowStock),
+                                iconBackground: MyColors.paleRed,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: StatCard(
+                                title: 'Total Interests',
+                                value:
+                                    '${controller.productModel.value.data?.statistics?.totalInterests ?? 0}',
+                                icon: SvgPicture.asset(Asset.TotalInterests),
+                                iconBackground: MyColors.warmOrange,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+                Obx(
+                  () => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: controller.productList.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final Product product = controller.productList[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              Routes.PRODUCT_DETAILS,
+                              arguments: {"product": product},
+                            );
+                          },
+                          child: ProductCard(
+                            statusText: (product.isActive ?? false)
+                                ? 'Active'
+                                : 'InActive',
+                            statusColor: const Color(0xFF10B981),
+                            productName: product.productName ?? '',
+                            brandName: product.brand ?? '',
+                            locationText: 'Vasai Virar, Mahab Chowpatty',
+                            pricePerUnit: double.parse(product.price ?? '0'),
+                            stockCount: product.stockQuantity ?? 0,
+                            imageUrl: product.productImage, // pass network image here
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Center(
+                  child: RoundedButton(
+                    onTap: () {
+                      Get.toNamed(Routes.ADD_PRODUCT);
+                    },
+                    buttonName: '',
+                    borderRadius: 12,
+                    width: 50.w,
+                    height: 45,
+                    verticalPadding: 0,
+                    horizontalPadding: 0,
+                    child: Center(
+                      child: Text(
+                        '+ Add New Product',
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.white,
+                          fontFamily: MyTexts.Roboto,
+                        ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ],
             ),
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                border: Border.all(color: MyColors.hexGray92),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Stack(
-                clipBehavior: Clip.none, // 👈 allows badge to overflow
-                children: [
-                  SvgPicture.asset(
-                    Asset.notifications, // or 'assets/images/notifications.svg'
-                    width: 28,
-                    height: 28,
-                  ),
-                  // 🔴 Red Dot Badge
-                  Positioned(
-                    right: 0,
-                    top: 3,
-                    child: Container(
-                      width: 6.19,
-                      height: 6.19,
-                      decoration: const BoxDecoration(
-                        color: MyColors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(22.5),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x1A000000), // light shadow (10% black)
-                        blurRadius: 8, // soften the shadow
-                        offset: Offset(0, 4), // move shadow down
-                      ),
-                    ],
-                  ),
-                  child: TextField(
-                    onChanged:(value) {
-                      controller.searchProduct(value);
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
-                      ),
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 36,
-                        minHeight: 36,
-                      ),
-                      hintText: 'Search',
-
-                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
-                      filled: true,
-                      fillColor: MyColors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 12,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(22.5),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 1.h),
-
-              /// Features title
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  "Product Management",
-                  style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
-                ),
-              ),
-              SizedBox(height: 2.h),
-
-              /// ✅ Stats Cards
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Obx(
-                  () =>  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: StatCard(
-                              title: 'Total Products',
-                              value: '${controller.productModel.value.data?.statistics?.totalProducts??0}',
-                              icon: SvgPicture.asset(Asset.TotalProducts),
-                              iconBackground: MyColors.yellowundertones,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: StatCard(
-                              title: 'Featured',
-                              value: '${controller.productModel.value.data?.statistics?.featured??0}',
-                              icon: SvgPicture.asset(Asset.Featured),
-                              iconBackground: MyColors.verypaleBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 1.h),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: StatCard(
-                              title: 'Low Stock',
-                              value: '${controller.productModel.value.data?.statistics?.lowStock??0}',
-                              icon: SvgPicture.asset(Asset.LowStock),
-                              iconBackground: MyColors.paleRed,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: StatCard(
-                              title: 'Total Interests',
-                              value: '${controller.productModel.value.data?.statistics?.totalInterests??0}',
-                              icon: SvgPicture.asset(Asset.TotalInterests),
-                              iconBackground: MyColors.warmOrange,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              /// ✅ Product Cards
-              // Inside your widget
-              Obx(
-                () =>  Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.productList.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final Product product = controller.productList[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.PRODUCT_DETAILS,arguments: {"product":product});
-                        },
-                        child: ProductCard(
-                          statusText: (product.isActive??false)?'Active':'InActive',
-                          statusColor: const Color(0xFF10B981),
-                          productName: product.productName??'',
-                          // companyName: product.,
-                          brandName: product.brand??'',
-                          locationText: 'Vasai Virar, Mahab Chowpatty',
-                          pricePerUnit:double.parse(product.price??'0'),
-                          stockCount:product.stockQuantity??0,
-  imageUrl: product.productImage,     // pass network image here
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              SizedBox(height: 2.h),
-              Center(
-                child: RoundedButton(
-                  onTap: () {
-Get.toNamed(Routes.ADDP_PRODUCT)!.then((_) {
-  controller.fetchProducts();
-});
-                  
-                  },
-                  buttonName: '',
-                  borderRadius: 12,
-                  width: 50.w,
-                  height: 45,
-                  verticalPadding: 0,
-                  horizontalPadding: 0,
-                  child: Center(
-                    child: Text(
-                      '+ Add Certification',
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.white,
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
       ),

@@ -16,7 +16,7 @@ class MainTabBarView extends GetView<MainController> {
           case 0:
             return HomeView();
           case 1:
-            return const ProductManagementHomeView();
+            return ProductManagementView();
           case 2:
             return const SupportView();
           case 3:

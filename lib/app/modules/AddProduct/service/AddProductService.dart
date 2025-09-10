@@ -11,9 +11,7 @@ class AddProductService {
   // MainCategory
   Future<MainCategoryModel> mainCategory() async {
     try {
-      final response = await apiManager.get(
-        url: '${APIConstants.getMainCategories}',
-      );
+      final response = await apiManager.get(url: APIConstants.getMainCategories);
       return MainCategoryModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in sendOtp: $e , $st');
@@ -42,7 +40,9 @@ class AddProductService {
     } catch (e, st) {
       throw Exception('Error in productsBySubCategory: $e , $st');
     }
-  }  Future<GetFilterModel> getFilter(int subCategoryId) async {
+  }
+
+  Future<GetFilterModel> getFilter(int subCategoryId) async {
     try {
       final response = await apiManager.get(
         url: "${APIConstants.getFilter}$subCategoryId",
@@ -59,7 +59,7 @@ class AddProductService {
   }) async {
     try {
       final response = await apiManager.postMultipart(
-        url: '${APIConstants.createProduct}',
+        url: APIConstants.createProduct,
         fields: fields,
         files: files,
       );

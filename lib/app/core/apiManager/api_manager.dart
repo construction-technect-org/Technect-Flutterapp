@@ -87,10 +87,7 @@ class ApiManager {
   }
 
   /// POST method for JSON body requests
-  Future<dynamic> postObject({
-    required String url,
-    required Object body,
-  }) async {
+  Future<dynamic> postObject({required String url, required Object body}) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -392,24 +389,14 @@ class ApiManager {
       case 201:
         final responseJson = json.decode(responseString);
         return responseJson;
-        // final Map responseJson = json.decode(responseString);
-        // if (responseJson['code'] == "0") {
-        //   SnackBars.errorSnackBar(content: responseJson['message']);
-        //   throw BadRequestException(responseJson['message']);
-        // }
-        // return responseJson;
-
       case 400:
         SnackBars.errorSnackBar(
           content:
-              ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Bad Request',
+              ErrorModel.fromJson(json.decode(responseString)).message ?? 'Bad Request',
         );
         throw BadRequestException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Bad Request',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Bad Request',
         );
-
       case 401:
         final responseJson = json.decode(responseString);
         final message = responseJson['message']?.toString();
@@ -430,23 +417,19 @@ class ApiManager {
       case 403:
         SnackBars.errorSnackBar(
           content:
-              ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Forbidden',
+              ErrorModel.fromJson(json.decode(responseString)).message ?? 'Forbidden',
         );
         throw UnauthorisedException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Forbidden',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Forbidden',
         );
 
       case 404:
         SnackBars.errorSnackBar(
           content:
-              ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Not Found',
+              ErrorModel.fromJson(json.decode(responseString)).message ?? 'Not Found',
         );
         throw UnauthorisedException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Not Found',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Not Found',
         );
 
       case 409:
@@ -456,8 +439,7 @@ class ApiManager {
               'Conflict Error',
         );
         throw BadRequestException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Conflict Error',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
         );
 
       case 500:

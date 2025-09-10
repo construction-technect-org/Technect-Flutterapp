@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Marketplace/controllers/market_place_controller.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
-import 'package:get/get.dart';
 
 class MarketPlaceView extends GetView<MarketPlaceController> {
   const MarketPlaceView({super.key});
@@ -11,7 +10,7 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: AppBar(
-                  scrolledUnderElevation: 0.0,
+        scrolledUnderElevation: 0.0,
 
         backgroundColor: MyColors.white,
         elevation: 0,
@@ -107,12 +106,18 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                         padding: const EdgeInsets.only(left: 18, right: 8),
                         child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                       ),
-                      prefixIconConstraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      prefixIconConstraints: const BoxConstraints(
+                        minWidth: 36,
+                        minHeight: 36,
+                      ),
                       hintText: 'Search',
                       hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                       filled: true,
                       fillColor: MyColors.white,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 12,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(22.5),
                         borderSide: BorderSide.none,
@@ -135,8 +140,6 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                 ),
               ),
               SizedBox(height: 2.h),
-
-              /// Marketplace Cards
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -178,21 +181,32 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                                     child: Image.asset(item["icon"], fit: BoxFit.contain),
                                   ),
                                   if (isSelected)
-                                    const Icon(Icons.check_box, color: MyColors.primary, size: 22),
+                                    const Icon(
+                                      Icons.check_box,
+                                      color: MyColors.primary,
+                                      size: 22,
+                                    ),
                                 ],
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: isSelected
                                         ? MyColors.yellow.withOpacity(0.5)
                                         : MyColors.ghostWhite,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: Text(item["title"],
-                                      style: MyTexts.medium16.copyWith(color: MyColors.fontBlack)),
+                                  child: Text(
+                                    item["title"],
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -265,6 +279,7 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                   borderRadius: 12,
                   width: 50.w,
                   height: 50,
+                  verticalPadding: 0,
                   child: Center(
                     child: Text(
                       '+ Add Certification',

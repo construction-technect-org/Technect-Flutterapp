@@ -6,9 +6,7 @@ class ProductManagementService {
 
   Future<ProductListModel> getProductList() async {
     try {
-      final response = await apiManager.get(
-        url: "${APIConstants.getProductList}",
-      );
+      final response = await apiManager.get(url: APIConstants.getProductList);
       return ProductListModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in productsBySubCategory: $e , $st');

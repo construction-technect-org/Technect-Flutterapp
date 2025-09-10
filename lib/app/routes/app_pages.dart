@@ -115,7 +115,7 @@ class AppPages {
       binding: AddLocationBinding(),
     ),
     GetPage(
-      name: _Paths.ADDP_PRODUCT,
+      name: _Paths.ADD_PRODUCT,
       page: () => const AddProductView(),
       binding: AddProductBinding(),
     ),
@@ -154,7 +154,7 @@ class AppPages {
       page: () => const TeamDetailsView(),
       binding: TeamDetailsBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.MARKET_PLACE,
       page: () => const MarketPlaceView(),
       binding: MarketPlaceBinding(),

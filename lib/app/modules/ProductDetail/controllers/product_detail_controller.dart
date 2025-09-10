@@ -3,25 +3,20 @@ import 'package:construction_technect/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class ProductDetailsController extends GetxController {
+  Rx<Product> product = Product().obs;
+  // ignore: type_annotate_public_apis
+  var argument = Get.arguments;
 
-Rx<Product> product = Product().obs;
-// ignore: type_annotate_public_apis
-var argument = Get.arguments;
-
-@override
+  @override
   void onInit() {
-if(argument!=null){
-  product.value=argument['product'];
-}    super.onInit();
+    if (argument != null) {
+      product.value = argument['product'];
+    }
+    super.onInit();
   }
-
- 
 
   /// Function to navigate to edit product
   void onEditProduct() {
-    Get.toNamed(
-      Routes.ADDP_PRODUCT,
-      arguments: {"isEdit": true},
-    );
+    Get.toNamed(Routes.ADD_PRODUCT, arguments: {"isEdit": true});
   }
 }

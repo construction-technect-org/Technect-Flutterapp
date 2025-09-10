@@ -1,17 +1,16 @@
 import 'dart:convert';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
-import 'package:construction_technect/app/modules/AddProduct/models/get_filter_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:get/get.dart';
-import 'package:construction_technect/app/modules/AddProduct/models/MainCategoryModel.dart';
-import 'package:construction_technect/app/modules/AddProduct/models/SubCategoryModel.dart';
-import 'package:construction_technect/app/modules/AddProduct/models/ProductModelForCategory.dart';
-import 'package:construction_technect/app/modules/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/core/utils/imports.dart'; // your CommonDropdown
+import 'package:construction_technect/app/modules/AddProduct/models/MainCategoryModel.dart';
+import 'package:construction_technect/app/modules/AddProduct/models/ProductModelForCategory.dart';
+import 'package:construction_technect/app/modules/AddProduct/models/SubCategoryModel.dart';
+import 'package:construction_technect/app/modules/AddProduct/models/get_filter_model.dart';
+import 'package:construction_technect/app/modules/AddProduct/service/AddProductService.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AddProductController extends GetxController {
+  final pageController = PageController();
   // ---------------- Form Controllers ----------------
   final productNameController = TextEditingController();
   final stockController = TextEditingController();
@@ -23,7 +22,7 @@ class AddProductController extends GetxController {
 
   final packageSizeController = TextEditingController();
   final brandNameController = TextEditingController();
-  final WeightController = TextEditingController();
+  final weightController = TextEditingController();
   final shapeController = TextEditingController();
   final textureController = TextEditingController();
   final sizeController = TextEditingController();
@@ -49,7 +48,7 @@ class AddProductController extends GetxController {
   RxList<String> subCategoryNames = <String>[].obs;
   RxList<String> productNames = <String>[].obs;
 
-  RxList<String> uomList = <String>["Kg", "truck",].obs;
+  RxList<String> uomList = <String>["Kg", "truck"].obs;
 
   // ---------------- Selections ----------------
   Rxn<String> selectedMainCategory = Rxn<String>();
@@ -69,12 +68,13 @@ class AddProductController extends GetxController {
   RxBool isLoadingCreateProduct = false.obs;
 
   final AddProductService _service = AddProductService();
-
+  bool isEdit = false;
   @override
   void onInit() {
     super.onInit();
     final args = Get.arguments;
     if (args != null) {
+      isEdit = args['isEdit'] ?? false;
       isEnabled.value = args["isEnabled"] ?? false;
     }
     fetchMainCategories();
@@ -105,9 +105,7 @@ class AddProductController extends GetxController {
 
     selectedMainCategory.value = categoryName;
 
-    final selected = mainCategories.firstWhereOrNull(
-      (c) => c.name == categoryName,
-    );
+    final selected = mainCategories.firstWhereOrNull((c) => c.name == categoryName);
     selectedMainCategoryId.value = '${selected?.id ?? 0}';
     if (selected != null) {
       fetchSubCategories(selected.id);
@@ -127,9 +125,7 @@ class AddProductController extends GetxController {
 
     selectedSubCategory.value = subCategoryName;
 
-    final selectedSub = subCategories.firstWhereOrNull(
-      (s) => s.name == subCategoryName,
-    );
+    final selectedSub = subCategories.firstWhereOrNull((s) => s.name == subCategoryName);
     selectedSubCategoryId.value = '${selectedSub?.id ?? 0}';
 
     if (selectedSub != null) {
@@ -161,6 +157,7 @@ class AddProductController extends GetxController {
       isLoading(false);
     }
   }
+
   Map<String, TextEditingController> dynamicControllers = {};
 
   Future<void> getFilter(int subCategoryId) async {
@@ -169,10 +166,9 @@ class AddProductController extends GetxController {
       final result = await _service.getFilter(subCategoryId);
 
       if (result.success == true) {
-        filters.value =
-            (result.data as List<FilterData>).map((e) => e).toList();
+        filters.value = (result.data as List<FilterData>).map((e) => e).toList();
         for (FilterData filter in filters) {
-          dynamicControllers[filter.filterName??''] = TextEditingController();
+          dynamicControllers[filter.filterName ?? ''] = TextEditingController();
         }
       } else {
         filters.clear();
@@ -189,9 +185,7 @@ class AddProductController extends GetxController {
 
   void onProductSelected(String? productName) {
     selectedProduct.value = productName;
-    final selectedSub = productsList.firstWhereOrNull(
-      (s) => s.name == productName,
-    );
+    final selectedSub = productsList.firstWhereOrNull((s) => s.name == productName);
     selectedProductId.value = '${selectedSub?.id ?? 0}';
   }
 
@@ -250,26 +244,20 @@ class AddProductController extends GetxController {
 
   void gstCalculate() {
     final double amount =
-        (double.parse(
-              priceController.text.isEmpty ? '0.0' : priceController.text,
-            ) *
-            double.parse(
-              gstController.text.isEmpty ? '0.0' : gstController.text,
-            )) /
+        (double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
+            double.parse(gstController.text.isEmpty ? '0.0' : gstController.text)) /
         100;
     gstPriceController.text = amount.toString();
   }
 
   Future<void> pickFile() async {
     try {
-      final XFile? result = await CommonConstant().filePick();
+      final XFile? result = await CommonConstant().pickImageFromGallery();
 
       if (result != null && result.path.isNotEmpty) {
         final XFile file = result;
-        pickedFileName.value = file.name ?? '';
-        pickedFilePath.value = file.path ?? '';
-
-        // addSelectedDocument(certificationType, file);
+        pickedFileName.value = file.name;
+        pickedFilePath.value = file.path;
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Failed to pick file: $e', time: 3);
@@ -299,7 +287,7 @@ class AddProductController extends GetxController {
     } else if (priceController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Price is required');
       isRequired = false;
-    }  else if (stockController.text.isEmpty) {
+    } else if (stockController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Stock is required');
       isRequired = false;
     } else if (gstPriceController.text.isEmpty) {
@@ -329,9 +317,9 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'Color is required');
     } else if (sizeController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Size is required');
-    } else if (WeightController.text.isEmpty) {
+    } else if (weightController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Weight is required');
-    }else {
+    } else {
       createProduct();
     }
   }
@@ -339,17 +327,8 @@ class AddProductController extends GetxController {
   Future<void> createProduct() async {
     isLoadingCreateProduct.value = true;
     Map<String, dynamic> fields = {};
-    final Map<String, String> selectedFiles = {
-      "product_image": pickedFilePath.value,
-    };
+    final Map<String, String> selectedFiles = {"product_image": pickedFilePath.value};
 
-    // final data = {
-    //   "fineness_modulus": finenessModulusController.text,
-    //   "specific_gravity": specificGravityController.text,
-    //   "bulk_density": bulkDensityController.text,
-    //   "water_absorption": waterAbsorptionController.text,
-    //   "moisture_content": moistureContentController.text,
-    // };
     final Map<String, String> payload = {};
     dynamicControllers.forEach((key, controller) {
       if (controller.text.isNotEmpty) {
@@ -362,9 +341,6 @@ class AddProductController extends GetxController {
       "sub_category_id": selectedSubCategoryId.value,
       "category_product_id": selectedProductId.value,
       "stock_quantity": stockController.text,
-      // "main_category_id": '1',
-      // "sub_category_id":  '1',
-      // "category_product_id": '2',
       "brand": brandNameController.text,
       "uom": selectedUom.value,
       "package_type": packageTypeController.text,
@@ -373,7 +349,7 @@ class AddProductController extends GetxController {
       "texture": textureController.text,
       "colour": colorController.text,
       "size": sizeController.text,
-      "weight": WeightController.text,
+      "weight": weightController.text,
       "is_active": isEnabled.value,
       "is_featured": false,
       "sort_order": "1",
@@ -389,12 +365,6 @@ class AddProductController extends GetxController {
       if (addTeamResponse.success == true) {
         isLoadingCreateProduct.value = false;
         Get.back();
-
-        //Get.put(ProductManagementController()).getProductList;
-
-        SnackBars.successSnackBar(
-          content: addTeamResponse.message ?? 'Something went wrong!!',
-        );
       } else {
         isLoadingCreateProduct.value = false;
         SnackBars.errorSnackBar(
@@ -403,11 +373,6 @@ class AddProductController extends GetxController {
       }
     } catch (e) {
       isLoadingCreateProduct.value = false;
-
-      // Error snackbar is already shown by ApiManager
-      // No need to show another one here
     }
   }
-
-
 }
