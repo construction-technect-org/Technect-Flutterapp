@@ -61,6 +61,7 @@ class Asset {
   static const String hrmsIcon = 'assets/images/hrms.png';
   static const String projectManagementIcon = 'assets/images/project_management.png';
   static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
+  static const String ConstructionTaxi = 'assets/images/ConstructionTaxi.png';
   static const String team = 'assets/images/team.png';
 
   //Statistics
@@ -88,7 +89,6 @@ class Asset {
   //Role management
   static const String Admin = 'assets/images/Admin.svg';
   static const String user = 'assets/images/user.svg';
-
 
   //Team Details
   static const String Delete = 'assets/images/delete.svg';

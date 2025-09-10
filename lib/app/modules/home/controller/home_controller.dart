@@ -10,12 +10,13 @@ class HomeController extends GetxController {
   CommonController commonController = Get.find();
   final List<Map<String, String>> items = [
     {"icon": Asset.marketplaceIcon, "label": "Marketplace"},
-    {"icon": Asset.erpIcon, "label": "ERP"},
     {"icon": Asset.crmIcon, "label": "CRM"},
-    {"icon": Asset.ovpIcon, "label": "OVP"},
-    {"icon": Asset.hrmsIcon, "label": "HRMS"},
+    {"icon": Asset.erpIcon, "label": "ERP"},
     {"icon": Asset.projectManagementIcon, "label": "Project\nManagement"},
+    {"icon": Asset.hrmsIcon, "label": "HRMS"},
     {"icon": Asset.portfolioManagementIcon, "label": "Portfolio\nManagement"},
+    {"icon": Asset.ovpIcon, "label": "OVP"},
+    {"icon": Asset.ConstructionTaxi, "label": "Construction\nTaxi"},
   ];
 
   HomeService homeService = HomeService();

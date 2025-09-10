@@ -77,7 +77,6 @@ class HomeView extends StatelessWidget {
                       width: 28,
                       height: 28,
                     ),
-                    // 🔴 Red Dot Badge
                     Positioned(
                       right: 0,
                       top: 3,
@@ -101,7 +100,6 @@ class HomeView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// Search bar
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                   child: Container(
@@ -154,10 +152,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                SizedBox(height: 2.h),
-
-                /// Features title
+                SizedBox(height: 1.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
@@ -168,10 +163,7 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 1.h),
-
-                /// ✅ FIXED GridView
                 Container(
-                  height: 237,
                   decoration: BoxDecoration(
                     color: MyColors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -187,64 +179,49 @@ class HomeView extends StatelessWidget {
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      top: 4,
-                      bottom: 20, // 👈 extra bottom space
-                    ),
+                    padding: const EdgeInsets.all(20),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
-                      crossAxisSpacing: 20,
-                      childAspectRatio: 0.80,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
                     ),
                     itemCount: controller.items.length,
                     itemBuilder: (context, index) {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            height: 70,
-                            width: 65,
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              alignment: Alignment.center,
+                          Container(
+                            height: 75,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFED29),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 5,
+                            ),
+                            child: Column(
                               children: [
-                                Container(
-                                  width: 65,
-                                  height: 65,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFFFEB3B),
-                                    shape: BoxShape.circle,
-                                  ),
+                                Expanded(
+                                  child: Image.asset(controller.items[index]["icon"]!),
                                 ),
-                                Positioned(
-                                  bottom: -15,
-                                  left: 0,
-                                  right: 0,
-                                  child: Image.asset(
-                                    controller.items[index]["icon"]!,
-                                    height: 73,
+                                const SizedBox(height: 10),
+                                Text(
+                                  controller.items[index]["label"]!,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textHeightBehavior: const TextHeightBehavior(
+                                    applyHeightToFirstAscent: false,
+                                    applyHeightToLastDescent: false,
+                                  ),
+                                  style: MyTexts.medium12.copyWith(
+                                    height: 1.2,
+                                    color: MyColors.textFieldBackground,
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-                          SizedBox(height: 0.7.h),
-                          SizedBox(
-                            child: Text(
-                              controller.items[index]["label"]!,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textHeightBehavior: const TextHeightBehavior(
-                                applyHeightToFirstAscent: false,
-                                applyHeightToLastDescent: false,
-                              ),
-                              style: MyTexts.medium12.copyWith(
-                                height: 1.2,
-                                color: MyColors.textFieldBackground,
-                              ),
                             ),
                           ),
                         ],
