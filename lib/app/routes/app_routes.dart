@@ -26,7 +26,7 @@ abstract class Routes {
   static const APPROVAL_INBOX = _Paths.APPROVAL_INBOX;
   static const ROLE_DETAILS = _Paths.ROLE_DETAILS;
   static const TEAM_DETAILS = _Paths.TEAM_DETAILS;
-
+  static const MARKET_PLACE = _Paths.MARKET_PLACE;
 
 }
 
@@ -55,6 +55,7 @@ abstract class _Paths {
   static const APPROVAL_INBOX = '/approval-inbox';
   static const ROLE_DETAILS = '/role-details';
   static const TEAM_DETAILS = '/team-details';
+  static const MARKET_PLACE = '/market-place';
 
 
 }

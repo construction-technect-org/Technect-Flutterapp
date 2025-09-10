@@ -12,6 +12,8 @@ import 'package:construction_technect/app/modules/ApprovalInbox/bindings/approva
 import 'package:construction_technect/app/modules/ApprovalInbox/views/approval_Inbox_view.dart';
 import 'package:construction_technect/app/modules/BusinessHours/bindings/business_hours_bindings.dart';
 import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
+import 'package:construction_technect/app/modules/Marketplace/bindings/market_place_binding.dart';
+import 'package:construction_technect/app/modules/Marketplace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
 import 'package:construction_technect/app/modules/RoleDetails/bindings/role_details_binding.dart';
@@ -151,6 +153,11 @@ class AppPages {
       name: _Paths.TEAM_DETAILS,
       page: () => const TeamDetailsView(),
       binding: TeamDetailsBinding(),
+    ),
+     GetPage(
+      name: _Paths.MARKET_PLACE,
+      page: () => const MarketPlaceView(),
+      binding: MarketPlaceBinding(),
     ),
   ];
 }

@@ -64,6 +64,14 @@ class MyColors {
   static const Color mistyRosecolor = Color(0xFFFFE8E8);
   static const Color oldLacelight = Color(0xFFFFF5E4);
   static const Color paleBluecolor = Color(0xFFDAE4FF);
+  static const Color oldSilver = Color(0xFF838383);
+  static const Color brightGray = Color(0xFFEEEEEE);
+  static const Color yellow = Color(0xFFFFED29);
+  static const Color ghostWhite = Color(0xFFF7FAFF);
+
+
+
+
 
   // Text field colors
   static const Color textFieldBorder = Color(0xFFA0A0A0);

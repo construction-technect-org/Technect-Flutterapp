@@ -1,10 +1,30 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/product_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
+import 'package:construction_technect/app/modules/ProductManagement/controllers/product_management_controller.dart';
+import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
 
-class ProductManagementHomeView extends StatelessWidget {
+class ProductManagementHomeView extends StatefulWidget {
   const ProductManagementHomeView({super.key});
 
+  @override
+  State<ProductManagementHomeView> createState() => _ProductManagementHomeViewState();
+}
+
+class _ProductManagementHomeViewState extends State<ProductManagementHomeView> {
+
+
+
+
+  ProductManagementController controller = ProductManagementController();
+
+
+  @override
+  void initState() {
+     controller = Get.put(ProductManagementController());
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,6 +128,9 @@ class ProductManagementHomeView extends StatelessWidget {
                     ],
                   ),
                   child: TextField(
+                    onChanged:(value) {
+                      controller.searchProduct(value);
+                    },
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
@@ -118,6 +141,7 @@ class ProductManagementHomeView extends StatelessWidget {
                         minHeight: 36,
                       ),
                       hintText: 'Search',
+
                       hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                       filled: true,
                       fillColor: MyColors.white,
@@ -153,52 +177,54 @@ class ProductManagementHomeView extends StatelessWidget {
               /// ✅ Stats Cards
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: StatCard(
-                            title: 'Total Products',
-                            value: '04',
-                            icon: SvgPicture.asset(Asset.TotalProducts),
-                            iconBackground: MyColors.yellowundertones,
+                child: Obx(
+                  () =>  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: StatCard(
+                              title: 'Total Products',
+                              value: '${controller.productModel.value.data?.statistics?.totalProducts??0}',
+                              icon: SvgPicture.asset(Asset.TotalProducts),
+                              iconBackground: MyColors.yellowundertones,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: StatCard(
-                            title: 'Featured',
-                            value: '02',
-                            icon: SvgPicture.asset(Asset.Featured),
-                            iconBackground: MyColors.verypaleBlue,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: StatCard(
+                              title: 'Featured',
+                              value: '${controller.productModel.value.data?.statistics?.featured??0}',
+                              icon: SvgPicture.asset(Asset.Featured),
+                              iconBackground: MyColors.verypaleBlue,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: StatCard(
-                            title: 'Low Stock',
-                            value: '04',
-                            icon: SvgPicture.asset(Asset.LowStock),
-                            iconBackground: MyColors.paleRed,
+                        ],
+                      ),
+                      SizedBox(height: 1.h),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: StatCard(
+                              title: 'Low Stock',
+                              value: '${controller.productModel.value.data?.statistics?.lowStock??0}',
+                              icon: SvgPicture.asset(Asset.LowStock),
+                              iconBackground: MyColors.paleRed,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: StatCard(
-                            title: 'Total Interests',
-                            value: '02',
-                            icon: SvgPicture.asset(Asset.TotalInterests),
-                            iconBackground: MyColors.warmOrange,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: StatCard(
+                              title: 'Total Interests',
+                              value: '${controller.productModel.value.data?.statistics?.totalInterests??0}',
+                              icon: SvgPicture.asset(Asset.TotalInterests),
+                              iconBackground: MyColors.warmOrange,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
@@ -206,31 +232,34 @@ class ProductManagementHomeView extends StatelessWidget {
 
               /// ✅ Product Cards
               // Inside your widget
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 5,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.PRODUCT_DETAILS);
-                      },
-                      child: ProductCard(
-                        statusText: 'Active',
-                        statusColor: const Color(0xFF10B981),
-                        productName: 'Premium M Sand ${index + 1}',
-                        companyName: 'M M manufacturers',
-                        brandName: 'SV Manufacturers',
-                        locationText: 'Vasai Virar, Mahab Chowpatty',
-                        pricePerUnit: 123.00,
-                        stockCount: 45,
-                        imageAsset: Asset.Product,
-                      ),
-                    );
-                  },
+              Obx(
+                () =>  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.productList.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final Product product = controller.productList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.PRODUCT_DETAILS,arguments: {"product":product});
+                        },
+                        child: ProductCard(
+                          statusText: (product.isActive??false)?'Active':'InActive',
+                          statusColor: const Color(0xFF10B981),
+                          productName: product.productName??'',
+                          // companyName: product.,
+                          brandName: product.brand??'',
+                          locationText: 'Vasai Virar, Mahab Chowpatty',
+                          pricePerUnit:double.parse(product.price??'0'),
+                          stockCount:product.stockQuantity??0,
+  imageUrl: product.productImage,     // pass network image here
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
 
@@ -240,7 +269,10 @@ class ProductManagementHomeView extends StatelessWidget {
               Center(
                 child: RoundedButton(
                   onTap: () {
-                    Get.toNamed(Routes.ADDP_PRODUCT);
+Get.toNamed(Routes.ADDP_PRODUCT)!.then((_) {
+  controller.fetchProducts();
+});
+                  
                   },
                   buttonName: '',
                   borderRadius: 12,

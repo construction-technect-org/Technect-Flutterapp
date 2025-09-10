@@ -24,11 +24,14 @@ class APIConstants {
   static const String getAllRole = "merchant/role/list";
   static const String updateRole = "merchant/role";
   static const String team = "merchant/team";
+  static const String createProduct = "merchant/product/create";
   static const String teamStatsOverview = "merchant/team/stats/overview";
   static const String roleDetailById = "merchant/role";
   static const String teamDetail = "merchant/team";
-  static const String getMainCategories = "/merchant/category/main";
-  static const String getCategories = "merchant/category/sub?main_category_id=";
-  static const String getSubCategories =
-      "merchant/category/sub?main_category_id=";
+  static const String getMainCategories = "merchant/category/main";
+  static const String getSubCategories = "merchant/category/sub?main_category_id=";
+  static const String getProducts = "merchant/category/products/sub/";
+  static const String getFilter = "merchant/category/filters/sub/";
+  static const String getProductList = "merchant/product/list";
+
 }

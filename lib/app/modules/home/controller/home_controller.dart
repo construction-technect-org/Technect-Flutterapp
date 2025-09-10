@@ -77,7 +77,8 @@ class HomeController extends GetxController {
 
   void _checkProfileCompletion() {
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
+        0;
 
     if (profileData.value.data?.merchantProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
@@ -125,7 +126,9 @@ class HomeController extends GetxController {
                   const SizedBox(height: 12),
                   Text(
                     'Complete your Profile',
-                    style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground),
+                    style: MyTexts.medium18.copyWith(
+                      color: MyColors.textFieldBackground,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -144,7 +147,8 @@ class HomeController extends GetxController {
 
   void _handleProfileDialogTap() {
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
+        0;
 
     if (completionPercentage == 0) {
       Get.toNamed(Routes.PROFILE);
@@ -174,7 +178,8 @@ class HomeController extends GetxController {
 
   void _checkProfileCompletionAfterEdit() {
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
+        0;
 
     if (profileData.value.data?.merchantProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
@@ -291,7 +296,8 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true && profileResponse.data?.user != null) {
+      if (profileResponse.success == true &&
+          profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);

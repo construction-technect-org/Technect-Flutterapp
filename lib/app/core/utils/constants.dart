@@ -55,14 +55,17 @@ class Asset {
 
   // 📦 Business modules (new)
   static const String marketplaceIcon = 'assets/images/marketpalce.png';
-  static const String erpIcon = 'assets/images/erp.png';
   static const String crmIcon = 'assets/images/crm.png';
-  static const String ovpIcon = 'assets/images/ovp.png';
+  static const String erpIcon = 'assets/images/erp.png';
+  static const String projectManagementIcon =
+      'assets/images/project_management.png';
   static const String hrmsIcon = 'assets/images/hrms.png';
-  static const String projectManagementIcon = 'assets/images/project_management.png';
-  static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
+  static const String portfolioManagementIcon =
+      'assets/images/portfolio_management.png';
   static const String ConstructionTaxi = 'assets/images/ConstructionTaxi.png';
   static const String team = 'assets/images/team.png';
+  static const String ovpIcon = 'assets/images/ovp.png';
+  static const String constructionTaxi = 'assets/images/team.png';
 
   //Statistics
   static const String noOfUsers = 'assets/images/no_of_users.svg';
@@ -93,6 +96,13 @@ class Asset {
   //Team Details
   static const String Delete = 'assets/images/delete.svg';
   static const String viewEye = 'assets/images/view_eye.svg';
+
+  // Market Place view
+  static const String materialMarketplace = 'assets/images/material_market.png';
+  static const String constructionCinemarketPlace =
+      'assets/images/construction-cine marketplace.png';
+  static const String logisticMarketPlace =
+      'assets/images/logistic_marketplace.png';
 }
 
 class Constants {

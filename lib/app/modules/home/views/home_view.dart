@@ -32,7 +32,9 @@ class HomeView extends StatelessWidget {
                   Obx(
                     () => Text(
                       'Welcome ${controller.profileData.value.data?.user?.firstName}!',
-                      style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
+                      style: MyTexts.medium16.copyWith(
+                        color: MyColors.fontBlack,
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -41,7 +43,11 @@ class HomeView extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(Asset.location, width: 9, height: 12.22),
+                        SvgPicture.asset(
+                          Asset.location,
+                          width: 9,
+                          height: 12.22,
+                        ),
                         SizedBox(width: 0.4.h),
                         Obx(
                           () => Text(
@@ -73,7 +79,8 @@ class HomeView extends StatelessWidget {
                   clipBehavior: Clip.none, // 👈 allows badge to overflow
                   children: [
                     SvgPicture.asset(
-                      Asset.notifications, // or 'assets/images/notifications.svg'
+                      Asset
+                          .notifications, // or 'assets/images/notifications.svg'
                       width: 28,
                       height: 28,
                     ),
@@ -101,7 +108,10 @@ class HomeView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 13,
+                  ),
                   child: Container(
                     decoration: BoxDecoration(
                       color: MyColors.white,
@@ -129,7 +139,9 @@ class HomeView extends StatelessWidget {
                           minHeight: 36,
                         ),
                         hintText: 'Search',
-                        hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                        hintStyle: MyTexts.medium16.copyWith(
+                          color: MyColors.darkGray,
+                        ),
                         filled: true,
                         fillColor: MyColors.white,
                         contentPadding: const EdgeInsets.symmetric(
@@ -163,7 +175,10 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 1.h),
+
+                /// ✅ FIXED GridView
                 Container(
+                  height: 210, // match your design
                   decoration: BoxDecoration(
                     color: MyColors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -176,57 +191,78 @@ class HomeView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(20),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: controller.items.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 75,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFED29),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 5,
-                            ),
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: Image.asset(controller.items[index]["icon"]!),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  controller.items[index]["label"]!,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  textHeightBehavior: const TextHeightBehavior(
-                                    applyHeightToFirstAscent: false,
-                                    applyHeightToLastDescent: false,
-                                  ),
-                                  style: MyTexts.medium12.copyWith(
-                                    height: 1.2,
-                                    color: MyColors.textFieldBackground,
-                                  ),
-                                ),
-                              ],
-                            ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: controller.items.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4, // 4 items per row
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 1, // roughly square
                           ),
-                        ],
-                      );
-                    },
+                      itemBuilder: (context, index) {
+                        final item = controller.items[index];
+                        final isSelected =
+                            controller.selectedIndex.value == index;
+
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectedIndex.value =
+                                index; // update selection
+
+                            if (item['title'] == "Marketplace") {
+                              Get.toNamed(Routes.MARKET_PLACE);
+                            }
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: 85,
+                                height: 85,
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? const Color(0xFFFFED29)
+                                      : const Color(0x99FFED29),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      item['icon'],
+                                      height: 40,
+                                      width: 50,
+                                    ),
+                                    Text(
+                                      item["title"],
+                                      textAlign: TextAlign.center,
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.fontBlack,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // Add check icon overlay when selected
+                              if (isSelected)
+                                const Positioned(
+                                  top: -1,
+                                  right: 1,
+                                  child: Icon(
+                                    Icons.check_box,
+                                    color: MyColors.primary,
+                                    size: 20,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 SizedBox(height: 1.h),
@@ -245,7 +281,8 @@ class HomeView extends StatelessWidget {
                                   top: 15,
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Team",
@@ -273,7 +310,8 @@ class HomeView extends StatelessWidget {
                                       scrollDirection: Axis.horizontal,
                                       itemCount: controller.teamList.length,
                                       itemBuilder: (context, index) {
-                                        final teamMember = controller.teamList[index];
+                                        final teamMember =
+                                            controller.teamList[index];
                                         return Padding(
                                           padding: const EdgeInsets.only(
                                             left: 20,
@@ -286,37 +324,54 @@ class HomeView extends StatelessWidget {
                                                 child: ClipOval(
                                                   child: CachedNetworkImage(
                                                     imageUrl:
-                                                        teamMember.profilePhotoUrl ?? '',
+                                                        teamMember
+                                                            .profilePhotoUrl ??
+                                                        '',
                                                     width: 70,
                                                     height: 70,
                                                     fit: BoxFit.cover,
-                                                    placeholder: (context, url) =>
-                                                        Container(
+                                                    placeholder:
+                                                        (
+                                                          context,
+                                                          url,
+                                                        ) => Container(
                                                           width: 70,
                                                           height: 70,
-                                                          decoration: const BoxDecoration(
-                                                            color: MyColors.grey1,
-                                                            shape: BoxShape.circle,
-                                                          ),
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                                color: MyColors
+                                                                    .grey1,
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
                                                           child: const Center(
                                                             child:
                                                                 CupertinoActivityIndicator(
-                                                                  color: MyColors.primary,
+                                                                  color: MyColors
+                                                                      .primary,
                                                                   radius: 15,
                                                                 ),
                                                           ),
                                                         ),
-                                                    errorWidget: (context, url, error) =>
-                                                        Container(
+                                                    errorWidget:
+                                                        (
+                                                          context,
+                                                          url,
+                                                          error,
+                                                        ) => Container(
                                                           width: 70,
                                                           height: 70,
-                                                          decoration: const BoxDecoration(
-                                                            color: MyColors.grey1,
-                                                            shape: BoxShape.circle,
-                                                          ),
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                                color: MyColors
+                                                                    .grey1,
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
                                                           child: const Icon(
                                                             Icons.person,
-                                                            color: MyColors.grey,
+                                                            color:
+                                                                MyColors.grey,
                                                             size: 35,
                                                           ),
                                                         ),
@@ -325,13 +380,17 @@ class HomeView extends StatelessWidget {
                                               ),
                                               SizedBox(height: 1.h),
                                               Text(
-                                                teamMember.fullName ?? 'Unknown',
-                                                style: MyTexts.medium16.copyWith(
-                                                  color: MyColors.dimGray,
-                                                  fontFamily: MyTexts.Roboto,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 11,
-                                                ),
+                                                teamMember.fullName ??
+                                                    'Unknown',
+                                                style: MyTexts.medium16
+                                                    .copyWith(
+                                                      color: MyColors.dimGray,
+                                                      fontFamily:
+                                                          MyTexts.Roboto,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 11,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -387,7 +446,9 @@ class HomeView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: const [
                                 BoxShadow(
-                                  color: Color(0x33000000), // subtle black shadow (20%)
+                                  color: Color(
+                                    0x33000000,
+                                  ), // subtle black shadow (20%)
                                   blurRadius: 4, // smooth edges
                                   offset: Offset(0, 2), // shadow below bar
                                 ),
@@ -399,7 +460,8 @@ class HomeView extends StatelessWidget {
                               children: [
                                 /// Top Row (Title + Dropdown)
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Interests',
@@ -415,7 +477,9 @@ class HomeView extends StatelessWidget {
                                             color: MyColors.textFieldBackground,
                                           ),
                                         ),
-                                        const Icon(Icons.keyboard_arrow_down_outlined),
+                                        const Icon(
+                                          Icons.keyboard_arrow_down_outlined,
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -430,21 +494,27 @@ class HomeView extends StatelessWidget {
                                   ) {
                                     return Expanded(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
                                           for (int i = 0; i < 4; i++)
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                vertical: 2,
-                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 2,
+                                                  ),
                                               child: Container(
                                                 width: 10,
                                                 height: 20,
                                                 decoration: BoxDecoration(
-                                                  color: (i.isEven || monthIndex % 2 == 0)
+                                                  color:
+                                                      (i.isEven ||
+                                                          monthIndex % 2 == 0)
                                                       ? MyColors.warning
-                                                      : MyColors.progressRemaining,
-                                                  borderRadius: BorderRadius.circular(12),
+                                                      : MyColors
+                                                            .progressRemaining,
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                 ),
                                               ),
                                             ),
@@ -452,7 +522,8 @@ class HomeView extends StatelessWidget {
                                           Text(
                                             _monthNames[monthIndex],
                                             style: MyTexts.extraBold12.copyWith(
-                                              color: MyColors.textFieldBackground,
+                                              color:
+                                                  MyColors.textFieldBackground,
                                             ),
                                           ),
                                         ],
@@ -540,7 +611,9 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
+              style: MyTexts.extraBold18.copyWith(
+                color: MyColors.textFieldBackground,
+              ),
             ),
           ],
         ),
