@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/login/services/LoginService.dart';
 
@@ -6,6 +7,7 @@ class LoginController extends GetxController {
   final mobileController = TextEditingController();
   final passwordController = TextEditingController();
   final rememberMe = false.obs;
+  HomeService homeService = HomeService();
 
   LoginService loginService = LoginService();
   final isLoading = false.obs;
@@ -53,7 +55,6 @@ class LoginController extends GetxController {
       );
 
       if (loginResponse.success == true) {
-        // Store token and user data
         if (loginResponse.data?.token != null) {
           myPref.setToken(loginResponse.data?.token ?? '');
         }
@@ -62,15 +63,20 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
-        // Save credentials if remember me is checked
         if (rememberMe.value) {
           myPref.saveCredentials(mobileController.text, passwordController.text);
         } else {
-          // Clear saved credentials if remember me is unchecked
           myPref.clearCredentials();
         }
-
-        Get.offAllNamed(Routes.MAIN);
+        final addressResponse = await homeService.getAddress();
+        if (addressResponse.success == true &&
+            (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
+          myPref.setAddressData(addressResponse.toJson());
+          Get.offAllNamed(Routes.MAIN);
+        } else {
+          myPref.clearAddressData();
+          Get.offAllNamed(Routes.ADDRESS, arguments: {'isFromLogin': true});
+        }
       } else {
         SnackBars.errorSnackBar(content: loginResponse.message ?? 'Login failed');
       }

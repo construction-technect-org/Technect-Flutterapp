@@ -43,7 +43,7 @@ class HomeController extends GetxController {
     _refreshHomeData();
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      _checkProfileCompletion();
+      _checkAddressAndProfileCompletion();
     });
   }
 
@@ -60,6 +60,18 @@ class HomeController extends GetxController {
   bool _hasCachedAddressData() {
     final cachedData = myPref.getAddressData();
     return cachedData != null && cachedData.isNotEmpty;
+  }
+
+  void _checkAddressAndProfileCompletion() {
+    // First check if address is available
+    if (!_hasCachedAddressData()) {
+      // No address available - navigate to address screen (no profile dialog)
+      _checkAddressAndNavigate();
+      return;
+    }
+
+    // Address is available - now check profile completion
+    _checkProfileCompletion();
   }
 
   void _checkProfileCompletion() {
@@ -317,5 +329,18 @@ class HomeController extends GetxController {
 
   Future<void> refreshTeamList() async {
     await fetchTeamList();
+  }
+
+  Future<void> refreshAddressAndProfile() async {
+    // Refresh address data
+    await _refreshHomeData();
+
+    // Refresh profile data
+    await fetchProfileData();
+
+    // Re-check both address and profile completion
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _checkAddressAndProfileCompletion();
+    });
   }
 }

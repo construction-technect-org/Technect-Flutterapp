@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/services/address_service.dart';
-import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 
 class AddLocationController extends GetxController {
@@ -16,31 +15,31 @@ class AddLocationController extends GetxController {
   final isLoading = false.obs;
   final locationAdded = false.obs;
   final isEditing = false.obs;
+  final isFromLogin = false.obs;
   int? existingAddressId;
 
   // Service
   final AddressService _addressService = AddressService();
-  HomeController homeController = Get.find<HomeController>();
   @override
   void onInit() {
     super.onInit();
+    if (Get.arguments != null) {
+      isFromLogin.value = Get.arguments['isFromLogin'] ?? false;
+    }
     _handlePassedData();
   }
 
   void _handlePassedData() {
     final arguments = Get.arguments;
     if (arguments != null && arguments is Map<String, dynamic>) {
-      // Check if it's existing address data
       if (arguments.containsKey('id')) {
         isEditing.value = true;
         existingAddressId = arguments['id'];
         _prefillForm(arguments);
       } else if (arguments.containsKey('address_line1')) {
-        // It's address data from address screen (with or without coordinates)
         _prefillForm(arguments);
       } else if (arguments.containsKey('latitude') &&
           arguments.containsKey('longitude')) {
-        // It's location data from address screen
         _prefillFromLocation(arguments);
       }
     }
@@ -56,26 +55,19 @@ class AddLocationController extends GetxController {
   }
 
   void _prefillFromLocation(Map<String, dynamic> locationData) {
-    // Check if we have address data to prefill
     if (locationData.containsKey('address_line1')) {
       _prefillForm(locationData);
     }
-    // Coordinates are handled in the submit method
   }
 
-  // Fetch and store address data after successful save
   Future<void> _fetchAndStoreAddressData() async {
     try {
-      // Import the home service to call get address API
       final homeService = HomeService();
       final addressResponse = await homeService.getAddress();
 
       if (addressResponse.success == true) {
-        // Store the updated address data in local storage
         myPref.setAddressData(addressResponse.toJson());
-        Get.printInfo(
-          info: '💾 Manual Address: Fetched and cached updated address data',
-        );
+        Get.printInfo(info: '💾 Manual Address: Fetched and cached updated address data');
       }
     } catch (e) {
       Get.printError(info: 'Error fetching address data: $e');
@@ -161,9 +153,7 @@ class AddLocationController extends GetxController {
         Get.offAllNamed(Routes.MAIN);
       } else {
         locationAdded.value = false;
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to save address',
-        );
+        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to save address');
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error saving address: $e');
