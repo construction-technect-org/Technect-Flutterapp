@@ -75,11 +75,7 @@ class InfoMetricsComponent extends StatelessWidget {
                             color: const Color(0xFFFFED29),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Icon(
-                            Icons.camera_alt,
-                            size: 12,
-                            color: MyColors.black,
-                          ),
+                          child: Icon(Icons.camera_alt, size: 12, color: MyColors.black),
                         ),
                       ),
                     ],
@@ -114,6 +110,13 @@ class InfoMetricsComponent extends StatelessWidget {
                               fontFamily: MyTexts.Roboto,
                             ),
                           ),
+                          Text(
+                            'GST Number: ${merchantProfile?.gstinNumber ?? ''}',
+                            style: MyTexts.regular14.copyWith(
+                              color: const Color(0xFF838383),
+                              fontFamily: MyTexts.Roboto,
+                            ),
+                          ),
                         ],
                       );
                     }),
@@ -123,11 +126,7 @@ class InfoMetricsComponent extends StatelessWidget {
             ],
           ),
           SizedBox(height: 1.h),
-          Container(
-            width: double.infinity,
-            height: 1,
-            color: const Color(0xFFD9D9D9),
-          ),
+          Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
           SizedBox(height: 1.h),
           Text(
             'Contact Details',
@@ -144,36 +143,25 @@ class InfoMetricsComponent extends StatelessWidget {
             return Column(
               children: [
                 if (controller.currentAddress != null)
-                  _buildContactItem(
-                    Icons.location_on,
-                    controller.currentAddress!,
-                  ),
+                  _buildContactItem(Icons.location_on, controller.currentAddress!),
                 if (controller.currentAddress != null) SizedBox(height: 1.h),
                 if (userData?.mobileNumber != null)
                   _buildContactItem(Icons.phone, userData!.mobileNumber!),
                 if (userData?.mobileNumber != null) SizedBox(height: 1.h),
+                if (userData?.email != null)
+                  _buildContactItem(Icons.email, userData?.email ?? ''),
+                if (userData?.email != null) SizedBox(height: 1.h),
                 if (merchantProfile?.businessEmail != null)
-                  _buildContactItem(
-                    Icons.email,
-                    merchantProfile!.businessEmail!,
-                  ),
-                if (merchantProfile?.businessEmail != null)
-                  SizedBox(height: 1.h),
+                  _buildContactItem(Icons.email, merchantProfile?.businessEmail ?? ''),
+                if (merchantProfile?.businessEmail != null) SizedBox(height: 1.h),
                 if (controller.businessWebsite != null)
-                  _buildContactItem(
-                    Icons.language,
-                    controller.businessWebsite!,
-                  ),
+                  _buildContactItem(Icons.language, controller.businessWebsite!),
                 if (controller.businessWebsite != null) SizedBox(height: 1.h),
               ],
             );
           }),
           SizedBox(height: 1.h),
-          Container(
-            width: double.infinity,
-            height: 1,
-            color: const Color(0xFFD9D9D9),
-          ),
+          Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
           SizedBox(height: 1.h),
           // Business Hours Section
           Text(
@@ -295,21 +283,16 @@ class InfoMetricsComponent extends StatelessWidget {
                     'Years in Business',
                     '${merchantProfile!.yearsInBusiness}+',
                   ),
-                if (merchantProfile?.yearsInBusiness != null)
-                  SizedBox(height: 1.h),
+                if (merchantProfile?.yearsInBusiness != null) SizedBox(height: 1.h),
                 if (merchantProfile?.projectsCompleted != null)
                   _buildMetricItem(
                     'Projects Completed',
                     '${merchantProfile!.projectsCompleted}+',
                   ),
-                if (merchantProfile?.projectsCompleted != null)
-                  SizedBox(height: 1.h),
+                if (merchantProfile?.projectsCompleted != null) SizedBox(height: 1.h),
                 _buildMetricItem('Customer Rating', '4.9/5'), // Static for now
                 SizedBox(height: 1.h),
-                _buildMetricItem(
-                  'Response Time',
-                  '< 2 hours',
-                ), // Static for now
+                _buildMetricItem('Response Time', '< 2 hours'), // Static for now
               ],
             );
           }),

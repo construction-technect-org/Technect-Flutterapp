@@ -4,6 +4,19 @@ import 'package:construction_technect/app/core/widgets/stepper_edit_profile_widg
 import 'package:construction_technect/app/modules/editProfile/controller/edit_profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
+  }
+}
+
 class EditProfileView extends GetView<EditProfileController> {
   const EditProfileView({super.key});
 
@@ -34,9 +47,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     ],
                     Expanded(
                       child: RoundedButton(
-                        buttonName: controller.currentStep.value == 1
-                            ? 'NEXT'
-                            : 'UPDATE',
+                        buttonName: controller.currentStep.value == 1 ? 'NEXT' : 'UPDATE',
                         onTap: () {
                           controller.updateProfile();
                         },
@@ -82,9 +93,7 @@ class EditProfileView extends GetView<EditProfileController> {
                           controller.currentStep.value == 1
                               ? "Update your Business Details"
                               : "Update your Certifications",
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.greyDetails,
-                          ),
+                          style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
                         ),
                         // Progress Bar
                       ],
@@ -126,10 +135,30 @@ class EditProfileView extends GetView<EditProfileController> {
         SizedBox(height: 1.h),
         CustomTextField(
           controller: controller.businessNameController,
-          hintText: 'Enter business name',
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.words,
         ),
         SizedBox(height: 2.h),
-
+        Row(
+          children: [
+            Text(
+              'GSTIN Number',
+              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
+            ),
+            Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
+          ],
+        ),
+        SizedBox(height: 1.h),
+        CustomTextField(
+          controller: controller.gstNumberController,
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.characters,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(15),
+            UpperCaseTextFormatter(),
+          ],
+        ),
+        SizedBox(height: 2.h),
         Row(
           children: [
             Text(
@@ -143,7 +172,6 @@ class EditProfileView extends GetView<EditProfileController> {
         CustomTextField(
           controller: controller.businessEmailController,
           keyboardType: TextInputType.emailAddress,
-          hintText: 'Enter business email',
         ),
         SizedBox(height: 2.h),
 
@@ -160,7 +188,10 @@ class EditProfileView extends GetView<EditProfileController> {
         CustomTextField(
           controller: controller.businessContactController,
           keyboardType: TextInputType.phone,
-          hintText: 'Enter contact number',
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(10),
+          ],
         ),
         SizedBox(height: 2.h),
 
@@ -181,7 +212,6 @@ class EditProfileView extends GetView<EditProfileController> {
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(2),
           ],
-          hintText: 'Enter years in business',
         ),
         SizedBox(height: 2.h),
 
@@ -202,7 +232,6 @@ class EditProfileView extends GetView<EditProfileController> {
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(4),
           ],
-          hintText: 'Enter number of projects completed',
         ),
         SizedBox(height: 2.h),
         Obx(
@@ -222,41 +251,29 @@ class EditProfileView extends GetView<EditProfileController> {
               children: [
                 Row(
                   children: [
-                    const Icon(
-                      Icons.access_time,
-                      color: Colors.orange,
-                      size: 20,
-                    ),
+                    const Icon(Icons.access_time, color: Colors.orange, size: 20),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         "Business Hours*",
-                        style: MyTexts.bold16.copyWith(
-                          color: MyColors.progressFill,
-                        ),
+                        style: MyTexts.bold16.copyWith(color: MyColors.progressFill),
                       ),
                     ),
                     GestureDetector(
                       onTap: () async {
                         // Pass previous business hours data if available
-                        final previousData = controller.businessHoursData
-                            .toList();
+                        final previousData = controller.businessHoursData.toList();
                         final result = await Get.toNamed(
                           Routes.BUSINESS_HOURS,
-                          arguments: previousData.isNotEmpty
-                              ? previousData
-                              : null,
+                          arguments: previousData.isNotEmpty ? previousData : null,
                         );
-                        if (result != null &&
-                            result is List<Map<String, dynamic>>) {
+                        if (result != null && result is List<Map<String, dynamic>>) {
                           controller.handleBusinessHoursData(result);
                         }
                       },
                       child: Text(
                         controller.businessHoursData.isEmpty ? "ADD" : "EDIT",
-                        style: MyTexts.bold16.copyWith(
-                          color: MyColors.progressFill,
-                        ),
+                        style: MyTexts.bold16.copyWith(color: MyColors.progressFill),
                       ),
                     ),
                   ],
@@ -308,9 +325,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                       const SizedBox(width: 4),
                                     ],
                                     Text(
-                                      isOpen
-                                          ? '$openTime - $closeTime'
-                                          : 'Closed',
+                                      isOpen ? '$openTime - $closeTime' : 'Closed',
                                       style: MyTexts.regular14.copyWith(
                                         color: isOpen
                                             ? MyColors.fontBlack
@@ -410,9 +425,7 @@ class EditProfileView extends GetView<EditProfileController> {
                       ),
                     ),
                     Text(
-                      (isSelected && fileName != null)
-                          ? fileName
-                          : organization,
+                      (isSelected && fileName != null) ? fileName : organization,
                       style: MyTexts.regular14.copyWith(
                         color: const Color(0xFF717171),
                         fontFamily: MyTexts.Roboto,

@@ -12,6 +12,8 @@ class CustomTextField extends StatelessWidget {
   final int maxLines; // 👈 NEW for multi-line
   final bool? obscureText; // 👈 NEW for multi-line
   final bool? readOnly; // 👈 NEW for multi-line
+  final TextCapitalization?
+  textCapitalization; // 👈 NEW for text capitalization
 
   const CustomTextField({
     super.key,
@@ -26,6 +28,7 @@ class CustomTextField extends StatelessWidget {
     this.suffix,
     this.prefix,
     this.maxLines = 1,
+    this.textCapitalization,
   });
 
   @override
@@ -39,13 +42,18 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         obscureText: obscureText ?? false,
-        style: MyTexts.extraBold16.copyWith(height: 36 / 16, color: MyColors.primary),
+        style: MyTexts.extraBold16.copyWith(
+          height: 36 / 16,
+          color: MyColors.primary,
+        ),
         cursorHeight: 20,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         onChanged: onChanged,
         maxLines: maxLines,
 readOnly: readOnly??false,
+        textCapitalization: textCapitalization ?? TextCapitalization.none,
+
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: hintText != null
@@ -58,7 +66,10 @@ readOnly: readOnly??false,
             minWidth: 10, // 👈 shrink width
             minHeight: 10, // 👈 shrink height
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 12,
+          ),
           isDense: true,
         ),
       ),

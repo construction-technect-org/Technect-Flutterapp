@@ -8,15 +8,30 @@ import 'package:construction_technect/app/modules/home/services/HomeService.dart
 
 class HomeController extends GetxController {
   CommonController commonController = Get.find();
-  final List<Map<String, String>> items = [
-    {"icon": Asset.marketplaceIcon, "label": "Marketplace"},
-    {"icon": Asset.erpIcon, "label": "ERP"},
-    {"icon": Asset.crmIcon, "label": "CRM"},
-    {"icon": Asset.ovpIcon, "label": "OVP"},
-    {"icon": Asset.hrmsIcon, "label": "HRMS"},
-    {"icon": Asset.projectManagementIcon, "label": "Project\nManagement"},
-    {"icon": Asset.portfolioManagementIcon, "label": "Portfolio\nManagement"},
-  ];
+  // final List<Map<String, String>> items = [
+  //   {"icon": Asset.marketplaceIcon, "label": "Marketplace"},
+  //   {"icon": Asset.erpIcon, "label": "ERP"},
+  //   {"icon": Asset.crmIcon, "label": "CRM"},
+  //   {"icon": Asset.ovpIcon, "label": "OVP"},
+  //   {"icon": Asset.hrmsIcon, "label": "HRMS"},
+  //   {"icon": Asset.projectManagementIcon, "label": "Project\nManagement"},
+  //   {"icon": Asset.portfolioManagementIcon, "label": "Portfolio\nManagement"},
+  // ];
+
+
+final List<Map<String, dynamic>> items = [
+  {"icon": Asset.marketplaceIcon, "title": "Marketplace"},
+  {"icon": Asset.crmIcon, "title": "CRM"},
+  {"icon": Asset.erpIcon, "title": "ERP"},
+  {"icon": Asset.projectManagementIcon, "title": "Portfolio\nManagement"},
+  {"icon": Asset.hrmsIcon, "title": "HRMS"},
+  {"icon": Asset.portfolioManagementIcon, "title": "Portfolio\nManagement"},
+  {"icon": Asset.ovpIcon, "title": "OVP"},
+  {"icon": Asset.constructionTaxi, "title": "Construction\nTaxi"},
+];
+
+
+  RxInt selectedIndex = 0.obs;
 
   HomeService homeService = HomeService();
   GetAllRoleService roleService = GetAllRoleService();
@@ -43,7 +58,7 @@ class HomeController extends GetxController {
     _refreshHomeData();
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      _checkProfileCompletion();
+      _checkAddressAndProfileCompletion();
     });
   }
 
@@ -60,6 +75,18 @@ class HomeController extends GetxController {
   bool _hasCachedAddressData() {
     final cachedData = myPref.getAddressData();
     return cachedData != null && cachedData.isNotEmpty;
+  }
+
+  void _checkAddressAndProfileCompletion() {
+    // First check if address is available
+    if (!_hasCachedAddressData()) {
+      // No address available - navigate to address screen (no profile dialog)
+      _checkAddressAndNavigate();
+      return;
+    }
+
+    // Address is available - now check profile completion
+    _checkProfileCompletion();
   }
 
   void _checkProfileCompletion() {
@@ -317,5 +344,18 @@ class HomeController extends GetxController {
 
   Future<void> refreshTeamList() async {
     await fetchTeamList();
+  }
+
+  Future<void> refreshAddressAndProfile() async {
+    // Refresh address data
+    await _refreshHomeData();
+
+    // Refresh profile data
+    await fetchProfileData();
+
+    // Re-check both address and profile completion
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _checkAddressAndProfileCompletion();
+    });
   }
 }

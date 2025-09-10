@@ -170,89 +170,93 @@ class HomeView extends StatelessWidget {
                 SizedBox(height: 1.h),
 
                 /// ✅ FIXED GridView
-                Container(
-                  height: 237,
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 2,
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      top: 4,
-                      bottom: 20, // 👈 extra bottom space
-                    ),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 20,
-                      childAspectRatio: 0.80,
-                    ),
-                    itemCount: controller.items.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 70,
-                            width: 65,
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  width: 65,
-                                  height: 65,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFFFEB3B),
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: -15,
-                                  left: 0,
-                                  right: 0,
-                                  child: Image.asset(
-                                    controller.items[index]["icon"]!,
-                                    height: 73,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 0.7.h),
-                          SizedBox(
-                            child: Text(
-                              controller.items[index]["label"]!,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textHeightBehavior: const TextHeightBehavior(
-                                applyHeightToFirstAscent: false,
-                                applyHeightToLastDescent: false,
-                              ),
-                              style: MyTexts.medium12.copyWith(
-                                height: 1.2,
-                                color: MyColors.textFieldBackground,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+ Container(
+  height: 210, // match your design
+  decoration: BoxDecoration(
+    color: MyColors.white,
+    borderRadius: BorderRadius.circular(12),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.1),
+        spreadRadius: 2,
+        blurRadius: 6,
+        offset: const Offset(0, 3),
+      ),
+    ],
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(10),
+    child: GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: controller.items.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4, // 4 items per row
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1, // roughly square
+      ),
+   itemBuilder: (context, index) {
+  final item = controller.items[index];
+  final isSelected = controller.selectedIndex.value == index;
+
+  return GestureDetector(
+    onTap: () {
+      controller.selectedIndex.value = index; // update selection
+
+      if (item['title'] == "Marketplace") {
+        Get.toNamed(Routes.MARKET_PLACE);
+
+      }
+    },
+    child: Stack(
+      children: [
+        Container(
+          width: 85,
+          height: 85,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? const Color(0xFFFFED29)
+                : const Color(0x99FFED29),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                item['icon'],
+                height: 40,
+                width: 50,
+              ),
+              Text(
+                item["title"],
+                textAlign: TextAlign.center,
+                style: MyTexts.medium14.copyWith(
+                  color: MyColors.fontBlack,
                 ),
-                SizedBox(height: 1.h),
+              ),
+            ],
+          ),
+        ),
+        // Add check icon overlay when selected
+        if (isSelected)
+          const Positioned(
+            top: -1,
+            right: 1,
+            child: Icon(
+              Icons.check_box,
+              color: MyColors.primary,
+              size: 20,
+            ),
+          ),
+      ],
+    ),
+  );
+},
+ ),
+  ),
+),
+SizedBox(height: 1.h),
                 Obx(() {
                   if (commonController.hasProfileComplete.value) {
                     return Column(

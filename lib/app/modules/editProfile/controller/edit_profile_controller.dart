@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 
 class EditProfileController extends GetxController {
   final businessNameController = TextEditingController();
+  final gstNumberController = TextEditingController();
   final businessEmailController = TextEditingController();
   final businessContactController = TextEditingController();
   final yearsInBusinessController = TextEditingController();
@@ -42,6 +43,7 @@ class EditProfileController extends GetxController {
       if (merchantProfile != null) {
         // Populate text fields
         businessNameController.text = merchantProfile.businessName ?? '';
+        gstNumberController.text = merchantProfile.gstinNumber ?? '';
         businessEmailController.text = merchantProfile.businessEmail ?? '';
         businessContactController.text = merchantProfile.businessContactNumber ?? '';
         yearsInBusinessController.text =
@@ -126,31 +128,100 @@ class EditProfileController extends GetxController {
   }
 
   bool _validateBusinessDetails() {
+    // Business Name Validation
     if (businessNameController.text.trim().isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter business name");
       return false;
     }
+    if (businessNameController.text.trim().length < 2) {
+      SnackBars.errorSnackBar(content: "Business name must be at least 2 characters");
+      return false;
+    }
+
+    // GST Number Validation
+    if (gstNumberController.text.trim().isEmpty) {
+      SnackBars.errorSnackBar(content: "Please enter GST number");
+      return false;
+    }
+    if (gstNumberController.text.trim().length != 15) {
+      SnackBars.errorSnackBar(content: "GST number must be exactly 15 characters");
+      return false;
+    }
+    if (!_isValidGSTNumber(gstNumberController.text.trim())) {
+      SnackBars.errorSnackBar(content: "Please enter a valid GST number");
+      return false;
+    }
+
+    // Business Email Validation
     if (businessEmailController.text.trim().isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter business email");
       return false;
     }
+    if (!_isValidEmail(businessEmailController.text.trim())) {
+      SnackBars.errorSnackBar(content: "Please enter a valid email address");
+      return false;
+    }
+
+    // Business Contact Number Validation
     if (businessContactController.text.trim().isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter business contact number");
       return false;
     }
+    if (businessContactController.text.trim().length != 10) {
+      SnackBars.errorSnackBar(content: "Contact number must be exactly 10 digits");
+      return false;
+    }
+    if (!_isValidPhoneNumber(businessContactController.text.trim())) {
+      SnackBars.errorSnackBar(content: "Please enter a valid contact number");
+      return false;
+    }
+
+    // Years in Business Validation
     if (yearsInBusinessController.text.trim().isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter years in business");
       return false;
     }
+    final years = int.tryParse(yearsInBusinessController.text.trim());
+    if (years == null || years < 0 || years > 99) {
+      SnackBars.errorSnackBar(content: "Please enter a valid number of years (0-99)");
+      return false;
+    }
+
+    // Projects Completed Validation
     if (projectsCompletedController.text.trim().isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter projects completed");
       return false;
     }
+    final projects = int.tryParse(projectsCompletedController.text.trim());
+    if (projects == null || projects < 0 || projects > 9999) {
+      SnackBars.errorSnackBar(
+        content: "Please enter a valid number of projects (0-9999)",
+      );
+      return false;
+    }
+
+    // Business Hours Validation
     if (businessHoursData.isEmpty) {
       SnackBars.errorSnackBar(content: "Please set business hours");
       return false;
     }
+
     return true;
+  }
+
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  bool _isValidPhoneNumber(String phone) {
+    return RegExp(r'^[6-9]\d{9}$').hasMatch(phone);
+  }
+
+  bool _isValidGSTNumber(String gst) {
+    // GST format: 2 digits + 2 letters + 5 digits + 1 letter + 1 digit + 1 letter + 1 digit
+    return RegExp(
+      r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
+    ).hasMatch(gst);
   }
 
   void _submitProfile() {
@@ -174,6 +245,7 @@ class EditProfileController extends GetxController {
 
       final formFields = <String, dynamic>{
         'business_name': businessNameController.text.trim(),
+        'gstin_number': gstNumberController.text.trim(),
         'business_email': businessEmailController.text.trim(),
         'business_contact_number': businessContactController.text.trim(),
         'years_in_business': yearsInBusinessController.text.trim(),

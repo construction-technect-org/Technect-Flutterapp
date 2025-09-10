@@ -36,6 +36,7 @@ class Data {
 class MerchantProfile {
   int? id;
   String? businessName;
+  String? gstinNumber;
   String? businessEmail;
   String? businessContactNumber;
   String? businessWebsite;
@@ -58,6 +59,7 @@ class MerchantProfile {
   MerchantProfile({
     this.id,
     this.businessName,
+    this.gstinNumber,
     this.businessEmail,
     this.businessContactNumber,
     this.businessWebsite,
@@ -82,6 +84,7 @@ class MerchantProfile {
       MerchantProfile(
         id: json["id"],
         businessName: json["businessName"],
+        gstinNumber: json["gstinNumber"],
         businessEmail: json["businessEmail"],
         businessContactNumber: json["businessContactNumber"],
         businessWebsite: json["businessWebsite"],
@@ -115,6 +118,7 @@ class MerchantProfile {
   Map<String, dynamic> toJson() => {
     "id": id,
     "businessName": businessName,
+    "gstinNumber": gstinNumber,
     "businessEmail": businessEmail,
     "businessContactNumber": businessContactNumber,
     "businessWebsite": businessWebsite,

@@ -17,6 +17,7 @@ class AddressController extends GetxController {
   final isLoading = false.obs;
   final isGettingLocation = false.obs;
   final isSearching = false.obs;
+  final isFromLogin = false.obs;
 
   // Debounce timer for search
   Timer? _searchDebounce;
@@ -31,6 +32,9 @@ class AddressController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if (Get.arguments != null) {
+      isFromLogin.value = Get.arguments['isFromLogin'] ?? false;
+    }
     _handlePassedData();
     _initializeLocation();
   }
@@ -341,6 +345,7 @@ class AddressController extends GetxController {
       'latitude': selectedPosition.value.latitude,
       'longitude': selectedPosition.value.longitude,
       'address': currentAddress.value,
+      'isFromLogin': isFromLogin.value,
     };
 
     // If we have existing address data, pass it along

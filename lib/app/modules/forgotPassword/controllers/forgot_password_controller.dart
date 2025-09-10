@@ -18,6 +18,8 @@ class ForgotPasswordController extends GetxController {
   final otpSend = false.obs;
   final otpVerify = false.obs;
   final isLoading = false.obs;
+  final isNewPasswordVisible = false.obs;
+  final isConfirmPasswordVisible = false.obs;
 
   // Services
   ForgotPasswordService forgotPasswordService = ForgotPasswordService();
@@ -52,9 +54,16 @@ class ForgotPasswordController extends GetxController {
     super.onClose();
   }
 
+  void toggleNewPasswordVisibility() {
+    isNewPasswordVisible.value = !isNewPasswordVisible.value;
+  }
+
+  void toggleConfirmPasswordVisibility() {
+    isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
+  }
+
   void _disposeControllers() {
     phoneEmailController.dispose();
-    otpController.dispose();
     newPasswordController.dispose();
     confirmPasswordController.dispose();
   }
@@ -75,7 +84,9 @@ class ForgotPasswordController extends GetxController {
         otpSend.value = true;
         SnackBars.successSnackBar(content: 'OTP sent successfully');
       } else {
-        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
+        SnackBars.errorSnackBar(
+          content: otpResponse.message ?? 'Failed to send OTP',
+        );
       }
     } catch (e) {
       // Error is already shown by ApiManager
@@ -148,7 +159,9 @@ class ForgotPasswordController extends GetxController {
       if (otpSend.value) {
         await verifyOtp();
       } else {
-        SnackBars.errorSnackBar(content: 'Please verify your mobile number first');
+        SnackBars.errorSnackBar(
+          content: 'Please verify your mobile number first',
+        );
         return;
       }
     }
@@ -170,7 +183,9 @@ class ForgotPasswordController extends GetxController {
     }
 
     if (newPassword.value.length < 8) {
-      SnackBars.errorSnackBar(content: 'Password must be at least 8 characters long');
+      SnackBars.errorSnackBar(
+        content: 'Password must be at least 8 characters long',
+      );
       return false;
     }
 
