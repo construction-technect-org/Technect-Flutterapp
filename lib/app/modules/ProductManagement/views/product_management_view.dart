@@ -60,7 +60,6 @@ class ProductManagementView extends StatelessWidget {
                           minHeight: 36,
                         ),
                         hintText: 'Search',
-
                         hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                         filled: true,
                         fillColor: MyColors.white,
@@ -179,7 +178,7 @@ class ProductManagementView extends StatelessWidget {
                             locationText: 'Vasai Virar, Mahab Chowpatty',
                             pricePerUnit: double.parse(product.price ?? '0'),
                             stockCount: product.stockQuantity ?? 0,
-                            imageUrl: product.productImage, // pass network image here
+                            imageUrl: product.productImage,
                           ),
                         );
                       },

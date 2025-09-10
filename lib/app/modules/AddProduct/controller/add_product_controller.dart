@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart'; // your CommonDropdown
@@ -7,10 +8,12 @@ import 'package:construction_technect/app/modules/AddProduct/models/ProductModel
 import 'package:construction_technect/app/modules/AddProduct/models/SubCategoryModel.dart';
 import 'package:construction_technect/app/modules/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/AddProduct/service/AddProductService.dart';
+import 'package:construction_technect/app/modules/ProductManagement/controllers/product_management_controller.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AddProductController extends GetxController {
   final pageController = PageController();
+  ProductManagementController controller = Get.find();
   // ---------------- Form Controllers ----------------
   final productNameController = TextEditingController();
   final stockController = TextEditingController();
@@ -43,6 +46,7 @@ class AddProductController extends GetxController {
   RxList<SubCategory> subCategories = <SubCategory>[].obs;
   RxList<Product> productsList = <Product>[].obs;
   RxList<FilterData> filters = <FilterData>[].obs;
+
   // Reactive name lists for dropdowns
   RxList<String> mainCategoryNames = <String>[].obs;
   RxList<String> subCategoryNames = <String>[].obs;
@@ -63,12 +67,12 @@ class AddProductController extends GetxController {
   RxBool showExtraFields = false.obs;
   RxString pickedFileName = "".obs;
   RxString pickedFilePath = "".obs;
-  RxBool isEnabled = false.obs;
+  RxBool isEnabled = true.obs;
   RxBool isLoading = false.obs;
-  RxBool isLoadingCreateProduct = false.obs;
 
   final AddProductService _service = AddProductService();
   bool isEdit = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -113,7 +117,7 @@ class AddProductController extends GetxController {
   }
 
   // ---------------- SubCategory ----------------
-  void onSubCategorySelected(String? subCategoryName) {
+  Future<void> onSubCategorySelected(String? subCategoryName) async {
     if (subCategoryName == null) {
       selectedSubCategory.value = null;
       productsList.clear();
@@ -129,8 +133,8 @@ class AddProductController extends GetxController {
     selectedSubCategoryId.value = '${selectedSub?.id ?? 0}';
 
     if (selectedSub != null) {
-      fetchProducts(selectedSub.id);
-      getFilter(selectedSub.id);
+      await fetchProducts(selectedSub.id);
+      await getFilter(selectedSub.id);
     }
   }
 
@@ -167,7 +171,7 @@ class AddProductController extends GetxController {
 
       if (result.success == true) {
         filters.value = (result.data as List<FilterData>).map((e) => e).toList();
-        for (FilterData filter in filters) {
+        for (final FilterData filter in filters) {
           dynamicControllers[filter.filterName ?? ''] = TextEditingController();
         }
       } else {
@@ -236,7 +240,6 @@ class AddProductController extends GetxController {
     }
   }
 
-  // ---------------- Helpers ----------------
   void submitProduct() {
     showExtraFields.value = true;
     createProductValidation();
@@ -278,7 +281,7 @@ class AddProductController extends GetxController {
     } else if (selectedSubCategoryId.value == null) {
       SnackBars.errorSnackBar(content: 'Sub category is required');
       isRequired = false;
-    } else if (selectedProductId.value == null) {
+    } else if (productNames.isNotEmpty && selectedProductId.value == null) {
       SnackBars.errorSnackBar(content: 'Product is required');
       isRequired = false;
     } else if (selectedUom.value == null) {
@@ -325,7 +328,7 @@ class AddProductController extends GetxController {
   }
 
   Future<void> createProduct() async {
-    isLoadingCreateProduct.value = true;
+    isLoading.value = true;
     Map<String, dynamic> fields = {};
     final Map<String, String> selectedFiles = {"product_image": pickedFilePath.value};
 
@@ -339,7 +342,17 @@ class AddProductController extends GetxController {
       "product_name": productNameController.text,
       "main_category_id": selectedMainCategoryId.value,
       "sub_category_id": selectedSubCategoryId.value,
-      "category_product_id": selectedProductId.value,
+    };
+
+    // Only include product_id if products are available and selected
+    if (productNames.isNotEmpty && selectedProductId.value != null) {
+      fields["category_product_id"] = selectedProductId.value!;
+    }
+
+    fields.addAll({
+      "price": priceController.text,
+      "gst_percentage": gstController.text,
+      "terms_and_conditions": termsController.text,
       "stock_quantity": stockController.text,
       "brand": brandNameController.text,
       "uom": selectedUom.value,
@@ -354,8 +367,8 @@ class AddProductController extends GetxController {
       "is_featured": false,
       "sort_order": "1",
       "filter_values": json.encode(payload),
-    };
-
+    });
+    log('fields $fields');
     try {
       final addTeamResponse = await _service.createProduct(
         fields: fields,
@@ -363,16 +376,17 @@ class AddProductController extends GetxController {
       );
 
       if (addTeamResponse.success == true) {
-        isLoadingCreateProduct.value = false;
+        await controller.fetchProducts();
+        isLoading.value = false;
         Get.back();
       } else {
-        isLoadingCreateProduct.value = false;
+        isLoading.value = false;
         SnackBars.errorSnackBar(
           content: addTeamResponse.message ?? 'Something went wrong!!',
         );
       }
     } catch (e) {
-      isLoadingCreateProduct.value = false;
+      isLoading.value = false;
     }
   }
 }

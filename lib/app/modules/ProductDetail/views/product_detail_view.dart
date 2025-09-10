@@ -4,7 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ProductDetail/controllers/product_detail_controller.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
-  List<String> specifications = [
+  final List<String> specifications = [
     "Particle size ranging from 0 to 4.75mm.",
     "High compressive strength.",
     "Free from impurities.",
@@ -13,8 +13,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
   @override
   Widget build(BuildContext context) {
-   
-
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: MyColors.veryPaleBlue,
@@ -64,26 +62,25 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   ),
                   padding: EdgeInsets.only(bottom: 2.h),
                   alignment: Alignment.center,
-child: (controller.product.value.productImage != null &&
-        controller.product.value.productImage!.isNotEmpty)
-    ? Image.network(
-        "https://bucket-construction-tech.s3.ap-south-1.amazonaws.com/${controller.product.value.productImage!}",
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) {
-          return const Icon(
-            Icons.broken_image, // "no image" icon
-            size: 60,
-            color: Colors.grey,
-          );
-        },
-      )
-    : const Icon(
-        Icons.image_not_supported, // shown if null/empty
-        size: 60,
-        color: Colors.grey,
-      ),
-
-
+                  child:
+                      (controller.product.value.productImage != null &&
+                          controller.product.value.productImage!.isNotEmpty)
+                      ? Image.network(
+                          "${APIConstants.bucketUrl}${controller.product.value.productImage!}",
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.broken_image, // "no image" icon
+                              size: 60,
+                              color: Colors.grey,
+                            );
+                          },
+                        )
+                      : const Icon(
+                          Icons.image_not_supported, // shown if null/empty
+                          size: 60,
+                          color: Colors.grey,
+                        ),
                 ),
               ),
 
@@ -99,9 +96,7 @@ child: (controller.product.value.productImage != null &&
                       children: [
                         Text(
                           '${controller.product.value.brand}',
-                          style: MyTexts.medium18.copyWith(
-                            color: MyColors.fontBlack,
-                          ),
+                          style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
                         ),
                         TextButton.icon(
                           onPressed: controller.onEditProduct,
@@ -128,9 +123,7 @@ child: (controller.product.value.productImage != null &&
                       children: [
                         Text(
                           "${controller.product.value.price ?? 0}/Unit",
-                          style: MyTexts.medium24.copyWith(
-                            color: MyColors.primary,
-                          ),
+                          style: MyTexts.medium24.copyWith(color: MyColors.primary),
                         ),
                         const SizedBox(width: 10),
                         const Icon(Icons.star, color: Colors.amber, size: 20),
@@ -169,11 +162,7 @@ child: (controller.product.value.productImage != null &&
                                     maxLines: 1,
                                     text: TextSpan(
                                       text:
-                                          controller
-                                              .product
-                                              .value
-                                              .mainCategoryName ??
-                                          '',
+                                          controller.product.value.mainCategoryName ?? '',
                                       style: MyTexts.extraBold14.copyWith(
                                         color: MyColors.green,
                                       ),
@@ -206,11 +195,7 @@ child: (controller.product.value.productImage != null &&
                                     maxLines: 1,
                                     text: TextSpan(
                                       text:
-                                          controller
-                                              .product
-                                              .value
-                                              .subCategoryName ??
-                                          '',
+                                          controller.product.value.subCategoryName ?? '',
                                       style: MyTexts.extraBold14.copyWith(
                                         color: MyColors.green,
                                       ),
@@ -228,18 +213,14 @@ child: (controller.product.value.productImage != null &&
                     /// Company Details
                     Text(
                       "Company Details:",
-                      style: MyTexts.light14.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
+                      style: MyTexts.light14.copyWith(color: MyColors.fontBlack),
                     ),
                     SizedBox(height: 0.5.h),
                     Row(
                       children: [
                         Text(
                           'M N Manufacturers',
-                          style: MyTexts.extraBold20.copyWith(
-                            color: MyColors.primary,
-                          ),
+                          style: MyTexts.extraBold20.copyWith(color: MyColors.primary),
                         ),
                         SizedBox(width: 0.5.w),
                         Image.asset(Asset.virify, height: 4.h, width: 4.w),
@@ -247,9 +228,7 @@ child: (controller.product.value.productImage != null &&
                     ),
                     Text(
                       "GSTIN: 12097310983",
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
+                      style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                     ),
 
                     SizedBox(height: 2.h),
@@ -257,9 +236,7 @@ child: (controller.product.value.productImage != null &&
                     /// Specifications
                     Text(
                       "Specifications:",
-                      style: MyTexts.extraBold16.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
+                      style: MyTexts.extraBold16.copyWith(color: MyColors.fontBlack),
                     ),
                     SizedBox(height: 1.h),
                     ListView.builder(
@@ -305,8 +282,7 @@ child: (controller.product.value.productImage != null &&
                               if (rightKey != null)
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         rightKey.replaceAll("_", " "),
@@ -331,18 +307,14 @@ child: (controller.product.value.productImage != null &&
                     ),
                     Text(
                       controller.product.value.termsAndConditions ?? '',
-                      style: MyTexts.extraBold14.copyWith(
-                        color: MyColors.green,
-                      ),
+                      style: MyTexts.extraBold14.copyWith(color: MyColors.green),
                     ),
                     SizedBox(height: 1.h),
 
                     /// Price Summary
                     Text(
                       "Amount & Tax Summary",
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
+                      style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                     ),
                     SizedBox(height: 0.8.h),
 
@@ -402,13 +374,11 @@ child: (controller.product.value.productImage != null &&
       children: [
         Text(
           label,
-          style:
-              labelStyle ?? MyTexts.light14.copyWith(color: MyColors.fontBlack),
+          style: labelStyle ?? MyTexts.light14.copyWith(color: MyColors.fontBlack),
         ),
         Text(
           value,
-          style:
-              valueStyle ?? MyTexts.light14.copyWith(color: MyColors.fontBlack),
+          style: valueStyle ?? MyTexts.light14.copyWith(color: MyColors.fontBlack),
         ),
       ],
     );
