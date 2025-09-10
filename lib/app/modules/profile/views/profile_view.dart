@@ -53,6 +53,7 @@ class ProfileView extends GetView<ProfileController> {
             SizedBox(height: 1.h),
             _buildProfileBanner(),
             SizedBox(height: 1.h),
+
             Obx(() {
               final completionPercentage = controller.profileCompletionPercentage;
               if (completionPercentage > 90) {
@@ -71,13 +72,15 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 );
               } else {
-                return Column(
-                  children: [
-                    SizedBox(height: 1.h),
-                    _buildTabBar(),
-                    SizedBox(height: 1.h),
-                    Expanded(child: _buildTabContent()),
-                  ],
+                return Expanded(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 1.h),
+                      _buildTabBar(),
+                      SizedBox(height: 1.h),
+                      Expanded(child: _buildTabContent()),
+                    ],
+                  ),
                 );
               }
             }),

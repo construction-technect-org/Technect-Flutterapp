@@ -8,6 +8,8 @@ class SignUpPasswordController extends GetxController {
 
   final password = ''.obs;
   final confirmPassword = ''.obs;
+  final isPasswordVisible = false.obs;
+  final isConfirmPasswordVisible = false.obs;
 
   SignUpService signUpService = SignUpService();
   final isLoading = false.obs;
@@ -30,6 +32,14 @@ class SignUpPasswordController extends GetxController {
     confirmPasswordController.addListener(() {
       confirmPassword.value = confirmPasswordController.text;
     });
+  }
+
+  void togglePasswordVisibility() {
+    isPasswordVisible.value = !isPasswordVisible.value;
+  }
+
+  void toggleConfirmPasswordVisibility() {
+    isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
   }
 
   @override

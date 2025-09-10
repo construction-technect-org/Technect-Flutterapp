@@ -1,5 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/core/widgets/stepper_widget.dart';
 import 'package:construction_technect/app/modules/SignUpPassword/controllers/sign_up_password_controller.dart';
 
@@ -52,9 +51,54 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                       ],
                     ),
                     SizedBox(height: 1.h),
-                    CustomTextField(
-                      controller: controller.passwordController,
-                      obscureText: true,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: MyColors.textFieldBorder),
+                        color: MyColors.white,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Obx(
+                              () => TextField(
+                                controller: controller.passwordController,
+                                obscureText: !controller.isPasswordVisible.value,
+                                style: MyTexts.extraBold16.copyWith(
+                                  color: MyColors.primary,
+                                  height: 36 / 16,
+                                ),
+                                cursorHeight: 20,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 12,
+                                  ),
+                                  isDense: true,
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              controller.togglePasswordVisibility();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: SvgPicture.asset(
+                                Asset.eyeIcon,
+                                width: 18,
+                                height: 18,
+                                colorFilter: const ColorFilter.mode(
+                                  MyColors.primary,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     Row(
@@ -84,9 +128,55 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                       ],
                     ),
                     SizedBox(height: 1.h),
-                    CustomTextField(
-                      controller: controller.confirmPasswordController,
-                      obscureText: true,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: MyColors.textFieldBorder),
+                        color: MyColors.white,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Obx(
+                              () => TextField(
+                                controller: controller.confirmPasswordController,
+                                obscureText: !controller.isConfirmPasswordVisible.value,
+                                style: MyTexts.extraBold16.copyWith(
+                                  color: MyColors.primary,
+                                  height: 36 / 16,
+                                ),
+                                cursorHeight: 20,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 12,
+                                  ),
+                                  isDense: true,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Eye icon
+                          GestureDetector(
+                            onTap: () {
+                              controller.toggleConfirmPasswordVisibility();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: SvgPicture.asset(
+                                Asset.eyeIcon,
+                                width: 18,
+                                height: 18,
+                                colorFilter: const ColorFilter.mode(
+                                  MyColors.primary,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                     SizedBox(height: 6.h),
