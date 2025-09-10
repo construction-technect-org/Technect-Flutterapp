@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? prefix; // 👈 Added for start icon
   final int maxLines; // 👈 NEW for multi-line
   final bool? obscureText; // 👈 NEW for multi-line
+  final bool? readOnly; // 👈 NEW for multi-line
 
   const CustomTextField({
     super.key,
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.obscureText,
+    this.readOnly=false,
     this.controller,
     this.onChanged,
     this.validator,
@@ -43,7 +45,7 @@ class CustomTextField extends StatelessWidget {
         inputFormatters: inputFormatters,
         onChanged: onChanged,
         maxLines: maxLines,
-
+readOnly: readOnly??false,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: hintText != null
