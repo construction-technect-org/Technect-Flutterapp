@@ -89,7 +89,6 @@ class Asset {
   static const String Admin = 'assets/images/Admin.svg';
   static const String user = 'assets/images/user.svg';
 
-
   //Team Details
   static const String Delete = 'assets/images/delete.svg';
   static const String viewEye = 'assets/images/view_eye.svg';

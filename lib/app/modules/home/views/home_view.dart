@@ -77,7 +77,6 @@ class HomeView extends StatelessWidget {
                       width: 28,
                       height: 28,
                     ),
-                    // 🔴 Red Dot Badge
                     Positioned(
                       right: 0,
                       top: 3,
@@ -101,7 +100,6 @@ class HomeView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// Search bar
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                   child: Container(
@@ -154,10 +152,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                SizedBox(height: 2.h),
-
-                /// Features title
+                SizedBox(height: 1.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
