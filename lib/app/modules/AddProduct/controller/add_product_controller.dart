@@ -285,7 +285,7 @@ class AddProductController extends GetxController {
 
   }
 
-  createProductValidation() {
+  void createProductValidation() {
    if (brandNameController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Brand name is required');
     } else if (packageTypeController.text.isEmpty) {
@@ -324,7 +324,7 @@ class AddProductController extends GetxController {
       "product_image": pickedFilePath.value,
     };
 
-    var data = {
+    final data = {
       "fineness_modulus": finenessModulusController.text,
       "specific_gravity": specificGravityController.text,
       "bulk_density": bulkDensityController.text,
@@ -352,7 +352,7 @@ class AddProductController extends GetxController {
     };
 
     try {
-      var addTeamResponse = await _service.createProduct(
+      final addTeamResponse = await _service.createProduct(
         fields: fields,
         files: selectedFiles,
       );
