@@ -177,93 +177,69 @@ class HomeView extends StatelessWidget {
                 SizedBox(height: 1.h),
 
                 /// ✅ FIXED GridView
-                Container(
-                  height: 210, // match your design
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 2,
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: controller.items.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4, // 4 items per row
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 1, // roughly square
-                          ),
-                      itemBuilder: (context, index) {
-                        final item = controller.items[index];
-                        final isSelected =
-                            controller.selectedIndex.value == index;
+ Container(
+  height: 210, // match your design
+  decoration: BoxDecoration(
+    color: MyColors.white,
+    borderRadius: BorderRadius.circular(12),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.1),
+        spreadRadius: 2,
+        blurRadius: 6,
+        offset: const Offset(0, 3),
+      ),
+    ],
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(10),
+    child: GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: controller.items.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4, // 4 items per row
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1, // roughly square
+      ),
+   itemBuilder: (context, index) {
+  final item = controller.items[index];
+  final isSelected = controller.selectedIndex.value == index;
 
-                        return GestureDetector(
-                          onTap: () {
-                            controller.selectedIndex.value =
-                                index; // update selection
+  return GestureDetector(
+    onTap: () {
+      controller.selectedIndex.value = index; // update selection
 
-                            if (item['title'] == "Marketplace") {
-                              Get.toNamed(Routes.MARKET_PLACE);
-                            }
-                          },
-                          child: Stack(
-                            children: [
-                              Container(
-                                width: 85,
-                                height: 85,
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? const Color(0xFFFFED29)
-                                      : const Color(0x99FFED29),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      item['icon'],
-                                      height: 40,
-                                      width: 50,
-                                    ),
-                                    Text(
-                                      item["title"],
-                                      textAlign: TextAlign.center,
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.fontBlack,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Add check icon overlay when selected
-                              if (isSelected)
-                                const Positioned(
-                                  top: -1,
-                                  right: 1,
-                                  child: Icon(
-                                    Icons.check_box,
-                                    color: MyColors.primary,
-                                    size: 20,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+      if (item['title'] == "Marketplace") {
+        Get.toNamed(Routes.MARKET_PLACE);
+
+      }
+    },
+    child: Stack(
+      children: [
+        Container(
+          width: 85,
+          height: 85,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? const Color(0xFFFFED29)
+                : const Color(0x99FFED29),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                item['icon'],
+                height: 40,
+                width: 50,
+              ),
+              Text(
+                item["title"],
+                textAlign: TextAlign.center,
+                style: MyTexts.medium14.copyWith(
+                  color: MyColors.fontBlack,
                 ),
                 SizedBox(height: 1.h),
                 Obx(() {

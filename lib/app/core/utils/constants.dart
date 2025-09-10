@@ -62,8 +62,6 @@ class Asset {
   static const String hrmsIcon = 'assets/images/hrms.png';
   static const String portfolioManagementIcon =
       'assets/images/portfolio_management.png';
-  static const String ConstructionTaxi = 'assets/images/ConstructionTaxi.png';
-  static const String team = 'assets/images/team.png';
   static const String ovpIcon = 'assets/images/ovp.png';
   static const String constructionTaxi = 'assets/images/team.png';
 
