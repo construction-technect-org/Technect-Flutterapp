@@ -121,19 +121,18 @@ class ProductCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 0.2.h),
                       RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
                               text: 'Brand: ',
-                              style: MyTexts.regular16.copyWith(
+                              style: MyTexts.regular14.copyWith(
                                 color: MyColors.primary,
                               ),
                             ),
                             TextSpan(
                               text: brandName,
-                              style: MyTexts.regular16.copyWith(
+                              style: MyTexts.regular14.copyWith(
                                 color: MyColors.primary,
                               ),
                             ),
@@ -145,7 +144,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 1.h),
+            SizedBox(height: 0.8.h),
             Row(
               children: [
                 const Icon(
@@ -162,7 +161,6 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 0.7.h),
             Text(
               '₹ ${pricePerUnit.toStringAsFixed(2)}/unit',
               style: MyTexts.extraBold20.copyWith(color: MyColors.primary),
@@ -193,7 +191,7 @@ class ProductCard extends StatelessWidget {
                 ),
                 SizedBox(width: 0.2.h),
                 Icon(
-                  Icons.keyboard_arrow_right,
+                  Icons.keyboard_arrow_down,
                   size: 16.sp,
                   color: MyColors.warning,
                 ),

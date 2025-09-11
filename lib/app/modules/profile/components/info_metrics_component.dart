@@ -75,7 +75,11 @@ class InfoMetricsComponent extends StatelessWidget {
                             color: const Color(0xFFFFED29),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Icon(Icons.camera_alt, size: 12, color: MyColors.black),
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 12,
+                            color: MyColors.black,
+                          ),
                         ),
                       ),
                     ],
@@ -89,17 +93,55 @@ class InfoMetricsComponent extends StatelessWidget {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${userData?.firstName ?? ''} ${userData?.lastName ?? ''}'
-                                    .trim()
-                                    .isEmpty
-                                ? 'User Name'
-                                : '${userData?.firstName ?? ''} ${userData?.lastName ?? ''}'
-                                      .trim(),
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.black,
-                              fontFamily: MyTexts.Roboto,
-                            ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // User name
+                              Text(
+                                '${userData?.firstName ?? ''} ${userData?.lastName ?? ''}'
+                                        .trim()
+                                        .isEmpty
+                                    ? 'User Name'
+                                    : '${userData?.firstName ?? ''} ${userData?.lastName ?? ''}'
+                                          .trim(),
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.black,
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ), // space between name and badge
+                              // Verified badge
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: MyColors.green,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset(
+                                      Asset.verified,
+                                      height: 14,
+                                      width: 14,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      "Verified",
+                                      style: MyTexts.regular14.copyWith(
+                                        color: MyColors.white,
+                                        fontFamily: MyTexts.Roboto,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 0.5.h),
                           Text(
@@ -112,10 +154,29 @@ class InfoMetricsComponent extends StatelessWidget {
                           ),
                           Text(
                             'GST Number: ${merchantProfile?.gstinNumber ?? ''}',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.fontBlack,
+                            style: MyTexts.regular14.copyWith(
+                              color: MyColors.primary,
                               fontFamily: MyTexts.Roboto,
                             ),
+                          ),
+
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                Asset.premium,
+                                height: 14,
+                                width: 14,
+                                color: MyColors.oldSilver,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                "Premium Partner",
+                                style: MyTexts.regular14.copyWith(
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       );
@@ -126,81 +187,211 @@ class InfoMetricsComponent extends StatelessWidget {
             ],
           ),
           SizedBox(height: 1.h),
-         // Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
+          // Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
           SizedBox(height: 1.h),
-          Text(
-            'Contact Details',
-            style: MyTexts.regular14.copyWith(
-              color: MyColors.black,
-              fontFamily: MyTexts.Roboto,
-            ),
-          ),
-          SizedBox(height: 1.h),
-          Obx(() {
-            final userData = controller.userData;
-            final merchantProfile = controller.merchantProfile;
-
-            return Column(
-              children: [
-                if (controller.currentAddress != null)
-                  _buildContactItem(Icons.location_on, controller.currentAddress!),
-                if (controller.currentAddress != null) SizedBox(height: 1.h),
-                if (userData?.mobileNumber != null)
-                  _buildContactItem(Icons.phone, userData!.mobileNumber!),
-                if (userData?.mobileNumber != null) SizedBox(height: 1.h),
-                if (userData?.email != null)
-                  _buildContactItem(Icons.email, userData?.email ?? ''),
-                if (userData?.email != null) SizedBox(height: 1.h),
-                if (merchantProfile?.businessEmail != null)
-                  _buildContactItem(Icons.email, merchantProfile?.businessEmail ?? ''),
-                if (merchantProfile?.businessEmail != null) SizedBox(height: 1.h),
-                if (controller.businessWebsite != null)
-                  _buildContactItem(Icons.language, controller.businessWebsite!),
-                if (controller.businessWebsite != null) SizedBox(height: 1.h),
-              ],
-            );
-          }),
-          SizedBox(height: 1.h),
-          Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
-          SizedBox(height: 1.h),
-          // Business Hours Section
-          Text(
-            'Business Hours',
-            style: MyTexts.regular14.copyWith(
-              color: MyColors.black,
-              fontFamily: MyTexts.Roboto,
-            ),
-          ),
-          SizedBox(height: 1.h),
-          Obx(() {
-            final businessHours = controller.businessHours;
-
-            if (businessHours.isEmpty) {
-              return Text(
-                'No business hours set',
-                style: MyTexts.regular14.copyWith(
-                  color: const Color(0xFF838383),
-                  fontFamily: MyTexts.Roboto,
-                ),
-              );
-            }
-
-            return Column(
-              children: businessHours.map((hours) {
-                final dayName = _getDayName(hours.dayOfWeek ?? 0);
-                final timeText = (hours.isOpen == true)
-                    ? '${hours.openTime} - ${hours.closeTime}'
-                    : 'Closed';
-
-                return Column(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// CONTACT DETAILS (LEFT SIDE)
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildBusinessHourItem(dayName, timeText),
-                    if (hours != businessHours.last) SizedBox(height: 0.5.h),
+                    Text(
+                      'Contact Details',
+                      style: MyTexts.regular14.copyWith(
+                        color: MyColors.black,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                    SizedBox(height: 1.h),
+                    Obx(() {
+                      final userData = controller.userData;
+                      final merchantProfile = controller.merchantProfile;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (controller.currentAddress != null)
+                            _buildContactItem(
+                              Icons.location_on,
+                              controller.currentAddress!,
+                            ),
+                          if (controller.currentAddress != null)
+                            SizedBox(height: 1.h),
+
+                          if (userData?.mobileNumber != null)
+                            _buildContactItem(
+                              Icons.phone,
+                              userData!.mobileNumber!,
+                            ),
+                          if (userData?.mobileNumber != null)
+                            SizedBox(height: 1.h),
+
+                          if (userData?.email != null)
+                            _buildContactItem(
+                              Icons.email,
+                              userData?.email ?? '',
+                            ),
+                          if (userData?.email != null) SizedBox(height: 1.h),
+
+                          if (merchantProfile?.businessEmail != null)
+                            _buildContactItem(
+                              Icons.email,
+                              merchantProfile?.businessEmail ?? '',
+                            ),
+                          if (merchantProfile?.businessEmail != null)
+                            SizedBox(height: 1.h),
+
+                          if (controller.businessWebsite != null)
+                            _buildContactItem(
+                              Icons.language,
+                              controller.businessWebsite!,
+                            ),
+                        ],
+                      );
+                    }),
                   ],
-                );
-              }).toList(),
-            );
-          }),
+                ),
+              ),
+
+              SizedBox(width: 4.w), // spacing between columns
+              /// BUSINESS HOURS (RIGHT SIDE)
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Business Hours',
+                      style: MyTexts.regular14.copyWith(
+                        color: MyColors.black,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                    SizedBox(height: 1.h),
+                    Obx(() {
+                      final businessHours = controller.businessHours;
+
+                      if (businessHours.isEmpty) {
+                        return Text(
+                          'No business hours set',
+                          style: MyTexts.regular14.copyWith(
+                            color: const Color(0xFF838383),
+                            fontFamily: MyTexts.Roboto,
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: businessHours.map((hours) {
+                          final dayName = _getDayName(hours.dayOfWeek ?? 0);
+                          final timeText = (hours.isOpen == true)
+                              ? '${hours.openTime} - ${hours.closeTime}'
+                              : 'Closed';
+
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 0.5.h),
+                            child: _buildBusinessHourItem(dayName, timeText),
+                          );
+                        }).toList(),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          // Text(
+          //   'Contact Details',
+          //   style: MyTexts.regular14.copyWith(
+          //     color: MyColors.black,
+          //     fontFamily: MyTexts.Roboto,
+          //   ),
+          // ),
+          // SizedBox(height: 1.h),
+          // Obx(() {
+          //   final userData = controller.userData;
+          //   final merchantProfile = controller.merchantProfile;
+
+          //   return Column(
+          //     children: [
+          //       if (controller.currentAddress != null)
+          //         _buildContactItem(
+          //           Icons.location_on,
+          //           controller.currentAddress!,
+          //         ),
+          //       if (controller.currentAddress != null) SizedBox(height: 1.h),
+          //       if (userData?.mobileNumber != null)
+          //         _buildContactItem(Icons.phone, userData!.mobileNumber!),
+          //       if (userData?.mobileNumber != null) SizedBox(height: 1.h),
+          //       if (userData?.email != null)
+          //         _buildContactItem(Icons.email, userData?.email ?? ''),
+          //       if (userData?.email != null) SizedBox(height: 1.h),
+          //       if (merchantProfile?.businessEmail != null)
+          //         _buildContactItem(
+          //           Icons.email,
+          //           merchantProfile?.businessEmail ?? '',
+          //         ),
+          //       if (merchantProfile?.businessEmail != null)
+          //         SizedBox(height: 1.h),
+          //       if (controller.businessWebsite != null)
+          //         _buildContactItem(
+          //           Icons.language,
+          //           controller.businessWebsite!,
+          //         ),
+          //       if (controller.businessWebsite != null) SizedBox(height: 1.h),
+          //     ],
+          //   );
+          // }),
+          // SizedBox(height: 1.h),
+          // Container(
+          //   width: double.infinity,
+          //   height: 1,
+          //   color: const Color(0xFFD9D9D9),
+          // ),
+          // SizedBox(height: 1.h),
+          // // Business Hours Section
+          // Text(
+          //   'Business Hours',
+          //   style: MyTexts.regular14.copyWith(
+          //     color: MyColors.black,
+          //     fontFamily: MyTexts.Roboto,
+          //   ),
+          // ),
+          // SizedBox(height: 1.h),
+          // Obx(() {
+          //   final businessHours = controller.businessHours;
+
+          //   if (businessHours.isEmpty) {
+          //     return Text(
+          //       'No business hours set',
+          //       style: MyTexts.regular14.copyWith(
+          //         color: const Color(0xFF838383),
+          //         fontFamily: MyTexts.Roboto,
+          //       ),
+          //     );
+          //   }
+
+          //   return Column(
+          //     children: businessHours.map((hours) {
+          //       final dayName = _getDayName(hours.dayOfWeek ?? 0);
+          //       final timeText = (hours.isOpen == true)
+          //           ? '${hours.openTime} - ${hours.closeTime}'
+          //           : 'Closed';
+
+          //       return Column(
+          //         children: [
+          //           _buildBusinessHourItem(dayName, timeText),
+          //           if (hours != businessHours.last) SizedBox(height: 0.5.h),
+          //         ],
+          //       );
+          //     }).toList(),
+          //   );
+          // }),
         ],
       ),
     );
@@ -283,16 +474,21 @@ class InfoMetricsComponent extends StatelessWidget {
                     'Years in Business',
                     '${merchantProfile!.yearsInBusiness}+',
                   ),
-                if (merchantProfile?.yearsInBusiness != null) SizedBox(height: 1.h),
+                if (merchantProfile?.yearsInBusiness != null)
+                  SizedBox(height: 1.h),
                 if (merchantProfile?.projectsCompleted != null)
                   _buildMetricItem(
                     'Projects Completed',
                     '${merchantProfile!.projectsCompleted}+',
                   ),
-                if (merchantProfile?.projectsCompleted != null) SizedBox(height: 1.h),
+                if (merchantProfile?.projectsCompleted != null)
+                  SizedBox(height: 1.h),
                 _buildMetricItem('Customer Rating', '4.9/5'), // Static for now
                 SizedBox(height: 1.h),
-                _buildMetricItem('Response Time', '< 2 hours'), // Static for now
+                _buildMetricItem(
+                  'Response Time',
+                  '< 2 hours',
+                ), // Static for now
               ],
             );
           }),
@@ -306,7 +502,7 @@ class InfoMetricsComponent extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: const Color(0xFFEEF8FF), // Light blue background
+        color: MyColors.backgroundColor, // Light blue background
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -315,14 +511,14 @@ class InfoMetricsComponent extends StatelessWidget {
           Text(
             label,
             style: MyTexts.regular14.copyWith(
-              color: const Color(0xFF505050),
+              color: MyColors.textGrey,
               fontFamily: MyTexts.Roboto,
             ),
           ),
           Text(
             value,
             style: MyTexts.medium14.copyWith(
-              color: MyColors.primary,
+              color: MyColors.textGrey,
               fontFamily: MyTexts.Roboto,
             ),
           ),

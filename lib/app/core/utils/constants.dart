@@ -38,6 +38,8 @@ class Asset {
   static const String businessLiIcon = 'assets/images/businessLi.svg';
   static const String qualityIcon = 'assets/images/quality.svg';
   static const String profil = 'assets/images/profil.png';
+  static const String verified = 'assets/images/verified.png';
+  static const String premium = 'assets/images/premium.png';
 
   // Edit
   static const String editIcon = 'assets/images/edit.svg';
@@ -82,6 +84,13 @@ class Asset {
   static const String Featured = 'assets/images/Featured.svg';
   static const String price = 'assets/images/price.png';
   static const String gst = 'assets/images/gst.png';
+
+
+//Add Role
+  static const String approvals = 'assets/images/approvals.png';
+  static const String management = 'assets/images/management.png';
+  static const String operations = 'assets/images/operations.png';
+
 
   //Product details
   static const String productDetails = 'assets/images/product_details.png';

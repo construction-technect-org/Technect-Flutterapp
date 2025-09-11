@@ -1,3 +1,4 @@
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/core/widgets/stepper_edit_profile_widget.dart';
@@ -503,31 +504,31 @@ class EditProfileView extends GetView<EditProfileController> {
               ),
             ),
 
-            /// Top-right action icons
-            Positioned(
-              right: 20,
-              top: 20,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                    },
-                    child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
-                  ),
-                  const SizedBox(width: 16),
-                  GestureDetector(
-                    onTap: () {
+            // /// Top-right action icons
+            // Positioned(
+            //   right: 20,
+            //   top: 20,
+            //   child: Row(
+            //     children: [
+            //       GestureDetector(
+            //         onTap: () {
+            //         },
+            //         child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
+            //       ),
+            //       const SizedBox(width: 16),
+            //       GestureDetector(
+            //         onTap: () {
                       
-                    },
-                    child: SvgPicture.asset(
-                      Asset.delete,
-                      width: 20,
-                      height: 20,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            //         },
+            //         child: SvgPicture.asset(
+            //           Asset.delete,
+            //           width: 20,
+            //           height: 20,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

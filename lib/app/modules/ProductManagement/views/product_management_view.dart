@@ -6,7 +6,9 @@ import 'package:construction_technect/app/modules/ProductManagement/controllers/
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
 
 class ProductManagementView extends StatelessWidget {
-  final ProductManagementController controller = Get.put(ProductManagementController());
+  final ProductManagementController controller = Get.put(
+    ProductManagementController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,10 @@ class ProductManagementView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 13,
+                  ),
                   child: Container(
                     decoration: BoxDecoration(
                       color: MyColors.white,
@@ -60,7 +65,9 @@ class ProductManagementView extends StatelessWidget {
                           minHeight: 36,
                         ),
                         hintText: 'Search',
-                        hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                        hintStyle: MyTexts.medium16.copyWith(
+                          color: MyColors.darkGray,
+                        ),
                         filled: true,
                         fillColor: MyColors.white,
                         contentPadding: const EdgeInsets.symmetric(
@@ -89,7 +96,9 @@ class ProductManagementView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
                     "Product Management",
-                    style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
+                    style: MyTexts.extraBold18.copyWith(
+                      color: MyColors.fontBlack,
+                    ),
                   ),
                 ),
                 SizedBox(height: 2.h),
@@ -189,9 +198,11 @@ class ProductManagementView extends StatelessWidget {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: controller.filteredProducts.length,
-                            separatorBuilder: (_, _) => const SizedBox(height: 12),
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: 12),
                             itemBuilder: (context, index) {
-                              final Product product = controller.filteredProducts[index];
+                              final Product product =
+                                  controller.filteredProducts[index];
                               return GestureDetector(
                                 onTap: () {
                                   Get.toNamed(
@@ -209,7 +220,9 @@ class ProductManagementView extends StatelessWidget {
                                   productName: product.productName ?? '',
                                   brandName: product.brand ?? '',
                                   locationText: 'Vasai Virar, Mahab Chowpatty',
-                                  pricePerUnit: double.parse(product.price ?? '0'),
+                                  pricePerUnit: double.parse(
+                                    product.price ?? '0',
+                                  ),
                                   stockCount: product.stockQuantity ?? 0,
                                   imageUrl: product.productImage,
                                 ),

@@ -8,25 +8,17 @@ import 'package:construction_technect/app/modules/home/services/HomeService.dart
 
 class HomeController extends GetxController {
   CommonController commonController = Get.find();
-  // final List<Map<String, String>> items = [
-  //   {"icon": Asset.marketplaceIcon, "label": "Marketplace"},
-  //   {"icon": Asset.erpIcon, "label": "ERP"},
-  //   {"icon": Asset.crmIcon, "label": "CRM"},
-  //   {"icon": Asset.ovpIcon, "label": "OVP"},
-  //   {"icon": Asset.hrmsIcon, "label": "HRMS"},
-  //   {"icon": Asset.projectManagementIcon, "label": "Project\nManagement"},
-  //   {"icon": Asset.portfolioManagementIcon, "label": "Portfolio\nManagement"},
-  // ];
+  
 
   final List<Map<String, dynamic>> items = [
     {"icon": Asset.marketplaceIcon, "title": "Marketplace"},
     {"icon": Asset.crmIcon, "title": "CRM"},
     {"icon": Asset.erpIcon, "title": "ERP"},
-    {"icon": Asset.projectManagementIcon, "title": "Portfolio\nManagement"},
+    {"icon": Asset.projectManagementIcon, "title": "Project Management"},
     {"icon": Asset.hrmsIcon, "title": "HRMS"},
     {"icon": Asset.portfolioManagementIcon, "title": "Portfolio\nManagement"},
     {"icon": Asset.ovpIcon, "title": "OVP"},
-    {"icon": Asset.constructionTaxi, "title": "Construction\nTaxi"},
+    {"icon": Asset.constructionTaxi, "title": "Construction Taxi"},
   ];
 
   RxInt selectedIndex = 0.obs;

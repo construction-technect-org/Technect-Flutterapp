@@ -134,7 +134,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                         widthFactor: progressValue,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: MyColors.warning,
+                            color: MyColors.green,
                             borderRadius: BorderRadius.circular(25),
                           ),
                         ),

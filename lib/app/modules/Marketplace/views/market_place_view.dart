@@ -282,7 +282,7 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                   verticalPadding: 0,
                   child: Center(
                     child: Text(
-                      '+ Add Certification',
+                      '+ Add New Product',
                       style: MyTexts.medium16.copyWith(color: MyColors.white),
                     ),
                   ),

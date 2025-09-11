@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -22,7 +23,12 @@ class SettingsView extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 2.h),
-            _buildMenuItem('Product Management', false),
+            _buildMenuItem('Product Management', false,
+             onTap: () {
+                Get.to(() =>  ProductManagementView());  
+
+              },
+            ),
             SizedBox(height: 1.h),
             _buildMenuItem('Approval Inbox', true),
             SizedBox(height: 1.h),
@@ -43,11 +49,7 @@ class SettingsView extends StatelessWidget {
                 Get.toNamed(Routes.PROFILE);
               },
             ),
-
-            // 🔹 Section Separator
-            SizedBox(height: 3.h),
-            Divider(color: Colors.grey.shade300, thickness: 1),
-            SizedBox(height: 2.h),
+            SizedBox(height: 1.h),
             _buildMenuItem(
               'Log Out',
               false,
