@@ -74,7 +74,8 @@ class CertificationsComponent extends StatelessWidget {
                     'Uploaded',
                     document,
                   ),
-                  if (index < validDocuments.length - 1) SizedBox(height: 1.7.h),
+                  if (index < validDocuments.length - 1)
+                    SizedBox(height: 1.7.h),
                 ],
               );
             }).toList(),
@@ -181,7 +182,11 @@ class CertificationsComponent extends StatelessWidget {
                       document.id ?? 0,
                       document.documentName ?? 'Document',
                     ),
-                    child: SvgPicture.asset(Asset.delete, width: 20, height: 20),
+                    child: SvgPicture.asset(
+                      Asset.delete,
+                      width: 20,
+                      height: 20,
+                    ),
                   ),
               ],
             ),
@@ -190,4 +195,6 @@ class CertificationsComponent extends StatelessWidget {
       ),
     );
   }
+
+
 }
