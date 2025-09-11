@@ -9,10 +9,12 @@ import 'package:construction_technect/app/modules/AddProduct/models/SubCategoryM
 import 'package:construction_technect/app/modules/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/ProductManagement/controllers/product_management_controller.dart';
+import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AddProductController extends GetxController {
   final pageController = PageController();
+  Product product = Product();
   ProductManagementController controller = Get.find();
   // ---------------- Form Controllers ----------------
   final productNameController = TextEditingController();
@@ -22,7 +24,6 @@ class AddProductController extends GetxController {
   final gstController = TextEditingController();
   final gstPriceController = TextEditingController();
   final termsController = TextEditingController();
-
   final packageSizeController = TextEditingController();
   final brandNameController = TextEditingController();
   final weightController = TextEditingController();
@@ -44,7 +45,7 @@ class AddProductController extends GetxController {
   // ---------------- DropDown Data ----------------
   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
   RxList<SubCategory> subCategories = <SubCategory>[].obs;
-  RxList<Product> productsList = <Product>[].obs;
+  RxList<CategoryProduct> productsList = <CategoryProduct>[].obs;
   RxList<FilterData> filters = <FilterData>[].obs;
 
   // Reactive name lists for dropdowns
@@ -79,9 +80,13 @@ class AddProductController extends GetxController {
     final args = Get.arguments;
     if (args != null) {
       isEdit = args['isEdit'] ?? false;
-      isEnabled.value = args["isEnabled"] ?? false;
+      product = args['product'] ?? Product();
     }
-    fetchMainCategories();
+    initCalled();
+  }
+
+  Future<void> initCalled() async {
+    await fetchMainCategories();
   }
 
   @override
@@ -112,7 +117,7 @@ class AddProductController extends GetxController {
     final selected = mainCategories.firstWhereOrNull((c) => c.name == categoryName);
     selectedMainCategoryId.value = '${selected?.id ?? 0}';
     if (selected != null) {
-      fetchSubCategories(selected.id);
+      fetchSubCategories(selected.id ?? 0);
     }
   }
 
@@ -133,8 +138,8 @@ class AddProductController extends GetxController {
     selectedSubCategoryId.value = '${selectedSub?.id ?? 0}';
 
     if (selectedSub != null) {
-      await fetchProducts(selectedSub.id);
-      await getFilter(selectedSub.id);
+      await fetchProducts(selectedSub.id ?? 0);
+      await getFilter(selectedSub.id ?? 0);
     }
   }
 
@@ -144,9 +149,15 @@ class AddProductController extends GetxController {
       isLoading(true);
       final result = await _service.productsBySubCategory(subCategoryId);
 
-      if (result.success) {
-        productsList.value = result.data;
-        productNames.value = result.data.map((e) => e.name).toList();
+      if ((result.success) == true) {
+        productsList.value = result.data ?? [];
+        productNames.value =
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
+            [];
         selectedProduct.value = null;
       } else {
         productsList.clear();
@@ -198,9 +209,15 @@ class AddProductController extends GetxController {
     try {
       isLoading(true);
       final result = await _service.mainCategory();
-      if (result.success) {
-        mainCategories.value = result.data;
-        mainCategoryNames.value = result.data.map((e) => e.name).toList();
+      if ((result.success) == true) {
+        mainCategories.value = result.data ?? [];
+        mainCategoryNames.value =
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
+            [];
       } else {
         mainCategories.clear();
         mainCategoryNames.clear();
@@ -217,9 +234,15 @@ class AddProductController extends GetxController {
     try {
       isLoading(true);
       final result = await _service.subCategory(mainCategoryId);
-      if (result.success) {
-        subCategories.value = result.data;
-        subCategoryNames.value = result.data.map((e) => e.name).toList();
+      if ((result.success) == true) {
+        subCategories.value = result.data ?? [];
+        subCategoryNames.value =
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
+            [];
       } else {
         subCategories.clear();
         subCategoryNames.clear();

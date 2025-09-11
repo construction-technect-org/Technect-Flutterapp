@@ -1,27 +1,15 @@
-// To parse this JSON data, do
-//
-//     final getFilterModel = getFilterModelFromJson(jsonString);
-
-import 'dart:convert';
-
-GetFilterModel getFilterModelFromJson(String str) => GetFilterModel.fromJson(json.decode(str));
-
-String getFilterModelToJson(GetFilterModel data) => json.encode(data.toJson());
-
 class GetFilterModel {
   final bool? success;
   final List<FilterData>? data;
   final String? message;
 
-  GetFilterModel({
-    this.success,
-    this.data,
-    this.message,
-  });
+  GetFilterModel({this.success, this.data, this.message});
 
   factory GetFilterModel.fromJson(Map<String, dynamic> json) => GetFilterModel(
     success: json["success"],
-    data: json["data"] == null ? [] : List<FilterData>.from(json["data"]!.map((x) => FilterData.fromJson(x))),
+    data: json["data"] == null
+        ? []
+        : List<FilterData>.from(json["data"]!.map((x) => FilterData.fromJson(x))),
     message: json["message"],
   );
 

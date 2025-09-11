@@ -1,57 +1,67 @@
 class ProductModel {
-  final bool success;
-  final List<Product> data;
-  final String message;
+  bool? success;
+  List<CategoryProduct>? data;
+  String? message;
 
-  ProductModel({
-    required this.success,
-    required this.data,
-    required this.message,
-  });
+  ProductModel({this.success, this.data, this.message});
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
-    return ProductModel(
-      success: json['success'] ?? false,
-      data: (json['data'] as List<dynamic>?)
-              ?.map((item) => Product.fromJson(item))
-              .toList() ??
-          [],
-      message: json['message'] ?? '',
-    );
-  }
+  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
+    success: json["success"],
+    data: json["data"] == null
+        ? []
+        : List<CategoryProduct>.from(
+            json["data"]!.map((x) => CategoryProduct.fromJson(x)),
+          ),
+    message: json["message"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success,
+    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "message": message,
+  };
 }
 
-class Product {
-  final int id;
-  final int subCategoryId;
-  final String name;
-  final bool isActive;
-  final int sortOrder;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final String subCategoryName;
+class CategoryProduct {
+  int? id;
+  int? subCategoryId;
+  String? name;
+  bool? isActive;
+  int? sortOrder;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? subCategoryName;
 
-  Product({
-    required this.id,
-    required this.subCategoryId,
-    required this.name,
-    required this.isActive,
-    required this.sortOrder,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.subCategoryName,
+  CategoryProduct({
+    this.id,
+    this.subCategoryId,
+    this.name,
+    this.isActive,
+    this.sortOrder,
+    this.createdAt,
+    this.updatedAt,
+    this.subCategoryName,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      id: json['id'],
-      subCategoryId: json['sub_category_id'],
-      name: json['name'] ?? '',
-      isActive: json['is_active'] ?? false,
-      sortOrder: json['sort_order'] ?? 0,
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      subCategoryName: json['sub_category_name'] ?? '',
-    );
-  }
+  factory CategoryProduct.fromJson(Map<String, dynamic> json) => CategoryProduct(
+    id: json["id"],
+    subCategoryId: json["sub_category_id"],
+    name: json["name"],
+    isActive: json["is_active"],
+    sortOrder: json["sort_order"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    subCategoryName: json["sub_category_name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "sub_category_id": subCategoryId,
+    "name": name,
+    "is_active": isActive,
+    "sort_order": sortOrder,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "sub_category_name": subCategoryName,
+  };
 }

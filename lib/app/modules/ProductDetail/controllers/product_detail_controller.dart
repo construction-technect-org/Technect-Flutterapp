@@ -1,22 +1,19 @@
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
-import 'package:construction_technect/app/routes/app_pages.dart';
-import 'package:get/get.dart';
+import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
 
 class ProductDetailsController extends GetxController {
-  Rx<Product> product = Product().obs;
-  // ignore: type_annotate_public_apis
-  var argument = Get.arguments;
+  Product product = Product();
+  ProfileModel profileData = ProfileModel.fromJson(myPref.getProfileData() ?? {});
 
   @override
   void onInit() {
-    if (argument != null) {
-      product.value = argument['product'];
-    }
+    final argument = Get.arguments as Map;
+    product = argument['product'] ?? Product();
     super.onInit();
   }
 
-  /// Function to navigate to edit product
   void onEditProduct() {
-    Get.toNamed(Routes.ADD_PRODUCT, arguments: {"isEdit": true});
+    Get.toNamed(Routes.ADD_PRODUCT, arguments: {"isEdit": true, 'product': product});
   }
 }
