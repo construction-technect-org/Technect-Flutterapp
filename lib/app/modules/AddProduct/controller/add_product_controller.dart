@@ -87,6 +87,7 @@ class AddProductController extends GetxController {
       await fetchSubCategories(product.mainCategoryId ?? 0);
       await fetchProducts(product.subCategoryId ?? 0);
       await getFilter(product.subCategoryId ?? 0);
+      _initializeEditMode();
     }
   }
 
