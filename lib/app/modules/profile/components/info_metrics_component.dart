@@ -112,8 +112,8 @@ class InfoMetricsComponent extends StatelessWidget {
                           ),
                           Text(
                             'GST Number: ${merchantProfile?.gstinNumber ?? ''}',
-                            style: MyTexts.regular14.copyWith(
-                              color: const Color(0xFF838383),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.fontBlack,
                               fontFamily: MyTexts.Roboto,
                             ),
                           ),
@@ -126,7 +126,7 @@ class InfoMetricsComponent extends StatelessWidget {
             ],
           ),
           SizedBox(height: 1.h),
-          Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
+         // Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
           SizedBox(height: 1.h),
           Text(
             'Contact Details',

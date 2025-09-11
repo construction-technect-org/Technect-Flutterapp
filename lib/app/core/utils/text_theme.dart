@@ -170,6 +170,7 @@ class MyTexts {
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
+  
 
   static TextStyle get extraBold20 => TextStyle(
     fontFamily: Lato,

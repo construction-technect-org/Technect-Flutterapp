@@ -28,7 +28,6 @@ class MyColors {
   static const Color profileFill = Color(0xFFFFB26E);
   static const Color profileRemaining = Color(0xFF2F4479);
   static const Color iconColor = Color(0xFF999999);
-  static const Color progressFill = Color(0xFFEB842A);
   static const Color progressRemaining = Color(0xFFD9D9D9);
   static const Color metricBackground = Color(0xFFEFEFEF);
   static const Color textGrey = Color(0xFF505050);
@@ -68,6 +67,8 @@ class MyColors {
   static const Color brightGray = Color(0xFFEEEEEE);
   static const Color yellow = Color(0xFFFFED29);
   static const Color ghostWhite = Color(0xFFF7FAFF);
+  static const Color brightGray1 = Color(0xFFE9E9E9);
+
 
 
 

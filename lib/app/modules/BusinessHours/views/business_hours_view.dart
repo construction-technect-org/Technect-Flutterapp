@@ -37,7 +37,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                       child: const Icon(
                         Icons.access_time,
                         color: MyColors.warning,
-                        size: 46,
+                        size: 30,
                       ),
                     ),
                     SizedBox(width: 2.h, height: 10.h),
@@ -46,21 +46,22 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                       children: [
                         Text(
                           "BUSINESS HOURS",
-                          style: MyTexts.light22.copyWith(
+                          style: MyTexts.bold20.copyWith(
                             color: MyColors.textFieldBackground,
                           ),
                         ),
-                        SizedBox(height: 1.h),
                         Text(
                           "Update your Working Hours",
-                          style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.greyDetails,
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
 
-                SizedBox(height: 2.h),
+                SizedBox(height: 3.h),
 
                 // Enable toggle
                 Row(
@@ -73,10 +74,12 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                           "Enable",
                           style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
                         ),
-                        SizedBox(height: 0.5.h),
+                        SizedBox(height: 1.h),
                         Text(
                           "Quickly Enable or Disable business hours",
-                          style: MyTexts.bold14.copyWith(color: MyColors.graniteGray),
+                          style: MyTexts.regular14.copyWith(
+                            color: MyColors.graniteGray,
+                          ),
                         ),
                       ],
                     ),
@@ -90,7 +93,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                     ),
                   ],
                 ),
-                Divider(height: 2.h),
+                SizedBox(height: 1.h),
+                Divider(height: 2.h, color: MyColors.brightGray1),
                 SizedBox(height: 1.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,37 +106,58 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                           "Timezone",
                           style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
                         ),
+                        SizedBox(height: 0.7.h),
                         Text(
                           "Set your timezone",
-                          style: MyTexts.bold14.copyWith(color: MyColors.graniteGray),
+                          style: MyTexts.regular14.copyWith(
+                            color: MyColors.graniteGray,
+                          ),
                         ),
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                      height: 6.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: MyColors.textFieldBorder),
+                        border: Border.all(
+                          color: Colors.grey.shade400,
+                          width: 1.5,
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "(UTC-8:00) Pacific Time",
-                            style: MyTexts.bold14.copyWith(color: MyColors.fontBlack),
-                          ),
-                          Image.asset(
-                            Asset.updownIcon,
-                            width: 14,
-                            height: 14,
-                            color: MyColors.fontBlack,
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(9),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "(UTC-8:00) Pacific Time",
+                              style: MyTexts.bold16.copyWith(
+                                color: MyColors.fontBlack,
+                              ),
+                            ),
+                            SizedBox(width: 5.w),
+                            const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.keyboard_arrow_up,
+                                  size: 10,
+                                  color: Colors.black,
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 10,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const Divider(height: 40),
+                Divider(height: 4.h, color: MyColors.brightGray1),
                 // Days List
                 Obx(() {
                   if (!controller.isEnabled.value) {
@@ -152,7 +177,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                   controller.daysEnabled[day]!.value = val;
                                 },
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 2.w),
                               Expanded(
                                 child: Text(
                                   day,
@@ -162,9 +187,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                 ),
                               ),
                               if (enabled) ...[
-                                // From/To fields
+                                
                                 SizedBox(
-                                  width: 95,
+                                  width: 90,
                                   height: 40,
                                   child: TextField(
                                     controller: controller.fromControllers[day],
@@ -175,15 +200,53 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                     ],
                                     decoration: InputDecoration(
                                       hintText: "From",
-                                      helperStyle: MyTexts.bold14.copyWith(
+                                      hintStyle: MyTexts.bold14.copyWith(
                                         color: MyColors.fontBlack,
                                       ),
-                                      contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 8,
-                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 8,
+                                          ),
+
+                                      // ✅ Default border
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
+                                      ),
+
+                                      // ✅ When enabled
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
+                                      ),
+
+                                      // ✅ When focused (clicked)
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
+                                      ),
+
+                                      // ✅ When error
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
+                                      ),
+
+                                      // ✅ When focused + error
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
                                       ),
                                     ),
                                     onChanged: (value) {
@@ -191,9 +254,11 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                     },
                                   ),
                                 ),
+
                                 const SizedBox(width: 10),
-                                SizedBox(
-                                  width: 95,
+                               
+                              SizedBox(
+                                  width: 90,
                                   height: 40,
                                   child: TextField(
                                     controller: controller.toControllers[day],
@@ -203,28 +268,73 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                       LengthLimitingTextInputFormatter(2),
                                     ],
                                     decoration: InputDecoration(
-                                      hintText: "To",
-                                      helperStyle: MyTexts.bold14.copyWith(
+                                      hintText: "From",
+                                      hintStyle: MyTexts.bold14.copyWith(
                                         color: MyColors.fontBlack,
                                       ),
-                                      contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 8,
-                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 8,
+                                          ),
+
+                                      // ✅ Default border
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
+                                      ),
+
+                                      // ✅ When enabled
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
+                                      ),
+
+                                      // ✅ When focused (clicked)
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
+                                      ),
+
+                                      // ✅ When error
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
+                                      ),
+
+                                      // ✅ When focused + error
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: MyColors.textFieldBorder,
+                                        ),
                                       ),
                                     ),
-                                    onChanged: (value) {
-                                      controller.validateTimeInput(value, day, 'to');
+                                     onChanged: (value) {
+                                      controller.validateTimeInput(
+                                        value,
+                                        day,
+                                        'to',
+                                      );
                                     },
                                   ),
                                 ),
+
+                               
+                             
                               ] else ...[
                                 // Closed UI
                                 Container(
-                                  width: 198,
-                                  height: 37,
+                                  width: 190,
+                                  height: 38,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: MyColors.textFieldBorder),
@@ -239,7 +349,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           width: 12,
                                           height: 12,
                                         ),
-                                        const SizedBox(width: 6),
+                                         SizedBox(width: 2.w),
                                         Text(
                                           "Closed",
                                           style: MyTexts.bold14.copyWith(

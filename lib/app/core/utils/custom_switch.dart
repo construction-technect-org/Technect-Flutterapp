@@ -17,7 +17,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
       onTap: () => widget.onChanged(!widget.value),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        width: 55,
+        width: 54,
         height: 30,
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(

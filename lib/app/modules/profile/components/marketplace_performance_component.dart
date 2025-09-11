@@ -134,7 +134,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                         widthFactor: progressValue,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: MyColors.progressFill,
+                            color: MyColors.warning,
                             borderRadius: BorderRadius.circular(25),
                           ),
                         ),
@@ -162,7 +162,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                       () => _buildPerformanceMetricItem(
                         'Marketplace Tier',
                         controller.merchantProfile?.marketplaceTier ?? 'No Tier',
-                        MyColors.progressFill,
+                        MyColors.warning,
                       ),
                     ),
                   ),
