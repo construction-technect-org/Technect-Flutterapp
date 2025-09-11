@@ -154,35 +154,68 @@ class ProductManagementView extends StatelessWidget {
                 Obx(
                   () => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.productList.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final Product product = controller.productList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.toNamed(
-                              Routes.PRODUCT_DETAILS,
-                              arguments: {"product": product},
-                            );
-                          },
-                          child: ProductCard(
-                            statusText: (product.isActive ?? false)
-                                ? 'Active'
-                                : 'InActive',
-                            statusColor: const Color(0xFF10B981),
-                            productName: product.productName ?? '',
-                            brandName: product.brand ?? '',
-                            locationText: 'Vasai Virar, Mahab Chowpatty',
-                            pricePerUnit: double.parse(product.price ?? '0'),
-                            stockCount: product.stockQuantity ?? 0,
-                            imageUrl: product.productImage,
+                    child:
+                        controller.filteredProducts.isEmpty &&
+                            controller.searchQuery.value.isNotEmpty
+                        ? Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4.h),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.search_off,
+                                    size: 64,
+                                    color: MyColors.grey,
+                                  ),
+                                  SizedBox(height: 2.h),
+                                  Text(
+                                    'No products found',
+                                    style: MyTexts.medium18.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
+                                  ),
+                                  SizedBox(height: 0.5.h),
+                                  Text(
+                                    'Try searching with different keywords',
+                                    style: MyTexts.regular14.copyWith(
+                                      color: MyColors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: controller.filteredProducts.length,
+                            separatorBuilder: (_, _) => const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              final Product product = controller.filteredProducts[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(
+                                    Routes.PRODUCT_DETAILS,
+                                    arguments: {"product": product},
+                                  );
+                                },
+                                child: ProductCard(
+                                  statusText: (product.isActive ?? false)
+                                      ? 'Active'
+                                      : 'InActive',
+                                  statusColor: (product.isActive ?? false)
+                                      ? MyColors.green
+                                      : MyColors.red,
+                                  productName: product.productName ?? '',
+                                  brandName: product.brand ?? '',
+                                  locationText: 'Vasai Virar, Mahab Chowpatty',
+                                  pricePerUnit: double.parse(product.price ?? '0'),
+                                  stockCount: product.stockQuantity ?? 0,
+                                  imageUrl: product.productImage,
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
                 ),
                 SizedBox(height: 2.h),

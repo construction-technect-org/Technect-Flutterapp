@@ -74,7 +74,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// Title + Edit
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -86,17 +85,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         onPressed: controller.onEditProduct,
                         icon: SvgPicture.asset(
                           Asset.editIcon,
-                          width: 12,
-                          height: 12,
-                          // ignore: deprecated_member_use
+                          width: 16,
+                          height: 16,
                           color: MyColors.primary,
                         ),
                         label: Text(
                           "Edit",
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.primary,
-                            decoration: TextDecoration.underline,
-                          ),
+                          style: MyTexts.regular16.copyWith(color: MyColors.primary),
                         ),
                       ),
                     ],
@@ -288,7 +283,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 0.8.h),
+                  SizedBox(height: 2.h),
                 ],
               ),
             ),

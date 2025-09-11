@@ -11,7 +11,9 @@ class AddProductService {
   // MainCategory
   Future<MainCategoryModel> mainCategory() async {
     try {
-      final response = await apiManager.get(url: APIConstants.getMainCategories);
+      final response = await apiManager.get(
+        url: APIConstants.getMainCategories,
+      );
       return MainCategoryModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in sendOtp: $e , $st');
@@ -65,7 +67,24 @@ class AddProductService {
       );
       return CreateProductModel.fromJson(response);
     } catch (e, st) {
-      throw Exception('Error in signup: $e , $st');
+      throw Exception('Error in createProduct: $e , $st');
+    }
+  }
+
+  Future<CreateProductModel> updateProduct({
+    required int productId,
+    required Map<String, dynamic> fields,
+    Map<String, String>? files,
+  }) async {
+    try {
+      final response = await apiManager.putMultipart(
+        url: "${APIConstants.updateProduct}$productId",
+        fields: fields,
+        files: files,
+      );
+      return CreateProductModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in updateProduct: $e , $st');
     }
   }
 }

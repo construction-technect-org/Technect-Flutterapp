@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 class ProductManagementController extends GetxController {
   RxBool isLoading = false.obs;
   Rx<ProductListModel> productModel = ProductListModel().obs;
-  RxList<Product> productList = <Product>[].obs;
+  RxList<Product> filteredProducts = <Product>[].obs;
+  RxString searchQuery = ''.obs;
 
   @override
   void onInit() {
@@ -16,12 +17,13 @@ class ProductManagementController extends GetxController {
   final ProductManagementService _service = ProductManagementService();
 
   void searchProduct(String value) {
+    searchQuery.value = value;
     if (value.isEmpty) {
-      productList.clear();
-      productList.addAll(productModel.value.data?.products ?? []);
+      filteredProducts.clear();
+      filteredProducts.addAll(productModel.value.data?.products ?? []);
     } else {
-      productList.clear();
-      productList.value = (productModel.value.data?.products ?? []).where((product) {
+      filteredProducts.clear();
+      filteredProducts.value = (productModel.value.data?.products ?? []).where((product) {
         return (product.productName ?? '').toLowerCase().contains(value.toLowerCase()) ||
             (product.brand ?? '').toLowerCase().contains(value.toLowerCase());
       }).toList();
@@ -31,11 +33,9 @@ class ProductManagementController extends GetxController {
   Future<void> fetchProducts() async {
     try {
       isLoading(true);
-      final result = await _service.getProductList();
-      if (result.success == true) {
-        productModel.value = result;
-        productList.addAll(productModel.value.data?.products ?? []);
-      }
+      productModel.value = await _service.getProductList();
+      filteredProducts.clear();
+      filteredProducts.addAll(productModel.value.data?.products ?? []);
     } catch (e) {
       isLoading(false);
     } finally {

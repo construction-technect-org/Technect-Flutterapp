@@ -32,15 +32,6 @@ class AddProductController extends GetxController {
   final sizeController = TextEditingController();
   final colorController = TextEditingController();
   final packageTypeController = TextEditingController();
-  final grainSizeController = TextEditingController();
-  final finenessModulusController = TextEditingController();
-  final siltContentController = TextEditingController();
-  final clayDustContentController = TextEditingController();
-  final moistureContentController = TextEditingController();
-  final specificGravityController = TextEditingController();
-  final bulkDensityController = TextEditingController();
-  final waterAbsorptionController = TextEditingController();
-  final zoneController = TextEditingController();
 
   // ---------------- DropDown Data ----------------
   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
@@ -81,13 +72,62 @@ class AddProductController extends GetxController {
     if (args != null) {
       isEdit = args['isEdit'] ?? false;
       product = args['product'] ?? Product();
+      if (isEdit) {
+        _initializeEditMode();
+      }
     }
     initCalled();
   }
 
   Future<void> initCalled() async {
     await fetchMainCategories();
+
+    // If in edit mode, load sub-categories and filters for the existing product
+    if (isEdit && product.subCategoryId != null) {
+      await fetchSubCategories(product.mainCategoryId ?? 0);
+      await fetchProducts(product.subCategoryId ?? 0);
+      await getFilter(product.subCategoryId ?? 0);
+    }
   }
+
+  void _initializeEditMode() {
+    productNameController.text = product.productName ?? '';
+    stockController.text = product.stockQuantity?.toString() ?? '';
+    priceController.text = product.price ?? '';
+    gstController.text = product.gstPercentage ?? '';
+    gstPriceController.text = product.gstAmount ?? '';
+    termsController.text = product.termsAndConditions ?? '';
+    packageSizeController.text = product.packageSize ?? '';
+    brandNameController.text = product.brand ?? '';
+    weightController.text = product.weight ?? '';
+    shapeController.text = product.shape ?? '';
+    textureController.text = product.texture ?? '';
+    sizeController.text = product.size ?? '';
+    colorController.text = product.colour ?? '';
+    packageTypeController.text = product.packageType ?? '';
+
+    selectedUom.value = product.uom ?? '';
+    isEnabled.value = product.isActive ?? true;
+
+    selectedMainCategory.value = product.mainCategoryName ?? '';
+    selectedSubCategory.value = product.subCategoryName ?? '';
+    selectedProduct.value = product.categoryProductName ?? '';
+
+    selectedMainCategoryId.value = (product.mainCategoryId ?? 0).toString();
+    selectedSubCategoryId.value = (product.subCategoryId ?? 0).toString();
+    selectedProductId.value = (product.categoryProductId ?? 0).toString();
+
+    // Set existing product image for display
+    if (product.productImage != null && product.productImage!.isNotEmpty) {
+      pickedFilePath.value = "${APIConstants.bucketUrl}${product.productImage!}";
+      pickedFileName.value = "Current product image";
+    }
+
+    // Store filter values for later use after filters are loaded
+    _storedFilterValues = product.filterValues;
+  }
+
+  String? _storedFilterValues;
 
   @override
   void onClose() {
@@ -185,16 +225,37 @@ class AddProductController extends GetxController {
         for (final FilterData filter in filters) {
           dynamicControllers[filter.filterName ?? ''] = TextEditingController();
         }
+
+        // Populate filter values if in edit mode
+        if (isEdit && _storedFilterValues != null && _storedFilterValues!.isNotEmpty) {
+          _populateFilterControllers();
+        }
       } else {
         filters.clear();
       }
       isLoading(false);
     } catch (e) {
       isLoading(false);
-
       filters.clear();
     } finally {
       isLoading(false);
+    }
+  }
+
+  void _populateFilterControllers() {
+    if (_storedFilterValues == null || _storedFilterValues!.isEmpty) return;
+
+    try {
+      final Map<String, dynamic> filterValues = jsonDecode(_storedFilterValues!);
+
+      // Populate each dynamic controller with its corresponding value
+      filterValues.forEach((key, value) {
+        if (dynamicControllers.containsKey(key)) {
+          dynamicControllers[key]!.text = value.toString();
+        }
+      });
+    } catch (e) {
+      print('Error parsing stored filter values: $e');
     }
   }
 
@@ -346,7 +407,11 @@ class AddProductController extends GetxController {
     } else if (weightController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Weight is required');
     } else {
-      createProduct();
+      if (isEdit) {
+        updateProduct();
+      } else {
+        createProduct();
+      }
     }
   }
 
@@ -410,6 +475,74 @@ class AddProductController extends GetxController {
       }
     } catch (e) {
       isLoading.value = false;
+    }
+  }
+
+  /// Update existing product
+  Future<void> updateProduct() async {
+    isLoading.value = true;
+    Map<String, dynamic> fields = {};
+
+    final Map<String, String> selectedFiles = {};
+    final String existingImageUrl =
+        "${APIConstants.bucketUrl}${product.productImage ?? ''}";
+
+    if (pickedFilePath.value.isNotEmpty &&
+        pickedFilePath.value != existingImageUrl &&
+        !pickedFilePath.value.contains('http')) {
+      selectedFiles["product_image"] = pickedFilePath.value;
+    }
+
+    final Map<String, String> payload = {};
+    dynamicControllers.forEach((key, controller) {
+      if (controller.text.isNotEmpty) {
+        payload[key] = controller.text;
+      }
+    });
+
+    fields = {
+      "product_name": productNameController.text,
+      "price": priceController.text,
+      "gst_percentage": gstController.text,
+      "terms_and_conditions": termsController.text,
+      "stock_quantity": stockController.text,
+      "brand": brandNameController.text,
+      "uom": selectedUom.value,
+      "package_type": packageTypeController.text,
+      "package_size": packageSizeController.text,
+      "shape": shapeController.text,
+      "texture": textureController.text,
+      "colour": colorController.text,
+      "size": sizeController.text,
+      "weight": weightController.text,
+      "is_active": isEnabled.value.toString(),
+      "is_featured": "false",
+      "sort_order": "1",
+      "low_stock_threshold": "10",
+      "filter_values": json.encode(payload),
+    };
+
+    try {
+      final updateResponse = await _service.updateProduct(
+        productId: product.id!,
+        fields: fields,
+        files: selectedFiles.isNotEmpty ? selectedFiles : null,
+      );
+
+      if (updateResponse.success == true) {
+        await controller.fetchProducts();
+        isLoading.value = false;
+        Get.back();
+        Get.back();
+      } else {
+        isLoading.value = false;
+        SnackBars.errorSnackBar(
+          content: updateResponse.message ?? 'Something went wrong!!',
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
+      SnackBars.errorSnackBar(content: 'Error updating product: $e');
     }
   }
 }

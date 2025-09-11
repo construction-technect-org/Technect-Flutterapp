@@ -11,7 +11,7 @@ class CommonDropdown<T> extends StatelessWidget {
   final Widget? prefix;
   final Widget? suffix;
   final ValueChanged<T?>? onChanged; // 🔹 added callback
-
+  final bool enabled; // 🔹 added enabled parameter
 
   const CommonDropdown({
     required this.hintText,
@@ -21,7 +21,7 @@ class CommonDropdown<T> extends StatelessWidget {
     this.prefix,
     this.suffix,
     this.onChanged, // 🔹 added
-
+    this.enabled = true, // 🔹 default to enabled
   });
 
   @override
@@ -29,24 +29,37 @@ class CommonDropdown<T> extends StatelessWidget {
     return Obx(() {
       return Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: enabled ? Colors.white : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFA0A0A0)), // same as text field
+          border: Border.all(
+            color: enabled ? const Color(0xFFA0A0A0) : Colors.grey.shade300,
+          ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<T>(
-            value: items.contains(selectedValue.value) ? selectedValue.value : null,
+            value: items.contains(selectedValue.value)
+                ? selectedValue.value
+                : null,
             isExpanded: true,
             hint: Text(
               hintText,
-              style: hintText != null
-                  ? MyTexts.medium16.copyWith(color: MyColors.grey)
-                  : null,
+              style: MyTexts.medium16.copyWith(
+                color: enabled ? MyColors.grey : Colors.grey.shade400,
+              ),
             ),
-            icon:
-                suffix ??
-                const Icon(Icons.keyboard_arrow_down, size: 28, color: Colors.black),
+            icon: enabled
+                ? (suffix ??
+                      const Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 28,
+                        color: Colors.black,
+                      ))
+                : const Icon(
+                    Icons.keyboard_arrow_down,
+                    size: 28,
+                    color: Colors.grey,
+                  ),
             items: items.map((T item) {
               return DropdownMenuItem<T>(
                 value: item,
@@ -54,21 +67,22 @@ class CommonDropdown<T> extends StatelessWidget {
                   itemLabel(item),
                   style: MyTexts.extraBold16.copyWith(
                     height: 36 / 16,
-                    color: MyColors.primary,
+                    color: enabled ? MyColors.primary : Colors.grey.shade400,
                   ),
                 ),
               );
             }).toList(),
-             onChanged: (T? newValue) {
-              selectedValue.value = newValue;
-              if (onChanged != null) {
-                onChanged!(newValue); // 🔹 fire callback
-              }
-            },
-            // Match same padding as CustomTextField
+            onChanged: enabled
+                ? (T? newValue) {
+                    selectedValue.value = newValue;
+                    if (onChanged != null) {
+                      onChanged!(newValue);
+                    }
+                  }
+                : null,
             dropdownColor: MyColors.white,
           ),
-        ), // SAME as TextField
+        ),
       );
     });
   }

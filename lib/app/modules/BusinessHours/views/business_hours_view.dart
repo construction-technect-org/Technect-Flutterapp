@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:construction_technect/app/core/utils/custom_switch.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/BusinessHours/controller/business_hours_controller.dart';
@@ -54,9 +53,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                         SizedBox(height: 1.h),
                         Text(
                           "Update your Working Hours",
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.greyDetails,
-                          ),
+                          style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
                         ),
                       ],
                     ),
@@ -74,16 +71,12 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                       children: [
                         Text(
                           "Enable",
-                          style: MyTexts.bold16.copyWith(
-                            color: MyColors.fontBlack,
-                          ),
+                          style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
                         ),
                         SizedBox(height: 0.5.h),
                         Text(
                           "Quickly Enable or Disable business hours",
-                          style: MyTexts.bold14.copyWith(
-                            color: MyColors.graniteGray,
-                          ),
+                          style: MyTexts.bold14.copyWith(color: MyColors.graniteGray),
                         ),
                       ],
                     ),
@@ -107,23 +100,16 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                       children: [
                         Text(
                           "Timezone",
-                          style: MyTexts.bold16.copyWith(
-                            color: MyColors.fontBlack,
-                          ),
+                          style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
                         ),
                         Text(
                           "Set your timezone",
-                          style: MyTexts.bold14.copyWith(
-                            color: MyColors.graniteGray,
-                          ),
+                          style: MyTexts.bold14.copyWith(color: MyColors.graniteGray),
                         ),
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 12,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: MyColors.textFieldBorder),
@@ -133,9 +119,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                         children: [
                           Text(
                             "(UTC-8:00) Pacific Time",
-                            style: MyTexts.bold14.copyWith(
-                              color: MyColors.fontBlack,
-                            ),
+                            style: MyTexts.bold14.copyWith(color: MyColors.fontBlack),
                           ),
                           Image.asset(
                             Asset.updownIcon,
@@ -159,8 +143,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 18),
                         child: Obx(() {
-                          final bool enabled =
-                              controller.daysEnabled[day]!.value;
+                          final bool enabled = controller.daysEnabled[day]!.value;
                           return Row(
                             children: [
                               CustomSwitch(
@@ -195,21 +178,16 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                       helperStyle: MyTexts.bold14.copyWith(
                                         color: MyColors.fontBlack,
                                       ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 8,
-                                          ),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 8,
+                                      ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
                                     onChanged: (value) {
-                                      controller.validateTimeInput(
-                                        value,
-                                        day,
-                                        'from',
-                                      );
+                                      controller.validateTimeInput(value, day, 'from');
                                     },
                                   ),
                                 ),
@@ -229,21 +207,16 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                       helperStyle: MyTexts.bold14.copyWith(
                                         color: MyColors.fontBlack,
                                       ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 8,
-                                          ),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 8,
+                                      ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
                                     onChanged: (value) {
-                                      controller.validateTimeInput(
-                                        value,
-                                        day,
-                                        'to',
-                                      );
+                                      controller.validateTimeInput(value, day, 'to');
                                     },
                                   ),
                                 ),
@@ -254,9 +227,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                   height: 37,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: MyColors.textFieldBorder,
-                                    ),
+                                    border: Border.all(color: MyColors.textFieldBorder),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Padding(

@@ -57,10 +57,14 @@ class ProductCard extends StatelessWidget {
                             height: 57,
                             decoration: const BoxDecoration(
                               color: MyColors.grey1,
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                             ),
                             child: const Center(
-                              child: CupertinoActivityIndicator(color: MyColors.primary),
+                              child: CupertinoActivityIndicator(
+                                color: MyColors.primary,
+                              ),
                             ),
                           ),
                           errorWidget: (context, url, error) => Image.asset(
@@ -88,7 +92,9 @@ class ProductCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               productName,
-                              style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
+                              style: MyTexts.bold18.copyWith(
+                                color: MyColors.fontBlack,
+                              ),
                             ),
                           ),
                           Container(
@@ -97,7 +103,9 @@ class ProductCard extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: MyColors.paleGreen,
+                              color: statusColor == MyColors.green
+                                  ? MyColors.paleGreen
+                                  : MyColors.paleRed,
                               borderRadius: BorderRadius.circular(25),
                             ),
                             child: Row(
@@ -105,7 +113,7 @@ class ProductCard extends StatelessWidget {
                                 Text(
                                   statusText,
                                   style: MyTexts.regular14.copyWith(
-                                    color: MyColors.green,
+                                    color: statusColor,
                                   ),
                                 ),
                               ],
@@ -119,11 +127,15 @@ class ProductCard extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: 'Brand: ',
-                              style: MyTexts.regular16.copyWith(color: MyColors.primary),
+                              style: MyTexts.regular16.copyWith(
+                                color: MyColors.primary,
+                              ),
                             ),
                             TextSpan(
                               text: brandName,
-                              style: MyTexts.regular16.copyWith(color: MyColors.primary),
+                              style: MyTexts.regular16.copyWith(
+                                color: MyColors.primary,
+                              ),
                             ),
                           ],
                         ),
@@ -136,7 +148,11 @@ class ProductCard extends StatelessWidget {
             SizedBox(height: 1.h),
             Row(
               children: [
-                const Icon(Icons.place_outlined, size: 16, color: Color(0xFF6B7280)),
+                const Icon(
+                  Icons.place_outlined,
+                  size: 16,
+                  color: Color(0xFF6B7280),
+                ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
@@ -160,7 +176,9 @@ class ProductCard extends StatelessWidget {
                   ),
                   TextSpan(
                     text: '45',
-                    style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
+                    style: MyTexts.regular14.copyWith(
+                      color: MyColors.fontBlack,
+                    ),
                   ),
                 ],
               ),
@@ -174,7 +192,11 @@ class ProductCard extends StatelessWidget {
                   style: MyTexts.regular14.copyWith(color: MyColors.warning),
                 ),
                 SizedBox(width: 0.2.h),
-                Icon(Icons.keyboard_arrow_right, size: 16.sp, color: MyColors.warning),
+                Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 16.sp,
+                  color: MyColors.warning,
+                ),
               ],
             ),
           ],

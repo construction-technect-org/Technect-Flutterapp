@@ -1,10 +1,7 @@
-
 class AppException implements Exception {
-  // ignore: prefer_typing_uninitialized_variables
-  final _message;
+  final String? _message;
 
-  // ignore: prefer_typing_uninitialized_variables
-  final _prefix;
+  final String? _prefix;
 
   AppException([this._message, this._prefix]);
 
@@ -15,8 +12,7 @@ class AppException implements Exception {
 }
 
 class FetchDataException extends AppException {
-  FetchDataException([String? message])
-      : super(message, "Error During Communication: ");
+  FetchDataException([String? message]) : super(message, "Error During Communication: ");
 }
 
 class BadRequestException extends AppException {

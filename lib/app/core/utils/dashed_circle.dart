@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class DashedCircle extends StatelessWidget {
@@ -18,7 +19,7 @@ class DashedCircle extends StatelessWidget {
     this.strokeWidth = 1.5,
     this.dashLength = 6,
     this.dashGap = 4,
-    this.file ,
+    this.file,
     required this.assetImage,
   });
 
@@ -38,11 +39,33 @@ class DashedCircle extends StatelessWidget {
           ),
         ),
         // Rounded image from assets inside
-        if (file!=null&&file!.isNotEmpty) ClipOval(
-          child: file!.contains('http')?Image.network(file??'', width: 67, height: 67, fit: BoxFit.cover):Image.file(File(file??''), width: 67, height: 67, fit: BoxFit.cover),
-        ) else ClipOval(
-          child: Image.asset(assetImage, width: 67, height: 67, fit: BoxFit.cover),
-        ),
+        if (file != null && file!.isNotEmpty)
+          ClipOval(
+            child: file!.contains('http')
+                ? CachedNetworkImage(
+                    imageUrl: file!,
+                    width: 67,
+                    height: 67,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      width: 67,
+                      height: 67,
+                      color: Colors.grey.shade200,
+                      child: const Icon(Icons.image, color: Colors.grey),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      width: 67,
+                      height: 67,
+                      color: Colors.grey.shade200,
+                      child: const Icon(Icons.broken_image, color: Colors.grey),
+                    ),
+                  )
+                : Image.file(File(file!), width: 67, height: 67, fit: BoxFit.cover),
+          )
+        else
+          ClipOval(
+            child: Image.asset(assetImage, width: 67, height: 67, fit: BoxFit.cover),
+          ),
       ],
     );
   }

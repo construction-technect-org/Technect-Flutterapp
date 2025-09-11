@@ -176,7 +176,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                     padding: EdgeInsets.symmetric(horizontal: 4.w),
                     scrollDirection: Axis.horizontal,
                     itemCount: controller.roles.length,
-                    separatorBuilder: (_, __) => SizedBox(width: 4.w),
+                    separatorBuilder: (_, _) => SizedBox(width: 4.w),
                     itemBuilder: (context, index) {
                       final role = controller.roles[index];
                       return GestureDetector(

@@ -1,7 +1,3 @@
-
-
-
-import 'package:get/get.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class MarketPlaceController extends GetxController {
