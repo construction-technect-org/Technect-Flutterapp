@@ -63,9 +63,7 @@ class SignUpPasswordController extends GetxController {
       } else if (password.value != confirmPassword.value) {
         SnackBars.errorSnackBar(content: 'Passwords do not match');
       } else if (password.value.length < 8) {
-        SnackBars.errorSnackBar(
-          content: 'Password must be at least 8 characters long',
-        );
+        SnackBars.errorSnackBar(content: 'Password must be at least 8 characters long');
       }
       return;
     }
@@ -75,9 +73,7 @@ class SignUpPasswordController extends GetxController {
     try {
       // Check if user data is available
       if (userData == null) {
-        SnackBars.errorSnackBar(
-          content: 'User data not found. Please try again.',
-        );
+        SnackBars.errorSnackBar(content: 'User data not found. Please try again.');
         return;
       }
 
@@ -93,14 +89,6 @@ class SignUpPasswordController extends GetxController {
       );
 
       if (signUpResponse.success == true) {
-        // Store token and user data for future use
-        if (signUpResponse.data?.token != null) {
-          // You can store this token in local storage for authentication
-          print('Token: ${signUpResponse.data!.token}');
-          print('User ID: ${signUpResponse.data!.user?.id}');
-          print('Role: ${signUpResponse.data!.user?.roleName}');
-        }
-
         SnackBars.successSnackBar(content: 'Account created successfully!');
         Get.offAllNamed(Routes.LOGIN);
       } else {

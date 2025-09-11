@@ -3,11 +3,7 @@ class AddRolemodel {
   final AddRole? data;
   final String message;
 
-  AddRolemodel({
-    required this.success,
-    required this.data,
-    required this.message,
-  });
+  AddRolemodel({required this.success, required this.data, required this.message});
 
   factory AddRolemodel.fromJson(Map<String, dynamic> json) {
     return AddRolemodel(
@@ -18,11 +14,7 @@ class AddRolemodel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'data': data?.toJson(),
-      'message': message,
-    };
+    return {'success': success, 'data': data?.toJson(), 'message': message};
   }
 }
 
@@ -73,4 +65,3 @@ class AddRole {
     };
   }
 }
-

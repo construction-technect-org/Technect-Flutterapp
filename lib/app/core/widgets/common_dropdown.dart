@@ -75,9 +75,7 @@ class CommonDropdown<T> extends StatelessWidget {
             onChanged: enabled
                 ? (T? newValue) {
                     selectedValue.value = newValue;
-                    if (onChanged != null) {
-                      onChanged!(newValue);
-                    }
+                    onChanged?.call(newValue);
                   }
                 : null,
             dropdownColor: MyColors.white,

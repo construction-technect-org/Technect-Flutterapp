@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -16,11 +17,11 @@ class CommonConstant {
 
     // Print original file size
     final double originalSizeMB = file.lengthSync() / 1024 / 1024;
-    print('Original File Size: ${originalSizeMB.toStringAsFixed(2)} MB');
+    log('Original File Size: ${originalSizeMB.toStringAsFixed(2)} MB');
 
     // If file is already under the max size, return it immediately
     if (compressedFile.lengthSync() <= maxSize) {
-      print('No compression needed');
+      log('No compression needed');
       return compressedFile;
     }
 
@@ -34,7 +35,7 @@ class CommonConstant {
     }
 
     final double compressedSizeMB = compressedFile.lengthSync() / 1024 / 1024;
-    print('Compressed File Size: ${compressedSizeMB.toStringAsFixed(2)} MB');
+    log('Compressed File Size: ${compressedSizeMB.toStringAsFixed(2)} MB');
     return compressedFile;
   }
 
@@ -66,13 +67,13 @@ class CommonConstant {
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png'],
     );
-    XFile? _file;
+    XFile? file;
     if (result != null) {
       final newFile = await compressImage(File(result.files.first.path ?? ''));
-      _file = XFile(newFile.path);
+      file = XFile(newFile.path);
     }
 
-    return _file;
+    return file;
   }
 
   Future<XFile?> pickImageFromGallery() async {

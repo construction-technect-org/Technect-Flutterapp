@@ -10,7 +10,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 class AddTeamController extends GetxController {
   final fullNameController = TextEditingController();
   final emialIdController = TextEditingController();
-  final PhonenumberController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final addressController = TextEditingController();
   final stateController = TextEditingController();
   final cityController = TextEditingController();
@@ -69,7 +69,7 @@ class AddTeamController extends GetxController {
     isEdit.value = true;
     fullNameController.text = teamDetailsModel.value.fullName ?? '';
     emialIdController.text = teamDetailsModel.value.emailId ?? '';
-    PhonenumberController.text = teamDetailsModel.value.phoneNumber ?? '';
+    phoneNumberController.text = teamDetailsModel.value.phoneNumber ?? '';
     addressController.text = teamDetailsModel.value.address ?? '';
     stateController.text = teamDetailsModel.value.state ?? '';
     cityController.text = teamDetailsModel.value.city ?? '';
@@ -97,7 +97,7 @@ class AddTeamController extends GetxController {
   void onClose() {
     fullNameController.dispose();
     emialIdController.dispose();
-    PhonenumberController.dispose();
+    phoneNumberController.dispose();
     addressController.dispose();
     stateController.dispose();
     super.onClose();
@@ -110,7 +110,7 @@ class AddTeamController extends GetxController {
       fields = {
         "full_name": fullNameController.text,
         "email_id": emialIdController.text,
-        "phone_number": PhonenumberController.text,
+        "phone_number": phoneNumberController.text,
         "address": addressController.text,
         "state": stateController.text,
         "city": cityController.text,
@@ -124,7 +124,7 @@ class AddTeamController extends GetxController {
       fields = {
         "full_name": fullNameController.text,
         "email_id": emialIdController.text,
-        "phone_number": PhonenumberController.text,
+        "phone_number": phoneNumberController.text,
         "address": addressController.text,
         "state": stateController.text,
         "city": cityController.text,
@@ -134,7 +134,6 @@ class AddTeamController extends GetxController {
         "team_role_id": selectedRole?.value.id ?? '',
         "is_active": "true",
       };
-      ;
     }
     Map<String, String> selectedFiles = {};
 
@@ -219,11 +218,11 @@ class AddTeamController extends GetxController {
       SnackBars.errorSnackBar(content: 'Email is required');
     } else if (!GetUtils.isEmail(emialIdController.text)) {
       SnackBars.errorSnackBar(content: 'Please enter a valid email');
-    } else if (PhonenumberController.text.isEmpty) {
+    } else if (phoneNumberController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Phone number is required');
-    } else if (!GetUtils.isPhoneNumber(PhonenumberController.text)) {
+    } else if (!GetUtils.isPhoneNumber(phoneNumberController.text)) {
       SnackBars.errorSnackBar(content: 'Please enter a valid phone number');
-    } else if (PhonenumberController.text.length != 10) {
+    } else if (phoneNumberController.text.length != 10) {
       SnackBars.errorSnackBar(content: 'Phone number must be 10 digits');
     } else if (addressController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Address is required');

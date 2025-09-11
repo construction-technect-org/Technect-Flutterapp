@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class StatCard extends StatelessWidget {
@@ -16,7 +15,7 @@ class StatCard extends StatelessWidget {
   final Color iconBackground;
 
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Container(
       height: 84,
       decoration: BoxDecoration(
@@ -56,6 +55,4 @@ class StatCard extends StatelessWidget {
       ),
     );
   }
-
-
 }

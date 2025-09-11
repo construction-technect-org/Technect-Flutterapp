@@ -21,6 +21,7 @@ class ProfileView extends GetView<ProfileController> {
 
         title: Row(
           children: [
+
             Image.asset(Asset.profil, height: 40, width: 40),
             SizedBox(width: 1.h),
             Column(
@@ -56,6 +57,7 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                     ],
                   ),
+
                 ),
               ],
             ),
