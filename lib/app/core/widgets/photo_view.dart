@@ -1,4 +1,4 @@
-import '../utils/imports.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 
 class PhotoView extends StatelessWidget {
   final String image;
@@ -8,17 +8,10 @@ class PhotoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        title: const Text('Photo View'),
-
-      ),
+      appBar: AppBar(title: const Text('Photo View')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Image.network(
-            image,
-          ),
-        ),
+        child: Center(child: Image.network(image)),
       ),
     );
   }

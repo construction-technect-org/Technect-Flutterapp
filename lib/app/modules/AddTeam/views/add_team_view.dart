@@ -140,7 +140,7 @@ class AddTeamView extends GetView<AddTeamController> {
                       ],
                     ),
                     SizedBox(height: 1.h),
-                    CustomTextField(controller: controller.PhonenumberController),
+                    CustomTextField(controller: controller.phoneNumberController),
                     SizedBox(height: 2.h),
 
                     Row(

@@ -1,4 +1,4 @@
-import 'UserModel.dart';
+import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 
 class LoginModel {
   bool? success;

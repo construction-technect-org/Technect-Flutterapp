@@ -243,7 +243,7 @@ class EditProfileView extends GetView<EditProfileController> {
               border: Border.all(
                 color: controller.businessHoursData.isEmpty
                     ? MyColors.textFieldBorder
-                    : MyColors.primary.withOpacity(0.3),
+                    : MyColors.primary.withValues(alpha: 0.3),
               ),
             ),
             child: Column(
@@ -286,7 +286,7 @@ class EditProfileView extends GetView<EditProfileController> {
                       color: MyColors.white,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: MyColors.textFieldBorder.withOpacity(0.3),
+                        color: MyColors.textFieldBorder.withValues(alpha: 0.3),
                       ),
                     ),
                     child: Column(
@@ -386,7 +386,7 @@ class EditProfileView extends GetView<EditProfileController> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -399,7 +399,7 @@ class EditProfileView extends GetView<EditProfileController> {
                   height: 40,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? MyColors.primary.withOpacity(0.1)
+                        ? MyColors.primary.withValues(alpha: 0.1)
                         : const Color(0xFFD9F0FF),
                     borderRadius: BorderRadius.circular(10),
                   ),

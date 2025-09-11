@@ -87,7 +87,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           Asset.editIcon,
                           width: 16,
                           height: 16,
-                          color: MyColors.primary,
+                          colorFilter: const ColorFilter.mode(
+                            MyColors.primary,
+                            BlendMode.srcIn,
+                          ),
                         ),
                         label: Text(
                           "Edit",
@@ -415,7 +418,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       decoration: BoxDecoration(
         color: MyColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: MyColors.brightGray.withOpacity(0.5)),
+        border: Border.all(color: MyColors.brightGray.withValues(alpha: 0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

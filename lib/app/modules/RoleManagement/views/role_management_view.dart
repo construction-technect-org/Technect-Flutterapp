@@ -445,7 +445,6 @@ class RoleCard extends StatelessWidget {
                             Asset.Admin,
                             width: 14.54, // scale as needed
                             height: 13,
-                            fit: BoxFit.contain,
                           ),
                         ),
                       ),

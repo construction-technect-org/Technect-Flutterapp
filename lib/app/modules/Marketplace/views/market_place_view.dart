@@ -147,7 +147,7 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: MyColors.americanSilver.withOpacity(0.6),
+                      color: MyColors.americanSilver.withValues(alpha: 0.6),
                       spreadRadius: 2,
                       blurRadius: 6,
                       offset: const Offset(0, 3),
@@ -197,7 +197,7 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                                   ),
                                   decoration: BoxDecoration(
                                     color: isSelected
-                                        ? MyColors.yellow.withOpacity(0.5)
+                                        ? MyColors.yellow.withValues(alpha: 0.5)
                                         : MyColors.ghostWhite,
                                     borderRadius: BorderRadius.circular(12),
                                   ),

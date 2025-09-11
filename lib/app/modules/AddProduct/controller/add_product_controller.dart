@@ -255,7 +255,7 @@ class AddProductController extends GetxController {
         }
       });
     } catch (e) {
-      print('Error parsing stored filter values: $e');
+      log('Error parsing stored filter values: $e');
     }
   }
 
@@ -434,7 +434,7 @@ class AddProductController extends GetxController {
 
     // Only include product_id if products are available and selected
     if (productNames.isNotEmpty && selectedProductId.value != null) {
-      fields["category_product_id"] = selectedProductId.value!;
+      fields["category_product_id"] = selectedProductId.value;
     }
 
     fields.addAll({

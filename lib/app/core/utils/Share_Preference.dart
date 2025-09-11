@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/TeamStatsModel.dart';
@@ -156,7 +158,7 @@ class AppSharedPreference {
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       });
     } catch (e) {
-      print('Error saving roles: $e');
+      log('Error saving roles: $e');
     }
   }
 
@@ -170,7 +172,7 @@ class AppSharedPreference {
         return rolesList;
       }
     } catch (e) {
-      print('Error getting roles: $e');
+      log('Error getting roles: $e');
     }
     return null;
   }
@@ -198,7 +200,7 @@ class AppSharedPreference {
       final teamJson = team.map((member) => member.toJson()).toList();
       setTeamData({'data': teamJson, 'timestamp': DateTime.now().millisecondsSinceEpoch});
     } catch (e) {
-      print('Error saving team: $e');
+      log('Error saving team: $e');
     }
   }
 
@@ -212,7 +214,7 @@ class AppSharedPreference {
         return teamList;
       }
     } catch (e) {
-      print('Error getting team: $e');
+      log('Error getting team: $e');
     }
     return null;
   }
@@ -242,7 +244,7 @@ class AppSharedPreference {
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       });
     } catch (e) {
-      print('Error saving team stats: $e');
+      log('Error saving team stats: $e');
     }
   }
 
@@ -253,7 +255,7 @@ class AppSharedPreference {
         return TeamStatsModel.fromJson(data['data']);
       }
     } catch (e) {
-      print('Error getting team stats: $e');
+      log('Error getting team stats: $e');
     }
     return null;
   }

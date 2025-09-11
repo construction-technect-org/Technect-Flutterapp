@@ -3,8 +3,7 @@ import 'package:construction_technect/app/core/widgets/stepper_edit_profile_widg
 import 'package:construction_technect/app/modules/UpdateYourCertifications/controllers/update_your_certifications_controller.dart';
 import 'package:construction_technect/app/modules/profile/components/certifications_component.dart';
 
-class UpdateYourCertificationsView
-    extends GetView<UpdateYourCertificationsController> {
+class UpdateYourCertificationsView extends GetView<UpdateYourCertificationsController> {
   const UpdateYourCertificationsView({super.key});
 
   @override
@@ -19,7 +18,7 @@ class UpdateYourCertificationsView
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [StepperEditProfileWidget(currentStep: 1)],
             ),
-             SizedBox(height: 2.h),
+            SizedBox(height: 2.h),
 
             Padding(
               padding: const EdgeInsets.only(left: 16),
@@ -27,20 +26,17 @@ class UpdateYourCertificationsView
                 alignment: Alignment.topLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       "EDIT PROFILE",
                       style: MyTexts.light22.copyWith(
-                          color: MyColors.textFieldBackground,
-                        ),
+                        color: MyColors.textFieldBackground,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       "Update your Business Details",
-                     style: MyTexts.light16.copyWith(
-                          color: MyColors.greyDetails,
-                        ),
+                      style: MyTexts.light16.copyWith(color: MyColors.greyDetails),
                     ),
                     const SizedBox(height: 20),
                   ],
@@ -50,18 +46,16 @@ class UpdateYourCertificationsView
 
             SizedBox(height: 2.h),
             const CertificationsComponent(),
-
-
-             SizedBox(height: 3.h),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RoundedButton(
-                        buttonName: 'UPDATE',
-                        onTap: () {
-                         // controller.completeSignUp();
-                        },
-                      ),
-                    ),
+            SizedBox(height: 3.h),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RoundedButton(
+                buttonName: 'UPDATE',
+                onTap: () {
+                  // controller.completeSignUp();
+                },
+              ),
+            ),
           ],
         ),
       ),

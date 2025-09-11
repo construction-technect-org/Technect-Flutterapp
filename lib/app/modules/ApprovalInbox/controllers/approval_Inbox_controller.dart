@@ -1,9 +1,6 @@
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:construction_technect/app/core/utils/colors.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 
 class ApprovalInboxController extends GetxController {
-  // Rx list of status cards
   final statusCards = <Map<String, dynamic>>[].obs;
 
   @override

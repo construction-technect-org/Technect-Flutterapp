@@ -32,7 +32,10 @@ class ProfileView extends GetView<ProfileController> {
                 Asset.editIcon,
                 width: 12,
                 height: 12,
-                color: MyColors.primary, // 👈 optional: match text color
+                colorFilter: const ColorFilter.mode(
+                  MyColors.primary,
+                  BlendMode.srcIn,
+                ), // 👈 optional: match text color
               ),
               label: Text(
                 "Edit Profile",
