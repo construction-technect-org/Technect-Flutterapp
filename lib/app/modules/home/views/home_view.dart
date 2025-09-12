@@ -15,6 +15,7 @@ class HomeView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: AppBar(
+          
           scrolledUnderElevation: 0.0,
           backgroundColor: MyColors.white,
           elevation: 0,

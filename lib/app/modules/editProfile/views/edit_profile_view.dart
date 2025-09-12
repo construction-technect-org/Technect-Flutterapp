@@ -519,31 +519,31 @@ class EditProfileView extends GetView<EditProfileController> {
                 ),
               ),
 
-              // /// Top-right action icons
-              // Positioned(
-              //   right: 20,
-              //   top: 20,
-              //   child: Row(
-              //     children: [
-              //       GestureDetector(
-              //         onTap: () {
-              //         },
-              //         child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
-              //       ),
-              //       const SizedBox(width: 16),
-              //       GestureDetector(
-              //         onTap: () {
+              /// Top-right action icons
+              Positioned(
+                right: 20,
+                top: 20,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                      },
+                      child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
+                    ),
+                    const SizedBox(width: 16),
+                    GestureDetector(
+                      onTap: () {
 
-              //         },
-              //         child: SvgPicture.asset(
-              //           Asset.delete,
-              //           width: 20,
-              //           height: 20,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+                      },
+                      child: SvgPicture.asset(
+                        Asset.delete,
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

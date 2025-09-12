@@ -27,6 +27,8 @@ abstract class Routes {
   static const ROLE_DETAILS = _Paths.ROLE_DETAILS;
   static const TEAM_DETAILS = _Paths.TEAM_DETAILS;
   static const MARKET_PLACE = _Paths.MARKET_PLACE;
+  static const YOUR_ROLE = _Paths.YOUR_ROLE;
+
 }
 
 abstract class _Paths {
@@ -55,4 +57,6 @@ abstract class _Paths {
   static const ROLE_DETAILS = '/role-details';
   static const TEAM_DETAILS = '/team-details';
   static const MARKET_PLACE = '/market-place';
+  static const YOUR_ROLE = '/your-role';
+
 }

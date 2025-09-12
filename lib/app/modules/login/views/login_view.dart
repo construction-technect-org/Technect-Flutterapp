@@ -237,6 +237,7 @@ class LoginView extends GetView<LoginController> {
                         SizedBox(height: 2.sh),
                         Obx(
                           () => RoundedButton(
+                            
                             buttonName: 'LOGIN',
                             onTap: controller.isLoading.value
                                 ? null

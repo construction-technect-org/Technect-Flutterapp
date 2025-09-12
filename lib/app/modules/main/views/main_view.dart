@@ -1,9 +1,9 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
 import 'package:construction_technect/app/modules/home/views/home_view.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
 import 'package:construction_technect/app/modules/settings/views/settings_view.dart';
-import 'package:construction_technect/app/modules/support/views/support_view.dart';
 
 class MainTabBarView extends GetView<MainController> {
   const MainTabBarView({super.key});
@@ -18,7 +18,7 @@ class MainTabBarView extends GetView<MainController> {
           case 1:
             return ProductManagementView();
           case 2:
-            return const SupportView();
+            return CustomerSupportView();
           case 3:
             return const SettingsView();
           default:

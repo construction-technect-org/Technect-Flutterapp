@@ -66,8 +66,12 @@ class MyColors {
   static const Color oldSilver = Color(0xFF838383);
   static const Color brightGray = Color(0xFFEEEEEE);
   static const Color yellow = Color(0xFFFFED29);
+  static const Color yellowRemaining = Color(0x80FFED29);
   static const Color ghostWhite = Color(0xFFF7FAFF);
   static const Color brightGray1 = Color(0xFFE9E9E9);
+  static const Color charcoal = Color(0xFF494949);
+
+ 
 
 
 

@@ -30,6 +30,8 @@ import 'package:construction_technect/app/modules/TeamDetails/bindings/team_deta
 import 'package:construction_technect/app/modules/TeamDetails/views/team_details_view.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/bindings/update_your_certifications_binding.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/views/update_your_certifications_view.dart';
+import 'package:construction_technect/app/modules/YourRole/bindings/your_role_binding.dart';
+import 'package:construction_technect/app/modules/YourRole/views/your_role_view.dart';
 import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
 import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
 import 'package:construction_technect/app/modules/forgotPassword/bindings/forgot_password_binding.dart';
@@ -158,6 +160,11 @@ class AppPages {
       name: _Paths.MARKET_PLACE,
       page: () => const MarketPlaceView(),
       binding: MarketPlaceBinding(),
+    ),
+    GetPage(
+      name: _Paths.YOUR_ROLE,
+      page: () => const YourRoleView(),
+      binding: YourRoleBinding(),
     ),
   ];
 }

@@ -72,7 +72,9 @@ class LoginController extends GetxController {
         if (addressResponse.success == true &&
             (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
           myPref.setAddressData(addressResponse.toJson());
-          Get.offAllNamed(Routes.MAIN);
+         // Get.offAllNamed(Routes.MAIN);
+          Get.offAllNamed(Routes.YOUR_ROLE);
+
         } else {
           myPref.clearAddressData();
           Get.offAllNamed(Routes.ADDRESS, arguments: {'isFromLogin': true});

@@ -84,6 +84,7 @@ class Asset {
   static const String Featured = 'assets/images/Featured.svg';
   static const String price = 'assets/images/price.png';
   static const String gst = 'assets/images/gst.png';
+  static const String inprog = 'assets/images/inprog.png';
 
 
 //Add Role
@@ -110,6 +111,13 @@ class Asset {
       'assets/images/construction-cine marketplace.png';
   static const String logisticMarketPlace =
       'assets/images/logistic_marketplace.png';
+
+// Your Role 
+  static const String partner = 'assets/images/partner.png';
+  static const String connector = 'assets/images/connector.png';
+  static const String checkCircle = 'assets/images/check_circle.png';
+
+
 }
 
 class Constants {
