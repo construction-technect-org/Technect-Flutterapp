@@ -27,8 +27,9 @@ abstract class Routes {
   static const ROLE_DETAILS = _Paths.ROLE_DETAILS;
   static const TEAM_DETAILS = _Paths.TEAM_DETAILS;
   static const MARKET_PLACE = _Paths.MARKET_PLACE;
-  static const YOUR_ROLE = _Paths.YOUR_ROLE;
-
+  static const SERVICE_MANAGEMENT = _Paths.SERVICE_MANAGEMENT;
+  static const ADD_SERVICE = _Paths.ADD_SERVICE;
+  static const SERVICE_DETAILS = _Paths.SERVICE_DETAILS;
 }
 
 abstract class _Paths {
@@ -57,6 +58,7 @@ abstract class _Paths {
   static const ROLE_DETAILS = '/role-details';
   static const TEAM_DETAILS = '/team-details';
   static const MARKET_PLACE = '/market-place';
-  static const YOUR_ROLE = '/your-role';
-
+  static const SERVICE_MANAGEMENT = '/service-management';
+  static const ADD_SERVICE = '/add-service';
+  static const SERVICE_DETAILS = '/service-details';
 }

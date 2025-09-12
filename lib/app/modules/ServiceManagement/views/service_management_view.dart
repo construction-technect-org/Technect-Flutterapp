@@ -1,12 +1,12 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/welcome_name.dart';
-import 'package:construction_technect/app/modules/ProductManagement/components/product_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
-import 'package:construction_technect/app/modules/ProductManagement/controllers/product_management_controller.dart';
-import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
+import 'package:construction_technect/app/modules/ServiceManagement/components/service_card.dart';
+import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
+import 'package:construction_technect/app/modules/ServiceManagement/model/service_model.dart';
 
-class ProductManagementView extends StatelessWidget {
-  final ProductManagementController controller = Get.put(ProductManagementController());
+class ServiceManagementView extends StatelessWidget {
+  final ServiceManagementController controller = Get.put(ServiceManagementController());
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class ProductManagementView extends StatelessWidget {
                     ),
                     child: TextField(
                       onChanged: (value) {
-                        controller.searchProduct(value);
+                        controller.searchService(value);
                       },
                       decoration: InputDecoration(
                         prefixIcon: Padding(
@@ -83,12 +83,11 @@ class ProductManagementView extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 1.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
-                    "Product Management",
+                    "Service Management",
                     style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
                   ),
                 ),
@@ -102,9 +101,9 @@ class ProductManagementView extends StatelessWidget {
                           children: [
                             Expanded(
                               child: StatCard(
-                                title: 'Total Products',
+                                title: 'Total Services',
                                 value:
-                                    '${controller.productModel.value.data?.statistics?.totalProducts ?? 0}',
+                                    '${controller.serviceModel.value.data?.statistics?.totalServices ?? 0}',
                                 icon: SvgPicture.asset(Asset.TotalProducts),
                                 iconBackground: MyColors.yellowundertones,
                               ),
@@ -114,7 +113,7 @@ class ProductManagementView extends StatelessWidget {
                               child: StatCard(
                                 title: 'Featured',
                                 value:
-                                    '${controller.productModel.value.data?.statistics?.featured ?? 0}',
+                                    '${controller.serviceModel.value.data?.statistics?.featured ?? 0}',
                                 icon: SvgPicture.asset(Asset.Featured),
                                 iconBackground: MyColors.verypaleBlue,
                               ),
@@ -128,7 +127,7 @@ class ProductManagementView extends StatelessWidget {
                               child: StatCard(
                                 title: 'Low Stock',
                                 value:
-                                    '${controller.productModel.value.data?.statistics?.lowStock ?? 0}',
+                                    '${controller.serviceModel.value.data?.statistics?.lowStock ?? 0}',
                                 icon: SvgPicture.asset(Asset.LowStock),
                                 iconBackground: MyColors.paleRed,
                               ),
@@ -138,7 +137,7 @@ class ProductManagementView extends StatelessWidget {
                               child: StatCard(
                                 title: 'Total Interests',
                                 value:
-                                    '${controller.productModel.value.data?.statistics?.totalInterests ?? 0}',
+                                    '${controller.serviceModel.value.data?.statistics?.totalInterests ?? 0}',
                                 icon: SvgPicture.asset(Asset.TotalInterests),
                                 iconBackground: MyColors.warmOrange,
                               ),
@@ -155,7 +154,7 @@ class ProductManagementView extends StatelessWidget {
                   () => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child:
-                        controller.filteredProducts.isEmpty &&
+                        controller.filteredServices.isEmpty &&
                             controller.searchQuery.value.isNotEmpty
                         ? Center(
                             child: Padding(
@@ -169,7 +168,7 @@ class ProductManagementView extends StatelessWidget {
                                   ),
                                   SizedBox(height: 2.h),
                                   Text(
-                                    'No products found',
+                                    'No services found',
                                     style: MyTexts.medium18.copyWith(
                                       color: MyColors.fontBlack,
                                     ),
@@ -188,30 +187,29 @@ class ProductManagementView extends StatelessWidget {
                         : ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: controller.filteredProducts.length,
+                            itemCount: controller.filteredServices.length,
                             separatorBuilder: (_, _) => const SizedBox(height: 12),
                             itemBuilder: (context, index) {
-                              final Product product = controller.filteredProducts[index];
+                              final Service service = controller.filteredServices[index];
                               return GestureDetector(
                                 onTap: () {
                                   Get.toNamed(
-                                    Routes.PRODUCT_DETAILS,
-                                    arguments: {"product": product},
+                                    Routes.SERVICE_DETAILS,
+                                    arguments: {"service": service},
                                   );
                                 },
-                                child: ProductCard(
-                                  statusText: (product.isActive ?? false)
+                                child: ServiceCard(
+                                  statusText: (service.isActive ?? false)
                                       ? 'Active'
                                       : 'InActive',
-                                  statusColor: (product.isActive ?? false)
+                                  statusColor: (service.isActive ?? false)
                                       ? MyColors.green
                                       : MyColors.red,
-                                  productName: product.productName ?? '',
-                                  brandName: product.brand ?? '',
+                                  serviceName: service.serviceName ?? '',
+                                  serviceTypeName: service.serviceTypeName ?? '',
                                   locationText: 'Vasai Virar, Mahab Chowpatty',
-                                  pricePerUnit: double.parse(product.price ?? '0'),
-                                  stockCount: product.stockQuantity ?? 0,
-                                  imageUrl: product.productImage,
+                                  pricePerUnit: double.parse(service.price ?? '0'),
+                                  imageUrl: service.serviceImage,
                                 ),
                               );
                             },
@@ -222,7 +220,7 @@ class ProductManagementView extends StatelessWidget {
                 Center(
                   child: RoundedButton(
                     onTap: () {
-                      Get.toNamed(Routes.ADD_PRODUCT);
+                      Get.toNamed(Routes.ADD_SERVICE);
                     },
                     buttonName: '',
                     borderRadius: 12,
@@ -232,7 +230,7 @@ class ProductManagementView extends StatelessWidget {
                     horizontalPadding: 0,
                     child: Center(
                       child: Text(
-                        '+ Add New Product',
+                        '+ Add New Service',
                         style: MyTexts.medium16.copyWith(
                           color: MyColors.white,
                           fontFamily: MyTexts.Roboto,
