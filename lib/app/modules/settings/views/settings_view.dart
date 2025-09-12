@@ -23,10 +23,19 @@ class SettingsView extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 2.h),
-            _buildMenuItem('Product Management', false,
-             onTap: () {
-                Get.to(() =>  ProductManagementView());  
-
+            _buildMenuItem(
+              'Service Management',
+              false,
+              onTap: () {
+                Get.toNamed(Routes.SERVICE_MANAGEMENT);
+              },
+            ),
+            SizedBox(height: 1.h),
+            _buildMenuItem(
+              'Product Management',
+              false,
+              onTap: () {
+                Get.to(() => ProductManagementView());
               },
             ),
             SizedBox(height: 1.h),
@@ -158,7 +167,9 @@ class SettingsView extends StatelessWidget {
               title,
               style: MyTexts.medium16.copyWith(
                 color: isDestructive == true ? MyColors.red : MyColors.primary,
-                fontWeight: highlight == true ? FontWeight.w600 : FontWeight.w800,
+                fontWeight: highlight == true
+                    ? FontWeight.w600
+                    : FontWeight.w800,
               ),
             ),
           ],
@@ -210,7 +221,9 @@ void _showConfirmDialog(
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             side: BorderSide(color: Colors.grey.shade400),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: () => Get.back(),
@@ -222,7 +235,9 @@ void _showConfirmDialog(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             elevation: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: onConfirm,

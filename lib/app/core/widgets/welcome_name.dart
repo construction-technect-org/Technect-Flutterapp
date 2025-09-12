@@ -10,39 +10,47 @@ class WelcomeName extends StatelessWidget {
       children: [
         Image.asset(Asset.profil, height: 40, width: 40),
         SizedBox(width: 1.h),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(
-              () => Text(
-                'Welcome ${controller.profileData.value.data?.user?.firstName}!',
-                style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(
+                () => Text(
+                  'Welcome ${controller.profileData.value.data?.user?.firstName}!',
+                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                controller.navigateToEditAddress();
-              },
-              child: Row(
-                children: [
-                  SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                  SizedBox(width: 0.4.h),
-                  Obx(
-                    () => Text(
-                      controller.getCurrentAddress(),
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.textFieldBackground,
+              GestureDetector(
+                onTap: () {
+                  controller.navigateToEditAddress();
+                },
+                child: Row(
+                  children: [
+                    SvgPicture.asset(Asset.location, width: 9, height: 12.22),
+                    SizedBox(width: 0.4.h),
+                    Obx(
+                      () => Expanded(
+                        child: Text(
+                          controller.getCurrentAddress(),
+                          overflow: TextOverflow.ellipsis,
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.textFieldBackground,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  const Icon(Icons.keyboard_arrow_down, size: 16, color: Colors.black54),
-                ],
+                    const SizedBox(width: 4),
+                    const Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 16,
+                      color: Colors.black54,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        const Spacer(),
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(

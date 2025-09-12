@@ -6,6 +6,8 @@ import 'package:construction_technect/app/modules/AddRole/bindings/add_role_bind
 import 'package:construction_technect/app/modules/AddRole/views/add_role_view.dart';
 import 'package:construction_technect/app/modules/AddTeam/bindings/add_team_binding.dart';
 import 'package:construction_technect/app/modules/AddTeam/views/add_team_view.dart';
+import 'package:construction_technect/app/modules/AddService/bindings/add_service_binding.dart';
+import 'package:construction_technect/app/modules/AddService/views/add_service_view.dart';
 import 'package:construction_technect/app/modules/Address/bindings/address_bindings.dart';
 import 'package:construction_technect/app/modules/Address/views/address_view.dart';
 import 'package:construction_technect/app/modules/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
@@ -20,6 +22,8 @@ import 'package:construction_technect/app/modules/RoleDetails/bindings/role_deta
 import 'package:construction_technect/app/modules/RoleDetails/views/role_details_view.dart';
 import 'package:construction_technect/app/modules/RoleManagement/bindings/role_management_binding.dart';
 import 'package:construction_technect/app/modules/RoleManagement/views/role_management_view.dart';
+import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
+import 'package:construction_technect/app/modules/ServiceManagement/views/service_management_view.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/bindings/sign_up_details_binding.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_up_password_binding.dart';
@@ -57,7 +61,11 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -85,7 +93,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.PROFILE,
-      page: () =>  ProfileView(),
+      page: () => ProfileView(),
       binding: ProfileBinding(),
     ),
     GetPage(
@@ -158,6 +166,20 @@ class AppPages {
       name: _Paths.MARKET_PLACE,
       page: () => const MarketPlaceView(),
       binding: MarketPlaceBinding(),
+    ),
+    GetPage(
+      name: _Paths.SERVICE_MANAGEMENT,
+      page: () => ServiceManagementView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<ServiceManagementController>(
+          () => ServiceManagementController(),
+        );
+      }),
+    ),
+    GetPage(
+      name: _Paths.ADD_SERVICE,
+      page: () => const AddServiceView(),
+      binding: AddServiceBinding(),
     ),
   ];
 }

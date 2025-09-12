@@ -38,11 +38,7 @@ class AddProductView extends GetView<AddProductController> {
                   controller.pageController.jumpToPage(0);
                 }
               },
-              child: const Icon(
-                Icons.arrow_back_rounded,
-                size: 24,
-                color: Colors.black,
-              ),
+              child: const Icon(Icons.arrow_back_rounded, size: 24, color: Colors.black),
             ),
             titleSpacing: 0, // 👈 removes space between icon and text
             title: Column(
@@ -78,9 +74,7 @@ class AddProductView extends GetView<AddProductController> {
                         padding: const EdgeInsets.only(left: 10),
                         child: Text(
                           "Product Image",
-                          style: MyTexts.regular18.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
+                          style: MyTexts.regular18.copyWith(color: MyColors.lightBlue),
                         ),
                       ),
                       SizedBox(height: 2.h),
@@ -103,30 +97,33 @@ class AddProductView extends GetView<AddProductController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width: 119,
-                                    height: 31,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: MyColors.primary,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
                                         padding: EdgeInsets.zero,
                                       ),
-                                      onPressed: controller.pickFile,
-                                      child: Text(
-                                        "Choose File",
-                                        style: MyTexts.regular16.copyWith(
-                                          color: MyColors.white,
+                                      onPressed: controller.pickImage,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                        ),
+                                        child: Text(
+                                          "Choose Image",
+                                          style: MyTexts.regular16.copyWith(
+                                            color: MyColors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                  '${controller.pickedFileName.value} Img45.jpg',
+                                    controller.pickedFileName.value == ''
+                                        ? "Upload Product Image"
+                                        : controller.pickedFileName.value,
                                     overflow: TextOverflow.ellipsis,
                                     style: MyTexts.regular16.copyWith(
                                       color: MyColors.fontBlack,
@@ -143,37 +140,21 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Product Name',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
-                      CustomTextField(
-                        controller: controller.productNameController,
-                      ),
+                      CustomTextField(controller: controller.productNameController),
                       SizedBox(height: 2.h),
                       Row(
                         children: [
                           Text(
                             'Main Category',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -194,9 +175,7 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Sub-category',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
                         ],
                       ),
@@ -230,9 +209,7 @@ class AddProductView extends GetView<AddProductController> {
                                   ),
                                   Text(
                                     '*',
-                                    style: MyTexts.light16.copyWith(
-                                      color: MyColors.red,
-                                    ),
+                                    style: MyTexts.light16.copyWith(color: MyColors.red),
                                   ),
                                 ],
                               ),
@@ -260,16 +237,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'UOM',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -286,16 +256,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Price',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
 
@@ -313,16 +276,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Stock',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
 
@@ -338,16 +294,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'GST%',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -365,9 +314,7 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'GST Price',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
                         ],
                       ),
@@ -384,16 +331,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Terms & Conditions',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -433,79 +373,45 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Brand Name',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
-                      CustomTextField(
-                        controller: controller.brandNameController,
-                      ),
+                      CustomTextField(controller: controller.brandNameController),
                       SizedBox(height: 2.h),
                       Row(
                         children: [
                           Text(
                             'Package Type',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
-                      CustomTextField(
-                        controller: controller.packageTypeController,
-                      ),
+                      CustomTextField(controller: controller.packageTypeController),
                       SizedBox(height: 2.h),
                       Row(
                         children: [
                           Text(
                             'Package Size',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
-                      CustomTextField(
-                        controller: controller.packageSizeController,
-                      ),
+                      CustomTextField(controller: controller.packageSizeController),
                       SizedBox(height: 2.h),
                       Row(
                         children: [
                           Text(
                             'Shape',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -515,16 +421,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Texture',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -534,16 +433,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Color',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -553,16 +445,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Size',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -575,16 +460,9 @@ class AddProductView extends GetView<AddProductController> {
                         children: [
                           Text(
                             'Weight',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
+                            style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
+                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -614,8 +492,8 @@ class AddProductView extends GetView<AddProductController> {
                                 ),
                                 SizedBox(height: 1.h),
                                 CustomTextField(
-                                  controller: controller
-                                      .dynamicControllers[filter.filterName],
+                                  controller:
+                                      controller.dynamicControllers[filter.filterName],
                                   validator: (value) {
                                     if (filter.isRequired == true &&
                                         (value == null || value.isEmpty)) {
@@ -659,9 +537,7 @@ class AddProductView extends GetView<AddProductController> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  controller.isEnabled.value
-                                      ? "Active"
-                                      : "Inactive",
+                                  controller.isEnabled.value ? "Active" : "Inactive",
                                   style: MyTexts.medium16.copyWith(
                                     color: controller.isEnabled.value
                                         ? MyColors.green
@@ -676,21 +552,16 @@ class AddProductView extends GetView<AddProductController> {
                                         padding: const EdgeInsets.all(20),
                                         decoration: BoxDecoration(
                                           color: MyColors.white,
-                                          borderRadius:
-                                              const BorderRadius.vertical(
-                                                top: Radius.circular(20),
-                                              ),
+                                          borderRadius: const BorderRadius.vertical(
+                                            top: Radius.circular(20),
+                                          ),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Icon(
-                                              val
-                                                  ? Icons.check_circle
-                                                  : Icons.cancel,
-                                              color: val
-                                                  ? MyColors.green
-                                                  : MyColors.red,
+                                              val ? Icons.check_circle : Icons.cancel,
+                                              color: val ? MyColors.green : MyColors.red,
                                               size: 40,
                                             ),
                                             const SizedBox(height: 12),
@@ -717,17 +588,12 @@ class AddProductView extends GetView<AddProductController> {
                                                   child: OutlinedButton(
                                                     onPressed: () =>
                                                         Get.back(result: false),
-                                                    style:
-                                                        OutlinedButton.styleFrom(
-                                                          foregroundColor:
-                                                              MyColors
-                                                                  .fontBlack,
-                                                          side:
-                                                              const BorderSide(
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                        ),
+                                                    style: OutlinedButton.styleFrom(
+                                                      foregroundColor: MyColors.fontBlack,
+                                                      side: const BorderSide(
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
                                                     child: const Text("Cancel"),
                                                   ),
                                                 ),
@@ -735,24 +601,19 @@ class AddProductView extends GetView<AddProductController> {
                                                 Expanded(
                                                   child: ElevatedButton(
                                                     style: ElevatedButton.styleFrom(
-                                                      backgroundColor:
-                                                          MyColors.primary,
+                                                      backgroundColor: MyColors.primary,
                                                       shape: RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                              12,
-                                                            ),
+                                                            BorderRadius.circular(12),
                                                       ),
                                                     ),
                                                     onPressed: () =>
                                                         Get.back(result: true),
                                                     child: Text(
                                                       "Yes, Confirm",
-                                                      style: MyTexts.light16
-                                                          .copyWith(
-                                                            color:
-                                                                MyColors.white,
-                                                          ),
+                                                      style: MyTexts.light16.copyWith(
+                                                        color: MyColors.white,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

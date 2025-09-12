@@ -338,7 +338,7 @@ class AddProductController extends GetxController {
     gstPriceController.text = amount.toString();
   }
 
-  Future<void> pickFile() async {
+  Future<void> pickImage() async {
     try {
       final XFile? result = await CommonConstant().pickImageFromGallery();
 
