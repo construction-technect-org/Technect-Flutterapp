@@ -176,7 +176,6 @@ class CertificationsComponent extends StatelessWidget {
                   child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
                 ),
                 const SizedBox(width: 16),
-           
                   GestureDetector(
                     onTap: () => controller.showDeleteConfirmationDialog(
                       document.id ?? 0,

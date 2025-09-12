@@ -70,6 +70,12 @@ class MyColors {
   static const Color ghostWhite = Color(0xFFF7FAFF);
   static const Color brightGray1 = Color(0xFFE9E9E9);
   static const Color charcoal = Color(0xFF494949);
+  static const Color mistyRose = Color(0xFFFFE5E2);
+  static const Color aquacolor = Color(0xFFFFEBEB);
+  static const Color faneuilBrick = Color(0xFFB77A73);
+
+
+
 
  
 

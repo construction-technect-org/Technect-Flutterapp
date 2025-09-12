@@ -518,7 +518,6 @@ class EditProfileView extends GetView<EditProfileController> {
                   ],
                 ),
               ),
-
               /// Top-right action icons
               Positioned(
                 right: 20,

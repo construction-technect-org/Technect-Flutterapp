@@ -118,6 +118,10 @@ class Asset {
   static const String checkCircle = 'assets/images/check_circle.png';
 
 
+
+//Support
+  static const String supportView = 'assets/images/view.png';
+
 }
 
 class Constants {
