@@ -1,4 +1,3 @@
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/core/widgets/stepper_edit_profile_widget.dart';
@@ -104,21 +103,34 @@ class EditProfileView extends GetView<EditProfileController> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 3.h),
+                  Obx(() {
+                    return controller.currentStep.value == 1
+                        ? const SizedBox.shrink()
+                        : SizedBox(height: 3.h);
+                  }),
 
                   Row(
                     children: [
-                      SvgPicture.asset(
-                        Asset.certificateIcon,
-                        width: 20,
-                        height: 20,
+                      Obx(
+                        () => controller.currentStep.value == 1
+                            ? const SizedBox.shrink()
+                            : SvgPicture.asset(
+                                Asset.certificateIcon,
+                                width: 20,
+                                height: 20,
+                              ),
                       ),
+
                       SizedBox(width: 1.w),
-                      Text(
-                        'Certifications & Licenses',
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.black,
-                          fontFamily: MyTexts.Roboto,
+                      Obx(
+                        () => Text(
+                          controller.currentStep.value == 1
+                              ? ""
+                              : "Certifications & Licenses",
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.black,
+                            fontFamily: MyTexts.Roboto,
+                          ),
                         ),
                       ),
                     ],
@@ -428,112 +440,114 @@ class EditProfileView extends GetView<EditProfileController> {
     );
   }
 
- Widget _buildCertificationItem(String title, String organization) {
-  return Obx(() {
-    final isSelected = controller.isDocumentSelected(title);
-    final fileName = controller.getSelectedDocumentName(title);
+  Widget _buildCertificationItem(String title, String organization) {
+    return Obx(() {
+      final isSelected = controller.isDocumentSelected(title);
+      final fileName = controller.getSelectedDocumentName(title);
 
-    return GestureDetector(
-      onTap: () {
-        controller.pickFile(title);
-      },
-      child: DottedBorder(
-        borderType: BorderType.RRect,
-        radius: const Radius.circular(12),
-        color: isSelected ? MyColors.primary : const Color(0xFF8C8C8C),
-        dashPattern: const [5, 5],
-        child: Stack(
-          children: [
-            /// Main card content
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              decoration: BoxDecoration(
-                color: MyColors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Icon
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFD9F0FF),
-                      borderRadius: BorderRadius.circular(10),
+      return GestureDetector(
+        onTap: () {
+          controller.pickFile(title);
+        },
+        child: DottedBorder(
+          borderType: BorderType.RRect,
+          radius: const Radius.circular(12),
+          color: isSelected ? MyColors.primary : const Color(0xFF8C8C8C),
+          dashPattern: const [5, 5],
+          child: Stack(
+            children: [
+              /// Main card content
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: MyColors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: SvgPicture.asset(
-                        Asset.certificateIcon,
-                        colorFilter: const ColorFilter.mode(
-                          MyColors.primary,
-                          BlendMode.srcIn,
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// Icon
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD9F0FF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: SvgPicture.asset(
+                          Asset.certificateIcon,
+                          colorFilter: const ColorFilter.mode(
+                            MyColors.primary,
+                            BlendMode.srcIn,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                SizedBox(height: 2.w),
-                  /// Title + Organization/File
-                  Text(
-                    title,
-                    style: MyTexts.medium22.copyWith(
-                      color: MyColors.black,
-                      fontFamily: MyTexts.Roboto,
+                    SizedBox(height: 2.w),
+
+                    /// Title + Organization/File
+                    Text(
+                      title,
+                      style: MyTexts.medium22.copyWith(
+                        color: MyColors.black,
+                        fontFamily: MyTexts.Roboto,
+                      ),
                     ),
-                  ),
-                  Text(
-                    (isSelected && fileName != null)
-                        ? fileName
-                        : organization,
-                    style: MyTexts.regular14.copyWith(
-                      color: const Color(0xFF717171),
-                      fontFamily: MyTexts.Roboto,
+                    Text(
+                      (isSelected && fileName != null)
+                          ? fileName
+                          : organization,
+                      style: MyTexts.regular14.copyWith(
+                        color: const Color(0xFF717171),
+                        fontFamily: MyTexts.Roboto,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            // /// Top-right action icons
-            // Positioned(
-            //   right: 20,
-            //   top: 20,
-            //   child: Row(
-            //     children: [
-            //       GestureDetector(
-            //         onTap: () {
-            //         },
-            //         child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
-            //       ),
-            //       const SizedBox(width: 16),
-            //       GestureDetector(
-            //         onTap: () {
-                      
-            //         },
-            //         child: SvgPicture.asset(
-            //           Asset.delete,
-            //           width: 20,
-            //           height: 20,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-          ],
+              // /// Top-right action icons
+              // Positioned(
+              //   right: 20,
+              //   top: 20,
+              //   child: Row(
+              //     children: [
+              //       GestureDetector(
+              //         onTap: () {
+              //         },
+              //         child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
+              //       ),
+              //       const SizedBox(width: 16),
+              //       GestureDetector(
+              //         onTap: () {
+
+              //         },
+              //         child: SvgPicture.asset(
+              //           Asset.delete,
+              //           width: 20,
+              //           height: 20,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+            ],
+          ),
         ),
-      ),
-    );
-  });
-}
-
+      );
+    });
+  }
 }

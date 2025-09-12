@@ -222,7 +222,9 @@ class ProfileView extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Complete your Profile',
+                     completionPercentage > 90
+                        ? "Complete Profile"
+                        : 'Complete your Profile',
                     style: MyTexts.medium18.copyWith(
                       color: MyColors.white,
                       fontSize: 17.sp,

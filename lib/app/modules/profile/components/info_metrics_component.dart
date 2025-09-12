@@ -153,7 +153,7 @@ class InfoMetricsComponent extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'GST Number: ${merchantProfile?.gstinNumber ?? ''}',
+                            'GST Number: ${merchantProfile?.gstinNumber ?? '-'}',
                             style: MyTexts.regular14.copyWith(
                               color: MyColors.primary,
                               fontFamily: MyTexts.Roboto,
