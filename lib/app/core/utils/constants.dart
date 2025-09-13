@@ -41,6 +41,11 @@ class Asset {
   static const String verified = 'assets/images/verified.png';
   static const String premium = 'assets/images/premium.png';
   static const String suportTicket = 'assets/images/suportTicket.svg';
+  static const String termscondi = 'assets/images/terms&condi.png';
+  static const String rate = 'assets/images/rate.png';
+  static const String aboutUs = 'assets/images/aboutUs.png';
+
+
 
   // Edit
   static const String editIcon = 'assets/images/edit.svg';

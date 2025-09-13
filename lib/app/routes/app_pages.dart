@@ -44,6 +44,8 @@ import 'package:construction_technect/app/modules/editProfile/bindings/edit_prof
 import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
 import 'package:construction_technect/app/modules/forgotPassword/bindings/forgot_password_binding.dart';
 import 'package:construction_technect/app/modules/forgotPassword/views/forgot_password_view.dart';
+import 'package:construction_technect/app/modules/location/bindings/location_binding.dart';
+import 'package:construction_technect/app/modules/location/views/location_view.dart';
 import 'package:construction_technect/app/modules/login/bindings/login_binding.dart';
 import 'package:construction_technect/app/modules/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/main/bindings/main_binding.dart';
@@ -201,6 +203,11 @@ class AppPages {
       name: _Paths.CONNECTION_INBOX,
       page: () =>  ConnectionInboxView(),
       binding: ConnectionInboxBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOCATION,
+      page: () =>  const LocationView(),
+      binding: LocationBinding(),
     ),
   ];
 }

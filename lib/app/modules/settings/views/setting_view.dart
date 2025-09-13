@@ -1,10 +1,8 @@
+import 'package:construction_technect/app/core/utils/dashed_circle.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
-import 'package:construction_technect/app/modules/ProductApproval/views/product_approval_view.dart';
-import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
 
-class SettingsView extends StatelessWidget {
-  const SettingsView({super.key});
+class SettingView extends StatelessWidget {
+  const SettingView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,71 +12,86 @@ class SettingsView extends StatelessWidget {
         backgroundColor: MyColors.white,
         elevation: 0,
         centerTitle: false,
-        leading: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SvgPicture.asset(Asset.menuIcon, width: 24, height: 24),
-        ),
-        title: Text('Menu', style: MyTexts.regular20),
+        title: Text('Settings', style: MyTexts.regular20),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 6.sw),
         child: Column(
           children: [
+            Row(
+              children: [
+                const DashedCircle(
+                  size: 81,
+                  color: MyColors.grey,
+                  strokeWidth: 1.2,
+                  assetImage: Asset.profil,
+                ),
+
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Mike Junior",
+                      overflow: TextOverflow.ellipsis,
+                      style: MyTexts.regular16.copyWith(color: MyColors.fontBlack),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "mike@constructiontechnet.com",
+                      overflow: TextOverflow.ellipsis,
+                      style: MyTexts.regular16.copyWith(color: MyColors.fontBlack),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
             SizedBox(height: 2.h),
             _buildMenuItem(
-              'Service Management',
-              false,
-              onTap: () {
-                Get.toNamed(Routes.SERVICE_MANAGEMENT);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Product Management',
-              false,
-              onTap: () {
-                Get.to(() => ProductManagementView());
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem('Approval Inbox', true,
-            onTap: (){
-              Get.to(()=> const ProductApprovalView());
-            }),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Connection Inbox',
-              true,
-              customIcon: Image.asset(Asset.crmIcon, height: 24, width: 24),
-              onTap: () {
-                Get.toNamed(Routes.CONNECTION_INBOX);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Role Management',
-              false,
-              onTap: () {
-                Get.toNamed(Routes.ROLE_MANAGEMENT);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Support Ticket',
-              true,
-              customIcon: SvgPicture.asset(Asset.suportTicket),
-              onTap: () {
-                Get.to(() => CustomerSupportView());
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Settings',
+              'My Profile',
+              icon: Icons.person_outline,
               false,
               onTap: () {
                 Get.toNamed(Routes.PROFILE);
               },
             ),
+            SizedBox(height: 1.h),
+            _buildMenuItem(
+              'Terms & Conditions',
+              customIcon: Image.asset(Asset.termscondi, height: 24, width: 24),
+
+              false,
+              onTap: () {},
+            ),
+            SizedBox(height: 1.h),
+            _buildMenuItem(
+              'Rate/Feedback App',
+              false,
+              customIcon: Image.asset(Asset.rate, height: 24, width: 24),
+
+              onTap: () {},
+            ),
+            SizedBox(height: 1.h),
+            _buildMenuItem(
+              'Share App',
+              icon: Icons.share_outlined,
+              true,
+              onTap: () {
+              
+              },
+            ),
+            SizedBox(height: 1.h),
+            _buildMenuItem(
+              'About Us',
+              customIcon: Image.asset(Asset.aboutUs, height: 24, width: 24),
+
+              false,
+              onTap: () {
+                // Get.toNamed(Routes.ROLE_MANAGEMENT);
+              },
+            ),
+
             SizedBox(height: 1.h),
             _buildMenuItem(
               'Log Out',
@@ -219,7 +232,6 @@ class SettingsView extends StatelessWidget {
       ),
     );
   }
-
 }
 
 /// Modern Confirmation Dialog

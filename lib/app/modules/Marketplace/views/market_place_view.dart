@@ -274,7 +274,10 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
               SizedBox(height: 2.h),
               Center(
                 child: RoundedButton(
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(Routes.LOCATION);
+
+                  },
                   buttonName: '',
                   borderRadius: 12,
                   width: 50.w,

@@ -4,6 +4,8 @@ import 'package:construction_technect/app/modules/ProductManagement/components/p
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/controllers/product_management_controller.dart';
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
+import 'package:construction_technect/app/modules/location/controllers/location_controller.dart';
+import 'package:construction_technect/app/modules/location/views/location_view.dart';
 
 class ProductManagementView extends StatelessWidget {
   final ProductManagementController controller = Get.put(ProductManagementController());
@@ -222,7 +224,10 @@ class ProductManagementView extends StatelessWidget {
                 Center(
                   child: RoundedButton(
                     onTap: () {
-                      Get.toNamed(Routes.ADD_PRODUCT);
+                      Get.to(() {
+                        Get.put(LocationController()); // inject controller
+                        return const LocationView();
+                      });
                     },
                     buttonName: '',
                     borderRadius: 12,

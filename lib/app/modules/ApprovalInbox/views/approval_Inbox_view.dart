@@ -13,7 +13,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
     required String message,
     required String product,
     required String category,
-    required String dateTime,
+    required String dateTime, 
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -30,7 +30,6 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -90,7 +89,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-       appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: MyColors.white,
         elevation: 0,
         scrolledUnderElevation: 0.0,
@@ -98,39 +97,38 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-  padding: const EdgeInsets.all(16),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-       Text(
-        "Approval Inbox",
-  style: MyTexts.medium20.copyWith(color: MyColors.fontBlack),
-
-      ),
-       SizedBox(height: 2.h), // spacing between text and list
-      Expanded(
-        child: Obx(
-          () => ListView.builder(
-            itemCount: controller.statusCards.length,
-            itemBuilder: (context, index) {
-              final card = controller.statusCards[index];
-              return buildStatusCard(
-                borderColor: card["borderColor"],
-                iconBgColor: card["iconBgColor"],
-                icon: card["icon"],
-                iconColor: card["iconColor"],
-                message: card["message"],
-                product: card["product"],
-                category: card["category"],
-                dateTime: card["dateTime"],
-              );
-            },
-          ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Approval Inbox",
+              style: MyTexts.medium20.copyWith(color: MyColors.fontBlack),
+            ),
+            SizedBox(height: 2.h), // spacing between text and list
+            Expanded(
+              child: Obx(
+                () => ListView.builder(
+                  itemCount: controller.statusCards.length,
+                  itemBuilder: (context, index) {
+                    final card = controller.statusCards[index];
+                    return buildStatusCard(
+                      borderColor: card["borderColor"],
+                      iconBgColor: card["iconBgColor"],
+                      icon: card["icon"],
+                      iconColor: card["iconColor"],
+                      message: card["message"],
+                      product: card["product"],
+                      category: card["category"],
+                      dateTime: card["dateTime"],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-    ],
-  ),
-),
-  );
+    );
   }
 }

@@ -15,7 +15,8 @@ class HomeView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: AppBar(
-        
+        forceMaterialTransparency: true,
+
           backgroundColor: MyColors.white,
           elevation: 0,
           title: Row(
