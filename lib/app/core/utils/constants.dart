@@ -40,6 +40,7 @@ class Asset {
   static const String profil = 'assets/images/profil.png';
   static const String verified = 'assets/images/verified.png';
   static const String premium = 'assets/images/premium.png';
+  static const String suportTicket = 'assets/images/suportTicket.svg';
 
   // Edit
   static const String editIcon = 'assets/images/edit.svg';
@@ -59,11 +60,9 @@ class Asset {
   static const String marketplaceIcon = 'assets/images/marketpalce.png';
   static const String crmIcon = 'assets/images/crm.png';
   static const String erpIcon = 'assets/images/erp.png';
-  static const String projectManagementIcon =
-      'assets/images/project_management.png';
+  static const String projectManagementIcon = 'assets/images/project_management.png';
   static const String hrmsIcon = 'assets/images/hrms.png';
-  static const String portfolioManagementIcon =
-      'assets/images/portfolio_management.png';
+  static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
   static const String ovpIcon = 'assets/images/ovp.png';
   static const String constructionTaxi = 'assets/images/team.png';
 
@@ -86,12 +85,10 @@ class Asset {
   static const String gst = 'assets/images/gst.png';
   static const String inprog = 'assets/images/inprog.png';
 
-
-//Add Role
+  //Add Role
   static const String approvals = 'assets/images/approvals.png';
   static const String management = 'assets/images/management.png';
   static const String operations = 'assets/images/operations.png';
-
 
   //Product details
   static const String productDetails = 'assets/images/product_details.png';
@@ -109,19 +106,23 @@ class Asset {
   static const String materialMarketplace = 'assets/images/material_market.png';
   static const String constructionCinemarketPlace =
       'assets/images/construction-cine marketplace.png';
-  static const String logisticMarketPlace =
-      'assets/images/logistic_marketplace.png';
+  static const String logisticMarketPlace = 'assets/images/logistic_marketplace.png';
 
-// Your Role 
+  // Your Role
   static const String partner = 'assets/images/partner.png';
   static const String connector = 'assets/images/connector.png';
   static const String checkCircle = 'assets/images/check_circle.png';
 
-
-
-//Support
+  //Support
   static const String supportView = 'assets/images/view.png';
 
+  // Connect to Crm
+  static const String connectToCrm = 'assets/images/connect-crm.png';
+
+  // Connection inbox
+  static const String inboxTotalProducts = 'assets/images/totalProducts.png';
+  static const String approvedProducts = 'assets/images/approvedProducts.png';
+  static const String rejectedProducts = 'assets/images/rejectedProducts.png';
 }
 
 class Constants {

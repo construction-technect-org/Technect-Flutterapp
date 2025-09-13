@@ -16,6 +16,8 @@ import 'package:construction_technect/app/modules/BusinessHours/bindings/busines
 import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
+import 'package:construction_technect/app/modules/ConnectionInbox/bindings/connection_inbox_binding.dart';
+import 'package:construction_technect/app/modules/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/Marketplace/bindings/market_place_binding.dart';
 import 'package:construction_technect/app/modules/Marketplace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
@@ -194,6 +196,11 @@ class AppPages {
       name: _Paths.CHAT_SYSTEM,
       page: () => const ChatSystemView(),
       binding: ChatSystemBinding(),
+    ),
+     GetPage(
+      name: _Paths.CONNECTION_INBOX,
+      page: () =>  ConnectionInboxView(),
+      binding: ConnectionInboxBinding(),
     ),
   ];
 }

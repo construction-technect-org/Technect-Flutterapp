@@ -20,7 +20,7 @@ class MainTabBarView extends GetView<MainController> {
           case 2:
             return CustomerSupportView();
           case 3:
-            return const SettingsView();
+            return  const SettingsView();
           default:
             return HomeView();
         }

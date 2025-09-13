@@ -73,6 +73,9 @@ class MyColors {
   static const Color mistyRose = Color(0xFFFFE5E2);
   static const Color aquacolor = Color(0xFFFFEBEB);
   static const Color faneuilBrick = Color(0xFFB77A73);
+  static const Color dopelyColors = Color(0xFF6C6C6C);
+  static const Color gray53 = Color(0xFF878787);
+
 
 
 

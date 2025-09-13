@@ -39,12 +39,12 @@ class WelcomeName extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    const Icon(
-                      Icons.keyboard_arrow_down,
-                      size: 16,
-                      color: Colors.black54,
-                    ),
+                    // const SizedBox(width: 4),
+                    // const Icon(
+                    //   Icons.keyboard_arrow_down,
+                    //   size: 16,
+                    //   color: Colors.black54,
+                    // ),
                   ],
                 ),
               ),

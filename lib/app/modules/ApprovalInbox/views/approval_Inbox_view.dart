@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/ApprovalInbox/controllers/approval_Inbox_controller.dart';
 
 class ApprovalInboxView extends GetView<ApprovalInboxController> {
@@ -29,7 +30,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Status Icon
+            
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -89,32 +90,25 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-
-        automaticallyImplyLeading: false,
+       appBar: AppBar(
         backgroundColor: MyColors.white,
         elevation: 0,
-        flexibleSpace: Padding(
-          padding: EdgeInsets.only(top: 6.h, left: 16, right: 16),
-          child: Row(
-            children: [
-              InkWell(
-                onTap: () => Get.back(),
-                borderRadius: BorderRadius.circular(50),
-                child: Icon(Icons.arrow_back_rounded, size: 24, color: MyColors.black),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "APPROVAL INBOX",
-                style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-              ),
-            ],
-          ),
-        ),
+        scrolledUnderElevation: 0.0,
+        title: WelcomeName(),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+  padding: const EdgeInsets.all(16),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+       Text(
+        "Approval Inbox",
+  style: MyTexts.medium20.copyWith(color: MyColors.fontBlack),
+
+      ),
+       SizedBox(height: 2.h), // spacing between text and list
+      Expanded(
         child: Obx(
           () => ListView.builder(
             itemCount: controller.statusCards.length,
@@ -134,6 +128,9 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
           ),
         ),
       ),
-    );
+    ],
+  ),
+),
+  );
   }
 }

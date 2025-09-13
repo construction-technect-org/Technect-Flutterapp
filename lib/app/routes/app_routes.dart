@@ -32,6 +32,8 @@ abstract class Routes {
   static const ADD_SERVICE = _Paths.ADD_SERVICE;
   static const SERVICE_DETAILS = _Paths.SERVICE_DETAILS;
   static const CHAT_SYSTEM  = _Paths.CHAT_SYSTEM;
+  static const CONNECTION_INBOX  = _Paths.CONNECTION_INBOX;
+
 
 }
 
@@ -66,5 +68,7 @@ abstract class _Paths {
   static const ADD_SERVICE = '/add-service';
   static const SERVICE_DETAILS = '/service-details';
   static const CHAT_SYSTEM = '/chat-system';
+  static const CONNECTION_INBOX = '/connection-inbox';
+
 
 }
