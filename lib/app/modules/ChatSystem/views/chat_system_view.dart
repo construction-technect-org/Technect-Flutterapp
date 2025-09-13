@@ -12,6 +12,8 @@ class ChatSystemView extends GetView<ChatSystemController> {
       backgroundColor: MyColors.backgroundColor,
       resizeToAvoidBottomInset: true, // ✅ Allows body to resize when keyboard opens
       appBar: AppBar(
+          forceMaterialTransparency: true,
+
         centerTitle: false,
         titleSpacing: 0,
         elevation: 0,

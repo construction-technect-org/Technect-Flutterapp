@@ -18,7 +18,7 @@ class CustomerSupportView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: AppBar(
-          automaticallyImplyLeading: false, // This removes the back button
+       forceMaterialTransparency: true,
           backgroundColor: MyColors.white,
           elevation: 0,
           scrolledUnderElevation: 0.0,

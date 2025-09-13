@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
 
 class SettingsView extends StatelessWidget {
@@ -9,6 +10,7 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: AppBar(
+        
         backgroundColor: MyColors.white,
         elevation: 0,
         centerTitle: false,
@@ -49,7 +51,12 @@ class SettingsView extends StatelessWidget {
               },
             ),
             SizedBox(height: 1.h),
-            _buildMenuItem('Support Ticket', true),
+            _buildMenuItem('Support Ticket', true,
+             onTap: () {
+                Get.to(() => CustomerSupportView());
+              },
+
+            ),
             SizedBox(height: 1.h),
             _buildMenuItem(
               'Settings',
