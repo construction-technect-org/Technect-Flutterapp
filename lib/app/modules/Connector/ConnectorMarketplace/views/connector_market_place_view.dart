@@ -228,7 +228,7 @@ class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
                       children: [
                         Expanded(
                           child: StatCard(
-                            title: 'Total Products',
+                            title: 'No of Products',
                             value: '10',
                             icon: SvgPicture.asset(Asset.TotalProducts),
                             iconBackground: MyColors.yellowundertones,
@@ -237,10 +237,10 @@ class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: StatCard(
-                            title: 'Featured',
-                            value: '0',
+                            title: 'No of Merchants',
+                            value: '04',
                             icon: SvgPicture.asset(Asset.Featured),
-                            iconBackground: MyColors.verypaleBlue,
+                            iconBackground: MyColors.blanchedAlmond,
                           ),
                         ),
                       ],
@@ -250,19 +250,22 @@ class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
                       children: [
                         Expanded(
                           child: StatCard(
-                            title: 'Low Stock',
-                            value: '0',
-                            icon: SvgPicture.asset(Asset.LowStock),
-                            iconBackground: MyColors.paleRed,
+                            title: 'No of Wishlist',
+                            value: '04',
+                            icon: SvgPicture.asset(Asset.TotalInterests),
+                            iconBackground: MyColors.lavender,
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: StatCard(
-                            title: 'Total Interests',
-                            value: '0',
+                            title: 'Connect Inbox',
+                            value: '02',
                             icon: SvgPicture.asset(Asset.TotalInterests),
                             iconBackground: MyColors.warmOrange,
+                              showCornerBadge: true, // shows red circle
+
+                            
                           ),
                         ),
                       ],
