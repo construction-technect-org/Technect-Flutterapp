@@ -25,6 +25,7 @@ class Asset {
   static const String wishlistIcon = 'assets/images/wishlist.svg';
   static const String supportIcon = 'assets/images/support.svg';
   static const String settingsIcon = 'assets/images/settings.svg';
+  static const String vectorIcon = 'assets/images/Vector.png';
 
   // Menu icons
   static const String menuSettingIcon = 'assets/images/menuSetting.svg';
@@ -44,6 +45,9 @@ class Asset {
   static const String termscondi = 'assets/images/terms&condi.png';
   static const String rate = 'assets/images/rate.png';
   static const String aboutUs = 'assets/images/aboutUs.png';
+  static const String productManagement = 'assets/images/productManagement.svg';
+ static const String role = 'assets/images/role.svg';
+
 
 
 

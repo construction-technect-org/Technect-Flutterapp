@@ -1,11 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
-import 'package:construction_technect/app/modules/ProductApproval/views/product_approval_view.dart';
-import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
-import 'package:construction_technect/app/modules/settings/views/setting_view.dart';
 
-class MenuView extends StatelessWidget {
-  const MenuView({super.key});
+class ConnectorMenuView extends StatelessWidget {
+  const ConnectorMenuView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,48 +21,22 @@ class MenuView extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 6.sw),
         child: Column(
           children: [
-            SizedBox(height: 2.h),
-            _buildMenuItem(
-              'Service Management',
-              false,
-              onTap: () {
-                Get.toNamed(Routes.SERVICE_MANAGEMENT);
-              },
-            ),
             SizedBox(height: 1.h),
             _buildMenuItem(
-              'Product Management',
-              customIcon: SvgPicture.asset(Asset.productManagement, height: 24, width: 24),
-
+              'Wish list',
               false,
+              customIcon: SvgPicture.asset(Asset.wishlistIcon),
               onTap: () {
-                Get.to(() => ProductManagementView());
+                // Get.to(() => ProductManagementView());
               },
             ),
-            SizedBox(height: 1.h),
-            _buildMenuItem('Approval Inbox', true,
-               customIcon: Image.asset(Asset.vectorIcon, height: 24, width: 24),
-
-            onTap: (){
-              Get.to(()=> const ProductApprovalView());
-            }),
             SizedBox(height: 1.h),
             _buildMenuItem(
               'Connection Inbox',
               true,
-              customIcon: Image.asset(Asset.crmIcon, height: 24, width: 24),
+              customIcon: Image.asset(Asset.vectorIcon, height: 24, width: 24),
               onTap: () {
-                  Get.toNamed(Routes.CONNECTION_INBOX);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Role Management',
-          customIcon: SvgPicture.asset(Asset.role, height: 24, width: 24),
-
-              false,
-              onTap: () {
-                Get.toNamed(Routes.ROLE_MANAGEMENT);
+                //  Get.toNamed(Routes.CONNECTION_INBOX);
               },
             ),
             SizedBox(height: 1.h),
@@ -75,22 +45,18 @@ class MenuView extends StatelessWidget {
               true,
               customIcon: SvgPicture.asset(Asset.suportTicket),
               onTap: () {
-                Get.to(() => CustomerSupportView());
+                // Get.to(() => CustomerSupportView());
               },
             ),
             SizedBox(height: 1.h),
             _buildMenuItem(
               'Settings',
+            customIcon: SvgPicture.asset(Asset.settingsIcon, height: 24, width: 24),
+
               false,
-               customIcon: SvgPicture.asset(Asset.settingsIcon),
-
-               onTap: () {
-                Get.to(() => const SettingView());
+              onTap: () {
+                //  Get.to(() => const SettingView());
               },
-
-              // onTap: () {
-              //   Get.toNamed(Routes.PROFILE);
-              // },
             ),
           ],
         ),
@@ -191,7 +157,6 @@ class MenuView extends StatelessWidget {
       ),
     );
   }
-
 }
 
 /// Modern Confirmation Dialog

@@ -263,7 +263,7 @@ class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
                             value: '02',
                             icon: SvgPicture.asset(Asset.TotalInterests),
                             iconBackground: MyColors.warmOrange,
-                              showCornerBadge: true, // shows red circle
+                             showCornerBadge: true, // shows red circle
 
                             
                           ),

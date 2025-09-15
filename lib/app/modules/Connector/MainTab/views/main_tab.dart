@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorMenu/views/connector_menu_view.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/controllers/main_tab_controller.dart';
 import 'package:construction_technect/app/modules/Connector/home/views/home_view.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
@@ -18,7 +19,7 @@ class MainTab extends GetView<MainTabController> {
           case 2:
             return const Center(child: Text("2"));
           case 3:
-            return  const Center(child: Text("3"));
+            return  const ConnectorMenuView();
           default:
             return HomeView();
         }
