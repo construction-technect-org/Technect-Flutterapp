@@ -36,6 +36,12 @@ abstract class Routes {
   static const LOCATION  = _Paths.LOCATION;
 
 
+  // Connector
+   static const MAIN_TAB  = _Paths.MAIN_TAB;
+   static const CONNECTOR_MARKET_PLACE  = _Paths.CONNECTOR_MARKET_PLACE;
+
+
+
 }
 
 abstract class _Paths {
@@ -71,6 +77,12 @@ abstract class _Paths {
   static const CHAT_SYSTEM = '/chat-system';
   static const CONNECTION_INBOX = '/connection-inbox';
   static const LOCATION = '/location';
+
+
+
+// Connector
+   static const MAIN_TAB = '/main-tab';
+   static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
 
 
 }

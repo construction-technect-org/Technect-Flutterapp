@@ -19,6 +19,8 @@ class RoundedButton extends StatelessWidget {
     this.gradientColor,
     this.style,
     this.horizontalPadding,
+     this.assetImage, // ✅ optional asset image
+
   });
 
   final Color? color;
@@ -38,6 +40,7 @@ class RoundedButton extends StatelessWidget {
   final double? horizontalPadding;
   final List<Color>? gradientColor;
   final TextStyle? style;
+  final String? assetImage; // ✅ new optional asset image
 
   @override
   Widget build(BuildContext context) {
@@ -78,3 +81,6 @@ class RoundedButton extends StatelessWidget {
     );
   }
 }
+
+
+
