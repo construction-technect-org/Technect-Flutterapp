@@ -7,8 +7,7 @@ import 'dart:convert';
 ServiceListModel serviceListModelFromJson(String str) =>
     ServiceListModel.fromJson(json.decode(str));
 
-String serviceListModelToJson(ServiceListModel data) =>
-    json.encode(data.toJson());
+String serviceListModelToJson(ServiceListModel data) => json.encode(data.toJson());
 
 class ServiceListModel {
   final bool? success;
@@ -17,12 +16,11 @@ class ServiceListModel {
 
   ServiceListModel({this.success, this.data, this.message});
 
-  factory ServiceListModel.fromJson(Map<String, dynamic> json) =>
-      ServiceListModel(
-        success: json["success"],
-        data: json["data"] == null ? null : ServiceData.fromJson(json["data"]),
-        message: json["message"],
-      );
+  factory ServiceListModel.fromJson(Map<String, dynamic> json) => ServiceListModel(
+    success: json["success"],
+    data: json["data"] == null ? null : ServiceData.fromJson(json["data"]),
+    message: json["message"],
+  );
 
   Map<String, dynamic> toJson() => {
     "success": success,
@@ -73,7 +71,7 @@ class Service {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? serviceTypeName;
-  final String? serviceNameValue;
+  final String? serviceNameStandard;
 
   Service({
     this.id,
@@ -94,7 +92,7 @@ class Service {
     this.createdAt,
     this.updatedAt,
     this.serviceTypeName,
-    this.serviceNameValue,
+    this.serviceNameStandard,
   });
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
@@ -113,14 +111,10 @@ class Service {
     isActive: json["is_active"],
     isFeatured: json["is_featured"],
     sortOrder: json["sort_order"],
-    createdAt: json["created_at"] == null
-        ? null
-        : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null
-        ? null
-        : DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     serviceTypeName: json["service_type_name"],
-    serviceNameValue: json["service_name_value"],
+    serviceNameStandard: json["service_name_standard"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -142,36 +136,35 @@ class Service {
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
     "service_type_name": serviceTypeName,
-    "service_name_value": serviceNameValue,
+    "service_name_standard": serviceNameStandard,
   };
 }
 
 class ServiceStatistics {
-  final int? totalServices;
-  final int? lowStock;
-  final int? totalInterests;
-  final int? featured;
+  final String? totalServices;
+  final String? featuredServices;
+  final String? servicesWithPricing;
+  final String? averagePrice;
 
   ServiceStatistics({
     this.totalServices,
-    this.lowStock,
-    this.totalInterests,
-    this.featured,
+    this.featuredServices,
+    this.servicesWithPricing,
+    this.averagePrice,
   });
 
-  factory ServiceStatistics.fromJson(Map<String, dynamic> json) =>
-      ServiceStatistics(
-        totalServices: json["total_services"],
-        lowStock: json["low_stock"],
-        totalInterests: json["total_interests"],
-        featured: json["featured"],
-      );
+  factory ServiceStatistics.fromJson(Map<String, dynamic> json) => ServiceStatistics(
+    totalServices: json["total_services"],
+    featuredServices: json["featured_services"],
+    servicesWithPricing: json["services_with_pricing"],
+    averagePrice: json["average_price"],
+  );
 
   Map<String, dynamic> toJson() => {
     "total_services": totalServices,
-    "low_stock": lowStock,
-    "total_interests": totalInterests,
-    "featured": featured,
+    "featured_services": featuredServices,
+    "services_with_pricing": servicesWithPricing,
+    "average_price": averagePrice,
   };
 }
 
@@ -183,22 +176,17 @@ class ServiceTypeModel {
 
   ServiceTypeModel({this.success, this.data, this.message});
 
-  factory ServiceTypeModel.fromJson(Map<String, dynamic> json) =>
-      ServiceTypeModel(
-        success: json["success"],
-        data: json["data"] == null
-            ? []
-            : List<ServiceType>.from(
-                json["data"]!.map((x) => ServiceType.fromJson(x)),
-              ),
-        message: json["message"],
-      );
+  factory ServiceTypeModel.fromJson(Map<String, dynamic> json) => ServiceTypeModel(
+    success: json["success"],
+    data: json["data"] == null
+        ? []
+        : List<ServiceType>.from(json["data"]!.map((x) => ServiceType.fromJson(x))),
+    message: json["message"],
+  );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data == null
-        ? []
-        : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -206,13 +194,41 @@ class ServiceTypeModel {
 class ServiceType {
   final int? id;
   final String? name;
+  final String? description;
+  final bool? isActive;
+  final int? sortOrder;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
-  ServiceType({this.id, this.name});
+  ServiceType({
+    this.id,
+    this.name,
+    this.description,
+    this.isActive,
+    this.sortOrder,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-  factory ServiceType.fromJson(Map<String, dynamic> json) =>
-      ServiceType(id: json["id"], name: json["name"]);
+  factory ServiceType.fromJson(Map<String, dynamic> json) => ServiceType(
+    id: json["id"],
+    name: json["name"],
+    description: json["description"],
+    isActive: json["is_active"],
+    sortOrder: json["sort_order"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+  );
 
-  Map<String, dynamic> toJson() => {"id": id, "name": name};
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "description": description,
+    "is_active": isActive,
+    "sort_order": sortOrder,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+  };
 }
 
 class ServiceDropdownModel {
@@ -235,21 +251,51 @@ class ServiceDropdownModel {
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data == null
-        ? []
-        : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
 
 class ServiceDropdown {
   final int? id;
+  final int? serviceTypeId;
   final String? name;
+  final String? description;
+  final bool? isActive;
+  final int? sortOrder;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
-  ServiceDropdown({this.id, this.name});
+  ServiceDropdown({
+    this.id,
+    this.serviceTypeId,
+    this.name,
+    this.description,
+    this.isActive,
+    this.sortOrder,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-  factory ServiceDropdown.fromJson(Map<String, dynamic> json) =>
-      ServiceDropdown(id: json["id"], name: json["name"]);
+  factory ServiceDropdown.fromJson(Map<String, dynamic> json) => ServiceDropdown(
+    id: json["id"],
+    serviceTypeId: json["service_type_id"],
+    name: json["name"],
+    description: json["description"],
+    isActive: json["is_active"],
+    sortOrder: json["sort_order"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+  );
 
-  Map<String, dynamic> toJson() => {"id": id, "name": name};
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "service_type_id": serviceTypeId,
+    "name": name,
+    "description": description,
+    "is_active": isActive,
+    "sort_order": sortOrder,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+  };
 }

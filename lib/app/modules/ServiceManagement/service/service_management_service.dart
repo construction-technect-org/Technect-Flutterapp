@@ -25,7 +25,7 @@ class ServiceManagementService {
   Future<ServiceDropdownModel> getServices(int serviceTypeId) async {
     try {
       final response = await apiManager.get(
-        url: '${APIConstants.getServices}/$serviceTypeId',
+        url: '${APIConstants.getServices}/$serviceTypeId/services',
       );
       return ServiceDropdownModel.fromJson(response);
     } catch (e, st) {
@@ -63,6 +63,17 @@ class ServiceManagementService {
       return CreateServiceResponse.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in updateService: $e , $st');
+    }
+  }
+
+  Future<CreateServiceResponse> deleteService(int serviceId) async {
+    try {
+      final response = await apiManager.delete(
+        url: '${APIConstants.deleteService}$serviceId',
+      );
+      return CreateServiceResponse.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in deleteService: $e , $st');
     }
   }
 }

@@ -12,7 +12,8 @@ class APIConstants {
   static const String signup = "auth/signup";
   static const String login = "auth/login";
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
-  static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
+  static const String forgotPasswordVerifyOtp =
+      "auth/forgot-password/verify-otp";
   static const String forgotPasswordReset = "auth/forgot-password/reset";
   static const String profile = "auth/profile";
   static const String address = "address";
@@ -29,15 +30,17 @@ class APIConstants {
   static const String roleDetailById = "merchant/role";
   static const String teamDetail = "merchant/team";
   static const String getMainCategories = "merchant/category/main";
-  static const String getSubCategories = "merchant/category/sub?main_category_id=";
+  static const String getSubCategories =
+      "merchant/category/sub?main_category_id=";
   static const String getProducts = "merchant/category/products/sub/";
   static const String getFilter = "merchant/category/filters/sub/";
   static const String getProductList = "merchant/product/list";
 
   // Service Management APIs
-  static const String getServiceList = "merchant/service/list";
-  static const String createService = "merchant/service/create";
-  static const String updateService = "merchant/service/";
-  static const String getServiceTypes = "merchant/service/types";
-  static const String getServices = "merchant/service/list/type";
+  static const String getServiceList = "service/merchant/list";
+  static const String createService = "service/create";
+  static const String updateService = "service/merchant/";
+  static const String deleteService = "service/merchant/";
+  static const String getServiceTypes = "service/types";
+  static const String getServices = "service/types";
 }

@@ -44,7 +44,7 @@ class AddServiceView extends GetView<AddServiceController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  controller.isEdit.value ? "EDIT SERVICE" : "ADD SERVICE",
+                  controller.isEdit ? "EDIT SERVICE" : "ADD SERVICE",
                   style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
                 ),
                 const SizedBox(height: 2),
@@ -152,16 +152,30 @@ class AddServiceView extends GetView<AddServiceController> {
                             'Service Type',
                             style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
+                          if (!controller.isEdit)
+                            Text(
+                              '*',
+                              style: MyTexts.light16.copyWith(color: MyColors.red),
+                            ),
+                          if (controller.isEdit) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              '(Read Only)',
+                              style: MyTexts.light12.copyWith(color: MyColors.grey),
+                            ),
+                          ],
                         ],
                       ),
                       SizedBox(height: 1.h),
                       CommonDropdown<String>(
                         items: controller.serviceTypeNames,
                         selectedValue: controller.selectedServiceType,
-                        onChanged: controller.onServiceTypeSelected,
+                        onChanged: controller.isEdit
+                            ? null
+                            : controller.onServiceTypeSelected,
                         hintText: 'Select Service Type',
                         itemLabel: (item) => item,
+                        enabled: !controller.isEdit,
                       ),
                       SizedBox(height: 2.h),
                       Row(
@@ -170,16 +184,30 @@ class AddServiceView extends GetView<AddServiceController> {
                             'Service',
                             style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                           ),
-                          Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
+                          if (!controller.isEdit)
+                            Text(
+                              '*',
+                              style: MyTexts.light16.copyWith(color: MyColors.red),
+                            ),
+                          if (controller.isEdit) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              '(Read Only)',
+                              style: MyTexts.light12.copyWith(color: MyColors.grey),
+                            ),
+                          ],
                         ],
                       ),
                       SizedBox(height: 1.h),
                       CommonDropdown<String>(
                         items: controller.serviceNames,
                         selectedValue: controller.selectedService,
-                        onChanged: controller.onServiceSelected,
+                        onChanged: controller.isEdit
+                            ? null
+                            : controller.onServiceSelected,
                         itemLabel: (item) => item,
                         hintText: 'Select Service',
+                        enabled: !controller.isEdit,
                       ),
                       SizedBox(height: 2.h),
                       Row(
@@ -213,6 +241,9 @@ class AddServiceView extends GetView<AddServiceController> {
                       CustomTextField(
                         controller: controller.priceController,
                         keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          controller.gstCalculate();
+                        },
                       ),
                       SizedBox(height: 2.h),
                       Row(
@@ -227,6 +258,9 @@ class AddServiceView extends GetView<AddServiceController> {
                       CustomTextField(
                         controller: controller.gstController,
                         keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          controller.gstCalculate();
+                        },
                       ),
                       SizedBox(height: 2.h),
                       Row(
@@ -242,6 +276,7 @@ class AddServiceView extends GetView<AddServiceController> {
                       CustomTextField(
                         controller: controller.gstPriceController,
                         keyboardType: TextInputType.number,
+                        readOnly: true,
                       ),
                       SizedBox(height: 2.h),
                       Row(

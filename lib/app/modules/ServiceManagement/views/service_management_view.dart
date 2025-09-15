@@ -113,7 +113,7 @@ class ServiceManagementView extends StatelessWidget {
                               child: StatCard(
                                 title: 'Featured',
                                 value:
-                                    '${controller.serviceModel.value.data?.statistics?.featured ?? 0}',
+                                    '${controller.serviceModel.value.data?.statistics?.featuredServices ?? 0}',
                                 icon: SvgPicture.asset(Asset.Featured),
                                 iconBackground: MyColors.verypaleBlue,
                               ),
@@ -125,9 +125,9 @@ class ServiceManagementView extends StatelessWidget {
                           children: [
                             Expanded(
                               child: StatCard(
-                                title: 'Low Stock',
+                                title: 'With Pricing',
                                 value:
-                                    '${controller.serviceModel.value.data?.statistics?.lowStock ?? 0}',
+                                    '${controller.serviceModel.value.data?.statistics?.servicesWithPricing ?? 0}',
                                 icon: SvgPicture.asset(Asset.LowStock),
                                 iconBackground: MyColors.paleRed,
                               ),
@@ -135,9 +135,9 @@ class ServiceManagementView extends StatelessWidget {
                             const SizedBox(width: 12),
                             Expanded(
                               child: StatCard(
-                                title: 'Total Interests',
+                                title: 'Avg Price',
                                 value:
-                                    '${controller.serviceModel.value.data?.statistics?.totalInterests ?? 0}',
+                                    '₹${double.parse(controller.serviceModel.value.data?.statistics?.averagePrice ?? '0').toStringAsFixed(1)}',
                                 icon: SvgPicture.asset(Asset.TotalInterests),
                                 iconBackground: MyColors.warmOrange,
                               ),

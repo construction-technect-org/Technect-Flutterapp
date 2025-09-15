@@ -28,6 +28,8 @@ import 'package:construction_technect/app/modules/RoleManagement/bindings/role_m
 import 'package:construction_technect/app/modules/RoleManagement/views/role_management_view.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/views/service_management_view.dart';
+import 'package:construction_technect/app/modules/ServiceDetail/bindings/service_detail_binding.dart';
+import 'package:construction_technect/app/modules/ServiceDetail/views/service_detail_view.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/bindings/sign_up_details_binding.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_up_password_binding.dart';
@@ -180,7 +182,7 @@ class AppPages {
       page: () => const YourRoleView(),
       binding: YourRoleBinding(),
     ),
-      GetPage(
+    GetPage(
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
       binding: BindingsBuilder(() {
@@ -194,19 +196,24 @@ class AppPages {
       page: () => const AddServiceView(),
       binding: AddServiceBinding(),
     ),
-     GetPage(
+    GetPage(
+      name: _Paths.SERVICE_DETAILS,
+      page: () => ServiceDetailsView(),
+      binding: ServiceDetailBinding(),
+    ),
+    GetPage(
       name: _Paths.CHAT_SYSTEM,
       page: () => const ChatSystemView(),
       binding: ChatSystemBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.CONNECTION_INBOX,
-      page: () =>  ConnectionInboxView(),
+      page: () => ConnectionInboxView(),
       binding: ConnectionInboxBinding(),
     ),
     GetPage(
       name: _Paths.LOCATION,
-      page: () =>  const LocationView(),
+      page: () => const LocationView(),
       binding: LocationBinding(),
     ),
   ];
