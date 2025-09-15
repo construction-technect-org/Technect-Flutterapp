@@ -75,7 +75,7 @@ class MyColors {
   static const Color faneuilBrick = Color(0xFFB77A73);
   static const Color dopelyColors = Color(0xFF6C6C6C);
   static const Color gray53 = Color(0xFF878787);
-
+  static const Color sonicSilver = Color(0xFF747474);
 
 
 

@@ -61,7 +61,94 @@ class YourRoleView extends GetView<YourRoleController> {
                         RoundedButton(
                           buttonName: 'PROCEED',
                           onTap: () {
-                            Get.toNamed(Routes.MAIN);
+                            if (controller.selectedRole.value == "Partner") {
+                              // Direct navigation for Partner
+                              Get.toNamed(Routes.MAIN);
+                            } else if (controller.selectedRole.value == "Connector") {
+                              // Show custom dialog for Connector
+                              showDialog(
+                                context: Get.context!, // use GetX context
+                                barrierDismissible:
+                                    false, // prevent dismiss on tap outside
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        color: Colors.white,
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(
+                                            height: 120,
+                                            child: Image.asset(
+                                              Asset.welcommarketpalce,
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                          SizedBox(height: 2.h),
+                                          Text(
+                                            "Welcome to Marketpalce!",
+                                            style: MyTexts.extraBold18.copyWith(
+                                              color: MyColors.primary,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(height: 1.h),
+                                          Text(
+                                            "Search Products and Connect Premium Merchants!",
+                                            style: MyTexts.regular16.copyWith(
+                                              color: MyColors.dopelyColors,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(height: 24),
+                                          Center(
+                                            child: RoundedButton(
+                                              onTap: () {
+                                                Navigator.of(
+                                                  context,
+                                                ).pop(); // close dialog
+                                                Get.toNamed(
+                                                  Routes.MAIN_TAB,
+                                                ); // go to Connector main
+                                              },
+                                              buttonName: '',
+                                              borderRadius: 12,
+                                              width: 40.w,
+                                              height: 45,
+                                              verticalPadding: 0,
+                                              horizontalPadding: 0,
+                                              color: MyColors.lightBlue,
+                                              child: Center(
+                                                child: Text(
+                                                  'Proceed',
+                                                  style: MyTexts.medium16.copyWith(
+                                                    color: MyColors.white,
+                                                    fontFamily: MyTexts.Roboto,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              // No role selected
+                              Get.snackbar(
+                                "Select Role",
+                                "Please select a role before proceeding",
+                              );
+                            }
                           },
                         ),
                       ],
@@ -122,7 +209,7 @@ class YourRoleView extends GetView<YourRoleController> {
                 Expanded(
                   child: Text(
                     title,
-                   style: MyTexts.bold18.copyWith(color:MyColors.fontBlack),
+                    style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
                   ),
                 ),
               ],

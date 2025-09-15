@@ -117,17 +117,21 @@ class Asset {
   static const String partner = 'assets/images/partner.png';
   static const String connector = 'assets/images/connector.png';
   static const String checkCircle = 'assets/images/check_circle.png';
+  static const String welcommarketpalce = 'assets/images/welcommarketpalce.png';
 
   //Support
   static const String supportView = 'assets/images/view.png';
 
   // Connect to Crm
   static const String connectToCrm = 'assets/images/connect-crm.png';
+    static const String call = 'assets/images/call.png';
 
   // Connection inbox
   static const String inboxTotalProducts = 'assets/images/totalProducts.png';
   static const String approvedProducts = 'assets/images/approvedProducts.png';
   static const String rejectedProducts = 'assets/images/rejectedProducts.png';
+
+
 }
 
 class Constants {
