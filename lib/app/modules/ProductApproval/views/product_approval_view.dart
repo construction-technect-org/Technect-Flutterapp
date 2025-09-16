@@ -95,7 +95,6 @@ class ProductApprovalView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     "Product Approval",
@@ -104,12 +103,10 @@ class ProductApprovalView extends StatelessWidget {
                   const Spacer(), // Automatically takes available space
                   InkWell(
                     onTap: () {
-                     Get.toNamed(Routes.APPROVAL_INBOX);
-
+                      Get.toNamed(Routes.APPROVAL_INBOX);
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // "Approved" text with underline using Container decoration
                         Container(

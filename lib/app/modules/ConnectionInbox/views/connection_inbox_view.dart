@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/ConnectionInbox/controllers/connection_inbox_controller.dart';
-import 'package:get/get.dart';
 
 class ConnectionInboxView extends GetView<ConnectionInboxController> {
   @override
@@ -14,8 +13,7 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
         elevation: 0,
         scrolledUnderElevation: 0.0,
         title: WelcomeName(),
-       automaticallyImplyLeading: false, // This removes the back button
-
+        automaticallyImplyLeading: false, // This removes the back button
       ),
       body: SafeArea(
         child: Column(

@@ -1,4 +1,3 @@
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 /// Ticket Model
@@ -151,14 +150,14 @@ class TicketListView extends StatelessWidget {
                       MyColors.fontBlack,
                       borderColor: MyColors.americanSilver,
                     ),
-                     SizedBox(width: 2.w),
+                    SizedBox(width: 2.w),
                     _buildChip(
                       ticket.status,
                       _getStatusBgColor(ticket.status),
                       MyColors.white,
                       icon: _getStatusIcon(ticket.status),
                     ),
-                     SizedBox(width: 2.w),
+                    SizedBox(width: 2.w),
                     _buildChip(
                       ticket.priority,
                       MyColors.white,
@@ -168,7 +167,7 @@ class TicketListView extends StatelessWidget {
                     ),
                   ],
                 ),
-                 SizedBox(height: 1.h),
+                SizedBox(height: 1.h),
 
                 /// Title
                 Text(
@@ -176,20 +175,20 @@ class TicketListView extends StatelessWidget {
                   style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
                 ),
 
-                 SizedBox(height: 1.h),
+                SizedBox(height: 1.h),
 
                 /// Company + email
                 Row(
                   children: [
                     const Icon(Icons.person_outline, size: 16, color: Colors.grey),
-                     SizedBox(width: 0.4.w),
+                    SizedBox(width: 0.4.w),
                     Text(
                       ticket.company,
                       style: MyTexts.regular14.copyWith(color: MyColors.darkGray),
                     ),
-                     SizedBox(width: 3.w),
+                    SizedBox(width: 3.w),
                     const Icon(Icons.email_outlined, size: 16, color: Colors.grey),
-                     SizedBox(width: 1.w),
+                    SizedBox(width: 1.w),
                     Text(
                       ticket.email,
                       style: MyTexts.regular14.copyWith(color: MyColors.darkGray),
@@ -197,7 +196,7 @@ class TicketListView extends StatelessWidget {
                   ],
                 ),
 
-                 SizedBox(height: 0.8.h),
+                SizedBox(height: 0.8.h),
 
                 /// Description
                 Text(
@@ -205,7 +204,7 @@ class TicketListView extends StatelessWidget {
                   style: MyTexts.regular14.copyWith(color: MyColors.charcoal),
                 ),
 
-                 SizedBox(height: 1.h),
+                SizedBox(height: 1.h),
 
                 /// Dates + assigned
                 Text(
@@ -238,7 +237,7 @@ class TicketListView extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: borderColor ?? Colors.transparent, width: 1),
+        border: Border.all(color: borderColor ?? Colors.transparent),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

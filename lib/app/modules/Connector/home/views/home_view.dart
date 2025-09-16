@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Connector/home/components/home_components.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
-import 'package:flutter/cupertino.dart';
 
 class HomeView extends StatelessWidget {
   final HomeController controller = Get.put(HomeController());
@@ -55,11 +54,7 @@ class HomeView extends StatelessWidget {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  SvgPicture.asset(
-                    Asset.notifications,
-                    width: 28,
-                    height: 28,
-                  ),
+                  SvgPicture.asset(Asset.notifications, width: 28, height: 28),
                   Positioned(
                     right: 0,
                     top: 3,
@@ -111,7 +106,10 @@ class HomeView extends StatelessWidget {
                     hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                     filled: true,
                     fillColor: MyColors.white,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 12,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(22.5),
                       borderSide: BorderSide.none,
@@ -132,9 +130,7 @@ class HomeView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 "Features",
-                style: MyTexts.extraBold18.copyWith(
-                  color: MyColors.textFieldBackground,
-                ),
+                style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
               ),
             ),
 
@@ -175,9 +171,7 @@ class HomeView extends StatelessWidget {
                           Text(
                             item["title"],
                             textAlign: TextAlign.center,
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.fontBlack,
-                            ),
+                            style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                           ),
                         ],
                       ),
@@ -195,34 +189,28 @@ class HomeView extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Team",
-                    style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
-                  ),
+                  Text("Team", style: MyTexts.bold18.copyWith(color: MyColors.fontBlack)),
                   Text(
                     "View All",
-                    style: MyTexts.medium12.copyWith(
-                      color: MyColors.textFieldBackground,
-                    ),
+                    style: MyTexts.medium12.copyWith(color: MyColors.textFieldBackground),
                   ),
                 ],
               ),
             ),
 
             // Team List
-           ListView.builder(
-  padding: const EdgeInsets.all(12),
-  itemCount: 3,
-  shrinkWrap: true, // Important for nested scrollables
-  physics: const NeverScrollableScrollPhysics(), // Disables inner scrolling
-  itemBuilder: (context, index) {
-    return const Padding(
-      padding: EdgeInsets.only(bottom: 12),
-      child: MerchantCard(), // Use your card here
-    );
-  },
-)
-
+            ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: 3,
+              shrinkWrap: true, // Important for nested scrollables
+              physics: const NeverScrollableScrollPhysics(), // Disables inner scrolling
+              itemBuilder: (context, index) {
+                return const Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: MerchantCard(), // Use your card here
+                );
+              },
+            ),
           ],
         ),
       ),
