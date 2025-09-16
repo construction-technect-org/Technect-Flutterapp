@@ -22,6 +22,8 @@ import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/bindings/main_tab_binding.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/views/main_tab.dart';
+import 'package:construction_technect/app/modules/Connector/SelectMainCategory/bindings/select_main_category_binding.dart';
+import 'package:construction_technect/app/modules/Connector/SelectMainCategory/views/select_main_category_view.dart';
 import 'package:construction_technect/app/modules/Marketplace/bindings/market_place_binding.dart';
 import 'package:construction_technect/app/modules/Marketplace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
@@ -235,6 +237,11 @@ class AppPages {
       name: _Paths.CONNECTOR_MARKET_PLACE,
       page: () =>  const ConnectorMarketPlaceView(),
       binding: ConnectorMarketPlaceBinfing(),
+    ),
+     GetPage(
+      name: _Paths.SELECT_MAIN_CATEGORY,
+      page: () =>   SelectMainCategoryView(),
+      binding: SelectMainCategoryBinding(),
     ),
   ];
 }

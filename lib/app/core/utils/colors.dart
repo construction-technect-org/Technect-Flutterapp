@@ -77,7 +77,9 @@ class MyColors {
   static const Color gray53 = Color(0xFF878787);
   static const Color sonicSilver = Color(0xFF747474);
   static const Color blanchedAlmond = Color(0xFFFFEDCF);
-  static const Color  lavender = Color(0xFFE6E8FF);
+  static const Color lavender = Color(0xFFE6E8FF);
+  static const Color  paleBlue = Color(0xFFDEE8FF);
+
 
 
 
