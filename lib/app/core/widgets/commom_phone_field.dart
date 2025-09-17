@@ -44,10 +44,10 @@ class CommonPhoneField extends StatelessWidget {
                   children: [
                     Text(
                       headerText ?? "",
-                      style: MyTexts.n16w400.copyWith(color: MyColors.lightBlue),
+                      style: MyTexts.regular16.copyWith(color: MyColors.lightBlue,  fontFamily: MyTexts.Roboto,),
                     ),
                     Text('*',
-                        style: MyTexts.light18.copyWith(color: Colors.red)),
+                        style: MyTexts.regular16.copyWith(color: Colors.red)),
                   ],
                 ),
                 const Gap(5),
@@ -66,7 +66,9 @@ class CommonPhoneField extends StatelessWidget {
             dropdownIcon: const Icon(Icons.arrow_drop_down,
                 color: MyColors.primary),
             dropdownIconPosition: IconPosition.trailing,
-            style: MyTexts.n16w500.copyWith(color: MyColors.primary),
+            style: MyTexts.medium16.copyWith(color: MyColors.primary,
+                fontFamily: MyTexts.Roboto
+            ),
             decoration:  InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
@@ -92,8 +94,9 @@ class CommonPhoneField extends StatelessWidget {
               contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               hintText: "Enter your phone number",
-              hintStyle: MyTexts.n14w500.copyWith(
+              hintStyle: MyTexts.medium14.copyWith(
                 color: MyColors.primary.withValues(alpha: 0.5),
+                  fontFamily: MyTexts.Roboto
               ),
             ),
             onSubmitted: onSubmitted,
@@ -101,9 +104,16 @@ class CommonPhoneField extends StatelessWidget {
               searchFieldCursorColor: MyColors.primary,
               backgroundColor: Colors.white,
               countryNameStyle:
-              MyTexts.n14w500.copyWith(color: Colors.black),
+              MyTexts.medium14.copyWith(color: Colors.black,
+                  fontFamily: MyTexts.Roboto
+
+              ),
               countryCodeStyle:
-              MyTexts.n14w500.copyWith(color: Colors.black),
+              MyTexts.medium14.copyWith(color: Colors.black,
+
+                  fontFamily: MyTexts.Roboto
+
+              ),
               listTilePadding:
               const EdgeInsets.symmetric(horizontal: 10),
               searchFieldPadding: const EdgeInsets.all(10),
@@ -115,8 +125,11 @@ class CommonPhoneField extends StatelessWidget {
                 hintText: "Search Country",
                 prefixIcon: const Icon(CupertinoIcons.search,
                     color: MyColors.primary),
-                hintStyle: MyTexts.n14w500
-                    .copyWith(color: MyColors.textFieldDivider),
+                hintStyle: MyTexts.medium14
+                    .copyWith(color: MyColors.textFieldDivider,
+                    fontFamily: MyTexts.Roboto
+
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderSide:
                   const BorderSide(color: MyColors.textFieldBorder),
@@ -150,7 +163,10 @@ class CommonPhoneField extends StatelessWidget {
                 isValid.value == 0
                     ? "Please enter your phone number"
                     : "Invalid mobile number",
-                style: MyTexts.n13w400.copyWith(color: Colors.red),
+                style: MyTexts.medium13.copyWith(color: Colors.red,
+                    fontFamily: MyTexts.Roboto
+
+                ),
               ),
             ),
         ],

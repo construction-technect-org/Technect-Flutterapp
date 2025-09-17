@@ -69,16 +69,22 @@ class CommonTextField extends StatelessWidget {
                 children: [
                   Text(
                     headerText ?? "",
-                    style: MyTexts.n16w400.copyWith(color: MyColors.lightBlue),
+                    style: MyTexts.regular16.copyWith(color: MyColors.lightBlue,
+                        fontFamily: MyTexts.Roboto
+
+                    ),
                   ),
-                  Text('*', style: MyTexts.light18.copyWith(color: Colors.red)),
+                  Text('*', style: MyTexts.regular16.copyWith(color: Colors.red)),
                 ],
               ),
               const Gap(5),
             ],
           ),
         TextFormField(
-          style: MyTexts.n16w500.copyWith(color: MyColors.primary),
+          style: MyTexts.medium16.copyWith(color: MyColors.primary,
+              fontFamily: MyTexts.Roboto
+
+          ),
           autofillHints: autofillHints,
           onFieldSubmitted: onFieldSubmitted,
           readOnly: readOnly,
@@ -132,10 +138,13 @@ class CommonTextField extends StatelessWidget {
               horizontal: 12,
               vertical: 12,
             ),
-            errorStyle:  MyTexts.n13w400.copyWith(color: Colors.red),
+            errorStyle:  MyTexts.regular13.copyWith(color: Colors.red,
+                fontFamily: MyTexts.Roboto
+            ),
             hintText: hintText,
-            hintStyle: MyTexts.n14w500.copyWith(
+            hintStyle: MyTexts.medium14.copyWith(
               color:MyColors.primary.withValues(alpha: 0.5),
+                fontFamily: MyTexts.Roboto
             ),
           ),
         ),

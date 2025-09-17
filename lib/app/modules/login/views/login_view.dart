@@ -45,8 +45,9 @@ class LoginView extends GetView<LoginController> {
                             const Gap(30),
                             Text(
                               'LOGIN',
-                              style: MyTexts.n24w500.copyWith(
+                              style: MyTexts.medium20.copyWith(
                                 color: Colors.black,
+                                fontFamily: MyTexts.Roboto
                               ),
                             ),
                             const Gap(30),
@@ -142,8 +143,9 @@ class LoginView extends GetView<LoginController> {
                                     const Gap(8),
                                     Text(
                                       'Remember Me',
-                                      style: MyTexts.n12w500.copyWith(
+                                      style: MyTexts.medium13.copyWith(
                                         color: MyColors.grey,
+                                        fontFamily: MyTexts.Roboto
                                       ),
                                     ),
                                   ],
@@ -154,8 +156,9 @@ class LoginView extends GetView<LoginController> {
                                   },
                                   child: Text(
                                     'Forgot Password?',
-                                    style: MyTexts.n13w500.copyWith(
+                                    style: MyTexts.medium14.copyWith(
                                       color: MyColors.red,
+                                        fontFamily: MyTexts.Roboto
                                     ),
                                   ),
                                 ),
@@ -206,8 +209,10 @@ class LoginView extends GetView<LoginController> {
                                   ),
                                   child: Text(
                                     'Or Continue with',
-                                    style: MyTexts.n13w500.copyWith(
+                                    style: MyTexts.medium13.copyWith(
                                       color: MyColors.greySecond,
+                                        fontFamily: MyTexts.Roboto
+
                                     ),
                                   ),
                                 ),
@@ -269,12 +274,16 @@ class LoginView extends GetView<LoginController> {
                                 children: [
                                   Text(
                                     "Don't have an account? ",
-                                    style: MyTexts.n14w500,
+                                    style: MyTexts.regular14.copyWith(
+                                        fontFamily: MyTexts.Roboto
+
+                                    ),
                                   ),
                                   Text(
                                     "Sign-up",
-                                    style: MyTexts.n14w700.copyWith(
+                                    style: MyTexts.bold14.copyWith(
                                       color: MyColors.lightBlueSecond,
+                                        fontFamily: MyTexts.Roboto
                                     ),
                                   ),
                                 ],
