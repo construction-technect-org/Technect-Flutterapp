@@ -19,7 +19,7 @@ class RoundedButton extends StatelessWidget {
     this.gradientColor,
     this.style,
     this.horizontalPadding,
-     this.assetImage, // ✅ optional asset image
+     this.assetImage,
 
   });
 
@@ -40,7 +40,7 @@ class RoundedButton extends StatelessWidget {
   final double? horizontalPadding;
   final List<Color>? gradientColor;
   final TextStyle? style;
-  final String? assetImage; // ✅ new optional asset image
+  final String? assetImage;
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +48,14 @@ class RoundedButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: width,
-        height: height ?? 60,
+        height: height ?? 57,
         decoration: BoxDecoration(
           color: color ?? MyColors.primary,
           border:
               borderColor != null
                   ? Border.all(color: borderColor ?? MyColors.white)
                   : null,
-          borderRadius: BorderRadius.circular(borderRadius ?? 50),
+          borderRadius: BorderRadius.circular(borderRadius ?? 0),
         ),
         alignment: alignment ?? Alignment.center,
         padding: EdgeInsets.symmetric(
@@ -71,9 +71,8 @@ class RoundedButton extends StatelessWidget {
                       textAlign: textAlign,
                       style:
                           style ??
-                          MyTexts.medium16.copyWith(
+                          MyTexts.n18w600.copyWith(
                             color: fontColor ?? MyColors.white,
-                            fontSize: fontSize ?? 18.sp,
                           ),
                     )
                 : child,

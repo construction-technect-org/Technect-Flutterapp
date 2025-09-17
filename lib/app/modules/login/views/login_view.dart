@@ -1,4 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/login/controllers/login_controller.dart';
 import 'package:gap/gap.dart';
 
@@ -29,99 +31,51 @@ class LoginView extends GetView<LoginController> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(43)),
+                    borderRadius: BorderRadius.zero,
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 6.sw),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                       const Gap(30),
-                        Text('LOGIN', style: MyTexts.n24w500.copyWith(color: Colors.black)),
-                        Row(
+                    child: Form(
+                      key: controller.formKey,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
+                            const Gap(30),
                             Text(
-                              'Enter Your Mobile Number',
-                              style: MyTexts.light18.copyWith(color: MyColors.lightBlue),
+                              'LOGIN',
+                              style: MyTexts.n24w500.copyWith(
+                                color: Colors.black,
+                              ),
                             ),
-                            Text('*', style: MyTexts.light18.copyWith(color: Colors.red)),
-                          ],
-                        ),
-                        SizedBox(height: 2.h),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: MyColors.textFieldBorder),
-                            color: MyColors.white,
-                          ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: SvgPicture.asset(
-                                  Asset.phoneIcon,
-                                  width: 20,
-                                  height: 20,
-                                  colorFilter: const ColorFilter.mode(
-                                    MyColors.primary,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                              ),
-                              // Vertical divider
-                              Container(
-                                width: 1,
-                                height: 30,
-                                color: MyColors.textFieldDivider,
-                              ),
-                              // Text field
-                              Expanded(
-                                child: TextField(
-                                  controller: controller.mobileController,
-                                  keyboardType: TextInputType.phone,
-                                  style: MyTexts.extraBold16.copyWith(
-                                    height: 36 / 16,
-                                    color: MyColors.primary,
-                                  ),
-                                  cursorHeight: 20,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter mobile number',
-                                    hintStyle: MyTexts.medium16.copyWith(
-                                      color: MyColors.grey,
-                                    ),
-                                    border: InputBorder.none,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 12,
-                                    ),
-                                    isDense: true,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 4.sh),
-                        Text(
-                          'Password*',
-                          style: MyTexts.light18.copyWith(color: MyColors.lightBlue),
-                        ),
-                        SizedBox(height: 1.sh),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: MyColors.textFieldBorder),
-                            color: MyColors.white,
-                          ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: SvgPicture.asset(
+                            const Gap(30),
+                            CommonPhoneField(
+                              headerText: "Mobile Number",
+                              controller: controller.mobileController,
+                              focusNode: controller.mobileFocusNode,
+                              isValid: controller.isValid,
+                              onCountryCodeChanged: (code) {
+                                controller.countryCode.value = code;
+                              },
+                              onSubmitted: (val) {
+                                FocusScope.of(
+                                  context,
+                                ).requestFocus(controller.passwordFocusNode);
+                              },
+                            ),
+                            const Gap(16),
+                            Obx(() {
+                              return CommonTextField(
+                                textInputAction: TextInputAction.done,
+                                headerText: "Password",
+                                focusNode: controller.passwordFocusNode,
+                                controller: controller.passwordController,
+                                obscureText:
+                                    !controller.isPasswordVisible.value,
+                                // controlled from your controller
+                                hintText: "******",
+                                prefixIcon: SvgPicture.asset(
                                   Asset.lockIcon,
                                   width: 20,
                                   height: 20,
@@ -130,205 +84,206 @@ class LoginView extends GetView<LoginController> {
                                     BlendMode.srcIn,
                                   ),
                                 ),
-                              ),
-                              // Vertical divider
-                              Container(
-                                width: 1,
-                                height: 30,
-                                color: MyColors.textFieldDivider,
-                              ),
-                              // Text field
-                              Expanded(
-                                child: Obx(
-                                  () => TextField(
-                                    controller: controller.passwordController,
-                                    obscureText: !controller.isPasswordVisible.value,
-                                    style: MyTexts.extraBold16.copyWith(
-                                      color: MyColors.primary,
-                                      height: 36 / 16,
+                                validator: (val) {
+                                  if ((val ?? "").isEmpty) {
+                                    return "Please enter your password";
+                                  }
+                                  return null;
+                                },
+                                showDivider: true,
+                                suffixIcon: GestureDetector(
+                                  onTap: () =>
+                                      controller.togglePasswordVisibility(),
+                                  child: Icon(
+                                    controller.isPasswordVisible.value
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: MyColors.primary,
+                                  ),
+                                ),
+                              );
+                            }),
+                            const Gap(8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Obx(
+                                      () => GestureDetector(
+                                        onTap: () {
+                                          controller.rememberMe.value =
+                                              !controller.rememberMe.value;
+                                        },
+                                        child: Container(
+                                          width: 18,
+                                          height: 18,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              3,
+                                            ),
+                                            border: Border.all(
+                                              color: MyColors.grey,
+                                            ),
+                                            color: controller.rememberMe.value
+                                                ? MyColors.primary
+                                                : Colors.transparent,
+                                          ),
+                                          child: controller.rememberMe.value
+                                              ? const Icon(
+                                                  Icons.check,
+                                                  size: 14,
+                                                  color: Colors.white,
+                                                )
+                                              : null,
+                                        ),
+                                      ),
                                     ),
-                                    cursorHeight: 20,
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter password',
-                                      hintStyle: MyTexts.medium16.copyWith(
+                                    const Gap(8),
+                                    Text(
+                                      'Remember Me',
+                                      style: MyTexts.n12w500.copyWith(
                                         color: MyColors.grey,
                                       ),
-                                      border: InputBorder.none,
-                                      contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 12,
-                                      ),
-                                      isDense: true,
+                                    ),
+                                  ],
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Get.toNamed(Routes.FORGOT_PASSWORD);
+                                  },
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: MyTexts.n13w500.copyWith(
+                                      color: MyColors.red,
                                     ),
                                   ),
-                                ),
-                              ),
-                              // Eye icon
-                              GestureDetector(
-                                onTap: () {
-                                  controller.togglePasswordVisibility();
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                                  child: SvgPicture.asset(
-                                    Asset.eyeIcon,
-                                    width: 18,
-                                    height: 18,
-                                    colorFilter: const ColorFilter.mode(
-                                      MyColors.primary,
-                                      BlendMode.srcIn,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Obx(
-                                  () => GestureDetector(
-                                    onTap: () {
-                                      controller.rememberMe.value =
-                                          !controller.rememberMe.value;
-                                    },
-                                    child: Container(
-                                      width: 18,
-                                      height: 18,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(3),
-                                        border: Border.all(color: MyColors.grey),
-                                        color: controller.rememberMe.value
-                                            ? MyColors.primary
-                                            : Colors.transparent,
-                                      ),
-                                      child: controller.rememberMe.value
-                                          ? const Icon(
-                                              Icons.check,
-                                              size: 14,
-                                              color: Colors.white,
-                                            )
-                                          : null,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Remember Me',
-                                  style: MyTexts.medium14.copyWith(color: MyColors.grey),
                                 ),
                               ],
                             ),
-                            TextButton(
-                              onPressed: () {
-                                Get.toNamed(Routes.FORGOT_PASSWORD);
+                            const Gap(24),
+                            Obx(
+                              () => RoundedButton(
+                                buttonName: 'LOGIN',
+                                onTap: controller.isLoading.value
+                                    ? null
+                                    : () {
+                                        controller.isValid.value = -1;
+                                        if (controller
+                                            .mobileController
+                                            .text
+                                            .isEmpty) {
+                                          controller.isValid.value = 0;
+                                        }
+                                        if (controller.formKey.currentState
+                                                ?.validate() ??
+                                            false) {
+                                          if (controller
+                                              .mobileController
+                                              .text
+                                              .isEmpty) {
+                                            controller.isValid.value = 0;
+                                          } else {
+                                            controller.login();
+                                          }
+                                        }
+                                      },
+                              ),
+                            ),
+                            const Gap(24),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                    color: MyColors.greySecond,
+                                    indent: 20.sw,
+                                    thickness: 1,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 2.w,
+                                  ),
+                                  child: Text(
+                                    'Or Continue with',
+                                    style: MyTexts.n13w500.copyWith(
+                                      color: MyColors.greySecond,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    color: MyColors.greySecond,
+                                    endIndent: 20.sw,
+                                    thickness: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(24),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: MyColors.greyThird,
+                                      ),
+                                    ),
+                                    height: 6.sh,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(Asset.googleIcon),
+                                    ),
+                                  ),
+                                  onTap: () {},
+                                ),
+                                SizedBox(width: 10.sw),
+                                GestureDetector(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: MyColors.greyThird,
+                                      ),
+                                    ),
+                                    height: 6.sh,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(Asset.facebookIcon),
+                                    ),
+                                  ),
+                                  onTap: () {},
+                                ),
+                              ],
+                            ),
+                            const Gap(24),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.SIGN_UP_ROLE);
                               },
-                              child: Text(
-                                'Forgot Password?',
-                                style: MyTexts.medium14.copyWith(color: Colors.red),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Don't have an account? ",
+                                    style: MyTexts.n14w500,
+                                  ),
+                                  Text(
+                                    "Sign-up",
+                                    style: MyTexts.n14w700.copyWith(
+                                      color: MyColors.lightBlueSecond,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
+                            const Gap(32),
                           ],
                         ),
-                        SizedBox(height: 2.sh),
-                        Obx(
-                          () => RoundedButton(
-                            
-                            buttonName: 'LOGIN',
-                            onTap: controller.isLoading.value
-                                ? null
-                                : () {
-                                    controller.login();
-                                  },
-                          ),
-                        ),
-                        SizedBox(height: 2.sh),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: MyColors.greySecond,
-                                indent: 12.sw,
-                                thickness: 1,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 2.w),
-                              child: Text(
-                                'Or Continue with',
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.greySecond,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: MyColors.greySecond,
-                                endIndent: 16.sw,
-                                thickness: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 3.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: MyColors.greyThird),
-                                ),
-                                height: 6.sh,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(Asset.googleIcon),
-                                ),
-                              ),
-                              onTap: () {},
-                            ),
-                            SizedBox(width: 10.sw),
-                            GestureDetector(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: MyColors.greyThird),
-                                ),
-                                height: 6.sh,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(Asset.facebookIcon),
-                                ),
-                              ),
-                              onTap: () {},
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 2.5.sh),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.SIGN_UP_ROLE);
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Don't have an account? ", style: MyTexts.light16),
-                              Text(
-                                "Sign-up",
-                                style: MyTexts.light16.copyWith(
-                                  color: MyColors.lightBlueSecond,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 4.sh),
-                      ],
+                      ),
                     ),
                   ),
                 ),

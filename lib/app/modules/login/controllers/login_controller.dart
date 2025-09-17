@@ -4,9 +4,16 @@ import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/login/services/LoginService.dart';
 
 class LoginController extends GetxController {
+  final formKey = GlobalKey<FormState>();
+
   final mobileController = TextEditingController();
   final passwordController = TextEditingController();
+
+  FocusNode mobileFocusNode = FocusNode();
+  FocusNode passwordFocusNode = FocusNode();
   final rememberMe = false.obs;
+  RxInt isValid = (-1).obs;
+  RxString countryCode ="".obs;
   HomeService homeService = HomeService();
 
   LoginService loginService = LoginService();
@@ -16,6 +23,7 @@ class LoginController extends GetxController {
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
+
 
   @override
   void onInit() {

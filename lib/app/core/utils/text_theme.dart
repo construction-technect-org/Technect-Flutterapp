@@ -228,4 +228,40 @@ class MyTexts {
     fontSize: 14,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle get n14w700 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle get n16w500 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle get n16w400 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle get n13w400 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle get n13w500 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle get n12w500 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle get n18w600 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+  );
 }
