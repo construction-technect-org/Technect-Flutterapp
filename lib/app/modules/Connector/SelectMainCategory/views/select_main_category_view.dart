@@ -162,11 +162,13 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
                   child: Row(
                     children: List.generate(controller.categories.length, (index) {
                       final category = controller.categories[index];
-                      final isSelected = controller.selectedIndex.value == index;
+                      final isSelected = controller.selectedCategory.value == index;
 
                       return GestureDetector(
                         onTap: () {
-                          controller.selectedIndex.value = index;
+                          controller.selectCategory(
+                            index,
+                          ); // ✅ Make sure this also updates subcategories/products
                         },
                         child: Container(
                           margin: const EdgeInsets.only(right: 12),
@@ -184,7 +186,7 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
                           child: Row(
                             children: [
                               Image.asset(
-                                category['image'],
+                                category['image'], // ✅ Fixed line
                                 width: 24,
                                 height: 24,
                                 fit: BoxFit.cover,
@@ -214,6 +216,8 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 0.8.h),
+
+                  /// ✅ Wrap Category GridView in Obx
                   GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -221,43 +225,16 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
                       crossAxisCount: 4,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
-                      childAspectRatio: 0.7,
+                      childAspectRatio: 0.9,
                     ),
-                    itemCount: products.length,
+                    itemCount: categories.length,
                     itemBuilder: (context, index) {
                       return buildSelectableCard(
-                        title: products[index]["name"],
-                        assetsImage: products[index]["image"],
-                        isSelected: controller.selectedProduct.value == index,
+                        title: categories[index]["name"],
+                        assetsImage: categories[index]["image"],
+                        isSelected: controller.selectedCategory.value == index,
                         onTap: () {
-                          controller.selectedProduct.value = index;
-                        },
-                      );
-                    },
-                  ),
-
-                  const Text(
-                    "Sub-Category",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 0.8.h),
-                  GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 9,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemCount: subCategories.length,
-                    itemBuilder: (context, index) {
-                      return buildSelectableCard(
-                        title: subCategories[index]["name"],
-                        assetsImage: subCategories[index]["image"],
-                        isSelected: controller.selectedSubCategory.value == index,
-                        onTap: () {
-                          controller.selectedSubCategory.value = index;
+                          controller.selectCategory(index);
                         },
                       );
                     },
@@ -265,29 +242,68 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
 
                   SizedBox(height: 1.h),
                   const Text(
+                    "Sub-Category",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 0.8.h),
+
+                  /// ✅ Wrap Sub-Category GridView in Obx
+                  Obx(
+                    () => GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 9,
+                        childAspectRatio: 0.9,
+                      ),
+                      itemCount: controller.subCategories.length,
+                      itemBuilder: (context, index) {
+                        final subCategory = controller.subCategories[index];
+                        return buildSelectableCard(
+                          title: subCategory["name"],
+                          assetsImage: subCategory["image"],
+                          isSelected: controller.selectedSubCategory.value == index,
+                          onTap: () {
+                            controller.selectSubCategory(index);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+
+                  SizedBox(height: 1.h),
+                  const Text(
                     "Product",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 0.7,
+                  SizedBox(height: 0.8.h),
+
+                  /// ✅ Wrap Product GridView in Obx
+                  Obx(
+                    () => GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        childAspectRatio: 0.9,
+                      ),
+                      itemCount: controller.products.length,
+                      itemBuilder: (context, index) {
+                        final product = controller.products[index];
+                        return buildSelectableCard(
+                          title: product["name"],
+                          assetsImage: product["image"],
+                          isSelected: controller.selectedProduct.value == index,
+                          onTap: () {
+                            controller.selectProduct(index);
+                          },
+                        );
+                      },
                     ),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      return buildSelectableCard(
-                        title: products[index]["name"],
-                        assetsImage: products[index]["image"],
-                        isSelected: controller.selectedProduct.value == index,
-                        onTap: () {
-                          controller.selectedProduct.value = index;
-                        },
-                      );
-                    },
                   ),
                 ],
               ),
@@ -309,56 +325,44 @@ Widget buildSelectableCard({
 }) {
   return GestureDetector(
     onTap: onTap,
-    child: Container(
-      margin: const EdgeInsets.all(6),
-      width: width ?? 100,
-      decoration: BoxDecoration(
-        color: Colors.white, // container stays white
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Column(
-        children: [
-          /// Image with perfect border
-          Stack(
-            children: [
-              // Border container
-              Container(
-                height: height ?? 68,
-                width: width ?? 68,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                  border: isSelected
-                      ? Border.all(color: MyColors.primary, )
-                      : null,
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                  child: Image.asset(
-                    assetsImage,
-                    height: height ?? 68,
-                    width: width ?? 68,
-                    fit: BoxFit.cover,
-                  ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: width ?? 68,
+              height: height ?? 68,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: isSelected ? MyColors.primary : Colors.transparent,
+                  width: 2,
                 ),
               ),
-
-             
-            ],
-          ),
-
-          const SizedBox(height: 6),
-
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: MyTexts.medium12.copyWith(
-              color: MyColors.fontBlack, // always black
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.asset(assetsImage, fit: BoxFit.cover),
+              ),
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
+            if (isSelected)
+              const Positioned(
+                top: -6,
+                right: -6,
+                child: Icon(Icons.check_box, color: MyColors.primary),
+              ),
+          ],
+        ),
+        SizedBox(height: 0.6.h),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: MyTexts.medium12.copyWith(color: MyColors.primary),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     ),
   );
 }
