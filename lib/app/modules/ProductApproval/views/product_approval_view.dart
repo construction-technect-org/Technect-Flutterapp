@@ -102,36 +102,28 @@ class ProductApprovalView extends StatelessWidget {
                     style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
                   ),
                   const Spacer(), // Automatically takes available space
-                  InkWell(
-                    onTap: () {
-                     Get.toNamed(Routes.APPROVAL_INBOX);
-
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // "Approved" text with underline using Container decoration
-                        Container(
-                          padding: const EdgeInsets.only(
-                            bottom: 2,
-                          ), // Space for underline
-                          decoration: const BoxDecoration(
-                            border: Border(bottom: BorderSide(color: MyColors.gray53)),
-                          ),
-                          child: Text(
-                            "Approved",
-                            style: MyTexts.extraBold18.copyWith(color: MyColors.green),
-                          ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // "Approved" text with underline using Container decoration
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 2), // Space for underline
+                        decoration: const BoxDecoration(
+                          border: Border(bottom: BorderSide(color: MyColors.gray53)),
                         ),
-                        SizedBox(width: 0.4.w), // space between text and icon
-                        const Icon(
-                          Icons.keyboard_arrow_down_outlined,
-                          size: 30,
-                          color: MyColors.darkSilver,
+                        child: Text(
+                          "Approved",
+                          style: MyTexts.extraBold18.copyWith(color: MyColors.green),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: 0.4.w), // space between text and icon
+                      const Icon(
+                        Icons.keyboard_arrow_down_outlined,
+                        size: 30,
+                        color: MyColors.darkSilver,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -143,11 +135,11 @@ class ProductApprovalView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ListView.separated(
                   itemCount: 5,
-                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        // Handle tap
+                        Get.toNamed(Routes.APPROVAL_INBOX);
                       },
                       child: const ProductCard(
                         statusText: 'Approved',
