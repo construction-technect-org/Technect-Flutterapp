@@ -22,6 +22,12 @@ class MyTexts {
     color: MyColors.black,
     fontFamily: Lato,
   );
+  static TextStyle get medium13 => TextStyle(
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w500,
+    color: MyColors.black,
+    fontFamily: Lato,
+  );
   static TextStyle get medium10 => TextStyle(
     fontSize: 10.sp,
     fontWeight: FontWeight.w500,
@@ -88,6 +94,7 @@ class MyTexts {
     color: MyColors.black,
   );
 
+
   static TextStyle get light24 => TextStyle(
     fontFamily: Lato,
     fontSize: 24.sp,
@@ -119,6 +126,11 @@ class MyTexts {
   static TextStyle get regular14 => TextStyle(
     fontFamily: Lato,
     fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: MyColors.black,
+  );  static TextStyle get regular13 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 13.sp,
     fontWeight: FontWeight.w400,
     color: MyColors.black,
   );
@@ -213,4 +225,5 @@ class MyTexts {
     fontWeight: FontWeight.w700,
     color: MyColors.black,
   );
+
 }

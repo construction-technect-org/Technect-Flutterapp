@@ -1,0 +1,180 @@
+import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:gap/gap.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+
+class CommonPhoneField extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final RxInt isValid;
+  final String? initialCountryCode;
+  final void Function(String countryCode)? onCountryCodeChanged;
+  final Function(String countryCode)? onSubmitted;
+  final String? headerText;
+  final bool showDivider;
+  final Color? bgColor;
+  final double? borderRadius;
+  final Widget? suffix;
+
+  const CommonPhoneField({
+    super.key,
+    required this.controller,
+    required this.focusNode,
+    required this.isValid,
+    this.initialCountryCode = 'IN',
+    this.onCountryCodeChanged,
+    this.suffix,
+    this.onSubmitted,
+    this.headerText,
+    this.showDivider = false,
+    this.bgColor,
+    this.borderRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if ((headerText ?? "").isNotEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      headerText ?? "",
+                      style: MyTexts.regular16.copyWith(color: MyColors.lightBlue,  fontFamily: MyTexts.Roboto,),
+                    ),
+                    Text('*',
+                        style: MyTexts.regular16.copyWith(color: Colors.red)),
+                  ],
+                ),
+                const Gap(5),
+              ],
+            ),
+
+          IntlPhoneField(
+            flagsButtonMargin: const EdgeInsets.all(8),
+            controller: controller,
+            focusNode: focusNode,
+            initialCountryCode: initialCountryCode,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            cursorColor: MyColors.lightBlue,
+            textInputAction: TextInputAction.next,
+            dropdownIcon: const Icon(Icons.arrow_drop_down,
+                color: MyColors.primary),
+            dropdownIconPosition: IconPosition.trailing,
+            style: MyTexts.medium16.copyWith(color: MyColors.primary,
+                fontFamily: MyTexts.Roboto
+            ),
+
+            decoration:  InputDecoration(
+              suffixIcon: suffix,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: isValid.value == 0
+                      ? Colors.red
+                      : MyColors.textFieldBorder,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyColors.black),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.red, width: 1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.red),
+                borderRadius: BorderRadius.circular(10),),
+              isDense: true,
+              counterText: "",
+              contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              hintText: "Enter your phone number",
+              hintStyle: MyTexts.medium16.copyWith(
+                color: MyColors.primary.withValues(alpha: 0.5),
+                  fontFamily: MyTexts.Roboto
+              ),
+            ),
+            onSubmitted: onSubmitted,
+            pickerDialogStyle: PickerDialogStyle(
+              searchFieldCursorColor: MyColors.primary,
+              backgroundColor: Colors.white,
+              countryNameStyle:
+              MyTexts.medium14.copyWith(color: Colors.black,
+                  fontFamily: MyTexts.Roboto
+
+              ),
+              countryCodeStyle:
+              MyTexts.medium14.copyWith(color: Colors.black,
+
+                  fontFamily: MyTexts.Roboto
+
+              ),
+              listTilePadding:
+              const EdgeInsets.symmetric(horizontal: 10),
+              searchFieldPadding: const EdgeInsets.all(10),
+              searchFieldInputDecoration: InputDecoration(
+                isDense: true,
+                counterText: "",
+                filled: true,
+                fillColor: MyColors.textFieldDivider.withOpacity(0.1),
+                hintText: "Search Country",
+                prefixIcon: const Icon(CupertinoIcons.search,
+                    color: MyColors.primary),
+                hintStyle: MyTexts.medium14
+                    .copyWith(color: MyColors.textFieldDivider,
+                    fontFamily: MyTexts.Roboto
+
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide:
+                  const BorderSide(color: MyColors.textFieldBorder),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: MyColors.primary),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            onChanged: (phone) {
+              if (phone.number.isEmpty) {
+                isValid.value = 0;
+              } else {
+                isValid.value = -1;
+              }
+              if (onCountryCodeChanged != null) {
+                onCountryCodeChanged!(phone.countryCode);
+              }
+            },
+          ),
+          if (isValid.value == 0 || isValid.value == 1)
+            Padding(
+              padding: const EdgeInsets.only(left: 12, top: 6),
+              child: Text(
+                isValid.value == 0
+                    ? "Please enter your phone number"
+                    : "Invalid mobile number",
+                style: MyTexts.medium13.copyWith(color: Colors.red,
+                    fontFamily: MyTexts.Roboto
+
+                ),
+              ),
+            ),
+        ],
+      );
+    });
+  }
+}

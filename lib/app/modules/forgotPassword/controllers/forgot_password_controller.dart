@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/forgotPassword/services/ForgotPasswordService.dart';
+import 'package:timer_count_down/timer_controller.dart';
 
 class ForgotPasswordController extends GetxController {
   // Controllers
@@ -14,6 +15,22 @@ class ForgotPasswordController extends GetxController {
   final newPassword = ''.obs;
   final confirmPassword = ''.obs;
 
+
+  RxInt isValid = (-1).obs;
+  RxString countryCode ="".obs;
+
+
+  final countdownController = CountdownController(autoStart: true);
+  RxBool isResendVisible = false.obs;
+
+  void startTimer() {
+    isResendVisible.value = false;
+    countdownController.restart();
+  }
+
+  void onCountdownFinish() {
+    isResendVisible.value = true;
+  }
   // State management
   final otpSend = false.obs;
   final otpVerify = false.obs;
@@ -76,7 +93,7 @@ class ForgotPasswordController extends GetxController {
 
     try {
       final otpResponse = await forgotPasswordService.sendOtp(
-        countryCode: "+91",
+        countryCode: countryCode.value,
         mobileNumber: phoneEmail.value,
       );
 
@@ -117,7 +134,7 @@ class ForgotPasswordController extends GetxController {
 
     try {
       final otpResponse = await forgotPasswordService.verifyOtp(
-        countryCode: "+91",
+        countryCode:countryCode.value,
         mobileNumber: phoneEmail.value,
         otp: otp.value,
       );
@@ -197,7 +214,7 @@ class ForgotPasswordController extends GetxController {
 
     try {
       final resetResponse = await forgotPasswordService.resetPassword(
-        countryCode: "+91",
+        countryCode: countryCode.value,
         mobileNumber: phoneEmail.value,
         password: newPassword.value,
         confirmPassword: confirmPassword.value,

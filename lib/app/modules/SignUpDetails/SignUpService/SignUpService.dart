@@ -17,11 +17,11 @@ class SignUpService {
     }
   }
 
-  Future<OtpModel> resendOtp({required String mobileNumber}) async {
+  Future<OtpModel> resendOtp({required String mobileNumber,String? code}) async {
     try {
       final response = await apiManager.postObject(
         url: APIConstants.resendOtp,
-        body: {"countryCode": "+91", "mobileNumber": mobileNumber},
+        body: {"countryCode": code, "mobileNumber": mobileNumber},
       );
       return OtpModel.fromJson(response);
     } catch (e, st) {

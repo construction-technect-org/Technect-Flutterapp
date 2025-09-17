@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/model/UserDataModel.dart';
+import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
   final firstNameController = TextEditingController();
@@ -16,6 +17,21 @@ class SignUpDetailsController extends GetxController {
   final otp = ''.obs;
   final otpSend = false.obs;
   final otpVerify = false.obs;
+
+  RxInt isValid = (-1).obs;
+  RxString countryCode = "".obs;
+
+  final countdownController = CountdownController(autoStart: true);
+  RxBool isResendVisible = false.obs;
+
+  void startTimer() {
+    isResendVisible.value = false;
+    countdownController.restart();
+  }
+
+  void onCountdownFinish() {
+    isResendVisible.value = true;
+  }
 
   @override
   void onInit() {
@@ -105,6 +121,7 @@ class SignUpDetailsController extends GetxController {
     try {
       final otpResponse = await signUpService.resendOtp(
         mobileNumber: mobileNumber.value,
+        code: countryCode.value,
       );
 
       if (otpResponse.success == true) {
@@ -138,7 +155,8 @@ class SignUpDetailsController extends GetxController {
       if (isFormValid()) {
         // Pass user data to password screen
         final userData = UserDataModel(
-          roleId: 1, // Default role ID
+          roleId: 1,
+          // Default role ID
           firstName: firstName.value,
           lastName: lastName.value,
           countryCode: "+91",
@@ -174,7 +192,8 @@ class SignUpDetailsController extends GetxController {
           if (isFormValid()) {
             // Pass user data to password screen
             final userData = UserDataModel(
-              roleId: 1, // Default role ID
+              roleId: 1,
+              // Default role ID
               firstName: firstName.value,
               lastName: lastName.value,
               countryCode: "+91",
