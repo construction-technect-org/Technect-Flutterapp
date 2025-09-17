@@ -39,6 +39,7 @@ abstract class Routes {
   // Connector
    static const MAIN_TAB  = _Paths.MAIN_TAB;
    static const CONNECTOR_MARKET_PLACE  = _Paths.CONNECTOR_MARKET_PLACE;
+   static const SELECT_MAIN_CATEGORY  = _Paths.SELECT_MAIN_CATEGORY;
 
 
 
@@ -83,6 +84,7 @@ abstract class _Paths {
 // Connector
    static const MAIN_TAB = '/main-tab';
    static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
+   static const SELECT_MAIN_CATEGORY = '/select-main-category';
 
 
 }

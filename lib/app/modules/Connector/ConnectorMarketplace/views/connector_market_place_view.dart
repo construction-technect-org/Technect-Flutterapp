@@ -161,7 +161,13 @@ class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
                       final isSelected = controller.selectedIndex.value == index;
 
                       return GestureDetector(
-                        onTap: () => controller.selectIndex(index),
+                        onTap: () {
+                          controller.selectIndex(index);
+                         Get.toNamed(Routes.SELECT_MAIN_CATEGORY);
+
+                          // 👇 Navigate to new screen
+                          Get.to(());
+                        },
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           padding: const EdgeInsets.all(10),
@@ -263,9 +269,7 @@ class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
                             value: '02',
                             icon: SvgPicture.asset(Asset.TotalInterests),
                             iconBackground: MyColors.warmOrange,
-                             showCornerBadge: true, // shows red circle
-
-                            
+                            showCornerBadge: true, // shows red circle
                           ),
                         ),
                       ],
