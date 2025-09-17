@@ -74,7 +74,6 @@ class SplashView extends GetView<SplashController> {
   Widget build(BuildContext context) {
     log(controller.token ?? 'null');
 
-    // ✅ Handle Web separately
     if (kIsWeb) {
       return Scaffold(
         body: Stack(

@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/login/controllers/login_controller.dart';
+import 'package:gap/gap.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -36,9 +37,8 @@ class LoginView extends GetView<LoginController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(height: 4.h),
-                        Text('LOGIN', style: MyTexts.light22),
-                        SizedBox(height: 3.h),
+                       const Gap(30),
+                        Text('LOGIN', style: MyTexts.n24w500.copyWith(color: Colors.black)),
                         Row(
                           children: [
                             Text(

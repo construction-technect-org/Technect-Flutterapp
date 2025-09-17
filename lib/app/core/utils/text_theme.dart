@@ -213,4 +213,19 @@ class MyTexts {
     fontWeight: FontWeight.w700,
     color: MyColors.black,
   );
+
+
+  ///
+
+  static TextStyle get n24w500 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 24,
+    fontWeight: FontWeight.w500,
+  );
+
+  static TextStyle get n14w500 => const TextStyle(
+    fontFamily: Roboto,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  );
 }
