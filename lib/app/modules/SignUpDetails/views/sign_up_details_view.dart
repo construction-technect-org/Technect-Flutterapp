@@ -63,9 +63,51 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                       // Mobile Number
                       CommonPhoneField(
                         suffix: Obx((){
+                          if (!controller.otpSend.value) {
+                            return Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  if (controller.otpSend.value) {
+                                    await controller.resendOtp().then((val) {
+                                      controller.startTimer();
+                                    });
+                                  } else {
+                                    controller.verifyMobileNumber();
+                                    controller.startTimer();
+                                  }
+                                },
+                                child: Container(
+                                  width: 90,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                  margin: const EdgeInsets.symmetric(vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: MyColors.primary,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Center(
+                                    child: Obx(
+                                          () => Text(
+                                        controller.otpSend.value
+                                            ? "Resend"
+                                            : 'Verify',
+                                        style: MyTexts.medium16.copyWith(
+                                          color: MyColors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                           if (!controller.isResendVisible.value) {
                             return const SizedBox();
-                          } else {
+                          }
+
+                          else {
                             return Container(
                             margin: const EdgeInsets.only(right: 8),
                             child: GestureDetector(
@@ -177,7 +219,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     return Text(
                                       "Resend in 00:${time.ceil().toString().padLeft(2, '0')}",
                                       style: MyTexts.bold16.copyWith(
-                                        color: Colors.lightGreen,
+                                        color: MyColors.green,
                                       ),
                                     );
                                   },
