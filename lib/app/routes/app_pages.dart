@@ -243,5 +243,10 @@ class AppPages {
       page: () =>   SelectMainCategoryView(),
       binding: SelectMainCategoryBinding(),
     ),
+    //  GetPage(
+    //   name: _Paths.LIST_OF_MERCHANT,
+    //   page: () =>   SelectMainCategoryView(),
+    //   binding: SelectMainCategoryBinding(),
+    // ),
   ];
 }
