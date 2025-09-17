@@ -63,7 +63,7 @@ class SelectMainCategoryController extends GetxController {
     selectedProduct.value = index;
 
     // Navigate to ListOfMerchantView automatically
-   // Get.to(() => const ListOfMerchantView());
+    Get.toNamed(Routes.LIST_OF_MERCHANT);
   }
 
   void loadSubCategoriesAndProducts(int categoryIndex) {

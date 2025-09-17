@@ -43,7 +43,6 @@ abstract class Routes {
    static const LIST_OF_MERCHANT  = _Paths.LIST_OF_MERCHANT;
 
 
-
 }
 
 abstract class _Paths {
@@ -86,7 +85,6 @@ abstract class _Paths {
    static const MAIN_TAB = '/main-tab';
    static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
    static const SELECT_MAIN_CATEGORY = '/select-main-category';
-   static const LIST_OF_MERCHANT = '/select-main-category';
-
+   static const LIST_OF_MERCHANT = '/List-of_merchant';
 
 }

@@ -43,4 +43,12 @@ class APIConstants {
   static const String deleteService = "service/merchant/";
   static const String getServiceTypes = "service/types";
   static const String getServices = "service/types";
+
+  // Service SupportTicket API
+  static const String getSupportTicketCategories = "support-ticket/categories";
+  static const String  getSupportTicketPriorities = "support-ticket/priorities";
+  static const String  SupportTicketCreat = "support-ticket/create";
+  static const String  getSupportMyTickets = "support-ticket/my-tickets";
+
+
 }

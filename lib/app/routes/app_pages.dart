@@ -20,6 +20,8 @@ import 'package:construction_technect/app/modules/ConnectionInbox/bindings/conne
 import 'package:construction_technect/app/modules/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
+import 'package:construction_technect/app/modules/Connector/ListOfMerchant/bindings/list_0f_merchant_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ListOfMerchant/views/list_0f_merchant_view.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/bindings/main_tab_binding.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/views/main_tab.dart';
 import 'package:construction_technect/app/modules/Connector/SelectMainCategory/bindings/select_main_category_binding.dart';
@@ -243,10 +245,10 @@ class AppPages {
       page: () =>   SelectMainCategoryView(),
       binding: SelectMainCategoryBinding(),
     ),
-    //  GetPage(
-    //   name: _Paths.LIST_OF_MERCHANT,
-    //   page: () =>   SelectMainCategoryView(),
-    //   binding: SelectMainCategoryBinding(),
-    // ),
+     GetPage(
+      name: _Paths.LIST_OF_MERCHANT,
+      page: () =>   ListOfMerchantView(),
+      binding: ListOfMerchantBinding(),
+    ),
   ];
 }
