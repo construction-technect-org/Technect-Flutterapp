@@ -69,21 +69,24 @@ class CommonTextField extends StatelessWidget {
                 children: [
                   Text(
                     headerText ?? "",
-                    style: MyTexts.regular16.copyWith(color: MyColors.lightBlue,
-                        fontFamily: MyTexts.Roboto
-
+                    style: MyTexts.regular16.copyWith(
+                      color: MyColors.lightBlue,
+                      fontFamily: MyTexts.Roboto,
                     ),
                   ),
-                  Text('*', style: MyTexts.regular16.copyWith(color: Colors.red)),
+                  Text(
+                    '*',
+                    style: MyTexts.regular16.copyWith(color: Colors.red),
+                  ),
                 ],
               ),
               const Gap(5),
             ],
           ),
         TextFormField(
-          style: MyTexts.medium16.copyWith(color: MyColors.primary,
-              fontFamily: MyTexts.Roboto
-
+          style: MyTexts.medium16.copyWith(
+            color: MyColors.primary,
+            fontFamily: MyTexts.Roboto,
           ),
           autofillHints: autofillHints,
           onFieldSubmitted: onFieldSubmitted,
@@ -117,8 +120,7 @@ class CommonTextField extends StatelessWidget {
                   )
                 : const SizedBox(),
             enabledBorder: OutlineInputBorder(
-              borderSide:
-              const BorderSide(color: MyColors.textFieldBorder),
+              borderSide: const BorderSide(color: MyColors.textFieldBorder),
               borderRadius: BorderRadius.circular(10),
             ),
             focusedBorder: OutlineInputBorder(
@@ -131,20 +133,22 @@ class CommonTextField extends StatelessWidget {
             ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.circular(10),),
+              borderRadius: BorderRadius.circular(10),
+            ),
             isDense: true,
             counterText: "",
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 12,
             ),
-            errorStyle:  MyTexts.regular13.copyWith(color: Colors.red,
-                fontFamily: MyTexts.Roboto
+            errorStyle: MyTexts.regular13.copyWith(
+              color: Colors.red,
+              fontFamily: MyTexts.Roboto,
             ),
             hintText: hintText,
-            hintStyle: MyTexts.medium14.copyWith(
-              color:MyColors.primary.withValues(alpha: 0.5),
-                fontFamily: MyTexts.Roboto
+            hintStyle: MyTexts.medium16.copyWith(
+              color: MyColors.primary.withValues(alpha: 0.5),
+              fontFamily: MyTexts.Roboto,
             ),
           ),
         ),

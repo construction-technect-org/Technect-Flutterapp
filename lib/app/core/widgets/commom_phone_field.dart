@@ -94,7 +94,7 @@ class CommonPhoneField extends StatelessWidget {
               contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               hintText: "Enter your phone number",
-              hintStyle: MyTexts.medium14.copyWith(
+              hintStyle: MyTexts.medium16.copyWith(
                 color: MyColors.primary.withValues(alpha: 0.5),
                   fontFamily: MyTexts.Roboto
               ),

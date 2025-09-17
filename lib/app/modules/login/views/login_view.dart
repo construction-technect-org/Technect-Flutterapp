@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
@@ -187,6 +188,7 @@ class LoginView extends GetView<LoginController> {
                                               .isEmpty) {
                                             controller.isValid.value = 0;
                                           } else {
+                                            hideKeyboard();
                                             controller.login();
                                           }
                                         }
