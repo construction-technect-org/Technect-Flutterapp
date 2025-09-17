@@ -107,18 +107,18 @@ class CommonTextField extends StatelessWidget {
           validator: validator,
           enabled: enable ?? true,
           decoration: InputDecoration(
-            prefixIcon: (prefixIcon != null)
+            prefixIcon: prefixIcon != null
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: prefixIcon,
-                  )
-                : const SizedBox(),
-            suffixIcon: (suffixIcon != null)
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: prefixIcon,
+            )
+                : null,
+            suffixIcon: suffixIcon != null
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: suffixIcon,
-                  )
-                : const SizedBox(),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: suffixIcon,
+            )
+                : null,
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: MyColors.textFieldBorder),
               borderRadius: BorderRadius.circular(10),
@@ -136,6 +136,8 @@ class CommonTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             isDense: true,
+            filled: true,
+            fillColor: bgColor??Colors.white,
             counterText: "",
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
@@ -146,7 +148,7 @@ class CommonTextField extends StatelessWidget {
               fontFamily: MyTexts.Roboto,
             ),
             hintText: hintText,
-            hintStyle: MyTexts.medium16.copyWith(
+            hintStyle: MyTexts.regular16.copyWith(
               color: MyColors.primary.withValues(alpha: 0.5),
               fontFamily: MyTexts.Roboto,
             ),

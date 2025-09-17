@@ -276,14 +276,14 @@ class LoginView extends GetView<LoginController> {
                                 children: [
                                   Text(
                                     "Don't have an account? ",
-                                    style: MyTexts.regular14.copyWith(
+                                    style: MyTexts.regular16.copyWith(
                                         fontFamily: MyTexts.Roboto
 
                                     ),
                                   ),
                                   Text(
                                     "Sign-up",
-                                    style: MyTexts.bold14.copyWith(
+                                    style: MyTexts.bold16.copyWith(
                                       color: MyColors.lightBlueSecond,
                                         fontFamily: MyTexts.Roboto
                                     ),

@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/model/UserDataModel.dart';
+import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
   final firstNameController = TextEditingController();
@@ -17,6 +18,21 @@ class SignUpDetailsController extends GetxController {
   final otpSend = false.obs;
   final otpVerify = false.obs;
 
+  RxInt isValid = (-1).obs;
+  RxString countryCode ="".obs;
+
+
+  final countdownController = CountdownController(autoStart: true);
+  RxBool isResendVisible = false.obs;
+
+  void startTimer() {
+    isResendVisible.value = false;
+    countdownController.restart();
+  }
+
+  void onCountdownFinish() {
+    isResendVisible.value = true;
+  }
   @override
   void onInit() {
     super.onInit();

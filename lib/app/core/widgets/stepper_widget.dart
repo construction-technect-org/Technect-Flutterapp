@@ -95,7 +95,9 @@ class StepperWidget extends StatelessWidget {
             const SizedBox(width: 10),
             // Dotted line
             _buildDottedLine(
-              currentStep > 0 ? const Color(0xFF3DA741) : const Color(0xFF1B2F62),
+              currentStep > 0
+                  ? const Color(0xFF3DA741)
+                  : const Color(0xFF1B2F62),
             ),
             const SizedBox(width: 10),
             // Step 2 - Basic Details
@@ -116,7 +118,9 @@ class StepperWidget extends StatelessWidget {
             const SizedBox(width: 10),
             // Dotted line
             _buildDottedLine(
-              currentStep > 1 ? const Color(0xFF3DA741) : const Color(0xFF1B2F62),
+              currentStep > 1
+                  ? const Color(0xFF3DA741)
+                  : const Color(0xFF1B2F62),
             ),
             const SizedBox(width: 10),
             // Step 3 - Password
@@ -146,6 +150,7 @@ class StepperWidget extends StatelessWidget {
               child: Text(
                 'Role',
                 style: MyTexts.medium14.copyWith(
+                  fontFamily: MyTexts.Roboto,
                   color: currentStep > 0
                       ? const Color(0xFF3DA741)
                       : currentStep == 0
@@ -164,6 +169,7 @@ class StepperWidget extends StatelessWidget {
                 child: Text(
                   'Basic Details',
                   style: MyTexts.medium14.copyWith(
+                    fontFamily: MyTexts.Roboto,
                     color: currentStep > 1
                         ? const Color(0xFF3DA741)
                         : currentStep == 1
@@ -182,6 +188,7 @@ class StepperWidget extends StatelessWidget {
               child: Text(
                 'Password',
                 style: MyTexts.medium14.copyWith(
+                  fontFamily: MyTexts.Roboto,
                   color: currentStep > 2
                       ? const Color(0xFF3DA741)
                       : currentStep == 2

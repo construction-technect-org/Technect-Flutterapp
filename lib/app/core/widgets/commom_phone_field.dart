@@ -15,6 +15,7 @@ class CommonPhoneField extends StatelessWidget {
   final bool showDivider;
   final Color? bgColor;
   final double? borderRadius;
+  final Widget? suffix;
 
   const CommonPhoneField({
     super.key,
@@ -23,6 +24,7 @@ class CommonPhoneField extends StatelessWidget {
     required this.isValid,
     this.initialCountryCode = 'IN',
     this.onCountryCodeChanged,
+    this.suffix,
     this.onSubmitted,
     this.headerText,
     this.showDivider = false,
@@ -69,7 +71,9 @@ class CommonPhoneField extends StatelessWidget {
             style: MyTexts.medium16.copyWith(color: MyColors.primary,
                 fontFamily: MyTexts.Roboto
             ),
+
             decoration:  InputDecoration(
+              suffixIcon: suffix,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: isValid.value == 0
