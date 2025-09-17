@@ -19,8 +19,7 @@ class SignUpDetailsController extends GetxController {
   final otpVerify = false.obs;
 
   RxInt isValid = (-1).obs;
-  RxString countryCode ="".obs;
-
+  RxString countryCode = "".obs;
 
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
@@ -33,6 +32,7 @@ class SignUpDetailsController extends GetxController {
   void onCountdownFinish() {
     isResendVisible.value = true;
   }
+
   @override
   void onInit() {
     super.onInit();
@@ -121,6 +121,7 @@ class SignUpDetailsController extends GetxController {
     try {
       final otpResponse = await signUpService.resendOtp(
         mobileNumber: mobileNumber.value,
+        code: countryCode.value,
       );
 
       if (otpResponse.success == true) {
@@ -154,7 +155,8 @@ class SignUpDetailsController extends GetxController {
       if (isFormValid()) {
         // Pass user data to password screen
         final userData = UserDataModel(
-          roleId: 1, // Default role ID
+          roleId: 1,
+          // Default role ID
           firstName: firstName.value,
           lastName: lastName.value,
           countryCode: "+91",
@@ -190,7 +192,8 @@ class SignUpDetailsController extends GetxController {
           if (isFormValid()) {
             // Pass user data to password screen
             final userData = UserDataModel(
-              roleId: 1, // Default role ID
+              roleId: 1,
+              // Default role ID
               firstName: firstName.value,
               lastName: lastName.value,
               countryCode: "+91",

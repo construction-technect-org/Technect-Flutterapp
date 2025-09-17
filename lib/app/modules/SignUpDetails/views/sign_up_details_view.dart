@@ -26,7 +26,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
             children: [
               SizedBox(height: 2.h),
               const StepperWidget(currentStep: 1),
-              SizedBox(height: 2.h),
+              SizedBox(height: 3.h),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -34,12 +34,12 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                     children: [
                       Text(
                         'Enter your Basic Details',
-                        style: MyTexts.medium16.copyWith(
+                        style: MyTexts.medium18.copyWith(
                           color: MyColors.lightBlue,
                           fontFamily: MyTexts.Roboto,
                         ),
                       ),
-                      SizedBox(height: 2.h),
+                      SizedBox(height: 2.5.h),
                       CommonTextField(
                         headerText: "First Name",
                         hintText: "Enter your first name",
