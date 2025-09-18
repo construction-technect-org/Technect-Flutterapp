@@ -88,7 +88,7 @@ class SettingView extends StatelessWidget {
 
               false,
               onTap: () {
-                // Get.toNamed(Routes.ROLE_MANAGEMENT);
+                 Get.toNamed(Routes.ROLE_MANAGEMENT);
               },
             ),
 

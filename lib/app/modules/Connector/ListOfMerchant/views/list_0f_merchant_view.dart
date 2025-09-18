@@ -1,27 +1,16 @@
-
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ListOfMerchant/controllers/list_0f_merchant_controller.dart';
 
 class ListOfMerchantView extends GetView<ListOfMerchantController> {
   ListOfMerchantView({super.key});
 
-  // Dummy data
   final List<Map<String, dynamic>> categories = [
-    {"name": "Fine Aggregate", "image": Asset.Product},
+    {"title": "Main Category", "name": "Sand", "image": Asset.Product, "selected": true},
+    {"title": "Category", "name": "Sand", "image": Asset.Product, "selected": true},
+    {"title": "Sub-Category", "name": "Sand", "image": Asset.Product, "selected": true},
+    {"title": "Product", "name": "Sand", "image": Asset.Product, "selected": true},
   ];
 
-  final List<Map<String, dynamic>> subCategories = [
-    {"name": "Sand", "image": Asset.Product},
-  ];
-
-  final List<Map<String, dynamic>> products = [
-    {"name": "Manufacture Sand", "image": Asset.Product},
-    {"name": "Concrete Sand", "image": Asset.Product},
-    {"name": "Plastering Sand", "image": Asset.Product},
-    {"name": "River Sand", "image": Asset.Product},
-    {"name": "Dust", "image": Asset.Product},
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,7 +136,57 @@ class ListOfMerchantView extends GetView<ListOfMerchantController> {
                 ),
               ),
 
-            
+              /// Categories Grid
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: categories.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3, // 3 items in a row
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
+                    childAspectRatio: 0.99,
+                  ),
+                  itemBuilder: (context, index) {
+                    final item = categories[index];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item["title"],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.asset(
+                            item["image"],
+                            width: 90,
+                            height: 70,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Center(
+                          child: Text(
+                            item["name"],
+                            style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -155,58 +194,3 @@ class ListOfMerchantView extends GetView<ListOfMerchantController> {
     );
   }
 }
-
-Widget buildSelectableCard({
-  required String title,
-  required String assetsImage,
-  required bool isSelected,
-  required VoidCallback onTap,
-  double? width,
-  double? height,
-}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              width: width ?? 68,
-              height: height ?? 68,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isSelected ? MyColors.primary : Colors.transparent,
-                  width: 2,
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.asset(assetsImage, fit: BoxFit.cover),
-              ),
-            ),
-            if (isSelected)
-              const Positioned(
-                top: -6,
-                right: -6,
-                child: Icon(Icons.check_box, color: MyColors.primary),
-              ),
-          ],
-        ),
-        SizedBox(height: 0.6.h),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: MyTexts.medium12.copyWith(color: MyColors.primary),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    ),
-  );
-}
-
-
-

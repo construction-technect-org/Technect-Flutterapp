@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/AddLocationManually/models/SavedAddressesModel.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/services/address_service.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 
@@ -11,15 +12,22 @@ class AddLocationController extends GetxController {
   final stateController = TextEditingController();
   final pinCodeController = TextEditingController();
 
-  // State variables
+  // State
   final isLoading = false.obs;
   final locationAdded = false.obs;
   final isEditing = false.obs;
   final isFromLogin = false.obs;
   int? existingAddressId;
 
+  RxInt selectedIndex = 0.obs; // 0=Office, 1=Factory
+  RxBool copyToOtherType = false.obs;
+  RxBool showAddLocationOption = true.obs;
+
   // Service
   final AddressService _addressService = AddressService();
+
+  RxList<SavedAddresses> addresses = <SavedAddresses>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -27,6 +35,7 @@ class AddLocationController extends GetxController {
       isFromLogin.value = Get.arguments['isFromLogin'] ?? false;
     }
     _handlePassedData();
+    fetchAddresses();
   }
 
   void _handlePassedData() {
@@ -67,7 +76,7 @@ class AddLocationController extends GetxController {
 
       if (addressResponse.success == true) {
         myPref.setAddressData(addressResponse.toJson());
-        Get.printInfo(info: '💾 Manual Address: Fetched and cached updated address data');
+        Get.printInfo(info: '💾 Manual Address: Updated address data cached');
       }
     } catch (e) {
       Get.printError(info: 'Error fetching address data: $e');
@@ -85,9 +94,7 @@ class AddLocationController extends GetxController {
     super.onClose();
   }
 
-  // Submit location
   Future<void> submitLocation() async {
-    // Validation
     if (addressLine1Controller.text.trim().isEmpty ||
         landmarkController.text.trim().isEmpty ||
         cityController.text.trim().isEmpty ||
@@ -97,7 +104,6 @@ class AddLocationController extends GetxController {
       return;
     }
 
-    // Validate pin code (should be 6 digits)
     if (pinCodeController.text.trim().length != 6) {
       SnackBars.errorSnackBar(content: 'Please enter a valid 6-digit pin code');
       return;
@@ -116,8 +122,9 @@ class AddLocationController extends GetxController {
 
       Map<String, dynamic> response;
 
+      final addressType = selectedIndex.value == 0 ? "office" : "factory";
+
       if (isEditing.value && existingAddressId != null) {
-        // Update existing address
         response = await _addressService.updateAddress(
           addressId: existingAddressId!,
           addressLine1: addressLine1Controller.text.trim(),
@@ -128,9 +135,9 @@ class AddLocationController extends GetxController {
           pinCode: pinCodeController.text.trim(),
           latitude: latitude,
           longitude: longitude,
+          addressType: addressType,
         );
       } else {
-        // Create new address
         response = await _addressService.addAddressManually(
           addressLine1: addressLine1Controller.text.trim(),
           addressLine2: addressLine2Controller.text.trim(),
@@ -140,17 +147,31 @@ class AddLocationController extends GetxController {
           pinCode: pinCodeController.text.trim(),
           latitude: latitude,
           longitude: longitude,
+          addressType: addressType,
         );
+
+        if (copyToOtherType.value) {
+          final otherType = addressType == "office" ? "factory" : "office";
+          await _addressService.addAddressManually(
+            addressLine1: addressLine1Controller.text.trim(),
+            addressLine2: addressLine2Controller.text.trim(),
+            landmark: landmarkController.text.trim(),
+            city: cityController.text.trim(),
+            state: stateController.text.trim(),
+            pinCode: pinCodeController.text.trim(),
+            latitude: latitude,
+            longitude: longitude,
+            addressType: otherType,
+          );
+        }
       }
 
       if (response['success'] == true) {
         locationAdded.value = true;
-
-        // Call get address API to fetch updated address data
         await _fetchAndStoreAddressData();
-
         await Future.delayed(const Duration(seconds: 2));
-        Get.offAllNamed(Routes.MAIN);
+
+         Get.offAllNamed(Routes.MAIN);
       } else {
         locationAdded.value = false;
         SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to save address');
@@ -160,5 +181,22 @@ class AddLocationController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+
+    Future<void> fetchAddresses() async {
+    try {
+      isLoading.value = true;
+      final response = await _addressService.getProfile();
+      addresses.value = response.data.addresses;
+    } catch (e) {
+      Get.snackbar("Error", "Failed to load addresses: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void setSelectedIndex(int index) {
+    selectedIndex.value = index;
   }
 }
