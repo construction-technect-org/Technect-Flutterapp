@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/controller/customer_support_controller.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/views/creat_new_ticket.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/ticket_list_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 
@@ -11,6 +12,9 @@ class CustomerSupportView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   
+   
+   
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -101,7 +105,7 @@ class CustomerSupportView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: StatCard(
-                              title: 'Total Products',
+                              title: 'Open Tickets',
                               value: '0',
                               icon: SvgPicture.asset(Asset.TotalProducts),
                               iconBackground: MyColors.yellowundertones,
@@ -110,7 +114,7 @@ class CustomerSupportView extends StatelessWidget {
                           const SizedBox(width: 12),
                           Expanded(
                             child: StatCard(
-                              title: 'Featured',
+                              title: 'In Progress',
                               value: '0',
                               icon: SvgPicture.asset(Asset.Featured),
                               iconBackground: MyColors.verypaleBlue,
@@ -123,7 +127,7 @@ class CustomerSupportView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: StatCard(
-                              title: 'Low Stock',
+                              title: 'Resolved',
                               value: '0',
                               icon: SvgPicture.asset(Asset.LowStock),
                               iconBackground: MyColors.paleRed,
@@ -132,7 +136,7 @@ class CustomerSupportView extends StatelessWidget {
                           const SizedBox(width: 12),
                           Expanded(
                             child: StatCard(
-                              title: 'Total Interests',
+                              title: 'Avg Response',
                               value: '0',
                               icon: SvgPicture.asset(Asset.TotalInterests),
                               iconBackground: MyColors.warmOrange,
@@ -182,7 +186,8 @@ class CustomerSupportView extends StatelessWidget {
                               Center(
                                 child: RoundedButton(
                                   onTap: () {
-                                     Get.toNamed(Routes.CHAT_SYSTEM);
+                                    Get.to( CreatNewTicket());
+                                     //Get.toNamed(Routes.CHAT_SYSTEM);
                                   },
                                  buttonName: '',
                                   borderRadius: 12,
@@ -215,6 +220,8 @@ class CustomerSupportView extends StatelessWidget {
         ),
       ),
     );
+ 
+ 
   }
 }
 
