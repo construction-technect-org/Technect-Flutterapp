@@ -78,7 +78,7 @@ class SignUpPasswordController extends GetxController {
       }
 
       final signUpResponse = await signUpService.signup(
-        roleId: userData!.roleId,
+        roleName: userData!.roleName,
         firstName: userData!.firstName,
         lastName: userData!.lastName,
         countryCode: userData!.countryCode,

@@ -4,6 +4,7 @@ class SignUpRoleController extends GetxController {
   RxInt selectedRole = (-1).obs;
   TextEditingController otherRoleController = TextEditingController();
   RxString otherRoleString = "".obs;
+  RxString selectedRoleName = "".obs;
 
   List roleName = [
     'Manufacturer',

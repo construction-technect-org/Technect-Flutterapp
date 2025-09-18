@@ -24,92 +24,93 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
               SizedBox(height: 2.h),
               const StepperWidget(currentStep: 0),
               SizedBox(height: 2.h),
-             Expanded(
-               child: SingleChildScrollView(
-                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                     Text(
-                       'Select Role',
-                       style: MyTexts.medium16.copyWith(
-                         color: MyColors.lightBlue,
-                         fontFamily: MyTexts.Roboto,
-                       ),
-                     ),
-                     SizedBox(height: 2.h),
-                     // Role selection grid
-                     Obx(
-                           () => Padding(
-                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                         child: Column(
-                           children: [
-                             for (int i = 0; i < 6; i += 2)
-                               Padding(
-                                 padding: EdgeInsets.only(bottom: i < 4 ? 20.0 : 0),
-                                 child: Row(
-                                   children: [
-                                     _buildRoleCard(
-                                       i,
-                                       controller.roleImages[i],
-                                       controller.roleName[i],
-                                     ),
-                                     const SizedBox(width: 20),
-                                     _buildRoleCard(
-                                       i + 1,
-                                       controller.roleImages[i + 1],
-                                       controller.roleName[i + 1],
-                                     ),
-                                   ],
-                                 ),
-                               ),
-                           ],
-                         ),
-                       ),
-                     ),
-                     SizedBox(height: 2.h),
-                 
-                     Obx(() {
-                       return controller.selectedRole.value == 6
-                           ? Column(
-                         children: [
-                           CommonTextField(
-                             hintText: "Specify others",
-                             textInputAction: TextInputAction.done,
-                 
-                             bgColor: MyColors.greyE5.withValues(alpha: 0.5),
-                             controller: controller.otherRoleController,
-                             onChange: (val) {
-                               controller.otherRoleString.value;
-                             },
-                           ),
-                           SizedBox(height: 2.h),
-                 
-                         ],
-                       )
-                           : const SizedBox();
-                     }),
-                 
-                     // SizedBox(height: 2.5.sh),
-                     // Row(
-                     //   mainAxisAlignment: MainAxisAlignment.center,
-                     //   children: [
-                     //     Text("Already have an account? ", style: MyTexts.light16),
-                     //     GestureDetector(
-                     //       onTap: () => Get.back(),
-                     //       child: Text(
-                     //         "Login",
-                     //         style: MyTexts.light16.copyWith(
-                     //           color: MyColors.lightBlueSecond,
-                     //         ),
-                     //       ),
-                     //     ),
-                     //   ],
-                     // ),
-                     // SizedBox(height: 4.sh),
-                   ],
-                 ),
-               ),
-             )
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Select Role',
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.lightBlue,
+                          fontFamily: MyTexts.Roboto,
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+                      // Role selection grid
+                      Obx(
+                        () => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Column(
+                            children: [
+                              for (int i = 0; i < 6; i += 2)
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: i < 4 ? 20.0 : 0,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      _buildRoleCard(
+                                        i,
+                                        controller.roleImages[i],
+                                        controller.roleName[i],
+                                      ),
+                                      const SizedBox(width: 20),
+                                      _buildRoleCard(
+                                        i + 1,
+                                        controller.roleImages[i + 1],
+                                        controller.roleName[i + 1],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+                      Obx(() {
+                        return controller.selectedRole.value == 6
+                            ? Column(
+                                children: [
+                                  CommonTextField(
+                                    hintText: "Specify others",
+                                    textInputAction: TextInputAction.done,
+                                    bgColor: MyColors.greyE5.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                    controller: controller.otherRoleController,
+                                    onChange: (val) {
+                                      controller.otherRoleString.value;
+                                    },
+                                  ),
+                                  SizedBox(height: 2.h),
+                                ],
+                              )
+                            : const SizedBox();
+                      }),
+
+                      // SizedBox(height: 2.5.sh),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Text("Already have an account? ", style: MyTexts.light16),
+                      //     GestureDetector(
+                      //       onTap: () => Get.back(),
+                      //       child: Text(
+                      //         "Login",
+                      //         style: MyTexts.light16.copyWith(
+                      //           color: MyColors.lightBlueSecond,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(height: 4.sh),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -124,12 +125,20 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                   SnackBars.errorSnackBar(content: 'Please enter other role');
                   return;
                 } else {
+                  if (controller.selectedRole.value == 1) {
+                    controller.selectedRoleName.value = "Merchant";
+                  } else if (controller.selectedRole.value == 6) {
+                    controller.selectedRoleName.value =
+                        controller.otherRoleController.text;
+                  } else {
+                    controller.selectedRoleName.value =
+                        controller.roleName[controller.selectedRole.value];
+                  }
                   Get.toNamed(Routes.SIGN_UP_DETAILS);
-                }
-              }
-              else{
-                SnackBars.errorSnackBar(content: 'Please select role');
 
+                }
+              } else {
+                SnackBars.errorSnackBar(content: 'Please select role');
               }
             },
           ),

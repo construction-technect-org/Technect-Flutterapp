@@ -42,7 +42,7 @@ class SignUpService {
   }
 
   Future<SignUpModel> signup({
-    required int roleId,
+    required String roleName,
     required String firstName,
     required String lastName,
     required String countryCode,
@@ -55,7 +55,7 @@ class SignUpService {
       final response = await apiManager.postObject(
         url: APIConstants.signup,
         body: {
-          "roleId": roleId,
+          "roleName": roleName,
           "firstName": firstName,
           "lastName": lastName,
           "countryCode": countryCode,

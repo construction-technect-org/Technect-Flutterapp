@@ -1,5 +1,5 @@
 class UserDataModel {
-  final int roleId;
+  final String roleName;
   final String firstName;
   final String lastName;
   final String countryCode;
@@ -7,7 +7,7 @@ class UserDataModel {
   final String email;
 
   UserDataModel({
-    required this.roleId,
+    required this.roleName,
     required this.firstName,
     required this.lastName,
     required this.countryCode,
@@ -16,8 +16,8 @@ class UserDataModel {
   });
 
   Map<String, dynamic> toJson() => {
-    "roleId": roleId,
     "firstName": firstName,
+    "roleName": roleName,
     "lastName": lastName,
     "countryCode": countryCode,
     "mobileNumber": mobileNumber,
@@ -25,7 +25,7 @@ class UserDataModel {
   };
 
   factory UserDataModel.fromJson(Map<String, dynamic> json) => UserDataModel(
-    roleId: json["roleId"] ?? 1,
+    roleName: json["roleName"] ?? "",
     firstName: json["firstName"] ?? "",
     lastName: json["lastName"] ?? "",
     countryCode: json["countryCode"] ?? "+91",

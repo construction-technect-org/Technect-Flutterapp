@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/model/UserDataModel.dart';
+import 'package:construction_technect/app/modules/SignUpRole/controllers/sign_up_role_controller.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
@@ -155,11 +156,11 @@ class SignUpDetailsController extends GetxController {
       if (isFormValid()) {
         // Pass user data to password screen
         final userData = UserDataModel(
-          roleId: 1,
+          roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
           // Default role ID
           firstName: firstName.value,
           lastName: lastName.value,
-          countryCode: "+91",
+          countryCode: countryCode.value,
           mobileNumber: mobileNumber.value,
           email: email.value,
         );
@@ -192,7 +193,7 @@ class SignUpDetailsController extends GetxController {
           if (isFormValid()) {
             // Pass user data to password screen
             final userData = UserDataModel(
-              roleId: 1,
+              roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
               // Default role ID
               firstName: firstName.value,
               lastName: lastName.value,
