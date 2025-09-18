@@ -1,9 +1,9 @@
-import 'dart:developer';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
+import 'package:construction_technect/app/modules/profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:gap/gap.dart';
 
 class CertificationsComponent extends StatelessWidget {
   const CertificationsComponent({this.isDelete});
@@ -14,75 +14,116 @@ class CertificationsComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            SvgPicture.asset(Asset.certificateIcon, width: 20, height: 20),
-            SizedBox(width: 1.w),
-            Text(
-              'Certifications & Licenses',
-              style: MyTexts.medium16.copyWith(
-                color: MyColors.black,
-                fontFamily: MyTexts.Roboto,
+    return Obx(() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ...controller.certificates.asMap().entries.map((entry) {
+            final index = entry.key;
+            final cert = entry.value;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      cert.title,
+                      style: MyTexts.medium16.copyWith(
+                        color: MyColors.fontBlack,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                    const Spacer(),
+                    const Icon(Icons.visibility, color: MyColors.primary),
+                    if (!cert.isDefault)
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: MyColors.red),
+                        onPressed: () => controller.removeCertificate(index),
+                      ),
+                  ],
+                ),
+                const Gap(10),
+                GestureDetector(
+                  onTap: () => controller.pickAndSetCertificateFile(index),
+
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: MyColors.grey),
+                    ),
+                    padding: const EdgeInsets.all(17),
+                    child: Column(
+                      children: [
+                        if (cert.filePath == null) ...[
+                          Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: MyColors.grey),
+                                ),
+                                padding: const EdgeInsets.all(14),
+                                child: const Icon(
+                                  Icons.add,
+                                  size: 30,
+                                  color: MyColors.grey,
+                                ),
+                              ),
+                              const Gap(10),
+                              const Gap(10),
+                              Text(
+                                "Select File you want to upload",
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.grey,
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                              const Gap(10),
+                              Text(
+                                "Upload Certification",
+                                style: MyTexts.bold16.copyWith(
+                                  color: MyColors.black,
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ] else
+                          Text("File uploaded: ${cert.filePath}"),
+                      ],
+                    ),
+                  ),
+                ),
+                const Gap(20),
+              ],
+            );
+          }),
+          Align(
+            child: GestureDetector(
+              onTap: () {
+                // Example: open dialog to enter title
+
+                Get.to(() => const AddCertificate())?.then((val) {
+                  if (val != null) {
+                    controller.documents.add(val);
+                  }
+                });
+              },
+              child: RoundedButton(
+                width: 200,
+                height: 40,
+                verticalPadding: 0,
+                style: MyTexts.medium14.copyWith(color: Colors.white),
+                buttonName: '+ Add Certification',
               ),
             ),
-          ],
-        ),
-        SizedBox(height: 2.h),
-        Obx(() {
-          final documents = controller.documents;
-
-          // Filter out documents with null or invalid data
-          final validDocuments = documents.where((document) {
-            return document.id != null &&
-                document.documentType != null &&
-                document.documentName != null &&
-                document.filePath != null;
-          }).toList();
-
-          if (validDocuments.isEmpty) {
-            return Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: MyColors.white,
-                border: Border.all(color: const Color(0xFFD0D0D0)),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                'No certifications uploaded yet',
-                style: MyTexts.regular14.copyWith(
-                  color: const Color(0xFF838383),
-                  fontFamily: MyTexts.Roboto,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            );
-          }
-          return Column(
-            children: validDocuments.asMap().entries.map((entry) {
-              final index = entry.key;
-              final document = entry.value;
-              log(document.documentType ?? '');
-              return Column(
-                children: [
-                  _buildCertificationItem(
-                    controller.getDocumentDisplayName(document.documentType),
-                    document.documentName ?? 'Document Name',
-                    'Uploaded',
-                    document,
-                  ),
-                  if (index < validDocuments.length - 1)
-                    SizedBox(height: 1.7.h),
-                ],
-              );
-            }).toList(),
-          );
-        }),
-      ],
-    );
+          ),
+          const Gap(20),
+        ],
+      );
+    });
   }
 
   Widget _buildCertificationItem(
@@ -176,25 +217,18 @@ class CertificationsComponent extends StatelessWidget {
                   child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
                 ),
                 const SizedBox(width: 16),
-                  GestureDetector(
-                    onTap: () => controller.showDeleteConfirmationDialog(
-                      document.id ?? 0,
-                      document.documentName ?? 'Document',
-                    ),
-                    child: SvgPicture.asset(
-                      Asset.delete,
-                      width: 20,
-                      height: 20,
-                    ),
+                GestureDetector(
+                  onTap: () => controller.showDeleteConfirmationDialog(
+                    document.id ?? 0,
+                    document.documentName ?? 'Document',
                   ),
+                  child: SvgPicture.asset(Asset.delete, width: 20, height: 20),
+                ),
               ],
             ),
           ),
-          
         ],
       ),
     );
   }
-
-
 }

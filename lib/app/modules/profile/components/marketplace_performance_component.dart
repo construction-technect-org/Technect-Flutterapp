@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 class MarketplacePerformanceComponent extends StatelessWidget {
@@ -12,178 +13,169 @@ class MarketplacePerformanceComponent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Trust & Safety Section
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: MyColors.white,
-            border: Border.all(color: const Color(0xFFD0D0D0)),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Trust & Safety',
-                style: MyTexts.medium16.copyWith(
-                  color: MyColors.black,
-                  fontFamily: MyTexts.Roboto,
-                ),
-              ),
-              SizedBox(height: 2.h),
-              Obx(
-                () => _buildTrustSafetyItem(
-                  Asset.identityIcon,
-                  'Identity Verified',
-                  controller.merchantProfile?.verificationStatus?.identityVerified ??
-                      false,
-                ),
-              ),
-              SizedBox(height: 1.h),
-              Obx(
-                () => _buildTrustSafetyItem(
-                  Asset.businessLiIcon,
-                  'Business License',
-                  controller.merchantProfile?.verificationStatus?.businessLicense ??
-                      false,
-                ),
-              ),
-              SizedBox(height: 1.h),
-              Obx(
-                () => _buildTrustSafetyItem(
-                  Asset.qualityIcon,
-                  'Quality Assurance',
-                  controller.merchantProfile?.verificationStatus?.qualityAssurance ??
-                      false,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 2.h),
+        // Container(
+        //   width: double.infinity,
+        //   padding: const EdgeInsets.all(16),
+        //   decoration: BoxDecoration(
+        //     color: MyColors.white,
+        //     border: Border.all(color: const Color(0xFFD0D0D0)),
+        //     borderRadius: BorderRadius.circular(12),
+        //     boxShadow: [
+        //       BoxShadow(
+        //         color: Colors.black.withValues(alpha: 0.1),
+        //         blurRadius: 8,
+        //         offset: const Offset(0, 2),
+        //       ),
+        //     ],
+        //   ),
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Text(
+        //         'Trust & Safety',
+        //         style: MyTexts.medium16.copyWith(
+        //           color: MyColors.black,
+        //           fontFamily: MyTexts.Roboto,
+        //         ),
+        //       ),
+        //       SizedBox(height: 2.h),
+        //       Obx(
+        //         () => _buildTrustSafetyItem(
+        //           Asset.identityIcon,
+        //           'Identity Verified',
+        //           controller.merchantProfile?.verificationStatus?.identityVerified ??
+        //               false,
+        //         ),
+        //       ),
+        //       SizedBox(height: 1.h),
+        //       Obx(
+        //         () => _buildTrustSafetyItem(
+        //           Asset.businessLiIcon,
+        //           'Business License',
+        //           controller.merchantProfile?.verificationStatus?.businessLicense ??
+        //               false,
+        //         ),
+        //       ),
+        //       SizedBox(height: 1.h),
+        //       Obx(
+        //         () => _buildTrustSafetyItem(
+        //           Asset.qualityIcon,
+        //           'Quality Assurance',
+        //           controller.merchantProfile?.verificationStatus?.qualityAssurance ??
+        //               false,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // SizedBox(height: 2.h),
         // Marketplace Performance Section
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: MyColors.white,
-            border: Border.all(color: const Color(0xFFD0D0D0)),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Gap(20),
+            Text(
+              'Marketplace Performance',
+              style: MyTexts.medium16.copyWith(
+                color: MyColors.fontBlack,
+                fontFamily: MyTexts.Roboto,
               ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Marketplace Performance',
-                style: MyTexts.medium14.copyWith(
-                  color: MyColors.black,
-                  fontFamily: MyTexts.Roboto,
-                ),
-              ),
-              SizedBox(height: 1.5.h),
-              Obx(() {
-                final completionPercentage = controller.profileCompletionPercentage;
-                final progressValue = completionPercentage / 100.0;
+            ),
+            SizedBox(height: 1.5.h),
+            Obx(() {
+              final completionPercentage = controller
+                  .profileCompletionPercentage;
+              final progressValue = completionPercentage / 100.0;
 
-                return Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Profile Completeness',
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.textGrey,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        ),
-                        Text(
-                          '$completionPercentage%',
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.black,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    Container(
-                      width: double.infinity,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: MyColors.progressRemaining,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: FractionallySizedBox(
-                        alignment: Alignment.centerLeft,
-                        widthFactor: progressValue,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: MyColors.green,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-              SizedBox(height: 1.5.h),
-              // Metrics Row
-              Row(
+              return Column(
                 children: [
-                  Expanded(
-                    child: Obx(
-                      () => _buildPerformanceMetricItem(
-                        'Trust Score',
-                        controller.merchantProfile?.trustScore ?? 'No Score',
-                        MyColors.primary,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Profile Completeness',
+                        style: MyTexts.regular16.copyWith(
+                          color: MyColors.textGrey,
+                          fontFamily: MyTexts.Roboto,
+                        ),
+                      ),
+                      Text(
+                        '$completionPercentage%',
+                        style: MyTexts.medium14.copyWith(
+                          color: MyColors.black,
+                          fontFamily: MyTexts.Roboto,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.h),
+                  Container(
+                    width: double.infinity,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: MyColors.progressRemaining,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: progressValue,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: MyColors.green,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 1.w),
-                  Expanded(
-                    child: Obx(
-                      () => _buildPerformanceMetricItem(
-                        'Marketplace Tier',
-                        controller.merchantProfile?.marketplaceTier ?? 'No Tier',
-                        MyColors.warning,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 1.w),
-                  Expanded(
-                    child: Obx(() {
-                      return _buildPerformanceMetricItem(
-                        'Member Since',
-                        controller.merchantProfile?.memberSince != null
-                            ? DateFormat('dd MM yyyy').format(
-                                DateTime.parse(controller.merchantProfile!.memberSince!),
-                              )
-                            : 'Unknown',
-                        MyColors.black,
-                      );
-                    }),
                   ),
                 ],
-              ),
-            ],
-          ),
+              );
+            }),
+            SizedBox(height: 2.h),
+            // Metrics Row
+            Row(
+              children: [
+                Expanded(
+                  child: Obx(
+                        () =>
+                        _buildPerformanceMetricItem(
+                          'Trust Score',
+                          controller.merchantProfile?.trustScore ?? 'No Score',
+                          MyColors.primary,
+                        ),
+                  ),
+                ),
+                SizedBox(width: 1.w),
+                Expanded(
+                  child: Obx(
+                        () =>
+                        _buildPerformanceMetricItem(
+                          'Marketplace Tier',
+                          controller.merchantProfile?.marketplaceTier ??
+                              'No Tier',
+                          MyColors.warning,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const Gap(20),
+            Row(
+              children: [
+                Text('Member Since:', style: MyTexts.regular14.copyWith(
+                    color: MyColors.grey, fontFamily: MyTexts.Roboto),),
+                const Gap(5),
+                Obx(() {
+                  return Text( controller.merchantProfile?.memberSince != null
+                      ? DateFormat('dd MM yyyy').format(
+                    DateTime.parse(controller.merchantProfile!.memberSince!),
+                  )
+                      : 'Unknown',
+                    style: MyTexts.bold14.copyWith(
+                        color: MyColors.black, fontFamily: MyTexts.Roboto),);
+                }),
+              ],
+            ),
+          ],
         ),
       ],
     );
@@ -228,11 +220,12 @@ class MarketplacePerformanceComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildPerformanceMetricItem(String label, String value, Color valueColor) {
+  Widget _buildPerformanceMetricItem(String label, String value,
+      Color valueColor) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: MyColors.metricBackground,
+        border: Border.all(color: MyColors.greyE5, width: 1.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -241,7 +234,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             label,
             style: MyTexts.regular14.copyWith(
               color: MyColors.textGrey,
-              fontSize: 13.5.sp,
+              fontSize: 14.sp,
               fontFamily: MyTexts.Roboto,
             ),
             textAlign: TextAlign.center,
@@ -251,7 +244,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             value,
             style: MyTexts.medium14.copyWith(
               color: valueColor,
-              fontSize: 13.5.sp,
+              fontSize: 16.sp,
               fontFamily: MyTexts.Roboto,
             ),
             textAlign: TextAlign.center,
@@ -278,7 +271,8 @@ class MarketplacePerformanceComponent extends StatelessWidget {
         'November',
         'December',
       ];
-      return '${date.day.toString().padLeft(2, '0')} ${months[date.month - 1]} ${date.year}';
+      return '${date.day.toString().padLeft(2, '0')} ${months[date.month -
+          1]} ${date.year}';
     } catch (e) {
       return 'Unknown';
     }

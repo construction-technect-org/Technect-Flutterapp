@@ -4,10 +4,12 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/editProfile/services/EditProfileService.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:file_picker/file_picker.dart';
 
 class EditProfileController extends GetxController {
   final businessNameController = TextEditingController();
+  final businessWebsiteController = TextEditingController();
   final gstNumberController = TextEditingController();
   final businessEmailController = TextEditingController();
   final businessContactController = TextEditingController();
@@ -93,14 +95,25 @@ class EditProfileController extends GetxController {
 
   void nextStep() {
     if (currentStep.value < totalSteps) {
-      currentStep.value++;
-      Future.delayed(const Duration(milliseconds: 100), () {
-        scrollController.animateTo(
-          0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      });
+      Get.find<ProfileController>().businessModel.value=BusinessModel(
+        businessContactNumber: businessContactController.text,
+        businessEmail: businessEmailController.text,
+        businessName: businessNameController.text,
+        gstinNumber: gstNumberController.text,
+        projectsCompleted: int.parse(projectsCompletedController.text),
+        website: businessWebsiteController.text,
+        yearsInBusiness:int.parse( yearsInBusinessController.text)
+      );
+      Get.find<ProfileController>().businessModel.refresh();
+      Get.back();
+      // currentStep.value++;
+      // Future.delayed(const Duration(milliseconds: 100), () {
+      //   scrollController.animateTo(
+      //     0,
+      //     duration: const Duration(milliseconds: 500),
+      //     curve: Curves.easeInOut,
+      //   );
+      // });
     }
   }
 
@@ -200,11 +213,11 @@ class EditProfileController extends GetxController {
       return false;
     }
 
-    // Business Hours Validation
-    if (businessHoursData.isEmpty) {
-      SnackBars.errorSnackBar(content: "Please set business hours");
-      return false;
-    }
+    // // Business Hours Validation
+    // if (businessHoursData.isEmpty) {
+    //   SnackBars.errorSnackBar(content: "Please set business hours");
+    //   return false;
+    // }
 
     return true;
   }

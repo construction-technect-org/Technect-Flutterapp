@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/home/models/AddressModel.dart'
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/profile/services/document_service.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ProfileController extends GetxController {
   final selectedTabIndex = 0.obs;
@@ -81,4 +82,74 @@ class ProfileController extends GetxController {
       ),
     );
   }
+  final certificates = <CertificateModel>[
+    CertificateModel(title: "GST Certificate", isDefault: true),
+    CertificateModel(title: "Udyam Certificate", isDefault: true),
+    CertificateModel(title: "MSME Certificate", isDefault: true),
+  ].obs;
+
+  void addCertificate(String title) {
+    certificates.add(CertificateModel(title: title));
+  }
+
+  void updateCertificateFile(int index, String filePath) {
+    certificates[index].filePath = filePath;
+    certificates.refresh();
+  }
+
+  void removeCertificate(int index) {
+    certificates.removeAt(index);
+  }
+  Future<void> pickAndSetCertificateFile(int index) async {
+    try {
+      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+      if (result != null) {
+        certificates[index].filePath = result.files.first.path;
+        certificates.refresh();
+      } else {
+        SnackBars.errorSnackBar(content: "No file selected");
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: "Error selecting file: $e");
+    }
+  }
+  Future<String?> pickFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    return result?.files.single.path;
+  }
+
+  Rx<BusinessModel> businessModel = BusinessModel().obs;
+
+
+}
+class CertificateModel {
+  final String title;
+  String? filePath;
+  final bool isDefault;
+
+  CertificateModel({
+    required this.title,
+    this.filePath,
+    this.isDefault = false,
+  });
+}
+class BusinessModel {
+  String? businessName;
+  String? website;
+  String? businessEmail;
+  String? gstinNumber;
+  String? businessContactNumber;
+  int? yearsInBusiness;
+  int? projectsCompleted;
+
+  BusinessModel({
+     this.businessName,
+     this.website,
+     this.businessEmail,
+     this.gstinNumber,
+     this.businessContactNumber,
+     this.yearsInBusiness,
+     this.projectsCompleted,
+  });
 }

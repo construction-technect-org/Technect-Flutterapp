@@ -1,8 +1,9 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
-import 'package:construction_technect/app/core/widgets/stepper_edit_profile_widget.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/editProfile/controller/edit_profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:gap/gap.dart';
 
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override
@@ -27,6 +28,10 @@ class EditProfileView extends GetView<EditProfileController> {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
+          appBar: CommonAppBar(
+            isCenter: false,
+            title: Text("EDIT BUSINESS METRICS".toUpperCase()),
+          ),
           backgroundColor: MyColors.white,
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
@@ -60,93 +65,75 @@ class EditProfileView extends GetView<EditProfileController> {
               ),
             ],
           ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              controller: controller.scrollController,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 1.h),
-                  Obx(
-                    () => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        StepperEditProfileWidget(
-                          currentStep: controller.currentStep.value,
-                        ),
-                      ],
-                    ),
+          body: SingleChildScrollView(
+            controller: controller.scrollController,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 1.h),
+                // Obx(
+                //   () => Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //     children: [
+                //       StepperEditProfileWidget(
+                //         currentStep: controller.currentStep.value,
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(height: 2.h),
+                SizedBox(height: 0.6.h),
+                Text("Update your Business Details",
+                  style: MyTexts.medium16.copyWith(
+                      color: MyColors.greyDetails,
+                      fontFamily: MyTexts.Roboto
                   ),
-                  SizedBox(height: 2.h),
-                  Obx(
-                    () => Column(
-                      key: controller.titleKey,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "EDIT PROFILE",
-                          style: MyTexts.light22.copyWith(
-                            color: MyColors.textFieldBackground,
-                          ),
-                        ),
-                        SizedBox(height: 0.6.h),
-                        Text(
-                          controller.currentStep.value == 1
-                              ? "Update your Business Details"
-                              : "Update your Certifications",
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.greyDetails,
-                          ),
-                        ),
-                        // Progress Bar
-                      ],
-                    ),
-                  ),
-                  Obx(() {
-                    return controller.currentStep.value == 1
-                        ? const SizedBox.shrink()
-                        : SizedBox(height: 3.h);
-                  }),
+                ),
+                // Obx(() {
+                //   return controller.currentStep.value == 1
+                //       ? const SizedBox.shrink()
+                //       : SizedBox(height: 3.h);
+                // }),
 
-                  Row(
-                    children: [
-                      Obx(
-                        () => controller.currentStep.value == 1
-                            ? const SizedBox.shrink()
-                            : SvgPicture.asset(
-                                Asset.certificateIcon,
-                                width: 20,
-                                height: 20,
-                              ),
-                      ),
+                // Row(
+                //   children: [
+                //     Obx(
+                //       () => controller.currentStep.value == 1
+                //           ? const SizedBox.shrink()
+                //           : SvgPicture.asset(
+                //               Asset.certificateIcon,
+                //               width: 20,
+                //               height: 20,
+                //             ),
+                //     ),
+                //
+                //     SizedBox(width: 1.w),
+                //     Obx(
+                //       () => Text(
+                //         controller.currentStep.value == 1
+                //             ? ""
+                //             : "Certifications & Licenses",
+                //         style: MyTexts.medium16.copyWith(
+                //           color: MyColors.black,
+                //           fontFamily: MyTexts.Roboto,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(height: 2.h),
+                //
+                // // Step 1: Business Details
+                const Gap(20),
+                Obx(
+                  () => controller.currentStep.value == 1
+                      ? _buildBusinessDetailsStep()
+                      : _buildCertificationsStep(),
+                ),
 
-                      SizedBox(width: 1.w),
-                      Obx(
-                        () => Text(
-                          controller.currentStep.value == 1
-                              ? ""
-                              : "Certifications & Licenses",
-                          style: MyTexts.medium16.copyWith(
-                            color: MyColors.black,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 2.h),
-
-                  // Step 1: Business Details
-                  Obx(
-                    () => controller.currentStep.value == 1
-                        ? _buildBusinessDetailsStep()
-                        : _buildCertificationsStep(),
-                  ),
-
-                  SizedBox(height: 4.h),
-                ],
-              ),
+                SizedBox(height: 4.h),
+              ],
             ),
           ),
         ),
@@ -159,33 +146,31 @@ class EditProfileView extends GetView<EditProfileController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              'Business Name',
-              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-            ),
-            Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
-          ],
-        ),
-        SizedBox(height: 1.h),
-        CustomTextField(
+        CommonTextField(
+          headerText: "Business Name",
+          hintText: "Enter your business name",
           controller: controller.businessNameController,
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
         ),
         SizedBox(height: 2.h),
-        Row(
-          children: [
-            Text(
-              'GSTIN Number',
-              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-            ),
-            Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
-          ],
+        CommonTextField(
+          hintText: "Enter your website url",
+          headerText: "Website",
+          controller: controller.businessWebsiteController,
+          keyboardType: TextInputType.text,
         ),
-        SizedBox(height: 1.h),
-        CustomTextField(
+        SizedBox(height: 2.h),
+        CommonTextField(
+          headerText: "Business Email",
+          hintText: "adcdef@gmail.com",
+          controller: controller.businessEmailController,
+          keyboardType: TextInputType.emailAddress,
+        ),
+        SizedBox(height: 2.h),
+        CommonTextField(
+          hintText: "xxxxxxxxxxxxxx",
+          headerText: "GSTIN Number",
           controller: controller.gstNumberController,
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.characters,
@@ -195,33 +180,10 @@ class EditProfileView extends GetView<EditProfileController> {
           ],
         ),
         SizedBox(height: 2.h),
-        Row(
-          children: [
-            Text(
-              'Business Email',
-              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-            ),
-            Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
-          ],
-        ),
-        SizedBox(height: 1.h),
-        CustomTextField(
-          controller: controller.businessEmailController,
-          keyboardType: TextInputType.emailAddress,
-        ),
-        SizedBox(height: 2.h),
+        CommonTextField(
+          hintText: "+91 9292929929",
 
-        Row(
-          children: [
-            Text(
-              'Business Contact Number',
-              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-            ),
-            Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
-          ],
-        ),
-        SizedBox(height: 1.h),
-        CustomTextField(
+          headerText: "Business Contact Number",
           controller: controller.businessContactController,
           keyboardType: TextInputType.phone,
           inputFormatters: [
@@ -230,18 +192,8 @@ class EditProfileView extends GetView<EditProfileController> {
           ],
         ),
         SizedBox(height: 2.h),
-
-        Row(
-          children: [
-            Text(
-              'Years in Business',
-              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-            ),
-            Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
-          ],
-        ),
-        SizedBox(height: 1.h),
-        CustomTextField(
+        CommonTextField(
+          headerText: "Years in Business",
           controller: controller.yearsInBusinessController,
           keyboardType: TextInputType.number,
           inputFormatters: [
@@ -250,18 +202,8 @@ class EditProfileView extends GetView<EditProfileController> {
           ],
         ),
         SizedBox(height: 2.h),
-
-        Row(
-          children: [
-            Text(
-              'Projects Completed',
-              style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-            ),
-            Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
-          ],
-        ),
-        SizedBox(height: 1.h),
-        CustomTextField(
+        CommonTextField(
+          headerText:  'Projects Completed',
           controller: controller.projectsCompletedController,
           keyboardType: TextInputType.number,
           inputFormatters: [
@@ -269,162 +211,163 @@ class EditProfileView extends GetView<EditProfileController> {
             LengthLimitingTextInputFormatter(4),
           ],
         ),
+
         SizedBox(height: 2.h),
-        Obx(
-          () => Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: MyColors.oldLace,
-              borderRadius: BorderRadius.circular(12),
-
-              border: Border.all(
-                color: controller.businessHoursData.isEmpty
-                    ? MyColors.textFieldBorder
-                    : MyColors.primary.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.access_time,
-                      color: MyColors.warning,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Text(
-                            'Business Hours',
-                            style: MyTexts.bold16.copyWith(
-                              color: MyColors.warning,
-                            ),
-                          ),
-                          Text(
-                            '*',
-                            style: MyTexts.light16.copyWith(
-                              color: MyColors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        // Pass previous business hours data if available
-                        final previousData = controller.businessHoursData
-                            .toList();
-                        final result = await Get.toNamed(
-                          Routes.BUSINESS_HOURS,
-                          arguments: previousData.isNotEmpty
-                              ? previousData
-                              : null,
-                        );
-                        if (result != null &&
-                            result is List<Map<String, dynamic>>) {
-                          controller.handleBusinessHoursData(result);
-                        }
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            controller.businessHoursData.isEmpty
-                                ? "+ADD"
-                                : "+EDIT",
-                            style: MyTexts.bold16.copyWith(
-                              color: MyColors.warning,
-                              decoration: TextDecoration.none,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 1),
-                          Container(
-                            height: 1,
-                            width: 50,
-                            color: MyColors.warning,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                if (controller.businessHoursData.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: MyColors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: MyColors.textFieldBorder.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: controller.businessHoursData.map((dayData) {
-                        final dayName = dayData['day_name'] ?? '';
-                        final isOpen = dayData['is_open'] == true;
-                        final openTime = dayData['open_time'] ?? '';
-                        final closeTime = dayData['close_time'] ?? '';
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 6.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  dayName,
-                                  style: MyTexts.regular14.copyWith(
-                                    color: MyColors.fontBlack,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    if (isOpen) ...[
-                                      const Icon(
-                                        Icons.access_time,
-                                        size: 14,
-                                        color: MyColors.primary,
-                                      ),
-                                      const SizedBox(width: 4),
-                                    ],
-                                    Text(
-                                      isOpen
-                                          ? '$openTime - $closeTime'
-                                          : 'Closed',
-                                      style: MyTexts.regular14.copyWith(
-                                        color: isOpen
-                                            ? MyColors.fontBlack
-                                            : MyColors.grey,
-                                        fontWeight: isOpen
-                                            ? FontWeight.w500
-                                            : FontWeight.normal,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
+        // Obx(
+        //   () => Container(
+        //     padding: const EdgeInsets.all(16),
+        //     decoration: BoxDecoration(
+        //       color: MyColors.oldLace,
+        //       borderRadius: BorderRadius.circular(12),
+        //
+        //       border: Border.all(
+        //         color: controller.businessHoursData.isEmpty
+        //             ? MyColors.textFieldBorder
+        //             : MyColors.primary.withValues(alpha: 0.3),
+        //       ),
+        //     ),
+        //     child: Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: [
+        //         Row(
+        //           children: [
+        //             const Icon(
+        //               Icons.access_time,
+        //               color: MyColors.warning,
+        //               size: 20,
+        //             ),
+        //             const SizedBox(width: 12),
+        //             Expanded(
+        //               child: Row(
+        //                 children: [
+        //                   Text(
+        //                     'Business Hours',
+        //                     style: MyTexts.bold16.copyWith(
+        //                       color: MyColors.warning,
+        //                     ),
+        //                   ),
+        //                   Text(
+        //                     '*',
+        //                     style: MyTexts.light16.copyWith(
+        //                       color: MyColors.red,
+        //                     ),
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //             // GestureDetector(
+        //             //   onTap: () async {
+        //             //     // Pass previous business hours data if available
+        //             //     final previousData = controller.businessHoursData
+        //             //         .toList();
+        //             //     final result = await Get.toNamed(
+        //             //       Routes.BUSINESS_HOURS,
+        //             //       arguments: previousData.isNotEmpty
+        //             //           ? previousData
+        //             //           : null,
+        //             //     );
+        //             //     if (result != null &&
+        //             //         result is List<Map<String, dynamic>>) {
+        //             //       controller.handleBusinessHoursData(result);
+        //             //     }
+        //             //   },
+        //             //   child: Column(
+        //             //     mainAxisSize: MainAxisSize.min,
+        //             //     children: [
+        //             //       Text(
+        //             //         controller.businessHoursData.isEmpty
+        //             //             ? "+ADD"
+        //             //             : "+EDIT",
+        //             //         style: MyTexts.bold16.copyWith(
+        //             //           color: MyColors.warning,
+        //             //           decoration: TextDecoration.none,
+        //             //         ),
+        //             //         textAlign: TextAlign.center,
+        //             //       ),
+        //             //       const SizedBox(height: 1),
+        //             //       Container(
+        //             //         height: 1,
+        //             //         width: 50,
+        //             //         color: MyColors.warning,
+        //             //       ),
+        //             //     ],
+        //             //   ),
+        //             // ),
+        //           ],
+        //         ),
+        //         if (controller.businessHoursData.isNotEmpty) ...[
+        //           const SizedBox(height: 12),
+        //           Container(
+        //             padding: const EdgeInsets.all(12),
+        //             decoration: BoxDecoration(
+        //               color: MyColors.white,
+        //               borderRadius: BorderRadius.circular(8),
+        //               border: Border.all(
+        //                 color: MyColors.textFieldBorder.withValues(alpha: 0.3),
+        //               ),
+        //             ),
+        //             child: Column(
+        //               crossAxisAlignment: CrossAxisAlignment.start,
+        //               children: controller.businessHoursData.map((dayData) {
+        //                 final dayName = dayData['day_name'] ?? '';
+        //                 final isOpen = dayData['is_open'] == true;
+        //                 final openTime = dayData['open_time'] ?? '';
+        //                 final closeTime = dayData['close_time'] ?? '';
+        //
+        //                 return Padding(
+        //                   padding: const EdgeInsets.only(bottom: 6.0),
+        //                   child: Row(
+        //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                     children: [
+        //                       Expanded(
+        //                         flex: 2,
+        //                         child: Text(
+        //                           dayName,
+        //                           style: MyTexts.regular14.copyWith(
+        //                             color: MyColors.fontBlack,
+        //                           ),
+        //                         ),
+        //                       ),
+        //                       Expanded(
+        //                         flex: 3,
+        //                         child: Row(
+        //                           mainAxisAlignment: MainAxisAlignment.end,
+        //                           children: [
+        //                             if (isOpen) ...[
+        //                               const Icon(
+        //                                 Icons.access_time,
+        //                                 size: 14,
+        //                                 color: MyColors.primary,
+        //                               ),
+        //                               const SizedBox(width: 4),
+        //                             ],
+        //                             Text(
+        //                               isOpen
+        //                                   ? '$openTime - $closeTime'
+        //                                   : 'Closed',
+        //                               style: MyTexts.regular14.copyWith(
+        //                                 color: isOpen
+        //                                     ? MyColors.fontBlack
+        //                                     : MyColors.grey,
+        //                                 fontWeight: isOpen
+        //                                     ? FontWeight.w500
+        //                                     : FontWeight.normal,
+        //                               ),
+        //                             ),
+        //                           ],
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 );
+        //               }).toList(),
+        //             ),
+        //           ),
+        //         ],
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

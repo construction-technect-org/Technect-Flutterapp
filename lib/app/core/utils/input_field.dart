@@ -21,6 +21,7 @@ class CommonTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final int? maxLine;
   final int? maxLength;
+  final TextCapitalization? textCapitalization;
   final bool readOnly;
   final bool isBorder;
   final bool? enable;
@@ -35,6 +36,7 @@ class CommonTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.borderRadius,
     this.prefixIcon,
+    this.textCapitalization,
     this.suffixIcon,
     this.bgColor,
     this.isBorder = true,
@@ -84,6 +86,7 @@ class CommonTextField extends StatelessWidget {
             ],
           ),
         TextFormField(
+          textCapitalization: textCapitalization ?? TextCapitalization.none,
           style: MyTexts.medium16.copyWith(
             color: MyColors.primary,
             fontFamily: MyTexts.Roboto,

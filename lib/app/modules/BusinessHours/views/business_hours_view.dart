@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/custom_switch.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/BusinessHours/controller/business_hours_controller.dart';
@@ -19,50 +20,36 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
       child: Scaffold(
         backgroundColor: MyColors.white,
         resizeToAvoidBottomInset: false,
-        body: SafeArea(
+        appBar: CommonAppBar(
+          isCenter: false,
+          title: Text("EDIT BUSINESS HOURS".toUpperCase()),
+        ),
+        bottomNavigationBar:      Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: RoundedButton(
+            buttonName: 'SUBMIT',
+            onTap: () {
+              controller.onSubmit();
+            },
+          ),
+        ),
+        body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: MyColors.oldLace,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Icon(
-                        Icons.access_time,
-                        color: MyColors.warning,
-                        size: 30,
-                      ),
-                    ),
-                    SizedBox(width: 2.h, height: 10.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "BUSINESS HOURS",
-                          style: MyTexts.bold20.copyWith(
-                            color: MyColors.textFieldBackground,
-                          ),
-                        ),
-                        Text(
-                          "Update your Working Hours",
-                          style: MyTexts.medium16.copyWith(
-                            color: MyColors.greyDetails,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                Text(
+                  "Update your Working Hours",
+                  style: MyTexts.medium16.copyWith(
+                      color: MyColors.greyDetails,
+                      fontFamily: MyTexts.Roboto
+                  ),
                 ),
-
+          
                 SizedBox(height: 3.h),
-
+          
                 // Enable toggle
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,7 +174,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                 ),
                               ),
                               if (enabled) ...[
-                                
+          
                                 SizedBox(
                                   width: 90,
                                   height: 40,
@@ -201,22 +188,21 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                     decoration: InputDecoration(
                                       hintText: "From",
                                       hintStyle: MyTexts.bold14.copyWith(
-                                        color: MyColors.fontBlack,
+                                        color: MyColors.grey,
                                       ),
                                       contentPadding:
                                           const EdgeInsets.symmetric(
                                             horizontal: 10,
                                             vertical: 8,
                                           ),
-
-                                      // ✅ Default border
+          
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide: const BorderSide(
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-
+          
                                       // ✅ When enabled
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -224,7 +210,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-
+          
                                       // ✅ When focused (clicked)
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -232,7 +218,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-
+          
                                       // ✅ When error
                                       errorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -240,7 +226,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-
+          
                                       // ✅ When focused + error
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -254,9 +240,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                     },
                                   ),
                                 ),
-
+          
                                 const SizedBox(width: 10),
-                               
+          
                               SizedBox(
                                   width: 90,
                                   height: 40,
@@ -270,14 +256,14 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                     decoration: InputDecoration(
                                       hintText: "From",
                                       hintStyle: MyTexts.bold14.copyWith(
-                                        color: MyColors.fontBlack,
+                                        color: MyColors.grey,
                                       ),
                                       contentPadding:
                                           const EdgeInsets.symmetric(
                                             horizontal: 10,
                                             vertical: 8,
                                           ),
-
+          
                                       // ✅ Default border
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -285,7 +271,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-
+          
                                       // ✅ When enabled
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -293,7 +279,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-
+          
                                       // ✅ When focused (clicked)
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -301,7 +287,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-
+          
                                       // ✅ When error
                                       errorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -309,7 +295,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-
+          
                                       // ✅ When focused + error
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -327,9 +313,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                     },
                                   ),
                                 ),
-
-                               
-                             
+          
+          
+          
                               ] else ...[
                                 // Closed UI
                                 Container(
@@ -368,13 +354,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                     }).toList(),
                   );
                 }),
-                const Spacer(),
-                RoundedButton(
-                  buttonName: 'SUBMIT',
-                  onTap: () {
-                    controller.onSubmit();
-                  },
-                ),
+          
               ],
             ),
           ),

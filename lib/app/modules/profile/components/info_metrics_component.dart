@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
+import 'package:gap/gap.dart';
 
 class InfoMetricsComponent extends StatelessWidget {
   const InfoMetricsComponent({super.key});
@@ -9,10 +10,108 @@ class InfoMetricsComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 4.h),
+        Center(
+          child: Stack(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 8, right: 8),
+                width: 90,
+                height: 90,
+                decoration: BoxDecoration(
+                  color: MyColors.primary,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Image.asset(Asset.infoIcon),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFED29),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Icon(
+                    Icons.photo_camera,
+                    size: 20,
+                    color: MyColors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Information',
+              style: MyTexts.medium16.copyWith(
+                color: MyColors.fontBlack,
+                fontFamily: MyTexts.Roboto,
+              ),
+            ),
+            // TextButton(
+            //   onPressed: () {
+            //     Get.toNamed(Routes.EDIT_PROFILE);
+            //   },
+            //   style: TextButton.styleFrom(padding: EdgeInsets.zero),
+            //   child: Row(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       SvgPicture.asset(
+            //         Asset.editIcon,
+            //         width: 12,
+            //         height: 12,
+            //         color: MyColors.primary,
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(right: 10),
+            //         child: Text(
+            //           "Edit Profile",
+            //           style: MyTexts.regular14.copyWith(
+            //             color: MyColors.primary,
+            //             fontFamily: MyTexts.Roboto,
+            //             decoration: TextDecoration.underline,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ),
+        SizedBox(height: 2.h),
         _buildInfoMetricsContent(),
         SizedBox(height: 2.h),
-        _buildBusinessMetricsCard(),
+        Text(
+          'Business Metrics',
+          style: MyTexts.medium16.copyWith(
+            color: MyColors.fontBlack,
+            fontFamily: MyTexts.Roboto,
+          ),
+        ),
+        SizedBox(height: 1.h),
+        _buildBusinessMetricsContent(),
+        SizedBox(height: 2.h),
+        Text(
+          'Business Hours',
+          style: MyTexts.medium16.copyWith(
+            color: MyColors.fontBlack,
+            fontFamily: MyTexts.Roboto,
+          ),
+        ),
+        SizedBox(height: 1.h),
+        _buildBusinessHourContent(),
+
         SizedBox(height: 4.h),
       ],
     );
@@ -24,15 +123,8 @@ class InfoMetricsComponent extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: MyColors.white,
-        border: Border.all(color: const Color(0xFFD0D0D0)),
+        border: Border.all(color: MyColors.primary),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,144 +132,48 @@ class InfoMetricsComponent extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Information',
-                style: MyTexts.medium16.copyWith(
-                  color: MyColors.black,
-                  fontFamily: MyTexts.Roboto,
-                ),
-              ),
-              SizedBox(height: 1.h),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Stack(
-                    children: [
-                      Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: MyColors.primary,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Image.asset(Asset.infoIcon),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFED29),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Icon(
-                            Icons.camera_alt,
-                            size: 12,
-                            color: MyColors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 3.w),
                   Expanded(
                     child: Obx(() {
                       final userData = controller.userData;
-                      final merchantProfile = controller.merchantProfile;
+                      // final merchantProfile = controller.merchantProfile;
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // User name
-                              Text(
-                                '${userData?.firstName ?? ''} ${userData?.lastName ?? ''}'
-                                        .trim()
-                                        .isEmpty
-                                    ? 'User Name'
-                                    : '${userData?.firstName ?? ''} ${userData?.lastName ?? ''}'
-                                          .trim(),
-                                style: MyTexts.medium16.copyWith(
-                                  color: MyColors.black,
-                                  fontFamily: MyTexts.Roboto,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ), // space between name and badge
-                              // Verified badge
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: MyColors.green,
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.asset(
-                                      Asset.verified,
-                                      height: 14,
-                                      width: 14,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      "Verified",
-                                      style: MyTexts.regular14.copyWith(
-                                        color: MyColors.white,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          buildRow(
+                            title: "Name",
+                            data:
+                            '${(userData?.firstName ?? '')
+                                .capitalizeFirst} ${(userData?.lastName ?? '')
+                                .capitalizeFirst}'
+                                .trim()
+                                .isEmpty
+                                ? 'User Name'
+                                : '${(userData?.firstName ?? '')
+                                .capitalizeFirst} ${(userData?.lastName ?? '')
+                                .capitalizeFirst}'
+                                .trim(),
+                          ),
+                          const Gap(6),
+                          buildRow(
+                            title: "Mobile Number",
+                            data: "${userData?.countryCode} ${userData
+                                ?.mobileNumber}",
+                          ),
+                          const Gap(6),
+                          buildRow(
+                            title: "Email ID",
+                            data: "${userData?.email}",
+                          ),
+                          const Gap(6),
+                          buildRow(
+                            title: "GSTIN",
+                            data: "${userData?.roleName}",
                           ),
                           SizedBox(height: 0.5.h),
-                          Text(
-                            merchantProfile?.businessName ??
-                                'Business name not available',
-                            style: MyTexts.regular14.copyWith(
-                              color: const Color(0xFF838383),
-                              fontFamily: MyTexts.Roboto,
-                            ),
-                          ),
-                          Text(
-                            'GST Number: ${merchantProfile?.gstinNumber ?? '-'}',
-                            style: MyTexts.regular14.copyWith(
-                              color: MyColors.primary,
-                              fontFamily: MyTexts.Roboto,
-                            ),
-                          ),
-
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                Asset.premium,
-                                height: 14,
-                                width: 14,
-                                color: MyColors.oldSilver,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                "Premium Partner",
-                                style: MyTexts.regular14.copyWith(
-                                  fontFamily: MyTexts.Roboto,
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       );
                     }),
@@ -186,214 +182,148 @@ class InfoMetricsComponent extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 1.h),
-          // Container(width: double.infinity, height: 1, color: const Color(0xFFD9D9D9)),
-          SizedBox(height: 1.h),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// CONTACT DETAILS (LEFT SIDE)
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Contact Details',
-                      style: MyTexts.regular14.copyWith(
-                        color: MyColors.black,
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                    SizedBox(height: 1.h),
-                    Obx(() {
-                      final userData = controller.userData;
-                      final merchantProfile = controller.merchantProfile;
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (controller.currentAddress != null)
-                            _buildContactItem(
-                              Icons.location_on,
-                              controller.currentAddress!,
-                            ),
-                          if (controller.currentAddress != null)
-                            SizedBox(height: 1.h),
-
-                          if (userData?.mobileNumber != null)
-                            _buildContactItem(
-                              Icons.phone,
-                              userData!.mobileNumber!,
-                            ),
-                          if (userData?.mobileNumber != null)
-                            SizedBox(height: 1.h),
-
-                          if (userData?.email != null)
-                            _buildContactItem(
-                              Icons.email,
-                              userData?.email ?? '',
-                            ),
-                          if (userData?.email != null) SizedBox(height: 1.h),
-
-                          if (merchantProfile?.businessEmail != null)
-                            _buildContactItem(
-                              Icons.email,
-                              merchantProfile?.businessEmail ?? '',
-                            ),
-                          if (merchantProfile?.businessEmail != null)
-                            SizedBox(height: 1.h),
-
-                          if (controller.businessWebsite != null)
-                            _buildContactItem(
-                              Icons.language,
-                              controller.businessWebsite!,
-                            ),
-                        ],
-                      );
-                    }),
-                  ],
-                ),
-              ),
-
-              SizedBox(width: 4.w), // spacing between columns
-              /// BUSINESS HOURS (RIGHT SIDE)
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Business Hours',
-                      style: MyTexts.regular14.copyWith(
-                        color: MyColors.black,
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                    SizedBox(height: 1.h),
-                    Obx(() {
-                      final businessHours = controller.businessHours;
-
-                      if (businessHours.isEmpty) {
-                        return Text(
-                          'No business hours set',
-                          style: MyTexts.regular14.copyWith(
-                            color: const Color(0xFF838383),
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        );
-                      }
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: businessHours.map((hours) {
-                          final dayName = _getDayName(hours.dayOfWeek ?? 0);
-                          final timeText = (hours.isOpen == true)
-                              ? '${hours.openTime} - ${hours.closeTime}'
-                              : 'Closed';
-
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 0.5.h),
-                            child: _buildBusinessHourItem(dayName, timeText),
-                          );
-                        }).toList(),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          // Text(
-          //   'Contact Details',
-          //   style: MyTexts.regular14.copyWith(
-          //     color: MyColors.black,
-          //     fontFamily: MyTexts.Roboto,
-          //   ),
-          // ),
-          // SizedBox(height: 1.h),
-          // Obx(() {
-          //   final userData = controller.userData;
-          //   final merchantProfile = controller.merchantProfile;
-
-          //   return Column(
-          //     children: [
-          //       if (controller.currentAddress != null)
-          //         _buildContactItem(
-          //           Icons.location_on,
-          //           controller.currentAddress!,
-          //         ),
-          //       if (controller.currentAddress != null) SizedBox(height: 1.h),
-          //       if (userData?.mobileNumber != null)
-          //         _buildContactItem(Icons.phone, userData!.mobileNumber!),
-          //       if (userData?.mobileNumber != null) SizedBox(height: 1.h),
-          //       if (userData?.email != null)
-          //         _buildContactItem(Icons.email, userData?.email ?? ''),
-          //       if (userData?.email != null) SizedBox(height: 1.h),
-          //       if (merchantProfile?.businessEmail != null)
-          //         _buildContactItem(
-          //           Icons.email,
-          //           merchantProfile?.businessEmail ?? '',
-          //         ),
-          //       if (merchantProfile?.businessEmail != null)
-          //         SizedBox(height: 1.h),
-          //       if (controller.businessWebsite != null)
-          //         _buildContactItem(
-          //           Icons.language,
-          //           controller.businessWebsite!,
-          //         ),
-          //       if (controller.businessWebsite != null) SizedBox(height: 1.h),
-          //     ],
-          //   );
-          // }),
-          // SizedBox(height: 1.h),
-          // Container(
-          //   width: double.infinity,
-          //   height: 1,
-          //   color: const Color(0xFFD9D9D9),
-          // ),
-          // SizedBox(height: 1.h),
-          // // Business Hours Section
-          // Text(
-          //   'Business Hours',
-          //   style: MyTexts.regular14.copyWith(
-          //     color: MyColors.black,
-          //     fontFamily: MyTexts.Roboto,
-          //   ),
-          // ),
-          // SizedBox(height: 1.h),
-          // Obx(() {
-          //   final businessHours = controller.businessHours;
-
-          //   if (businessHours.isEmpty) {
-          //     return Text(
-          //       'No business hours set',
-          //       style: MyTexts.regular14.copyWith(
-          //         color: const Color(0xFF838383),
-          //         fontFamily: MyTexts.Roboto,
-          //       ),
-          //     );
-          //   }
-
-          //   return Column(
-          //     children: businessHours.map((hours) {
-          //       final dayName = _getDayName(hours.dayOfWeek ?? 0);
-          //       final timeText = (hours.isOpen == true)
-          //           ? '${hours.openTime} - ${hours.closeTime}'
-          //           : 'Closed';
-
-          //       return Column(
-          //         children: [
-          //           _buildBusinessHourItem(dayName, timeText),
-          //           if (hours != businessHours.last) SizedBox(height: 0.5.h),
-          //         ],
-          //       );
-          //     }).toList(),
-          //   );
-          // }),
         ],
       ),
+    );
+  }
+
+  Widget _buildBusinessMetricsContent() {
+    if ((controller.businessModel.value.businessEmail ?? "").isEmpty) {
+      return GestureDetector(
+        onTap: () {
+          Get.toNamed(Routes.EDIT_PROFILE);
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: MyColors.white,
+            border: Border.all(color: MyColors.grey),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(child: Text(" + ADD BUSINESS DETAILS",
+            style: MyTexts.bold16.copyWith(color: MyColors.grey),)),
+        ),
+      );
+    } else {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: MyColors.white,
+          border: Border.all(color: MyColors.primary),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Obx(() {
+              return buildRow(
+                title: "Business name",
+                data: controller.businessModel.value.businessName,
+              );
+            }),
+            const Gap(6),
+            Obx(() {
+              return buildRow(
+                title: "Mobile Number",
+                data: controller.businessModel.value.businessContactNumber,
+              );
+            }),
+            const Gap(6),
+            Obx(() {
+              return buildRow(
+                title: "Website",
+                data: controller.businessModel.value.website,
+              );
+            }),
+            const Gap(6), Obx(() {
+              return buildRow(
+                title: "Email id",
+                data: controller.businessModel.value.businessEmail,
+              );
+            }),
+            const Gap(6),
+            Obx(() {
+              return buildRow(
+                title: "Address",
+                data: controller.businessModel.value.website,
+              );
+            }),
+            const Gap(6),
+
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget _buildBusinessHourContent() {
+    return (controller.merchantProfile?.businessHours ?? []).isEmpty
+        ? GestureDetector(
+      onTap: () async {
+        final previousData = (controller.merchantProfile?.businessHours ?? [])
+            .toList();
+        final result = await Get.toNamed(
+          Routes.BUSINESS_HOURS,
+          arguments: previousData.isNotEmpty
+              ? previousData
+              : null,
+        );
+        if (result != null &&
+            result is List<Map<String, dynamic>>) {
+          // controller.handleBusinessHoursData(result);
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: MyColors.white,
+          border: Border.all(color: MyColors.grey),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(child: Text(" + ADD BUSINESS HOURS",
+          style: MyTexts.bold16.copyWith(color: MyColors.grey),)),
+      ),
+    )
+        : Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: MyColors.white,
+        border: Border.all(color: MyColors.primary),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // _buildBusinessHourItem(),
+        ],
+      ),
+    );
+  }
+
+
+  Widget buildRow({String? data, required String title}) {
+    return Row(
+      children: [
+        Text(
+          title,
+          style: MyTexts.medium16.copyWith(
+            color: MyColors.primary.withValues(alpha: 0.5),
+            fontFamily: MyTexts.Roboto,
+          ),
+        ),
+        const Spacer(),
+        Text(
+          data ?? "",
+          style: MyTexts.medium16.copyWith(
+            color: MyColors.black,
+            fontFamily: MyTexts.Roboto,
+          ),
+        ),
+      ],
     );
   }
 

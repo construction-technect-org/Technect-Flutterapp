@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/profile/components/certifications_component.dart';
@@ -9,151 +10,41 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({super.key});
 
   final HomeController controller1 = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        backgroundColor: MyColors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false, // This removes the back button
-
-        title: Row(
-          children: [
-
-            Image.asset(Asset.profil, height: 40, width: 40),
-            SizedBox(width: 1.h),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(
-                  () => Text(
-                    'Welcome ${controller1.profileData.value.data?.user?.firstName}!',
-                    style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    controller1.navigateToEditAddress();
-                  },
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                      SizedBox(width: 0.4.h),
-                      Obx(
-                        () => Text(
-                          controller1.getCurrentAddress(),
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.textFieldBackground,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.black54,
-                      ),
-                    ],
-                  ),
-
-                ),
-              ],
-            ),
-
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                border: Border.all(color: MyColors.hexGray92),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Stack(
-                clipBehavior: Clip.none, // 👈 allows badge to overflow
-                children: [
-                  SvgPicture.asset(
-                    Asset.notifications, // or 'assets/images/notifications.svg'
-                    width: 28,
-                    height: 28,
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 3,
-                    child: Container(
-                      width: 6.19,
-                      height: 6.19,
-                      decoration: const BoxDecoration(
-                        color: MyColors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        isCenter: false,
+        title: Text("Profile".toUpperCase()),
       ),
 
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.zero,
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Profile',
-                  style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.EDIT_PROFILE);
-                  },
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        Asset.editIcon,
-                        width: 12,
-                        height: 12,
-                        color: MyColors.primary,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Text(
-                          "Edit Profile",
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.primary,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            SizedBox(height: 2.h),
             _buildProfileBanner(),
-            SizedBox(height: 1.h),
-
+            SizedBox(height: 2.h),
             Obx(() {
               final completionPercentage =
                   controller.profileCompletionPercentage;
               if (completionPercentage > 90) {
                 return Expanded(
                   child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 1.h),
-                        const InfoMetricsComponent(),
-                        const CertificationsComponent(isDelete: false),
-                        SizedBox(height: 2.h),
-                        const MarketplacePerformanceComponent(),
-                        SizedBox(height: 3.h),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 1.h),
+                          const InfoMetricsComponent(),
+                          const CertificationsComponent(isDelete: false),
+                          SizedBox(height: 2.h),
+                          const MarketplacePerformanceComponent(),
+                          SizedBox(height: 3.h),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -164,13 +55,25 @@ class ProfileView extends GetView<ProfileController> {
                       SizedBox(height: 1.h),
                       _buildTabBar(),
                       SizedBox(height: 1.h),
-                      Expanded(child: _buildTabContent()),
+                      Expanded(child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: _buildTabContent(),
+                      )),
                     ],
                   ),
                 );
               }
             }),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: RoundedButton(
+          buttonName: "PROCEED",
+          onTap: () {
+
+          },
         ),
       ),
     );
@@ -180,12 +83,12 @@ class ProfileView extends GetView<ProfileController> {
     return Obx(() {
       final completionPercentage = controller.profileCompletionPercentage;
       final progressValue = completionPercentage / 100.0;
-
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: MyColors.primary,
+          border: Border.all(color: MyColors.primary, width: 1.2),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -209,7 +112,7 @@ class ProfileView extends GetView<ProfileController> {
                 Text(
                   '$completionPercentage%',
                   style: MyTexts.medium16.copyWith(
-                    color: MyColors.white,
+                    color: MyColors.black,
                     fontFamily: MyTexts.Roboto,
                   ),
                 ),
@@ -222,12 +125,11 @@ class ProfileView extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                     completionPercentage > 90
+                    completionPercentage > 90
                         ? "Complete Profile"
                         : 'Complete your Profile',
-                    style: MyTexts.medium18.copyWith(
-                      color: MyColors.white,
-                      fontSize: 17.sp,
+                    style: MyTexts.medium16.copyWith(
+                      color: MyColors.primary,
                       fontFamily: MyTexts.Roboto,
                     ),
                   ),
@@ -237,7 +139,7 @@ class ProfileView extends GetView<ProfileController> {
                         ? "Profile Verified"
                         : 'Profile Pending',
                     style: MyTexts.medium14.copyWith(
-                      color: MyColors.white,
+                      color: MyColors.warning,
                       fontFamily: MyTexts.Roboto,
                     ),
                   ),
