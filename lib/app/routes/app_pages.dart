@@ -247,7 +247,7 @@ class AppPages {
     ),
      GetPage(
       name: _Paths.LIST_OF_MERCHANT,
-      page: () =>   ListOfMerchantView(),
+      page: () =>  ListOfMerchantView(),
       binding: ListOfMerchantBinding(),
     ),
   ];

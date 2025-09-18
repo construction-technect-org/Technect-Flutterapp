@@ -55,7 +55,7 @@ class RoundedButton extends StatelessWidget {
               borderColor != null
                   ? Border.all(color: borderColor ?? MyColors.white)
                   : null,
-          borderRadius: BorderRadius.circular(borderRadius ?? 14),
+          borderRadius: BorderRadius.circular(borderRadius ?? 20),
         ),
         alignment: alignment ?? Alignment.center,
         padding: EdgeInsets.symmetric(
