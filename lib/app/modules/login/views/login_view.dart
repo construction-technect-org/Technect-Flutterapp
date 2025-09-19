@@ -143,7 +143,7 @@ class LoginView extends GetView<LoginController> {
                                     ),
                                     const Gap(8),
                                     Text(
-                                      'Remember Me',
+                                      'Resmember Me',
                                       style: MyTexts.medium13.copyWith(
                                         color: MyColors.grey,
                                         fontFamily: MyTexts.Roboto

@@ -259,8 +259,8 @@ class InfoMetricsComponent extends StatelessWidget {
   }
 
   Widget _buildBusinessHourContent() {
-    return (controller.merchantProfile?.businessHours ?? []).isEmpty
-        ? GestureDetector(
+    if (controller.businessHoursData.isEmpty) {
+      return GestureDetector(
       onTap: () async {
         final previousData = (controller.merchantProfile?.businessHours ?? [])
             .toList();
@@ -272,7 +272,8 @@ class InfoMetricsComponent extends StatelessWidget {
         );
         if (result != null &&
             result is List<Map<String, dynamic>>) {
-          // controller.handleBusinessHoursData(result);
+          controller.handleBusinessHoursData(result);
+          print(controller.businessHoursData);
         }
       },
       child: Container(
@@ -286,8 +287,9 @@ class InfoMetricsComponent extends StatelessWidget {
         child: Center(child: Text(" + ADD BUSINESS HOURS",
           style: MyTexts.bold16.copyWith(color: MyColors.grey),)),
       ),
-    )
-        : Container(
+    );
+    } else {
+      return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -295,12 +297,93 @@ class InfoMetricsComponent extends StatelessWidget {
         border: Border.all(color: MyColors.primary),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Column(
+      child:  Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            "Working Hours",
+            style: MyTexts.medium16.copyWith(
+              color: MyColors.primary.withValues(alpha: 0.5),
+              fontFamily: MyTexts.Roboto,
+            ),
+          ),
+          const Gap(20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildBusinessHourItem(),
+              ],
+            ),
+          ),
+
           // _buildBusinessHourItem(),
         ],
       ),
+    );
+    }
+  }
+
+  Widget _buildBusinessHourItem() {
+    final data = controller.businessHoursData;
+
+    // Group open days with same hours
+    final List<String> lines = [];
+    String? currentOpenTime;
+    String? currentCloseTime;
+    List<String> currentDays = [];
+
+    for (int i = 0; i < data.length; i++) {
+      final item = data[i];
+      final isOpen = item["is_open"] as bool;
+      final dayName = item["day_name"] as String;
+
+      if (isOpen) {
+        final openTime = item["open_time"];
+        final closeTime = item["close_time"];
+
+        if (currentOpenTime == openTime &&
+            currentCloseTime == closeTime) {
+          currentDays.add(dayName);
+        } else {
+          if (currentDays.isNotEmpty) {
+            lines.add(
+                "${currentDays.first} to ${currentDays.last}\n$currentOpenTime to $currentCloseTime");
+          }
+          currentDays = [dayName];
+          currentOpenTime = openTime;
+          currentCloseTime = closeTime;
+        }
+      } else {
+        if (currentDays.isNotEmpty) {
+          lines.add(
+              "${currentDays.first} to ${currentDays.last}\n$currentOpenTime to $currentCloseTime");
+          currentDays = [];
+        }
+        lines.add("$dayName  Closed");
+      }
+    }
+
+    // flush last group
+    if (currentDays.isNotEmpty) {
+      lines.add(
+          "${currentDays.first} to ${currentDays.last}  $currentOpenTime to $currentCloseTime");
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: lines.map((line) {
+        final isClosed = line.contains("Closed");
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 6),
+          child: Text(
+            line,
+            style: MyTexts.medium16.copyWith(
+              color: isClosed ? MyColors.red : Colors.green,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -345,27 +428,6 @@ class InfoMetricsComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildBusinessHourItem(String day, String hours) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          day,
-          style: MyTexts.regular14.copyWith(
-            color: const Color(0xFF808080),
-            fontFamily: MyTexts.Roboto,
-          ),
-        ),
-        Text(
-          hours,
-          style: MyTexts.medium14.copyWith(
-            color: const Color(0xFF2B2B2B),
-            fontFamily: MyTexts.Roboto,
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildBusinessMetricsCard() {
     return Container(

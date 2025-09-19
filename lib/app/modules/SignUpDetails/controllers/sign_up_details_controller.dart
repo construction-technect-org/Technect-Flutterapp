@@ -10,11 +10,13 @@ class SignUpDetailsController extends GetxController {
   final mobileNumberController = TextEditingController();
   final emailController = TextEditingController();
   final otpController = TextEditingController();
+  final gstController = TextEditingController();
   SignUpService signUpService = SignUpService();
   final firstName = ''.obs;
   final lastName = ''.obs;
   final mobileNumber = ''.obs;
   final email = ''.obs;
+  final gst = ''.obs;
   final otp = ''.obs;
   final otpSend = false.obs;
   final otpVerify = false.obs;
@@ -52,6 +54,9 @@ class SignUpDetailsController extends GetxController {
     otpController.addListener(() {
       otp.value = otpController.text;
     });
+    gstController.addListener(() {
+      gst.value = gstController.text;
+    });
   }
 
   @override
@@ -60,6 +65,7 @@ class SignUpDetailsController extends GetxController {
     lastNameController.dispose();
     mobileNumberController.dispose();
     emailController.dispose();
+    gstController.dispose();
     super.onClose();
   }
 

@@ -120,6 +120,11 @@ class ProfileController extends GetxController {
   }
 
   Rx<BusinessModel> businessModel = BusinessModel().obs;
+  void handleBusinessHoursData(List<Map<String, dynamic>> data) {
+    businessHoursData.value = data;
+
+  }
+  RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
 
 
 }

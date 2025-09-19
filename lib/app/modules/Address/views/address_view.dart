@@ -149,7 +149,7 @@ class AddressView extends GetView<AddressController> {
                               size: 16,
                             ),
                             title: Text(
-                              "Add Location Manually",
+                              " Add Location Manually",
                               style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                             ),
                             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -231,6 +231,7 @@ class AddressView extends GetView<AddressController> {
                     ),
                   ),
                 ),
+                SizedBox(height: 3.h),
               ],
             ),
           ),

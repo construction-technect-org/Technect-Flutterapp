@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/forgotPassword/services/ForgotPasswordService.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
@@ -15,10 +16,8 @@ class ForgotPasswordController extends GetxController {
   final newPassword = ''.obs;
   final confirmPassword = ''.obs;
 
-
   RxInt isValid = (-1).obs;
-  RxString countryCode ="".obs;
-
+  RxString countryCode = "".obs;
 
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
@@ -31,6 +30,7 @@ class ForgotPasswordController extends GetxController {
   void onCountdownFinish() {
     isResendVisible.value = true;
   }
+
   // State management
   final otpSend = false.obs;
   final otpVerify = false.obs;
@@ -134,7 +134,7 @@ class ForgotPasswordController extends GetxController {
 
     try {
       final otpResponse = await forgotPasswordService.verifyOtp(
-        countryCode:countryCode.value,
+        countryCode: countryCode.value,
         mobileNumber: phoneEmail.value,
         otp: otp.value,
       );
@@ -221,8 +221,17 @@ class ForgotPasswordController extends GetxController {
       );
 
       if (resetResponse.success == true) {
-        Get.back();
-        SnackBars.successSnackBar(content: 'Password reset successfully!');
+        Get.to(
+          () => SuccessScreen(
+            title: "Success!",
+            image: Asset.forgetSImage,
+            header: "Password reset successfully !",
+            onTap: () {
+              Get.back();
+              Get.back();
+            },
+          ),
+        );
       } else {
         SnackBars.errorSnackBar(
           content: resetResponse.message ?? 'Password reset failed',

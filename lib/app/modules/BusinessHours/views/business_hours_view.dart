@@ -24,7 +24,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
           isCenter: false,
           title: Text("EDIT BUSINESS HOURS".toUpperCase()),
         ),
-        bottomNavigationBar:      Padding(
+        bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(24.0),
           child: RoundedButton(
             buttonName: 'SUBMIT',
@@ -43,13 +43,13 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                 Text(
                   "Update your Working Hours",
                   style: MyTexts.medium16.copyWith(
-                      color: MyColors.greyDetails,
-                      fontFamily: MyTexts.Roboto
+                    color: MyColors.greyDetails,
+                    fontFamily: MyTexts.Roboto,
                   ),
                 ),
-          
+
                 SizedBox(height: 3.h),
-          
+
                 // Enable toggle
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,7 +59,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                       children: [
                         Text(
                           "Enable",
-                          style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
+                          style: MyTexts.bold16.copyWith(
+                            color: MyColors.fontBlack,
+                          ),
                         ),
                         SizedBox(height: 1.h),
                         Text(
@@ -91,7 +93,9 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                       children: [
                         Text(
                           "Timezone",
-                          style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
+                          style: MyTexts.bold16.copyWith(
+                            color: MyColors.fontBlack,
+                          ),
                         ),
                         SizedBox(height: 0.7.h),
                         Text(
@@ -155,7 +159,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 18),
                         child: Obx(() {
-                          final bool enabled = controller.daysEnabled[day]!.value;
+                          final bool enabled =
+                              controller.daysEnabled[day]!.value;
                           return Row(
                             children: [
                               CustomSwitch(
@@ -168,17 +173,19 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                               Expanded(
                                 child: Text(
                                   day,
-                                  style: MyTexts.bold16.copyWith(
+                                  style: MyTexts.bold15.copyWith(
                                     color: MyColors.fontBlack,
                                   ),
                                 ),
                               ),
                               if (enabled) ...[
-          
                                 SizedBox(
-                                  width: 90,
+                                  width: 60,
                                   height: 40,
                                   child: TextField(
+                                    style: MyTexts.bold16.copyWith(
+                                      color: Colors.black,
+                                    ),
                                     controller: controller.fromControllers[day],
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
@@ -195,14 +202,14 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                             horizontal: 10,
                                             vertical: 8,
                                           ),
-          
+
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide: const BorderSide(
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-          
+
                                       // ✅ When enabled
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -210,7 +217,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-          
+
                                       // ✅ When focused (clicked)
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -218,7 +225,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-          
+
                                       // ✅ When error
                                       errorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -226,7 +233,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-          
+
                                       // ✅ When focused + error
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -236,17 +243,47 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                       ),
                                     ),
                                     onChanged: (value) {
-                                      controller.validateTimeInput(value, day, 'from');
+                                      controller.validateTimeInput(
+                                        value,
+                                        day,
+                                        'from',
+                                      );
                                     },
                                   ),
                                 ),
-          
-                                const SizedBox(width: 10),
-          
-                              SizedBox(
-                                  width: 90,
+
+                                const SizedBox(width: 6),
+
+                                // 🔽 AM/PM Dropdown
+                                Obx(
+                                  () => DropdownButton<String>(
+                                    underline: const SizedBox(),
+                                    iconSize: 0,
+                                    dropdownColor: Colors.white,
+                                    value: controller.fromPeriods[day]!.value,
+                                    items: ["AM", "PM"].map((e) {
+                                      return DropdownMenuItem<String>(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: MyTexts.bold14.copyWith(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: null,
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+
+                                SizedBox(
+                                  width: 60,
                                   height: 40,
                                   child: TextField(
+                                    style: MyTexts.bold16.copyWith(
+                                      color: Colors.black,
+                                    ),
                                     controller: controller.toControllers[day],
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
@@ -254,7 +291,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                       LengthLimitingTextInputFormatter(2),
                                     ],
                                     decoration: InputDecoration(
-                                      hintText: "From",
+                                      hintText: "To",
                                       hintStyle: MyTexts.bold14.copyWith(
                                         color: MyColors.grey,
                                       ),
@@ -263,7 +300,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                             horizontal: 10,
                                             vertical: 8,
                                           ),
-          
+
                                       // ✅ Default border
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -271,7 +308,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-          
+
                                       // ✅ When enabled
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -279,7 +316,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-          
+
                                       // ✅ When focused (clicked)
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -287,7 +324,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-          
+
                                       // ✅ When error
                                       errorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -295,7 +332,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           color: MyColors.textFieldBorder,
                                         ),
                                       ),
-          
+
                                       // ✅ When focused + error
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -304,7 +341,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                         ),
                                       ),
                                     ),
-                                     onChanged: (value) {
+                                    onChanged: (value) {
                                       controller.validateTimeInput(
                                         value,
                                         day,
@@ -313,17 +350,41 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                     },
                                   ),
                                 ),
-          
-          
-          
+
+                                const SizedBox(width: 6),
+
+                                // 🔽 AM/PM Dropdown
+                                Obx(
+                                  () => DropdownButton<String>(
+                                    iconSize: 0,
+                                     dropdownColor: Colors.white,
+                                     underline: const SizedBox(),
+
+                                    value: controller.toPeriods[day]!.value,
+                                    items: ["AM", "PM"].map((e) {
+                                      return DropdownMenuItem<String>(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: MyTexts.bold14.copyWith(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: null,
+                                  ),
+                                ),
                               ] else ...[
                                 // Closed UI
                                 Container(
                                   width: 190,
-                                  height: 38,
+                                  height: 44,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: MyColors.textFieldBorder),
+                                    border: Border.all(
+                                      color: MyColors.textFieldBorder,
+                                    ),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Padding(
@@ -335,7 +396,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                           width: 12,
                                           height: 12,
                                         ),
-                                         SizedBox(width: 2.w),
+                                        SizedBox(width: 2.w),
                                         Text(
                                           "Closed",
                                           style: MyTexts.bold14.copyWith(
@@ -354,7 +415,6 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                     }).toList(),
                   );
                 }),
-          
               ],
             ),
           ),

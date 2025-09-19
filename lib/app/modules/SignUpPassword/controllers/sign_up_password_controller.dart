@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/model/UserDataModel.dart';
 
@@ -89,8 +90,16 @@ class SignUpPasswordController extends GetxController {
       );
 
       if (signUpResponse.success == true) {
-        SnackBars.successSnackBar(content: 'Account created successfully!');
-        Get.offAllNamed(Routes.LOGIN);
+        Get.to(
+              () => SuccessScreen(
+            title: "Success!",
+            header: "Account created successfully !",
+            image: Asset.forgetSImage,
+            onTap: () {
+              Get.offAllNamed(Routes.LOGIN);
+            },
+          ),
+        );
       } else {
         SnackBars.errorSnackBar(
           content: signUpResponse.message ?? 'Failed to create account',

@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/login/services/LoginService.dart';
@@ -13,7 +14,7 @@ class LoginController extends GetxController {
   FocusNode passwordFocusNode = FocusNode();
   final rememberMe = false.obs;
   RxInt isValid = (-1).obs;
-  RxString countryCode ="".obs;
+  RxString countryCode = "".obs;
   HomeService homeService = HomeService();
 
   LoginService loginService = LoginService();
@@ -23,7 +24,6 @@ class LoginController extends GetxController {
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
-
 
   @override
   void onInit() {
@@ -72,7 +72,10 @@ class LoginController extends GetxController {
         }
 
         if (rememberMe.value) {
-          myPref.saveCredentials(mobileController.text, passwordController.text);
+          myPref.saveCredentials(
+            mobileController.text,
+            passwordController.text,
+          );
         } else {
           myPref.clearCredentials();
         }
@@ -80,15 +83,24 @@ class LoginController extends GetxController {
         if (addressResponse.success == true &&
             (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
           myPref.setAddressData(addressResponse.toJson());
-         // Get.offAllNamed(Routes.MAIN);
-          Get.offAllNamed(Routes.YOUR_ROLE);
-
+          // Get.offAllNamed(Routes.MAIN);
+          Get.to(
+            () => SuccessScreen(
+              title: "Success!",
+              header: "Thanks for Connecting !",
+              onTap: () {
+                Get.offAllNamed(Routes.YOUR_ROLE);
+              },
+            ),
+          );
         } else {
           myPref.clearAddressData();
           Get.offAllNamed(Routes.ADDRESS, arguments: {'isFromLogin': true});
         }
       } else {
-        SnackBars.errorSnackBar(content: loginResponse.message ?? 'Login failed');
+        SnackBars.errorSnackBar(
+          content: loginResponse.message ?? 'Login failed',
+        );
       }
     } catch (e) {
       // Error is already shown by ApiManager
