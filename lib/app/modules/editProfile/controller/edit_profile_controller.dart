@@ -15,6 +15,7 @@ class EditProfileController extends GetxController {
   final businessContactController = TextEditingController();
   final yearsInBusinessController = TextEditingController();
   final projectsCompletedController = TextEditingController();
+  final addressContoller = TextEditingController();
 
   EditProfileService editProfileService = EditProfileService();
 
