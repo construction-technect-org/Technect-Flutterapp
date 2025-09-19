@@ -50,6 +50,7 @@ class SignUpService {
     required String email,
     required String password,
     required String confirmPassword,
+     String? gst,
   }) async {
     try {
       final response = await apiManager.postObject(
@@ -61,6 +62,8 @@ class SignUpService {
           "countryCode": countryCode,
           "mobileNumber": mobileNumber,
           "email": email,
+          if((gst??"").isNotEmpty)
+          "gstNumber":gst,
           "password": password,
           "confirmPassword": confirmPassword,
         },

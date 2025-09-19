@@ -86,6 +86,7 @@ class SignUpPasswordController extends GetxController {
         mobileNumber: userData!.mobileNumber,
         email: userData!.email,
         password: password.value,
+        gst: userData!.gst,
         confirmPassword: confirmPassword.value,
       );
 

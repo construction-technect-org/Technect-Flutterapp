@@ -64,8 +64,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                         isRed: false,
                         headerText: "GSTIN (optional)",
                         hintText: "xxxxxxxxxxxxxx",
-                        keyboardType: TextInputType.emailAddress,
-                        controller: controller.emailController,
+                        controller: controller.gstController,
                       ),
                       SizedBox(height: 1.8.h),
                       // Mobile Number
