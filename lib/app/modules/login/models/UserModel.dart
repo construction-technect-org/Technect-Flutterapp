@@ -7,6 +7,7 @@ class UserModel {
   String? countryCode;
   String? mobileNumber;
   String? email;
+  String? gst;
   String? createdAt;
   String? updatedAt;
 
@@ -19,6 +20,7 @@ class UserModel {
     this.countryCode,
     this.mobileNumber,
     this.email,
+    this.gst,
     this.createdAt,
     this.updatedAt,
   });
@@ -32,6 +34,7 @@ class UserModel {
     countryCode: json["countryCode"],
     mobileNumber: json["mobileNumber"],
     email: json["email"],
+    gst: json["gstNumber"],
     createdAt: json["createdAt"],
     updatedAt: json["updatedAt"],
   );
@@ -45,6 +48,7 @@ class UserModel {
     "countryCode": countryCode,
     "mobileNumber": mobileNumber,
     "email": email,
+    "gstNumber": gst,
     "createdAt": createdAt,
     "updatedAt": updatedAt,
   };

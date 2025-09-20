@@ -53,7 +53,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     Expanded(
                       child: RoundedButton(
                         buttonName: controller.currentStep.value == 1
-                            ? 'NEXT'
+                            ? 'UPDATE'
                             : 'UPDATE',
                         onTap: () {
                           controller.updateProfile();
@@ -192,13 +192,13 @@ class EditProfileView extends GetView<EditProfileController> {
             LengthLimitingTextInputFormatter(10),
           ],
         ),
-        SizedBox(height: 2.h),
-        CommonTextField(
-          hintText: "3VR7+34 Mumbai, Maharashtra Maharashtra",
-          maxLine: 3,
-          headerText: "Business Address",
-          controller: controller.addressContoller,
-        ),
+        // SizedBox(height: 2.h),
+        // CommonTextField(
+        //   hintText: "3VR7+34 Mumbai, Maharashtra Maharashtra",
+        //   maxLine: 3,
+        //   headerText: "Business Address",
+        //   controller: controller.addressContoller,
+        // ),
 
         // SizedBox(height: 2.h),
         // CommonTextField(

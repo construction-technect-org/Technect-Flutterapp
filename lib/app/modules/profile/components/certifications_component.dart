@@ -4,6 +4,8 @@ import 'package:construction_technect/app/modules/profile/components/add_certifi
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:gap/gap.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path/path.dart';
 
 class CertificationsComponent extends StatelessWidget {
   const CertificationsComponent({this.isDelete});
@@ -35,8 +37,13 @@ class CertificationsComponent extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    const Icon(Icons.visibility, color: MyColors.primary),
-                    if (!cert.isDefault)
+                    IconButton(onPressed: (){
+                      print(APIConstants.bucketUrl+(cert.filePath??""));
+                      OpenFilex.open(APIConstants.bucketUrl+(cert.filePath??""));
+
+                    }, icon: const Icon(Icons.visibility, color: MyColors.primary),),
+
+                    if (cert.filePath != null)
                       IconButton(
                         icon: const Icon(Icons.delete, color: MyColors.red),
                         onPressed: () => controller.removeCertificate(index),
@@ -90,8 +97,18 @@ class CertificationsComponent extends StatelessWidget {
                               ),
                             ],
                           ),
-                        ] else
-                          Text("File uploaded: ${cert.filePath}"),
+                        ] else ...[
+                          const Gap(14),
+
+                          Image.asset(Asset.pdfImage, height: 50, width: 32),
+                          const Gap(14),
+                          Text(
+                            "File uploaded: ${basename("${cert.filePath}")}",
+                            textAlign: TextAlign.center,
+                          ),
+
+                          const Gap(14),
+                        ],
                       ],
                     ),
                   ),
@@ -103,11 +120,9 @@ class CertificationsComponent extends StatelessWidget {
           Align(
             child: GestureDetector(
               onTap: () {
-                // Example: open dialog to enter title
-
                 Get.to(() => const AddCertificate())?.then((val) {
                   if (val != null) {
-                    controller.documents.add(val);
+                    controller.certificates.add(val);
                   }
                 });
               },

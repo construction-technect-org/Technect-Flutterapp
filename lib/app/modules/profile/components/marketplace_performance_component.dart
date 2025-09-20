@@ -96,18 +96,18 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                         ?.qualityAssurance ??
                         false,
                     onChanged: (val) {
-                      controller
-                          .merchantProfile
-                          ?.verificationStatus
-                          ?.qualityAssurance=!(controller
-                          .merchantProfile
-                          ?.verificationStatus
-                          ?.qualityAssurance ??
-                          true);
-                      print(  controller
-                          .merchantProfile
-                          ?.verificationStatus
-                          ?.qualityAssurance);
+                      // controller
+                      //     .merchantProfile
+                      //     ?.verificationStatus
+                      //     ?.qualityAssurance=!(controller
+                      //     .merchantProfile
+                      //     ?.verificationStatus
+                      //     ?.qualityAssurance ??
+                      //     true);
+                      // print(  controller
+                      //     .merchantProfile
+                      //     ?.verificationStatus
+                      //     ?.qualityAssurance);
                     },
                   );
                 }),

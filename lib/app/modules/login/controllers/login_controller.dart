@@ -95,7 +95,18 @@ class LoginController extends GetxController {
           );
         } else {
           myPref.clearAddressData();
-          Get.offAllNamed(Routes.ADDRESS, arguments: {'isFromLogin': true});
+          Get.to(
+            () => SuccessScreen(
+              title: "Success!",
+              header: "Thanks for Connecting !",
+              onTap: () {
+                Get.offAllNamed(
+                  Routes.ADDRESS,
+                  arguments: {'isFromLogin': true},
+                );
+              },
+            ),
+          );
         }
       } else {
         SnackBars.errorSnackBar(

@@ -48,6 +48,7 @@ class EditProfileController extends GetxController {
         businessNameController.text = merchantProfile.businessName ?? '';
         gstNumberController.text = merchantProfile.gstinNumber ?? '';
         businessEmailController.text = merchantProfile.businessEmail ?? '';
+        businessWebsiteController.text = merchantProfile.website ?? '';
         businessContactController.text = merchantProfile.businessContactNumber ?? '';
         yearsInBusinessController.text =
             merchantProfile.yearsInBusiness?.toString() ?? '';
@@ -101,9 +102,9 @@ class EditProfileController extends GetxController {
         businessEmail: businessEmailController.text,
         businessName: businessNameController.text,
         gstinNumber: gstNumberController.text,
-        projectsCompleted: int.parse(projectsCompletedController.text),
         website: businessWebsiteController.text,
-        yearsInBusiness:int.parse( yearsInBusinessController.text)
+        address: addressContoller.text
+
       );
       Get.find<ProfileController>().businessModel.refresh();
       Get.back();
@@ -151,6 +152,24 @@ class EditProfileController extends GetxController {
       SnackBars.errorSnackBar(content: "Business name must be at least 2 characters");
       return false;
     }
+    // Business Website URL Validation
+    if (businessWebsiteController.text.trim().isEmpty) {
+      SnackBars.errorSnackBar(content: "Please enter business website URL");
+      return false;
+    }
+    if (!_isValidUrl(businessWebsiteController.text.trim())) {
+      SnackBars.errorSnackBar(content: "Please enter a valid website URL");
+      return false;
+    }
+    // Business Email Validation
+    if (businessEmailController.text.trim().isEmpty) {
+      SnackBars.errorSnackBar(content: "Please enter business email");
+      return false;
+    }
+    if (!_isValidEmail(businessEmailController.text.trim())) {
+      SnackBars.errorSnackBar(content: "Please enter a valid email address");
+      return false;
+    }
 
     // GST Number Validation
     if (gstNumberController.text.trim().isEmpty) {
@@ -166,15 +185,7 @@ class EditProfileController extends GetxController {
       return false;
     }
 
-    // Business Email Validation
-    if (businessEmailController.text.trim().isEmpty) {
-      SnackBars.errorSnackBar(content: "Please enter business email");
-      return false;
-    }
-    if (!_isValidEmail(businessEmailController.text.trim())) {
-      SnackBars.errorSnackBar(content: "Please enter a valid email address");
-      return false;
-    }
+
 
     // Business Contact Number Validation
     if (businessContactController.text.trim().isEmpty) {
@@ -190,30 +201,10 @@ class EditProfileController extends GetxController {
       return false;
     }
 
-    // Years in Business Validation
-    if (yearsInBusinessController.text.trim().isEmpty) {
-      SnackBars.errorSnackBar(content: "Please enter years in business");
-      return false;
-    }
-    final years = int.tryParse(yearsInBusinessController.text.trim());
-    if (years == null || years < 0 || years > 99) {
-      SnackBars.errorSnackBar(content: "Please enter a valid number of years (0-99)");
-      return false;
-    }
-
-    // Projects Completed Validation
-    if (projectsCompletedController.text.trim().isEmpty) {
-      SnackBars.errorSnackBar(content: "Please enter projects completed");
-      return false;
-    }
-    final projects = int.tryParse(projectsCompletedController.text.trim());
-    if (projects == null || projects < 0 || projects > 9999) {
-      SnackBars.errorSnackBar(
-        content: "Please enter a valid number of projects (0-9999)",
-      );
-      return false;
-    }
-
+    // if (addressContoller.text.trim().isEmpty) {
+    //   SnackBars.errorSnackBar(content: "Please enter business address");
+    //   return false;
+    // }
     // // Business Hours Validation
     // if (businessHoursData.isEmpty) {
     //   SnackBars.errorSnackBar(content: "Please set business hours");
@@ -221,6 +212,13 @@ class EditProfileController extends GetxController {
     // }
 
     return true;
+  }
+
+  // URL Validation
+  bool _isValidUrl(String url) {
+    const pattern = r'^(https?:\/\/)?([\w\-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/\S*)?$';
+    final regex = RegExp(pattern);
+    return regex.hasMatch(url);
   }
 
   bool _isValidEmail(String email) {

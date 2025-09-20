@@ -81,9 +81,13 @@ class BusinessHoursController extends GetxController {
           // Remove ":00" and get just the hour
           final openHour = openTime.replaceAll(':00', '');
           final closeHour = closeTime.replaceAll(':00', '');
+          String _removeAmPm(String time) {
+            return time.replaceAll(RegExp(r'(AM|PM)', caseSensitive: false), "").trim();
+          }
 
-          fromControllers[dayName]?.text = openHour;
-          toControllers[dayName]?.text = closeHour;
+
+          fromControllers[dayName]?.text = _removeAmPm(openHour);
+          toControllers[dayName]?.text = _removeAmPm(closeHour);
 
           Get.printInfo(info: '📅 Restored $dayName: $openHour - $closeHour');
         } else {

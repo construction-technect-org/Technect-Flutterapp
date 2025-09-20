@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:gap/gap.dart';
+import 'package:path/path.dart';
 
 class AddCertificate extends StatefulWidget {
   const AddCertificate({super.key});
@@ -66,7 +67,7 @@ class _AddCertificateState extends State<AddCertificate> {
                     border: Border.all(color: MyColors.grey),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Column(
+                  child: filePath==null? Column(
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -86,6 +87,18 @@ class _AddCertificateState extends State<AddCertificate> {
                         "Upload Certification",
                         style: MyTexts.bold16.copyWith(color: MyColors.black),
                       ),
+                    ],
+                  ):Column(
+                    children: [
+                      const Gap(14),
+
+                      Image.asset(Asset.pdfImage, height: 50, width: 32),
+                      const Gap(14),
+                      Text(
+                        "File uploaded: ${basename("$filePath")}",
+                      ),
+
+                      const Gap(14),
                     ],
                   ),
                 ),
