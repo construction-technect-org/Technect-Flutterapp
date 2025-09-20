@@ -223,10 +223,7 @@ Widget _buildCertificationItem(
   BuildContext context,
 ) {
   return DottedBorder(
-    borderType: BorderType.RRect,
-    radius: Radius.circular(3.w),
-    color: const Color(0xFF8C8C8C),
-    dashPattern: const [5, 5],
+    options: const RectDottedBorderOptions(color: Color(0xFF8C8C8C), dashPattern: [5, 5]),
     child: Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),

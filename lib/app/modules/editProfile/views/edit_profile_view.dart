@@ -401,19 +401,16 @@ class EditProfileView extends GetView<EditProfileController> {
           controller.pickFile(title);
         },
         child: DottedBorder(
-          borderType: BorderType.RRect,
-          radius: const Radius.circular(12),
-          color: isSelected ? MyColors.primary : const Color(0xFF8C8C8C),
-          dashPattern: const [5, 5],
+          options: RectDottedBorderOptions(
+            color: isSelected ? MyColors.primary : const Color(0xFF8C8C8C),
+            dashPattern: [5, 5],
+          ),
           child: Stack(
             children: [
               /// Main card content
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 20,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 decoration: BoxDecoration(
                   color: MyColors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -458,9 +455,7 @@ class EditProfileView extends GetView<EditProfileController> {
                       ),
                     ),
                     Text(
-                      (isSelected && fileName != null)
-                          ? fileName
-                          : organization,
+                      (isSelected && fileName != null) ? fileName : organization,
                       style: MyTexts.regular14.copyWith(
                         color: const Color(0xFF717171),
                         fontFamily: MyTexts.Roboto,
@@ -478,20 +473,12 @@ class EditProfileView extends GetView<EditProfileController> {
                   children: [
                     GestureDetector(
                       onTap: () {},
-                      child: SvgPicture.asset(
-                        Asset.eyeIcon,
-                        width: 26,
-                        height: 20,
-                      ),
+                      child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
                     ),
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {},
-                      child: SvgPicture.asset(
-                        Asset.delete,
-                        width: 20,
-                        height: 20,
-                      ),
+                      child: SvgPicture.asset(Asset.delete, width: 20, height: 20),
                     ),
                   ],
                 ),

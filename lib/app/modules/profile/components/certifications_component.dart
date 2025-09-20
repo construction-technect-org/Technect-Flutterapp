@@ -37,11 +37,13 @@ class CertificationsComponent extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    IconButton(onPressed: (){
-                      print(APIConstants.bucketUrl+(cert.filePath??""));
-                      OpenFilex.open(APIConstants.bucketUrl+(cert.filePath??""));
-
-                    }, icon: const Icon(Icons.visibility, color: MyColors.primary),),
+                    IconButton(
+                      onPressed: () {
+                        print(APIConstants.bucketUrl + (cert.filePath ?? ""));
+                        OpenFilex.open(APIConstants.bucketUrl + (cert.filePath ?? ""));
+                      },
+                      icon: const Icon(Icons.visibility, color: MyColors.primary),
+                    ),
 
                     if (cert.filePath != null)
                       IconButton(
@@ -148,10 +150,10 @@ class CertificationsComponent extends StatelessWidget {
     Documents document,
   ) {
     return DottedBorder(
-      borderType: BorderType.RRect,
-      radius: const Radius.circular(12),
-      color: const Color(0xFF8C8C8C),
-      dashPattern: const [5, 5],
+      options: const RectDottedBorderOptions(
+        color: Color(0xFF8C8C8C),
+        dashPattern: [5, 5],
+      ),
       child: Stack(
         children: [
           Container(

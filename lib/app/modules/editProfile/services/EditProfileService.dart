@@ -37,4 +37,6 @@ class EditProfileService {
       rethrow;
     }
   }
+
+  Future uploadKycDetails(Map<String, String> payload) async {}
 }
