@@ -8,7 +8,6 @@ import 'package:construction_technect/app/modules/home/services/HomeService.dart
 
 class HomeController extends GetxController {
   CommonController commonController = Get.find();
-  
 
   final List<Map<String, dynamic>> items = [
     {"icon": Asset.marketplaceIcon, "title": "Marketplace"},
@@ -80,10 +79,15 @@ class HomeController extends GetxController {
   }
 
   void _checkProfileCompletion() {
-    final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+    final merchantProfile = profileData.value.data?.merchantProfile;
+    final connectorProfile = profileData.value.data?.connectorProfile;
 
-    if (profileData.value.data?.merchantProfile != null) {
+    final completionPercentage =
+        merchantProfile?.profileCompletionPercentage ??
+            connectorProfile?.profileCompletionPercentage ??
+            0;
+
+    if (merchantProfile != null || connectorProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
     }
 
@@ -94,6 +98,7 @@ class HomeController extends GetxController {
       _showProfileCompletionDialog();
     }
   }
+
 
   void _showProfileCompletionDialog() {
     if (Get.isDialogOpen == true) {
@@ -129,12 +134,18 @@ class HomeController extends GetxController {
                   const SizedBox(height: 12),
                   Text(
                     'Complete your Profile',
-                    style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground,fontFamily: MyTexts.Roboto),
+                    style: MyTexts.medium18.copyWith(
+                      color: MyColors.textFieldBackground,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Profile Pending',
-                    style: MyTexts.medium16.copyWith(color: MyColors.warning,fontFamily: MyTexts.Roboto),
+                    style: MyTexts.medium16.copyWith(
+                      color: MyColors.warning,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
                 ],
               ),
@@ -147,13 +158,13 @@ class HomeController extends GetxController {
   }
 
   void _handleProfileDialogTap() {
-    final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+    final role = profileData.value.data?.user?.roleName;
 
-    if (completionPercentage == 0) {
+    final bool isPartner = role?.toLowerCase() == "merchant" || role?.toLowerCase() == "civil engineer" || role?.toLowerCase() == "architect" || role?.toLowerCase() == "designer";
+    if (isPartner == true) {
       Get.toNamed(Routes.PROFILE);
     } else {
-      Get.toNamed(Routes.PROFILE);
+      Get.toNamed(Routes.CONNECTOR_PROFILE);
     }
   }
 
@@ -178,7 +189,8 @@ class HomeController extends GetxController {
 
   void _checkProfileCompletionAfterEdit() {
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
+        0;
 
     if (profileData.value.data?.merchantProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
@@ -295,7 +307,8 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true && profileResponse.data?.user != null) {
+      if (profileResponse.success == true &&
+          profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
@@ -312,7 +325,7 @@ class HomeController extends GetxController {
     if (cachedTeam != null && cachedTeam.isNotEmpty) {
       teamList.assignAll(cachedTeam);
     } else {
-      await fetchTeamList();
+      // await fetchTeamList();
     }
   }
 
@@ -333,7 +346,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> refreshTeamList() async {
-    await fetchTeamList();
+    // await fetchTeamList();
   }
 
   Future<void> refreshAddressAndProfile() async {

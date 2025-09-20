@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/editProfile/services/EditProfileService.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
@@ -299,14 +300,33 @@ class ProfileController extends GetxController {
             }
             if (commonController.hasProfileComplete.value == false) {
               commonController.hasProfileComplete.value = true;
-              Get.offAllNamed(Routes.MAIN);
+              Get.offAll(
+                    () => SuccessScreen(
+                  title: "Success!",
+                  header: "Thanks for Connecting !",
+                  onTap: () {
+                    Get.offAllNamed(Routes.MAIN);
+
+                  },
+                ),
+              );
             } else {
               Get.back();
             }
           } else {
+
             if (commonController.hasProfileComplete.value == false) {
               commonController.hasProfileComplete.value = true;
-              Get.offAllNamed(Routes.MAIN);
+              Get.offAll(
+                    () => SuccessScreen(
+                  title: "Success!",
+                  header: "Thanks for Connecting !",
+                  onTap: () {
+                    Get.offAllNamed(Routes.MAIN);
+
+                  },
+                ),
+              );
             } else {
               homeController.onReturnFromEditProfile();
               Get.back();
