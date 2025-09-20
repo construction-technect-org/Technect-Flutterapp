@@ -91,7 +91,7 @@ class SignUpPasswordController extends GetxController {
       );
 
       if (signUpResponse.success == true) {
-        Get.to(
+        Get.offAllNamed(
               () => SuccessScreen(
             title: "Success!",
             header: "Account created successfully !",

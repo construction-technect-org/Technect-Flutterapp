@@ -139,7 +139,7 @@ class AddKycController extends GetxController {
           // Get.back(result: response.data);
           // if (commonController.hasProfileComplete.value == false) {
             commonController.hasProfileComplete.value = true;
-          Get.to(
+          Get.offAllNamed(
                 () => SuccessScreen(
               title: "Success!",
               header: "Thanks for Connecting !",

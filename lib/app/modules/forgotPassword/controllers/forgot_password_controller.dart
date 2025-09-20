@@ -221,7 +221,7 @@ class ForgotPasswordController extends GetxController {
       );
 
       if (resetResponse.success == true) {
-        Get.to(
+        Get.offAllNamed(
           () => SuccessScreen(
             title: "Success!",
             image: Asset.forgetSImage,
