@@ -52,10 +52,11 @@ class StepperEditProfileWidget extends StatelessWidget {
     required Color fillColor,
   }) {
     return DottedBorder(
-      borderType: BorderType.Circle,
-      color: borderColor,
-      dashPattern: const [4, 4],
-      padding: const EdgeInsets.all(6),
+      options: CircularDottedBorderOptions(
+        color: borderColor,
+        dashPattern: const [4, 4],
+        padding: const EdgeInsets.all(6),
+      ),
       child: Container(
         width: 20,
         height: 20,
@@ -113,7 +114,7 @@ class StepperEditProfileWidget extends StatelessWidget {
                   ? const Color(0xFF1B2F62)
                   : const Color(0xFF6C6C6C),
             ),
-             const SizedBox(width: 10),
+            const SizedBox(width: 10),
             // // Dotted line
             // _buildDottedLine(
             //   currentStep > 1 ? const Color(0xFF3DA741) : const Color(0xFF1B2F62),

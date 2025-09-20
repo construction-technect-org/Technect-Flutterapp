@@ -134,10 +134,10 @@ class CertificationsComponent extends StatelessWidget {
     Documents document,
   ) {
     return DottedBorder(
-      borderType: BorderType.RRect,
-      radius: const Radius.circular(12),
-      color: const Color(0xFF8C8C8C),
-      dashPattern: const [5, 5],
+      options: const RectDottedBorderOptions(
+        color: Color(0xFF8C8C8C),
+        dashPattern: [5, 5],
+      ),
       child: Stack(
         children: [
           Container(

@@ -52,10 +52,11 @@ class StepperWidget extends StatelessWidget {
     required Color fillColor,
   }) {
     return DottedBorder(
-      borderType: BorderType.Circle,
-      color: borderColor,
-      dashPattern: const [4, 4],
-      padding: const EdgeInsets.all(6),
+      options: CircularDottedBorderOptions(
+        color: borderColor,
+        dashPattern: const [4, 4],
+        padding: const EdgeInsets.all(6),
+      ),
       child: Container(
         width: 20,
         height: 20,
@@ -95,9 +96,7 @@ class StepperWidget extends StatelessWidget {
             const SizedBox(width: 10),
             // Dotted line
             _buildDottedLine(
-              currentStep > 0
-                  ? const Color(0xFF3DA741)
-                  : const Color(0xFF1B2F62),
+              currentStep > 0 ? const Color(0xFF3DA741) : const Color(0xFF1B2F62),
             ),
             const SizedBox(width: 10),
             // Step 2 - Basic Details
@@ -118,9 +117,7 @@ class StepperWidget extends StatelessWidget {
             const SizedBox(width: 10),
             // Dotted line
             _buildDottedLine(
-              currentStep > 1
-                  ? const Color(0xFF3DA741)
-                  : const Color(0xFF1B2F62),
+              currentStep > 1 ? const Color(0xFF3DA741) : const Color(0xFF1B2F62),
             ),
             const SizedBox(width: 10),
             // Step 3 - Password
