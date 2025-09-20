@@ -41,6 +41,8 @@ abstract class Routes {
    static const CONNECTOR_MARKET_PLACE  = _Paths.CONNECTOR_MARKET_PLACE;
    static const SELECT_MAIN_CATEGORY  = _Paths.SELECT_MAIN_CATEGORY;
    static const LIST_OF_MERCHANT  = _Paths.LIST_OF_MERCHANT;
+   static const CONNECTOR_PROFILE  = _Paths.CONNECTOR_PROFILE;
+   static const ADD_KYC = _Paths.ADD_KYC;
 
 
 }
@@ -86,5 +88,7 @@ abstract class _Paths {
    static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
    static const SELECT_MAIN_CATEGORY = '/select-main-category';
    static const LIST_OF_MERCHANT = '/List-of_merchant';
+   static const CONNECTOR_PROFILE = '/connector-profile';
+   static const ADD_KYC = '/add-kyc';
 
 }

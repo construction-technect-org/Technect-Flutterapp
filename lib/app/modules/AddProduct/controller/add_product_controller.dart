@@ -546,4 +546,6 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'Error updating product: $e');
     }
   }
+
+
 }

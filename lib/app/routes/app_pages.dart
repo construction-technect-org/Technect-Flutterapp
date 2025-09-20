@@ -18,8 +18,12 @@ import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
 import 'package:construction_technect/app/modules/ConnectionInbox/bindings/connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/Connector/AddKyc/bindings/add_kyc_binding.dart';
+import 'package:construction_technect/app/modules/Connector/AddKyc/views/add_kyc_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProfile/views/connector_profile_view.dart';
 import 'package:construction_technect/app/modules/Connector/ListOfMerchant/bindings/list_0f_merchant_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ListOfMerchant/views/list_0f_merchant_view.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/bindings/main_tab_binding.dart';
@@ -249,6 +253,16 @@ class AppPages {
       name: _Paths.LIST_OF_MERCHANT,
       page: () =>  ListOfMerchantView(),
       binding: ListOfMerchantBinding(),
+    ),
+     GetPage(
+      name: _Paths.CONNECTOR_PROFILE,
+      page: () =>  ConnectorProfileView(),
+      binding: ConnectorProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_KYC,
+      page: () =>  const AddKycView(),
+      binding: AddKycBinding(),
     ),
   ];
 }
