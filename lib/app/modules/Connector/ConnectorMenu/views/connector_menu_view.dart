@@ -55,7 +55,7 @@ class ConnectorMenuView extends StatelessWidget {
 
               false,
               onTap: () {
-                //  Get.to(() => const SettingView());
+                Get.toNamed(Routes.CONNECTOR_PROFILE);
               },
             ),
           ],

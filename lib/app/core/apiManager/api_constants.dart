@@ -51,4 +51,9 @@ class APIConstants {
   static const String  getSupportMyTickets = "support-ticket/my-tickets";
 
 
+/// connector Api 
+ static const String connectorCreate = "connector/create";
+  static const String connectorUpdate = "connector/update";
+
+
 }

@@ -44,3 +44,4 @@ analyzer:
     unsafe_html: false
     #error in future
     argument_type_not_assignable: false
+    avoid_dynamic_calls: ignore
