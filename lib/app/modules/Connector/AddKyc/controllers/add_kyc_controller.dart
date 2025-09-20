@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
+import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/models/AddkycModel.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/services/AddKycService.dart';
@@ -138,7 +139,16 @@ class AddKycController extends GetxController {
           // Get.back(result: response.data);
           // if (commonController.hasProfileComplete.value == false) {
             commonController.hasProfileComplete.value = true;
-            Get.offAllNamed(Routes.MAIN);
+          Get.to(
+                () => SuccessScreen(
+              title: "Success!",
+              header: "Thanks for Connecting !",
+              onTap: () {
+                Get.offAllNamed(Routes.MAIN);
+
+              },
+            ),
+          );
           // } else {
           //   Get.find<HomeController>().onReturnFromEditProfile();
           //   Get.back();
