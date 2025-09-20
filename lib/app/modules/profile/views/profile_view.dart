@@ -51,6 +51,7 @@ class ProfileView extends GetView<ProfileController> {
               } else {
                 return Expanded(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 1.h),
                       _buildTabBar(),
@@ -175,6 +176,7 @@ class ProfileView extends GetView<ProfileController> {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildTabItem(0, 'Info & Metrics'),
             _buildTabItem(1, 'Certifications'),

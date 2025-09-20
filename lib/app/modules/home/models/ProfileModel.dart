@@ -17,19 +17,24 @@ class ProfileModel {
 class Data {
   UserModel? user;
   MerchantProfile? merchantProfile;
+  ConnectorProfile? connectorProfile;
 
-  Data({this.user, this.merchantProfile});
+  Data({this.user, this.merchantProfile,this.connectorProfile});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
     merchantProfile: json["merchantProfile"] == null
         ? null
         : MerchantProfile.fromJson(json["merchantProfile"]),
+    connectorProfile: json["connectorProfile"] == null
+        ? null
+        : ConnectorProfile.fromJson(json["connectorProfile"]),
   );
 
   Map<String, dynamic> toJson() => {
     "user": user?.toJson(),
     "merchantProfile": merchantProfile?.toJson(),
+    "connectorProfile": connectorProfile?.toJson(),
   };
 }
 
@@ -208,7 +213,73 @@ class BusinessHours {
     "day_of_week": dayOfWeek,
   };
 }
+class ConnectorProfile {
+  int? id;
+  String? aadhaarNumber;
+  String? panNumber;
+  int? profileCompletionPercentage;
+  bool? isProfileComplete;
+  bool? kycVerified;
+  String? trustScore;
+  String? marketplaceTier;
+  String? memberSince;
+  List<Documents>? documents;
+  String? createdAt;
+  String? updatedAt;
 
+  ConnectorProfile(
+      {this.id,
+        this.aadhaarNumber,
+        this.panNumber,
+        this.profileCompletionPercentage,
+        this.isProfileComplete,
+        this.kycVerified,
+        this.trustScore,
+        this.marketplaceTier,
+        this.memberSince,
+        this.documents,
+        this.createdAt,
+        this.updatedAt});
+
+  ConnectorProfile.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    aadhaarNumber = json['aadhaarNumber'];
+    panNumber = json['panNumber'];
+    profileCompletionPercentage = json['profileCompletionPercentage'];
+    isProfileComplete = json['isProfileComplete'];
+    kycVerified = json['kycVerified'];
+    trustScore = json['trustScore'];
+    marketplaceTier = json['marketplaceTier'];
+    memberSince = json['memberSince'];
+    if (json['documents'] != null) {
+      documents = <Documents>[];
+      json['documents'].forEach((v) {
+        documents!.add(Documents.fromJson(v));
+      });
+    }
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['aadhaarNumber'] = aadhaarNumber;
+    data['panNumber'] = panNumber;
+    data['profileCompletionPercentage'] = profileCompletionPercentage;
+    data['isProfileComplete'] = isProfileComplete;
+    data['kycVerified'] = kycVerified;
+    data['trustScore'] = trustScore;
+    data['marketplaceTier'] = marketplaceTier;
+    data['memberSince'] = memberSince;
+    if (documents != null) {
+      data['documents'] = documents!.map((v) => v.toJson()).toList();
+    }
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    return data;
+  }
+}
 class Documents {
   int? id;
   String? filePath;

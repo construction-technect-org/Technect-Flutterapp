@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/controllers/add_kyc_controller.dart';
+import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
 import 'package:gap/gap.dart';
 
 class AddKycView extends StatefulWidget {
@@ -57,6 +58,7 @@ class _AddKycViewState extends State<AddKycView> {
 
                 // Aadhaar Number
                 CommonTextField(
+                  maxLength: 12,
                   headerText: "Aadhaar Card Number",
                   hintText: "Enter your Aadhaar Card Number",
                   controller: controller.aadhaarController,
@@ -72,6 +74,10 @@ class _AddKycViewState extends State<AddKycView> {
 
                 // PAN Number
                 CommonTextField(
+                  maxLength: 10,
+                  inputFormatters: [
+                    UpperCaseTextFormatter()
+                  ],
                   headerText: "PAN Card Number",
                   hintText: "Enter your PAN Card Number",
                   controller: controller.panController,

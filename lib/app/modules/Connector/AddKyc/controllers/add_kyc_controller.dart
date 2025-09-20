@@ -1,6 +1,8 @@
 import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/models/AddkycModel.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/services/AddKycService.dart';
+import 'package:construction_technect/app/routes/app_pages.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -121,18 +123,28 @@ class AddKycController extends GetxController {
         final response = await kycService.updateProduct(fields: fields, files: files);
         if (response.success) {
           _setControllers(response.data);
-          SnackBars.successSnackBar(content: "KYC Updated Successfully");
           Get.back(result: response.data);
+          SnackBars.successSnackBar(content: "KYC Updated Successfully");
         } else {
           SnackBars.errorSnackBar(content: response.message);
         }
       } else {
         final response = await kycService.connectorCreateProduct(fields: fields, files: files);
         if (response.success) {
+          final commonController = Get.find<CommonController>();
+
           kycId.value = response.data.id;
           _setControllers(response.data);
-          SnackBars.successSnackBar(content: "KYC Created Successfully");
-          Get.back(result: response.data);
+          // Get.back(result: response.data);
+          // if (commonController.hasProfileComplete.value == false) {
+            commonController.hasProfileComplete.value = true;
+            Get.offAllNamed(Routes.MAIN);
+          // } else {
+          //   Get.find<HomeController>().onReturnFromEditProfile();
+          //   Get.back();
+          // }
+          // SnackBars.successSnackBar(content: "KYC Created Successfully");
+
         } else {
           SnackBars.errorSnackBar(content: response.message);
         }

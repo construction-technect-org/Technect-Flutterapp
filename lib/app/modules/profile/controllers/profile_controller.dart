@@ -304,6 +304,7 @@ class ProfileController extends GetxController {
               Get.back();
             }
           } else {
+
             if (commonController.hasProfileComplete.value == false) {
               commonController.hasProfileComplete.value = true;
               Get.offAllNamed(Routes.MAIN);

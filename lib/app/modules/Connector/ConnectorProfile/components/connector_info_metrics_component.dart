@@ -61,34 +61,34 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                       fontFamily: MyTexts.Roboto,
                     ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        Asset.editIcon,
-                        height: 18,
-                        width: 18,
-                        color: MyColors.primary,
-                      ),
-                      Text(
-                        'Edit Profile',
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.primary,
-                          fontFamily: MyTexts.Roboto,
-                          decoration: TextDecoration.underline,
-                          decorationColor: MyColors.primary,
-                          decorationThickness: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   children: [
+                  //     SvgPicture.asset(
+                  //       Asset.editIcon,
+                  //       height: 18,
+                  //       width: 18,
+                  //       color: MyColors.primary,
+                  //     ),
+                  //     Text(
+                  //       'Edit Profile',
+                  //       style: MyTexts.medium14.copyWith(
+                  //         color: MyColors.primary,
+                  //         fontFamily: MyTexts.Roboto,
+                  //         decoration: TextDecoration.underline,
+                  //         decorationColor: MyColors.primary,
+                  //         decorationThickness: 1.5,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ],
           ),
         ),
 
-        SizedBox(height: 2.h),
+        SizedBox(height: 1.h),
         _buildInfoMetricsContent(),
         SizedBox(height: 2.h),
         Padding(
@@ -153,7 +153,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                             const Gap(6),
                             buildRow(title: "Email ID", data: "${userData?.email}"),
                             const Gap(6),
-                            buildRow(title: "GSTIN", data: "${userData?.roleName}"),
+                            buildRow(title: "GSTIN", data: userData?.gst!=null?(userData?.gst??""):"-"),
                             SizedBox(height: 0.5.h),
                           ],
                         );

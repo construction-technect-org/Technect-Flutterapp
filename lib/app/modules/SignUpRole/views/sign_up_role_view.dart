@@ -132,8 +132,9 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                         controller.otherRoleController.text;
                   } else {
                     controller.selectedRoleName.value =
-                        controller.roleName[controller.selectedRole.value];
+                        controller.roleName[controller.selectedRole.value-1];
                   }
+                  print( controller.selectedRoleName.value );
                   Get.toNamed(Routes.SIGN_UP_DETAILS);
 
                 }
