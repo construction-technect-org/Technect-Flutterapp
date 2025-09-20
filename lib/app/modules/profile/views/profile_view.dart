@@ -55,10 +55,12 @@ class ProfileView extends GetView<ProfileController> {
                       SizedBox(height: 1.h),
                       _buildTabBar(),
                       SizedBox(height: 1.h),
-                      Expanded(child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: _buildTabContent(),
-                      )),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: _buildTabContent(),
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -70,9 +72,23 @@ class ProfileView extends GetView<ProfileController> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(24.0),
         child: RoundedButton(
-          buttonName: "PROCEED",
+          buttonName: controller.merchantProfile!=null? "SAVE":"PROCEED",
           onTap: () {
-
+            for (var cert in controller.certificates) {
+              if (cert.isDefault && (cert.filePath == null || cert.filePath!.isEmpty)) {
+                SnackBars.errorSnackBar(content: "Please upload all relevant certificates");
+                return;
+              }
+            }
+            if ((controller.businessModel.value.businessEmail ?? "").isEmpty) {
+              SnackBars.errorSnackBar(content: "Please fill business metrics");
+            } else if (controller.businessHoursData.isEmpty) {
+              SnackBars.errorSnackBar(content: "Please fill business hours");
+            }
+            else {
+              controller.handleMerchantData();
+              //27ABCDE1234F1Z5
+            }
           },
         ),
       ),
@@ -162,7 +178,7 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             _buildTabItem(0, 'Info & Metrics'),
             _buildTabItem(1, 'Certifications'),
-            _buildTabItem(2, 'Marketplace Performance'),
+            // _buildTabItem(2, 'Marketplace Performance'),
           ],
         ),
       );
@@ -206,10 +222,11 @@ class ProfileView extends GetView<ProfileController> {
         child: switch (controller.selectedTabIndex.value) {
           0 => const InfoMetricsComponent(),
           1 => const CertificationsComponent(isDelete: true),
-          2 => const MarketplacePerformanceComponent(),
+          // 2 => const MarketplacePerformanceComponent(),
           _ => const InfoMetricsComponent(),
         },
       ),
     );
   }
 }
+///27ABCDE1234F1Z5

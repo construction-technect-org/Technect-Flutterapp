@@ -23,6 +23,7 @@ class CommonTextField extends StatelessWidget {
   final int? maxLength;
   final TextCapitalization? textCapitalization;
   final bool readOnly;
+  final bool? isRed;
   final bool isBorder;
   final bool? enable;
   final Color? bgColor;
@@ -40,6 +41,7 @@ class CommonTextField extends StatelessWidget {
     this.suffixIcon,
     this.bgColor,
     this.isBorder = true,
+    this.isRed = true,
     this.maxLength,
     this.onTap,
     this.hintText = "",
@@ -76,6 +78,7 @@ class CommonTextField extends StatelessWidget {
                       fontFamily: MyTexts.Roboto,
                     ),
                   ),
+                  if(isRed==true)
                   Text(
                     '*',
                     style: MyTexts.regular16.copyWith(color: Colors.red),

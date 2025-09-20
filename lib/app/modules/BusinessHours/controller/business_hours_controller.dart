@@ -19,12 +19,16 @@ class BusinessHoursController extends GetxController {
   final Map<String, TextEditingController> fromControllers = {};
   final Map<String, TextEditingController> toControllers = {};
 
+  final Map<String, RxString> fromPeriods = {};
+  final Map<String, RxString> toPeriods = {};
   @override
   void onInit() {
     super.onInit();
     for (final day in daysEnabled.keys) {
       fromControllers[day] = TextEditingController();
       toControllers[day] = TextEditingController();
+      fromPeriods[day] = "AM".obs;
+      toPeriods[day] = "PM".obs;
     }
   }
 
@@ -43,20 +47,20 @@ class BusinessHoursController extends GetxController {
   void validateTimeInput(String value, String day, String type) {
     if (value.isNotEmpty) {
       final int? hour = int.tryParse(value);
-      if (hour == null || hour < 1 || hour > 24) {
-        // Clear invalid input
+      if (hour == null || hour < 0 || hour > 12) {
         if (type == 'from') {
           fromControllers[day]?.clear();
         } else {
           toControllers[day]?.clear();
         }
         SnackBars.errorSnackBar(
-          content: "Please enter valid time (1-24 hours)",
+          content: "Please enter valid time (0-12 hours)",
           time: 2,
         );
       }
     }
   }
+
 
   // Store previous business hours data when editing
   void loadPreviousBusinessHours(List<Map<String, dynamic>> previousData) {
@@ -77,9 +81,13 @@ class BusinessHoursController extends GetxController {
           // Remove ":00" and get just the hour
           final openHour = openTime.replaceAll(':00', '');
           final closeHour = closeTime.replaceAll(':00', '');
+          String _removeAmPm(String time) {
+            return time.replaceAll(RegExp(r'(AM|PM)', caseSensitive: false), "").trim();
+          }
 
-          fromControllers[dayName]?.text = openHour;
-          toControllers[dayName]?.text = closeHour;
+
+          fromControllers[dayName]?.text = _removeAmPm(openHour);
+          toControllers[dayName]?.text = _removeAmPm(closeHour);
 
           Get.printInfo(info: '📅 Restored $dayName: $openHour - $closeHour');
         } else {
@@ -114,8 +122,7 @@ class BusinessHoursController extends GetxController {
             fromHour >= 1 &&
             fromHour <= 24 &&
             toHour >= 1 &&
-            toHour <= 24 &&
-            fromHour < toHour) {
+            toHour <= 24 ) {
           hasValidHours = true;
         } else {
           SnackBars.errorSnackBar(
@@ -159,8 +166,8 @@ class BusinessHoursController extends GetxController {
           "day_of_week": dayOfWeek,
           "day_name": day,
           "is_open": true,
-          "open_time": "${fromControllers[day]?.text.padLeft(2, '0')}:00",
-          "close_time": "${toControllers[day]?.text.padLeft(2, '0')}:00",
+          "open_time": "${fromControllers[day]?.text.padLeft(2, '0')}:00 ${fromPeriods[day]!.value}",
+          "close_time": "${toControllers[day]?.text.padLeft(2, '0')}:00 ${toPeriods[day]!.value}",
         });
       } else {
         // Day is closed or has no valid times

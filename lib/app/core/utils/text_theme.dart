@@ -155,6 +155,12 @@ class MyTexts {
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
+  static TextStyle get bold15 => TextStyle(
+    fontFamily: Lato,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w600,
+    color: MyColors.black,
+  );
 
   static TextStyle get bold16 => TextStyle(
     fontFamily: Lato,

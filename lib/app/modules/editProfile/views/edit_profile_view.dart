@@ -53,7 +53,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     Expanded(
                       child: RoundedButton(
                         buttonName: controller.currentStep.value == 1
-                            ? 'NEXT'
+                            ? 'UPDATE'
                             : 'UPDATE',
                         onTap: () {
                           controller.updateProfile();
@@ -84,10 +84,11 @@ class EditProfileView extends GetView<EditProfileController> {
                 // ),
                 // SizedBox(height: 2.h),
                 SizedBox(height: 0.6.h),
-                Text("Update your Business Details",
+                Text(
+                  "Update your Business Details",
                   style: MyTexts.medium16.copyWith(
-                      color: MyColors.greyDetails,
-                      fontFamily: MyTexts.Roboto
+                    color: MyColors.greyDetails,
+                    fontFamily: MyTexts.Roboto,
                   ),
                 ),
                 // Obx(() {
@@ -191,27 +192,34 @@ class EditProfileView extends GetView<EditProfileController> {
             LengthLimitingTextInputFormatter(10),
           ],
         ),
-        SizedBox(height: 2.h),
-        CommonTextField(
-          headerText: "Years in Business",
-          controller: controller.yearsInBusinessController,
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(2),
-          ],
-        ),
-        SizedBox(height: 2.h),
-        CommonTextField(
-          headerText:  'Projects Completed',
-          controller: controller.projectsCompletedController,
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(4),
-          ],
-        ),
+        // SizedBox(height: 2.h),
+        // CommonTextField(
+        //   hintText: "3VR7+34 Mumbai, Maharashtra Maharashtra",
+        //   maxLine: 3,
+        //   headerText: "Business Address",
+        //   controller: controller.addressContoller,
+        // ),
 
+        // SizedBox(height: 2.h),
+        // CommonTextField(
+        //   headerText: "Years in Business",
+        //   controller: controller.yearsInBusinessController,
+        //   keyboardType: TextInputType.number,
+        //   inputFormatters: [
+        //     FilteringTextInputFormatter.digitsOnly,
+        //     LengthLimitingTextInputFormatter(2),
+        //   ],
+        // ),
+        // SizedBox(height: 2.h),
+        // CommonTextField(
+        //   headerText:  'Projects Completed',
+        //   controller: controller.projectsCompletedController,
+        //   keyboardType: TextInputType.number,
+        //   inputFormatters: [
+        //     FilteringTextInputFormatter.digitsOnly,
+        //     LengthLimitingTextInputFormatter(4),
+        //   ],
+        // ),
         SizedBox(height: 2.h),
         // Obx(
         //   () => Container(
@@ -461,6 +469,7 @@ class EditProfileView extends GetView<EditProfileController> {
                   ],
                 ),
               ),
+
               /// Top-right action icons
               Positioned(
                 right: 20,
@@ -468,15 +477,16 @@ class EditProfileView extends GetView<EditProfileController> {
                 child: Row(
                   children: [
                     GestureDetector(
-                      onTap: () {
-                      },
-                      child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
+                      onTap: () {},
+                      child: SvgPicture.asset(
+                        Asset.eyeIcon,
+                        width: 26,
+                        height: 20,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     GestureDetector(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: SvgPicture.asset(
                         Asset.delete,
                         width: 20,

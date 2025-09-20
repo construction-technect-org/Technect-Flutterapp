@@ -5,6 +5,7 @@ class UserDataModel {
   final String countryCode;
   final String mobileNumber;
   final String email;
+  final String gst;
 
   UserDataModel({
     required this.roleName,
@@ -13,6 +14,7 @@ class UserDataModel {
     required this.countryCode,
     required this.mobileNumber,
     required this.email,
+     this.gst="",
   });
 
   Map<String, dynamic> toJson() => {
@@ -22,6 +24,7 @@ class UserDataModel {
     "countryCode": countryCode,
     "mobileNumber": mobileNumber,
     "email": email,
+    "gstNumber":gst
   };
 
   factory UserDataModel.fromJson(Map<String, dynamic> json) => UserDataModel(
@@ -31,5 +34,6 @@ class UserDataModel {
     countryCode: json["countryCode"] ?? "+91",
     mobileNumber: json["mobileNumber"] ?? "",
     email: json["email"] ?? "",
+    gst: json["gstNumber"] ?? "",
   );
 }

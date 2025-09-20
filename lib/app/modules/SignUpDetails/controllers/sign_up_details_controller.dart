@@ -10,11 +10,13 @@ class SignUpDetailsController extends GetxController {
   final mobileNumberController = TextEditingController();
   final emailController = TextEditingController();
   final otpController = TextEditingController();
+  final gstController = TextEditingController();
   SignUpService signUpService = SignUpService();
   final firstName = ''.obs;
   final lastName = ''.obs;
   final mobileNumber = ''.obs;
   final email = ''.obs;
+  final gst = ''.obs;
   final otp = ''.obs;
   final otpSend = false.obs;
   final otpVerify = false.obs;
@@ -52,6 +54,9 @@ class SignUpDetailsController extends GetxController {
     otpController.addListener(() {
       otp.value = otpController.text;
     });
+    gstController.addListener(() {
+      gst.value = gstController.text;
+    });
   }
 
   @override
@@ -60,14 +65,17 @@ class SignUpDetailsController extends GetxController {
     lastNameController.dispose();
     mobileNumberController.dispose();
     emailController.dispose();
+    gstController.dispose();
     super.onClose();
   }
 
-  bool isFormValid() {
+  Future<bool> isFormValid() async {
+    final bool isGstValid = await verifyGStNumber();
     return firstName.value.isNotEmpty &&
         lastName.value.isNotEmpty &&
         mobileNumber.value.isNotEmpty &&
         email.value.isNotEmpty &&
+        true==isGstValid &&
         _isValidEmail(email.value);
   }
 
@@ -105,6 +113,33 @@ class SignUpDetailsController extends GetxController {
       // Resend OTP if already sent
       await resendOtp();
     }
+  }
+  Future<bool> verifyGStNumber() async {
+    if (gstController.text.trim().isEmpty) {
+      return true;
+    }
+    else{
+      if (gstController.text.trim().length != 15) {
+        SnackBars.errorSnackBar(content: "GST number must be exactly 15 characters");
+        return false;
+
+      }
+      if (!_isValidGSTNumber(gstController.text.trim())) {
+        SnackBars.errorSnackBar(content: "Please enter a valid GST number");
+        return false;
+
+      }
+    }
+
+    return true;
+
+  }
+
+  bool _isValidGSTNumber(String gst) {
+    // GST format: 2 digits + 2 letters + 5 digits + 1 letter + 1 digit + 1 letter + 1 digit
+    return RegExp(
+      r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
+    ).hasMatch(gst);
   }
 
   // Resend OTP method
@@ -153,7 +188,7 @@ class SignUpDetailsController extends GetxController {
 
       await verifyOtp();
     } else {
-      if (isFormValid()) {
+      if (await isFormValid()) {
         // Pass user data to password screen
         final userData = UserDataModel(
           roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
@@ -163,6 +198,7 @@ class SignUpDetailsController extends GetxController {
           countryCode: countryCode.value,
           mobileNumber: mobileNumber.value,
           email: email.value,
+          gst: gstController.text
         );
         Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
       } else {
@@ -190,7 +226,7 @@ class SignUpDetailsController extends GetxController {
         if (otpResponse.data?.verified == true) {
           otpVerify.value = true;
           SnackBars.successSnackBar(content: 'OTP verified successfully!');
-          if (isFormValid()) {
+          if (await isFormValid()) {
             // Pass user data to password screen
             final userData = UserDataModel(
               roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
@@ -200,6 +236,7 @@ class SignUpDetailsController extends GetxController {
               countryCode: "+91",
               mobileNumber: mobileNumber.value,
               email: email.value,
+              gst: gstController.text
             );
             Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
           } else {

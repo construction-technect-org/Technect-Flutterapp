@@ -60,6 +60,13 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                         controller: controller.emailController,
                       ),
                       SizedBox(height: 1.8.h),
+                      CommonTextField(
+                        isRed: false,
+                        headerText: "GSTIN (optional)",
+                        hintText: "xxxxxxxxxxxxxx",
+                        controller: controller.gstController,
+                      ),
+                      SizedBox(height: 1.8.h),
                       // Mobile Number
                       CommonPhoneField(
                         suffix: Obx((){

@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
@@ -13,62 +14,108 @@ class MarketplacePerformanceComponent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Container(
-        //   width: double.infinity,
-        //   padding: const EdgeInsets.all(16),
-        //   decoration: BoxDecoration(
-        //     color: MyColors.white,
-        //     border: Border.all(color: const Color(0xFFD0D0D0)),
-        //     borderRadius: BorderRadius.circular(12),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: Colors.black.withValues(alpha: 0.1),
-        //         blurRadius: 8,
-        //         offset: const Offset(0, 2),
-        //       ),
-        //     ],
-        //   ),
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Text(
-        //         'Trust & Safety',
-        //         style: MyTexts.medium16.copyWith(
-        //           color: MyColors.black,
-        //           fontFamily: MyTexts.Roboto,
-        //         ),
-        //       ),
-        //       SizedBox(height: 2.h),
-        //       Obx(
-        //         () => _buildTrustSafetyItem(
-        //           Asset.identityIcon,
-        //           'Identity Verified',
-        //           controller.merchantProfile?.verificationStatus?.identityVerified ??
-        //               false,
-        //         ),
-        //       ),
-        //       SizedBox(height: 1.h),
-        //       Obx(
-        //         () => _buildTrustSafetyItem(
-        //           Asset.businessLiIcon,
-        //           'Business License',
-        //           controller.merchantProfile?.verificationStatus?.businessLicense ??
-        //               false,
-        //         ),
-        //       ),
-        //       SizedBox(height: 1.h),
-        //       Obx(
-        //         () => _buildTrustSafetyItem(
-        //           Asset.qualityIcon,
-        //           'Quality Assurance',
-        //           controller.merchantProfile?.verificationStatus?.qualityAssurance ??
-        //               false,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // SizedBox(height: 2.h),
+        const Gap(20),
+        Text(
+          'Trust & Safety',
+          style: MyTexts.bold16.copyWith(
+            color: MyColors.primary,
+            fontFamily: MyTexts.Roboto,
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 2.h),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Identity Verified',
+                    style: MyTexts.medium16.copyWith(
+                      color: MyColors.black,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                  ),
+                ),
+                Obx(() {
+                  return CupertinoSwitch(
+                    value:
+                        controller
+                            .merchantProfile
+                            ?.verificationStatus
+                            ?.identityVerified ??
+                        false,
+                    onChanged: (val) {},
+                  );
+                }),
+              ],
+            ),
+            SizedBox(height: 1.h),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Business License',
+                    style: MyTexts.medium16.copyWith(
+                      color: MyColors.black,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                  ),
+                ),
+                Obx(() {
+                  return CupertinoSwitch(
+                    value:
+                    controller
+                        .merchantProfile
+                        ?.verificationStatus
+                        ?.businessLicense ??
+                        false,
+                    onChanged: (val) {},
+                  );
+                }),
+              ],
+            ),
+            SizedBox(height: 1.h),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Quality Assurance',
+                    style: MyTexts.medium16.copyWith(
+                      color: MyColors.black,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                  ),
+                ),
+                Obx(() {
+                  return CupertinoSwitch(
+                    value:
+                    controller
+                        .merchantProfile
+                        ?.verificationStatus
+                        ?.qualityAssurance ??
+                        false,
+                    onChanged: (val) {
+                      // controller
+                      //     .merchantProfile
+                      //     ?.verificationStatus
+                      //     ?.qualityAssurance=!(controller
+                      //     .merchantProfile
+                      //     ?.verificationStatus
+                      //     ?.qualityAssurance ??
+                      //     true);
+                      // print(  controller
+                      //     .merchantProfile
+                      //     ?.verificationStatus
+                      //     ?.qualityAssurance);
+                    },
+                  );
+                }),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(height: 2.h),
         // Marketplace Performance Section
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,8 +130,8 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             ),
             SizedBox(height: 1.5.h),
             Obx(() {
-              final completionPercentage = controller
-                  .profileCompletionPercentage;
+              final completionPercentage =
+                  controller.profileCompletionPercentage;
               final progressValue = completionPercentage / 100.0;
 
               return Column(
@@ -136,24 +183,21 @@ class MarketplacePerformanceComponent extends StatelessWidget {
               children: [
                 Expanded(
                   child: Obx(
-                        () =>
-                        _buildPerformanceMetricItem(
-                          'Trust Score',
-                          controller.merchantProfile?.trustScore ?? 'No Score',
-                          MyColors.primary,
-                        ),
+                    () => _buildPerformanceMetricItem(
+                      'Trust Score',
+                      controller.merchantProfile?.trustScore ?? 'No Score',
+                      MyColors.primary,
+                    ),
                   ),
                 ),
                 SizedBox(width: 1.w),
                 Expanded(
                   child: Obx(
-                        () =>
-                        _buildPerformanceMetricItem(
-                          'Marketplace Tier',
-                          controller.merchantProfile?.marketplaceTier ??
-                              'No Tier',
-                          MyColors.warning,
-                        ),
+                    () => _buildPerformanceMetricItem(
+                      'Marketplace Tier',
+                      controller.merchantProfile?.marketplaceTier ?? 'No Tier',
+                      MyColors.warning,
+                    ),
                   ),
                 ),
               ],
@@ -161,17 +205,28 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             const Gap(20),
             Row(
               children: [
-                Text('Member Since:', style: MyTexts.regular14.copyWith(
-                    color: MyColors.grey, fontFamily: MyTexts.Roboto),),
+                Text(
+                  'Member Since:',
+                  style: MyTexts.regular14.copyWith(
+                    color: MyColors.grey,
+                    fontFamily: MyTexts.Roboto,
+                  ),
+                ),
                 const Gap(5),
                 Obx(() {
-                  return Text( controller.merchantProfile?.memberSince != null
-                      ? DateFormat('dd MM yyyy').format(
-                    DateTime.parse(controller.merchantProfile!.memberSince!),
-                  )
-                      : 'Unknown',
+                  return Text(
+                    controller.merchantProfile?.memberSince != null
+                        ? DateFormat('dd MM yyyy').format(
+                            DateTime.parse(
+                              controller.merchantProfile!.memberSince!,
+                            ),
+                          )
+                        : 'Unknown',
                     style: MyTexts.bold14.copyWith(
-                        color: MyColors.black, fontFamily: MyTexts.Roboto),);
+                      color: MyColors.black,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                  );
                 }),
               ],
             ),
@@ -182,46 +237,40 @@ class MarketplacePerformanceComponent extends StatelessWidget {
   }
 
   Widget _buildTrustSafetyItem(String iconPath, String title, bool verified) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: MyColors.menuTile,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          SvgPicture.asset(iconPath, width: 14, height: 14),
-          SizedBox(width: 2.w),
-          Expanded(
-            child: Text(
-              title,
-              style: MyTexts.regular14.copyWith(
-                color: MyColors.textGrey,
-                fontFamily: MyTexts.Roboto,
-              ),
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: MyTexts.regular14.copyWith(
+              color: MyColors.textGrey,
+              fontFamily: MyTexts.Roboto,
             ),
           ),
-          Container(
-            width: 16,
-            height: 16,
-            decoration: BoxDecoration(
-              color: verified ? MyColors.primary : MyColors.red,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              verified ? Icons.check : Icons.close,
-              size: 10,
-              color: MyColors.white,
-            ),
+        ),
+        CupertinoSwitch(value: verified, onChanged: (val) {}),
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: verified ? MyColors.primary : MyColors.red,
+            shape: BoxShape.circle,
           ),
-        ],
-      ),
+          child: Icon(
+            verified ? Icons.check : Icons.close,
+            size: 10,
+            color: MyColors.white,
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildPerformanceMetricItem(String label, String value,
-      Color valueColor) {
+  Widget _buildPerformanceMetricItem(
+    String label,
+    String value,
+    Color valueColor,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
@@ -271,8 +320,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
         'November',
         'December',
       ];
-      return '${date.day.toString().padLeft(2, '0')} ${months[date.month -
-          1]} ${date.year}';
+      return '${date.day.toString().padLeft(2, '0')} ${months[date.month - 1]} ${date.year}';
     } catch (e) {
       return 'Unknown';
     }

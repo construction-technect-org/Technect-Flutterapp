@@ -136,6 +136,12 @@ class Asset {
   static const String rejectedProducts = 'assets/images/rejectedProducts.png';
 
 
+  static const String successImage = 'assets/images/sucess.svg';
+  static const String forgetSImage = 'assets/images/forgetS.svg';
+  static const String pdfImage = 'assets/images/pdf.png';
+
+
+
 }
 
 class Constants {

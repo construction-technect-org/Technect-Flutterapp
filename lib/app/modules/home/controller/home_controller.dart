@@ -129,12 +129,12 @@ class HomeController extends GetxController {
                   const SizedBox(height: 12),
                   Text(
                     'Complete your Profile',
-                    style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground),
+                    style: MyTexts.medium18.copyWith(color: MyColors.textFieldBackground,fontFamily: MyTexts.Roboto),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Profile Pending',
-                    style: MyTexts.medium16.copyWith(color: MyColors.warning),
+                    style: MyTexts.medium16.copyWith(color: MyColors.warning,fontFamily: MyTexts.Roboto),
                   ),
                 ],
               ),
