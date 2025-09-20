@@ -84,7 +84,7 @@ class LoginController extends GetxController {
             (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
           myPref.setAddressData(addressResponse.toJson());
           // Get.offAllNamed(Routes.MAIN);
-          Get.offAllNamed(
+          Get.offAll(
             () => SuccessScreen(
               title: "Success!",
               header: "Thanks for Connecting !",
@@ -95,7 +95,7 @@ class LoginController extends GetxController {
           );
         } else {
           myPref.clearAddressData();
-          Get.offAllNamed(
+          Get.offAll(
             () => SuccessScreen(
               title: "Success!",
               header: "Thanks for Connecting !",
