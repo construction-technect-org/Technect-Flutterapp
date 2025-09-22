@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/modules/AddLocationManually/bindings/add_location_manually_binding.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/views/add_location_manually_view.dart';
+import 'package:construction_technect/app/modules/AddLocationManually/views/saved_addresses_view.dart';
 import 'package:construction_technect/app/modules/AddProduct/bindings/add_product_binding.dart';
 import 'package:construction_technect/app/modules/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/AddRole/bindings/add_role_binding.dart';

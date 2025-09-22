@@ -121,7 +121,7 @@ class AddressView extends GetView<AddressController> {
                     decoration: BoxDecoration(
                       color: MyColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: MyColors.Gray83),
+                      border: Border.all(color: MyColors.grayD4),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

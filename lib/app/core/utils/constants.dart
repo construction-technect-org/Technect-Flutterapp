@@ -147,7 +147,14 @@ class Asset {
   // dashboard
 
   static const String noOfConectors = 'assets/images/noOfConnectors.svg';
-  static const String warning = 'assets/images/warning.svg';
+  static const String noOfPartner= 'assets/images/noOfPartner.svg';
+    static const String warning = 'assets/images/warning.svg';
+    static const String thumbup = 'assets/images/thumbup.svg';
+    static const String cart = 'assets/images/cart.svg';
+    static const String inbox = 'assets/images/inbox.svg';
+    static const String insights = 'assets/images/insights.svg';
+    static const String report = 'assets/images/report.svg';
+    static const String setting = 'assets/images/setting.svg';
 }
 
 class Constants {
