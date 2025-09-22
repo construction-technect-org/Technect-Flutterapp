@@ -157,6 +157,7 @@ class Asset {
     static const String insights = 'assets/images/insights.svg';
     static const String report = 'assets/images/report.svg';
     static const String setting = 'assets/images/setting.svg';
+    static const String aTeam = 'assets/images/ateam.png';
 }
 
 class Constants {
