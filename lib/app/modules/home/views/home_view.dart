@@ -27,18 +27,23 @@ class HomeView extends StatelessWidget {
               color: MyColors.yellow,
               border: Border.all(color: MyColors.black),
             ),
-            child: Row(
-              children: [
-                SvgPicture.asset(Asset.connectorSvg, width: 24, height: 24),
-                const Gap(8),
-                Text(
-                  "Join As Connector",
-                  style: MyTexts.regular14.copyWith(
-                    color: Colors.black,
-                    fontFamily: MyTexts.Roboto,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.MAIN_TAB);
+              },
+              child: Row(
+                children: [
+                  SvgPicture.asset(Asset.connectorSvg, width: 24, height: 24),
+                  const Gap(8),
+                  Text(
+                    "Join As Connector",
+                    style: MyTexts.regular14.copyWith(
+                      color: Colors.black,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -48,10 +53,7 @@ class HomeView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18.0,
-                    vertical: 16,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16),
                   child: Row(
                     children: [
                       Image.asset(Asset.profil, height: 40, width: 40),
@@ -85,11 +87,7 @@ class HomeView extends StatelessWidget {
                             },
                             child: Row(
                               children: [
-                                SvgPicture.asset(
-                                  Asset.location,
-                                  width: 9,
-                                  height: 12.22,
-                                ),
+                                SvgPicture.asset(Asset.location, width: 9, height: 12.22),
                                 SizedBox(width: 0.4.h),
                                 Obx(
                                   () => Text(
@@ -157,7 +155,10 @@ class HomeView extends StatelessWidget {
                               Asset.warning,
                               width: 18,
                               height: 18,
-                              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                              colorFilter: const ColorFilter.mode(
+                                Colors.black,
+                                BlendMode.srcIn,
+                              ),
                             ),
                             Positioned(
                               right: 0,
@@ -250,29 +251,24 @@ class HomeView extends StatelessWidget {
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: MyColors.gray5D,width: 0.5),
+                          border: Border.all(color: MyColors.gray5D, width: 0.5),
                         ),
                         child: GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: controller.items.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                mainAxisSpacing: 20,
-                                crossAxisSpacing: 12,
-                                childAspectRatio: 1.4,
-                              ),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            mainAxisSpacing: 20,
+                            crossAxisSpacing: 12,
+                            childAspectRatio: 1.4,
+                          ),
                           itemBuilder: (context, index) {
                             final item = controller.items[index];
                             return Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                SvgPicture.asset(
-                                  item['icon'],
-                                  height: 28,
-                                  width: 28,
-                                ),
+                                SvgPicture.asset(item['icon'], height: 28, width: 28),
                                 const SizedBox(height: 8),
                                 Text(
                                   item['title'],
@@ -296,9 +292,7 @@ class HomeView extends StatelessWidget {
                             onTap: () {},
                             child: Text(
                               "View All",
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.gray5D,
-                              ),
+                              style: MyTexts.medium14.copyWith(color: MyColors.gray5D),
                             ),
                           ),
                         ],
@@ -360,9 +354,7 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(
-                color: MyColors.textFieldBackground,
-              ),
+              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
             ),
           ],
         ),
@@ -402,12 +394,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildNotiCard({
-    String? title,
-    String? value,
-    String? icon,
-    Color? color,
-  }) {
+  Widget _buildNotiCard({String? title, String? value, String? icon, Color? color}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
       decoration: BoxDecoration(
@@ -430,10 +417,7 @@ class HomeView extends StatelessWidget {
                   icon ?? "",
                   height: 30,
                   width: 30,
-                  colorFilter: ColorFilter.mode(
-                    color ?? Colors.black,
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
                 ),
               ),
               Container(
