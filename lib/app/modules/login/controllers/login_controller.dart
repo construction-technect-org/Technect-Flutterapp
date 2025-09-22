@@ -92,7 +92,13 @@ class LoginController extends GetxController {
                 //Get.to(() => HomeView());
 
                 //  Get.offAllNamed(Routes.MAIN);
-                Get.offAllNamed(Routes.DASHBOARD);
+                if((loginResponse.data?.user?.marketPlace??"").isEmpty){
+                  Get.offAllNamed(Routes.DASHBOARD);
+
+                }
+                else{
+                  Get.offAllNamed(Routes.MAIN);
+                }
               },
             ),
           );

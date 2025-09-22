@@ -223,7 +223,7 @@ class SignUpPasswordController extends GetxController {
             header: "Account created successfully !",
             image: Asset.forgetSImage,
             onTap: () {
-              Get.offAllNamed(Routes.ADD_LOCATION_MANUALLY);
+              Get.offAllNamed(Routes.ADDRESS);
             },
           ),
         );

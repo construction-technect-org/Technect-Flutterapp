@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     
     <application
-        android:label="construction_technect"
+        android:label="CONSTRUCTION TECHNECT"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -52,17 +52,17 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAgyOP5KnUC1XJlmp2q7lVBsWpaF6ZsT9Q" />
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true"
-            tools:replace="android:authorities">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths"
-                tools:replace="android:resource" />
-        </provider>
+<!--        <provider-->
+<!--            android:name="androidx.core.content.FileProvider"-->
+<!--            android:authorities="${applicationId}.fileProvider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true"-->
+<!--            tools:replace="android:authorities">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                android:resource="@xml/filepaths"-->
+<!--                tools:replace="android:resource" />-->
+<!--        </provider>-->
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

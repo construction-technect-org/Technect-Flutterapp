@@ -1,10 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/AddLocationManually/views/saved_addresses_view.dart';
 import 'package:construction_technect/app/modules/Dashboard/controllers/dashboard_controller.dart';
-import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
-  final HomeController homeController = Get.put(HomeController());
+  // final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,51 +23,31 @@ class DashboardView extends GetView<DashboardController> {
                 children: [
                   Obx(
                     () => Text(
-                      'Welcome ${homeController.profileData.value.data?.user?.firstName}!',
+                      'Welcome ${controller.profileData.value.data?.user?.firstName}!',
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.fontBlack,
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // Condition check
-                      if (homeController.getCurrentAddress().isNotEmpty) {
-                        // Navigate to SavedAddressesView
-                        Get.to(() => const SavedAddressesView());
-                      } else {
-                        // No address → stay on same screen or show info
-                        Get.snackbar(
-                          "No Address",
-                          "Please add an address first",
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          Asset.location,
-                          width: 9,
-                          height: 12.22,
-                        ),
-                        SizedBox(width: 0.4.h),
-                        Obx(
-                          () => Text(
-                            homeController.getCurrentAddress(),
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.textFieldBackground,
-                            ),
+                  Row(
+                    children: [
+                      SvgPicture.asset(Asset.location, width: 9, height: 12.22),
+                      SizedBox(width: 0.4.h),
+                      Obx(
+                        () => Text(
+                          controller.address.value,
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.textFieldBackground,
                           ),
                         ),
-                        const SizedBox(width: 4),
-                        const Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 16,
-                          color: Colors.black54,
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 16,
+                        color: Colors.black54,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -84,8 +62,8 @@ class DashboardView extends GetView<DashboardController> {
                   clipBehavior: Clip.none, // 👈 allows badge to overflow
                   children: [
                     SvgPicture.asset(
-                      Asset
-                          .notifications, // or 'assets/images/notifications.svg'
+                      Asset.notifications,
+                      // or 'assets/images/notifications.svg'
                       width: 28,
                       height: 28,
                     ),
@@ -245,7 +223,18 @@ class DashboardView extends GetView<DashboardController> {
                             item: item,
                             itemWidth: itemWidth,
                             onTap: () {
-                              controller.selectedIndex.value = index;
+                              // if(isSelected){
+                              if (index == 0) {
+                                controller.selectedIndex.value = index;
+                              } else {
+                                SnackBars.successSnackBar(
+                                  content: 'This feature will come soon',
+                                );
+                              }
+                              // }
+                              // else{
+                              //
+                              // }
                             },
                           );
                         });
@@ -296,7 +285,16 @@ class DashboardView extends GetView<DashboardController> {
           padding: EdgeInsets.only(left: 2.h, right: 2.h, bottom: 2.h),
           child: RoundedButton(
             buttonName: 'PROCEED',
-            onTap: () => Get.toNamed(Routes.DASHABORD_MARKET_PLACE),
+            onTap: () {
+              if (controller.selectedIndex.value == 0) {
+                Get.toNamed(Routes.DASHABORD_MARKET_PLACE);
+              }
+              else{
+                SnackBars.errorSnackBar(
+                  content: 'Please select one feature',
+                );
+              }
+            },
           ),
         ),
       ),

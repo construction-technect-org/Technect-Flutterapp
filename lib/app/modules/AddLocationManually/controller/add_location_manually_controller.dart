@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/models/SavedAddressesModel.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/services/address_service.dart';
+import 'package:construction_technect/app/modules/Address/controller/address_controller.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 
 class AddLocationController extends GetxController {
@@ -33,6 +34,15 @@ class AddLocationController extends GetxController {
     super.onInit();
     if (Get.arguments != null) {
       isFromLogin.value = Get.arguments['isFromLogin'] ?? false;
+    }
+    if(Get.find<AddressController>().place.value != null){
+    print(Get.find<AddressController>().place);
+      addressLine1Controller.text=Get.find<AddressController>().place.value?.name??"";
+      addressLine2Controller.text=Get.find<AddressController>().place.value?.street??"";
+      cityController.text=Get.find<AddressController>().place.value?.locality??"";
+      landmarkController.text=Get.find<AddressController>().place.value?.subAdministrativeArea??"";
+      stateController.text=Get.find<AddressController>().place.value?.administrativeArea??"";
+      pinCodeController.text=Get.find<AddressController>().place.value?.postalCode??"";
     }
     _handlePassedData();
     fetchAddresses();
@@ -179,7 +189,7 @@ class AddLocationController extends GetxController {
           addressType: addressType,
         );
 
-        // 🔥 Always add the other type as well (compulsory both)
+        //  Always add the other type as well (compulsory both)
         if (response['success'] == true) {
           await _addressService.addAddressManually(
             addressLine1: addressLine1Controller.text.trim(),

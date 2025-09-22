@@ -42,7 +42,9 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                 // ✅ Marketplace Section
                 Text(
                   "Select Your Marketplace",
-                  style: MyTexts.medium16.copyWith(color: MyColors.primary),
+                  style: MyTexts.medium16.copyWith(color: MyColors.primary,
+                    fontFamily: MyTexts.Roboto,
+                  ),
                 ),
                 SizedBox(height: 1.h),
                 LayoutBuilder(
@@ -75,7 +77,13 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                             item['icon']!,
                             selected,
                             () {
-                              controller.selectMarketplace(item['title']!);
+                              if (index == 0) {
+                                controller.selectMarketplace(item['title']!);
+                              } else {
+                                SnackBars.successSnackBar(
+                                  content: 'This feature will come soon',
+                                );
+                              }
                             },
                           );
                         });
@@ -87,57 +95,78 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                 SizedBox(height: 2.h),
 
                 // ✅ Role Section
-                Text(
-                  "ROLE",
-                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                ),
-                SizedBox(height: 0.6.h),
-                Text(
-                  "Select Your Role",
-                  style: MyTexts.medium14.copyWith(
-                    color: MyColors.profileRemaining,
-                  ),
-                ),
-                SizedBox(height: 1.h),
                 Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      // Dynamically calculate item width
-                      final double itemWidth =
-                          (constraints.maxWidth - (3 * 10)) /
-                          1; // 4 per row with spacing
-                      final double itemHeight =
-                          itemWidth + 1; // for icon + text
+                  child: Obx(() {
+                    return controller.selectedMarketplace.value.isEmpty
+                        ? const SizedBox()
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "ROLE",
+                                style: MyTexts.bold16.copyWith(
+                                  color: MyColors.fontBlack,
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                              SizedBox(height: 0.6.h),
+                              Text(
+                                "Select Your Role",
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.profileRemaining,
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                              SizedBox(height: 1.h),
+                              Expanded(
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    // Dynamically calculate item width
+                                    final double itemWidth =
+                                        (constraints.maxWidth - (3 * 10)) /
+                                        1; // 4 per row with spacing
+                                    final double itemHeight =
+                                        itemWidth + 1; // for icon + text
 
-                      return GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: controller.roles.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: itemWidth / itemHeight,
-                        ),
-                        itemBuilder: (context, index) {
-                          final role = controller.roles[index];
+                                    return GridView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: controller.roles.length,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 10,
+                                            mainAxisSpacing: 10,
+                                            childAspectRatio:
+                                                itemWidth / itemHeight,
+                                          ),
+                                      itemBuilder: (context, index) {
+                                        final role = controller.roles[index];
 
-                          return Obx(() {
-                            final selected =
-                                controller.selectedRole.value == role['title'];
-                            return _buildTile(
-                              role['title'] ?? '',
-                              role['icon'] ?? '',
-                              selected,
-                              () {
-                                controller.selectRole(role['title']!);
-                              },
-                            );
-                          });
-                        },
-                      );
-                    },
-                  ),
+                                        return Obx(() {
+                                          final selected =
+                                              controller.selectedRole.value ==
+                                              role['title'];
+                                          return _buildTile(
+                                            role['title'] ?? '',
+                                            role['icon'] ?? '',
+                                            selected,
+                                            () {
+                                              controller.selectRole(
+                                                role['title']!,
+                                              );
+                                            },
+                                          );
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                  }),
                 ),
 
                 // ✅ Proceed Button
@@ -150,8 +179,15 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
           child: RoundedButton(
             buttonName: 'PROCEED',
             onTap: () {
-               Get.toNamed(Routes.MAIN_TAB);
-             
+              if (controller.selectedRole.isNotEmpty) {
+                controller.marketPlace();
+              } else {
+                if (controller.selectedMarketplace.isEmpty) {
+                  SnackBars.errorSnackBar(content: 'please select marketplace');
+                } else {
+                  SnackBars.errorSnackBar(content: 'please select role');
+                }
+              }
             },
           ),
         ),

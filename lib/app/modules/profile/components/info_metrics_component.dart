@@ -104,7 +104,9 @@ class InfoMetricsComponent extends StatelessWidget {
             const Spacer(),
             IconButton(
               padding: EdgeInsets.zero,
-              onPressed: () async => Get.toNamed(Routes.EDIT_PROFILE),
+              onPressed: () async {
+                return Get.toNamed(Routes.EDIT_PROFILE);
+              },
               icon: const Icon(Icons.edit, color: Colors.black, size: 20),
             ),
           ],

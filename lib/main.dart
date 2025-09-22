@@ -16,7 +16,7 @@ Future<void> main() async {
     ResponsiveSizer(
       builder: (context, orientation, screenType) {
         return GetMaterialApp(
-          title: "Construction Technect",
+          title: "CONSTRUCTION TECHNECT",
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,

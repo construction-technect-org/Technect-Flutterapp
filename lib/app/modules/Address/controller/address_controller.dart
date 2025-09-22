@@ -273,14 +273,17 @@ class AddressController extends GetxController {
     );
   }
 
+  final Rx<Placemark?> place = Rx<Placemark?>(null);
+  late final Placemark? place2;
+
   // Get address from coordinates
   Future<void> _getAddressFromCoordinates(double lat, double lng) async {
     try {
       final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks.isNotEmpty) {
-        final Placemark place = placemarks[0];
+        place2 = placemarks[0];
         currentAddress.value =
-            '${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
+            '${place2?.street}, ${place2?.locality}, ${place2?.administrativeArea}, ${place2?.country}';
         searchController.text = currentAddress.value;
       }
     } catch (e) {
