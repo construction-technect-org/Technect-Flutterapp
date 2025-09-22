@@ -32,7 +32,9 @@ class LocationView extends GetView<LocationController> {
                     const SizedBox(width: 8),
                     Text(
                       "Select a Location",
-                      style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                      style: MyTexts.medium18.copyWith(
+                        color: MyColors.fontBlack,
+                      ),
                     ),
                   ],
                 ),
@@ -42,7 +44,9 @@ class LocationView extends GetView<LocationController> {
                   padding: const EdgeInsets.only(left: 30),
                   child: Text(
                     "Select your location for better tracking",
-                    style: MyTexts.medium14.copyWith(color: MyColors.shadeOfGray),
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.shadeOfGray,
+                    ),
                   ),
                 ),
 
@@ -67,14 +71,20 @@ class LocationView extends GetView<LocationController> {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                        child: SvgPicture.asset(
+                          Asset.searchIcon,
+                          height: 16,
+                          width: 16,
+                        ),
                       ),
                       prefixIconConstraints: const BoxConstraints(
                         minWidth: 36,
                         minHeight: 36,
                       ),
                       hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                      hintStyle: MyTexts.medium16.copyWith(
+                        color: MyColors.darkGray,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(22.5),
                         borderSide: BorderSide.none,
@@ -86,7 +96,9 @@ class LocationView extends GetView<LocationController> {
                                 child: SizedBox(
                                   width: 20,
                                   height: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                               )
                             : Padding(
@@ -112,7 +124,9 @@ class LocationView extends GetView<LocationController> {
                       const SizedBox(width: 11),
                       Text(
                         "Drag the pin for your location",
-                        style: MyTexts.medium16.copyWith(color: MyColors.redgray),
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.redgray,
+                        ),
                       ),
                     ],
                   ),
@@ -145,7 +159,9 @@ class LocationView extends GetView<LocationController> {
                           ),
                           title: Text(
                             "Add Location Manually",
-                            style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.fontBlack,
+                            ),
                           ),
                         ),
                         const Divider(height: 1, thickness: 0.5),
@@ -158,7 +174,9 @@ class LocationView extends GetView<LocationController> {
                           ),
                           title: Text(
                             "Use your Current Location",
-                            style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.fontBlack,
+                            ),
                           ),
                         ),
                       ],
@@ -171,26 +189,31 @@ class LocationView extends GetView<LocationController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Left side text
-                       Text(
+                      Text(
                         "Delivery Radius",
-                       style: MyTexts.regular16.copyWith(color: MyColors.fontBlack),
-
+                        style: MyTexts.regular16.copyWith(
+                          color: MyColors.fontBlack,
+                        ),
                       ),
 
                       // Right side box
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey.shade400),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child:  Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               "5 KM",
-                               style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.fontBlack,
+                              ),
                             ),
                             const SizedBox(width: 6),
 
@@ -264,7 +287,8 @@ class LocationView extends GetView<LocationController> {
                         SizedBox(width: 5.w),
                         RoundedButton(
                           onTap: () {
-                            Get.toNamed(Routes.ADD_PRODUCT);
+                            // Get.toNamed(Routes.ADD_PRODUCT);
+                            Get.toNamed(Routes.DASHBOARD);
                           },
                           buttonName: '',
                           borderRadius: 12,

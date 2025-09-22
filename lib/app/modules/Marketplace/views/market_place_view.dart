@@ -1,9 +1,12 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Marketplace/controllers/market_place_controller.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 
 class MarketPlaceView extends GetView<MarketPlaceController> {
-  const MarketPlaceView({super.key});
+  final HomeController homeController = Get.put(HomeController());
+
+  MarketPlaceView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +89,10 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
             children: [
               /// Search Field
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 13,
+                ),
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
@@ -104,14 +110,20 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                        child: SvgPicture.asset(
+                          Asset.searchIcon,
+                          height: 16,
+                          width: 16,
+                        ),
                       ),
                       prefixIconConstraints: const BoxConstraints(
                         minWidth: 36,
                         minHeight: 36,
                       ),
                       hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                      hintStyle: MyTexts.medium16.copyWith(
+                        color: MyColors.darkGray,
+                      ),
                       filled: true,
                       fillColor: MyColors.white,
                       contentPadding: const EdgeInsets.symmetric(
@@ -124,7 +136,11 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                       ),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
+                        child: SvgPicture.asset(
+                          Asset.filterIcon,
+                          height: 20,
+                          width: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -136,7 +152,9 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
                   "Marketplace",
-                  style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
+                  style: MyTexts.extraBold18.copyWith(
+                    color: MyColors.fontBlack,
+                  ),
                 ),
               ),
               SizedBox(height: 2.h),
@@ -158,7 +176,8 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                   () => Column(
                     children: List.generate(controller.items.length, (index) {
                       final item = controller.items[index];
-                      final isSelected = controller.selectedIndex.value == index;
+                      final isSelected =
+                          controller.selectedIndex.value == index;
 
                       return GestureDetector(
                         onTap: () => controller.selectIndex(index),
@@ -178,7 +197,10 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     padding: const EdgeInsets.all(8),
-                                    child: Image.asset(item["icon"], fit: BoxFit.contain),
+                                    child: Image.asset(
+                                      item["icon"],
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                   if (isSelected)
                                     const Icon(
@@ -275,8 +297,9 @@ class MarketPlaceView extends GetView<MarketPlaceController> {
               Center(
                 child: RoundedButton(
                   onTap: () {
-                    Get.toNamed(Routes.LOCATION);
+                    Get.toNamed(Routes.ADD_PRODUCT);
 
+                    // Get.toNamed(Routes.LOCATION);
                   },
                   buttonName: '',
                   borderRadius: 12,
