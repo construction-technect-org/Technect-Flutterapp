@@ -179,7 +179,7 @@ class AddLocationController extends GetxController {
           addressType: addressType,
         );
 
-        // 🔥 Always add the other type as well (compulsory both)
+        //  Always add the other type as well (compulsory both)
         if (response['success'] == true) {
           await _addressService.addAddressManually(
             addressLine1: addressLine1Controller.text.trim(),
