@@ -37,7 +37,7 @@ class CertificationsComponent extends StatelessWidget {
                     ),
                     const Spacer(),
                     const Icon(Icons.visibility, color: MyColors.primary),
-                    if (!cert.isDefault)
+                    if (cert.filePath != null)
                       IconButton(
                         icon: const Icon(Icons.delete, color: MyColors.red),
                         onPressed: () => controller.removeCertificate(index),
@@ -91,19 +91,23 @@ class CertificationsComponent extends StatelessWidget {
                               ),
                             ],
                           ),
-                        ] else...[
+                        ] else ...[
                           Column(
                             children: [
                               const Gap(14),
 
-                              Image.asset(Asset.pdfImage, height: 50, width: 32),
+                              Image.asset(
+                                Asset.pdfImage,
+                                height: 50,
+                                width: 32,
+                              ),
                               const Gap(14),
                               Text(
                                 "File uploaded: ${basename("${cert.filePath}")}",
                               ),
                             ],
-                          )
-                        ]
+                          ),
+                        ],
                       ],
                     ),
                   ),
