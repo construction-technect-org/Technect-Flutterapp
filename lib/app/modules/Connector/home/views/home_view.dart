@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Connector/home/components/home_components.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 
 class HomeView extends StatelessWidget {
@@ -29,7 +28,7 @@ class HomeView extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-               // Get.toNamed(Routes.CONNECTOR_ADD_LOCATION);
+                // Get.toNamed(Routes.CONNECTOR_ADD_LOCATION);
               },
               child: Row(
                 children: [
@@ -61,18 +60,17 @@ class HomeView extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        Text(
-                              'Welcome Vaishnavi!',
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
-                              ),
+                          Text(
+                            'Welcome Vaishnavi!',
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.fontBlack,
+                              fontFamily: MyTexts.Roboto,
                             ),
-                          
+                          ),
+
                           GestureDetector(
                             onTap: () {
-
-                             Get.toNamed(Routes.MAIN);
+                              Get.toNamed(Routes.MAIN);
 
                               // // Condition check
                               // if (controller.getCurrentAddress().isNotEmpty) {
@@ -92,13 +90,13 @@ class HomeView extends StatelessWidget {
                                 SvgPicture.asset(Asset.location, width: 9, height: 12.22),
                                 SizedBox(width: 0.4.h),
                                 Text(
-                                    "",
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.textFieldBackground,
-                                      fontFamily: MyTexts.Roboto,
-                                    ),
+                                  "",
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.textFieldBackground,
+                                    fontFamily: MyTexts.Roboto,
                                   ),
-                                
+                                ),
+
                                 const SizedBox(width: 4),
                                 const Icon(
                                   Icons.keyboard_arrow_down,
@@ -362,45 +360,39 @@ class HomeView extends StatelessWidget {
               value,
               style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
             ),
-          ),
 
-          SizedBox(height: 2.h),
+            SizedBox(height: 2.h),
 
-          // Team title row
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Team",
-                  style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
-                ),
-                Text(
-                  "View All",
-                  style: MyTexts.medium12.copyWith(
-                    color: MyColors.textFieldBackground,
+            // Team title row
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Team", style: MyTexts.bold18.copyWith(color: MyColors.fontBlack)),
+                  Text(
+                    "View All",
+                    style: MyTexts.medium12.copyWith(color: MyColors.textFieldBackground),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          // Team List
-          ListView.builder(
-            padding: const EdgeInsets.all(12),
-            itemCount: 3,
-            shrinkWrap: true, // Important for nested scrollables
-            physics:
-                const NeverScrollableScrollPhysics(), // Disables inner scrolling
-            itemBuilder: (context, index) {
-              return const Padding(
-                padding: EdgeInsets.only(bottom: 12),
-                child: MerchantCard(), // Use your card here
-              );
-            },
-          ),
-        ],
+            // Team List
+            ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: 3,
+              shrinkWrap: true, // Important for nested scrollables
+              physics: const NeverScrollableScrollPhysics(), // Disables inner scrolling
+              itemBuilder: (context, index) {
+                return const Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: MerchantCard(), // Use your card here
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
