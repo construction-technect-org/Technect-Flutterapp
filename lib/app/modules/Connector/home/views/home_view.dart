@@ -10,11 +10,11 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
         forceMaterialTransparency: true,
         automaticallyImplyLeading: false,
-        backgroundColor: MyColors.white,
+        backgroundColor: MyColors.backgroundColor,
         elevation: 0,
         title: Row(
           children: [
@@ -95,14 +95,20 @@ class HomeView extends StatelessWidget {
                 decoration: InputDecoration(
                   prefixIcon: Padding(
                     padding: const EdgeInsets.only(left: 18, right: 8),
-                    child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                    child: SvgPicture.asset(
+                      Asset.searchIcon,
+                      height: 16,
+                      width: 16,
+                    ),
                   ),
                   prefixIconConstraints: const BoxConstraints(
                     minWidth: 36,
                     minHeight: 36,
                   ),
                   hintText: 'Search',
-                  hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                  hintStyle: MyTexts.medium16.copyWith(
+                    color: MyColors.darkGray,
+                  ),
                   filled: true,
                   fillColor: MyColors.white,
                   contentPadding: const EdgeInsets.symmetric(
@@ -115,7 +121,11 @@ class HomeView extends StatelessWidget {
                   ),
                   suffixIcon: Padding(
                     padding: const EdgeInsets.all(14),
-                    child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
+                    child: SvgPicture.asset(
+                      Asset.filterIcon,
+                      height: 20,
+                      width: 20,
+                    ),
                   ),
                 ),
               ),
@@ -129,7 +139,9 @@ class HomeView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               "Features",
-              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
+              style: MyTexts.extraBold18.copyWith(
+                color: MyColors.textFieldBackground,
+              ),
             ),
           ),
 
@@ -170,7 +182,9 @@ class HomeView extends StatelessWidget {
                         Text(
                           item["title"],
                           textAlign: TextAlign.center,
-                          style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.fontBlack,
+                          ),
                         ),
                       ],
                     ),
@@ -188,10 +202,15 @@ class HomeView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Team", style: MyTexts.bold18.copyWith(color: MyColors.fontBlack)),
+                Text(
+                  "Team",
+                  style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
+                ),
                 Text(
                   "View All",
-                  style: MyTexts.medium12.copyWith(color: MyColors.textFieldBackground),
+                  style: MyTexts.medium12.copyWith(
+                    color: MyColors.textFieldBackground,
+                  ),
                 ),
               ],
             ),
@@ -202,7 +221,8 @@ class HomeView extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             itemCount: 3,
             shrinkWrap: true, // Important for nested scrollables
-            physics: const NeverScrollableScrollPhysics(), // Disables inner scrolling
+            physics:
+                const NeverScrollableScrollPhysics(), // Disables inner scrolling
             itemBuilder: (context, index) {
               return const Padding(
                 padding: EdgeInsets.only(bottom: 12),

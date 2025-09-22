@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Connector/ListOfMerchant/components/connector_product_card.dart';
 import 'package:construction_technect/app/modules/Connector/ListOfMerchant/controllers/list_0f_merchant_controller.dart';
 
 class ListOfMerchantView extends GetView<ListOfMerchantController> {
@@ -14,10 +15,10 @@ class ListOfMerchantView extends GetView<ListOfMerchantController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        backgroundColor: MyColors.white,
+        backgroundColor: MyColors.backgroundColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Row(
@@ -58,6 +59,7 @@ class ListOfMerchantView extends GetView<ListOfMerchantController> {
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
+                color: MyColors.white,
                 border: Border.all(color: MyColors.hexGray92),
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -96,13 +98,6 @@ class ListOfMerchantView extends GetView<ListOfMerchantController> {
                   decoration: BoxDecoration(
                     color: MyColors.white,
                     borderRadius: BorderRadius.circular(22.5),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x1A000000),
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
                   ),
                   child: TextField(
                     onChanged: (value) {},
@@ -138,51 +133,147 @@ class ListOfMerchantView extends GetView<ListOfMerchantController> {
 
               /// Categories Grid
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                ), // no padding around grid
                 child: GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: categories.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, // 3 items in a row
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 0.99,
+                    crossAxisCount: 3, // 3 items per row
+                    mainAxisSpacing: 0, // no vertical space
+                    crossAxisSpacing: 0, // no horizontal space
+                    childAspectRatio: 0.99, // adjust as needed
                   ),
                   itemBuilder: (context, index) {
                     final item = categories[index];
                     return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           item["title"],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.fontBlack,
+                            fontFamily: MyTexts.Roboto,
                           ),
+                          textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 6),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Image.asset(
-                            item["image"],
-                            width: 90,
-                            height: 70,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Center(
-                          child: Text(
-                            item["name"],
-                            style: const TextStyle(
-                              color: Colors.blue,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
+                        SizedBox(height: 0.8.h),
+
+                        // Wrap image with Stack to overlay the check icon
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: Image.asset(
+                                item["image"],
+                                width: 90,
+                                height: 70,
+                                fit: BoxFit.cover,
+                              ),
                             ),
+                            Positioned(
+                              top: -6,
+                              right: -6,
+                              child: Container(
+                                height: 20,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: MyColors.primary,
+                                  borderRadius: BorderRadius.circular(5),
+                                  // shape: BoxShape.s,
+                                ),
+                                child: const Icon(
+                                  Icons.check,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 0.7.h),
+                        Text(
+                          item["name"],
+                          style: MyTexts.regular14.copyWith(
+                            color: MyColors.primary,
+                            fontFamily: MyTexts.Roboto,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Search Product
+                      _buildChip(
+                        asset: Asset.searchIcon,
+                        isSvg: true,
+                        text: "Search Product",
+                      ),
+                      SizedBox(width: 2.w),
+                      // Location
+                      _buildChip(
+                        icon: Icons.location_on_outlined,
+                        text: "Location",
+                        trailing: Icons.keyboard_arrow_down,
+                      ),
+                      SizedBox(width: 2.w),
+                      // Specification
+                      _buildChip(
+                        asset: Asset.filterIcon,
+                        isSvg: true,
+                        text: "Specification",
+                        trailing: Icons.keyboard_arrow_down,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 1.h),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  "Product",
+                  style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
+                ),
+              ),
+              SizedBox(height: 2.h),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 2,
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(
+                          Routes.CONNECTOR_PRODUCT_DETAILS,
+                          // arguments: {"product": product},
+                        );
+                      },
+                      child: const ConnectorProductCard(
+                        statusText: 'Active',
+                        statusColor: MyColors.green,
+                        productName: 'Premium M Sand',
+                        brandName: 'SV Manufacturers',
+                        locationText: 'Vasai Virar, Mahab Chowpatty',
+                        pricePerUnit: 1000,
+                        stockCount: 1,
+                        imageAsset: Asset.Product,
+                      ),
                     );
                   },
                 ),
@@ -190,6 +281,52 @@ class ListOfMerchantView extends GetView<ListOfMerchantController> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildChip({
+    String? asset, // path to image (PNG, JPG, etc.) or SVG
+    bool isSvg = false, // true if the asset is SVG
+    IconData? icon,
+    required String text,
+    IconData? trailing,
+  }) {
+    return Container(
+      width: 109,
+      height: 35,
+      padding: const EdgeInsets.symmetric(horizontal: 7),
+      decoration: BoxDecoration(
+        color: MyColors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center, // center vertically
+        children: [
+          if (asset != null)
+            isSvg
+                ? SvgPicture.asset(asset, width: 12, height: 12, fit: BoxFit.contain)
+                : Image.asset(asset, width: 12, height: 12, fit: BoxFit.cover)
+          else if (icon != null)
+            Icon(icon, size: 18, color: Colors.grey[700]),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text,
+              overflow: TextOverflow.ellipsis, // prevent overflow
+              style: MyTexts.medium10.copyWith(
+                color: MyColors.fontBlack,
+                fontFamily: MyTexts.Roboto,
+              ),
+            ),
+          ),
+          if (trailing != null) ...[
+            const SizedBox(width: 6),
+            Icon(trailing, size: 18, color: Colors.black),
+          ],
+        ],
       ),
     );
   }

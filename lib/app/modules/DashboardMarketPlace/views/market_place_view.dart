@@ -1,5 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-
 import 'package:construction_technect/app/modules/DashboardMarketPlace/controllers/market_place_controller.dart';
 
 class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {

@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Connector/WishList/views/wish_list_view.dart';
 
 class ConnectorMenuView extends StatelessWidget {
   const ConnectorMenuView({super.key});
@@ -27,7 +28,9 @@ class ConnectorMenuView extends StatelessWidget {
               false,
               customIcon: SvgPicture.asset(Asset.wishlistIcon),
               onTap: () {
-                // Get.to(() => ProductManagementView());
+               // Get.toNamed(Routes.WISH_LIST);
+
+               Get.to(() => WishListView());
               },
             ),
             SizedBox(height: 1.h),

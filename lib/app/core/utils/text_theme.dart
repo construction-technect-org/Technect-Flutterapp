@@ -9,6 +9,14 @@ class MyTexts {
   /// Medium = 500 , light = 400 , bold = 600
   /// Format {fontWeight}size
 
+
+ static TextStyle get medium8 => TextStyle(
+    fontSize: 8.sp,
+    fontWeight: FontWeight.w500,
+    color: MyColors.black,
+    fontFamily: Lato,
+  );
+ 
   static TextStyle get medium14 => TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,

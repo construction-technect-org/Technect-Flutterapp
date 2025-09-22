@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class ConnectorMarketPlaceController extends GetxController {
-  RxInt selectedIndex = 0.obs;
+RxInt selectedIndex = (-1).obs;
 
   final List<Map<String, dynamic>> items = [
     {"icon": Asset.materialMarketplace, "title": "Material\nMarketplace"},

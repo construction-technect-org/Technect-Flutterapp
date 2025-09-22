@@ -22,6 +22,8 @@ import 'package:construction_technect/app/modules/Connector/AddKyc/bindings/add_
 import 'package:construction_technect/app/modules/Connector/AddKyc/views/add_kyc_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/views/connector_profile_view.dart';
 import 'package:construction_technect/app/modules/Connector/ListOfMerchant/bindings/list_0f_merchant_binding.dart';
@@ -278,5 +280,11 @@ class AppPages {
       page: () => const DashboardMarketPlaceView(),
       binding: DashboardMarketPlaceBinding(),
     ),
+    GetPage(
+      name: Routes.CONNECTOR_PRODUCT_DETAILS,
+      page: () =>  ConnectorProductDetailsView(),
+      binding: ConnectorProductDetailsBindings(),
+    ),
+     
   ];
 }
