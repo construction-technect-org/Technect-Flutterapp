@@ -27,24 +27,22 @@ abstract class Routes {
   static const ROLE_DETAILS = _Paths.ROLE_DETAILS;
   static const TEAM_DETAILS = _Paths.TEAM_DETAILS;
   static const MARKET_PLACE = _Paths.MARKET_PLACE;
-  static const YOUR_ROLE = _Paths.YOUR_ROLE;
   static const SERVICE_MANAGEMENT = _Paths.SERVICE_MANAGEMENT;
   static const ADD_SERVICE = _Paths.ADD_SERVICE;
   static const SERVICE_DETAILS = _Paths.SERVICE_DETAILS;
-  static const CHAT_SYSTEM  = _Paths.CHAT_SYSTEM;
-  static const CONNECTION_INBOX  = _Paths.CONNECTION_INBOX;
-  static const LOCATION  = _Paths.LOCATION;
-
+  static const CHAT_SYSTEM = _Paths.CHAT_SYSTEM;
+  static const CONNECTION_INBOX = _Paths.CONNECTION_INBOX;
+  static const LOCATION = _Paths.LOCATION;
+  static const DASHBOARD = _Paths.DASHBOARD;
+  static const DASHABORD_MARKET_PLACE = _Paths.DASHABOARD_MARKET_PLACE;
 
   // Connector
-   static const MAIN_TAB  = _Paths.MAIN_TAB;
-   static const CONNECTOR_MARKET_PLACE  = _Paths.CONNECTOR_MARKET_PLACE;
-   static const SELECT_MAIN_CATEGORY  = _Paths.SELECT_MAIN_CATEGORY;
-   static const LIST_OF_MERCHANT  = _Paths.LIST_OF_MERCHANT;
-   static const CONNECTOR_PROFILE  = _Paths.CONNECTOR_PROFILE;
-   static const ADD_KYC = _Paths.ADD_KYC;
-
-
+  static const MAIN_TAB = _Paths.MAIN_TAB;
+  static const CONNECTOR_MARKET_PLACE = _Paths.CONNECTOR_MARKET_PLACE;
+  static const SELECT_MAIN_CATEGORY = _Paths.SELECT_MAIN_CATEGORY;
+  static const LIST_OF_MERCHANT = _Paths.LIST_OF_MERCHANT;
+  static const CONNECTOR_PROFILE = _Paths.CONNECTOR_PROFILE;
+  static const ADD_KYC = _Paths.ADD_KYC;
 }
 
 abstract class _Paths {
@@ -73,22 +71,20 @@ abstract class _Paths {
   static const ROLE_DETAILS = '/role-details';
   static const TEAM_DETAILS = '/team-details';
   static const MARKET_PLACE = '/market-place';
-  static const YOUR_ROLE = '/your-role';
   static const SERVICE_MANAGEMENT = '/service-management';
   static const ADD_SERVICE = '/add-service';
   static const SERVICE_DETAILS = '/service-details';
   static const CHAT_SYSTEM = '/chat-system';
   static const CONNECTION_INBOX = '/connection-inbox';
   static const LOCATION = '/location';
+  static const DASHBOARD = '/dashboard';
+  static const DASHABOARD_MARKET_PLACE = '/dashboard-market-place';
 
-
-
-// Connector
-   static const MAIN_TAB = '/main-tab';
-   static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
-   static const SELECT_MAIN_CATEGORY = '/select-main-category';
-   static const LIST_OF_MERCHANT = '/List-of_merchant';
-   static const CONNECTOR_PROFILE = '/connector-profile';
-   static const ADD_KYC = '/add-kyc';
-
+  // Connector
+  static const MAIN_TAB = '/main-tab';
+  static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
+  static const SELECT_MAIN_CATEGORY = '/select-main-category';
+  static const LIST_OF_MERCHANT = '/List-of_merchant';
+  static const CONNECTOR_PROFILE = '/connector-profile';
+  static const ADD_KYC = '/add-kyc';
 }

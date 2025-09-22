@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Allow access to cache directory (used by image_picker) -->
+    <cache-path
+        name="cache"
+        path="." />
+
+    <!-- Allow access to app's internal files -->
+    <files-path
+        name="files"
+        path="." />
+
+    <!-- Allow access to external storage (needed for camera/gallery) -->
+    <external-path
+        name="external"
+        path="." />
+
+</paths>

@@ -69,31 +69,6 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     controller.navigateToEditAddress();
-                  //   },
-                  //   child: Row(
-                  //     children: [
-                  //       SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                  //       SizedBox(width: 0.4.h),
-                  //       Obx(
-                  //         () => Text(
-                  //           controller.getCurrentAddress(),
-                  //           style: MyTexts.medium14.copyWith(
-                  //             color: MyColors.textFieldBackground,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       const SizedBox(width: 4),
-                  //       const Icon(
-                  //         Icons.keyboard_arrow_down,
-                  //         size: 16,
-                  //         color: Colors.black54,
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
               const Spacer(),
@@ -134,59 +109,58 @@ class HomeView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: MyColors.white,
-                      borderRadius: BorderRadius.circular(22.5),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x1A000000), // light shadow (10% black)
-                          blurRadius: 8, // soften the shadow
-                          offset: Offset(0, 4), // move shadow down
+                 Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 13,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: MyColors.white,
+                    borderRadius: BorderRadius.circular(22.5),
+                    border: Border.all(color: MyColors.Gray83),
+                  ),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(left: 18, right: 8),
+                        child: SvgPicture.asset(
+                          Asset.searchIcon,
+                          height: 16,
+                          width: 16,
                         ),
-                      ],
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.only(left: 18, right: 8),
-                          child: SvgPicture.asset(
-                            Asset.searchIcon,
-                            height: 16,
-                            width: 16,
-                          ),
-                        ),
-                        prefixIconConstraints: const BoxConstraints(
-                          minWidth: 36,
-                          minHeight: 36,
-                        ),
-                        hintText: 'Search',
-                        hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
-                        filled: true,
-                        fillColor: MyColors.white,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 12,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(22.5),
-                          borderSide: BorderSide.none,
-                        ),
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.all(14),
-                          child: SvgPicture.asset(
-                            Asset.filterIcon,
-                            height: 20,
-                            width: 20,
-                          ),
+                      ),
+                      prefixIconConstraints: const BoxConstraints(
+                        minWidth: 36,
+                        minHeight: 36,
+                      ),
+                      hintText: 'Search',
+                      hintStyle: MyTexts.medium16.copyWith(
+                        color: MyColors.darkGray,
+                      ),
+                      filled: true,
+                      fillColor: MyColors.white,
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 12,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(22.5),
+                        borderSide: BorderSide.none,
+                      ),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: SvgPicture.asset(
+                          Asset.filterIcon,
+                          height: 20,
+                          width: 20,
                         ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 1.h),
+              ),
+               SizedBox(height: 1.h),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
@@ -199,79 +173,75 @@ class HomeView extends StatelessWidget {
                 SizedBox(height: 1.h),
 
                 /// ✅ FIXED GridView
-                Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        spreadRadius: 2,
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        // Dynamically calculate item width
-                        final double itemWidth =
-                            (constraints.maxWidth - (3 * 10)) /
-                            3; // 4 per row with spacing
-                        final double itemHeight = itemWidth + 10; // for icon + text
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: MyColors.white,
+                      borderRadius: BorderRadius.circular(12),
+                     border: Border.all(color: MyColors.greyE5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          // Dynamically calculate item width
+                          final double itemWidth =
+                              (constraints.maxWidth - (3 * 10)) /
+                              3; // 4 per row with spacing
+                          final double itemHeight = itemWidth + 10; // for icon + text
 
-                        return GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: controller.items.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: itemWidth / itemHeight,
-                          ),
-                          itemBuilder: (context, index) {
-                            final item = controller.items[index];
-                            final isSelected = controller.selectedIndex.value == index;
+                          return GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: controller.items.length,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: itemWidth / itemHeight,
+                            ),
+                            itemBuilder: (context, index) {
+                              final item = controller.items[index];
+                              // final isSelected =
+                              //     controller.selectedIndex.value == index;
 
-                            return GestureDetector(
-                              onTap: () {
-                                controller.selectedIndex.value = index;
-                                if (item['title'] == "Marketplace") {
-                                  Get.toNamed(Routes.MARKET_PLACE);
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? const Color(0xFFFFED29)
-                                      : const Color(0x99FFED29),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      item['icon'],
-                                      height: itemWidth * 0.35, // responsive icon size
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      item["title"],
-                                      textAlign: TextAlign.center,
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.fontBlack,
+                              return GestureDetector(
+                                onTap: () {
+                                  controller.selectedIndex.value = index;
+                                  if (item['title'] == "Marketplace") {
+                                    Get.toNamed(Routes.MARKET_PLACE);
+                                  }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFED29),
+
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        item['icon'],
+                                        height: itemWidth * 0.35, // responsive icon size
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        item["title"],
+                                        textAlign: TextAlign.center,
+                                        style: MyTexts.medium14.copyWith(
+                                          color: MyColors.fontBlack,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      },
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -509,6 +479,7 @@ class HomeView extends StatelessWidget {
                                     );
                                   }),
                                 ),
+
                                 //   Row(
                                 //     crossAxisAlignment: CrossAxisAlignment.end,
                                 //     children: List.generate(_monthNames.length, (
@@ -571,15 +542,36 @@ class HomeView extends StatelessWidget {
                           child: Text("Statistics", style: MyTexts.medium18),
                         ),
                         SizedBox(height: 1.h),
-                        Center(child: Image.asset(Asset.worldMap, width: 90.w)),
-                        SizedBox(height: 2.h),
-                        Center(
-                          child: Text(
-                            "Connecting Construction World-wide with AI",
-                            textAlign: TextAlign.center,
-                            style: MyTexts.bold16,
+                        // ✅ Stats Row
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _buildStatCard("Partners", "250", Asset.noOfUsers),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildStatCard(
+                                  "Connectors",
+                                  "180",
+                                  Asset.noOfConectors,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+
+                        SizedBox(height: 1.h),
+                        Center(child: Image.asset(Asset.worldMap, width: 90.w)),
+                        // SizedBox(height: 2.h),
+                        // Center(
+                        //   child: Text(
+                        //     "Connecting Construction World-wide with AI",
+                        //     textAlign: TextAlign.center,
+                        //     style: MyTexts.bold16,
+                        //   ),
+                        // ),
                       ],
                     );
                   }
@@ -605,14 +597,8 @@ class HomeView extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08), // 👈 subtle shadow
-              spreadRadius: 1,
-              blurRadius: 6,
-              offset: const Offset(0, 3), // 👈 downward shadow
-            ),
-          ],
+           border: Border.all(color: MyColors.Gray83),
+
         ),
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -640,6 +626,41 @@ class HomeView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildStatCard(String title, String value, String icon) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(color: MyColors.greyE5),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SvgPicture.asset(icon, height: 20, width: 20),
+              const SizedBox(width: 10),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(value, style: MyTexts.bold18.copyWith(color: MyColors.primary)),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

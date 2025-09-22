@@ -17,6 +17,7 @@ class MyColors {
   static const Color grey1 = Color(0xFFA2A2A2);
   static const Color greySecond = Color(0xFF555555);
   static const Color greyThird = Color(0xFF989898);
+  static const Color greyFour = Color(0xFFD4D4D4);
   static const Color lightBlue = Color(0xFF013B61);
   static const Color lightBlueSecond = Color(0xFF3D41A7);
   static const Color fontBlack = Color(0xFF000000);
@@ -78,21 +79,10 @@ class MyColors {
   static const Color sonicSilver = Color(0xFF747474);
   static const Color blanchedAlmond = Color(0xFFFFEDCF);
   static const Color lavender = Color(0xFFE6E8FF);
-  static const Color  paleBlue = Color(0xFFDEE8FF);
-  static const Color  greyE5 = Color(0xFFE5E5E5);
-  static const Color  Gray83 = Color(0xFFD4D4D4);
-
-
-
-
-
-
- 
-
-
-
-
-
+  static const Color paleBlue = Color(0xFFDEE8FF);
+  static const Color greyE5 = Color(0xFFE5E5E5);
+  static const Color Gray83 = Color(0xFFD4D4D4);
+  static const Color Gray95 = Color(0xFFF2F2F2);
 
   // Text field colors
   static const Color textFieldBorder = Color(0xFFA0A0A0);

@@ -30,6 +30,10 @@ import 'package:construction_technect/app/modules/Connector/MainTab/bindings/mai
 import 'package:construction_technect/app/modules/Connector/MainTab/views/main_tab.dart';
 import 'package:construction_technect/app/modules/Connector/SelectMainCategory/bindings/select_main_category_binding.dart';
 import 'package:construction_technect/app/modules/Connector/SelectMainCategory/views/select_main_category_view.dart';
+import 'package:construction_technect/app/modules/Dashboard/bindings/dashboard_binding.dart';
+import 'package:construction_technect/app/modules/Dashboard/views/dashboard_view.dart';
+import 'package:construction_technect/app/modules/DashboardMarketPlace/bindings/market_place_binding.dart';
+import 'package:construction_technect/app/modules/DashboardMarketPlace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/Marketplace/bindings/market_place_binding.dart';
 import 'package:construction_technect/app/modules/Marketplace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
@@ -52,8 +56,6 @@ import 'package:construction_technect/app/modules/TeamDetails/bindings/team_deta
 import 'package:construction_technect/app/modules/TeamDetails/views/team_details_view.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/bindings/update_your_certifications_binding.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/views/update_your_certifications_view.dart';
-import 'package:construction_technect/app/modules/YourRole/bindings/your_role_binding.dart';
-import 'package:construction_technect/app/modules/YourRole/views/your_role_view.dart';
 import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
 import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
 import 'package:construction_technect/app/modules/forgotPassword/bindings/forgot_password_binding.dart';
@@ -110,7 +112,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MAIN,
-      page: () => const MainTabBarView(),
+      page: () => MainTabBarView(),
       binding: MainBinding(),
     ),
     GetPage(
@@ -186,14 +188,10 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MARKET_PLACE,
-      page: () => const MarketPlaceView(),
+      page: () => MarketPlaceView(),
       binding: MarketPlaceBinding(),
     ),
-    GetPage(
-      name: _Paths.YOUR_ROLE,
-      page: () => const YourRoleView(),
-      binding: YourRoleBinding(),
-    ),
+
     GetPage(
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
@@ -229,40 +227,56 @@ class AppPages {
       binding: LocationBinding(),
     ),
 
-
-
-
-
     // Connector
-     GetPage(
+    GetPage(
       name: _Paths.MAIN_TAB,
-      page: () =>  const MainTab(),
+      page: () => const MainTab(),
       binding: MainTabBinding(),
     ),
     GetPage(
       name: _Paths.CONNECTOR_MARKET_PLACE,
-      page: () =>  const ConnectorMarketPlaceView(),
+      page: () => const ConnectorMarketPlaceView(),
       binding: ConnectorMarketPlaceBinfing(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.SELECT_MAIN_CATEGORY,
-      page: () =>   SelectMainCategoryView(),
+      page: () => SelectMainCategoryView(),
       binding: SelectMainCategoryBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.LIST_OF_MERCHANT,
-      page: () =>  ListOfMerchantView(),
+      page: () => ListOfMerchantView(),
       binding: ListOfMerchantBinding(),
     ),
-     GetPage(
+    GetPage(
       name: _Paths.CONNECTOR_PROFILE,
-      page: () =>  ConnectorProfileView(),
+      page: () => ConnectorProfileView(),
       binding: ConnectorProfileBinding(),
     ),
     GetPage(
       name: _Paths.ADD_KYC,
-      page: () =>  const AddKycView(),
+      page: () => const AddKycView(),
       binding: AddKycBinding(),
+    ),
+    GetPage(
+      name: Routes.MARKET_PLACE,
+      page: () => MarketPlaceView(),
+      binding: MarketPlaceBinding(),
+    ),
+    GetPage(
+      name: Routes.MARKET_PLACE,
+      page: () => MarketPlaceView(),
+      binding: MarketPlaceBinding(),
+    ),
+    GetPage(
+      name: Routes.DASHBOARD,
+      page: () => DashboardView(),
+      binding: DashboardBinding(),
+    ),
+    GetPage(
+      name: Routes.DASHABORD_MARKET_PLACE,
+      page: () => const DashboardMarketPlaceView(),
+      binding: DashboardMarketPlaceBinding(),
     ),
   ];
 }

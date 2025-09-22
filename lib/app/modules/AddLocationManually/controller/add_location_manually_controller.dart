@@ -53,33 +53,32 @@ class AddLocationController extends GetxController {
   //     }
   //   }
   // }
-  // 
-  
+  //
+
   void _handlePassedData() {
-  final arguments = Get.arguments;
-  if (arguments != null && arguments is Map<String, dynamic>) {
-    if (arguments.containsKey('id')) {
-      isEditing.value = true;
-      existingAddressId = arguments['id'];
+    final arguments = Get.arguments;
+    if (arguments != null && arguments is Map<String, dynamic>) {
+      if (arguments.containsKey('id')) {
+        isEditing.value = true;
+        existingAddressId = arguments['id'];
 
-      // pre-fill form
-      _prefillForm(arguments);
+        // pre-fill form
+        _prefillForm(arguments);
 
-      // set type (office / factory)
-      if (arguments['addressType']?.toLowerCase() == "office") {
-        selectedIndex.value = 0;
-      } else if (arguments['addressType']?.toLowerCase() == "factory") {
-        selectedIndex.value = 1;
+        // set type (office / factory)
+        if (arguments['addressType']?.toLowerCase() == "office") {
+          selectedIndex.value = 0;
+        } else if (arguments['addressType']?.toLowerCase() == "factory") {
+          selectedIndex.value = 1;
+        }
+      } else if (arguments.containsKey('address_line1')) {
+        _prefillForm(arguments);
+      } else if (arguments.containsKey('latitude') &&
+          arguments.containsKey('longitude')) {
+        _prefillFromLocation(arguments);
       }
-    } else if (arguments.containsKey('address_line1')) {
-      _prefillForm(arguments);
-    } else if (arguments.containsKey('latitude') &&
-        arguments.containsKey('longitude')) {
-      _prefillFromLocation(arguments);
     }
   }
-}
-
 
   void _prefillForm(Map<String, dynamic> addressData) {
     addressLine1Controller.text = addressData['address_line1'] ?? '';
@@ -121,69 +120,41 @@ class AddLocationController extends GetxController {
     super.onClose();
   }
 
-
-Future<void> submitLocation() async {
-  if (addressLine1Controller.text.trim().isEmpty ||
-      landmarkController.text.trim().isEmpty ||
-      cityController.text.trim().isEmpty ||
-      stateController.text.trim().isEmpty ||
-      pinCodeController.text.trim().isEmpty) {
-    SnackBars.errorSnackBar(content: 'Please fill all required fields');
-    return;
-  }
-
-  if (pinCodeController.text.trim().length != 6) {
-    SnackBars.errorSnackBar(content: 'Please enter a valid 6-digit pin code');
-    return;
-  }
-
-  isLoading.value = true;
-
-  try {
-    final arguments = Get.arguments;
-    double? latitude;
-    double? longitude;
-    if (arguments != null && arguments is Map<String, dynamic>) {
-      latitude = arguments['latitude']?.toDouble();
-      longitude = arguments['longitude']?.toDouble();
+  Future<void> submitLocation() async {
+    if (addressLine1Controller.text.trim().isEmpty ||
+        landmarkController.text.trim().isEmpty ||
+        cityController.text.trim().isEmpty ||
+        stateController.text.trim().isEmpty ||
+        pinCodeController.text.trim().isEmpty) {
+      SnackBars.errorSnackBar(content: 'Please fill all required fields');
+      return;
     }
 
-    Map<String, dynamic> response;
+    if (pinCodeController.text.trim().length != 6) {
+      SnackBars.errorSnackBar(content: 'Please enter a valid 6-digit pin code');
+      return;
+    }
 
-    final addressType = selectedIndex.value == 0 ? "office" : "factory";
-    final otherType = addressType == "office" ? "factory" : "office";
+    isLoading.value = true;
 
-    if (isEditing.value && existingAddressId != null) {
-      // Update only selected one
-      response = await _addressService.updateAddress(
-        addressId: existingAddressId!,
-        addressLine1: addressLine1Controller.text.trim(),
-        addressLine2: addressLine2Controller.text.trim(),
-        landmark: landmarkController.text.trim(),
-        city: cityController.text.trim(),
-        state: stateController.text.trim(),
-        pinCode: pinCodeController.text.trim(),
-        latitude: latitude,
-        longitude: longitude,
-        addressType: addressType,
-      );
-    } else {
-      // Always add selected one
-      response = await _addressService.addAddressManually(
-        addressLine1: addressLine1Controller.text.trim(),
-        addressLine2: addressLine2Controller.text.trim(),
-        landmark: landmarkController.text.trim(),
-        city: cityController.text.trim(),
-        state: stateController.text.trim(),
-        pinCode: pinCodeController.text.trim(),
-        latitude: latitude,
-        longitude: longitude,
-        addressType: addressType,
-      );
+    try {
+      final arguments = Get.arguments;
+      double? latitude;
+      double? longitude;
+      if (arguments != null && arguments is Map<String, dynamic>) {
+        latitude = arguments['latitude']?.toDouble();
+        longitude = arguments['longitude']?.toDouble();
+      }
 
-      // 🔥 Always add the other type as well (compulsory both)
-      if (response['success'] == true) {
-        await _addressService.addAddressManually(
+      Map<String, dynamic> response;
+
+      final addressType = selectedIndex.value == 0 ? "office" : "factory";
+      final otherType = addressType == "office" ? "factory" : "office";
+
+      if (isEditing.value && existingAddressId != null) {
+        // Update only selected one
+        response = await _addressService.updateAddress(
+          addressId: existingAddressId!,
           addressLine1: addressLine1Controller.text.trim(),
           addressLine2: addressLine2Controller.text.trim(),
           landmark: landmarkController.text.trim(),
@@ -192,27 +163,56 @@ Future<void> submitLocation() async {
           pinCode: pinCodeController.text.trim(),
           latitude: latitude,
           longitude: longitude,
-          addressType: otherType,
+          addressType: addressType,
+        );
+      } else {
+        // Always add selected one
+        response = await _addressService.addAddressManually(
+          addressLine1: addressLine1Controller.text.trim(),
+          addressLine2: addressLine2Controller.text.trim(),
+          landmark: landmarkController.text.trim(),
+          city: cityController.text.trim(),
+          state: stateController.text.trim(),
+          pinCode: pinCodeController.text.trim(),
+          latitude: latitude,
+          longitude: longitude,
+          addressType: addressType,
+        );
+
+        // 🔥 Always add the other type as well (compulsory both)
+        if (response['success'] == true) {
+          await _addressService.addAddressManually(
+            addressLine1: addressLine1Controller.text.trim(),
+            addressLine2: addressLine2Controller.text.trim(),
+            landmark: landmarkController.text.trim(),
+            city: cityController.text.trim(),
+            state: stateController.text.trim(),
+            pinCode: pinCodeController.text.trim(),
+            latitude: latitude,
+            longitude: longitude,
+            addressType: otherType,
+          );
+        }
+      }
+
+      if (response['success'] == true) {
+        locationAdded.value = true;
+        await _fetchAndStoreAddressData();
+        await Future.delayed(const Duration(seconds: 2));
+
+        Get.offAllNamed(Routes.DASHBOARD);
+      } else {
+        locationAdded.value = false;
+        SnackBars.errorSnackBar(
+          content: response['message'] ?? 'Failed to save address',
         );
       }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error saving address: $e');
+    } finally {
+      isLoading.value = false;
     }
-
-    if (response['success'] == true) {
-      locationAdded.value = true;
-      await _fetchAndStoreAddressData();
-      await Future.delayed(const Duration(seconds: 2));
-
-      Get.offAllNamed(Routes.MAIN);
-    } else {
-      locationAdded.value = false;
-      SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to save address');
-    }
-  } catch (e) {
-    SnackBars.errorSnackBar(content: 'Error saving address: $e');
-  } finally {
-    isLoading.value = false;
   }
-}
 
   // Future<void> submitLocation() async {
   //   if (addressLine1Controller.text.trim().isEmpty ||
@@ -303,8 +303,7 @@ Future<void> submitLocation() async {
   //   }
   // }
 
-
-    Future<void> fetchAddresses() async {
+  Future<void> fetchAddresses() async {
     try {
       isLoading.value = true;
       final response = await _addressService.getProfile();

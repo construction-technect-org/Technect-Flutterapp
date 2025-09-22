@@ -4,7 +4,6 @@ import 'package:construction_technect/app/modules/profile/components/add_certifi
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:gap/gap.dart';
-import 'package:construction_technect/app/core/widgets/custom_dotted_border.dart';
 
 class CertificationsComponent extends StatelessWidget {
   const CertificationsComponent({this.isDelete});

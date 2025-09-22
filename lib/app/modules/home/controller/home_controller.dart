@@ -84,8 +84,8 @@ class HomeController extends GetxController {
 
     final completionPercentage =
         merchantProfile?.profileCompletionPercentage ??
-            connectorProfile?.profileCompletionPercentage ??
-            0;
+        connectorProfile?.profileCompletionPercentage ??
+        0;
 
     if (merchantProfile != null || connectorProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
@@ -98,7 +98,6 @@ class HomeController extends GetxController {
       _showProfileCompletionDialog();
     }
   }
-
 
   void _showProfileCompletionDialog() {
     if (Get.isDialogOpen == true) {
@@ -160,7 +159,11 @@ class HomeController extends GetxController {
   void _handleProfileDialogTap() {
     final role = profileData.value.data?.user?.roleName;
 
-    final bool isPartner = role?.toLowerCase() == "merchant" || role?.toLowerCase() == "civil engineer" || role?.toLowerCase() == "architect" || role?.toLowerCase() == "designer";
+    final bool isPartner =
+        role?.toLowerCase() == "merchant" ||
+        role?.toLowerCase() == "civil engineer" ||
+        role?.toLowerCase() == "architect" ||
+        role?.toLowerCase() == "designer";
     if (isPartner == true) {
       Get.toNamed(Routes.PROFILE);
     } else {
