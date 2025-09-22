@@ -20,6 +20,8 @@ import 'package:construction_technect/app/modules/ConnectionInbox/bindings/conne
 import 'package:construction_technect/app/modules/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/bindings/add_kyc_binding.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/views/add_kyc_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/bindings/Connector_add_location_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/views/connector_add_location_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
@@ -232,7 +234,7 @@ class AppPages {
     // Connector
     GetPage(
       name: _Paths.MAIN_TAB,
-      page: () => const MainTab(),
+      page: () =>  const MainTab(),
       binding: MainTabBinding(),
     ),
     GetPage(
@@ -285,6 +287,10 @@ class AppPages {
       page: () =>  ConnectorProductDetailsView(),
       binding: ConnectorProductDetailsBindings(),
     ),
-     
+      GetPage(
+      name: Routes.CONNECTOR_ADD_LOCATION,
+      page: () =>  ConnectorAddLocationView(),
+      binding: ConnectorAddLocationBinding(),
+    ),
   ];
 }

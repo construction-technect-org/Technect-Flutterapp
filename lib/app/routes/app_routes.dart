@@ -44,7 +44,9 @@ abstract class Routes {
   static const CONNECTOR_PROFILE = _Paths.CONNECTOR_PROFILE;
   static const ADD_KYC = _Paths.ADD_KYC;
   static const CONNECTOR_PRODUCT_DETAILS = _Paths.CONNECTOR_PRODUCT_DETAILS;
-}
+  static const CONNECTOR_ADD_LOCATION = _Paths.CONNECTOR_ADD_LOCATION;
+}  
+
 
 abstract class _Paths {
   _Paths._();
@@ -89,4 +91,6 @@ abstract class _Paths {
   static const CONNECTOR_PROFILE = '/connector-profile';
   static const ADD_KYC = '/add-kyc';
   static const CONNECTOR_PRODUCT_DETAILS = '/connector-product-details';
+  static const CONNECTOR_ADD_LOCATION = '/connector-add-location';
+
 }
