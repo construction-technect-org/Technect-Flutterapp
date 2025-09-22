@@ -1,5 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-
 import 'package:construction_technect/app/modules/DashboardMarketPlace/controllers/market_place_controller.dart';
 
 class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
@@ -151,7 +150,8 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
           child: RoundedButton(
             buttonName: 'PROCEED',
             onTap: () {
-              Get.toNamed(Routes.MAIN);
+               Get.toNamed(Routes.MAIN_TAB);
+             
             },
           ),
         ),
