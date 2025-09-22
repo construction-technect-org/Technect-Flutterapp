@@ -61,6 +61,8 @@ class Asset {
   static const String pendingIcon = 'assets/images/pending.png';
   static const String notifications = 'assets/images/notification.svg';
   static const String worldMap = 'assets/images/worldMap.png';
+  static const String wishlistM = 'assets/images/WishlistM.png';
+
 
   // 📦 Business modules (new)
   static const String marketplaceIcon = 'assets/images/marketpalce.png';

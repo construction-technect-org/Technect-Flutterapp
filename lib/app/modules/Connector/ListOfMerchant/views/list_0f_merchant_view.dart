@@ -259,10 +259,10 @@ class ListOfMerchantView extends GetView<ListOfMerchantController> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        // Get.toNamed(
-                        //   Routes.PRODUCT_DETAILS,
-                        //   arguments: {"product": product},
-                        // );
+                        Get.toNamed(
+                          Routes.CONNECTOR_PRODUCT_DETAILS,
+                          // arguments: {"product": product},
+                        );
                       },
                       child: const ConnectorProductCard(
                         statusText: 'Active',

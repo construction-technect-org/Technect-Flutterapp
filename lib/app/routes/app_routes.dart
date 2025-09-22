@@ -43,6 +43,7 @@ abstract class Routes {
   static const LIST_OF_MERCHANT = _Paths.LIST_OF_MERCHANT;
   static const CONNECTOR_PROFILE = _Paths.CONNECTOR_PROFILE;
   static const ADD_KYC = _Paths.ADD_KYC;
+  static const CONNECTOR_PRODUCT_DETAILS = _Paths.CONNECTOR_PRODUCT_DETAILS;
 }
 
 abstract class _Paths {
@@ -87,4 +88,5 @@ abstract class _Paths {
   static const LIST_OF_MERCHANT = '/List-of_merchant';
   static const CONNECTOR_PROFILE = '/connector-profile';
   static const ADD_KYC = '/add-kyc';
+  static const CONNECTOR_PRODUCT_DETAILS = '/connector-product-details';
 }

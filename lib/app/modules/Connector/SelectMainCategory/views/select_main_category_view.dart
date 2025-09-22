@@ -23,10 +23,10 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        backgroundColor: MyColors.white,
+      backgroundColor: MyColors.backgroundColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Row(
@@ -105,13 +105,7 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
                   decoration: BoxDecoration(
                     color: MyColors.white,
                     borderRadius: BorderRadius.circular(22.5),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x1A000000),
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
+                    
                   ),
                   child: TextField(
                     onChanged: (value) {},

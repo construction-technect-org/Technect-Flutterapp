@@ -26,7 +26,7 @@ class CommonButton extends StatelessWidget {
     this.width = 100,
     this.height = 40,
     this.backgroundColor = MyColors.primary,
-    this.borderRadius = 20,
+    this.borderRadius = 22.5,
     this.textSize = 14,
     this.textColor = Colors.white,
     this.iconColor = Colors.white,

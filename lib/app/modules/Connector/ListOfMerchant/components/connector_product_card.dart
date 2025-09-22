@@ -208,10 +208,80 @@ class ConnectorProductCard extends StatelessWidget {
                             fontFamily: MyTexts.Roboto,
                           ),
                         onPressed: () {
-                        // Get.toNamed(
-                        //   Routes.PRODUCT_DETAILS,
-                        //   // arguments: {"product": product},
-                        // );
+                          showDialog(
+                                      context: context,
+                                      barrierDismissible:
+                                          false, // prevent dismiss on tap outside
+                                      builder: (BuildContext context) {
+                                        return Dialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(16),
+                                          ),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(20),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(16),
+                                              color: Colors.white,
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                SizedBox(
+                                                  height: 120,
+                                                  child: Image.asset(
+                                                    Asset.connectToCrm,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 2.h),
+                    
+                                                Text(
+                                                  "Connect to CRM!",
+                                                  style: MyTexts.extraBold20.copyWith(
+                                                    color: MyColors.primary,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                SizedBox(height: 1.h),
+                                                Text(
+                                                  "To Proceed with your request, please connect to CRM.",
+                                                  style: MyTexts.regular16.copyWith(
+                                                    color: MyColors.dopelyColors,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                const SizedBox(height: 24),
+                                                Center(
+                                                  child: RoundedButton(
+                                                    onTap: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    buttonName: '',
+                                                    borderRadius: 12,
+                                                    width: 40.w,
+                                                    height: 45,
+                                                    verticalPadding: 0,
+                                                    horizontalPadding: 0,
+                                                    color: MyColors.lightBlue,
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Proceed',
+                                                        style: MyTexts.medium16.copyWith(
+                                                          color: MyColors.white,
+                                                          fontFamily: MyTexts.Roboto,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    
+                                 
+                        );
                         },
                       ),
                     ),

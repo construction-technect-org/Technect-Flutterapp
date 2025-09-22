@@ -10,11 +10,11 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
         forceMaterialTransparency: true,
         automaticallyImplyLeading: false,
-        backgroundColor: MyColors.white,
+        backgroundColor: MyColors.backgroundColor,
         elevation: 0,
         title: Row(
           children: [
@@ -84,13 +84,6 @@ class HomeView extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: MyColors.white,
                   borderRadius: BorderRadius.circular(22.5),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x1A000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
                 ),
                 child: TextField(
                   decoration: InputDecoration(
@@ -137,47 +130,71 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 1.h),
 
             // Features grid
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: controller.items.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.8,
-                ),
-                itemBuilder: (context, index) {
-                  final item = controller.items[index];
-                  return GestureDetector(
-                    onTap: () {
-                      controller.selectedIndex.value = index;
-                      if (item['title'] == "Marketplace") {
-                        Get.toNamed(Routes.CONNECTOR_MARKET_PLACE);
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFED29),
-                        borderRadius: BorderRadius.circular(8),
+            Container(
+              decoration: BoxDecoration(
+                color: MyColors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Dynamically calculate item width
+                    final double itemWidth =
+                        (constraints.maxWidth - (3 * 10)) / 3; // 4 per row with spacing
+                    final double itemHeight = itemWidth + 10; // for icon + text
+
+                    return GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: controller.items.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: itemWidth / itemHeight,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(item['icon'], height: 40),
-                          const SizedBox(height: 6),
-                          Text(
-                            item["title"],
-                            textAlign: TextAlign.center,
-                            style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                      itemBuilder: (context, index) {
+                        final item = controller.items[index];
+                        // final isSelected =
+                        //     controller.selectedIndex.value == index;
+
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectedIndex.value = index;
+                            if (item['title'] == "Marketplace") {
+                              Get.toNamed(Routes.CONNECTOR_MARKET_PLACE);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFED29),
+
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  item['icon'],
+                                  height: itemWidth * 0.35, // responsive icon size
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  item["title"],
+                                  textAlign: TextAlign.center,
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.fontBlack,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
 
