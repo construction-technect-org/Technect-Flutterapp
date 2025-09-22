@@ -130,6 +130,7 @@ class AddressView extends GetView<AddressController> {
                           padding: EdgeInsets.symmetric(horizontal: 1.h),
                           child: ListTile(
                             onTap: () {
+                              controller.place.value = null;
                               controller.navigateToManualAddress();
                             },
                             leading: const Icon(
@@ -141,7 +142,7 @@ class AddressView extends GetView<AddressController> {
                               "Add Location Manually",
                               style: MyTexts.regular16.copyWith(
                                 color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto
+                                fontFamily: MyTexts.Roboto,
                               ),
                             ),
                             trailing: const Icon(
@@ -153,14 +154,26 @@ class AddressView extends GetView<AddressController> {
 
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 2.h),
-                          child: Divider(height: 0.1.h, thickness: 0.5,color: MyColors.black.withValues(alpha: 0.5),),
+                          child: Divider(
+                            height: 0.1.h,
+                            thickness: 0.5,
+                            color: MyColors.black.withValues(alpha: 0.5),
+                          ),
                         ),
 
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 1.h),
                           child: ListTile(
                             onTap: () {
-                              controller.useCurrentLocation();
+                              if (controller.currentAddress.isNotEmpty) {
+                                controller.place.value = controller.place2;
+                                controller.navigateToManualAddress();
+                              } else {
+                                controller.useCurrentLocation().then((val) {
+                                  controller.place.value = controller.place2;
+                                  controller.navigateToManualAddress();
+                                });
+                              }
                             },
                             leading: const Icon(
                               Icons.my_location,
@@ -170,8 +183,8 @@ class AddressView extends GetView<AddressController> {
                             title: Text(
                               "Use your Current Location",
                               style: MyTexts.regular16.copyWith(
-                                  color: MyColors.fontBlack,
-                                  fontFamily: MyTexts.Roboto
+                                color: MyColors.fontBlack,
+                                fontFamily: MyTexts.Roboto,
                               ),
                             ),
                           ),
