@@ -36,9 +36,8 @@ class MainTabBarView extends GetView<MainController> {
                   onTap: () {},
                 ),
               )
-            : Container(
+            : ColoredBox(
                 color: MyColors.primary,
-                height: 74,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 6.0),
                   child: Theme(
@@ -57,9 +56,7 @@ class MainTabBarView extends GetView<MainController> {
                       currentIndex: controller.currentIndex.value,
                       onTap: controller.changeTab,
                       selectedItemColor: MyColors.white,
-                      unselectedItemColor: MyColors.white.withValues(
-                        alpha: 0.25,
-                      ),
+                      unselectedItemColor: MyColors.white.withValues(alpha: 0.25),
                       selectedLabelStyle: MyTexts.medium13.copyWith(
                         color: MyColors.white,
                       ),
@@ -117,7 +114,8 @@ class MainTabBarView extends GetView<MainController> {
                             ),
                           ),
                           label: 'Support',
-                        ),  BottomNavigationBarItem(
+                        ),
+                        BottomNavigationBarItem(
                           icon: Padding(
                             padding: const EdgeInsets.only(bottom: 4.0),
                             child: SvgPicture.asset(
