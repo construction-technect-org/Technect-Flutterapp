@@ -1,14 +1,16 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/welcome_name.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/product_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/controllers/product_management_controller.dart';
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
-import 'package:construction_technect/app/modules/location/controllers/location_controller.dart';
-import 'package:construction_technect/app/modules/location/views/location_view.dart';
+import 'package:gap/gap.dart';
 
 class ProductManagementView extends StatelessWidget {
-  final ProductManagementController controller = Get.put(ProductManagementController());
+  final ProductManagementController controller = Get.put(
+    ProductManagementController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +20,11 @@ class ProductManagementView extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar: AppBar(
-          backgroundColor: MyColors.white,
-          elevation: 0,
-          scrolledUnderElevation: 0.0,
-          title: WelcomeName(),
+        appBar: CommonAppBar(
+          isCenter: false,
+          leading: const SizedBox(),
+          leadingWidth: 0,
+          title: const Text("PRODUCT MANAGEMENT"),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -31,139 +33,202 @@ class ProductManagementView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: MyColors.white,
-                      borderRadius: BorderRadius.circular(22.5),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x1A000000),
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: TextField(
-                      onChanged: (value) {
-                        controller.searchProduct(value);
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.only(left: 18, right: 8),
-                          child: SvgPicture.asset(
-                            Asset.searchIcon,
-                            height: 16,
-                            width: 16,
-                          ),
-                        ),
-                        prefixIconConstraints: const BoxConstraints(
-                          minWidth: 36,
-                          minHeight: 36,
-                        ),
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Column(
+                    children: [
+                      CommonTextField(
+                        onChange: (value) {
+                          controller.searchProduct(value ?? "");
+                        },
+                        borderRadius: 22,
                         hintText: 'Search',
-                        hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
-                        filled: true,
-                        fillColor: MyColors.white,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 12,
+                        suffixIcon: SvgPicture.asset(
+                          Asset.filterIcon,
+                          height: 20,
+                          width: 20,
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(22.5),
-                          borderSide: BorderSide.none,
-                        ),
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.all(14),
-                          child: SvgPicture.asset(
-                            Asset.filterIcon,
-                            height: 20,
-                            width: 20,
-                          ),
+                        prefixIcon: SvgPicture.asset(
+                          Asset.searchIcon,
+                          height: 16,
+                          width: 16,
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 16),
+                      Column(
+                        children: [
+                          Container(
+                            height: 135,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: MyColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: MyColors.black,
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 8,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        SvgPicture.asset(Asset.noOfConectors),
+                                        const Gap(10),
+                                        Text(
+                                          "Total Products",
+                                          style: MyTexts.regular14.copyWith(
+                                            color: MyColors.black,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                        Text(
+                                          "123",
+                                          style: MyTexts.bold16.copyWith(
+                                            color: MyColors.fontBlack,
+                                          ),
+                                        ),
+                                        const Gap(10),
+                                        Text(
+                                          "Active Products",
+                                          style: MyTexts.regular14.copyWith(
+                                            color: MyColors.black,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                        Text(
+                                          "122.4K",
+                                          style: MyTexts.bold16.copyWith(
+                                            color: MyColors.green,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const Gap(12),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: MyColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: MyColors.americanSilver,
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 8,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        const Gap(10),
+                                        SvgPicture.asset(Asset.warning),
+                                        const Gap(10),
+                                        Text(
+                                          "Low Stock",
+                                          style: MyTexts.regular16.copyWith(
+                                            color: MyColors.gray53,
+                                            fontFamily: MyTexts.Roboto,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                        Text(
+                                          "04",
+                                          style: MyTexts.bold20.copyWith(
+                                            color: MyColors.redgray,
+                                            fontFamily: MyTexts.Roboto,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const Gap(12),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: MyColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: MyColors.americanSilver,
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 8,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        const Gap(10),
+                                        Text(
+                                          "Interest Products",
+                                          style: MyTexts.regular14.copyWith(
+                                            color: MyColors.black,
+                                            fontFamily: MyTexts.Roboto,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const Gap(15),
+                                        Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            const SizedBox(
+                                              width: 55,
+                                              height: 55,
+                                              child: CircularProgressIndicator(
+                                                value: 0.56,
+                                                strokeWidth: 8,
+                                                backgroundColor: MyColors.profileRemaining,
+                                                valueColor: AlwaysStoppedAnimation<Color>(
+                                                  MyColors.redgray,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              '56%',
+                                              style: MyTexts.medium16.copyWith(
+                                                color: MyColors.black,
+                                                fontFamily: MyTexts.Roboto,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-
-                SizedBox(height: 1.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Text(
-                    "Product Management",
-                    style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Obx(
-                    () => Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: StatCard(
-                                title: 'Total Products',
-                                value:
-                                    '${controller.productModel.value.data?.statistics?.totalProducts ?? 0}',
-                                icon: SvgPicture.asset(Asset.TotalProducts),
-                                iconBackground: MyColors.yellowundertones,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: StatCard(
-                                title: 'Featured',
-                                value:
-                                    '${controller.productModel.value.data?.statistics?.featured ?? 0}',
-                                icon: SvgPicture.asset(Asset.Featured),
-                                iconBackground: MyColors.verypaleBlue,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 1.h),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: StatCard(
-                                title: 'Low Stock',
-                                value:
-                                    '${controller.productModel.value.data?.statistics?.lowStock ?? 0}',
-                                icon: SvgPicture.asset(Asset.LowStock),
-                                iconBackground: MyColors.paleRed,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: StatCard(
-                                title: 'Total Interests',
-                                value:
-                                    '${controller.productModel.value.data?.statistics?.totalInterests ?? 0}',
-                                icon: SvgPicture.asset(Asset.TotalInterests),
-                                iconBackground: MyColors.warmOrange,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 16),
                 Obx(
                   () => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child:
-                        controller.filteredProducts.isEmpty &&
-                            controller.searchQuery.value.isNotEmpty
+                        (controller.filteredProducts.isEmpty &&
+                            controller.searchQuery.value.isNotEmpty)
                         ? Center(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.h),
                               child: Column(
                                 children: [
+                                  const Gap(20),
                                   const Icon(
                                     Icons.search_off,
                                     size: 64,
@@ -189,11 +254,14 @@ class ProductManagementView extends StatelessWidget {
                           )
                         : ListView.separated(
                             shrinkWrap: true,
+                            padding: const EdgeInsets.symmetric(vertical: 20),
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: controller.filteredProducts.length,
-                            separatorBuilder: (_, _) => const SizedBox(height: 12),
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: 12),
                             itemBuilder: (context, index) {
-                              final Product product = controller.filteredProducts[index];
+                              final Product product =
+                                  controller.filteredProducts[index];
                               return GestureDetector(
                                 onTap: () {
                                   Get.toNamed(
@@ -211,7 +279,9 @@ class ProductManagementView extends StatelessWidget {
                                   productName: product.productName ?? '',
                                   brandName: product.brand ?? '',
                                   locationText: 'Vasai Virar, Mahab Chowpatty',
-                                  pricePerUnit: double.parse(product.price ?? '0'),
+                                  pricePerUnit: double.parse(
+                                    product.price ?? '0',
+                                  ),
                                   stockCount: product.stockQuantity ?? 0,
                                   imageUrl: product.productImage,
                                 ),
@@ -221,32 +291,30 @@ class ProductManagementView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 2.h),
-                Center(
-                  child: RoundedButton(
-                    onTap: () {
-                      Get.to(() {
-                        Get.put(LocationController()); // inject controller
-                        return const LocationView();
-                      });
-                    },
-                    buttonName: '',
-                    borderRadius: 12,
-                    width: 50.w,
-                    height: 45,
-                    verticalPadding: 0,
-                    horizontalPadding: 0,
-                    child: Center(
-                      child: Text(
-                        '+ Add New Product',
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.white,
-                          fontFamily: MyTexts.Roboto,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 10),
+          child: RoundedButton(
+            onTap: () {
+              Get.toNamed(Routes.ADD_PRODUCT);
+            },
+            buttonName: '',
+            borderRadius: 12,
+            width: 50,
+            height: 45,
+            verticalPadding: 0,
+            horizontalPadding: 0,
+            child: Center(
+              child: Text(
+                '+ Add Product',
+                style: MyTexts.medium16.copyWith(
+                  color: MyColors.white,
+                  fontFamily: MyTexts.Roboto,
+                ),
+              ),
             ),
           ),
         ),

@@ -42,282 +42,302 @@ class HomeView extends StatelessWidget {
             ),
           ),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18.0,
-                    vertical: 16,
-                  ),
-                  child: Row(
-                    children: [
-                      Image.asset(Asset.profil, height: 40, width: 40),
-                      SizedBox(width: 1.h),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Obx(
-                            () => Text(
-                              'Welcome ${controller.profileData.value.data?.user?.firstName}!',
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              // Condition check
-                              if (controller.getCurrentAddress().isNotEmpty) {
-                                // Navigate to SavedAddressesView
-                                Get.to(() => const SavedAddressesView());
-                              } else {
-                                // No address → stay on same screen or show info
-                                Get.snackbar(
-                                  "No Address",
-                                  "Please add an address first",
-                                  snackPosition: SnackPosition.BOTTOM,
-                                );
-                              }
-                            },
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  Asset.location,
-                                  width: 9,
-                                  height: 12.22,
-                                ),
-                                SizedBox(width: 0.4.h),
-                                Obx(
-                                  () => Text(
-                                    controller.getCurrentAddress(),
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.textFieldBackground,
-                                      fontFamily: MyTexts.Roboto,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                const Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 16,
-                                  color: Colors.black54,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: MyColors.grayD4),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          // 👈 allows badge to overflow
-                          children: [
-                            SvgPicture.asset(
-                              Asset.notifications,
-                              // or 'assets/images/notifications.svg'
-                              width: 18,
-                              height: 18,
-                            ),
-                            Positioned(
-                              right: 0,
-                              top: 3,
-                              child: Container(
-                                width: 6.19,
-                                height: 6.19,
-                                decoration: const BoxDecoration(
-                                  color: MyColors.red,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 0.8.h),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: MyColors.grayD4),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            SvgPicture.asset(
-                              Asset.warning,
-                              width: 18,
-                              height: 18,
-                              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-                            ),
-                            Positioned(
-                              right: 0,
-                              top: 3,
-                              child: Container(
-                                width: 6.19,
-                                height: 6.19,
-                                decoration: const BoxDecoration(
-                                  color: MyColors.red,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 1.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+                vertical: 16,
+              ),
+              child: Row(
+                children: [
+                  Image.asset(Asset.profil, height: 40, width: 40),
+                  SizedBox(width: 1.h),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      HearderText(text: "Statics"),
-                      const Gap(14),
-                      SizedBox(
-                        height: 93,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildStatCard(
-                                "Total Partners",
-                                "123.4K",
-                                Asset.noOfPartner,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildStatCard(
-                                "Total Products",
-                                "123.4K",
-                                Asset.noOfConectors,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-
-                            Expanded(
-                              child: _buildStatCard(
-                                "Total Connectors",
-                                "250",
-                                Asset.noOfUsers,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Gap(14),
-                      HearderText(text: "Notification"),
-                      const Gap(14),
-                      SizedBox(
-                        height: 100,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildNotiCard(
-                                title: "Support Ticket",
-                                value: "04",
-                                icon: Asset.warning,
-                                color: MyColors.redgray,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildNotiCard(
-                                title: "Inbox",
-                                value: "02",
-                                icon: Asset.thumbup,
-                                color: MyColors.warning,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Gap(14),
-                      HearderText(text: "Quick Access"),
-                      const Gap(14),
-                      Container(
-                        padding: const EdgeInsets.all(18),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: MyColors.gray5D,width: 0.5),
-                        ),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: controller.items.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                mainAxisSpacing: 20,
-                                crossAxisSpacing: 12,
-                                childAspectRatio: 1.4,
-                              ),
-                          itemBuilder: (context, index) {
-                            final item = controller.items[index];
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SvgPicture.asset(
-                                  item['icon'],
-                                  height: 28,
-                                  width: 28,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  item['title'],
-                                  textAlign: TextAlign.center,
-                                  style: MyTexts.regular14.copyWith(
-                                    color: MyColors.textFieldBackground,
-                                    fontFamily: MyTexts.Roboto,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      const Gap(14),
-                      Row(
-                        children: [
-                          HearderText(text: "Active Team"),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Text(
-                              "View All",
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.gray5D,
-                              ),
-                            ),
+                      Obx(
+                        () => Text(
+                          'Welcome ${controller.profileData.value.data?.user?.firstName}!',
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.fontBlack,
+                            fontFamily: MyTexts.Roboto,
                           ),
-                        ],
+                        ),
                       ),
-                      const Gap(14),
-                      ListView.builder(
-                        itemCount: controller.teamList.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return const Text("data");
+                      GestureDetector(
+                        onTap: () {
+                          // Condition check
+                          if (controller.getCurrentAddress().isNotEmpty) {
+                            // Navigate to SavedAddressesView
+                            Get.to(() => const SavedAddressesView());
+                          } else {
+                            // No address → stay on same screen or show info
+                            Get.snackbar(
+                              "No Address",
+                              "Please add an address first",
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          }
                         },
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              Asset.location,
+                              width: 9,
+                              height: 12.22,
+                            ),
+                            SizedBox(width: 0.4.h),
+                            Obx(
+                              () => Text(
+                                controller.getCurrentAddress(),
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.textFieldBackground,
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(
+                              Icons.keyboard_arrow_down,
+                              size: 16,
+                              color: Colors.black54,
+                            ),
+                          ],
+                        ),
                       ),
-                      const Gap(14),
                     ],
                   ),
-                ),
-              ],
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: MyColors.grayD4),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      // 👈 allows badge to overflow
+                      children: [
+                        SvgPicture.asset(
+                          Asset.notifications,
+                          // or 'assets/images/notifications.svg'
+                          width: 18,
+                          height: 18,
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 3,
+                          child: Container(
+                            width: 6.19,
+                            height: 6.19,
+                            decoration: const BoxDecoration(
+                              color: MyColors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 0.8.h),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: MyColors.grayD4),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        SvgPicture.asset(
+                          Asset.warning,
+                          width: 18,
+                          height: 18,
+                          colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 3,
+                          child: Container(
+                            width: 6.19,
+                            height: 6.19,
+                            decoration: const BoxDecoration(
+                              color: MyColors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+           Expanded(
+             child: SingleChildScrollView(
+               child: Column(
+                 children: [
+                   SizedBox(height: 1.h),
+                   Padding(
+                     padding: const EdgeInsets.symmetric(horizontal: 16),
+                     child: Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       children: [
+                         HearderText(text: "Statics"),
+                         const Gap(14),
+                         SizedBox(
+                           height: 93,
+                           child: Row(
+                             children: [
+                               Expanded(
+                                 child: _buildStatCard(
+                                   "Total Partners",
+                                   "123.4K",
+                                   Asset.noOfPartner,
+                                 ),
+                               ),
+                               const SizedBox(width: 12),
+                               Expanded(
+                                 child: _buildStatCard(
+                                   "Total Products",
+                                   "123.4K",
+                                   Asset.noOfConectors,
+                                 ),
+                               ),
+                               const SizedBox(width: 12),
+               
+                               Expanded(
+                                 child: _buildStatCard(
+                                   "Total Connectors",
+                                   "250",
+                                   Asset.noOfUsers,
+                                 ),
+                               ),
+                             ],
+                           ),
+                         ),
+                         const Gap(14),
+                         HearderText(text: "Notification"),
+                         const Gap(14),
+                         SizedBox(
+                           height: 100,
+                           child: Row(
+                             children: [
+                               Expanded(
+                                 child: _buildNotiCard(
+                                   title: "Support Ticket",
+                                   value: "04",
+                                   icon: Asset.warning,
+                                   color: MyColors.redgray,
+                                 ),
+                               ),
+                               const SizedBox(width: 12),
+                               Expanded(
+                                 child: _buildNotiCard(
+                                   title: "Inbox",
+                                   value: "02",
+                                   icon: Asset.thumbup,
+                                   color: MyColors.warning,
+                                 ),
+                               ),
+                             ],
+                           ),
+                         ),
+                         const Gap(14),
+                         HearderText(text: "Quick Access"),
+                         const Gap(14),
+                         Container(
+                           padding: const EdgeInsets.all(18),
+                           decoration: BoxDecoration(
+                             borderRadius: BorderRadius.circular(12),
+                             border: Border.all(color: MyColors.gray5D,width: 0.5),
+                           ),
+                           child: GridView.builder(
+                             shrinkWrap: true,
+                             physics: const NeverScrollableScrollPhysics(),
+                             itemCount: controller.items.length,
+                             gridDelegate:
+                             const SliverGridDelegateWithFixedCrossAxisCount(
+                               crossAxisCount: 4,
+                               mainAxisSpacing: 20,
+                               crossAxisSpacing: 12,
+                               childAspectRatio: 1.4,
+                             ),
+                             itemBuilder: (context, index) {
+                               final item = controller.items[index];
+                               return Column(
+                                 mainAxisSize: MainAxisSize.min,
+                                 children: [
+                                   SvgPicture.asset(
+                                     item['icon'],
+                                     height: 28,
+                                     width: 28,
+                                   ),
+                                   const SizedBox(height: 8),
+                                   Text(
+                                     item['title'],
+                                     textAlign: TextAlign.center,
+                                     style: MyTexts.regular14.copyWith(
+                                       color: MyColors.textFieldBackground,
+                                       fontFamily: MyTexts.Roboto,
+                                     ),
+                                   ),
+                                 ],
+                               );
+                             },
+                           ),
+                         ),
+                         const Gap(14),
+                         Row(
+                           children: [
+                             HearderText(text: "Active Team"),
+                             const Spacer(),
+                             GestureDetector(
+                               onTap: () {},
+                               child: Text(
+                                 "View All",
+                                 style: MyTexts.medium14.copyWith(
+                                   color: MyColors.gray5D,
+                                 ),
+                               ),
+                             ),
+                           ],
+                         ),
+                         const Gap(14),
+                       ],
+                     ),
+                   ),
+                   SizedBox(
+                     height: 120,
+                     child: ListView.builder(
+                       itemCount: 5,
+                       padding: const EdgeInsets.symmetric(horizontal: 18),
+                       scrollDirection: Axis.horizontal,
+                       shrinkWrap: true,
+                       itemBuilder: (context, index) {
+                         return Container(
+                           width: 100,
+                           child: Column(
+                             children: [
+                               ClipRRect(
+                                   borderRadius: BorderRadius.circular(100),
+                                   child: Image.asset(Asset.aTeam,height: 67,width: 67,)),
+                               const Gap(12),
+                               Text("Mohan Sau",style: MyTexts.medium14.copyWith(color: MyColors.gray32),)
+                             ],
+                           ),
+                         );
+                       },
+                     ),
+                   ),
+                   const Gap(14),
+                 ],
+               ),
+             ),
+           )
+          ],
         ),
       ),
     );

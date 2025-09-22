@@ -115,7 +115,7 @@ class CommonTextField extends StatelessWidget {
           decoration: InputDecoration(
             prefixIcon: prefixIcon != null
                 ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal:  16),
               child: prefixIcon,
             )
                 : null,
@@ -127,19 +127,19 @@ class CommonTextField extends StatelessWidget {
                 : null,
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: MyColors.textFieldBorder),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(borderRadius??10),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: MyColors.black),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(borderRadius??10),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.red, width: 1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(borderRadius??10),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(borderRadius??10),
             ),
             isDense: true,
             filled: true,

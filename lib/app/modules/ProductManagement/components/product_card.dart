@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:gap/gap.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -125,15 +126,37 @@ class ProductCard extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Brand: ',
+                              text: 'Company: ',
                               style: MyTexts.regular14.copyWith(
                                 color: MyColors.primary,
+                                fontFamily: MyTexts.Roboto,
                               ),
                             ),
                             TextSpan(
-                              text: brandName,
+                              text: companyName ?? "-",
                               style: MyTexts.regular14.copyWith(
                                 color: MyColors.primary,
+                                fontFamily: MyTexts.Roboto,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Brand: ',
+                              style: MyTexts.regular14.copyWith(
+                                color: MyColors.primary,
+                                fontFamily: MyTexts.Roboto,
+                              ),
+                            ),
+                            TextSpan(
+                              text: brandName??"-",
+                              style: MyTexts.regular14.copyWith(
+                                color: MyColors.primary,
+                                fontFamily: MyTexts.Roboto,
                               ),
                             ),
                           ],
@@ -144,38 +167,48 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 0.8.h),
+           const Gap(11),
             Row(
               children: [
                 const Icon(
-                  Icons.place_outlined,
+                  Icons.location_on,
                   size: 16,
-                  color: Color(0xFF6B7280),
+                  color: MyColors.graniteg,
                 ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     locationText,
-                    style: MyTexts.regular14.copyWith(color: MyColors.graniteg),
+                    style: MyTexts.regular14.copyWith(
+                      color: MyColors.graniteg,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
                 ),
               ],
             ),
             Text(
               '₹ ${pricePerUnit.toStringAsFixed(2)}/unit',
-              style: MyTexts.extraBold20.copyWith(color: MyColors.primary),
+              style: MyTexts.extraBold20.copyWith(
+                color: MyColors.primary,
+                fontFamily: MyTexts.Roboto,
+              ),
             ),
             RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
                     text: 'In Stock: ',
-                    style: MyTexts.regular14.copyWith(color: MyColors.silver),
+                    style: MyTexts.regular14.copyWith(
+                      color: MyColors.silver,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
                   TextSpan(
                     text: '45',
                     style: MyTexts.regular14.copyWith(
-                      color: MyColors.fontBlack,
+                      color: MyColors.black,
+                      fontFamily: MyTexts.Roboto,
                     ),
                   ),
                 ],
@@ -187,7 +220,11 @@ class ProductCard extends StatelessWidget {
               children: [
                 Text(
                   'Specifications',
-                  style: MyTexts.regular14.copyWith(color: MyColors.warning),
+                  style: MyTexts.medium13.copyWith(
+                    fontSize: 13,
+                    color: MyColors.warning,
+                    fontFamily: MyTexts.Roboto,
+                  ),
                 ),
                 SizedBox(width: 0.2.h),
                 Icon(
