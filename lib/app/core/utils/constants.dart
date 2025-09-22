@@ -30,6 +30,9 @@ class Asset {
   // Menu icons
   static const String menuSettingIcon = 'assets/images/menuSetting.svg';
   static const String menuIcon = 'assets/images/menu.svg';
+  static const String connectionIcon = 'assets/images/connection.svg';
+  static const String moreIcon = 'assets/images/more.svg';
+  static const String productIcon = 'assets/images/product.svg';
 
   // Profile assets
   static const String profileEmoji = 'assets/images/profileEmoji.png';
