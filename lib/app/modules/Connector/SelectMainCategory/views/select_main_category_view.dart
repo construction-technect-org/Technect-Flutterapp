@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/SelectMainCategory/controllers/select_main_category_controller.dart';
 
-class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
-  SelectMainCategoryView({super.key});
+class SelectMainCategoryView extends StatelessWidget {
+  final SelectMainCategoryController controller = Get.put(SelectMainCategoryController());
 
   // Dummy data
   final List<Map<String, dynamic>> categories = [
@@ -26,7 +26,7 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
       backgroundColor: MyColors.backgroundColor,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-      backgroundColor: MyColors.backgroundColor,
+        backgroundColor: MyColors.backgroundColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Row(
@@ -105,7 +105,6 @@ class SelectMainCategoryView extends GetView<SelectMainCategoryController> {
                   decoration: BoxDecoration(
                     color: MyColors.white,
                     borderRadius: BorderRadius.circular(22.5),
-                    
                   ),
                   child: TextField(
                     onChanged: (value) {},

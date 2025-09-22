@@ -219,29 +219,26 @@ class HomeView extends StatelessWidget {
                       const Gap(14),
                       HearderText(text: "Notification"),
                       const Gap(14),
-                      SizedBox(
-                        height: 100,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildNotiCard(
-                                title: "Support Ticket",
-                                value: "04",
-                                icon: Asset.warning,
-                                color: MyColors.redgray,
-                              ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildNotiCard(
+                              title: "Support Ticket",
+                              value: "04",
+                              icon: Asset.warning,
+                              color: MyColors.redgray,
                             ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildNotiCard(
-                                title: "Inbox",
-                                value: "02",
-                                icon: Asset.thumbup,
-                                color: MyColors.warning,
-                              ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _buildNotiCard(
+                              title: "Inbox",
+                              value: "02",
+                              icon: Asset.thumbup,
+                              color: MyColors.warning,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       const Gap(14),
                       HearderText(text: "Quick Access"),
