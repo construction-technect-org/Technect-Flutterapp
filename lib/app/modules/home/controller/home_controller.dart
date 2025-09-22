@@ -79,6 +79,7 @@ class HomeController extends GetxController {
   }
 
   void _checkProfileCompletion() {
+    // final bool isPartner=profileData.value.data?.user?.roleName=="Partner";
     final merchantProfile = profileData.value.data?.merchantProfile;
     final connectorProfile = profileData.value.data?.connectorProfile;
 

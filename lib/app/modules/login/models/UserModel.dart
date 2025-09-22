@@ -8,6 +8,8 @@ class UserModel {
   String? mobileNumber;
   String? email;
   String? gst;
+  String? marketPlace;
+  String? marketPlaceRole;
   String? createdAt;
   String? updatedAt;
 
@@ -21,6 +23,8 @@ class UserModel {
     this.mobileNumber,
     this.email,
     this.gst,
+    this.marketPlace,
+    this.marketPlaceRole,
     this.createdAt,
     this.updatedAt,
   });
@@ -33,6 +37,8 @@ class UserModel {
     lastName: json["lastName"],
     countryCode: json["countryCode"],
     mobileNumber: json["mobileNumber"],
+    marketPlace: json["marketPlace"],
+    marketPlaceRole: json["marketPlaceRole"],
     email: json["email"],
     gst: json["gstNumber"],
     createdAt: json["createdAt"],
@@ -46,6 +52,8 @@ class UserModel {
     "firstName": firstName,
     "lastName": lastName,
     "countryCode": countryCode,
+    "marketPlace": marketPlace,
+    "marketPlaceRole": marketPlaceRole,
     "mobileNumber": mobileNumber,
     "email": email,
     "gstNumber": gst,

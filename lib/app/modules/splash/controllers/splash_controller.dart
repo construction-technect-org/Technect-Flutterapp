@@ -62,7 +62,7 @@ class SplashController extends GetxController {
     if (Device.screenType == ScreenType.mobile) {
       // Show splash for a brief moment even with token
       Future.delayed(const Duration(seconds: 3), () {
-        Get.offAllNamed(Routes.MAIN);
+        Get.offAllNamed(Routes.LOGIN);
       });
     } else {
       Get.offAllNamed(Routes.MAIN);

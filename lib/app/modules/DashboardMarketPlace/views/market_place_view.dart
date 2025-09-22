@@ -181,7 +181,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
             buttonName: 'PROCEED',
             onTap: () {
               if (controller.selectedRole.isNotEmpty) {
-                Get.offAllNamed(Routes.MAIN);
+                controller.marketPlace();
               } else {
                 if (controller.selectedMarketplace.isEmpty) {
                   SnackBars.errorSnackBar(content: 'please select marketplace');

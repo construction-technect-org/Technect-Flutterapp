@@ -18,7 +18,7 @@ class MainTab extends GetView<MainTabController> {
           case 2:
             return const Center(child: Text("2"));
           case 3:
-            return const ConnectorMenuView();
+            return const ConnectorMenuView ();
           default:
             return HomeView();
         }
