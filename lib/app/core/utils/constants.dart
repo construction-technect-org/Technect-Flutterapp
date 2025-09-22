@@ -30,6 +30,9 @@ class Asset {
   // Menu icons
   static const String menuSettingIcon = 'assets/images/menuSetting.svg';
   static const String menuIcon = 'assets/images/menu.svg';
+  static const String connectionIcon = 'assets/images/connection.svg';
+  static const String moreIcon = 'assets/images/more.svg';
+  static const String productIcon = 'assets/images/product.svg';
 
   // Profile assets
   static const String profileEmoji = 'assets/images/profileEmoji.png';
@@ -146,7 +149,14 @@ class Asset {
   // dashboard
 
   static const String noOfConectors = 'assets/images/noOfConnectors.svg';
-  static const String warning = 'assets/images/warning.svg';
+  static const String noOfPartner= 'assets/images/noOfPartner.svg';
+    static const String warning = 'assets/images/warning.svg';
+    static const String thumbup = 'assets/images/thumbup.svg';
+    static const String cart = 'assets/images/cart.svg';
+    static const String inbox = 'assets/images/inbox.svg';
+    static const String insights = 'assets/images/insights.svg';
+    static const String report = 'assets/images/report.svg';
+    static const String setting = 'assets/images/setting.svg';
 }
 
 class Constants {

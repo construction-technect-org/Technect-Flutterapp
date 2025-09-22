@@ -34,9 +34,6 @@ class AddLocationController extends GetxController {
     super.onInit();
     if (Get.arguments != null) {
       isFromLogin.value = Get.arguments['isFromLogin'] ?? false;
-    }
-    if(Get.find<AddressController>().place.value != null){
-    print(Get.find<AddressController>().place);
       addressLine1Controller.text=Get.find<AddressController>().place.value?.name??"";
       addressLine2Controller.text=Get.find<AddressController>().place.value?.street??"";
       cityController.text=Get.find<AddressController>().place.value?.locality??"";
@@ -44,6 +41,7 @@ class AddLocationController extends GetxController {
       stateController.text=Get.find<AddressController>().place.value?.administrativeArea??"";
       pinCodeController.text=Get.find<AddressController>().place.value?.postalCode??"";
     }
+
     _handlePassedData();
     fetchAddresses();
   }

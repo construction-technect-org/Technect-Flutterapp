@@ -9,8 +9,6 @@ import 'package:construction_technect/app/modules/menu/views/menu_view.dart';
 class MainTabBarView extends GetView<MainController> {
   final CommonController commonController = Get.put(CommonController());
 
-  // const MainTabBarView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,42 +37,126 @@ class MainTabBarView extends GetView<MainController> {
                 ),
               )
             : Container(
-                // margin: const EdgeInsets.symmetric(vertical: 20),
-                height: 80,
-                decoration: const BoxDecoration(
-                  color: MyColors.primary,
-                  // borderRadius: BorderRadius.circular(50),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildTabItem(0, Asset.homeIcon, 'Home'),
-                    _buildTabItem(1, Asset.wishlistIcon, 'Product Management'),
-                    _buildTabItem(2, Asset.supportIcon, 'Support'),
-                    _buildTabItem(3, Asset.settingsIcon, 'Settings'),
-                  ],
+                color: MyColors.primary,
+                height: 74,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 6.0),
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                    ),
+                    child: BottomNavigationBar(
+                      elevation: 0,
+                      // selectedFontSize: 0,
+                      // unselectedFontSize: 0,
+                      // showSelectedLabels: false,
+                      // showUnselectedLabels: false,
+                      type: BottomNavigationBarType.fixed,
+                      backgroundColor: MyColors.primary,
+                      currentIndex: controller.currentIndex.value,
+                      onTap: controller.changeTab,
+                      selectedItemColor: MyColors.white,
+                      unselectedItemColor: MyColors.white.withValues(
+                        alpha: 0.25,
+                      ),
+                      selectedLabelStyle: MyTexts.medium13.copyWith(
+                        color: MyColors.white,
+                      ),
+                      unselectedLabelStyle: MyTexts.medium13.copyWith(
+                        color: MyColors.white.withValues(alpha: 0.25),
+                      ),
+                      items: [
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: SvgPicture.asset(
+                              Asset.homeIcon,
+                              width: 24,
+                              height: 24,
+                              colorFilter: ColorFilter.mode(
+                                controller.currentIndex.value == 0
+                                    ? MyColors.white
+                                    : MyColors.white.withValues(alpha: 0.25),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Home',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: SvgPicture.asset(
+                              Asset.productIcon,
+                              width: 24,
+                              height: 24,
+                              colorFilter: ColorFilter.mode(
+                                controller.currentIndex.value == 1
+                                    ? MyColors.white
+                                    : MyColors.white.withValues(alpha: 0.25),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Product',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: SvgPicture.asset(
+                              Asset.supportIcon,
+                              width: 24,
+                              height: 24,
+                              colorFilter: ColorFilter.mode(
+                                controller.currentIndex.value == 2
+                                    ? MyColors.white
+                                    : MyColors.white.withValues(alpha: 0.25),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Support',
+                        ),  BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: SvgPicture.asset(
+                              Asset.connectionIcon,
+                              width: 24,
+                              height: 24,
+                              colorFilter: ColorFilter.mode(
+                                controller.currentIndex.value == 3
+                                    ? MyColors.white
+                                    : MyColors.white.withValues(alpha: 0.25),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'Connection',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: SvgPicture.asset(
+                              Asset.moreIcon,
+                              width: 24,
+                              height: 24,
+                              colorFilter: ColorFilter.mode(
+                                controller.currentIndex.value == 4
+                                    ? MyColors.white
+                                    : MyColors.white.withValues(alpha: 0.25),
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                          label: 'More',
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
       }),
-    );
-  }
-
-  Widget _buildTabItem(int index, String iconPath, String label) {
-    return GestureDetector(
-      onTap: () => controller.changeTab(index),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            iconPath,
-            width: 20,
-            height: 20,
-            colorFilter: ColorFilter.mode(MyColors.white, BlendMode.srcIn),
-          ),
-          const SizedBox(height: 4),
-          Text(label, style: MyTexts.medium12.copyWith(color: MyColors.white)),
-        ],
-      ),
     );
   }
 }

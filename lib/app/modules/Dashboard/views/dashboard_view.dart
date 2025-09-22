@@ -129,7 +129,7 @@ class DashboardView extends GetView<DashboardController> {
                   decoration: BoxDecoration(
                     color: MyColors.white,
                     borderRadius: BorderRadius.circular(22.5),
-                    border: Border.all(color: MyColors.Gray83),
+                    border: Border.all(color: MyColors.grayD4),
                   ),
                   child: TextFormField(
                     decoration: InputDecoration(
@@ -368,7 +368,7 @@ class _buildFeatureCard extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isSelected ? MyColors.primary : MyColors.Gray83,
+                  color: isSelected ? MyColors.primary : MyColors.grayD4,
                 ),
                 color: isSelected ? MyColors.yellow : MyColors.greyE5,
                 borderRadius: BorderRadius.circular(8),
