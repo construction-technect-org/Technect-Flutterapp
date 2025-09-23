@@ -45,6 +45,8 @@ abstract class Routes {
   static const CONNECTOR_SELECT_LOCATION = _Paths.CONNECTOR_SELECT_LOCATION;
   static const CONNECTOR_ADD_LOCATION = _Paths.CONNECTOR_ADD_LOCATION;
   static const CONNECTOR_ADD_LOCATION_MANUALLY = _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
+  static const CONNECTOR_FILTER = _Paths.CONNECTOR_FILTER;
+
 
 }  
 
@@ -93,5 +95,6 @@ abstract class _Paths {
   static const CONNECTOR_SELECT_LOCATION = '/connector-select-location';
   static const CONNECTOR_ADD_LOCATION = '/connector-add-location';
   static const CONNECTOR_ADD_LOCATION_MANUALLY = '/connector-add-location-manually';
+  static const CONNECTOR_FILTER = '/connector-filter';
 
 }

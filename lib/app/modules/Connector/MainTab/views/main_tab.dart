@@ -65,7 +65,7 @@
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMenu/views/connector_menu_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorSelectedProduct/views/connector_selected_product_view.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/controllers/main_tab_controller.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 
@@ -80,7 +80,7 @@ class MainTab extends GetView<MainTabController> {
           case 0:
             return ConnectorHomeView();
           case 1:
-            return ConnectorProductDetailsView();
+            return ConnectorSelectedProductView();
           case 2:
             return const Center(child: Text("2"));
           case 3:

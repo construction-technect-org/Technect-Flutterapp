@@ -1,9 +1,9 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorSelectedProduct/components/connector_category_card.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class ConnectorProductDetailsController extends GetxController {
+class ConnectorSelectedProductController extends GetxController {
   CommonController commonController = Get.find();
 
   RxBool isLoading = false.obs;
