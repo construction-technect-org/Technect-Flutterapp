@@ -23,35 +23,42 @@ class ProductManagementView extends StatelessWidget {
           leadingWidth: 0,
           title: const Text("PRODUCT MANAGEMENT"),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Column(
-                    children: [
-                      CommonTextField(
-                        onChange: (value) {
-                          controller.searchProduct(value ?? "");
-                        },
-                        borderRadius: 22,
-                        hintText: 'Search',
-                        suffixIcon: SvgPicture.asset(
-                          Asset.filterIcon,
-                          height: 20,
-                          width: 20,
-                        ),
-                        prefixIcon: SvgPicture.asset(
-                          Asset.searchIcon,
-                          height: 16,
-                          width: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: Column(
+                children: [
+                  CommonTextField(
+                    onChange: (value) {
+                      controller.searchProduct(value ?? "");
+                    },
+                    borderRadius: 22,
+                    hintText: 'Search',
+                    suffixIcon: SvgPicture.asset(
+                      Asset.filterIcon,
+                      height: 20,
+                      width: 20,
+                    ),
+                    prefixIcon: SvgPicture.asset(
+                      Asset.searchIcon,
+                      height: 16,
+                      width: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SizedBox(
                         height: 150,
                         child: Row(
                           children: [
@@ -199,85 +206,85 @@ class ProductManagementView extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Obx(
-                  () => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child:
-                        (controller.filteredProducts.isEmpty &&
-                            controller.searchQuery.value.isNotEmpty)
-                        ? Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 4.h),
-                              child: Column(
-                                children: [
-                                  const Gap(20),
-                                  const Icon(
-                                    Icons.search_off,
-                                    size: 64,
-                                    color: MyColors.grey,
+                    ),
+                    Obx(
+                      () => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child:
+                            (controller.filteredProducts.isEmpty &&
+                                controller.searchQuery.value.isNotEmpty)
+                            ? Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 4.h),
+                                  child: Column(
+                                    children: [
+                                      const Gap(20),
+                                      const Icon(
+                                        Icons.search_off,
+                                        size: 64,
+                                        color: MyColors.grey,
+                                      ),
+                                      SizedBox(height: 2.h),
+                                      Text(
+                                        'No products found',
+                                        style: MyTexts.medium18.copyWith(
+                                          color: MyColors.fontBlack,
+                                        ),
+                                      ),
+                                      SizedBox(height: 0.5.h),
+                                      Text(
+                                        'Try searching with different keywords',
+                                        style: MyTexts.regular14.copyWith(
+                                          color: MyColors.grey,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(height: 2.h),
-                                  Text(
-                                    'No products found',
-                                    style: MyTexts.medium18.copyWith(
-                                      color: MyColors.fontBlack,
+                                ),
+                              )
+                            : ListView.separated(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: controller.filteredProducts.length,
+                                separatorBuilder: (_, _) => const SizedBox(height: 12),
+                                itemBuilder: (context, index) {
+                                  final Product product = controller.filteredProducts[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.PRODUCT_DETAILS,
+                                        arguments: {"product": product},
+                                      );
+                                    },
+                                    child: ProductCard(
+                                      statusText: (product.isActive ?? false)
+                                          ? 'Active'
+                                          : 'InActive',
+                                      statusColor: (product.isActive ?? false)
+                                          ? MyColors.green
+                                          : MyColors.red,
+                                      productName: product.productName ?? '',
+                                      brandName: product.brand ?? '',
+                                      locationText: 'Vasai Virar, Mahab Chowpatty',
+                                      pricePerUnit: double.parse(product.price ?? '0'),
+                                      stockCount: product.stockQuantity ?? 0,
+                                      imageUrl: product.productImage,
                                     ),
-                                  ),
-                                  SizedBox(height: 0.5.h),
-                                  Text(
-                                    'Try searching with different keywords',
-                                    style: MyTexts.regular14.copyWith(
-                                      color: MyColors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : ListView.separated(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: controller.filteredProducts.length,
-                            separatorBuilder: (_, _) => const SizedBox(height: 12),
-                            itemBuilder: (context, index) {
-                              final Product product = controller.filteredProducts[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  Get.toNamed(
-                                    Routes.PRODUCT_DETAILS,
-                                    arguments: {"product": product},
                                   );
                                 },
-                                child: ProductCard(
-                                  statusText: (product.isActive ?? false)
-                                      ? 'Active'
-                                      : 'InActive',
-                                  statusColor: (product.isActive ?? false)
-                                      ? MyColors.green
-                                      : MyColors.red,
-                                  productName: product.productName ?? '',
-                                  brandName: product.brand ?? '',
-                                  locationText: 'Vasai Virar, Mahab Chowpatty',
-                                  pricePerUnit: double.parse(product.price ?? '0'),
-                                  stockCount: product.stockQuantity ?? 0,
-                                  imageUrl: product.productImage,
-                                ),
-                              );
-                            },
-                          ),
-                  ),
+                              ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 2.h),
-              ],
+              ),
             ),
-          ),
+            SizedBox(height: 2.h),
+          ],
         ),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 10),
+          padding: const EdgeInsets.only(left: 120,right: 120, bottom: 20),
           child: RoundedButton(
             onTap: () {
               Get.toNamed(Routes.ADD_PRODUCT);

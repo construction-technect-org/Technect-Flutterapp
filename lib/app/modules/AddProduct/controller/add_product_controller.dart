@@ -17,6 +17,15 @@ class AddProductController extends GetxController {
   Product product = Product();
   ProductManagementController controller = Get.find();
   // ---------------- Form Controllers ----------------
+
+  RxBool isOutStock = false.obs;
+  final productCodeController = TextEditingController();
+  final noteStockController = TextEditingController();
+  final noteController = TextEditingController();
+  final uocController = TextEditingController();
+  final amountController = TextEditingController();
+
+
   final productNameController = TextEditingController();
   final stockController = TextEditingController();
   final uomController = TextEditingController();
@@ -45,6 +54,8 @@ class AddProductController extends GetxController {
   RxList<String> productNames = <String>[].obs;
 
   RxList<String> uomList = <String>["Kg", "truck"].obs;
+  RxList<String> gstList = <String>["5%","12%", "18%","28%"].obs;
+
 
   // ---------------- Selections ----------------
   Rxn<String> selectedMainCategory = Rxn<String>();
@@ -54,6 +65,7 @@ class AddProductController extends GetxController {
   Rxn<String> selectedSubCategoryId = Rxn<String>();
   Rxn<String> selectedProductId = Rxn<String>();
   Rxn<String> selectedUom = Rxn<String>();
+  Rxn<String> selectedGST = Rxn<String>();
 
   // ---------------- State ----------------
   RxBool showExtraFields = false.obs;
@@ -93,9 +105,19 @@ class AddProductController extends GetxController {
 
   void _initializeEditMode() {
     productNameController.text = product.productName ?? '';
+    productCodeController.text = product.productCode ?? '';
+    uocController.text = product.uoc.toString() ?? '';
+    amountController.text = product.totalAmount ?? '';
+    noteController.text = product.productNote ?? '';
+    noteStockController.text = product.outOfStockNote ?? '';
+    sizeController.text = product.grainSize ?? '';
+    isOutStock.value = product.outOfStock ?? false;
     stockController.text = product.stockQuantity?.toString() ?? '';
     priceController.text = product.price ?? '';
-    gstController.text = product.gstPercentage ?? '';
+    if((product.gstPercentage??"").isNotEmpty) {
+      selectedGST.value = "${product.gstPercentage?.split(".").first}%";
+      print( selectedGST.value );
+    }
     gstPriceController.text = product.gstAmount ?? '';
     termsController.text = product.termsAndConditions ?? '';
     packageSizeController.text = product.packageSize ?? '';
@@ -227,7 +249,6 @@ class AddProductController extends GetxController {
           dynamicControllers[filter.filterName ?? ''] = TextEditingController();
         }
 
-        // Populate filter values if in edit mode
         if (isEdit && _storedFilterValues != null && _storedFilterValues!.isNotEmpty) {
           _populateFilterControllers();
         }
@@ -332,10 +353,11 @@ class AddProductController extends GetxController {
 
   void gstCalculate() {
     final double amount =
-        (double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
-            double.parse(gstController.text.isEmpty ? '0.0' : gstController.text)) /
+        double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
+            double.parse(selectedGST.value.toString().replaceAll("%", "").isEmpty ? '0.0' : (selectedGST.value.toString().replaceAll("%", ""))) /
         100;
-    gstPriceController.text = amount.toString();
+    gstPriceController.text = amount.toStringAsFixed(2);
+    amountController.text = (amount + double.parse(priceController.text)).toStringAsFixed(2);
   }
 
   Future<void> pickImage() async {
@@ -360,7 +382,13 @@ class AddProductController extends GetxController {
     } else if (productNameController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Product name is required');
       isRequired = false;
-    } else if (selectedMainCategoryId.value == null) {
+    }
+    else if (productCodeController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Product code is required');
+      isRequired = false;
+    }
+
+    else if (selectedMainCategoryId.value == null) {
       SnackBars.errorSnackBar(content: 'Main category is required');
       isRequired = false;
     } else if (selectedSubCategoryId.value == null) {
@@ -372,16 +400,22 @@ class AddProductController extends GetxController {
     } else if (selectedUom.value == null) {
       SnackBars.errorSnackBar(content: 'UOM is required');
       isRequired = false;
-    } else if (priceController.text.isEmpty) {
+    }
+    else if (uocController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'UOC is required');
+      isRequired = false;
+    }else if (priceController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Price is required');
       isRequired = false;
-    } else if (stockController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Stock is required');
+    } else if (selectedGST.value==null) {
+      SnackBars.errorSnackBar(content: 'GST percentage is required');
       isRequired = false;
-    } else if (gstPriceController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'GST price is required');
-      isRequired = false;
-    } else if (termsController.text.isEmpty) {
+    }
+    // else if (noteController.text.isEmpty) {
+    //   SnackBars.errorSnackBar(content: 'Note is required');
+    //   isRequired = false;
+    // }
+    else if (termsController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Terms is required');
       isRequired = false;
     } else {
@@ -405,8 +439,6 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'Color is required');
     } else if (sizeController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Size is required');
-    } else if (weightController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Weight is required');
     } else {
       if (isEdit) {
         updateProduct();
@@ -440,18 +472,24 @@ class AddProductController extends GetxController {
 
     fields.addAll({
       "price": priceController.text,
-      "gst_percentage": gstController.text,
+      "product_code": productCodeController.text,
+      "total_amount": amountController.text,
+      "grain_size": sizeController.text,
+      "product_note": noteController.text,
+      "gst_percentage": (selectedGST.value??"").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,
-      "stock_quantity": stockController.text,
+      // "stock_quantity": "1",
+      "outofstock": false,
       "brand": brandNameController.text,
       "uom": selectedUom.value,
+      "uoc": uocController.text,
       "package_type": packageTypeController.text,
       "package_size": packageSizeController.text,
       "shape": shapeController.text,
       "texture": textureController.text,
       "colour": colorController.text,
       "size": sizeController.text,
-      "weight": weightController.text,
+      // "weight": "0",
       "is_active": isEnabled.value,
       "is_featured": false,
       "sort_order": "1",
@@ -503,8 +541,9 @@ class AddProductController extends GetxController {
 
     fields = {
       "product_name": productNameController.text,
+      "product_code": productCodeController.text,
       "price": priceController.text,
-      "gst_percentage": gstController.text,
+      "gst_percentage": (selectedGST.value??"").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,
       "stock_quantity": stockController.text,
       "brand": brandNameController.text,
@@ -521,6 +560,15 @@ class AddProductController extends GetxController {
       "sort_order": "1",
       "low_stock_threshold": "10",
       "filter_values": json.encode(payload),
+      "total_amount": amountController.text,
+      "grain_size": sizeController.text,
+      "product_note": noteController.text,
+      // "stock_quantity": "1",
+      "outofstock_note": noteStockController.text,
+      "outofstock": isOutStock.value,
+      "uoc": uocController.text,
+
+
     };
 
     try {
@@ -549,3 +597,7 @@ class AddProductController extends GetxController {
 
 
 }
+
+/// product_code, uoc, total_amount, product_note,oos_note, grain_size
+
+///weight,stock_quantity

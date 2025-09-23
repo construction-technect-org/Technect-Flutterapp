@@ -154,6 +154,7 @@ class Asset {
   static const String report = 'assets/images/report.svg';
   static const String setting = 'assets/images/setting.svg';
   static const String aTeam = 'assets/images/ateam.png';
+  static const String link = 'assets/images/link.svg';
 
   // Connector Category
 

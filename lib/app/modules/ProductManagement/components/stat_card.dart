@@ -66,14 +66,20 @@ class StatCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: MyTexts.regular14.copyWith(color: MyColors.davysGrey),
+                  style: MyTexts.regular14.copyWith(
+                    color: MyColors.davysGrey,
+                    fontFamily: MyTexts.Roboto,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
                 SizedBox(height: 0.4.h),
                 Text(
                   value,
-                  style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
+                  style: MyTexts.bold18.copyWith(
+                    color: MyColors.fontBlack,
+                    fontFamily: MyTexts.Roboto,
+                  ),
                 ),
               ],
             ),

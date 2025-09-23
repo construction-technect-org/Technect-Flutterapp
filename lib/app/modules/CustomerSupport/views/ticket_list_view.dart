@@ -128,9 +128,9 @@ class TicketListView extends StatelessWidget {
       final tickets = convertSupportTicketsToTickets(controller.myTickets);
 
       if (tickets.isEmpty) {
-        return const Padding(
-          padding: EdgeInsets.only(top: 60),
-          child: Center(child: Text("No tickets found !!")),
+        return  Padding(
+          padding: const EdgeInsets.only(top: 80),
+          child: Center(child: Text("No tickets found !!",style: MyTexts.regular16.copyWith(color: Colors.black),)),
         );
       }
 
@@ -151,7 +151,7 @@ class TicketListView extends StatelessWidget {
               side: const BorderSide(color: MyColors.americanSilver),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -160,7 +160,7 @@ class TicketListView extends StatelessWidget {
                       _buildChip(
                         ticket.id,
                         MyColors.white,
-                        MyColors.fontBlack,
+                        MyColors.black,
                         borderColor: MyColors.americanSilver,
                       ),
                       SizedBox(width: 2.w),
@@ -182,22 +182,22 @@ class TicketListView extends StatelessWidget {
                   ),
                   SizedBox(height: 1.h),
                   Text(
-                    ticket.title,
-                    style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                    ticket.title.capitalizeFirst??"-",
+                    style: MyTexts.medium18.copyWith(color: MyColors.fontBlack,fontFamily: MyTexts.Roboto),
                   ),
                   SizedBox(height: 1.h),
                   Row(
                     children: [
                       const Icon(
                         Icons.person_outline,
-                        size: 16,
-                        color: Colors.grey,
+                        size: 18,
+                          color: MyColors.gray6B
                       ),
                       SizedBox(width: 0.4.w),
                       Text(
                         ticket.company,
                         style: MyTexts.regular14.copyWith(
-                          color: MyColors.darkGray,
+                          color: MyColors.gray6B
                         ),
                       ),
                       SizedBox(width: 3.w),
@@ -218,17 +218,26 @@ class TicketListView extends StatelessWidget {
                   SizedBox(height: 0.8.h),
                   Text(
                     ticket.description,
-                    style: MyTexts.regular14.copyWith(color: MyColors.charcoal),
+                    style: MyTexts.regular14.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
                   ),
                   SizedBox(height: 1.h),
-                  Text(
-                    "Created: ${ticket.createdDate}   •   Updated: ${ticket.updatedDate}",
-                    style: MyTexts.regular14.copyWith(color: MyColors.darkGray),
+                  Row(
+                    children: [
+                      Text(
+                        "Created: ${ticket.createdDate}",
+                        style: MyTexts.bold15.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
+                      ),
+                      const Spacer(),
+                      Text(
+                        "  ●   Updated: ${ticket.updatedDate}",
+                        style: MyTexts.bold15.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(
                     "● Assigned to: ${ticket.assignedTo}",
-                    style: MyTexts.regular14.copyWith(color: MyColors.darkGray),
+                    style: MyTexts.bold15.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
                   ),
                 ],
               ),
@@ -247,7 +256,7 @@ class TicketListView extends StatelessWidget {
     Widget? icon,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(20),
@@ -257,7 +266,7 @@ class TicketListView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[icon, const SizedBox(width: 4)],
-          Text(text, style: MyTexts.regular14.copyWith(color: textColor)),
+          Text(text, style: MyTexts.bold14.copyWith(color: textColor)),
         ],
       ),
     );
