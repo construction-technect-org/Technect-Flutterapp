@@ -65,9 +65,9 @@
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMenu/views/connector_menu_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/controllers/main_tab_controller.dart';
-import 'package:construction_technect/app/modules/Connector/SelectMainCategory/views/select_main_category_view.dart';
-import 'package:construction_technect/app/modules/Connector/home/views/home_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 
 class MainTab extends GetView<MainTabController> {
   const MainTab({super.key});
@@ -78,9 +78,9 @@ class MainTab extends GetView<MainTabController> {
       body: Obx(() {
         switch (controller.currentIndex.value) {
           case 0:
-            return HomeView();
+            return ConnectorHomeView();
           case 1:
-            return SelectMainCategoryView();
+            return ConnectorProductDetailsView();
           case 2:
             return const Center(child: Text("2"));
           case 3:

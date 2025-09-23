@@ -1,5 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/Connector/ListOfMerchant/components/connector_product_card.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -166,45 +165,7 @@ class WishListView extends StatelessWidget {
                   ],
                 ),
               ),
-                 SizedBox(height: 1.h),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  "Product",
-                  style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
-                ),
-              ),
-              SizedBox(height: 2.h),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 2,
-                  separatorBuilder: (_, _) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.toNamed(
-                          Routes.CONNECTOR_PRODUCT_DETAILS,
-                          // arguments: {"product": product},
-                        );
-                      },
-                      child: const ConnectorProductCard(
-                        statusText: 'Active',
-                        statusColor: MyColors.green,
-                        productName: 'Premium M Sand',
-                        brandName: 'SV Manufacturers',
-                        locationText: 'Vasai Virar, Mahab Chowpatty',
-                        pricePerUnit: 1000,
-                        stockCount: 1,
-                        imageAsset: Asset.Product,
-                      ),
-                    );
-                  },
-                ),
-              ),
-           
+              
             ],
           ),
         ),

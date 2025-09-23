@@ -39,12 +39,13 @@ abstract class Routes {
   // Connector
   static const MAIN_TAB = _Paths.MAIN_TAB;
   static const CONNECTOR_MARKET_PLACE = _Paths.CONNECTOR_MARKET_PLACE;
-  static const SELECT_MAIN_CATEGORY = _Paths.SELECT_MAIN_CATEGORY;
-  static const LIST_OF_MERCHANT = _Paths.LIST_OF_MERCHANT;
   static const CONNECTOR_PROFILE = _Paths.CONNECTOR_PROFILE;
   static const ADD_KYC = _Paths.ADD_KYC;
   static const CONNECTOR_PRODUCT_DETAILS = _Paths.CONNECTOR_PRODUCT_DETAILS;
+  static const CONNECTOR_SELECT_LOCATION = _Paths.CONNECTOR_SELECT_LOCATION;
   static const CONNECTOR_ADD_LOCATION = _Paths.CONNECTOR_ADD_LOCATION;
+  static const CONNECTOR_ADD_LOCATION_MANUALLY = _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
+
 }  
 
 
@@ -86,11 +87,11 @@ abstract class _Paths {
   // Connector
   static const MAIN_TAB = '/main-tab';
   static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
-  static const SELECT_MAIN_CATEGORY = '/select-main-category';
-  static const LIST_OF_MERCHANT = '/List-of_merchant';
   static const CONNECTOR_PROFILE = '/connector-profile';
   static const ADD_KYC = '/add-kyc';
   static const CONNECTOR_PRODUCT_DETAILS = '/connector-product-details';
+  static const CONNECTOR_SELECT_LOCATION = '/connector-select-location';
   static const CONNECTOR_ADD_LOCATION = '/connector-add-location';
+  static const CONNECTOR_ADD_LOCATION_MANUALLY = '/connector-add-location-manually';
 
 }

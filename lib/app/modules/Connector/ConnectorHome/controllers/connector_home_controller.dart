@@ -6,7 +6,7 @@ import 'package:construction_technect/app/modules/home/models/AddressModel.dart'
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 
-class HomeController extends GetxController {
+class ConnectorHomeController extends GetxController {
   CommonController commonController = Get.find();
   
 

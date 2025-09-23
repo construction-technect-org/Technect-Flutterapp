@@ -1,250 +1,148 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/controllers/connector_add_location_controller.dart';
-import 'package:construction_technect/app/modules/Dashboard/controllers/dashboard_controller.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorAddLocationView extends GetView<ConnectorAddLocationController> {
-  // final HomeController homeController = Get.put(HomeController());
+  const ConnectorAddLocationView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
       isLoading: controller.isLoading,
       child: Scaffold(
-        appBar: AppBar(
-          forceMaterialTransparency: true,
-          automaticallyImplyLeading: false,
-          backgroundColor: MyColors.white,
-          elevation: 0,
-          title: Row(
-            children: [
-              Image.asset(Asset.profil, height: 40, width: 40),
-              SizedBox(width: 1.h),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(
-                    () => Text(
-                      'Welcome ${controller.profileData.value.data?.user?.firstName}!',
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                      SizedBox(width: 0.4.h),
-                      Obx(
-                        () => Text(
-                          controller.address.value,
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.textFieldBackground,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.black54,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  border: Border.all(color: MyColors.hexGray92),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Stack(
-                  clipBehavior: Clip.none, // 👈 allows badge to overflow
-                  children: [
-                    SvgPicture.asset(
-                      Asset.notifications,
-                      // or 'assets/images/notifications.svg'
-                      width: 28,
-                      height: 28,
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 3,
-                      child: Container(
-                        width: 6.19,
-                        height: 6.19,
-                        decoration: const BoxDecoration(
-                          color: MyColors.red,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: 0.8.h),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  border: Border.all(color: MyColors.hexGray92),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Stack(
-                  clipBehavior: Clip.none, // 👈 allows badge to overflow
-                  children: [
-                    SvgPicture.asset(
-                      Asset.warning, // or 'assets/images/notifications.svg'
-                      width: 28,
-                      height: 28,
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 3,
-                      child: Container(
-                        width: 6.19,
-                        height: 6.19,
-                        decoration: const BoxDecoration(
-                          color: MyColors.red,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
         backgroundColor: MyColors.white,
-        body:  Container(),
-         bottomNavigationBar: Padding(
-          padding: EdgeInsets.only(left: 2.h, right: 2.h, bottom: 2.h),
-          child: RoundedButton(
-            buttonName: 'PROCEED',
-            onTap: () {
-              if (controller.selectedIndex.value == 0) {
-                Get.toNamed(Routes.DASHABORD_MARKET_PLACE);
-              }
-              else{
-                SnackBars.errorSnackBar(
-                  content: 'Please select one feature',
-                );
-              }
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatCard(String title, String value, String icon) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border.all(color: MyColors.greyE5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-          Row(
+        body: SafeArea(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset(icon, height: 20, width: 20),
-              const SizedBox(width: 10),
+              // ✅ Back + Title
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () => Get.back(),
+                      borderRadius: BorderRadius.circular(50),
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        size: 20,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "ADD LOCATION",
+                      style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 0.4.h),
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+              Padding(
+                padding: const EdgeInsets.only(left: 40),
+                child: Text(
+                  "Select your location for better tracking",
+                  style: MyTexts.medium14.copyWith(color: MyColors.shadeOfGray),
+                ),
+              ),
+
+               SizedBox(height: 2.h),
+
+              // ✅ Search Field
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Container(
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: MyColors.white,
+                    borderRadius: BorderRadius.circular(22.5),
+                    border: Border.all(color: MyColors.primary),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    value,
-                    style: MyTexts.bold18.copyWith(color: MyColors.primary),
+                  child: TextFormField(
+                    controller: controller.searchController,
+                    onChanged: controller.onSearchChanged,
+                    style: MyTexts.regular14.copyWith(
+                      color: MyColors.darkGray,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(left: 18, right: 8),
+                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                      ),
+                      prefixIconConstraints: const BoxConstraints(
+                        minWidth: 36,
+                        minHeight: 36,
+                      ),
+                      hintText: 'Search for area, street name..',
+                      hintStyle: MyTexts.regular14.copyWith(
+                        color: MyColors.darkGray,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(22.5),
+                        borderSide: BorderSide.none,
+                      ),
+                      // 👇 Center text & hint vertically
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
                   ),
-                ],
+                ),
+              ),
+              SizedBox(height: 1.h),
+
+              // ✅ Info
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(Asset.Locationon, height: 20, width: 20),
+                    const SizedBox(width: 11),
+                    Text(
+                      "Drag the pin for your location",
+                      style: MyTexts.regular14.copyWith(
+                        color: MyColors.redgray,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 2.h),
+              // ✅ Google Map
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: GoogleMap(
+                    onMapCreated: controller.onMapCreated,
+                    onCameraMove: controller.onCameraMove,
+                    onCameraIdle: controller.onCameraIdle,
+                    initialCameraPosition: CameraPosition(
+                      target: controller.currentPosition.value,
+                      zoom: controller.mapZoom.value,
+                    ),
+                    markers: controller.markers.values.toSet(),
+                    mapType: controller.mapType.value,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
+                    mapToolbarEnabled: false,
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 3.h),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: RoundedButton(buttonName: 'SUBMIT', onTap: () {
+                  Get.toNamed(Routes.CONNECTOR_ADD_LOCATION_MANUALLY);
+
+                }),
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _buildFeatureCard extends StatelessWidget {
-  const _buildFeatureCard({
-    super.key,
-    required this.controller,
-    required this.isSelected,
-    required this.item,
-    required this.itemWidth,
-    required this.onTap,
-  });
-
-  final DashboardController controller;
-  final bool isSelected;
-  final Map<String, String> item;
-  final double itemWidth;
-  final void Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isSelected ? MyColors.primary : MyColors.grayD4,
-                ),
-                color: isSelected ? MyColors.yellow : MyColors.greyE5,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    color: isSelected ? MyColors.primary : MyColors.grey,
-
-                    item['icon']!,
-                    height: itemWidth * 0.35, // responsive icon size
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    item["title"]!,
-                    textAlign: TextAlign.center,
-                    style: MyTexts.medium13.copyWith(color: MyColors.fontBlack),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (isSelected)
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                height: 20,
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: MyColors.primary,
-                  borderRadius: BorderRadius.circular(5),
-                  // shape: BoxShape.s,
-                ),
-                child: const Icon(Icons.check, size: 14, color: Colors.white),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

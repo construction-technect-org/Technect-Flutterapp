@@ -156,8 +156,7 @@ class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
 
                       return GestureDetector(
                         onTap: () {
-                          controller.selectIndex(index);
-                         Get.toNamed(Routes.SELECT_MAIN_CATEGORY);
+                        
                         },
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 8),

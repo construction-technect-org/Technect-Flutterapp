@@ -66,16 +66,13 @@ class Asset {
   static const String worldMap = 'assets/images/worldMap.png';
   static const String wishlistM = 'assets/images/WishlistM.png';
 
-
   // 📦 Business modules (new)
   static const String marketplaceIcon = 'assets/images/marketpalce.png';
   static const String crmIcon = 'assets/images/crm.png';
   static const String erpIcon = 'assets/images/erp.png';
-  static const String projectManagementIcon =
-      'assets/images/project_management.png';
+  static const String projectManagementIcon = 'assets/images/project_management.png';
   static const String hrmsIcon = 'assets/images/hrms.png';
-  static const String portfolioManagementIcon =
-      'assets/images/portfolio_management.png';
+  static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
   static const String ovpIcon = 'assets/images/ovp.png';
   static const String constructionTaxi = 'assets/images/team.png';
 
@@ -119,8 +116,7 @@ class Asset {
   static const String materialMarketplace = 'assets/images/material_market.png';
   static const String constructionCinemarketPlace =
       'assets/images/construction-cine marketplace.png';
-  static const String logisticMarketPlace =
-      'assets/images/logistic_marketplace.png';
+  static const String logisticMarketPlace = 'assets/images/logistic_marketplace.png';
 
   // Your Role
   static const String partner = 'assets/images/partner.png';
@@ -149,15 +145,20 @@ class Asset {
   // dashboard
 
   static const String noOfConectors = 'assets/images/noOfConnectors.svg';
-  static const String noOfPartner= 'assets/images/noOfPartner.svg';
-    static const String warning = 'assets/images/warning.svg';
-    static const String thumbup = 'assets/images/thumbup.svg';
-    static const String cart = 'assets/images/cart.svg';
-    static const String inbox = 'assets/images/inbox.svg';
-    static const String insights = 'assets/images/insights.svg';
-    static const String report = 'assets/images/report.svg';
-    static const String setting = 'assets/images/setting.svg';
-    static const String aTeam = 'assets/images/ateam.png';
+  static const String noOfPartner = 'assets/images/noOfPartner.svg';
+  static const String warning = 'assets/images/warning.svg';
+  static const String thumbup = 'assets/images/thumbup.svg';
+  static const String cart = 'assets/images/cart.svg';
+  static const String inbox = 'assets/images/inbox.svg';
+  static const String insights = 'assets/images/insights.svg';
+  static const String report = 'assets/images/report.svg';
+  static const String setting = 'assets/images/setting.svg';
+  static const String aTeam = 'assets/images/ateam.png';
+
+  // Connector Category
+
+  static const String constuctionMaterial = 'assets/images/constuction_material.png';
+  static const String interiorMateria = 'assets/images/interior_material.png';
 }
 
 class Constants {

@@ -1,11 +1,11 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/Connector/home/components/home_components.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorHome/components/connector_home_components.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 
-class HomeView extends StatelessWidget {
+class ConnectorHomeView extends StatelessWidget {
   final HomeController controller = Get.put(HomeController());
   final CommonController commonController = Get.find();
 
@@ -28,7 +28,7 @@ class HomeView extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                // Get.toNamed(Routes.CONNECTOR_ADD_LOCATION);
+                 Get.toNamed(Routes.MAIN);
               },
               child: Row(
                 children: [
@@ -70,27 +70,15 @@ class HomeView extends StatelessWidget {
 
                           GestureDetector(
                             onTap: () {
-                              Get.toNamed(Routes.MAIN);
+                              Get.toNamed(Routes.CONNECTOR_SELECT_LOCATION);
 
-                              // // Condition check
-                              // if (controller.getCurrentAddress().isNotEmpty) {
-                              //   // Navigate to SavedAddressesView
-                              //   Get.to(() => const SavedAddressesView());
-                              // } else {
-                              //   // No address → stay on same screen or show info
-                              //   Get.snackbar(
-                              //     "No Address",
-                              //     "Please add an address first",
-                              //     snackPosition: SnackPosition.BOTTOM,
-                              //   );
-                              // }
                             },
                             child: Row(
                               children: [
                                 SvgPicture.asset(Asset.location, width: 9, height: 12.22),
                                 SizedBox(width: 0.4.h),
                                 Text(
-                                  "",
+                                  "Sadashiv Peth, Pune",
                                   style: MyTexts.medium14.copyWith(
                                     color: MyColors.textFieldBackground,
                                     fontFamily: MyTexts.Roboto,
