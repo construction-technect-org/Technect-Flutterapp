@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
-import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/controller/customer_support_controller.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
@@ -10,7 +10,9 @@ import 'package:construction_technect/app/modules/CustomerSupport/models/Support
 class CreatNewTicket extends StatelessWidget {
   CreatNewTicket({super.key});
 
-  final CustomerSupportController controller = Get.put(CustomerSupportController());
+  final CustomerSupportController controller = Get.put(
+    CustomerSupportController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +20,8 @@ class CreatNewTicket extends StatelessWidget {
       onTap: hideKeyboard,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar:CommonAppBar(
-          title: const Text( "Create New Ticket",),
+        appBar: CommonAppBar(
+          title: const Text("Create New Ticket"),
           isCenter: false,
         ),
         body: Padding(
@@ -32,12 +34,16 @@ class CreatNewTicket extends StatelessWidget {
                     'Select Category',
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
-                  Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
+                  Text(
+                    '*',
+                    style: MyTexts.light16.copyWith(color: MyColors.red),
+                  ),
                 ],
               ),
               SizedBox(height: 1.h),
               CommonDropdown<SupportCategory>(
-                itemLabel: (item) => item.name, // Show category name
+                itemLabel: (item) => item.name,
+                // Show category name
                 items: controller.categories,
                 selectedValue: controller.selectedCategory,
                 onChanged: controller.onCategorySelected,
@@ -51,40 +57,36 @@ class CreatNewTicket extends StatelessWidget {
                     'Select Priority',
                     style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                   ),
-                  Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
+                  Text(
+                    '*',
+                    style: MyTexts.light16.copyWith(color: MyColors.red),
+                  ),
                 ],
               ),
               SizedBox(height: 1.h),
               CommonDropdown<SupportPriority>(
                 itemLabel: (item) => item.name,
-                items: controller.priorities, // should be RxList<SupportPriority>
+                items: controller.priorities,
                 selectedValue: controller.selectedPriority,
                 onChanged: controller.onPrioritySelected,
                 hintText: 'Select Priority',
               ),
 
               SizedBox(height: 2.h),
-              Row(
-                children: [
-                  Text(
-                    'Subject',
-                    style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-                  ),
-                  Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
-                ],
-              ),
-              SizedBox(height: 1.h),
-              CustomTextField(
+              CommonTextField(
+                headerText: 'Subject',
+
                 controller: controller.subjectController,
                 keyboardType: TextInputType.text,
+                hintText: "Enter your description",
               ),
               SizedBox(height: 2.h),
-              Text(
-                'Description',
-                style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
+              CommonTextField(
+                headerText: 'Description',
+                hintText: "Enter your description",
+                controller: controller.descriptionController,
+                maxLine: 3,
               ),
-              SizedBox(height: 1.h),
-              CustomTextField(controller: controller.descriptionController, maxLines: 3),
             ],
           ),
         ),
@@ -92,7 +94,9 @@ class CreatNewTicket extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Obx(
             () => RoundedButton(
-              buttonName: controller.isSubmitting.value ? 'Submitting...' : 'SUBMIT',
+              buttonName: controller.isSubmitting.value
+                  ? 'Submitting...'
+                  : 'SUBMIT',
               onTap: controller.isSubmitting.value
                   ? null
                   : () {

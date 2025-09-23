@@ -1,77 +1,41 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/welcome_name.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/ConnectionInbox/controllers/connection_inbox_controller.dart';
+import 'package:gap/gap.dart';
 
 class ConnectionInboxView extends GetView<ConnectionInboxController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        backgroundColor: MyColors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0.0,
-        title: WelcomeName(),
-        automaticallyImplyLeading: false, // This removes the back button
+      appBar: CommonAppBar(
+        isCenter: false,
+        leading: const SizedBox(),
+        leadingWidth: 0,
+        title: const Text("CONNECTION INBOX"),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            /// Search bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.circular(22.5),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x1A000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: CommonTextField(
+                onChange: (value) {},
+                borderRadius: 22,
+                hintText: 'Search',
+                suffixIcon: SvgPicture.asset(
+                  Asset.filterIcon,
+                  height: 20,
+                  width: 20,
                 ),
-                child: TextField(
-                  onChanged: (value) {},
-                  decoration: InputDecoration(
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.only(left: 18, right: 8),
-                      child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
-                    ),
-                    prefixIconConstraints: const BoxConstraints(
-                      minWidth: 36,
-                      minHeight: 36,
-                    ),
-                    hintText: 'Search',
-                    hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
-                    filled: true,
-                    fillColor: MyColors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(22.5),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
-                    ),
-                  ),
+                prefixIcon: SvgPicture.asset(
+                  Asset.searchIcon,
+                  height: 16,
+                  width: 16,
                 ),
               ),
             ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  "Connection Inbox",
-                  style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
-                ),
-              ),
-            ),
-
             SizedBox(height: 2.h),
             Expanded(
               child: ListView.builder(
@@ -80,8 +44,8 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                  Get.toNamed(Routes.CONNECTION_INBOX);
-              },
+                      Get.toNamed(Routes.CONNECTION_INBOX);
+                    },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
                       decoration: BoxDecoration(
@@ -116,19 +80,22 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
                                 SizedBox(width: 2.w),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "Mike Junior wants to connect with you",
-                                        style: MyTexts.medium14.copyWith(
+                                        style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
+                                          fontFamily: MyTexts.Roboto,
                                         ),
                                       ),
-                                      SizedBox(height: 1.h),
+                                      const Gap(4),
                                       Text(
                                         "User   •   12 Aug 2025, 08:00pm",
-                                        style: MyTexts.medium12.copyWith(
+                                        style: MyTexts.regular14.copyWith(
                                           color: MyColors.fontBlack,
+                                          fontFamily: MyTexts.Roboto,
                                         ),
                                       ),
                                     ],
@@ -136,9 +103,9 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
                                 ),
                               ],
                             ),
-                    
-                            SizedBox(height: 1.h),
-                    
+
+                            SizedBox(height: 2.h),
+
                             // Buttons Row
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -153,12 +120,15 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
                                       builder: (BuildContext context) {
                                         return Dialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(16),
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
                                           ),
                                           child: Container(
                                             padding: const EdgeInsets.all(20),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(16),
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
                                               color: Colors.white,
                                             ),
                                             child: Column(
@@ -172,27 +142,35 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
                                                   ),
                                                 ),
                                                 SizedBox(height: 2.h),
-                    
+
                                                 Text(
                                                   "Connect to CRM!",
-                                                  style: MyTexts.extraBold20.copyWith(
-                                                    color: MyColors.primary,
-                                                  ),
+                                                  style: MyTexts.extraBold20
+                                                      .copyWith(
+                                                        color: MyColors.primary,
+                                                      ),
                                                   textAlign: TextAlign.center,
                                                 ),
                                                 SizedBox(height: 1.h),
                                                 Text(
                                                   "To Proceed with your request, please connect to CRM.",
-                                                  style: MyTexts.regular16.copyWith(
-                                                    color: MyColors.dopelyColors,
-                                                  ),
+                                                  style: MyTexts.regular16
+                                                      .copyWith(
+                                                        color: MyColors
+                                                            .dopelyColors,
+                                                    fontFamily:
+                                                    MyTexts
+                                                        .Roboto,
+                                                      ),
                                                   textAlign: TextAlign.center,
                                                 ),
                                                 const SizedBox(height: 24),
                                                 Center(
                                                   child: RoundedButton(
                                                     onTap: () {
-                                                      Navigator.of(context).pop();
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
                                                     },
                                                     buttonName: '',
                                                     borderRadius: 12,
@@ -204,10 +182,14 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
                                                     child: Center(
                                                       child: Text(
                                                         'Proceed',
-                                                        style: MyTexts.medium16.copyWith(
-                                                          color: MyColors.white,
-                                                          fontFamily: MyTexts.Roboto,
-                                                        ),
+                                                        style: MyTexts.medium16
+                                                            .copyWith(
+                                                              color: MyColors
+                                                                  .white,
+                                                              fontFamily:
+                                                                  MyTexts
+                                                                      .Roboto,
+                                                            ),
                                                       ),
                                                     ),
                                                   ),
@@ -225,10 +207,14 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
                                   ),
                                   label: Text(
                                     "Connect",
-                                    style: MyTexts.medium14.copyWith(color: MyColors.white),
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.white,
+                                      fontFamily: MyTexts.Roboto
+                                    ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: MyColors.primary, // Navy Blue
+                                    backgroundColor: MyColors.primary,
+                                    // Navy Blue
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(30),
                                     ),
@@ -242,10 +228,17 @@ class ConnectionInboxView extends GetView<ConnectionInboxController> {
                                 // Disconnect Button
                                 ElevatedButton.icon(
                                   onPressed: () {},
-                                  icon: Icon(Icons.cancel_outlined, color: MyColors.white),
+                                  icon: Icon(
+                                    Icons.cancel_outlined,
+                                    color: MyColors.white,
+                                  ),
                                   label: Text(
                                     "Disconnect",
-                                    style: MyTexts.medium14.copyWith(color: MyColors.white),
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.white,
+                                        fontFamily: MyTexts.Roboto
+
+                                    ),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: MyColors.red,

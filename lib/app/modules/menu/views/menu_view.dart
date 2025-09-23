@@ -1,8 +1,11 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/ProductApproval/views/product_approval_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
 import 'package:construction_technect/app/modules/settings/views/setting_view.dart';
+import 'package:gap/gap.dart';
 
 class MenuView extends StatelessWidget {
   const MenuView({super.key});
@@ -11,88 +14,251 @@ class MenuView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        backgroundColor: MyColors.white,
-        elevation: 0,
-        centerTitle: false,
-        leading: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SvgPicture.asset(Asset.menuIcon, width: 24, height: 24),
-        ),
-        title: Text('Menu', style: MyTexts.regular20),
+      appBar: CommonAppBar(
+        isCenter: false,
+        leading: const SizedBox(),
+        leadingWidth: 0,
+        title: const Text("MENU"),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 6.sw),
-        child: Column(
-          children: [
-            SizedBox(height: 2.h),
-            _buildMenuItem(
-              'Service Management',
-              false,
-              onTap: () {
-                Get.toNamed(Routes.SERVICE_MANAGEMENT);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Product Management',
-              customIcon: SvgPicture.asset(Asset.productManagement, height: 24, width: 24),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 6.sw),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 1.h),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  color: const Color(0xFFFFED29).withValues(alpha: 0.5),
+                ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(Asset.gift),
+                    const Gap(13),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Get Couples for Every Referral",
+                          style: MyTexts.medium16.copyWith(
+                            fontFamily: MyTexts.Roboto,
+                            color: MyColors.primary,
+                          ),
+                        ),
+                        Text(
+                          "Refer your business friends now!",
+                          style: MyTexts.regular14.copyWith(
+                            fontFamily: MyTexts.Roboto,
+                            color: MyColors.gray6B,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 2.h),
+              HearderText(text: "Profile"),
+              Gap(1.h),
+              CommonContainer(
+                children: [
+                  CommonRowItem(
+                    icon: Asset.settingsIcon,
+                    title: "Profile Details",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.settingsIcon,
+                    title: "Teams & Roles",
+                    onTap: () {},
+                  ),
+                ],
+              ),
+              SizedBox(height: 2.h),
+              HearderText(text: "Support"),
+              Gap(1.h),
+              CommonContainer(
+                children: [
+                  CommonRowItem(
+                    icon: Asset.suportTicket,
 
-              false,
-              onTap: () {
-                Get.to(() => ProductManagementView());
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem('Approval Inbox', true,
-               customIcon: Image.asset(Asset.vectorIcon, height: 24, width: 24),
+                    title: "Help & Support",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.youtube,
 
-            onTap: (){
-              Get.to(()=> const ProductApprovalView());
-            }),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Connection Inbox',
-              true,
-              customIcon: Image.asset(Asset.crmIcon, height: 24, width: 24),
-              onTap: () {
+                    title: "Tutorials",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+
+                  CommonRowItem(
+                    icon: Asset.warning,
+
+                    title: "F.A.Q.S",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.thumbup,
+
+                    title: "Feedback",
+                    onTap: () {},
+                  ),
+                ],
+              ),
+              SizedBox(height: 2.h),
+              HearderText(text: "Others"),
+              Gap(1.h),
+              CommonContainer(
+                children: [
+                  CommonRowItem(
+                    icon: Asset.about,
+
+                    title: "Explore Subscription Plans",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.gift,
+
+                    title: "Refer & Get Coupons",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+
+                  CommonRowItem(
+                    icon: Asset.link,
+
+                    title: "Use on Desktop",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.notifications,
+
+                    title: "Whats NEWS",
+                    onTap: () {},
+                  ),
+                ],
+              ),
+              SizedBox(height: 2.h),
+              HearderText(text: "About"),
+              Gap(1.h),
+              CommonContainer(
+                children: [
+                  CommonRowItem(
+                    icon: Asset.about,
+
+                    title: "About Us",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.gift,
+
+                    title: "Privacy Policy",
+                    onTap: () {},
+                  ),
+                  const Gap(20),
+
+                  CommonRowItem(
+                    icon: Asset.link,
+
+                    title: "Terms & Conditions",
+                    onTap: () {},
+                  ),
+                ],
+              ),
+              const Gap(20),
+
+              _buildMenuItem(
+                'Service Management',
+                false,
+                onTap: () {
+                  Get.toNamed(Routes.SERVICE_MANAGEMENT);
+                },
+              ),
+              SizedBox(height: 1.h),
+              _buildMenuItem(
+                'Product Management',
+                customIcon: SvgPicture.asset(
+                  Asset.productManagement,
+                  height: 24,
+                  width: 24,
+                ),
+
+                false,
+                onTap: () {
+                  Get.to(() => ProductManagementView());
+                },
+              ),
+              SizedBox(height: 1.h),
+              _buildMenuItem(
+                'Approval Inbox',
+                true,
+                customIcon: Image.asset(
+                  Asset.vectorIcon,
+                  height: 24,
+                  width: 24,
+                ),
+
+                onTap: () {
+                  Get.to(() => const ProductApprovalView());
+                },
+              ),
+              SizedBox(height: 1.h),
+              _buildMenuItem(
+                'Connection Inbox',
+                true,
+                customIcon: Image.asset(Asset.crmIcon, height: 24, width: 24),
+                onTap: () {
                   Get.toNamed(Routes.CONNECTION_INBOX);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Role Management',
-          customIcon: SvgPicture.asset(Asset.role, height: 24, width: 24),
+                },
+              ),
+              SizedBox(height: 1.h),
+              _buildMenuItem(
+                'Role Management',
+                customIcon: SvgPicture.asset(Asset.role, height: 24, width: 24),
 
-              false,
-              onTap: () {
-                Get.toNamed(Routes.ROLE_MANAGEMENT);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Support Ticket',
-              true,
-              customIcon: SvgPicture.asset(Asset.suportTicket),
-              onTap: () {
-                Get.to(() => CustomerSupportView());
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Settings',
-              false,
-               customIcon: SvgPicture.asset(Asset.settingsIcon),
+                false,
+                onTap: () {
+                  Get.toNamed(Routes.ROLE_MANAGEMENT);
+                },
+              ),
+              SizedBox(height: 1.h),
+              _buildMenuItem(
+                'Support Ticket',
+                true,
+                customIcon: SvgPicture.asset(Asset.suportTicket),
+                onTap: () {
+                  Get.to(() => CustomerSupportView());
+                },
+              ),
+              SizedBox(height: 1.h),
+              _buildMenuItem(
+                'Settings',
+                false,
+                customIcon: SvgPicture.asset(Asset.settingsIcon),
 
-               onTap: () {
-                Get.to(() => const SettingView());
-              },
+                onTap: () {
+                  Get.to(() => const SettingView());
+                },
 
-              // onTap: () {
-              //   Get.toNamed(Routes.PROFILE);
-              // },
-            ),
-          ],
+                // onTap: () {
+                //   Get.toNamed(Routes.PROFILE);
+                // },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -182,8 +348,12 @@ class MenuView extends StatelessWidget {
             Text(
               title,
               style: MyTexts.medium16.copyWith(
-                color: isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                fontWeight: highlight == true ? FontWeight.w600 : FontWeight.w800,
+                color: isDestructive == true
+                    ? MyColors.red
+                    : MyColors.fontBlack,
+                fontWeight: highlight == true
+                    ? FontWeight.w600
+                    : FontWeight.w800,
               ),
             ),
           ],
@@ -191,7 +361,6 @@ class MenuView extends StatelessWidget {
       ),
     );
   }
-
 }
 
 /// Modern Confirmation Dialog
@@ -236,7 +405,9 @@ void _showConfirmDialog(
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             side: BorderSide(color: Colors.grey.shade400),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: () => Get.back(),
@@ -248,7 +419,9 @@ void _showConfirmDialog(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             elevation: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: onConfirm,
@@ -257,4 +430,71 @@ void _showConfirmDialog(
     ),
     barrierDismissible: false,
   );
+}
+
+class CommonContainer extends StatelessWidget {
+  final List<Widget> children;
+
+  const CommonContainer({super.key, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: MyColors.grayD4),
+      ),
+      child: Column(children: children),
+    );
+  }
+}
+
+class CommonRowItem extends StatelessWidget {
+  final String icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const CommonRowItem({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.translucent,
+      child: Row(
+        children: [
+          SizedBox(
+            height: 20,
+            width: 20,
+            child: SvgPicture.asset(
+              icon,
+              colorFilter: const ColorFilter.mode(
+                MyColors.primary,
+                BlendMode.srcIn,
+              ),
+              height: 20,
+              width: 20,
+            ),
+          ),
+          const Gap(20),
+          Text(
+            title,
+            style: MyTexts.regular16.copyWith(color: MyColors.primary),
+          ),
+          const Spacer(),
+          const Icon(
+            Icons.arrow_forward_ios,
+            color: MyColors.primary,
+            size: 16,
+          ),
+        ],
+      ),
+    );
+  }
 }

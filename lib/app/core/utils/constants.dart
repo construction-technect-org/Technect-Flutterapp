@@ -50,6 +50,8 @@ class Asset {
   static const String aboutUs = 'assets/images/aboutUs.png';
   static const String productManagement = 'assets/images/productManagement.svg';
   static const String role = 'assets/images/role.svg';
+  static const String about = 'assets/images/about.svg';
+  static const String youtube = 'assets/images/youtube.svg';
 
   // Edit
   static const String editIcon = 'assets/images/edit.svg';
@@ -155,6 +157,7 @@ class Asset {
   static const String setting = 'assets/images/setting.svg';
   static const String aTeam = 'assets/images/ateam.png';
   static const String link = 'assets/images/link.svg';
+  static const String gift = 'assets/images/gift.svg';
 
   // Connector Category
 
