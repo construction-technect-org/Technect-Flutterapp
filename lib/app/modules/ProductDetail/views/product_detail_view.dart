@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ProductDetail/controllers/product_detail_controller.dart';
+import 'package:gap/gap.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
   @override
@@ -15,59 +17,130 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        backgroundColor: MyColors.veryPaleBlue,
-        elevation: 0,
-        centerTitle: false,
-        titleSpacing: 0,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
-        ),
-        title: Text(
-          "Product Details",
-          style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-        ),
+      appBar: CommonAppBar(
+        title: const Text("Product Details"),
+        isCenter: false,
+        action: [
+          SvgPicture.asset(Asset.link),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+          ),
+        ],
       ),
 
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Container(
-                width: 360.w,
-                height: 30.h,
-                decoration: const BoxDecoration(
-                  color: MyColors.veryPaleBlue,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(37),
-                    bottomRight: Radius.circular(37),
-                  ),
-                ),
-                padding: EdgeInsets.only(bottom: 2.h),
-                alignment: Alignment.center,
-                child:
-                    (controller.product.productImage != null &&
-                        controller.product.productImage!.isNotEmpty)
-                    ? Image.network(
-                        "${APIConstants.bucketUrl}${controller.product.productImage!}",
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
-                            Icons.broken_image, // "no image" icon
-                            size: 60,
-                            color: Colors.grey,
-                          );
-                        },
-                      )
-                    : const Icon(
-                        Icons.image_not_supported, // shown if null/empty
-                        size: 60,
-                        color: Colors.grey,
-                      ),
-              ),
+            Container(
+              width: 360.w,
+              height: 40.h,
+              decoration: const BoxDecoration(color: MyColors.grayF2),
+              alignment: Alignment.center,
+              child:
+                  (controller.product.productImage != null &&
+                      controller.product.productImage!.isNotEmpty)
+                  ? Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        Image.network(
+                          "${APIConstants.bucketUrl}${controller.product.productImage!}",
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.broken_image,
+                              size: 60,
+                              color: Colors.grey,
+                            );
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    controller.product.outOfStock == true
+                                        ? "Out Of Stock"
+                                        : "In Stock",
+                                    style: MyTexts.bold18.copyWith(
+                                      color:
+                                          controller.product.outOfStock == true
+                                          ? Colors.red
+                                          : Colors.green,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  const Gap(4),
+                                  Container(
+                                    height: 10,
+                                    width: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          controller.product.outOfStock == true
+                                          ? Colors.red
+                                          : Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              // Right side: rating
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.orangeAccent,
+                                    size: 18,
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.orangeAccent,
+                                    size: 18,
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.orangeAccent,
+                                    size: 18,
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.orangeAccent,
+                                    size: 18,
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.orangeAccent,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "(4.9/5)",
+                                    style: MyTexts.regular14.copyWith(
+                                      color: Colors.black,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Icon(
+                      Icons.image_not_supported,
+                      size: 60,
+                      color: Colors.grey,
+                    ),
             ),
             Padding(
               padding: const EdgeInsets.all(20),
@@ -78,8 +151,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        controller.product.productName ?? '',
-                        style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                        controller.product.productName?.capitalizeFirst ?? '-',
+                        style: MyTexts.medium18.copyWith(
+                          color: MyColors.fontBlack,
+                        ),
                       ),
                       TextButton.icon(
                         onPressed: controller.onEditProduct,
@@ -94,7 +169,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         ),
                         label: Text(
                           "Edit",
-                          style: MyTexts.regular16.copyWith(color: MyColors.primary),
+                          style: MyTexts.regular16.copyWith(
+                            color: MyColors.primary,
+                            fontFamily: MyTexts.Roboto,
+                          ),
                         ),
                       ),
                     ],
@@ -103,7 +181,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     children: [
                       Text(
                         "${controller.product.price ?? 0}/Unit",
-                        style: MyTexts.medium24.copyWith(color: MyColors.primary),
+                        style: MyTexts.medium24.copyWith(
+                          color: MyColors.primary,
+                        ),
                       ),
                       const Spacer(),
                       if (controller.product.ratingCount != 0)
@@ -139,7 +219,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 text: TextSpan(
-                                  text: controller.product.mainCategoryName ?? '',
+                                  text:
+                                      controller.product.mainCategoryName ?? '',
                                   style: MyTexts.extraBold14.copyWith(
                                     color: MyColors.green,
                                   ),
@@ -169,7 +250,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 text: TextSpan(
-                                  text: controller.product.subCategoryName ?? '',
+                                  text:
+                                      controller.product.subCategoryName ?? '',
                                   style: MyTexts.extraBold14.copyWith(
                                     color: MyColors.green,
                                   ),
@@ -223,7 +305,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     children: [
                       Text(
                         controller.product.brand ?? '',
-                        style: MyTexts.extraBold18.copyWith(color: MyColors.primary),
+                        style: MyTexts.extraBold18.copyWith(
+                          color: MyColors.primary,
+                        ),
                       ),
                       SizedBox(width: 1.w),
                       Image.asset(Asset.virify, height: 4.h, width: 4.w),
@@ -236,7 +320,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   SizedBox(height: 2.h),
                   Text(
                     "Product Specifications:",
-                    style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
+                    style: MyTexts.extraBold18.copyWith(
+                      color: MyColors.fontBlack,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   _buildSpecificationsSection(),
@@ -246,46 +332,15 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   if ((controller.product.termsAndConditions ?? '') != '')
                     Text(
                       controller.product.termsAndConditions ?? '',
-                      style: MyTexts.extraBold16.copyWith(color: MyColors.green),
+                      style: MyTexts.extraBold16.copyWith(
+                        color: MyColors.green,
+                      ),
                     ).paddingOnly(bottom: 1.h),
                   Text(
                     "Amount & Tax Summary",
                     style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                   ),
                   SizedBox(height: 0.8.h),
-                  Container(
-                    width: 100.w,
-                    padding: EdgeInsets.all(2.h),
-                    decoration: BoxDecoration(
-                      color: MyColors.veryPaleOrange,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildPriceRow(
-                          "Product Rate:",
-                          '${controller.product.price ?? 0}',
-                        ),
-                        SizedBox(height: 0.8.h),
-                        _buildPriceRow(
-                          "GST (${controller.product.gstPercentage ?? 0}%):",
-                          '${controller.product.gstAmount}',
-                        ),
-                        const Divider(color: Colors.black38),
-                        _buildPriceRow(
-                          "Total Price:",
-                          '${double.parse(controller.product.price ?? '0') + double.parse(controller.product.gstAmount ?? '0')}',
-                          valueStyle: MyTexts.extraBold20.copyWith(
-                            color: MyColors.fontBlack,
-                          ),
-                          labelStyle: MyTexts.medium20.copyWith(
-                            color: MyColors.fontBlack,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   SizedBox(height: 2.h),
                 ],
               ),
@@ -308,11 +363,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       children: [
         Text(
           label,
-          style: labelStyle ?? MyTexts.light14.copyWith(color: MyColors.fontBlack),
+          style:
+              labelStyle ?? MyTexts.light14.copyWith(color: MyColors.fontBlack),
         ),
         Text(
           value,
-          style: valueStyle ?? MyTexts.light14.copyWith(color: MyColors.fontBlack),
+          style:
+              valueStyle ?? MyTexts.light14.copyWith(color: MyColors.fontBlack),
         ),
       ],
     );
@@ -341,7 +398,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       {'label': 'Colour', 'value': product.colour ?? 'N/A'},
       {'label': 'Size', 'value': product.size ?? 'N/A'},
       {'label': 'Weight', 'value': product.weight ?? 'N/A'},
-      {'label': 'Stock Quantity', 'value': product.stockQuantity?.toString() ?? 'N/A'},
+      {
+        'label': 'Stock Quantity',
+        'value': product.stockQuantity?.toString() ?? 'N/A',
+      },
     ];
 
     return _buildSpecificationGrid(specifications);
@@ -357,7 +417,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     final keys = filterValues.keys.toList();
     final specifications = keys
         .map(
-          (key) => {'label': _formatKeyName(key), 'value': filterValues[key].toString()},
+          (key) => {
+            'label': _formatKeyName(key),
+            'value': filterValues[key].toString(),
+          },
         )
         .toList();
 
@@ -386,7 +449,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         children: [
           for (int i = 0; i < specifications.length; i += 2)
             Padding(
-              padding: EdgeInsets.only(bottom: i + 2 < specifications.length ? 12 : 0),
+              padding: EdgeInsets.only(
+                bottom: i + 2 < specifications.length ? 12 : 0,
+              ),
               child: Row(
                 children: [
                   Expanded(

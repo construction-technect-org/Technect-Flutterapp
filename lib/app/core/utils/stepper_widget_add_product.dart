@@ -1,5 +1,6 @@
  import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:gap/gap.dart';
 
 class DottedLinePainter extends CustomPainter {
   final Color color;
@@ -121,26 +122,28 @@ class StepperWidgetAddProduct extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 50,
-              child: Text(
-                'Product',
-                style: MyTexts.medium14.copyWith(
-                  color: currentStep > 0
-                      ? const Color(0xFF3DA741)
-                      : currentStep == 0
-                      ? const Color(0xFF3D41A7)
-                      : const Color(0xFF787878),
+            Expanded(
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Text(
+                  'Product',
+                  style: MyTexts.medium14.copyWith(
+                    color: currentStep > 0
+                        ? const Color(0xFF3DA741)
+                        : currentStep == 0
+                        ? const Color(0xFF3D41A7)
+                        : const Color(0xFF787878),
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
               ),
-            ).paddingOnly(right: 16),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: SizedBox(
-                width: 80,
+            ),
+            const Gap(39),
+            Expanded(
+              child: Align(
+                alignment: Alignment.topLeft,
                 child: Text(
                   'Specifications',
                   style: MyTexts.medium14.copyWith(

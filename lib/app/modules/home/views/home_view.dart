@@ -491,7 +491,7 @@ class HearderText extends StatelessWidget {
     return Text(
       text,
       style: MyTexts.medium18.copyWith(
-        color: MyColors.textFieldBackground,
+        color: MyColors.black,
         fontFamily: MyTexts.Roboto,
       ),
     );

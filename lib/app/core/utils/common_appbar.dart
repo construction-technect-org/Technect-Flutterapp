@@ -5,7 +5,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final Widget? title;
   final Widget? leading;
-  final Widget? action;
+  final List<Widget>? action;
   final bool automaticallyImplyLeading;
   final bool isImageOrNot = true;
   final TextStyle? textStyle;
@@ -37,6 +37,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      actions:action,
       surfaceTintColor: Colors.white,
       automaticallyImplyLeading: false,
       leadingWidth: leadingWidth ?? 40,

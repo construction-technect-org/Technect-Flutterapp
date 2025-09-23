@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
 import 'package:construction_technect/app/modules/home/views/home_view.dart';
@@ -21,9 +22,9 @@ class MainTabBarView extends GetView<MainController> {
           case 2:
             return CustomerSupportView();
           case 3:
-            return const MenuView();
+            return ConnectionInboxView();
           default:
-            return HomeView();
+            return const MenuView();
         }
       }),
       bottomNavigationBar: Obx(() {

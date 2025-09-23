@@ -35,7 +35,7 @@ class CommonDropdown<T> extends StatelessWidget {
             color: enabled ? const Color(0xFFA0A0A0) : Colors.grey.shade300,
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<T>(
             value: items.contains(selectedValue.value)
@@ -44,9 +44,13 @@ class CommonDropdown<T> extends StatelessWidget {
             isExpanded: true,
             hint: Text(
               hintText,
-              style: MyTexts.medium16.copyWith(
-                color: enabled ? MyColors.grey : Colors.grey.shade400,
+              style:
+              MyTexts.regular16.copyWith(
+                color: enabled ? MyColors.primary.withValues(alpha: 0.5):  Colors.grey.shade400,
+                fontFamily: MyTexts.Roboto,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
             icon: enabled
                 ? (suffix ??
