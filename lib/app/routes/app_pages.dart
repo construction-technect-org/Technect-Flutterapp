@@ -22,18 +22,16 @@ import 'package:construction_technect/app/modules/Connector/AddKyc/bindings/add_
 import 'package:construction_technect/app/modules/Connector/AddKyc/views/add_kyc_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/bindings/Connector_add_location_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/views/connector_add_location_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorAddLocationManually/bindings/connector_add_location_manually_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorAddLocationManually/view/connector_add_location_manually_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/views/connector_profile_view.dart';
-import 'package:construction_technect/app/modules/Connector/ListOfMerchant/bindings/list_0f_merchant_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ListOfMerchant/views/list_0f_merchant_view.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/bindings/main_tab_binding.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/views/main_tab.dart';
-import 'package:construction_technect/app/modules/Connector/SelectMainCategory/bindings/select_main_category_binding.dart';
-import 'package:construction_technect/app/modules/Connector/SelectMainCategory/views/select_main_category_view.dart';
 import 'package:construction_technect/app/modules/Dashboard/bindings/dashboard_binding.dart';
 import 'package:construction_technect/app/modules/Dashboard/views/dashboard_view.dart';
 import 'package:construction_technect/app/modules/DashboardMarketPlace/bindings/market_place_binding.dart';
@@ -242,16 +240,8 @@ class AppPages {
       page: () => const ConnectorMarketPlaceView(),
       binding: ConnectorMarketPlaceBinfing(),
     ),
-    GetPage(
-      name: _Paths.SELECT_MAIN_CATEGORY,
-      page: () => SelectMainCategoryView(),
-      binding: SelectMainCategoryBinding(),
-    ),
-    GetPage(
-      name: _Paths.LIST_OF_MERCHANT,
-      page: () => ListOfMerchantView(),
-      binding: ListOfMerchantBinding(),
-    ),
+  
+  
     GetPage(
       name: _Paths.CONNECTOR_PROFILE,
       page: () => ConnectorProfileView(),
@@ -282,15 +272,21 @@ class AppPages {
       page: () => const DashboardMarketPlaceView(),
       binding: DashboardMarketPlaceBinding(),
     ),
-    GetPage(
-      name: Routes.CONNECTOR_PRODUCT_DETAILS,
-      page: () =>  ConnectorProductDetailsView(),
-      binding: ConnectorProductDetailsBindings(),
-    ),
+   
       GetPage(
+      name: Routes.CONNECTOR_SELECT_LOCATION,
+      page: () =>  ConnectorSelectLocationView(),
+      binding: ConnectorSelectLocationBinding(),
+    ),
+     GetPage(
       name: Routes.CONNECTOR_ADD_LOCATION,
-      page: () =>  ConnectorAddLocationView(),
+      page: () =>  const ConnectorAddLocationView(),
       binding: ConnectorAddLocationBinding(),
+    ),
+     GetPage(
+      name: Routes.CONNECTOR_ADD_LOCATION_MANUALLY,
+      page: () =>  const ConnectorAddLocationManuallyView(),
+      binding: ConnectorAddLocationManuallyBinding(),
     ),
   ];
 }

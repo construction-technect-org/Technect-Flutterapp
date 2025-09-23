@@ -41,9 +41,7 @@ class SplashController extends GetxController {
     Get.dialog(
       AlertDialog(
         title: const Text('No Internet Connection'),
-        content: const Text(
-          'Please check your internet connection and try again.',
-        ),
+        content: const Text('Please check your internet connection and try again.'),
         actions: [
           TextButton(
             onPressed: () {

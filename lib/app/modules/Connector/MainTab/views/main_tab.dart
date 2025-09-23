@@ -63,11 +63,11 @@
 //   }
 // }
 
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMenu/views/connector_menu_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
 import 'package:construction_technect/app/modules/Connector/MainTab/controllers/main_tab_controller.dart';
-import 'package:construction_technect/app/modules/Connector/home/views/home_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 
 class MainTab extends GetView<MainTabController> {
   const MainTab({super.key});
@@ -78,9 +78,9 @@ class MainTab extends GetView<MainTabController> {
       body: Obx(() {
         switch (controller.currentIndex.value) {
           case 0:
-            return HomeView();
+            return ConnectorHomeView();
           case 1:
-            return const Center(child: Text("1"));
+            return ConnectorProductDetailsView();
           case 2:
             return const Center(child: Text("2"));
           case 3:
@@ -89,110 +89,109 @@ class MainTab extends GetView<MainTabController> {
             return const ConnectorMenuView();
         }
       }),
-   bottomNavigationBar: Container(
-  height: 90,
-  color: MyColors.primary,
-  child: SafeArea(
-    top: false, // we only care about bottom safe area
-    child: Padding(
-      padding: const EdgeInsets.only(top: 6.0),
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-        ),
-        child: Obx(
-          () => BottomNavigationBar(
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: MyColors.primary,
-            currentIndex: controller.currentIndex.value,
-            onTap: controller.changeTab,
-            selectedItemColor: MyColors.white,
-            unselectedItemColor: MyColors.white.withOpacity(0.25),
-            selectedLabelStyle: MyTexts.medium13.copyWith(color: MyColors.white),
-            unselectedLabelStyle: MyTexts.medium13.copyWith(
-              color: MyColors.white.withOpacity(0.25),
+      bottomNavigationBar: ColoredBox(
+        color: MyColors.primary,
+        child: SafeArea(
+          top: false, // we only care about bottom safe area
+          child: Padding(
+            padding: const EdgeInsets.only(top: 6.0),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+              ),
+              child: Obx(
+                () => BottomNavigationBar(
+                  elevation: 0,
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: MyColors.primary,
+                  currentIndex: controller.currentIndex.value,
+                  onTap: controller.changeTab,
+                  selectedItemColor: MyColors.white,
+                  unselectedItemColor: MyColors.white.withOpacity(0.25),
+                  selectedLabelStyle: MyTexts.medium13.copyWith(color: MyColors.white),
+                  unselectedLabelStyle: MyTexts.medium13.copyWith(
+                    color: MyColors.white.withOpacity(0.25),
+                  ),
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        Asset.homeIcon,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(
+                          controller.currentIndex.value == 0
+                              ? MyColors.white
+                              : MyColors.white.withOpacity(0.25),
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        Asset.productIcon,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(
+                          controller.currentIndex.value == 1
+                              ? MyColors.white
+                              : MyColors.white.withOpacity(0.25),
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Product',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        Asset.supportIcon,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(
+                          controller.currentIndex.value == 2
+                              ? MyColors.white
+                              : MyColors.white.withOpacity(0.25),
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Support',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        Asset.connectionIcon,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(
+                          controller.currentIndex.value == 3
+                              ? MyColors.white
+                              : MyColors.white.withOpacity(0.25),
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'Connection',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: SvgPicture.asset(
+                        Asset.moreIcon,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(
+                          controller.currentIndex.value == 4
+                              ? MyColors.white
+                              : MyColors.white.withOpacity(0.25),
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                      label: 'More',
+                    ),
+                  ],
+                ),
+              ),
             ),
-            items: [
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  Asset.homeIcon,
-                  width: 24,
-                  height: 24,
-                  colorFilter: ColorFilter.mode(
-                    controller.currentIndex.value == 0
-                        ? MyColors.white
-                        : MyColors.white.withOpacity(0.25),
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  Asset.productIcon,
-                  width: 24,
-                  height: 24,
-                  colorFilter: ColorFilter.mode(
-                    controller.currentIndex.value == 1
-                        ? MyColors.white
-                        : MyColors.white.withOpacity(0.25),
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'Product',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  Asset.supportIcon,
-                  width: 24,
-                  height: 24,
-                  colorFilter: ColorFilter.mode(
-                    controller.currentIndex.value == 2
-                        ? MyColors.white
-                        : MyColors.white.withOpacity(0.25),
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'Support',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  Asset.connectionIcon,
-                  width: 24,
-                  height: 24,
-                  colorFilter: ColorFilter.mode(
-                    controller.currentIndex.value == 3
-                        ? MyColors.white
-                        : MyColors.white.withOpacity(0.25),
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'Connection',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  Asset.moreIcon,
-                  width: 24,
-                  height: 24,
-                  colorFilter: ColorFilter.mode(
-                    controller.currentIndex.value == 4
-                        ? MyColors.white
-                        : MyColors.white.withOpacity(0.25),
-                    BlendMode.srcIn,
-                  ),
-                ),
-                label: 'More',
-              ),
-            ],
           ),
         ),
       ),
-    ),
-  ),
-),
- );
+    );
   }
 
   Widget _buildTabItem(int index, String iconPath, String label) {
@@ -214,4 +213,3 @@ class MainTab extends GetView<MainTabController> {
     );
   }
 }
-

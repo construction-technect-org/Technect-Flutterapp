@@ -50,10 +50,7 @@ class HomeView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18.0,
-                vertical: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16),
               child: Row(
                 children: [
                   Image.asset(Asset.profil, height: 40, width: 40),
@@ -87,11 +84,7 @@ class HomeView extends StatelessWidget {
                         },
                         child: Row(
                           children: [
-                            SvgPicture.asset(
-                              Asset.location,
-                              width: 9,
-                              height: 12.22,
-                            ),
+                            SvgPicture.asset(Asset.location, width: 9, height: 12.22),
                             SizedBox(width: 0.4.h),
                             Obx(
                               () => Text(
@@ -253,10 +246,7 @@ class HomeView extends StatelessWidget {
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: MyColors.gray5D,
-                                width: 0.5,
-                              ),
+                              border: Border.all(color: MyColors.gray5D, width: 0.5),
                             ),
                             child: GridView.builder(
                               shrinkWrap: true,
@@ -274,11 +264,7 @@ class HomeView extends StatelessWidget {
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    SvgPicture.asset(
-                                      item['icon'],
-                                      height: 28,
-                                      width: 28,
-                                    ),
+                                    SvgPicture.asset(item['icon'], height: 28, width: 28),
                                     const SizedBox(height: 8),
                                     Text(
                                       item['title'],
@@ -327,11 +313,7 @@ class HomeView extends StatelessWidget {
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
-                                  child: Image.asset(
-                                    Asset.aTeam,
-                                    height: 67,
-                                    width: 67,
-                                  ),
+                                  child: Image.asset(Asset.aTeam, height: 67, width: 67),
                                 ),
                                 const Gap(12),
                                 Text(
@@ -394,9 +376,7 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(
-                color: MyColors.textFieldBackground,
-              ),
+              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
             ),
           ],
         ),
@@ -437,12 +417,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildNotiCard({
-    String? title,
-    String? value,
-    String? icon,
-    Color? color,
-  }) {
+  Widget _buildNotiCard({String? title, String? value, String? icon, Color? color}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
       decoration: BoxDecoration(
@@ -465,10 +440,7 @@ class HomeView extends StatelessWidget {
                   icon ?? "",
                   height: 30,
                   width: 30,
-                  colorFilter: ColorFilter.mode(
-                    color ?? Colors.black,
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
                 ),
               ),
               Container(
