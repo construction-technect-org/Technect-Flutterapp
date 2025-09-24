@@ -115,7 +115,7 @@ class MenuView extends StatelessWidget {
                           "Refer your business friends now!",
                           style: MyTexts.regular14.copyWith(
                             fontFamily: MyTexts.Roboto,
-                            color: MyColors.gray6B,
+                            color: MyColors.greyFour,
                           ),
                         ),
                       ],

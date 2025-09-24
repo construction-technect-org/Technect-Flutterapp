@@ -53,7 +53,7 @@ class DashboardMarketPlaceController extends GetxController {
         if (selectedRole.value.trim().toLowerCase() == "partner") {
           Get.offAllNamed(Routes.MAIN);
         } else {
-          Get.offAllNamed(Routes.MAIN_TAB);
+          Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
         }
       } else {
         SnackBars.errorSnackBar(

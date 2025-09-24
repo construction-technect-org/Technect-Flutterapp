@@ -3,6 +3,9 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 class MyTexts {
   static const String Lato = 'Lato';
   static const String Roboto = 'Roboto';
+  static const String Geometric = 'Geometric';
+
+
 
   //bool Ukr = 'Ukr';
 
@@ -239,5 +242,6 @@ class MyTexts {
     fontWeight: FontWeight.w700,
     color: MyColors.black,
   );
+   
 
 }
