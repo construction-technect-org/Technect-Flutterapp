@@ -18,28 +18,33 @@ class AddTeamService {
   }
 
   Future<SignUpModel> addTeam({
-    required Map<String, dynamic> fields,   Map<String, String>? files,
+    required Map<String, dynamic> fields,
+    Map<String, String>? files,
   }) async {
     try {
       final response = await apiManager.postMultipart(
         url: APIConstants.team,
-        fields:fields ,
+        fields: fields,
         files: files,
-//
+        //
       );
       return SignUpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in signup: $e , $st');
     }
-  }Future<SignUpModel> updateTeam({
-    required Map<String, dynamic> fields,   Map<String, String>? files,required String id
+  }
+
+  Future<SignUpModel> updateTeam({
+    required Map<String, dynamic> fields,
+    Map<String, String>? files,
+    required String id,
   }) async {
     try {
       final response = await apiManager.putMultipart(
         url: '${APIConstants.team}/$id',
-        fields:fields ,
+        fields: fields,
         files: files,
-//
+        //
       );
       return SignUpModel.fromJson(response);
     } catch (e, st) {

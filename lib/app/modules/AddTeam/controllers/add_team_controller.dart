@@ -111,12 +111,6 @@ class AddTeamController extends GetxController {
         "full_name": fullNameController.text,
         "email_id": emialIdController.text,
         "phone_number": phoneNumberController.text,
-        "address": addressController.text,
-        "state": stateController.text,
-        "city": cityController.text,
-        "pincode": pinCodeController.text,
-        "aadhar_card_number": aadharCardController.text,
-        "pan_card_number": panCardController.text,
         "team_role_id": selectedRole?.value.id ?? '',
         "is_active": "true",
       };
@@ -125,45 +119,14 @@ class AddTeamController extends GetxController {
         "full_name": fullNameController.text,
         "email_id": emialIdController.text,
         "phone_number": phoneNumberController.text,
-        "address": addressController.text,
-        "state": stateController.text,
-        "city": cityController.text,
-        "pincode": pinCodeController.text,
-        "aadhar_card_number": aadharCardController.text,
-        "pan_card_number": panCardController.text,
         "team_role_id": selectedRole?.value.id ?? '',
         "is_active": "true",
-      };
-    }
-    Map<String, String> selectedFiles = {};
-
-    if (isEdit.value) {
-      // For updates, only include photos that have been changed
-      if (pickedFileProfilePhotoPath.value != originalProfilePhotoPath &&
-          pickedFileProfilePhotoPath.value.isNotEmpty) {
-        selectedFiles["profile_photo"] = pickedFileProfilePhotoPath.value;
-      }
-      if (pickedFileAadhaarCardPhotoPath.value != originalAadhaarCardPhotoPath &&
-          pickedFileAadhaarCardPhotoPath.value.isNotEmpty) {
-        selectedFiles["aadhar_card_photo"] = pickedFileAadhaarCardPhotoPath.value;
-      }
-      if (pickedFilePanCardPhotoPath.value != originalPanCardPhotoPath &&
-          pickedFilePanCardPhotoPath.value.isNotEmpty) {
-        selectedFiles["pan_card_photo"] = pickedFilePanCardPhotoPath.value;
-      }
-    } else {
-      // For new team members, include all photos
-      selectedFiles = {
-        "profile_photo": pickedFileProfilePhotoPath.value,
-        "aadhar_card_photo": pickedFileAadhaarCardPhotoPath.value,
-        "pan_card_photo": pickedFilePanCardPhotoPath.value,
       };
     }
     try {
       if (isEdit.value) {
         await addTeamService.updateTeam(
           fields: fields,
-          files: selectedFiles,
           id: '${teamDetailsModel.value.id ?? ''}',
         );
         await homeController.refreshTeamList();
@@ -171,7 +134,7 @@ class AddTeamController extends GetxController {
         Get.back();
         Get.back();
       } else {
-        await addTeamService.addTeam(fields: fields, files: selectedFiles);
+        await addTeamService.addTeam(fields: fields,);
         await homeController.refreshTeamList();
         await roleController.fetchTeamStatsOverview();
         isLoading.value = false;
@@ -207,7 +170,6 @@ class AddTeamController extends GetxController {
   }
 
   Future<void> filedValidation() async {
-    final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
 
     // Validate Full Name
     if (fullNameController.text.isEmpty) {
@@ -224,47 +186,13 @@ class AddTeamController extends GetxController {
       SnackBars.errorSnackBar(content: 'Please enter a valid phone number');
     } else if (phoneNumberController.text.length != 10) {
       SnackBars.errorSnackBar(content: 'Phone number must be 10 digits');
-    } else if (addressController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Address is required');
-    } else if (addressController.text.length < 10) {
-      SnackBars.errorSnackBar(content: 'Address must be at least 10 characters');
-    } else if (stateController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'State is required');
-    } else if (cityController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'City is required');
-    } else if (pinCodeController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Pincode is required');
-    } else if (!GetUtils.isNumericOnly(pinCodeController.text)) {
-      SnackBars.errorSnackBar(content: 'Pincode must contain only numbers');
-    } else if (pinCodeController.text.length != 6) {
-      SnackBars.errorSnackBar(content: 'Pincode must be 6 digits');
-    } else if (aadharCardController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Aadhar card number is required');
-    } else if (!GetUtils.isNumericOnly(aadharCardController.text)) {
-      SnackBars.errorSnackBar(content: 'Aadhar must contain only numbers');
-    } else if (aadharCardController.text.length != 12) {
-      SnackBars.errorSnackBar(content: 'Aadhar must be 12 digits');
-    } else if (panCardController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'PAN card number is required');
-    } else if (panCardController.text.length != 10) {
-      SnackBars.errorSnackBar(content: 'PAN must be 10 characters');
-    } else if (!panRegex.hasMatch(panCardController.text.toUpperCase())) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid PAN number');
     } else if (selectedCategory.value == "") {
       SnackBars.errorSnackBar(content: 'User role is required');
     } else if (!isEdit.value) {
-      // Photo validation only for new team members
-      if (pickedFileProfilePhotoPath.value.isEmpty) {
-        SnackBars.errorSnackBar(content: 'Profile photo Photo is required');
-      } else if (pickedFileAadhaarCardPhotoPath.value.isEmpty) {
-        SnackBars.errorSnackBar(content: 'Aadhar card Photo is required');
-      } else if (pickedFilePanCardPhotoPath.value.isEmpty) {
-        SnackBars.errorSnackBar(content: 'PAN card Photo is required');
-      } else {
+
         await addTeam();
-      }
+
     } else {
-      // For updates, photos are optional
       await addTeam();
     }
   }

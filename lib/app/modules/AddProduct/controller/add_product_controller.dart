@@ -53,7 +53,7 @@ class AddProductController extends GetxController {
   RxList<String> subCategoryNames = <String>[].obs;
   RxList<String> productNames = <String>[].obs;
 
-  RxList<String> uomList = <String>["Kg", "truck"].obs;
+  RxList<String> uomList = <String>["Kg", "Tones"].obs;
   RxList<String> gstList = <String>["5%","12%", "18%","28%"].obs;
 
 

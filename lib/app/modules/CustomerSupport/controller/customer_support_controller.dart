@@ -3,7 +3,6 @@ import 'package:construction_technect/app/modules/CustomerSupport/models/Support
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/services/SupportTicketCategoriesServices.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
 
 class CustomerSupportController extends GetxController {
   final SupportTicketCategoriesServices _service =
