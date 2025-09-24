@@ -1,8 +1,5 @@
-import 'package:construction_technect/app/core/utils/colors.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
-import 'package:construction_technect/app/core/utils/constants.dart';
-import 'package:construction_technect/app/core/utils/text_theme.dart';
-import 'package:flutter/material.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 
 class ConnectorSupportRequestView extends StatelessWidget {
   const ConnectorSupportRequestView({super.key});
@@ -44,7 +41,7 @@ class ConnectorSupportRequestView extends StatelessWidget {
                 color: MyColors.veryDarkGray,
                 fontFamily: MyTexts.Roboto,
               ),),
-              const SizedBox(height: 3),
+               SizedBox(height: 0.3.h),
                Text(
                 "12 Mar 2025, 03:22 pm",
                style: MyTexts.medium12.copyWith(
