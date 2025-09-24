@@ -107,7 +107,7 @@ class TicketListView extends StatelessWidget {
         priority: t.priorityName,
         title: t.subject,
         company: t.userMobile, // or merchant name if available
-        email: t.userMobile, // or user email if available
+        email: t.categoryName, // or user email if available
         description: t.description,
         createdDate: t.createdAt.toLocal().toString().split(' ')[0],
         updatedDate: t.updatedAt.toLocal().toString().split(' ')[0],
@@ -212,7 +212,7 @@ class TicketListView extends StatelessWidget {
                       ),
                       SizedBox(width: 3.w),
                       const Icon(
-                        Icons.email_outlined,
+                        Icons.category,
                         size: 16,
                         color: Colors.grey,
                       ),
@@ -239,7 +239,7 @@ class TicketListView extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        "  ●   Updated: ${ticket.updatedDate}",
+                        "  ●  Updated: ${ticket.updatedDate}",
                         style: MyTexts.bold15.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
                       ),
                     ],
