@@ -10,7 +10,7 @@ class ChatSystemView extends GetView<ChatSystemController> {
 
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
-      resizeToAvoidBottomInset: true, // ✅ Allows body to resize when keyboard opens
+      resizeToAvoidBottomInset: true, 
       appBar: AppBar(
           forceMaterialTransparency: true,
 
@@ -29,10 +29,8 @@ class ChatSystemView extends GetView<ChatSystemController> {
       ),
       body: Stack(
         children: [
-          // Full screen background color
+         
           Container(color: MyColors.backgroundColor),
-
-          // White rounded-top container
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -50,13 +48,12 @@ class ChatSystemView extends GetView<ChatSystemController> {
 
                   child: Column(
                     children: [
-                      // Messages area
+                    
                       Container(
                         padding: const EdgeInsets.all(12),
-                        child: const SizedBox(), // Replace with actual messages
+                        child: const SizedBox(),
                       ),
 
-                      // Selection chips and expandable tiles
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Column(
@@ -128,7 +125,6 @@ class ChatSystemView extends GetView<ChatSystemController> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            // First Message (Left)
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -170,7 +166,7 @@ class ChatSystemView extends GetView<ChatSystemController> {
                             ),
                             SizedBox(height: 2.h),
 
-                            // Second Message (Right)
+                           
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -216,7 +212,6 @@ class ChatSystemView extends GetView<ChatSystemController> {
                         ),
                       ),
 
-                      // Input section
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                         child: Row(
@@ -252,7 +247,7 @@ class ChatSystemView extends GetView<ChatSystemController> {
                                   height: 24,
                                 ),
                                 onPressed: () {
-                                  // handle file attach action
+                                 
                                 },
                               ),
                             ),

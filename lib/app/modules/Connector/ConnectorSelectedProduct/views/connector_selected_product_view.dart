@@ -10,26 +10,6 @@ class ConnectorSelectedProductView extends StatelessWidget {
     ConnectorSelectedProductController(),
   );
   final CommonController commonController = Get.find();
-
-  final List<Map<String, String>> selectMainCategory = [
-    {'title': 'Construction Material', 'image': Asset.constuctionMaterial},
-    {'title': 'Interior Material', 'image': Asset.interiorMateria},
-  ];
-
-  final List<CategoryItem> selectCategory = [
-    CategoryItem("Fine Aggregate", Asset.Product),
-    CategoryItem("Coarse Aggregate", Asset.constuctionMaterial),
-    CategoryItem("Bricks", Asset.interiorMateria),
-    CategoryItem("Blocks", Asset.constuctionMaterial),
-    CategoryItem("Ready Concrete", Asset.interiorMateria),
-    CategoryItem("Cement", Asset.constuctionMaterial),
-    CategoryItem("Steel", Asset.Product),
-    CategoryItem("Electrical", Asset.constuctionMaterial),
-    CategoryItem("Plumbing", Asset.constuctionMaterial),
-  ];
-
-  final List<CategoryItem> selectSubCategory = [CategoryItem("Sand", Asset.Product)];
-
   final List<Map<String, String>> items = [
     {
       "title": "Main Category",
@@ -57,25 +37,26 @@ class ConnectorSelectedProductView extends StatelessWidget {
               ),
               Expanded(
                 child: Obx(() {
-                  // Determine swipe ability based on current page and selection
                   bool isPageSwipeEnabled;
+
                   switch (controller.currentPage.value) {
                     case 0:
+                      // Page 0 → Location selected?
+                      isPageSwipeEnabled = controller.selectedSiteIndex.value != -1;
+                      break;
+                    case 1:
+                      // Page 1 → Main category selected?
                       isPageSwipeEnabled =
                           controller.selectedMainCategoryIndex.value != -1;
                       break;
-                    case 1:
-                      isPageSwipeEnabled = controller.selectedIndex.value != -1;
-                      break;
                     case 2:
-                      isPageSwipeEnabled =
-                          controller.selectedSubCategoryIndex.value != -1;
+                      // Page 2 → Subcategory or product selected?
+                      isPageSwipeEnabled = controller.selectedProductIndex.value != -1;
                       break;
                     default:
                       isPageSwipeEnabled = false;
                   }
 
-                  // Rebuild PageView with updated physics
                   return PageView.builder(
                     controller: controller.pageController,
                     physics: isPageSwipeEnabled
@@ -104,7 +85,6 @@ class ConnectorSelectedProductView extends StatelessWidget {
     return Obx(() {
       final page = controller.currentPage.value;
 
-      // For Sub-Category page, show your profile/location AppBar
       if (page == 2) {
         return AppBar(
           forceMaterialTransparency: true,
@@ -419,21 +399,13 @@ class ConnectorSelectedProductView extends StatelessWidget {
                 style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Wrap(
                 spacing: 12,
                 runSpacing: 12,
-                children: List.generate(selectMainCategory.length, (index) {
-                  final item = selectMainCategory[index];
-
-                  // Show only selected item if any is selected
-                  if (controller.selectedMainCategoryIndex.value != -1 &&
-                      controller.selectedMainCategoryIndex.value != index) {
-                    return const SizedBox.shrink();
-                  }
-
+                children: List.generate(controller.mainCategories.length, (index) {
+                  final item = controller.mainCategories[index];
                   final isSelected = controller.selectedMainCategoryIndex.value == index;
                   return GestureDetector(
                     onTap: () => controller.selectMainCategory(index),
@@ -454,7 +426,7 @@ class ConnectorSelectedProductView extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.asset(
-                              item['image']!,
+                              Asset.constuctionMaterial,
                               width: 40,
                               height: 40,
                               fit: BoxFit.cover,
@@ -463,7 +435,7 @@ class ConnectorSelectedProductView extends StatelessWidget {
                           SizedBox(width: 2.w),
                           Expanded(
                             child: Text(
-                              item['title']!,
+                              item.name,
                               style: MyTexts.medium16.copyWith(
                                 fontFamily: MyTexts.Roboto,
                                 color: isSelected ? MyColors.primary : MyColors.fontBlack,
@@ -479,44 +451,8 @@ class ConnectorSelectedProductView extends StatelessWidget {
               ),
             ),
 
-            // Category
-            if (controller.selectedMainCategoryIndex.value != -1) ...[
-              SizedBox(height: 1.h),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-                child: Text(
-                  "Select Category",
-                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: selectCategory.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    childAspectRatio: 1,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemBuilder: (context, index) {
-                    final isSelected = controller.selectedIndex.value == index;
-                    return GestureDetector(
-                      onTap: () => controller.selectCategoryItem(index),
-                      child: ConnectorCategoryCard(
-                        category: selectCategory[index],
-                        isSelected: isSelected,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-
-            // Subcategory
-            if (controller.selectedIndex.value != -1) ...[
+            // Sub Category
+            if (controller.subCategories.isNotEmpty) ...[
               SizedBox(height: 1.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
@@ -530,7 +466,7 @@ class ConnectorSelectedProductView extends StatelessWidget {
                 child: GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: selectSubCategory.length,
+                  itemCount: controller.subCategories.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
                     childAspectRatio: 1,
@@ -540,9 +476,12 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final isSelected = controller.selectedSubCategoryIndex.value == index;
                     return GestureDetector(
-                      onTap: () => controller.selectSubCategoryItem(index),
+                      onTap: () => controller.selectSubCategory(index),
                       child: ConnectorCategoryCard(
-                        category: selectSubCategory[index],
+                        category: CategoryItem(
+                          controller.subCategories[index].name,
+                          Asset.Product,
+                        ),
                         isSelected: isSelected,
                       ),
                     );
@@ -551,13 +490,13 @@ class ConnectorSelectedProductView extends StatelessWidget {
               ),
             ],
 
-            // Products
-            if (controller.selectedSubCategoryIndex.value != -1) ...[
+            // Category Product (NEW)
+            if (controller.categoryProducts.isNotEmpty) ...[
               SizedBox(height: 1.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
                 child: Text(
-                  "Select Product",
+                  "Select  Product",
                   style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                 ),
               ),
@@ -566,7 +505,7 @@ class ConnectorSelectedProductView extends StatelessWidget {
                 child: GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.selectProduct.length,
+                  itemCount: controller.categoryProducts.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
                     childAspectRatio: 1,
@@ -574,11 +513,15 @@ class ConnectorSelectedProductView extends StatelessWidget {
                     mainAxisSpacing: 8,
                   ),
                   itemBuilder: (context, index) {
-                    final isSelected = controller.selectProduct == index;
+                    final isSelected =
+                        controller.selectedProductCategoryIndex.value == index;
                     return GestureDetector(
                       onTap: () => controller.selectProductItem(index),
                       child: ConnectorCategoryCard(
-                        category: controller.selectProduct[index],
+                        category: CategoryItem(
+                          controller.categoryProducts[index].name,
+                          Asset.Product,
+                        ),
                         isSelected: isSelected,
                       ),
                     );

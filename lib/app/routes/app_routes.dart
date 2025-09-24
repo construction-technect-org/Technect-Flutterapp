@@ -37,7 +37,7 @@ abstract class Routes {
   static const DASHABORD_MARKET_PLACE = _Paths.DASHABOARD_MARKET_PLACE;
 
   // Connector
-  static const MAIN_TAB = _Paths.MAIN_TAB;
+  static const CONNECTOR_MAIN_TAB = _Paths.CONNECTOR_MAIN_TAB;
   static const CONNECTOR_MARKET_PLACE = _Paths.CONNECTOR_MARKET_PLACE;
   static const CONNECTOR_PROFILE = _Paths.CONNECTOR_PROFILE;
   static const ADD_KYC = _Paths.ADD_KYC;
@@ -46,7 +46,9 @@ abstract class Routes {
   static const CONNECTOR_ADD_LOCATION = _Paths.CONNECTOR_ADD_LOCATION;
   static const CONNECTOR_ADD_LOCATION_MANUALLY = _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
   static const CONNECTOR_FILTER = _Paths.CONNECTOR_FILTER;
-
+  static const CONNECTOR_CONNECTION_INBOX = _Paths.CONNECTOR_CONNECTION_INBOX;
+  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET = _Paths.CONNECTOR_CUSTOMER_SUPPORT_TICKET;
+  static const CONNECTOR_REQUEST_DEMO = _Paths.CONNECTOR_REQUEST_DEMO;
 
 }  
 
@@ -87,7 +89,7 @@ abstract class _Paths {
   static const DASHABOARD_MARKET_PLACE = '/dashboard-market-place';
 
   // Connector
-  static const MAIN_TAB = '/main-tab';
+  static const CONNECTOR_MAIN_TAB = '/connector-main-tab';
   static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
   static const CONNECTOR_PROFILE = '/connector-profile';
   static const ADD_KYC = '/add-kyc';
@@ -96,5 +98,8 @@ abstract class _Paths {
   static const CONNECTOR_ADD_LOCATION = '/connector-add-location';
   static const CONNECTOR_ADD_LOCATION_MANUALLY = '/connector-add-location-manually';
   static const CONNECTOR_FILTER = '/connector-filter';
+  static const CONNECTOR_CONNECTION_INBOX = '/connector-connection-inbox';
+  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET = '/connector-customer-support-ticket';
+  static const CONNECTOR_REQUEST_DEMO = '/connector-request-demo';
 
 }

@@ -106,8 +106,8 @@ class TicketListView extends StatelessWidget {
         status: t.statusName,
         priority: t.priorityName,
         title: t.subject,
-        company: t.userMobile, // or merchant name if available
-        email: t.userMobile, // or user email if available
+        company: t.userMobile, 
+        email: t.userMobile, 
         description: t.description,
         createdDate: t.createdAt.toLocal().toString().split(' ')[0],
         updatedDate: t.updatedAt.toLocal().toString().split(' ')[0],

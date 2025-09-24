@@ -136,7 +136,7 @@ class CustomerSupportController extends GetxController {
     try {
       isLoadingMyTickets.value = true;
       final response = await _service.supportMyTicketsModel();
-      myTickets.assignAll(response.data.tickets); // just update the list
+      myTickets.assignAll(response.data.tickets); 
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Failed to fetch tickets: $e');
     } finally {

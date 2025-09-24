@@ -28,7 +28,7 @@ class ConnectorHomeView extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                 Get.toNamed(Routes.MAIN);
+                Get.toNamed(Routes.MAIN);
               },
               child: Row(
                 children: [
@@ -71,7 +71,6 @@ class ConnectorHomeView extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               Get.toNamed(Routes.CONNECTOR_SELECT_LOCATION);
-
                             },
                             child: Row(
                               children: [
@@ -497,10 +496,7 @@ class HearderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium18.copyWith(
-        color: MyColors.black,
-        fontFamily: MyTexts.Roboto,
-      ),
+      style: MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.Roboto),
     );
   }
 }

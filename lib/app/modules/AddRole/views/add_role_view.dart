@@ -115,9 +115,9 @@ class AddRoleView extends GetView<AddRoleController> {
 
 Widget _buildChip({
   required String label,
-  required String assetImage, // नया: asset image path
-  required Color color, // border + selected background
-  required Color labelColor, // label के लिए अलग color
+  required String assetImage, 
+  required Color color,
+  required Color labelColor, 
   required AddRoleController controller,
 }) {
   return Obx(() {
@@ -138,7 +138,7 @@ Widget _buildChip({
               assetImage,
               height: 20,
               width: 20,
-              color: color, // selected/unselected के लिए match
+              color: color, 
             ),
             const SizedBox(width: 8),
             Text(

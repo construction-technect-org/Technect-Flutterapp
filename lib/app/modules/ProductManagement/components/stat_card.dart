@@ -19,7 +19,7 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 84,
+      height: 85,
       decoration: BoxDecoration(
         color: MyColors.white,
         borderRadius: BorderRadius.circular(12),

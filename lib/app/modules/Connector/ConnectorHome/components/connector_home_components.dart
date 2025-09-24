@@ -83,7 +83,7 @@ class MerchantCard extends StatelessWidget {
               RoundedButton(
                 onTap: () {
                   Navigator.of(context).pop();
-                  Get.toNamed(Routes.MAIN_TAB);
+                  Get.toNamed(Routes.CONNECTOR_MAIN_TAB);
                 },
                 borderRadius: 12,
                 width: 40.w,
