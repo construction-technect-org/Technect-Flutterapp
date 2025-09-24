@@ -115,6 +115,7 @@ class _AddCertificateState extends State<AddCertificate> {
                 final cert = CertificateModel(
                   title: titleController.text,
                   filePath: filePath,
+                  name: basename(filePath??"")
                 );
                 Get.back(result: cert);
               } else {

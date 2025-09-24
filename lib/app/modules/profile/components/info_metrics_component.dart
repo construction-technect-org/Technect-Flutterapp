@@ -170,7 +170,11 @@ class InfoMetricsComponent extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Obx(() {
+
                       final userData = controller.userData;
+                      print(userData?.gst);
+                      print("object");
+                      print(Get.find<ProfileController>().businessModel.value.gstinNumber);
                       // final merchantProfile = controller.merchantProfile;
 
                       return Column(

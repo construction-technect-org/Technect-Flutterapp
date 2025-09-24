@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:path/path.dart';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
@@ -26,6 +27,7 @@ class ProfileController extends GetxController {
           .toString();
       businessModel.value.businessName = merchantProfile?.businessName
           .toString();
+      businessModel.value.gstinNumber = merchantProfile?.gstinNumber.toString();
       print(businessHours);
 
       final timeFormatter = DateFormat.jm();
@@ -63,22 +65,29 @@ class ProfileController extends GetxController {
   void loadCertificatesFromDocuments(List<Documents> documents) {
     for (var doc in documents) {
       final type = doc.documentType ?? "";
+      final name = doc.documentName ?? "";
       final path = doc.filePath;
 
       if (type == "gst_certificate") {
         certificates[0].filePath = path;
+        certificates[0].name = name;
       } else if (type == "udyam_certificate") {
         certificates[1].filePath = path;
+        certificates[1].name = name;
+
       } else if (type == "mtc_certificate") {
         certificates[2].filePath = path;
+        certificates[2].name = name;
+
       } else {
         // Add extra certificates dynamically
         certificates.add(
           CertificateModel(
-            title: (doc.documentName ?? type)
+            title: (doc.documentType ?? type)
                 .replaceAll("_", " ")
                 .toUpperCase(),
             filePath: path,
+            name: doc.documentName??""
           ),
         );
       }
@@ -184,6 +193,7 @@ class ProfileController extends GetxController {
 
   void updateCertificateFile(int index, String filePath) {
     certificates[index].filePath = filePath;
+    certificates[index].name = basename(filePath);
     certificates.refresh();
   }
 
@@ -203,6 +213,7 @@ class ProfileController extends GetxController {
 
       if (result != null) {
         certificates[index].filePath = result.files.first.path;
+        certificates[index].name = basename(result.files.first.path??"");
         certificates.refresh();
       } else {
         SnackBars.errorSnackBar(content: "No file selected");
@@ -226,6 +237,22 @@ class ProfileController extends GetxController {
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
   EditProfileService editProfileService = EditProfileService();
 
+  String? _normalizeTime(dynamic time) {
+    if (time == null || time.toString().isEmpty) return null;
+
+    // If already in HH:mm format, return as is
+    if (RegExp(r'^\d{2}:\d{2}$').hasMatch(time.toString())) {
+      return time.toString();
+    }
+
+    try {
+      final parsed = DateFormat.jm().parse(time.toString()); // parses "9:00 AM"
+      return DateFormat.Hm().format(parsed); // converts to "09:00"
+    } catch (_) {
+      return time.toString(); // fallback, don’t break
+    }
+  }
+
   Future<void> handleMerchantData() async {
     try {
       isLoading.value = true;
@@ -243,7 +270,8 @@ class ProfileController extends GetxController {
         'business_contact_number': businessModel.value.businessContactNumber
             .toString(),
         'website': businessModel.value.website.toString(),
-        'business_hours': json.encode(businessHoursData.toList()),
+        if (!isUpdate)
+          'business_hours': json.encode(businessHoursData.toList()),
       };
 
       final files = <String, String>{};
@@ -274,6 +302,16 @@ class ProfileController extends GetxController {
           }
         }
       }
+      final normalizedBusinessHours = businessHoursData.map((day) {
+        return {
+          "day_of_week": day["day_of_week"],
+          "day_name": day["day_name"],
+          "is_open": day["is_open"],
+          "open_time": _normalizeTime(day["open_time"]),
+          "close_time": _normalizeTime(day["close_time"]),
+        };
+      }).toList();
+      formFields['business_hours'] = json.encode(normalizedBusinessHours);
 
       // Call appropriate API based on merchant ID
       final response = isUpdate
@@ -301,29 +339,28 @@ class ProfileController extends GetxController {
             if (commonController.hasProfileComplete.value == false) {
               commonController.hasProfileComplete.value = true;
               Get.offAll(
-                    () => SuccessScreen(
+                () => SuccessScreen(
                   title: "Success!",
                   header: "Thanks for Connecting !",
                   onTap: () {
                     Get.offAllNamed(Routes.MAIN);
-
                   },
                 ),
               );
             } else {
               Get.back();
+              SnackBars.successSnackBar(content: "Profile update successfully");
+
             }
           } else {
-
             if (commonController.hasProfileComplete.value == false) {
               commonController.hasProfileComplete.value = true;
               Get.offAll(
-                    () => SuccessScreen(
+                () => SuccessScreen(
                   title: "Success!",
                   header: "Thanks for Connecting !",
                   onTap: () {
                     Get.offAllNamed(Routes.MAIN);
-
                   },
                 ),
               );
@@ -354,11 +391,13 @@ class ProfileController extends GetxController {
 class CertificateModel {
   final String title;
   String? filePath;
+  String? name;
   final bool isDefault;
 
   CertificateModel({
     required this.title,
     this.filePath,
+    this.name,
     this.isDefault = false,
   });
 }

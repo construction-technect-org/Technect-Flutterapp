@@ -4,7 +4,6 @@ import 'package:construction_technect/app/modules/profile/components/add_certifi
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:gap/gap.dart';
-import 'package:path/path.dart';
 
 class CertificationsComponent extends StatelessWidget {
   const CertificationsComponent({this.isDelete});
@@ -95,7 +94,6 @@ class CertificationsComponent extends StatelessWidget {
                           Column(
                             children: [
                               const Gap(14),
-
                               Image.asset(
                                 Asset.pdfImage,
                                 height: 50,
@@ -103,7 +101,8 @@ class CertificationsComponent extends StatelessWidget {
                               ),
                               const Gap(14),
                               Text(
-                                "File uploaded: ${basename("${cert.filePath}")}",
+                                "File uploaded: ${cert.name}",
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
@@ -119,13 +118,13 @@ class CertificationsComponent extends StatelessWidget {
           Align(
             child: GestureDetector(
               onTap: () {
-                // Example: open dialog to enter title
-
                 Get.to(() => const AddCertificate())?.then((val) {
                   if (val != null) {
-                    controller.documents.add(val);
+                    controller.certificates.add(val
+                    );
                   }
                 });
+
               },
               child: RoundedButton(
                 width: 200,

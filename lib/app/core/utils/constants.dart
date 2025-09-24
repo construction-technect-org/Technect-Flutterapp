@@ -52,6 +52,7 @@ class Asset {
   static const String role = 'assets/images/role.svg';
   static const String about = 'assets/images/about.svg';
   static const String youtube = 'assets/images/youtube.svg';
+  static const String peoples = 'assets/images/peoples.svg';
 
   // Edit
   static const String editIcon = 'assets/images/edit.svg';

@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/
 import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/ProductApproval/views/product_approval_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
+import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
 import 'package:construction_technect/app/modules/settings/views/setting_view.dart';
 import 'package:gap/gap.dart';
 
@@ -70,11 +71,13 @@ class MenuView extends StatelessWidget {
                   CommonRowItem(
                     icon: Asset.settingsIcon,
                     title: "Profile Details",
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.PROFILE);
+                    },
                   ),
                   const Gap(20),
                   CommonRowItem(
-                    icon: Asset.settingsIcon,
+                    icon: Asset.peoples,
                     title: "Teams & Roles",
                     onTap: () {},
                   ),
@@ -89,7 +92,9 @@ class MenuView extends StatelessWidget {
                     icon: Asset.suportTicket,
 
                     title: "Help & Support",
-                    onTap: () {},
+                    onTap: () {
+                      Get.find<MainController>().currentIndex.value=2;
+                    },
                   ),
                   const Gap(20),
                   CommonRowItem(

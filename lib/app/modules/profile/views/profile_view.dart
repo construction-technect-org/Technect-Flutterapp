@@ -27,46 +27,22 @@ class ProfileView extends GetView<ProfileController> {
             SizedBox(height: 2.h),
             _buildProfileBanner(),
             SizedBox(height: 2.h),
-            Obx(() {
-              final completionPercentage =
-                  controller.profileCompletionPercentage;
-              if (completionPercentage > 90) {
-                return Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 1.h),
-                          const InfoMetricsComponent(),
-                          const CertificationsComponent(isDelete: false),
-                          SizedBox(height: 2.h),
-                          const MarketplacePerformanceComponent(),
-                          SizedBox(height: 3.h),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              } else {
-                return Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 1.h),
-                      _buildTabBar(),
-                      SizedBox(height: 1.h),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: _buildTabContent(),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-            }),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 1.h),
+              _buildTabBar(),
+              SizedBox(height: 1.h),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _buildTabContent(),
+                ),
+              ),
+            ],
+          ),
+        ),
           ],
         ),
       ),
@@ -173,6 +149,8 @@ class ProfileView extends GetView<ProfileController> {
 
   Widget _buildTabBar() {
     return Obx(() {
+      final hasMarketplaceTab = controller.profileCompletionPercentage > 90;
+
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -180,7 +158,8 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             _buildTabItem(0, 'Info & Metrics'),
             _buildTabItem(1, 'Certifications'),
-            // _buildTabItem(2, 'Marketplace Performance'),
+            if (hasMarketplaceTab)
+              _buildTabItem(2, 'Marketplace Performance'),
           ],
         ),
       );
@@ -219,16 +198,25 @@ class ProfileView extends GetView<ProfileController> {
   }
 
   Widget _buildTabContent() {
-    return Obx(
-      () => SingleChildScrollView(
-        child: switch (controller.selectedTabIndex.value) {
-          0 => const InfoMetricsComponent(),
-          1 => const CertificationsComponent(isDelete: true),
-          // 2 => const MarketplacePerformanceComponent(),
-          _ => const InfoMetricsComponent(),
-        },
-      ),
-    );
+    return Obx(() {
+      final index = controller.selectedTabIndex.value;
+      final hasMarketplaceTab = controller.profileCompletionPercentage > 90;
+      Widget content;
+
+      if (index == 0) {
+        content = const InfoMetricsComponent();
+      } else if (index == 1) {
+        content = const CertificationsComponent(isDelete: true);
+      } else if (index == 2 && hasMarketplaceTab) {
+        content = const MarketplacePerformanceComponent();
+      } else {
+        // fallback if user tries to access non-existing tab
+        content = const InfoMetricsComponent();
+      }
+
+      return SingleChildScrollView(child: content);
+    });
   }
+
 }
 ///27ABCDE1234F1Z5
