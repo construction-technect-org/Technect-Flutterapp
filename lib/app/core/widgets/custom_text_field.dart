@@ -9,12 +9,12 @@ class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
   final Widget? suffix;
-  final Widget? prefix; // 👈 Added for start icon
-  final int maxLines; // 👈 NEW for multi-line
-  final bool? obscureText; // 👈 NEW for multi-line
-  final bool? readOnly; // 👈 NEW for multi-line
-  final TextCapitalization?
-  textCapitalization; // 👈 NEW for text capitalization
+  final Widget? prefix;
+  final int maxLines;
+  final bool? obscureText;
+  final bool? readOnly;
+  final TextCapitalization? textCapitalization;
+  final Color? borderColor; // 👈 New parameter for optional border color
 
   const CustomTextField({
     super.key,
@@ -23,7 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.obscureText,
-    this.readOnly=false,
+    this.readOnly = false,
     this.controller,
     this.onChanged,
     this.validator,
@@ -31,12 +31,12 @@ class CustomTextField extends StatelessWidget {
     this.prefix,
     this.maxLines = 1,
     this.textCapitalization,
+    this.borderColor, // 👈 Initialize here
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-
       children: [
         if ((headerText ?? "").isNotEmpty)
           Column(
@@ -63,7 +63,9 @@ class CustomTextField extends StatelessWidget {
           decoration: BoxDecoration(
             color: MyColors.white,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: MyColors.textFieldBorder),
+            border: Border.all(
+              color: borderColor ?? MyColors.textFieldBorder, // 👈 Use here
+            ),
           ),
           child: TextField(
             controller: controller,
@@ -77,9 +79,8 @@ class CustomTextField extends StatelessWidget {
             inputFormatters: inputFormatters,
             onChanged: onChanged,
             maxLines: maxLines,
-          readOnly: readOnly??false,
+            readOnly: readOnly ?? false,
             textCapitalization: textCapitalization ?? TextCapitalization.none,
-
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: hintText != null
@@ -89,8 +90,8 @@ class CustomTextField extends StatelessWidget {
               suffixIcon: suffix,
               prefixIcon: prefix,
               prefixIconConstraints: const BoxConstraints(
-                minWidth: 10, // 👈 shrink width
-                minHeight: 10, // 👈 shrink height
+                minWidth: 10,
+                minHeight: 10,
               ),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,

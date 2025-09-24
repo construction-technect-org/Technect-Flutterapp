@@ -144,7 +144,7 @@ class AddKycController extends GetxController {
               title: "Success!",
               header: "Thanks for Connecting !",
               onTap: () {
-                Get.offAllNamed(Routes.MAIN_TAB);
+                Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
 
               },
             ),

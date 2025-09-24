@@ -87,6 +87,7 @@ class AddRoleView extends GetView<AddRoleController> {
       ),
     );
   }
+
   Widget _buildChip({
     required String label,
     required String assetImage,
@@ -128,6 +129,4 @@ class AddRoleView extends GetView<AddRoleController> {
       );
     });
   }
-
 }
-

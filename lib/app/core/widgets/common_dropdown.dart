@@ -10,8 +10,9 @@ class CommonDropdown<T> extends StatelessWidget {
   final String Function(T) itemLabel;
   final Widget? prefix;
   final Widget? suffix;
-  final ValueChanged<T?>? onChanged; // 🔹 added callback
-  final bool enabled; // 🔹 added enabled parameter
+  final ValueChanged<T?>? onChanged;
+  final bool enabled;
+  final Color? borderColor; // 🔹 NEW PARAMETER
 
   const CommonDropdown({
     required this.hintText,
@@ -20,8 +21,9 @@ class CommonDropdown<T> extends StatelessWidget {
     required this.itemLabel,
     this.prefix,
     this.suffix,
-    this.onChanged, // 🔹 added
-    this.enabled = true, // 🔹 default to enabled
+    this.onChanged,
+    this.enabled = true,
+    this.borderColor, // 🔹 add to constructor
   });
 
   @override
@@ -32,7 +34,8 @@ class CommonDropdown<T> extends StatelessWidget {
           color: enabled ? Colors.white : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: enabled ? const Color(0xFFA0A0A0) : Colors.grey.shade300,
+            color: borderColor ??
+                (enabled ? const Color(0xFFA0A0A0) : Colors.grey.shade300), // 🔹 Use custom or fallback
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
@@ -44,9 +47,10 @@ class CommonDropdown<T> extends StatelessWidget {
             isExpanded: true,
             hint: Text(
               hintText,
-              style:
-              MyTexts.regular16.copyWith(
-                color: enabled ? MyColors.primary.withValues(alpha: 0.5):  Colors.grey.shade400,
+              style: MyTexts.regular16.copyWith(
+                color: enabled
+                    ? MyColors.primary.withAlpha(120)
+                    : Colors.grey.shade400,
                 fontFamily: MyTexts.Roboto,
               ),
               maxLines: 1,
@@ -54,11 +58,11 @@ class CommonDropdown<T> extends StatelessWidget {
             ),
             icon: enabled
                 ? (suffix ??
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 28,
-                        color: Colors.black,
-                      ))
+                    const Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 28,
+                      color: Colors.black,
+                    ))
                 : const Icon(
                     Icons.keyboard_arrow_down,
                     size: 28,

@@ -192,8 +192,11 @@ class TicketListView extends StatelessWidget {
                   ),
                   SizedBox(height: 1.h),
                   Text(
-                    ticket.title.capitalizeFirst??"-",
-                    style: MyTexts.medium18.copyWith(color: MyColors.fontBlack,fontFamily: MyTexts.Roboto),
+                    ticket.title.capitalizeFirst ?? "-",
+                    style: MyTexts.medium18.copyWith(
+                      color: MyColors.fontBlack,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
                   SizedBox(height: 1.h),
                   Row(
@@ -201,21 +204,17 @@ class TicketListView extends StatelessWidget {
                       const Icon(
                         Icons.person_outline,
                         size: 18,
-                          color: MyColors.gray6B
+                        color: MyColors.greyFour,
                       ),
                       SizedBox(width: 0.4.w),
                       Text(
                         ticket.company,
                         style: MyTexts.regular14.copyWith(
-                          color: MyColors.gray6B
+                          color: MyColors.greyFour,
                         ),
                       ),
                       SizedBox(width: 3.w),
-                      const Icon(
-                        Icons.category,
-                        size: 16,
-                        color: Colors.grey,
-                      ),
+                      const Icon(Icons.category, size: 16, color: Colors.grey),
                       SizedBox(width: 1.w),
                       Text(
                         ticket.email,
@@ -228,26 +227,38 @@ class TicketListView extends StatelessWidget {
                   SizedBox(height: 0.8.h),
                   Text(
                     ticket.description,
-                    style: MyTexts.regular14.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
+                    style: MyTexts.regular14.copyWith(
+                      color: MyColors.darkGray,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
                   SizedBox(height: 1.h),
                   Row(
                     children: [
                       Text(
                         "Created: ${ticket.createdDate}",
-                        style: MyTexts.bold15.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
+                        style: MyTexts.bold15.copyWith(
+                          color: MyColors.darkGray,
+                          fontFamily: MyTexts.Roboto,
+                        ),
                       ),
                       const Spacer(),
                       Text(
                         "  ●  Updated: ${ticket.updatedDate}",
-                        style: MyTexts.bold15.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
+                        style: MyTexts.bold15.copyWith(
+                          color: MyColors.darkGray,
+                          fontFamily: MyTexts.Roboto,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
                     "● Assigned to: ${ticket.assignedTo}",
-                    style: MyTexts.bold15.copyWith(color: MyColors.darkGray,fontFamily: MyTexts.Roboto),
+                    style: MyTexts.bold15.copyWith(
+                      color: MyColors.darkGray,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
                 ],
               ),
@@ -282,6 +293,3 @@ class TicketListView extends StatelessWidget {
     );
   }
 }
-
-
-

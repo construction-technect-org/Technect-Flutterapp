@@ -24,14 +24,24 @@ import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation
 import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/views/connector_add_location_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorAddLocationManually/bindings/connector_add_location_manually_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorAddLocationManually/view/connector_add_location_manually_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorConnectionInbox/bindings/connector_connection_inbox_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorConnectionInbox/views/connector_connection_inbox_vies.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorCustomerSupportTicket/bindings/connector_customer_support_ticket_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorCustomerSupportTicket/views/connector_customer_support_ticket_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorFilters/bindings/connector_filter_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorFilters/views/connector_filters_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo/bindings/connector_request_demo_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo/views/connector_request_demo_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/views/connector_profile_view.dart';
-import 'package:construction_technect/app/modules/Connector/MainTab/bindings/main_tab_binding.dart';
-import 'package:construction_technect/app/modules/Connector/MainTab/views/main_tab.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorMainTab/bindings/connector_main_tab_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorMainTab/views/connector_main_tab.dart';
 import 'package:construction_technect/app/modules/Dashboard/bindings/dashboard_binding.dart';
 import 'package:construction_technect/app/modules/Dashboard/views/dashboard_view.dart';
 import 'package:construction_technect/app/modules/DashboardMarketPlace/bindings/market_place_binding.dart';
@@ -245,9 +255,9 @@ class AppPages {
 
     // Connector
     GetPage(
-      name: _Paths.MAIN_TAB,
-      page: () =>  const MainTab(),
-      binding: MainTabBinding(),
+      name: _Paths.CONNECTOR_MAIN_TAB,
+      page: () =>  const ConnectorMainTab(),
+      binding: ConnectorMainTabBinding(),
     ),
     GetPage(
       name: _Paths.CONNECTOR_MARKET_PLACE,
@@ -301,6 +311,31 @@ class AppPages {
       name: Routes.CONNECTOR_ADD_LOCATION_MANUALLY,
       page: () =>  const ConnectorAddLocationManuallyView(),
       binding: ConnectorAddLocationManuallyBinding(),
+    ),
+    GetPage(
+      name: Routes.CONNECTOR_PRODUCT_DETAILS,
+      page: () =>   ConnectorProductDetailsView(),
+      binding: ConnectorProductDetailsBindings(),
+    ),
+    GetPage(
+      name: Routes.CONNECTOR_FILTER,
+      page: () => ConnectorFiltersView(),
+      binding: ConnectorFilterBinding(),
+    ),
+    GetPage(
+      name: Routes.CONNECTOR_CONNECTION_INBOX,
+      page: () =>   ConnectorConnectionInboxVies(),
+      binding:   ConnectorConnectionInboxBinding(),
+    ),
+     GetPage(
+      name: Routes.CONNECTOR_CUSTOMER_SUPPORT_TICKET,
+      page: () =>   ConnectorCustomerSupportTicketView(),
+      binding:   ConnectorCustomerSupportTicketBinding(),
+    ),
+     GetPage(
+      name: Routes.CONNECTOR_REQUEST_DEMO,
+      page: () =>   ConnectorRequestDemoView(),
+      binding:   ConnectorRequestDemoBinding(),
     ),
   ];
 }

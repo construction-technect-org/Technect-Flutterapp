@@ -36,6 +36,9 @@ dependencies:
   timer_count_down: ^2.2.2
   flutter_image_compress:
   path_provider:
+  youtube_player_flutter: ^8.1.1
+
+
 
 dev_dependencies:
   flutter_test:
@@ -77,3 +80,7 @@ flutter:
         - asset: assets/fonts/Roboto/Roboto-ExtraBoldItalic.ttf
         - asset: assets/fonts/Roboto/Roboto-Black.ttf
         - asset: assets/fonts/Roboto/Roboto-BlackItalic.ttf
+    - family: Geometric
+      fonts:
+        - asset: assets/fonts/Geometric/Geometric 706 Medium.otf
+       

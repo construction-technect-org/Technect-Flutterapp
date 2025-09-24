@@ -84,7 +84,11 @@ class MyColors {
   static const Color grayD4 = Color(0xFFD4D4D4);
   static const Color grayF2 = Color(0xFFF2F2F2);
   static const Color gray5D = Color(0xFF5D5D5D);
-  static const Color gray6B = Color(0xFF6B6B6B);
+  static const Color chineseSilver = Color(0xFFC8C8C8);
+  static const Color veryDarkGray = Color(0xFF6F6F6F);
+  static const Color dustyGray = Color(0xFF979595);
+
+
 
   // Text field colors
   static const Color textFieldBorder = Color(0xFFA0A0A0);
