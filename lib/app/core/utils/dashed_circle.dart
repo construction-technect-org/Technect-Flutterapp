@@ -9,6 +9,7 @@ class DashedCircle extends StatelessWidget {
   final double strokeWidth;
   final double dashLength;
   final double dashGap;
+  final double? imageSize;
   final String assetImage;
   final String? file;
 
@@ -18,6 +19,7 @@ class DashedCircle extends StatelessWidget {
     this.color = Colors.grey,
     this.strokeWidth = 1.5,
     this.dashLength = 6,
+    this.imageSize = 67,
     this.dashGap = 4,
     this.file,
     required this.assetImage,
@@ -44,27 +46,27 @@ class DashedCircle extends StatelessWidget {
             child: file!.contains('http')
                 ? CachedNetworkImage(
                     imageUrl: file!,
-                    width: 67,
-                    height: 67,
+                    width:imageSize?? 67,
+                    height:imageSize?? 67,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
-                      width: 67,
-                      height: 67,
+                      width: imageSize?? 67,
+                      height: imageSize?? 67,
                       color: Colors.grey.shade200,
                       child: const Icon(Icons.image, color: Colors.grey),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      width: 67,
-                      height: 67,
+                      width:imageSize?? 67,
+                      height: imageSize?? 67,
                       color: Colors.grey.shade200,
                       child: const Icon(Icons.broken_image, color: Colors.grey),
                     ),
                   )
-                : Image.file(File(file!), width: 67, height: 67, fit: BoxFit.cover),
+                : Image.file(File(file!), width: imageSize?? 67, height: imageSize?? 67, fit: BoxFit.cover),
           )
         else
           ClipOval(
-            child: Image.asset(assetImage, width: 67, height: 67, fit: BoxFit.cover),
+            child: Image.asset(assetImage, width: imageSize?? 67, height: imageSize?? 67, fit: BoxFit.cover),
           ),
       ],
     );

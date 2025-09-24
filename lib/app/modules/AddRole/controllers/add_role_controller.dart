@@ -46,6 +46,10 @@ class AddRoleController extends GetxController {
       Get.snackbar("Error", "Please fill all fields");
       return;
     }
+    else if(selectedFunctionalities.value.isEmpty){
+      Get.snackbar("Error", "Please select functionality");
+      return;
+    }
 
     isLoading.value = true;
 

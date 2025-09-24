@@ -1,9 +1,12 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
+import 'package:construction_technect/app/core/utils/dashed_circle.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/ProductApproval/views/product_approval_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
 import 'package:construction_technect/app/modules/settings/views/setting_view.dart';
 import 'package:gap/gap.dart';
@@ -23,11 +26,72 @@ class MenuView extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 6.sw),
+          padding: const EdgeInsets.symmetric(horizontal: 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 1.h),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12, horizontal: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: MyColors.grayD4),
+                ),
+                child: Row(
+                  children: [
+                    const DashedCircle(
+                      size: 61,
+                      imageSize: 50,
+                      color: MyColors.grey,
+                      strokeWidth: 1.2,
+                      assetImage: Asset.profil,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Obx(() {
+                            return Text(
+                              Get
+                                  .find<HomeController>()
+                                  .profileData
+                                  .value
+                                  .data
+                                  ?.user
+                                  ?.fullName ?? "-",
+                              overflow: TextOverflow.ellipsis,
+                              style: MyTexts.regular16.copyWith(
+                                color: MyColors.fontBlack,
+                              ),
+                            );
+                          }),
+                          const SizedBox(height: 4),
+                          Obx(() {
+                            return Text(
+                              Get
+                                  .find<HomeController>()
+                                  .profileData
+                                  .value
+                                  .data
+                                  ?.user
+                                  ?.email ?? "-",
+                              overflow: TextOverflow.ellipsis,
+                              style: MyTexts.regular16.copyWith(
+                                color: MyColors.fontBlack,
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    const Icon(Icons.edit)
+                  ],
+                ),
+              ),
+              SizedBox(height: 2.h),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -79,7 +143,9 @@ class MenuView extends StatelessWidget {
                   CommonRowItem(
                     icon: Asset.peoples,
                     title: "Teams & Roles",
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.ROLE_MANAGEMENT);
+                    },
                   ),
                 ],
               ),
@@ -93,7 +159,10 @@ class MenuView extends StatelessWidget {
 
                     title: "Help & Support",
                     onTap: () {
-                      Get.find<MainController>().currentIndex.value=2;
+                      Get
+                          .find<MainController>()
+                          .currentIndex
+                          .value = 2;
                     },
                   ),
                   const Gap(20),
@@ -101,7 +170,11 @@ class MenuView extends StatelessWidget {
                     icon: Asset.youtube,
 
                     title: "Tutorials",
-                    onTap: () {},
+                    onTap: () {
+                      openUrl(
+                        url: "https://www.youtube.com/watch?v=hcvmq-hcDIE",
+                      );
+                    },
                   ),
                   const Gap(20),
 
@@ -144,7 +217,9 @@ class MenuView extends StatelessWidget {
                     icon: Asset.link,
 
                     title: "Use on Desktop",
-                    onTap: () {},
+                    onTap: () {
+                      openUrl(url: "https://www.google.com");
+                    },
                   ),
                   const Gap(20),
                   CommonRowItem(
@@ -164,14 +239,18 @@ class MenuView extends StatelessWidget {
                     icon: Asset.about,
 
                     title: "About Us",
-                    onTap: () {},
+                    onTap: () {
+                      openUrl(url: "https://www.google.com");
+                    },
                   ),
                   const Gap(20),
                   CommonRowItem(
                     icon: Asset.gift,
 
                     title: "Privacy Policy",
-                    onTap: () {},
+                    onTap: () {
+                      openUrl(url: "https://www.google.com");
+                    },
                   ),
                   const Gap(20),
 
@@ -179,7 +258,12 @@ class MenuView extends StatelessWidget {
                     icon: Asset.link,
 
                     title: "Terms & Conditions",
-                    onTap: () {},
+                    onTap: () {
+                      openUrl(
+                        url:
+                        "https://www.figma.com/design/NVt9tWbBrKgGL11Xy9JOE1/MARKETPLACE?node-id=337-4362&t=1sLDXtFvJV7YRewa-0",
+                      );
+                    },
                   ),
                 ],
               ),
@@ -269,15 +353,14 @@ class MenuView extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(
-    String title,
-    bool hasNotification, {
-    VoidCallback? onTap,
-    bool? isDestructive,
-    bool? highlight,
-    IconData? icon, // 👈 Material icons
-    Widget? customIcon, // 👈 Images/SVGs
-  }) {
+  Widget _buildMenuItem(String title,
+      bool hasNotification, {
+        VoidCallback? onTap,
+        bool? isDestructive,
+        bool? highlight,
+        IconData? icon, // 👈 Material icons
+        Widget? customIcon, // 👈 Images/SVGs
+      }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -314,40 +397,44 @@ class MenuView extends StatelessWidget {
                     ),
                 ],
               ),
-            ] else if (icon != null) ...[
-              Icon(
-                icon,
-                size: 24,
-                color: isDestructive == true ? MyColors.red : MyColors.primary,
-              ),
-            ] else ...[
-              Stack(
-                children: [
-                  SvgPicture.asset(
-                    Asset.menuSettingIcon,
-                    width: 24,
-                    height: 24,
-                    colorFilter: ColorFilter.mode(
-                      isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  if (hasNotification)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
+            ] else
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 24,
+                  color: isDestructive == true ? MyColors.red : MyColors
+                      .primary,
+                ),
+              ] else
+                ...[
+                  Stack(
+                    children: [
+                      SvgPicture.asset(
+                        Asset.menuSettingIcon,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(
+                          isDestructive == true ? MyColors.red : MyColors
+                              .fontBlack,
+                          BlendMode.srcIn,
                         ),
                       ),
-                    ),
+                      if (hasNotification)
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
-              ),
-            ],
 
             SizedBox(width: 4.w),
             Text(
@@ -369,8 +456,7 @@ class MenuView extends StatelessWidget {
 }
 
 /// Modern Confirmation Dialog
-void _showConfirmDialog(
-  BuildContext context, {
+void _showConfirmDialog(BuildContext context, {
   required String title,
   required String message,
   required String confirmText,
@@ -447,7 +533,7 @@ class CommonContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: MyColors.grayD4),
       ),
       child: Column(children: children),

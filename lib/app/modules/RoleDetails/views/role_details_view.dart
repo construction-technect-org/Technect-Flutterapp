@@ -1,6 +1,8 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/welcome_name.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/RoleDetails/controllers/role_details_controller.dart';
+import 'package:gap/gap.dart';
 
 class RoleDetailsView extends GetView<RoleDetailsController> {
   const RoleDetailsView({super.key});
@@ -9,207 +11,211 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: MyColors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0.0,
-        title: WelcomeName(),
-      ),
-
+      appBar: CommonAppBar(title: const Text("Role Details"), isCenter: false),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(6.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          padding: EdgeInsets.all(5.w),
+          child: Obx(
+                () => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Edit Button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Role Details",
-                          style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(
-                              Routes.ADD_ROLE,
-                              arguments: {
-                                "isEdit": true,
-                                "data": controller.roleDetailsModel,
-                              },
-                            );
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(
+                          Routes.ADD_ROLE,
+                          arguments: {
+                            "isEdit": true,
+                            "data": controller.roleDetailsModel,
                           },
-                          child: Container(
-                            width: 27,
-                            height: 26,
-                            decoration: BoxDecoration(
-                              color: MyColors.primary,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(Icons.edit, size: 16, color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.5.h),
-
-                    /// Role Card
-                    Obx(
-                      () => Container(
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(3.w),
-                          border: Border.all(color: MyColors.americanSilver),
-                        ),
-                        padding: EdgeInsets.all(4.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 30,
-                                  height: 3.h,
-                                  decoration: BoxDecoration(
-                                    color: MyColors.paleBluecolor, // background color
-                                    borderRadius: BorderRadius.circular(9),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      Asset.Admin,
-                                      width: 14.54, // scale as needed
-                                      height: 13,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 3.w),
-                                Text(
-                                  controller.roleTitle.value,
-                                  style: MyTexts.medium20.copyWith(
-                                    color: MyColors.fontBlack,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 1.5.h),
-                            Text(
-                              "Role Description:",
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                            SizedBox(height: 0.5.h),
-                            Text(
-                              controller.roleDescription.toString(),
-                              style: MyTexts.regular14.copyWith(color: MyColors.gray32),
-                            ),
-                            /*  ...controller.roleDescription
-                                .map(
-                                  (desc) => Text(
-                                    "• $desc",
-                                    style: MyTexts.regular14.copyWith(
-                                      color: MyColors.gray32,
-                                    ),
-                                  ),
-                                )
-                                .toList(),*/
-                            SizedBox(height: 2.h),
-                            Text(
-                              "Functionality:",
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                            SizedBox(height: 1.h),
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: MyColors.green),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.sp),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 6.w,
-                                  vertical: 1.2.h,
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: Text(
-                                controller.functionalities.toString(),
-                                style: MyTexts.regular16.copyWith(color: MyColors.green),
-                              ),
-                            ),
-                            SizedBox(height: 2.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      "Role Status:",
-                                      style: MyTexts.regular14.copyWith(
-                                        color: MyColors.fontBlack,
-                                      ),
-                                    ),
-                                    SizedBox(height: 1.h),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 5.w,
-                                        vertical: 1.h,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: controller.roleStatus.value == 'Active'
-                                            ? MyColors.green
-                                            : MyColors.red,
-                                        borderRadius: BorderRadius.circular(30.sp),
-                                      ),
-                                      child: Text(
-                                        controller.roleStatus.value,
-                                        style: MyTexts.regular16.copyWith(
-                                          color: MyColors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      "Change Role Status:",
-                                      style: MyTexts.regular14.copyWith(
-                                        color: MyColors.fontBlack,
-                                      ),
-                                    ),
-                                    SizedBox(height: 1.h),
-                                    Switch(
-                                      activeColor: MyColors.green,
-                                      value: controller.roleStatus.value == 'Active',
-                                      onChanged: (value) {
-                                        if (value) {
-                                          controller.roleStatus.value = 'Active';
-                                        } else {
-                                          controller.roleStatus.value = 'InActive';
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
+                          color: MyColors.primary,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: MyColors.primary.withOpacity(0.2),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
                             ),
                           ],
+                        ),
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 18,
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
+                SizedBox(height: 2.h),
+
+                /// Role Details Card
+                Container(
+                  decoration: BoxDecoration(
+                    color: MyColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: MyColors.grayD4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.all(5.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// Role Icon + Title
+                      Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: MyColors.paleBluecolor.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                Asset.Admin,
+                                width: 18,
+                                height: 18,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Expanded(
+                            child: Text(
+                              controller.roleTitle.value,
+                              style: MyTexts.medium18.copyWith(
+                                color: MyColors.fontBlack,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 2.h),
+
+                      /// Description Section
+                      Text(
+                        "Description",
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.fontBlack,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 0.5.h),
+                      Text(
+                        controller.roleDescription.value,
+                        style: MyTexts.regular14.copyWith(
+                          color: MyColors.gray32,
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+
+                      /// Functionalities
+                      Text(
+                        "Functionalities",
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.fontBlack,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 1.h),
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: MyColors.green),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.sp)),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 5.w,
+                            vertical: 1.h,
+                          ),
+                          backgroundColor: MyColors.green.withOpacity(0.05),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          controller.functionalities.toString(),
+                          style: MyTexts.regular16.copyWith(
+                            color: MyColors.green,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+
+                      const Divider(thickness: 1.2, color: MyColors.grayD4),
+                      SizedBox(height: 2.h),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          /// Toggle
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Change Status",
+                                style: MyTexts.regular14.copyWith(
+                                  color: MyColors.fontBlack,
+                                ),
+                              ),
+                              SizedBox(height: 0.5.h),
+                              Switch(
+                                activeColor: MyColors.green,
+                                value: controller.roleStatus.value == 'Active',
+                                onChanged: (value) {
+                                  controller.roleStatus.value =
+                                  value ? 'Active' : 'InActive';
+                                },
+                              ),
+                            ],
+                          ),
+
+                          /// Animated Status Badge
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 5.w,
+                              vertical: 1.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: controller.roleStatus.value == 'Active'
+                                  ? MyColors.green
+                                  : MyColors.red,
+                              borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 8,
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              controller.roleStatus.value,
+                              style: MyTexts.regular16.copyWith(
+                                color: MyColors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
