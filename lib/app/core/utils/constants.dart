@@ -159,6 +159,13 @@ class Asset {
   static const String aTeam = 'assets/images/ateam.png';
   static const String link = 'assets/images/link.svg';
   static const String gift = 'assets/images/gift.svg';
+  static const String faq = 'assets/images/faq.svg';
+  static const String feed = 'assets/images/feed.svg';
+  static const String info = 'assets/images/info.svg';
+  static const String policy = 'assets/images/policy.svg';
+  static const String profile = 'assets/images/profile.svg';
+  static const String sub = 'assets/images/sub.svg';
+  static const String tc = 'assets/images/tc.svg';
 
   // Connector Category
 

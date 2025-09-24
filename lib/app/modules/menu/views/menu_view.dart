@@ -3,12 +3,8 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/dashed_circle.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
-import 'package:construction_technect/app/modules/ProductApproval/views/product_approval_view.dart';
-import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
-import 'package:construction_technect/app/modules/settings/views/setting_view.dart';
 import 'package:gap/gap.dart';
 
 class MenuView extends StatelessWidget {
@@ -133,7 +129,7 @@ class MenuView extends StatelessWidget {
               CommonContainer(
                 children: [
                   CommonRowItem(
-                    icon: Asset.settingsIcon,
+                    icon: Asset.profile,
                     title: "Profile Details",
                     onTap: () {
                       Get.toNamed(Routes.PROFILE);
@@ -179,7 +175,7 @@ class MenuView extends StatelessWidget {
                   const Gap(20),
 
                   CommonRowItem(
-                    icon: Asset.warning,
+                    icon: Asset.faq,
 
                     title: "F.A.Q.S",
                     onTap: () {
@@ -189,7 +185,7 @@ class MenuView extends StatelessWidget {
                   ),
                   const Gap(20),
                   CommonRowItem(
-                    icon: Asset.thumbup,
+                    icon: Asset.feed,
 
                     title: "Feedback",
                     onTap: () {
@@ -205,7 +201,7 @@ class MenuView extends StatelessWidget {
               CommonContainer(
                 children: [
                   CommonRowItem(
-                    icon: Asset.about,
+                    icon: Asset.sub,
 
                     title: "Explore Subscription Plans",
                     onTap: () {},
@@ -242,7 +238,7 @@ class MenuView extends StatelessWidget {
               CommonContainer(
                 children: [
                   CommonRowItem(
-                    icon: Asset.about,
+                    icon: Asset.info,
                     title: "About Us",
                     onTap: () {
                       openUrl(url: Constants.aboutUS);
@@ -250,7 +246,7 @@ class MenuView extends StatelessWidget {
                   ),
                   const Gap(20),
                   CommonRowItem(
-                    icon: Asset.gift,
+                    icon: Asset.policy,
                     title: "Privacy Policy",
                     onTap: () {
                       openUrl(url: Constants.privacyPolicy);
@@ -258,7 +254,7 @@ class MenuView extends StatelessWidget {
                   ),
                   const Gap(20),
                   CommonRowItem(
-                    icon: Asset.link,
+                    icon: Asset.tc,
                     title: "Terms & Conditions",
                     onTap: () {
                       openUrl(
@@ -271,83 +267,83 @@ class MenuView extends StatelessWidget {
               ),
               const Gap(20),
 
-              _buildMenuItem(
-                'Service Management',
-                false,
-                onTap: () {
-                  Get.toNamed(Routes.SERVICE_MANAGEMENT);
-                },
-              ),
-              SizedBox(height: 1.h),
-              _buildMenuItem(
-                'Product Management',
-                customIcon: SvgPicture.asset(
-                  Asset.productManagement,
-                  height: 24,
-                  width: 24,
-                ),
-
-                false,
-                onTap: () {
-                  Get.to(() => ProductManagementView());
-                },
-              ),
-              SizedBox(height: 1.h),
-              _buildMenuItem(
-                'Approval Inbox',
-                true,
-                customIcon: Image.asset(
-                  Asset.vectorIcon,
-                  height: 24,
-                  width: 24,
-                ),
-
-                onTap: () {
-                  Get.to(() => const ProductApprovalView());
-                },
-              ),
-              SizedBox(height: 1.h),
-              _buildMenuItem(
-                'Connection Inbox',
-                true,
-                customIcon: Image.asset(Asset.crmIcon, height: 24, width: 24),
-                onTap: () {
-                  Get.toNamed(Routes.CONNECTION_INBOX);
-                },
-              ),
-              SizedBox(height: 1.h),
-              _buildMenuItem(
-                'Role Management',
-                customIcon: SvgPicture.asset(Asset.role, height: 24, width: 24),
-
-                false,
-                onTap: () {
-                  Get.toNamed(Routes.ROLE_MANAGEMENT);
-                },
-              ),
-              SizedBox(height: 1.h),
-              _buildMenuItem(
-                'Support Ticket',
-                true,
-                customIcon: SvgPicture.asset(Asset.suportTicket),
-                onTap: () {
-                  Get.to(() => CustomerSupportView());
-                },
-              ),
-              SizedBox(height: 1.h),
-              _buildMenuItem(
-                'Settings',
-                false,
-                customIcon: SvgPicture.asset(Asset.settingsIcon),
-
-                onTap: () {
-                  Get.to(() => const SettingView());
-                },
-
-                // onTap: () {
-                //   Get.toNamed(Routes.PROFILE);
-                // },
-              ),
+              // _buildMenuItem(
+              //   'Service Management',
+              //   false,
+              //   onTap: () {
+              //     Get.toNamed(Routes.SERVICE_MANAGEMENT);
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Product Management',
+              //   customIcon: SvgPicture.asset(
+              //     Asset.productManagement,
+              //     height: 24,
+              //     width: 24,
+              //   ),
+              //
+              //   false,
+              //   onTap: () {
+              //     Get.to(() => ProductManagementView());
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Approval Inbox',
+              //   true,
+              //   customIcon: Image.asset(
+              //     Asset.vectorIcon,
+              //     height: 24,
+              //     width: 24,
+              //   ),
+              //
+              //   onTap: () {
+              //     Get.to(() => const ProductApprovalView());
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Connection Inbox',
+              //   true,
+              //   customIcon: Image.asset(Asset.crmIcon, height: 24, width: 24),
+              //   onTap: () {
+              //     Get.toNamed(Routes.CONNECTION_INBOX);
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Role Management',
+              //   customIcon: SvgPicture.asset(Asset.role, height: 24, width: 24),
+              //
+              //   false,
+              //   onTap: () {
+              //     Get.toNamed(Routes.ROLE_MANAGEMENT);
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Support Ticket',
+              //   true,
+              //   customIcon: SvgPicture.asset(Asset.suportTicket),
+              //   onTap: () {
+              //     Get.to(() => CustomerSupportView());
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Settings',
+              //   false,
+              //   customIcon: SvgPicture.asset(Asset.settingsIcon),
+              //
+              //   onTap: () {
+              //     Get.to(() => const SettingView());
+              //   },
+              //
+              //   // onTap: () {
+              //   //   Get.toNamed(Routes.PROFILE);
+              //   // },
+              // ),
             ],
           ),
         ),
