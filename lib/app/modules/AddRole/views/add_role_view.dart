@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/AddRole/controllers/add_role_controller.dart';
 
 class AddRoleView extends GetView<AddRoleController> {

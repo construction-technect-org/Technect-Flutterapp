@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/RoleManagement/controllers/role_management_controller.dart';

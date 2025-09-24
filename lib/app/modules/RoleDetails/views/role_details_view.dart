@@ -1,8 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/RoleDetails/controllers/role_details_controller.dart';
-import 'package:gap/gap.dart';
 
 class RoleDetailsView extends GetView<RoleDetailsController> {
   const RoleDetailsView({super.key});

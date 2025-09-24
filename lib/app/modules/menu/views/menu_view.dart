@@ -189,7 +189,10 @@ class MenuView extends StatelessWidget {
                     icon: Asset.thumbup,
 
                     title: "Feedback",
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.FEEDBACK_VIEW);
+
+                    },
                   ),
                 ],
               ),
