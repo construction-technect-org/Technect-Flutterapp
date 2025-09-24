@@ -213,35 +213,33 @@ class ProductManagementView extends StatelessWidget {
                         child:
                             (controller.filteredProducts.isEmpty &&
                                 controller.searchQuery.value.isNotEmpty)
-                            ? Center(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 4.h),
-                                  child: Column(
-                                    children: [
-                                      const Gap(20),
-                                      const Icon(
-                                        Icons.search_off,
-                                        size: 64,
-                                        color: MyColors.grey,
-                                      ),
-                                      SizedBox(height: 2.h),
-                                      Text(
-                                        'No products found',
-                                        style: MyTexts.medium18.copyWith(
-                                          color: MyColors.fontBlack,
-                                        ),
-                                      ),
-                                      SizedBox(height: 0.5.h),
-                                      Text(
-                                        'Try searching with different keywords',
-                                        style: MyTexts.regular14.copyWith(
-                                          color: MyColors.grey,
-                                        ),
-                                      ),
-                                    ],
+                            ? Padding(
+                              padding: const EdgeInsets.only(top: 100.0),
+                              child: Column(
+                                children: [
+                                  const Gap(20),
+                                  const Icon(
+                                    Icons.search_off,
+                                    size: 64,
+                                    color: MyColors.grey,
                                   ),
-                                ),
-                              )
+                                  SizedBox(height: 2.h),
+                                  Text(
+                                    'No products found',
+                                    style: MyTexts.medium18.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
+                                  ),
+                                  SizedBox(height: 0.5.h),
+                                  Text(
+                                    'Try searching with different keywords',
+                                    style: MyTexts.regular14.copyWith(
+                                      color: MyColors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
                             : ListView.separated(
                                 shrinkWrap: true,
                                 padding: const EdgeInsets.symmetric(vertical: 20),

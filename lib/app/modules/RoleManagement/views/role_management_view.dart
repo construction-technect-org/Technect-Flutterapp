@@ -19,11 +19,23 @@ class RoleManagementView extends GetView<RoleManagementController> {
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: AppBar(
+          leading:  GestureDetector(
+            onTap:
+                    () {
+                  Get.back();
+                },
+            behavior: HitTestBehavior.translucent,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Icon(Icons.arrow_back_ios, color: MyColors.black),
+            ),
+          ),
           backgroundColor: MyColors.white,
           elevation: 0,
-          title: const Text(
+          leadingWidth: 40,
+          title:  Text(
             "Teams & Roles",
-            style: TextStyle(color: Colors.black),
+            style: MyTexts.medium18.copyWith(color: Colors.black,fontFamily: MyTexts.Roboto),
           ),
           bottom: const TabBar(
             indicatorSize: TabBarIndicatorSize.tab,
@@ -463,7 +475,7 @@ class RoleCard extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: MyColors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: role.isActive == true
                   ? MyColors.green
@@ -539,21 +551,24 @@ class RoleCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Gap(10),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 4.w,
-                    vertical: 1.5.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: MyColors.whiteBlue,
-                    borderRadius: BorderRadius.circular(11),
-                  ),
-                  child: Text(
-                    "Users: ${role.teamMemberCount ?? '0'} ",
-                    style: MyTexts.regular14.copyWith(
-                      color: MyColors.fontBlack,
+                const Gap(6),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: MyColors.whiteBlue,
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: Text(
+                      "Users: ${role.teamMemberCount ?? '0'} ",
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.fontBlack,
+                        fontFamily: MyTexts.Roboto
+                      ),
                     ),
                   ),
                 ),

@@ -19,6 +19,7 @@ class CustomerSupportController extends GetxController {
   ];
   RxString selectedMainCategory = "".obs;
   bool isEdit = false;
+  RxString searchQuery = "".obs;
 
   final subjectController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -114,11 +115,6 @@ class CustomerSupportController extends GetxController {
         selectedCategory.value = null;
         selectedPriority.value = null;
         isSubmitting.value = false;
-
-        final result = await Get.to(() => CustomerSupportView());
-        if (result == true) {
-          fetchMyTickets(); // refresh list
-        }
       } else {
         SnackBars.errorSnackBar(
           content: response.message ?? 'Failed to submit ticket',

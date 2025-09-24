@@ -35,7 +35,9 @@ class CustomerSupportView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: CommonTextField(
-                onChange: (value) {},
+                onChange: (value) {
+                  controller.searchQuery.value = value ?? "";
+                },
                 borderRadius: 22,
                 hintText: 'Search',
                 suffixIcon: SvgPicture.asset(
@@ -60,7 +62,6 @@ class CustomerSupportView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                       
                           HearderText(text: "Customer Support Ticket"),
                           SizedBox(height: 2.h),
                           Row(
@@ -137,10 +138,13 @@ class CustomerSupportView extends StatelessWidget {
                                 child: OutlinedButton(
                                   onPressed: () => showDialog(
                                     context: context,
-                                    builder: (context) => const RequestDemoDialog(),
+                                    builder: (context) =>
+                                        const RequestDemoDialog(),
                                   ),
                                   style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: MyColors.primary),
+                                    side: const BorderSide(
+                                      color: MyColors.primary,
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
                                         12,
@@ -190,7 +194,6 @@ class CustomerSupportView extends StatelessWidget {
                 ),
               ),
             ),
-      
           ],
         ),
       ),
