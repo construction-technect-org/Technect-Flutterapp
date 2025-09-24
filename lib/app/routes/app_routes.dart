@@ -36,6 +36,7 @@ abstract class Routes {
   static const DASHBOARD = _Paths.DASHBOARD;
   static const DASHABORD_MARKET_PLACE = _Paths.DASHABOARD_MARKET_PLACE;
   static const FEEDBACK_VIEW = _Paths.FEEDBACK_VIEW;
+  static const FAQ = _Paths.FAQ;
 
   // Connector
   static const MAIN_TAB = _Paths.MAIN_TAB;
@@ -75,6 +76,7 @@ abstract class _Paths {
   static const APPROVAL_INBOX = '/approval-inbox';
   static const ROLE_DETAILS = '/role-details';
   static const FEEDBACK_VIEW = '/feedback-view';
+  static const FAQ = '/faq';
   static const TEAM_DETAILS = '/team-details';
   static const MARKET_PLACE = '/market-place';
   static const SERVICE_MANAGEMENT = '/service-management';

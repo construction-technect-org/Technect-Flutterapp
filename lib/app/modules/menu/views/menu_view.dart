@@ -182,7 +182,10 @@ class MenuView extends StatelessWidget {
                     icon: Asset.warning,
 
                     title: "F.A.Q.S",
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.FAQ);
+
+                    },
                   ),
                   const Gap(20),
                   CommonRowItem(
@@ -240,31 +243,27 @@ class MenuView extends StatelessWidget {
                 children: [
                   CommonRowItem(
                     icon: Asset.about,
-
                     title: "About Us",
                     onTap: () {
-                      openUrl(url: "https://www.google.com");
+                      openUrl(url: Constants.aboutUS);
                     },
                   ),
                   const Gap(20),
                   CommonRowItem(
                     icon: Asset.gift,
-
                     title: "Privacy Policy",
                     onTap: () {
-                      openUrl(url: "https://www.google.com");
+                      openUrl(url: Constants.privacyPolicy);
                     },
                   ),
                   const Gap(20),
-
                   CommonRowItem(
                     icon: Asset.link,
-
                     title: "Terms & Conditions",
                     onTap: () {
                       openUrl(
                         url:
-                        "https://www.figma.com/design/NVt9tWbBrKgGL11Xy9JOE1/MARKETPLACE?node-id=337-4362&t=1sLDXtFvJV7YRewa-0",
+                        Constants.termsCondition
                       );
                     },
                   ),

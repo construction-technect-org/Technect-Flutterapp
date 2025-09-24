@@ -36,6 +36,8 @@ import 'package:construction_technect/app/modules/Dashboard/bindings/dashboard_b
 import 'package:construction_technect/app/modules/Dashboard/views/dashboard_view.dart';
 import 'package:construction_technect/app/modules/DashboardMarketPlace/bindings/market_place_binding.dart';
 import 'package:construction_technect/app/modules/DashboardMarketPlace/views/market_place_view.dart';
+import 'package:construction_technect/app/modules/FAQ/bindings/faq_bindings.dart';
+import 'package:construction_technect/app/modules/FAQ/views/faq_screen.dart';
 import 'package:construction_technect/app/modules/FeedBack/bindings/feedback_bindings.dart';
 import 'package:construction_technect/app/modules/FeedBack/views/feedback_view_screen.dart';
 import 'package:construction_technect/app/modules/Marketplace/bindings/market_place_binding.dart';
@@ -189,6 +191,11 @@ class AppPages {
       name: _Paths.FEEDBACK_VIEW,
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
+    ),
+    GetPage(
+      name: _Paths.FAQ,
+      page: () => const FaqScreen(),
+      binding: FAQBindings(),
     ),
     GetPage(
       name: _Paths.TEAM_DETAILS,

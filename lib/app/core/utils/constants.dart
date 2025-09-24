@@ -168,6 +168,9 @@ class Asset {
 
 class Constants {
   static const String constructionTechnect = 'Construction Technect';
+  static const String privacyPolicy = 'http://43.205.117.97/merchant-privacy-policy.html';
+  static const String termsCondition = 'http://43.205.117.97/merchant-terms-conditions.html';
+  static const String aboutUS = 'http://43.205.117.97/merchant-about-us.html';
   static const String connectingConstructionWorldwide =
       'Connecting Construction Worldwide';
 }
