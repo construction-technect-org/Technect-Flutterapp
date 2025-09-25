@@ -512,7 +512,6 @@ class AddProductController extends GetxController {
       "sub_category_id": selectedSubCategoryId.value,
     };
 
-    // Only include product_id if products are available and selected
     if (productNames.isNotEmpty && selectedProductId.value != null) {
       fields["category_product_id"] = selectedProductId.value;
     }

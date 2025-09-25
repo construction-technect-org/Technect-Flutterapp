@@ -18,6 +18,7 @@ class ProfileController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website.toString();
       businessModel.value.businessEmail = merchantProfile?.businessEmail

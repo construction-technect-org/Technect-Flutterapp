@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/profile/components/edit_profile.dart';
 import 'package:construction_technect/app/modules/profile/controllers/profile_controller.dart';
 import 'package:gap/gap.dart';
 
@@ -61,8 +62,8 @@ class InfoMetricsComponent extends StatelessWidget {
             ),
             IconButton(
               padding: EdgeInsets.zero,
-              onPressed: () async {
-                return Get.toNamed(Routes.EDIT_PROFILE);
+              onPressed: ()  {
+                 Get.to(()=> EditProfile());
               },
               icon: const Icon(Icons.edit, color: Colors.black, size: 20),
             ),
@@ -150,14 +151,6 @@ class InfoMetricsComponent extends StatelessWidget {
                   Expanded(
                     child: Obx(() {
                       final userData = controller.userData;
-                      print(userData?.gst);
-                      print("object");
-                      print(
-                        Get.find<ProfileController>()
-                            .businessModel
-                            .value
-                            .gstinNumber,
-                      );
                       // final merchantProfile = controller.merchantProfile;
 
                       return Column(
