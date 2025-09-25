@@ -38,15 +38,12 @@ class TeamDetailsController extends GetxController {
 
   void _updateUIWithTeamData() {
     teamId.value = (teamDetailsModel.id ?? 0).toString();
-    userName.value = teamDetailsModel.fullName ?? userName.value;
+    userName.value = teamDetailsModel.firstName ?? userName.value;
     userEmail.value = teamDetailsModel.emailId ?? userEmail.value;
     userRole.value = teamDetailsModel.roleTitle ?? userRole.value;
-    userPhone.value = teamDetailsModel.phoneNumber ?? userPhone.value;
-    userAddress.value = teamDetailsModel.address ?? userAddress.value;
+    userPhone.value = teamDetailsModel.mobileNumber ?? userPhone.value;
     profileUrl.value = teamDetailsModel.profilePhotoUrl ?? profileUrl.value;
     userStatus.value = teamDetailsModel.isActive == true ? "Active" : "Inactive";
-    aadhaarUrl.value = teamDetailsModel.aadharCardPhotoUrl ?? "";
-    panUrl.value = teamDetailsModel.panCardPhotoUrl ?? "";
     documents.clear();
     if (aadhaarUrl.value.isNotEmpty) {
       documents.add({

@@ -65,8 +65,14 @@ class EditProfile extends StatelessWidget {
                 const Gap(8),
                 ElevatedButton.icon(
                   onPressed: () => eController.pickImageBottomSheet(context),
-                  icon: const Icon(Icons.camera_alt),
-                  label: const Text("Change Photo"),
+                  icon: const Icon(Icons.camera_alt, color: Colors.white),
+                  label: const Text(
+                    "Change Photo",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MyColors.primary, // or Colors.blue
+                  ),
                 ),
                 Gap(2.h),
                 CommonTextField(

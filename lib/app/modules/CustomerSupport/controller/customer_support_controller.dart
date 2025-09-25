@@ -103,7 +103,6 @@ class CustomerSupportController extends GetxController {
       );
 
       if (response.success) {
-        SnackBars.successSnackBar(content: 'Ticket submitted successfully');
 
         // Refresh ticket list after creation
         await fetchMyTickets();
@@ -114,6 +113,7 @@ class CustomerSupportController extends GetxController {
         selectedCategory.value = null;
         selectedPriority.value = null;
         isSubmitting.value = false;
+        SnackBars.successSnackBar(content: 'Ticket submitted successfully');
       } else {
         SnackBars.errorSnackBar(
           content: response.message ?? 'Failed to submit ticket',

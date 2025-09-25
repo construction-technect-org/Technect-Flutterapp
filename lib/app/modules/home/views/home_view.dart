@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/AddLocationManually/views/saved_addresses_view.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 

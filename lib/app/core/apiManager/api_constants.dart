@@ -29,7 +29,6 @@ class APIConstants {
   static const String updateProduct = "merchant/product/";
   static const String teamStatsOverview = "merchant/team/stats/overview";
   static const String roleDetailById = "merchant/role";
-  static const String teamDetail = "merchant/team";
   static const String getMainCategories = "merchant/category/main";
   static const String getSubCategories =
       "merchant/category/sub?main_category_id=";

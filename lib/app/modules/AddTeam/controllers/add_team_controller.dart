@@ -1,50 +1,23 @@
-import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AddTeamController extends GetxController {
-  final fullNameController = TextEditingController();
+  final fNameController = TextEditingController();
+  final lNameController = TextEditingController();
   final emialIdController = TextEditingController();
   final phoneNumberController = TextEditingController();
-  final addressController = TextEditingController();
-  final stateController = TextEditingController();
-  final cityController = TextEditingController();
-
-  final pinCodeController = TextEditingController();
-  final aadharCardController = TextEditingController();
-  final panCardController = TextEditingController();
   AddTeamService addTeamService = AddTeamService();
-  RxList<String> categories = <String>["PanCard", "AadharCard", "DrivingLicen"].obs;
   RoleManagementController roleController = Get.find();
   HomeController homeController = Get.find();
-
-  // Nullable selections
-  Rxn<String> selectedCategory = Rxn<String>();
-  Rxn<String> selectedSubCategory = Rxn<String>();
-  Rxn<String> selectedUom = Rxn<String>();
-
-  RxBool showExtraFields = false.obs;
-  RxString pickedFileProfilePhotoName = "".obs;
-  RxString pickedFileProfilePhotoPath = "".obs;
-  RxString pickedFileAadhaarCardPhotoName = "".obs;
-  RxString pickedFileAadhaarCardPhotoPath = "".obs;
-  RxString pickedFilePanCardPhotoName = "".obs;
-  RxString pickedFilePanCardPhotoPath = "".obs;
   RxBool isLoading = false.obs;
   final Rx<TeamListData> teamDetailsModel = TeamListData().obs;
   RxBool isEdit = false.obs;
   RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<GetAllRole>? selectedRole = GetAllRole().obs;
-
-  // Store original photo paths for comparison during updates
-  String originalProfilePhotoPath = "";
-  String originalAadhaarCardPhotoPath = "";
-  String originalPanCardPhotoPath = "";
 
   @override
   void onInit() {
@@ -52,7 +25,6 @@ class AddTeamController extends GetxController {
     final arg = Get.arguments;
     if (arg != null) {
       teamDetailsModel.value = arg['data'];
-      isEdit.value = true;
       loadTeamData();
     }
     super.onInit();
@@ -67,24 +39,10 @@ class AddTeamController extends GetxController {
 
   void loadTeamData() {
     isEdit.value = true;
-    fullNameController.text = teamDetailsModel.value.fullName ?? '';
+    fNameController.text=teamDetailsModel.value.firstName ?? '';
+    lNameController.text=teamDetailsModel.value.lastName ?? '';
     emialIdController.text = teamDetailsModel.value.emailId ?? '';
-    phoneNumberController.text = teamDetailsModel.value.phoneNumber ?? '';
-    addressController.text = teamDetailsModel.value.address ?? '';
-    stateController.text = teamDetailsModel.value.state ?? '';
-    cityController.text = teamDetailsModel.value.city ?? '';
-    pinCodeController.text = teamDetailsModel.value.pincode ?? '';
-    aadharCardController.text = teamDetailsModel.value.aadharCardNumber ?? '';
-    panCardController.text = teamDetailsModel.value.panCardNumber ?? '';
-    pickedFileProfilePhotoPath.value = teamDetailsModel.value.profilePhotoUrl ?? '';
-    pickedFileAadhaarCardPhotoPath.value =
-        teamDetailsModel.value.aadharCardPhotoUrl ?? '';
-    pickedFilePanCardPhotoPath.value = teamDetailsModel.value.panCardPhotoUrl ?? '';
-
-    // Store original photo paths for comparison during updates
-    originalProfilePhotoPath = teamDetailsModel.value.profilePhotoUrl ?? '';
-    originalAadhaarCardPhotoPath = teamDetailsModel.value.aadharCardPhotoUrl ?? '';
-    originalPanCardPhotoPath = teamDetailsModel.value.panCardPhotoUrl ?? '';
+    phoneNumberController.text = teamDetailsModel.value.mobileNumber ?? '';
     selectedRole!.value = roles.firstWhere(
       (element) => element.id == teamDetailsModel.value.teamRoleId,
       orElse: () {
@@ -93,34 +51,24 @@ class AddTeamController extends GetxController {
     );
   }
 
-  @override
-  void onClose() {
-    fullNameController.dispose();
-    emialIdController.dispose();
-    phoneNumberController.dispose();
-    addressController.dispose();
-    stateController.dispose();
-    super.onClose();
-  }
-
   Future<void> addTeam() async {
     isLoading.value = true;
     Map<String, dynamic> fields = {};
     if (isEdit.value) {
       fields = {
-        "full_name": fullNameController.text,
+        "first_name": fNameController.text,
+        "last_name": lNameController.text,
         "email_id": emialIdController.text,
         "phone_number": phoneNumberController.text,
         "team_role_id": selectedRole?.value.id ?? '',
-        "is_active": "true",
       };
     } else {
       fields = {
-        "full_name": fullNameController.text,
+        "first_name": fNameController.text,
+        "last_name": lNameController.text,
         "email_id": emialIdController.text,
-        "phone_number": phoneNumberController.text,
+        "mobile_number": phoneNumberController.text,
         "team_role_id": selectedRole?.value.id ?? '',
-        "is_active": "true",
       };
     }
     try {
@@ -132,51 +80,35 @@ class AddTeamController extends GetxController {
         await homeController.refreshTeamList();
         isLoading.value = false;
         Get.back();
-        Get.back();
       } else {
         await addTeamService.addTeam(fields: fields,);
         await homeController.refreshTeamList();
-        await roleController.fetchTeamStatsOverview();
+        // await roleController.fetchTeamStatsOverview();
         isLoading.value = false;
         Get.back();
       }
     } catch (e) {
+      isLoading.value = false;
       // Error snackbar is already shown by ApiManager
     }
   }
+  Rxn<String> selectedCategory = Rxn<String>();
 
-  Future<void> pickPhotoFromGallery(String type) async {
-    try {
-      final XFile? result = await CommonConstant().pickImageFromGallery();
-
-      if (result != null && result.path.isNotEmpty) {
-        final XFile file = result;
-        if (type == 'profile_photo') {
-          pickedFileProfilePhotoName.value = file.name;
-          pickedFileProfilePhotoPath.value = file.path;
-        }
-        if (type == 'aadhar_card_photo') {
-          pickedFileAadhaarCardPhotoName.value = file.name;
-          pickedFileAadhaarCardPhotoPath.value = file.path;
-        }
-        if (type == 'pan_card_photo') {
-          pickedFilePanCardPhotoName.value = file.name;
-          pickedFilePanCardPhotoPath.value = file.path;
-        }
-      }
-    } catch (e) {
-      SnackBars.errorSnackBar(content: 'Failed to pick photo from gallery: $e', time: 3);
-    }
-  }
 
   Future<void> filedValidation() async {
 
     // Validate Full Name
-    if (fullNameController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Full name is required');
-    } else if (fullNameController.text.length < 3) {
-      SnackBars.errorSnackBar(content: 'Name must be at least 3 characters');
-    } else if (emialIdController.text.isEmpty) {
+    if (fNameController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'First name is required');
+    } else if (fNameController.text.length < 3) {
+      SnackBars.errorSnackBar(content: 'First name must be at least 3 characters');
+    }
+    if (lNameController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'First name is required');
+    } else if (lNameController.text.length < 2) {
+      SnackBars.errorSnackBar(content: 'Last name must be at least 2 characters');
+    }
+    else if (emialIdController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Email is required');
     } else if (!GetUtils.isEmail(emialIdController.text)) {
       SnackBars.errorSnackBar(content: 'Please enter a valid email');

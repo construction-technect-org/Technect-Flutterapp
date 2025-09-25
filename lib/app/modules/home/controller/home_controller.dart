@@ -350,7 +350,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> refreshTeamList() async {
-    // await fetchTeamList();
+    await fetchTeamList();
   }
 
   Future<void> refreshAddressAndProfile() async {

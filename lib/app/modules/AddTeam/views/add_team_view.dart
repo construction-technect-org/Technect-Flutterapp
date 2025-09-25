@@ -27,9 +27,15 @@ class AddTeamView extends GetView<AddTeamController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CommonTextField(
-                  hintText: "Enter your full name",
-                  headerText: 'Full Name',
-                  controller: controller.fullNameController,
+                  hintText: "Enter your First name",
+                  headerText: 'First Name',
+                  controller: controller.fNameController,
+                ),
+                SizedBox(height: 2.h),
+                CommonTextField(
+                  hintText: "Enter your Last name",
+                  headerText: 'Last Name',
+                  controller: controller.lNameController,
                 ),
                 SizedBox(height: 2.h),
                 CommonTextField(
@@ -53,7 +59,9 @@ class AddTeamView extends GetView<AddTeamController> {
                   children: [
                     Text(
                       'User Role',
-                      style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
+                      style: MyTexts.light16.copyWith(
+                        color: MyColors.lightBlue,
+                      ),
                     ),
                     Text(
                       '*',
@@ -78,7 +86,7 @@ class AddTeamView extends GetView<AddTeamController> {
                 Center(
                   child: Obx(
                     () => RoundedButton(
-                      buttonName: 'NEXT',
+                      buttonName: controller.isEdit.value ? "UPDATE" : 'ADD',
                       isLoading: controller.isLoading.value,
                       onTap: () {
                         controller.filedValidation();
