@@ -26,21 +26,55 @@ class SupportMyTicketsModel {
   }
 }
 
+class Statistics {
+  int? openTickets;
+  int? inProgressTickets;
+  int? resolvedTickets;
+  int? avgResponse;
+
+  Statistics(
+      {this.openTickets,
+        this.inProgressTickets,
+        this.resolvedTickets,
+        this.avgResponse});
+
+  Statistics.fromJson(Map<String, dynamic> json) {
+    openTickets = json['open_tickets'];
+    inProgressTickets = json['in_progress_tickets'];
+    resolvedTickets = json['resolved_tickets'];
+    avgResponse = json['avg_response'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['open_tickets'] = openTickets;
+    data['in_progress_tickets'] = inProgressTickets;
+    data['resolved_tickets'] = resolvedTickets;
+    data['avg_response'] = avgResponse;
+    return data;
+  }
+}
+
 class SupportTicketsData {
   List<SupportMyTickets> tickets;
   Pagination pagination;
+  Statistics? statistics;
 
   SupportTicketsData({
     required this.tickets,
     required this.pagination,
+    this.statistics,
   });
 
   factory SupportTicketsData.fromJson(Map<String, dynamic> json) {
     return SupportTicketsData(
       tickets: (json['tickets'] as List<dynamic>?)
-              ?.map((e) => SupportMyTickets.fromJson(e))
-              .toList() ??
+          ?.map((e) => SupportMyTickets.fromJson(e))
+          .toList() ??
           [],
+      statistics: json['statistics'] != null
+          ? Statistics.fromJson(json['statistics'])
+          : null,
       pagination: Pagination.fromJson(json['pagination']),
     );
   }
@@ -49,9 +83,11 @@ class SupportTicketsData {
     return {
       'tickets': tickets.map((e) => e.toJson()).toList(),
       'pagination': pagination.toJson(),
+      'statistics': statistics?.toJson(),
     };
   }
 }
+
 
 class SupportMyTickets {
   int id;

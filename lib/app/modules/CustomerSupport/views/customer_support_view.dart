@@ -68,38 +68,44 @@ class CustomerSupportView extends StatelessWidget {
                           Row(
                             children: [
                               Expanded(
-                                child: StatCard(
-                                  onTap: () {
-                                    Get.to(
-                                      () => const ConnectorSupportRequestView(),
-                                    );
-                                  },
-                                  title: 'Open Tickets',
-                                  value: '04',
-                                  icon: SvgPicture.asset(
-                                    Asset.warning,
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                  iconBackground: MyColors.red.withValues(
-                                    alpha: 0.2,
-                                  ),
-                                ),
+                                child: Obx(() {
+                                  return StatCard(
+                                    onTap: () {
+                                      Get.to(
+                                            () => const ConnectorSupportRequestView(),
+                                      );
+                                    },
+                                    title: 'Open Tickets',
+                                    value: "${controller.statistics.value
+                                        .openTickets ?? 0}",
+                                    icon: SvgPicture.asset(
+                                      Asset.warning,
+                                      height: 20,
+                                      width: 20,
+                                    ),
+                                    iconBackground: MyColors.red.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                  );
+                                }),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: StatCard(
-                                  title: 'In Progress',
-                                  value: '02',
-                                  icon: const Icon(
-                                    Icons.watch_later_outlined,
-                                    size: 30,
-                                    color: MyColors.warning,
-                                  ),
-                                  iconBackground: MyColors.warning.withValues(
-                                    alpha: 0.2,
-                                  ),
-                                ),
+                                child: Obx(() {
+                                  return StatCard(
+                                    title: 'In Progress',
+                                    value: "${controller.statistics.value
+                                        .inProgressTickets ?? 0}",
+                                    icon: const Icon(
+                                      Icons.watch_later_outlined,
+                                      size: 30,
+                                      color: MyColors.warning,
+                                    ),
+                                    iconBackground: MyColors.warning.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                  );
+                                }),
                               ),
                             ],
                           ),
@@ -107,33 +113,40 @@ class CustomerSupportView extends StatelessWidget {
                           Row(
                             children: [
                               Expanded(
-                                child: StatCard(
-                                  title: 'Resolved',
-                                  value: '04',
-                                  icon: const Icon(
-                                    Icons.check_circle_rounded,
-                                    size: 30,
-                                    color: MyColors.green,
-                                  ),
-                                  iconBackground: MyColors.green.withValues(
-                                    alpha: 0.2,
-                                  ),
-                                ),
+                                child: Obx(() {
+                                  return StatCard(
+                                    title: 'Resolved',
+                                    value: "${controller.statistics.value
+                                        .resolvedTickets ?? 0}",
+                                    icon: const Icon(
+                                      Icons.check_circle_rounded,
+                                      size: 30,
+                                      color: MyColors.green,
+                                    ),
+                                    iconBackground: MyColors.green.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                  );
+                                }),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: StatCard(
-                                  title: 'Avg Response',
-                                  value: '02',
-                                  icon: const Icon(
-                                    Icons.watch_later_outlined,
-                                    size: 30,
-                                    color: MyColors.primary,
-                                  ),
-                                  iconBackground: MyColors.lightBlue.withValues(
-                                    alpha: 0.2,
-                                  ),
-                                ),
+                                child: Obx(() {
+                                  return StatCard(
+                                    title: 'Avg Response',
+                                    value: "${controller.statistics.value
+                                        .avgResponse ?? 0}",
+                                    icon: const Icon(
+                                      Icons.watch_later_outlined,
+                                      size: 30,
+                                      color: MyColors.primary,
+                                    ),
+                                    iconBackground: MyColors.lightBlue
+                                        .withValues(
+                                      alpha: 0.2,
+                                    ),
+                                  );
+                                }),
                               ),
                             ],
                           ),
@@ -287,8 +300,8 @@ class _RequestDemoDialogState extends State<RequestDemoDialog> {
                 onChanged: controller.isEdit
                     ? null
                     : (value) {
-                        controller.onMainCategorySelected(value);
-                      },
+                  controller.onMainCategorySelected(value);
+                },
                 enabled: !controller.isEdit,
               ),
 

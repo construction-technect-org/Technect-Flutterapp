@@ -126,12 +126,15 @@ class CustomerSupportController extends GetxController {
     }
   }
 
+  Rx<Statistics> statistics = Statistics().obs;
+
   // ---------------- New: Fetch My Tickets ----------------
   Future<void> fetchMyTickets() async {
     try {
       isLoadingMyTickets.value = true;
       final response = await _service.supportMyTicketsModel();
-      myTickets.assignAll(response.data.tickets); 
+      myTickets.assignAll(response.data.tickets);
+      statistics.value = response.data.statistics ?? Statistics();
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Failed to fetch tickets: $e');
     } finally {
