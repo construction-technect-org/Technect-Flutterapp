@@ -30,8 +30,7 @@ void onInit() {
   youtubeController = YoutubePlayerController(
     initialVideoId: videoId ?? '',
     flags: const YoutubePlayerFlags(
-      autoPlay: false,  // <-- Don't auto play on init
-      mute: false,
+      autoPlay: false,
     ),
   );
 }

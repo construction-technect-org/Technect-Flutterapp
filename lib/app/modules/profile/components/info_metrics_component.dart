@@ -59,34 +59,13 @@ class InfoMetricsComponent extends StatelessWidget {
                 fontFamily: MyTexts.Roboto,
               ),
             ),
-            // TextButton(
-            //   onPressed: () {
-            //     Get.toNamed(Routes.EDIT_PROFILE);
-            //   },
-            //   style: TextButton.styleFrom(padding: EdgeInsets.zero),
-            //   child: Row(
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: [
-            //       SvgPicture.asset(
-            //         Asset.editIcon,
-            //         width: 12,
-            //         height: 12,
-            //         color: MyColors.primary,
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.only(right: 10),
-            //         child: Text(
-            //           "Edit Profile",
-            //           style: MyTexts.regular14.copyWith(
-            //             color: MyColors.primary,
-            //             fontFamily: MyTexts.Roboto,
-            //             decoration: TextDecoration.underline,
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+            IconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () async {
+                return Get.toNamed(Routes.EDIT_PROFILE);
+              },
+              icon: const Icon(Icons.edit, color: Colors.black, size: 20),
+            ),
           ],
         ),
         SizedBox(height: 2.h),

@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorSupportRequest/views/connector_support_request_view.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/controller/customer_support_controller.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/creat_new_ticket.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/ticket_list_view.dart';
@@ -68,6 +69,11 @@ class CustomerSupportView extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: StatCard(
+                                  onTap: () {
+                                    Get.to(
+                                      () => const ConnectorSupportRequestView(),
+                                    );
+                                  },
                                   title: 'Open Tickets',
                                   value: '04',
                                   icon: SvgPicture.asset(
@@ -136,11 +142,9 @@ class CustomerSupportView extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: OutlinedButton(
-                                  onPressed: () => showDialog(
-                                    context: context,
-                                    builder: (context) =>
-                                        const RequestDemoDialog(),
-                                  ),
+                                  onPressed: () {
+                                    Get.toNamed(Routes.CONNECTOR_REQUEST_DEMO);
+                                  },
                                   style: OutlinedButton.styleFrom(
                                     side: const BorderSide(
                                       color: MyColors.primary,

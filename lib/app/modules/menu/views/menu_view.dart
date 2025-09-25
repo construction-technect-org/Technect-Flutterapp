@@ -1,9 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
-import 'package:construction_technect/app/core/utils/dashed_circle.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
-import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
 import 'package:gap/gap.dart';
 
@@ -27,80 +25,6 @@ class MenuView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 1.h),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 12, horizontal: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: MyColors.grayD4),
-                ),
-                child: Row(
-                  children: [
-                    const DashedCircle(
-                      size: 61,
-                      imageSize: 50,
-                      color: MyColors.grey,
-                      strokeWidth: 1.2,
-                      assetImage: Asset.profil,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Obx(() {
-                            return Text(
-                              Get
-                                  .find<HomeController>()
-                                  .profileData
-                                  .value
-                                  .data
-                                  ?.user
-                                  ?.fullName ?? "-",
-                              overflow: TextOverflow.ellipsis,
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            );
-                          }),
-                          const SizedBox(height: 4),
-                          Obx(() {
-                            return Text(
-                              Get
-                                  .find<HomeController>()
-                                  .profileData
-                                  .value
-                                  .data
-                                  ?.user
-                                  ?.email ?? "-",
-                              overflow: TextOverflow.ellipsis,
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    GestureDetector(
-                        onTap: (){
-                          _showConfirmDialog(
-                            context,
-                            title: "Log Out",
-                            message: "Are you sure you want to log out?",
-                            confirmText: "Log Out",
-                            onConfirm: () {
-                              myPref.logout();
-                              Get.offAllNamed(Routes.LOGIN);
-                            },
-                          );
-                        },
-                        child: const Icon(Icons.edit))
-                  ],
-                ),
-              ),
-              SizedBox(height: 2.h),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
