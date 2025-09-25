@@ -55,58 +55,62 @@ class HomeView extends StatelessWidget {
                 children: [
                   Image.asset(Asset.profil, height: 40, width: 40),
                   SizedBox(width: 1.h),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Obx(
-                        () => Text(
-                          'Welcome ${controller.profileData.value.data?.user?.firstName}!',
-                          style: MyTexts.medium16.copyWith(
-                            color: MyColors.fontBlack,
-                            fontFamily: MyTexts.Roboto,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(
+                          () => Text(
+                            'Welcome ${controller.profileData.value.data?.user?.firstName}!',
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.fontBlack,
+                              fontFamily: MyTexts.Roboto,
+                            ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          // Condition check
-                          if (controller.getCurrentAddress().isNotEmpty) {
-                            // Navigate to SavedAddressesView
-                            Get.to(() => const SavedAddressesView());
-                          } else {
-                            // No address → stay on same screen or show info
-                            Get.snackbar(
-                              "No Address",
-                              "Please add an address first",
-                              snackPosition: SnackPosition.BOTTOM,
-                            );
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                            SizedBox(width: 0.4.h),
-                            Obx(
-                              () => Text(
-                                controller.getCurrentAddress(),
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.textFieldBackground,
-                                  fontFamily: MyTexts.Roboto,
+                        GestureDetector(
+                          onTap: () {
+                            // Condition check
+                            if (controller.getCurrentAddress().isNotEmpty) {
+                              // Navigate to SavedAddressesView
+                              Get.toNamed(Routes.CONNECTOR_SELECT_LOCATION);
+                            } else {
+                              // No address → stay on same screen or show info
+                              Get.snackbar(
+                                "No Address",
+                                "Please add an address first",
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(Asset.location, width: 9, height: 12.22),
+                              SizedBox(width: 0.4.h),
+                              Obx(
+                                () => Text(
+                                  controller.getCurrentAddress(),
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.textFieldBackground,
+                                    fontFamily: MyTexts.Roboto,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 4),
-                            const Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 16,
-                              color: Colors.black54,
-                            ),
-                          ],
+                              const SizedBox(width: 4),
+                              const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 16,
+                                color: Colors.black54,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  const Spacer(),
+                  Gap(10),
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
