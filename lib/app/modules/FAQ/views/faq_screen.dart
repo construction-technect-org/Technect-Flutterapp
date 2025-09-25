@@ -83,7 +83,7 @@ class FaqScreen extends GetView<FAQController> {
                                             Text(
                                               faq['answer']!,
                                               style: MyTexts.regular16.copyWith(
-                                                color: MyColors.gray6B,
+                                                color: MyColors.gray53,
                                                 fontFamily: MyTexts.Roboto,
                                               ),
                                             ),

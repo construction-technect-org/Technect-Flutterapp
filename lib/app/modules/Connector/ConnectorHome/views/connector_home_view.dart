@@ -489,14 +489,15 @@ class ConnectorHomeView extends StatelessWidget {
 
 class HearderText extends StatelessWidget {
   String text;
+  TextStyle? textStyle;
 
-  HearderText({super.key, required this.text});
+  HearderText({super.key, required this.text,this.textStyle});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.Roboto),
+      style:textStyle?? MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.Roboto),
     );
   }
 }

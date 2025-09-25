@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart'; // your CommonDropdown
 import 'package:construction_technect/app/modules/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/AddProduct/models/ProductModelForCategory.dart';
@@ -93,8 +94,6 @@ class AddProductController extends GetxController {
 
   Future<void> initCalled() async {
     await fetchMainCategories();
-
-    // If in edit mode, load sub-categories and filters for the existing product
     if (isEdit && product.subCategoryId != null) {
       await fetchSubCategories(product.mainCategoryId ?? 0);
       await fetchProducts(product.subCategoryId ?? 0);
@@ -383,10 +382,10 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'Product name is required');
       isRequired = false;
     }
-    else if (productCodeController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Product code is required');
-      isRequired = false;
-    }
+    // else if (productCodeController.text.isEmpty) {
+    //   SnackBars.errorSnackBar(content: 'Product code is required');
+    //   isRequired = false;
+    // }
 
     else if (selectedMainCategoryId.value == null) {
       SnackBars.errorSnackBar(content: 'Main category is required');
@@ -405,16 +404,16 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'UOC is required');
       isRequired = false;
     }else if (priceController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Price is required');
+      SnackBars.errorSnackBar(content: 'Rate is required');
       isRequired = false;
     } else if (selectedGST.value==null) {
       SnackBars.errorSnackBar(content: 'GST percentage is required');
       isRequired = false;
     }
-    // else if (noteController.text.isEmpty) {
-    //   SnackBars.errorSnackBar(content: 'Note is required');
-    //   isRequired = false;
-    // }
+    else if (noteController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Note is required');
+      isRequired = false;
+    }
     else if (termsController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Terms is required');
       isRequired = false;
@@ -438,14 +437,62 @@ class AddProductController extends GetxController {
     } else if (colorController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Color is required');
     } else if (sizeController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Size is required');
+      SnackBars.errorSnackBar(content: 'Grain Size is required');
     } else {
       if (isEdit) {
         updateProduct();
       } else {
-        createProduct();
+        navigate();
       }
     }
+  }
+
+  void navigate(){
+    hideKeyboard();
+    final Map<String, String> payload = {};
+    dynamicControllers.forEach((key, controller) {
+      if (controller.text.isNotEmpty) {
+        payload[key] = controller.text;
+      }
+    });
+    final Product p = Product(
+      // categoryProductName: selectedSubCategory.value,
+       productImage: pickedFilePath.value,
+      mainCategoryName:  selectedMainCategory.value,
+      subCategoryName: selectedSubCategory.value,
+      productName:  productNameController.text,
+      shape: shapeController.text,
+      brand: brandNameController.text,
+      mainCategoryId: int.parse(selectedMainCategoryId.value??"0"),
+      subCategoryId:int.parse( selectedSubCategoryId.value??"0"),
+      categoryProductId: int.parse( selectedProductId.value??"0"),
+      price: priceController.text,
+      productCode: productCodeController.text,
+      totalAmount: amountController.text,
+      grainSize:  sizeController.text,
+      size: packageSizeController.text,
+      productNote: noteController.text,
+      gstPercentage: (selectedGST.value??"").replaceAll("%", ""),
+      termsAndConditions: termsController.text,
+      outOfStock: false,
+      uom: selectedUom.value,
+      uoc: uocController.text,
+      packageType: packageTypeController.text,
+      packageSize: packageSizeController.text,
+      texture:  textureController.text,
+      colour: colorController.text,
+      isActive: isEnabled.value,
+      isFeatured: false,
+      sortOrder: 1,
+      filterValues:  json.encode(payload),
+
+    );
+    Get.toNamed(
+      Routes.PRODUCT_DETAILS,
+      arguments: {"product": p,
+        "isFromAdd":true,
+      },
+    );
   }
 
   Future<void> createProduct() async {
@@ -488,7 +535,7 @@ class AddProductController extends GetxController {
       "shape": shapeController.text,
       "texture": textureController.text,
       "colour": colorController.text,
-      "size": sizeController.text,
+      "size": packageSizeController.text,
       // "weight": "0",
       "is_active": isEnabled.value,
       "is_featured": false,
@@ -505,6 +552,8 @@ class AddProductController extends GetxController {
       if (addTeamResponse.success == true) {
         await controller.fetchProducts();
         isLoading.value = false;
+        Get.back();
+        Get.back();
         Get.back();
       } else {
         isLoading.value = false;
@@ -581,6 +630,7 @@ class AddProductController extends GetxController {
       if (updateResponse.success == true) {
         await controller.fetchProducts();
         isLoading.value = false;
+
         Get.back();
         Get.back();
       } else {

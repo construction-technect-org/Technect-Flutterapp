@@ -204,13 +204,13 @@ class TicketListView extends StatelessWidget {
                       const Icon(
                         Icons.person_outline,
                         size: 18,
-                        color: MyColors.greyFour,
+                        color: MyColors.darkGray,
                       ),
                       SizedBox(width: 0.4.w),
                       Text(
                         ticket.company,
                         style: MyTexts.regular14.copyWith(
-                          color: MyColors.greyFour,
+                          color: MyColors.darkGray,
                         ),
                       ),
                       SizedBox(width: 3.w),

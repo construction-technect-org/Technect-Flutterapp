@@ -252,7 +252,9 @@ class ProductManagementView extends StatelessWidget {
                                     onTap: () {
                                       Get.toNamed(
                                         Routes.PRODUCT_DETAILS,
-                                        arguments: {"product": product},
+                                        arguments: {"product": product,
+                                        "isFromAdd":false
+                                        },
                                       );
                                     },
                                     child: ProductCard(

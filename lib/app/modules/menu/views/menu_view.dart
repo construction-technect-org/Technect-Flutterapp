@@ -83,7 +83,20 @@ class MenuView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    const Icon(Icons.edit)
+                    GestureDetector(
+                        onTap: (){
+                          _showConfirmDialog(
+                            context,
+                            title: "Log Out",
+                            message: "Are you sure you want to log out?",
+                            confirmText: "Log Out",
+                            onConfirm: () {
+                              myPref.logout();
+                              Get.offAllNamed(Routes.LOGIN);
+                            },
+                          );
+                        },
+                        child: const Icon(Icons.edit))
                   ],
                 ),
               ),
@@ -115,7 +128,7 @@ class MenuView extends StatelessWidget {
                           "Refer your business friends now!",
                           style: MyTexts.regular14.copyWith(
                             fontFamily: MyTexts.Roboto,
-                            color: MyColors.greyFour,
+                            color: MyColors.gray5D,
                           ),
                         ),
                       ],

@@ -17,7 +17,8 @@ class ConnectorSupportRequestView extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
-  itemCount: 10,
+        padding: const EdgeInsets.symmetric(vertical: 10),
+  itemCount: 20,
   itemBuilder: (context, index) {
     final bool isActive = index == 0;
     return Column(

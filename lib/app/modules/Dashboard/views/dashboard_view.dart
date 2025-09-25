@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Dashboard/controllers/dashboard_controller.dart';
+import 'package:gap/gap.dart';
 
 class DashboardView extends GetView<DashboardController> {
   // final HomeController homeController = Get.put(HomeController());
@@ -18,40 +19,46 @@ class DashboardView extends GetView<DashboardController> {
             children: [
               Image.asset(Asset.profil, height: 40, width: 40),
               SizedBox(width: 1.h),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(
-                    () => Text(
-                      'Welcome ${controller.profileData.value.data?.user?.firstName}!',
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                      SizedBox(width: 0.4.h),
-                      Obx(
-                        () => Text(
-                          controller.address.value,
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.textFieldBackground,
-                          ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Obx(
+                      () => Text(
+                        'Welcome ${controller.profileData.value.data?.user?.firstName}!',
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.fontBlack,
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.black54,
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(Asset.location, width: 9, height: 12.22),
+                        SizedBox(width: 0.4.h),
+                        Expanded(
+                          child: Obx(
+                            () => Text(
+                              controller.address.value,
+                              style: MyTexts.medium14.copyWith(
+                                color: MyColors.textFieldBackground,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 16,
+                          color: Colors.black54,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const Spacer(),
+             Gap(10),
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
@@ -64,8 +71,8 @@ class DashboardView extends GetView<DashboardController> {
                     SvgPicture.asset(
                       Asset.notifications,
                       // or 'assets/images/notifications.svg'
-                      width: 28,
-                      height: 28,
+                      width: 20,
+                      height: 20,
                     ),
                     Positioned(
                       right: 0,
@@ -94,8 +101,8 @@ class DashboardView extends GetView<DashboardController> {
                   children: [
                     SvgPicture.asset(
                       Asset.warning, // or 'assets/images/notifications.svg'
-                      width: 28,
-                      height: 28,
+                      width: 20,
+                      height: 20,
                     ),
                     Positioned(
                       right: 0,
