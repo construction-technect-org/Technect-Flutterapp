@@ -68,6 +68,8 @@ import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_u
 import 'package:construction_technect/app/modules/SignUpPassword/views/sign_up_password_view.dart';
 import 'package:construction_technect/app/modules/SignUpRole/bindings/sign_up_role_binding.dart';
 import 'package:construction_technect/app/modules/SignUpRole/views/sign_up_role_view.dart';
+import 'package:construction_technect/app/modules/SuppoerRequestPArtner/bindings/support_request_bindings.dart';
+import 'package:construction_technect/app/modules/SuppoerRequestPArtner/views/support_request_screen.dart';
 import 'package:construction_technect/app/modules/TeamDetails/bindings/team_details_binding.dart';
 import 'package:construction_technect/app/modules/TeamDetails/views/team_details_view.dart';
 import 'package:construction_technect/app/modules/UpdateYourCertifications/bindings/update_your_certifications_binding.dart';
@@ -319,7 +321,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.CONNECTOR_FILTER,
-      page: () => ConnectorFiltersView(),
+      page: () => const ConnectorFiltersView(),
       binding: ConnectorFilterBinding(),
     ),
     GetPage(
@@ -336,6 +338,11 @@ class AppPages {
       name: Routes.CONNECTOR_REQUEST_DEMO,
       page: () =>   ConnectorRequestDemoView(),
       binding:   ConnectorRequestDemoBinding(),
+    ),
+    GetPage(
+      name: Routes.SUPPORT_REQUEST,
+      page: () =>   const SupportRequestScreen(),
+      binding:   SupportRequestBindings(),
     ),
   ];
 }

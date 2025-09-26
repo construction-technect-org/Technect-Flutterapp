@@ -31,8 +31,9 @@ class Ticket {
 
 /// Ticket List
 class TicketListView extends StatelessWidget {
-  final CustomerSupportController controller =
-      Get.find<CustomerSupportController>();
+  final List<SupportMyTickets> list;
+
+  TicketListView({super.key, required this.list});
 
   // Status color handling
   Color _getStatusBgColor(String status) {
@@ -98,16 +99,16 @@ class TicketListView extends StatelessWidget {
   }
 
   List<Ticket> convertSupportTicketsToTickets(
-    List<SupportMyTickets> myTickets,
-  ) {
+      List<SupportMyTickets> myTickets,
+      ) {
     return myTickets.map((t) {
       return Ticket(
         id: t.ticketNumber,
         status: t.statusName,
         priority: t.priorityName,
         title: t.subject,
-        company: t.userMobile, // or merchant name if available
-        email: t.categoryName, // or user email if available
+        company: t.userMobile,
+        email: t.categoryName,
         description: t.description,
         createdDate: t.createdAt.toLocal().toString().split(' ')[0],
         updatedDate: t.updatedAt.toLocal().toString().split(' ')[0],
@@ -116,166 +117,152 @@ class TicketListView extends StatelessWidget {
     }).toList();
   }
 
-  TicketListView({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.isLoadingMyTickets.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
+    if (list.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 80),
+        child: Center(
+          child: Text(
+            "No tickets found !!",
+            style: MyTexts.regular16.copyWith(color: Colors.black),
+          ),
+        ),
+      );
+    }
 
-      final tickets = convertSupportTicketsToTickets(controller.myTickets);
+    final tickets = convertSupportTicketsToTickets(list);
 
-      // 🔍 Apply search filter here
-      final filteredTickets = tickets.where((t) {
-        final query = controller.searchQuery.value.toLowerCase();
-        return t.title.toLowerCase().contains(query);
-      }).toList();
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(16),
+      itemCount: tickets.length,
+      itemBuilder: (context, index) {
+        final ticket = tickets[index];
 
-      if (filteredTickets.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 80),
-          child: Center(
-            child: Text(
-              "No tickets found !!",
-              style: MyTexts.regular16.copyWith(color: Colors.black),
+        return Card(
+          color: MyColors.white,
+          margin: const EdgeInsets.only(bottom: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: MyColors.americanSilver),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    _buildChip(
+                      ticket.id,
+                      MyColors.white,
+                      MyColors.black,
+                      borderColor: MyColors.americanSilver,
+                    ),
+                    SizedBox(width: 2.w),
+                    _buildChip(
+                      ticket.status,
+                      _getStatusBgColor(ticket.status),
+                      MyColors.white,
+                      icon: _getStatusIcon(ticket.status),
+                    ),
+                    SizedBox(width: 2.w),
+                    _buildChip(
+                      ticket.priority,
+                      MyColors.white,
+                      _getPriorityColor(ticket.priority),
+                      borderColor: _getPriorityColor(ticket.priority),
+                      icon: _getPriorityIcon(ticket.priority),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 1.h),
+                Text(
+                  ticket.title.capitalizeFirst ?? "-",
+                  style: MyTexts.medium18.copyWith(
+                    color: MyColors.fontBlack,
+                    fontFamily: MyTexts.Roboto,
+                  ),
+                ),
+                SizedBox(height: 1.h),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.person_outline,
+                      size: 18,
+                      color: MyColors.darkGray,
+                    ),
+                    SizedBox(width: 0.4.w),
+                    Text(
+                      ticket.company,
+                      style: MyTexts.regular14.copyWith(
+                        color: MyColors.darkGray,
+                      ),
+                    ),
+                    SizedBox(width: 3.w),
+                    const Icon(Icons.category, size: 16, color: Colors.grey),
+                    SizedBox(width: 1.w),
+                    Text(
+                      ticket.email,
+                      style: MyTexts.regular14.copyWith(
+                        color: MyColors.darkGray,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 0.8.h),
+                Text(
+                  ticket.description,
+                  style: MyTexts.regular14.copyWith(
+                    color: MyColors.darkGray,
+                    fontFamily: MyTexts.Roboto,
+                  ),
+                ),
+                SizedBox(height: 1.h),
+                Row(
+                  children: [
+                    Text(
+                      "Created: ${ticket.createdDate}",
+                      style: MyTexts.bold15.copyWith(
+                        color: MyColors.darkGray,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      "  ●  Updated: ${ticket.updatedDate}",
+                      style: MyTexts.bold15.copyWith(
+                        color: MyColors.darkGray,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "● Assigned to: ${ticket.assignedTo}",
+                  style: MyTexts.bold15.copyWith(
+                    color: MyColors.darkGray,
+                    fontFamily: MyTexts.Roboto,
+                  ),
+                ),
+              ],
             ),
           ),
         );
-      }
-      return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
-        itemCount: filteredTickets.length,
-        itemBuilder: (context, index) {
-          final ticket = filteredTickets[index];
-
-          // --- your existing Card code ---
-          return Card(
-            color: MyColors.white,
-            margin: const EdgeInsets.only(bottom: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: const BorderSide(color: MyColors.americanSilver),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _buildChip(
-                        ticket.id,
-                        MyColors.white,
-                        MyColors.black,
-                        borderColor: MyColors.americanSilver,
-                      ),
-                      SizedBox(width: 2.w),
-                      _buildChip(
-                        ticket.status,
-                        _getStatusBgColor(ticket.status),
-                        MyColors.white,
-                        icon: _getStatusIcon(ticket.status),
-                      ),
-                      SizedBox(width: 2.w),
-                      _buildChip(
-                        ticket.priority,
-                        MyColors.white,
-                        _getPriorityColor(ticket.priority),
-                        borderColor: _getPriorityColor(ticket.priority),
-                        icon: _getPriorityIcon(ticket.priority),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 1.h),
-                  Text(
-                    ticket.title.capitalizeFirst ?? "-",
-                    style: MyTexts.medium18.copyWith(
-                      color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
-                    ),
-                  ),
-                  SizedBox(height: 1.h),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.person_outline,
-                        size: 18,
-                        color: MyColors.darkGray,
-                      ),
-                      SizedBox(width: 0.4.w),
-                      Text(
-                        ticket.company,
-                        style: MyTexts.regular14.copyWith(
-                          color: MyColors.darkGray,
-                        ),
-                      ),
-                      SizedBox(width: 3.w),
-                      const Icon(Icons.category, size: 16, color: Colors.grey),
-                      SizedBox(width: 1.w),
-                      Text(
-                        ticket.email,
-                        style: MyTexts.regular14.copyWith(
-                          color: MyColors.darkGray,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 0.8.h),
-                  Text(
-                    ticket.description,
-                    style: MyTexts.regular14.copyWith(
-                      color: MyColors.darkGray,
-                      fontFamily: MyTexts.Roboto,
-                    ),
-                  ),
-                  SizedBox(height: 1.h),
-                  Row(
-                    children: [
-                      Text(
-                        "Created: ${ticket.createdDate}",
-                        style: MyTexts.bold15.copyWith(
-                          color: MyColors.darkGray,
-                          fontFamily: MyTexts.Roboto,
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        "  ●  Updated: ${ticket.updatedDate}",
-                        style: MyTexts.bold15.copyWith(
-                          color: MyColors.darkGray,
-                          fontFamily: MyTexts.Roboto,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "● Assigned to: ${ticket.assignedTo}",
-                    style: MyTexts.bold15.copyWith(
-                      color: MyColors.darkGray,
-                      fontFamily: MyTexts.Roboto,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    });
+      },
+    );
   }
 
   Widget _buildChip(
-    String text,
-    Color bgColor,
-    Color textColor, {
-    Color? borderColor,
-    Widget? icon,
-  }) {
+      String text,
+      Color bgColor,
+      Color textColor, {
+        Color? borderColor,
+        Widget? icon,
+      }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(

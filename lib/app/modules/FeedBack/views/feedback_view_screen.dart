@@ -29,7 +29,7 @@ class FeedbackViewScreen extends GetView<FeedBackController> {
                   ),
                 ),
                 const Gap(8),
-          
+
                 Center(
                   child: Obx(() {
                     return Text(
@@ -86,7 +86,10 @@ class FeedbackViewScreen extends GetView<FeedBackController> {
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            controller.suggestionController.text = "";
+                            controller.rating.value = 0;
+                          },
                           child: const Text(
                             "CANCEL",
                             style: TextStyle(color: Colors.white),

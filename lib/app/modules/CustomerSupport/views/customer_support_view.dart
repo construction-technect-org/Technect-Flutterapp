@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorSupportRequest/views/connector_support_request_view.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/controller/customer_support_controller.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/creat_new_ticket.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/ticket_list_view.dart';
@@ -71,13 +70,14 @@ class CustomerSupportView extends StatelessWidget {
                                 child: Obx(() {
                                   return StatCard(
                                     onTap: () {
-                                      Get.to(
-                                            () => const ConnectorSupportRequestView(),
+                                      Get.toNamed(
+                                        Routes.SUPPORT_REQUEST,
+                                        arguments: {"status": "open"},
                                       );
                                     },
                                     title: 'Open Tickets',
-                                    value: "${controller.statistics.value
-                                        .openTickets ?? 0}",
+                                    value:
+                                        "${controller.statistics.value.openTickets ?? 0}",
                                     icon: SvgPicture.asset(
                                       Asset.warning,
                                       height: 20,
@@ -93,9 +93,15 @@ class CustomerSupportView extends StatelessWidget {
                               Expanded(
                                 child: Obx(() {
                                   return StatCard(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.SUPPORT_REQUEST,
+                                        arguments: {"status": "inprogress"},
+                                      );
+                                    },
                                     title: 'In Progress',
-                                    value: "${controller.statistics.value
-                                        .inProgressTickets ?? 0}",
+                                    value:
+                                        "${controller.statistics.value.inProgressTickets ?? 0}",
                                     icon: const Icon(
                                       Icons.watch_later_outlined,
                                       size: 30,
@@ -115,9 +121,15 @@ class CustomerSupportView extends StatelessWidget {
                               Expanded(
                                 child: Obx(() {
                                   return StatCard(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.SUPPORT_REQUEST,
+                                        arguments: {"status": "resolved"},
+                                      );
+                                    },
                                     title: 'Resolved',
-                                    value: "${controller.statistics.value
-                                        .resolvedTickets ?? 0}",
+                                    value:
+                                        "${controller.statistics.value.resolvedTickets ?? 0}",
                                     icon: const Icon(
                                       Icons.check_circle_rounded,
                                       size: 30,
@@ -133,18 +145,22 @@ class CustomerSupportView extends StatelessWidget {
                               Expanded(
                                 child: Obx(() {
                                   return StatCard(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.SUPPORT_REQUEST,
+                                        arguments: {"status": "resolved"},
+                                      );
+                                    },
                                     title: 'Avg Response',
-                                    value: "${controller.statistics.value
-                                        .avgResponse ?? 0}",
+                                    value:
+                                        "${controller.statistics.value.avgResponse ?? 0}",
                                     icon: const Icon(
                                       Icons.watch_later_outlined,
                                       size: 30,
                                       color: MyColors.primary,
                                     ),
                                     iconBackground: MyColors.lightBlue
-                                        .withValues(
-                                      alpha: 0.2,
-                                    ),
+                                        .withValues(alpha: 0.2),
                                   );
                                 }),
                               ),
@@ -206,7 +222,16 @@ class CustomerSupportView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    TicketListView(),
+                    Obx(() {
+                      if (controller.isLoadingMyTickets.value) {
+                        return const Center(child: Padding(
+                          padding: EdgeInsets.only(top: 70.0),
+                          child: CircularProgressIndicator(),
+                        ));
+                      } else {
+                        return TicketListView(list: controller.myTickets);
+                      }
+                    })
                   ],
                 ),
               ),
@@ -300,8 +325,8 @@ class _RequestDemoDialogState extends State<RequestDemoDialog> {
                 onChanged: controller.isEdit
                     ? null
                     : (value) {
-                  controller.onMainCategorySelected(value);
-                },
+                        controller.onMainCategorySelected(value);
+                      },
                 enabled: !controller.isEdit,
               ),
 

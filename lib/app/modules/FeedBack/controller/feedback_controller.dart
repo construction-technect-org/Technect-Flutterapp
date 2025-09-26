@@ -25,8 +25,7 @@ class FeedBackController extends GetxController {
       if (result != null && result.success) {
         suggestionController.text = "";
         rating.value = 0;
-        SnackBars.successSnackBar(content: "sads");
-        return;
+        SnackBars.successSnackBar(content: result.message);
       } else {
         Get.snackbar("Failed", result?.message ?? "Something went wrong");
       }

@@ -52,9 +52,14 @@ class SupportTicketCategoriesServices {
 
 
   /// Support My Tickets
-  Future<SupportMyTicketsModel> supportMyTicketsModel() async {
+  Future<SupportMyTicketsModel> supportMyTicketsModel({String? filter}) async {
     try {
-      final response = await apiManager.get(url: APIConstants.getSupportMyTickets);
+      final qp={
+        if((filter??"").isNotEmpty)
+        "status":filter
+      };
+
+      final response = await apiManager.get(url: APIConstants.getSupportMyTickets,params:qp );
       return SupportMyTicketsModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in sendOtp: $e , $st');

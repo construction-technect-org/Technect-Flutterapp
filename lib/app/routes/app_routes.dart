@@ -51,6 +51,7 @@ abstract class Routes {
   static const CONNECTOR_CONNECTION_INBOX = _Paths.CONNECTOR_CONNECTION_INBOX;
   static const CONNECTOR_CUSTOMER_SUPPORT_TICKET = _Paths.CONNECTOR_CUSTOMER_SUPPORT_TICKET;
   static const CONNECTOR_REQUEST_DEMO = _Paths.CONNECTOR_REQUEST_DEMO;
+  static const SUPPORT_REQUEST = _Paths.SUPPORT_REQUEST;
 
 }  
 
@@ -91,6 +92,7 @@ abstract class _Paths {
   static const LOCATION = '/location';
   static const DASHBOARD = '/dashboard';
   static const DASHABOARD_MARKET_PLACE = '/dashboard-market-place';
+  static const SUPPORT_REQUEST = '/support-request';
 
   // Connector
   static const CONNECTOR_MAIN_TAB = '/connector-main-tab';

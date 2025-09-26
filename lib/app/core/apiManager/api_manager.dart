@@ -48,29 +48,33 @@ class ApiManager {
   }
 
   /// GET method for requests with authorization header
-  Future<dynamic> get({required String url}) async {
+  /// GET method with optional query parameters
+  Future<dynamic> get({
+    required String url,
+    Map<String, dynamic>? params, // ✅ optional query params
+  }) async {
     try {
+      // Build full URL with query parameters
+      final uri = Uri.parse(baseUrl + url).replace(
+        queryParameters: params?.map((key, value) => MapEntry(key, value.toString())),
+      );
+
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${myPref.getToken()}',
       };
 
       Get.printInfo(info: '🌐 API GET Request:');
-      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   URL: $uri');
       Get.printInfo(info: '   Headers: $headers');
 
-      final request = http.Request('GET', Uri.parse(baseUrl + url));
+      final request = http.Request('GET', uri);
       request.headers.addAll(headers);
 
       final http.StreamedResponse response = await request.send();
+      final map = await _returnResponse(response);
 
-      Get.printInfo(info: '📡 API Response:');
-      Get.printInfo(info: '   Status: ${response.statusCode}');
-      Get.printInfo(info: '   Headers: ${response.headers}');
-
-      final map = _returnResponse(response);
-
-      // Check for invalid/expired token in response body
+      // Check for invalid/expired token
       _checkTokenValidity(map);
 
       Get.printInfo(info: '✅ Parsed Response: $map');
