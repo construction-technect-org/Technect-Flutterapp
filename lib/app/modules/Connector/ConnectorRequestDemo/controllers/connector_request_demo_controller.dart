@@ -42,6 +42,7 @@ class ConnectorRequestDemoController extends GetxController {
       return;
     } else if (!GetUtils.isEmail(emilaController.text)) {
       SnackBars.errorSnackBar(content: 'Please enter a valid email');
+      return;
     }
     try {
       final result = await RequestDemoService.addRequestDemo(
