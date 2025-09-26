@@ -12,7 +12,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading:controller.isFromAdd.value==true?  Get.find<AddProductController>().isLoading:false.obs,
+      isLoading: controller.isFromAdd.value == true
+          ? Get.find<AddProductController>().isLoading
+          : false.obs,
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: CommonAppBar(
@@ -27,16 +29,17 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           ],
         ),
         bottomNavigationBar: Obx(
-              () => controller.isFromAdd.value==true?
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: RoundedButton(
-                  buttonName: 'SUBMIT',
-                  onTap: Get.find<AddProductController>().isLoading.value
-                      ? null
-                      : Get.find<AddProductController>().createProduct,
-                ),
-              ):const SizedBox(),
+          () => controller.isFromAdd.value == true
+              ? Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: RoundedButton(
+                    buttonName: 'SUBMIT',
+                    onTap: Get.find<AddProductController>().isLoading.value
+                        ? null
+                        : Get.find<AddProductController>().createProduct,
+                  ),
+                )
+              : const SizedBox(),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -48,115 +51,129 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 decoration: const BoxDecoration(color: MyColors.grayF2),
                 alignment: Alignment.center,
                 child:
-                (controller.product.productImage != null &&
-                    controller.product.productImage!.isNotEmpty)
+                    (controller.product.productImage != null &&
+                        controller.product.productImage!.isNotEmpty)
                     ? Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Obx(() {
+                            return controller.isFromAdd.value == false
+                                ? Image.network(
+                                    "${APIConstants.bucketUrl}${controller.product.productImage!}",
+                                    fit: BoxFit.contain,
+                                    height: 35.h,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(
+                                        Icons.broken_image,
+                                        size: 60,
+                                        color: Colors.grey,
+                                      );
+                                    },
+                                  )
+                                : Image.file(
+                                    File(controller.product.productImage ?? ""),
+                                    height: 35.h,
+                                  );
+                          }),
 
-                    Obx(() {
-                      return controller.isFromAdd.value == false ? Image.network(
-                        "${APIConstants.bucketUrl}${controller.product
-                            .productImage!}",
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
-                            Icons.broken_image,
-                            size: 60,
-                            color: Colors.grey,
-                          );
-                        },
-                      ) : Image.file(File(controller.product.productImage ?? ""));
-                    }),
+                          Obx(() {
+                            return controller.isFromAdd.value == false
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 8,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              controller.product.outOfStock ==
+                                                      true
+                                                  ? "Out Of Stock"
+                                                  : "In Stock",
+                                              style: MyTexts.bold18.copyWith(
+                                                color:
+                                                    controller
+                                                            .product
+                                                            .outOfStock ==
+                                                        true
+                                                    ? Colors.red
+                                                    : Colors.green,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                            const Gap(4),
+                                            Container(
+                                              height: 10,
+                                              width: 10,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color:
+                                                    controller
+                                                            .product
+                                                            .outOfStock ==
+                                                        true
+                                                    ? Colors.red
+                                                    : Colors.green,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
 
-                    Obx(() {
-                      return controller.isFromAdd.value == false ? Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 8,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  controller.product.outOfStock == true
-                                      ? "Out Of Stock"
-                                      : "In Stock",
-                                  style: MyTexts.bold18.copyWith(
-                                    color:
-                                    controller.product.outOfStock == true
-                                        ? Colors.red
-                                        : Colors.green,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                const Gap(4),
-                                Container(
-                                  height: 10,
-                                  width: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color:
-                                    controller.product.outOfStock == true
-                                        ? Colors.red
-                                        : Colors.green,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            // Right side: rating
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.orangeAccent,
-                                  size: 18,
-                                ),
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.orangeAccent,
-                                  size: 18,
-                                ),
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.orangeAccent,
-                                  size: 18,
-                                ),
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.orangeAccent,
-                                  size: 18,
-                                ),
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.orangeAccent,
-                                  size: 18,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "(4.9/5)",
-                                  style: MyTexts.regular14.copyWith(
-                                    color: Colors.black,
-                                    fontFamily: MyTexts.Roboto,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ):const SizedBox();
-                    }),
-                  ],
-                )
+                                        // Right side: rating
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.orangeAccent,
+                                              size: 18,
+                                            ),
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.orangeAccent,
+                                              size: 18,
+                                            ),
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.orangeAccent,
+                                              size: 18,
+                                            ),
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.orangeAccent,
+                                              size: 18,
+                                            ),
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.orangeAccent,
+                                              size: 18,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              "(4.9/5)",
+                                              style: MyTexts.regular14.copyWith(
+                                                color: Colors.black,
+                                                fontFamily: MyTexts.Roboto,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox();
+                          }),
+                        ],
+                      )
                     : const Icon(
-                  Icons.image_not_supported,
-                  size: 60,
-                  color: Colors.grey,
-                ),
+                        Icons.image_not_supported,
+                        size: 60,
+                        color: Colors.grey,
+                      ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
@@ -167,33 +184,35 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          controller.product.productName?.capitalizeFirst ?? '-',
+                          controller.product.productName?.capitalizeFirst ??
+                              '-',
                           style: MyTexts.medium18.copyWith(
                             color: MyColors.fontBlack,
                           ),
                         ),
 
                         Obx(() {
-                          return controller.isFromAdd.value == false ? TextButton
-                              .icon(
-                            onPressed: controller.onEditProduct,
-                            icon: SvgPicture.asset(
-                              Asset.editIcon,
-                              width: 16,
-                              height: 16,
-                              colorFilter: const ColorFilter.mode(
-                                MyColors.primary,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            label: Text(
-                              "Edit",
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.primary,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                          ) : const SizedBox();
+                          return controller.isFromAdd.value == false
+                              ? TextButton.icon(
+                                  onPressed: controller.onEditProduct,
+                                  icon: SvgPicture.asset(
+                                    Asset.editIcon,
+                                    width: 16,
+                                    height: 16,
+                                    colorFilter: const ColorFilter.mode(
+                                      MyColors.primary,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  label: Text(
+                                    "Edit",
+                                    style: MyTexts.regular16.copyWith(
+                                      color: MyColors.primary,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox();
                         }),
                       ],
                     ),
@@ -272,7 +291,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   maxLines: 1,
                                   text: TextSpan(
                                     text:
-                                    controller.product.mainCategoryName ?? '',
+                                        controller.product.mainCategoryName ??
+                                        '',
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.green,
                                       fontFamily: MyTexts.Roboto,
@@ -308,7 +328,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   maxLines: 1,
                                   text: TextSpan(
                                     text:
-                                    controller.product.subCategoryName ?? '',
+                                        controller.product.subCategoryName ??
+                                        '',
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.green,
                                       fontFamily: MyTexts.Roboto,
@@ -344,9 +365,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ],
                     ),
                     Text(
-                      "GSTIN: ${controller.profileData.data?.merchantProfile
-                          ?.gstinNumber ?? ''}",
-                      style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                      "GSTIN: ${controller.profileData.data?.merchantProfile?.gstinNumber ?? ''}",
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.fontBlack,
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     const Divider(),
@@ -372,82 +394,81 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 ),
                                 const Spacer(),
                                 Obx(
-                                      () =>
-                                      Icon(
-                                        controller.showProductDetails.value
-                                            ? Icons.keyboard_arrow_up
-                                            : Icons.keyboard_arrow_down,
-                                        color: MyColors.primary,
-                                      ),
+                                  () => Icon(
+                                    controller.showProductDetails.value
+                                        ? Icons.keyboard_arrow_up
+                                        : Icons.keyboard_arrow_down,
+                                    color: MyColors.primary,
+                                  ),
                                 ),
                               ],
                             ),
                             Obx(
-                                  () =>
-                              controller.showProductDetails.value
+                              () => controller.showProductDetails.value
                                   ? Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  const Gap(10),
-                                  HearderText(
-                                    text: "Product Specifications:",
-                                    textStyle: MyTexts.bold16.copyWith(
-                                      color: MyColors.black,
-                                      fontFamily: MyTexts.Roboto,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  _buildSpecificationsTable(),
-                                  SizedBox(height: 2.h),
-                                  _buildFilterSpecificationsTable(),
-                                  SizedBox(height: 2.h),
-                                  if ((controller
-                                      .product
-                                      .termsAndConditions ??
-                                      '') !=
-                                      '') ...[
-                                    HearderText(
-                                      text: "Terms & Condition:",
-                                      textStyle: MyTexts.bold16.copyWith(
-                                        color: MyColors.black,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ),
-                                    Text(
-                                      controller
-                                          .product
-                                          .termsAndConditions ??
-                                          '',
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.green,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ),
-                                  ],
-                                  if ((controller.product.productNote ??
-                                      '') !=
-                                      '') ...[
-                                    SizedBox(height: 1.h),
-                                    HearderText(
-                                      text: "Notes:",
-                                      textStyle: MyTexts.bold16.copyWith(
-                                        color: MyColors.black,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ),
-                                    Text(
-                                      controller.product.productNote ?? '',
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.black,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ).paddingOnly(bottom: 1.h),
-                                  ],
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Gap(10),
+                                        HearderText(
+                                          text: "Product Specifications:",
+                                          textStyle: MyTexts.bold16.copyWith(
+                                            color: MyColors.black,
+                                            fontFamily: MyTexts.Roboto,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        _buildSpecificationsTable(),
+                                        SizedBox(height: 2.h),
+                                        _buildFilterSpecificationsTable(),
+                                        SizedBox(height: 2.h),
+                                        if ((controller
+                                                    .product
+                                                    .termsAndConditions ??
+                                                '') !=
+                                            '') ...[
+                                          HearderText(
+                                            text: "Terms & Condition:",
+                                            textStyle: MyTexts.bold16.copyWith(
+                                              color: MyColors.black,
+                                              fontFamily: MyTexts.Roboto,
+                                            ),
+                                          ),
+                                          Text(
+                                            controller
+                                                    .product
+                                                    .termsAndConditions ??
+                                                '',
+                                            style: MyTexts.medium16.copyWith(
+                                              color: MyColors.green,
+                                              fontFamily: MyTexts.Roboto,
+                                            ),
+                                          ),
+                                        ],
+                                        if ((controller.product.productNote ??
+                                                '') !=
+                                            '') ...[
+                                          SizedBox(height: 1.h),
+                                          HearderText(
+                                            text: "Notes:",
+                                            textStyle: MyTexts.bold16.copyWith(
+                                              color: MyColors.black,
+                                              fontFamily: MyTexts.Roboto,
+                                            ),
+                                          ),
+                                          Text(
+                                            controller.product.productNote ??
+                                                '',
+                                            style: MyTexts.medium16.copyWith(
+                                              color: MyColors.black,
+                                              fontFamily: MyTexts.Roboto,
+                                            ),
+                                          ).paddingOnly(bottom: 1.h),
+                                        ],
 
-                                  SizedBox(height: 2.h),
-                                ],
-                              )
+                                        SizedBox(height: 2.h),
+                                      ],
+                                    )
                                   : const SizedBox.shrink(),
                             ),
                           ],
@@ -469,11 +490,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         .replaceAll('_', ' ')
         .split(' ')
         .map(
-          (word) =>
-      word.isNotEmpty
-          ? word[0].toUpperCase() + word.substring(1).toLowerCase()
-          : word,
-    )
+          (word) => word.isNotEmpty
+              ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+              : word,
+        )
         .join(' ');
   }
 
@@ -577,7 +597,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     final specifications = filterValues.entries
         .map(
           (e) => {'label': _formatKeyName(e.key), 'value': e.value.toString()},
-    )
+        )
         .toList();
 
     return Column(
@@ -612,7 +632,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
             verticalInside: BorderSide(color: MyColors.grayD4),
           ),
           children: [
-
             /// ✅ Header Row
             TableRow(
               decoration: const BoxDecoration(color: MyColors.primary),
@@ -640,31 +659,30 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               ],
             ),
             ...specifications.map(
-                  (spec) =>
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          spec['label']!,
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.primary,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        ),
+              (spec) => TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      spec['label']!,
+                      style: MyTexts.regular14.copyWith(
+                        color: MyColors.primary,
+                        fontFamily: MyTexts.Roboto,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          spec['value']!,
-                          style: MyTexts.medium16.copyWith(
-                            color: Colors.black,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      spec['value']!,
+                      style: MyTexts.medium16.copyWith(
+                        color: Colors.black,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

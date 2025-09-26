@@ -1,8 +1,8 @@
 import 'dart:developer';
 
+import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
-import 'package:construction_technect/app/modules/RoleManagement/models/TeamStatsModel.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -237,7 +237,7 @@ class AppSharedPreference {
   }
 
   // Helper methods for team stats
-  Future<void> saveTeamStats(TeamStatsModel stats) async {
+  Future<void> saveTeamStats(Statistics stats) async {
     try {
       setTeamStatsData({
         'data': stats.toJson(),
@@ -248,15 +248,82 @@ class AppSharedPreference {
     }
   }
 
-  TeamStatsModel? getTeamStats() {
+  Future<void> saveStatistics(Statistics stats) async {
+    try {
+      setTeamStatsData({
+        'data': stats.toJson(),
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    } catch (e) {
+      log('Error saving statistics: $e');
+    }
+  }
+
+  Statistics? getStatistics() {
     try {
       final data = getTeamStatsData();
       if (data != null && data['data'] != null) {
-        return TeamStatsModel.fromJson(data['data']);
+        return Statistics.fromJson(data['data']);
+      }
+    } catch (e) {
+      log('Error getting statistics: $e');
+    }
+    return null;
+  }
+
+
+  Statistics? getTeamStats() {
+    try {
+      final data = getTeamStatsData();
+      if (data != null && data['data'] != null) {
+        return Statistics.fromJson(data['data']);
       }
     } catch (e) {
       log('Error getting team stats: $e');
     }
     return null;
   }
+// Role stats data storage
+  final roleStatsData = <String, dynamic>{}.val('roleStatsData');
+
+  void setRoleStatsData(Map<String, dynamic> stats) {
+    roleStatsData.val = stats;
+  }
+
+  Map<String, dynamic>? getRoleStatsData() {
+    final data = roleStatsData.val;
+    if (data.isNotEmpty) {
+      return Map<String, dynamic>.from(data);
+    }
+    return null;
+  }
+
+  void clearRoleStatsData() {
+    roleStatsData.val = {};
+  }
+
+// Helper methods for role stats
+  Future<void> saveRoleStats(Statistics stats) async {
+    try {
+      setRoleStatsData({
+        'data': stats.toJson(),
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    } catch (e) {
+      log('Error saving role stats: $e');
+    }
+  }
+
+  Statistics? getRoleStats() {
+    try {
+      final data = getRoleStatsData();
+      if (data != null && data['data'] != null) {
+        return Statistics.fromJson(data['data']);
+      }
+    } catch (e) {
+      log('Error getting role stats: $e');
+    }
+    return null;
+  }
+
 }

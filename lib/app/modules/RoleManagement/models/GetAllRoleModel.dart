@@ -1,9 +1,13 @@
+import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
+
 class GetAllRoleModel {
   final bool success;
   final List<GetAllRole> data;
+  Statistics? statistics;
+
   final String message;
 
-  GetAllRoleModel({required this.success, required this.data, required this.message});
+  GetAllRoleModel({required this.success, required this.data, required this.message,this.statistics});
 
   factory GetAllRoleModel.fromJson(Map<String, dynamic> json) {
     return GetAllRoleModel(
@@ -14,6 +18,9 @@ class GetAllRoleModel {
               .toList() ??
           [],
       message: json['message'] ?? '',
+      statistics: json['statistics'] != null
+          ? Statistics.fromJson(json['statistics'])
+          : null,
     );
   }
 
@@ -22,6 +29,7 @@ class GetAllRoleModel {
       "success": success,
       "data": data.map((e) => e.toJson()).toList(),
       "message": message,
+      'statistics': statistics?.toJson(),
     };
   }
 }

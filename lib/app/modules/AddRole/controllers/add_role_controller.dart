@@ -96,7 +96,6 @@ class AddRoleController extends GetxController {
     try {
       if (Get.isRegistered<RoleManagementController>()) {
         final roleManagementController = Get.find<RoleManagementController>();
-        await roleManagementController.refreshTeamStatsOverview();
         await roleManagementController.refreshRoles();
       }
     } catch (e) {

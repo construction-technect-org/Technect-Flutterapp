@@ -518,7 +518,6 @@ class AddProductController extends GetxController {
 
     fields.addAll({
       "price": priceController.text,
-      "product_code": productCodeController.text,
       "total_amount": amountController.text,
       "grain_size": sizeController.text,
       "product_note": noteController.text,
@@ -589,7 +588,6 @@ class AddProductController extends GetxController {
 
     fields = {
       "product_name": productNameController.text,
-      "product_code": productCodeController.text,
       "price": priceController.text,
       "gst_percentage": (selectedGST.value??"").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,

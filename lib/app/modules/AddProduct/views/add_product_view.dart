@@ -8,6 +8,7 @@ import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/AddProduct/controller/add_product_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AddProductView extends GetView<AddProductController> {
   const AddProductView({super.key});
@@ -156,11 +157,14 @@ class AddProductView extends GetView<AddProductController> {
                         controller: controller.productNameController,
                       ),
                       SizedBox(height: 2.h),
+                      if(controller.isEdit)
                       CommonTextField(
                         headerText: 'Product Code',
+                        readOnly: true,
                         hintText: "CTPC01",
                         controller: controller.productCodeController,
                       ),
+                      if(controller.isEdit)
                       SizedBox(height: 2.h),
                       Row(
                         children: [

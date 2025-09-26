@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/TeamStatsModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/services/GetAllRoleService.dart';
@@ -7,6 +8,8 @@ import 'package:get/get.dart';
 
 class RoleManagementController extends GetxController {
   final RxList<GetAllRole> roles = <GetAllRole>[].obs;
+  Rx<Statistics> statistics = Statistics().obs;
+
   final Rx<TeamStatsModel?> teamStats = Rx<TeamStatsModel?>(null);
   HomeController homeController = Get.find();
   final isLoading = false.obs;
@@ -19,7 +22,6 @@ class RoleManagementController extends GetxController {
   void onInit() {
     super.onInit();
     loadRoles();
-    loadTeamStats();
   }
 
   Future<void> loadRoles() async {
@@ -28,7 +30,14 @@ class RoleManagementController extends GetxController {
 
   Future<void> _loadRolesFromStorage() async {
     final cachedRoles = myPref.getRoles();
+    final getRoleStats = myPref.getRoleStats(); // ✅ use role stats only
     if (cachedRoles != null && cachedRoles.isNotEmpty) {
+      if (getRoleStats != null) {
+        statistics.value = Statistics(
+          totalRoles: getRoleStats.totalRoles,
+          activeRoles: getRoleStats.activeRoles,
+        );
+      }
       roles.assignAll(cachedRoles);
     } else {
       await fetchRoles();
@@ -45,6 +54,10 @@ class RoleManagementController extends GetxController {
       final result = await _service.fetchAllRoles();
       if (result != null && result.success) {
         roles.assignAll(result.data);
+        if (result.statistics != null) {
+          statistics.value = result.statistics!;
+          await myPref.saveRoleStats(result.statistics!); // ✅ save role stats separately
+        }
         await _saveRolesToStorage();
       }
     } finally {
@@ -52,43 +65,10 @@ class RoleManagementController extends GetxController {
     }
   }
 
-  Future<void> loadTeamStats() async {
-    await _loadTeamStatsFromStorage();
-  }
 
-  Future<void> _loadTeamStatsFromStorage() async {
-    final cachedStats = myPref.getTeamStats();
-    if (cachedStats != null) {
-      teamStats.value = cachedStats;
-    } else {
-      await fetchTeamStatsOverview();
-    }
-  }
-
-  Future<void> _saveTeamStatsToStorage() async {
-    if (teamStats.value != null) {
-      await myPref.saveTeamStats(teamStats.value!);
-    }
-  }
-
-  Future<void> fetchTeamStatsOverview() async {
-    try {
-      isLoadingTeamStats.value = true;
-      final TeamStatsModel? result = await _service.fetchTeamStatsOverview();
-      if (result != null && result.success == true) {
-        teamStats.value = result;
-        await _saveTeamStatsToStorage();
-      }
-    } finally {
-      isLoadingTeamStats.value = false;
-    }
-  }
 
   Future<void> refreshRoles() async {
     await fetchRoles();
   }
 
-  Future<void> refreshTeamStatsOverview() async {
-    await fetchTeamStatsOverview();
-  }
 }

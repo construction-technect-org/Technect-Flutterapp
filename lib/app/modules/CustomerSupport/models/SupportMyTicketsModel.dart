@@ -31,11 +31,19 @@ class Statistics {
   int? inProgressTickets;
   int? resolvedTickets;
   int? avgResponse;
+  int? totalTeamMember;
+  int? activeTeamMember;
+  int? totalRoles;
+  int? activeRoles;
 
   Statistics(
       {this.openTickets,
         this.inProgressTickets,
         this.resolvedTickets,
+        this.totalTeamMember,
+        this.totalRoles,
+        this.activeRoles,
+        this.activeTeamMember,
         this.avgResponse});
 
   Statistics.fromJson(Map<String, dynamic> json) {
@@ -43,6 +51,10 @@ class Statistics {
     inProgressTickets = json['in_progress_tickets'];
     resolvedTickets = json['resolved_tickets'];
     avgResponse = json['avg_response'];
+    totalTeamMember = json['total_team_members'];
+    totalRoles = json['total_roles'];
+    activeRoles = json['active_roles'];
+    activeTeamMember = json['active_team_members'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +63,10 @@ class Statistics {
     data['in_progress_tickets'] = inProgressTickets;
     data['resolved_tickets'] = resolvedTickets;
     data['avg_response'] = avgResponse;
+    data['total_team_members'] = totalTeamMember;
+    data['active_team_members'] = activeTeamMember;
+    data['total_roles'] = totalRoles;
+    data['active_roles'] = activeRoles;
     return data;
   }
 }

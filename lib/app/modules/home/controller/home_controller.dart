@@ -1,6 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
+import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart' hide Statistics;
+import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart' show Statistics, TeamListData, TeamListModel;
 import 'package:construction_technect/app/modules/RoleManagement/services/GetAllRoleService.dart';
 import 'package:construction_technect/app/modules/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
@@ -323,15 +325,23 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
-
   Future<void> _loadTeamFromStorage() async {
     final cachedTeam = myPref.getTeam();
+    final getTeamStats = myPref.getTeamStats(); // ✅ use team stats only
     if (cachedTeam != null && cachedTeam.isNotEmpty) {
+      if (getTeamStats != null) {
+        statistics.value = Statistics(
+          totalTeamMember: getTeamStats.totalTeamMember,
+          activeTeamMember: getTeamStats.activeTeamMember,
+        );
+      }
       teamList.assignAll(cachedTeam);
     } else {
       await fetchTeamList();
     }
   }
+
+  Rx<Statistics> statistics = Statistics().obs;
 
   Future<void> fetchTeamList() async {
     try {
@@ -341,6 +351,11 @@ class HomeController extends GetxController {
         teamList.clear();
         teamList.addAll(result?.data ?? []);
         await myPref.saveTeam(teamList.toList());
+
+        if (result?.statistics != null) {
+          statistics.value = result!.statistics!;
+          await myPref.saveTeamStats(result.statistics!); // ✅ save team stats separately
+        }
       }
     } catch (e) {
       Get.printError(info: 'Error fetching team list: $e');
@@ -349,20 +364,21 @@ class HomeController extends GetxController {
     }
   }
 
+
   Future<void> refreshTeamList() async {
     await fetchTeamList();
   }
 
-  Future<void> refreshAddressAndProfile() async {
-    // Refresh address data
-    await _refreshHomeData();
-
-    // Refresh profile data
-    await fetchProfileData();
-
-    // Re-check both address and profile completion
-    Future.delayed(const Duration(milliseconds: 300), () {
-      _checkAddressAndProfileCompletion();
-    });
-  }
+  // Future<void> refreshAddressAndProfile() async {
+  //   // Refresh address data
+  //   await _refreshHomeData();
+  //
+  //   // Refresh profile data
+  //   await fetchProfileData();
+  //
+  //   // Re-check both address and profile completion
+  //   Future.delayed(const Duration(milliseconds: 300), () {
+  //     _checkAddressAndProfileCompletion();
+  //   });
+  // }
 }
