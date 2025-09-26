@@ -8,7 +8,6 @@ import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/AddProduct/controller/add_product_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
-import 'package:get_storage/get_storage.dart';
 
 class AddProductView extends GetView<AddProductController> {
   const AddProductView({super.key});

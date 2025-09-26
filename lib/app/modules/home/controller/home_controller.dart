@@ -1,8 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
-import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart' hide Statistics;
-import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart' show Statistics, TeamListData, TeamListModel;
+import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/services/GetAllRoleService.dart';
 import 'package:construction_technect/app/modules/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';

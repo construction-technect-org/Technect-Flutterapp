@@ -36,6 +36,7 @@ class APIConstants {
   static const String getFilter = "merchant/category/filters/sub/";
   static const String getProductList = "merchant/product/list";
   static const String updateProfile = "auth/profile";
+  static const String faq = "merchant/faq/list";
 
   // Service Management APIs
   static const String getServiceList = "service/merchant/list";
