@@ -14,8 +14,11 @@ class RoleManagementView extends GetView<RoleManagementController> {
 
   @override
   Widget build(BuildContext context) {
+    final initialTabIndex = Get.arguments != null ? 1 : 0;
+
     return DefaultTabController(
       length: 2, // Roles & Teams
+      initialIndex: initialTabIndex,
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: AppBar(

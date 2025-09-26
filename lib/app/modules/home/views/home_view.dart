@@ -49,7 +49,10 @@ class HomeView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+                vertical: 16,
+              ),
               child: Row(
                 children: [
                   Image.asset(Asset.profil, height: 40, width: 40),
@@ -84,7 +87,11 @@ class HomeView extends StatelessWidget {
                           },
                           child: Row(
                             children: [
-                              SvgPicture.asset(Asset.location, width: 9, height: 12.22),
+                              SvgPicture.asset(
+                                Asset.location,
+                                width: 9,
+                                height: 12.22,
+                              ),
                               SizedBox(width: 0.4.h),
                               Obx(
                                 () => Text(
@@ -249,7 +256,10 @@ class HomeView extends StatelessWidget {
                             padding: const EdgeInsets.all(18),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: MyColors.gray5D, width: 0.5),
+                              border: Border.all(
+                                color: MyColors.gray5D,
+                                width: 0.5,
+                              ),
                             ),
                             child: GridView.builder(
                               shrinkWrap: true,
@@ -267,7 +277,11 @@ class HomeView extends StatelessWidget {
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    SvgPicture.asset(item['icon'], height: 28, width: 28),
+                                    SvgPicture.asset(
+                                      item['icon'],
+                                      height: 28,
+                                      width: 28,
+                                    ),
                                     const SizedBox(height: 8),
                                     Text(
                                       item['title'],
@@ -288,7 +302,12 @@ class HomeView extends StatelessWidget {
                               HearderText(text: "Active Team"),
                               const Spacer(),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed(
+                                    Routes.ROLE_MANAGEMENT,
+                                    arguments: {"isHome": true},
+                                  );
+                                },
                                 child: Text(
                                   "View All",
                                   style: MyTexts.medium14.copyWith(
@@ -304,32 +323,40 @@ class HomeView extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 120,
-                      child: ListView.builder(
-                        itemCount: 5,
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            width: 100,
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Image.asset(Asset.aTeam, height: 67, width: 67),
-                                ),
-                                const Gap(12),
-                                Text(
-                                  "Mohan Sau",
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.gray32,
+                      child: Obx(() {
+                        return ListView.builder(
+                          itemCount: controller.teamList.take(5).length,
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              width: 100,
+                              child: Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.asset(
+                                      Asset.aTeam,
+                                      height: 67,
+                                      width: 67,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                                  const Gap(12),
+                                  Text(
+                                    "${controller.teamList[index].firstName} ${controller.teamList[index].lastName}",
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.black,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }),
                     ),
                     const Gap(14),
                   ],
@@ -379,7 +406,9 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
+              style: MyTexts.extraBold18.copyWith(
+                color: MyColors.textFieldBackground,
+              ),
             ),
           ],
         ),
@@ -420,7 +449,12 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildNotiCard({String? title, String? value, String? icon, Color? color}) {
+  Widget _buildNotiCard({
+    String? title,
+    String? value,
+    String? icon,
+    Color? color,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
       decoration: BoxDecoration(
@@ -443,7 +477,10 @@ class HomeView extends StatelessWidget {
                   icon ?? "",
                   height: 30,
                   width: 30,
-                  colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(
+                    color ?? Colors.black,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
               Container(
