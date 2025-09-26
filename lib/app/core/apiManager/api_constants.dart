@@ -37,11 +37,13 @@ class APIConstants {
   static const String getProductList = "merchant/product/list";
   static const String updateProfile = "auth/profile";
   static const String faq = "merchant/faq/list";
+  static const String merchantFeedback = "feedback/merchant";
 
   // Service Management APIs
   static const String getServiceList = "service/merchant/list";
   static const String createService = "service/create";
   static const String updateService = "service/merchant/";
+
   static const String deleteService = "service/merchant/";
   static const String getServiceTypes = "service/types";
   static const String getServices = "service/types";

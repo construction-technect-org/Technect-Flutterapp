@@ -104,8 +104,8 @@ class FeedbackViewScreen extends GetView<FeedBackController> {
                             padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
-                            SnackBars.successSnackBar(content: "Feedback sent successfully");
+                            controller.addFeedBack();
+                            // SnackBars.successSnackBar(content: "Feedback sent successfully");
                           },
                           child: Text(
                             "SUBMIT",

@@ -161,6 +161,7 @@ class AddProductView extends GetView<AddProductController> {
                         headerText: 'Product Code',
                         readOnly: true,
                         hintText: "CTPC01",
+                        bgColor: Colors.grey.shade100 ,
                         controller: controller.productCodeController,
                       ),
                       if(controller.isEdit)
