@@ -10,6 +10,7 @@ class ConnectorRequestDemoView extends StatelessWidget {
   final ConnectorRequestDemoController controller = Get.put(
     ConnectorRequestDemoController(),
   );
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -19,11 +20,11 @@ class ConnectorRequestDemoView extends StatelessWidget {
         appBar: CommonAppBar(
           isCenter: false,
           // ignore: prefer_const_constructors
-          title:Text("Request Demo")
+          title: Text("Request Demo"),
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal:18.0),
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -41,9 +42,14 @@ class ConnectorRequestDemoView extends StatelessWidget {
                   children: [
                     Text(
                       'Request Demo for',
-                      style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
+                      style: MyTexts.light16.copyWith(
+                        color: MyColors.lightBlue,
+                      ),
                     ),
-                    Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
+                    Text(
+                      '*',
+                      style: MyTexts.light16.copyWith(color: MyColors.red),
+                    ),
                   ],
                 ),
                 SizedBox(height: 1.h),
@@ -57,8 +63,8 @@ class ConnectorRequestDemoView extends StatelessWidget {
                   onChanged: controller.isEdit
                       ? null
                       : (value) {
-                    controller.onMainCategorySelected(value);
-                  },
+                          controller.onMainCategorySelected(value);
+                        },
                   enabled: !controller.isEdit,
                 ),
                 SizedBox(height: 1.h),
@@ -67,9 +73,14 @@ class ConnectorRequestDemoView extends StatelessWidget {
                   children: [
                     Text(
                       'Phone Number',
-                      style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
+                      style: MyTexts.light16.copyWith(
+                        color: MyColors.lightBlue,
+                      ),
                     ),
-                    Text('*', style: MyTexts.light16.copyWith(color: MyColors.red)),
+                    Text(
+                      '*',
+                      style: MyTexts.light16.copyWith(color: MyColors.red),
+                    ),
                   ],
                 ),
                 SizedBox(height: 1.h),
@@ -85,12 +96,16 @@ class ConnectorRequestDemoView extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 12.0),
                         child: Icon(Icons.phone, color: MyColors.primary),
                       ),
-                      Container(width: 1, height: 3.h, color: MyColors.darkGray),
+                      Container(
+                        width: 1,
+                        height: 3.h,
+                        color: MyColors.darkGray,
+                      ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: TextField(
-                            controller: controller.PhoneNumberController,
+                            controller: controller.phoneNumberController,
                             keyboardType: TextInputType.phone,
                             style: MyTexts.medium16.copyWith(
                               color: MyColors.primary,
@@ -110,9 +125,10 @@ class ConnectorRequestDemoView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 2.h),
-                const CommonTextField(
-                 headerText: 'Email',
-                 hintText: "Enter your email address",
+                CommonTextField(
+                  controller: controller.emilaController,
+                  headerText: 'Email',
+                  hintText: "Enter your email address",
                 ),
                 SizedBox(height: 4.h),
                 Row(
@@ -126,7 +142,11 @@ class ConnectorRequestDemoView extends StatelessWidget {
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          controller.selectedMainCategory.value = "";
+                          controller.emilaController.text = "";
+                          controller.phoneNumberController.text = "";
+                        },
                         child: const Text(
                           "CANCEL",
                           style: TextStyle(color: Colors.white),
@@ -143,8 +163,13 @@ class ConnectorRequestDemoView extends StatelessWidget {
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        onPressed: () {},
-                        child: Text("SUBMIT", style: TextStyle(color: MyColors.white)),
+                        onPressed: () {
+                          controller.addRequestDemo();
+                        },
+                        child: Text(
+                          "SUBMIT",
+                          style: TextStyle(color: MyColors.white),
+                        ),
                       ),
                     ),
                   ],

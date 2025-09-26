@@ -1,5 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/controller/customer_support_controller.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
 
 /// Ticket Model
