@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
 import 'package:gap/gap.dart';
 
 class HomeView extends StatelessWidget {
@@ -195,43 +196,49 @@ class HomeView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          HearderText(text: "Statics"),
+                          HeaderText(text: "Statics"),
                           const Gap(14),
                           Row(
                             children: [
                               Expanded(
-                                child: _buildStatCard(
-                                  "Total Partners",
-                                  "123.4K",
-                                  Asset.noOfPartner,
+                                child: StaticsCard(
+                                  title: "Total Partners",
+                                  value: "123.4K",
+                                  icon: Asset.noOfPartner,
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: _buildStatCard(
-                                  "Total Products",
-                                  "123.4K",
-                                  Asset.noOfConectors,
+                                child: StaticsCard(
+                                  title: "Total Products",
+                                  value: "123.4K",
+                                  icon: Asset.noOfConectors,
                                 ),
                               ),
                               const SizedBox(width: 12),
 
                               Expanded(
-                                child: _buildStatCard(
-                                  "Total Connectors",
-                                  "250",
-                                  Asset.noOfUsers,
+                                child: StaticsCard(
+                                  title: "Total Connectors",
+                                  value: "250",
+                                  icon: Asset.noOfUsers,
                                 ),
                               ),
                             ],
                           ),
                           const Gap(14),
-                          HearderText(text: "Notification"),
+                          HeaderText(text: "Notification"),
                           const Gap(14),
                           Row(
                             children: [
                               Expanded(
                                 child: _buildNotiCard(
+                                  onTap: () {
+                                    Get.find<MainController>()
+                                            .currentIndex
+                                            .value =
+                                        2;
+                                  },
                                   title: "Support Ticket",
                                   value: "04",
                                   icon: Asset.warning,
@@ -241,6 +248,9 @@ class HomeView extends StatelessWidget {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: _buildNotiCard(
+                                  onTap: () {
+                                    Get.toNamed(Routes.APPROVAL_INBOX);
+                                  },
                                   title: "Inbox",
                                   value: "02",
                                   icon: Asset.thumbup,
@@ -250,7 +260,7 @@ class HomeView extends StatelessWidget {
                             ],
                           ),
                           const Gap(14),
-                          HearderText(text: "Quick Access"),
+                          HeaderText(text: "Quick Access"),
                           const Gap(14),
                           Container(
                             padding: const EdgeInsets.all(18),
@@ -274,24 +284,29 @@ class HomeView extends StatelessWidget {
                                   ),
                               itemBuilder: (context, index) {
                                 final item = controller.items[index];
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SvgPicture.asset(
-                                      item['icon'],
-                                      height: 28,
-                                      width: 28,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      item['title'],
-                                      textAlign: TextAlign.center,
-                                      style: MyTexts.regular14.copyWith(
-                                        color: MyColors.textFieldBackground,
-                                        fontFamily: MyTexts.Roboto,
+                                return GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(Routes.APPROVAL_INBOX);
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        item['icon'],
+                                        height: 28,
+                                        width: 28,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        item['title'],
+                                        textAlign: TextAlign.center,
+                                        style: MyTexts.regular14.copyWith(
+                                          color: MyColors.textFieldBackground,
+                                          fontFamily: MyTexts.Roboto,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 );
                               },
                             ),
@@ -299,7 +314,7 @@ class HomeView extends StatelessWidget {
                           const Gap(14),
                           Row(
                             children: [
-                              HearderText(text: "Active Team"),
+                              HeaderText(text: "Active Team"),
                               const Spacer(),
                               GestureDetector(
                                 onTap: () {
@@ -416,7 +431,93 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value, String icon) {
+  Widget _buildNotiCard({
+    String? title,
+    String? value,
+    Function()? onTap,
+    String? icon,
+    Color? color,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.translucent,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+        decoration: BoxDecoration(
+          border: Border.all(color: MyColors.greyE5),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 4, top: 4),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: (color ?? Colors.black).withValues(alpha: 0.3),
+                  ),
+                  child: SvgPicture.asset(
+                    icon ?? "",
+                    height: 30,
+                    width: 30,
+                    colorFilter: ColorFilter.mode(
+                      color ?? Colors.black,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 12,
+                  width: 12,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+            const Gap(12),
+
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title ?? "",
+                  style: MyTexts.regular14.copyWith(
+                    color: MyColors.gray5D,
+                    fontFamily: MyTexts.Roboto,
+                  ),
+                ),
+                Text(
+                  value ?? "",
+                  style: MyTexts.bold20.copyWith(
+                    color: MyColors.black,
+                    fontFamily: MyTexts.Roboto,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StaticsCard extends StatelessWidget {
+  String? icon;
+  String? title;
+  String? value;
+  Color? color;
+
+  StaticsCard({super.key, this.icon, this.title, this.value, this.color});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
       decoration: BoxDecoration(
@@ -427,10 +528,17 @@ class HomeView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-          SvgPicture.asset(icon, height: 20, width: 20),
+          SvgPicture.asset(
+            icon ?? "",
+            height: 20,
+            width: 20,
+            colorFilter: color == null
+                ? null
+                : ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
+          ),
           const Gap(6),
           Text(
-            title,
+            title ?? "",
             overflow: TextOverflow.ellipsis,
             style: MyTexts.regular14.copyWith(
               color: MyColors.fontBlack,
@@ -438,7 +546,7 @@ class HomeView extends StatelessWidget {
             ),
           ),
           Text(
-            value,
+            value ?? "",
             style: MyTexts.bold16.copyWith(
               color: MyColors.black,
               fontFamily: MyTexts.Roboto,
@@ -448,83 +556,12 @@ class HomeView extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildNotiCard({
-    String? title,
-    String? value,
-    String? icon,
-    Color? color,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
-      decoration: BoxDecoration(
-        border: Border.all(color: MyColors.greyE5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 4, top: 4),
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: (color ?? Colors.black).withValues(alpha: 0.3),
-                ),
-                child: SvgPicture.asset(
-                  icon ?? "",
-                  height: 30,
-                  width: 30,
-                  colorFilter: ColorFilter.mode(
-                    color ?? Colors.black,
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
-              Container(
-                height: 12,
-                width: 12,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
-          const Gap(12),
-
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title ?? "",
-                style: MyTexts.regular14.copyWith(
-                  color: MyColors.gray5D,
-                  fontFamily: MyTexts.Roboto,
-                ),
-              ),
-              Text(
-                value ?? "",
-                style: MyTexts.bold20.copyWith(
-                  color: MyColors.black,
-                  fontFamily: MyTexts.Roboto,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }
 
-class HearderText extends StatelessWidget {
+class HeaderText extends StatelessWidget {
   String text;
 
-  HearderText({super.key, required this.text});
+  HeaderText({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
