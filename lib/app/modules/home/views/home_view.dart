@@ -290,6 +290,7 @@ class HomeView extends StatelessWidget {
                                     if (index == 0) {
                                       Get.toNamed(Routes.APPROVAL_INBOX);
                                     } else if (index == 1) {
+                                      Get.toNamed(Routes.REPORT);
                                     } else if (index == 2) {
                                     } else if (index == 3) {
                                       Get.to(() => SettingView());
@@ -299,8 +300,11 @@ class HomeView extends StatelessWidget {
                                         arguments: {"isHome": true},
                                       );
                                     } else if (index == 5) {
+                                      Get.toNamed(Routes.INVENTORY);
                                     } else if (index == 6) {
-                                    } else if (index == 7) {}
+                                    } else if (index == 7) {
+                                      Get.toNamed(Routes.REFER_EARN);
+                                    }
                                   },
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,

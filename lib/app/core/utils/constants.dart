@@ -171,6 +171,7 @@ class Asset {
 
   static const String constuctionMaterial = 'assets/images/constuction_material.png';
   static const String interiorMateria = 'assets/images/interior_material.png';
+  static const String con = 'assets/images/con.png';
 
  // connector location
   static const String connectorLocation = 'assets/images/connector_location.svg';

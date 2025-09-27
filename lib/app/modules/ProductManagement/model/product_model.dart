@@ -247,15 +247,16 @@ class Statistics {
 
   factory Statistics.fromJson(Map<String, dynamic> json) => Statistics(
     totalProducts: json["total_products"],
-    lowStock: json["low_stock"],
+    lowStock: json["out_of_stock"],
     totalInterests: json["total_interests"],
-    featured: json["featured"],
+    featured: json["approved"],
   );
 
   Map<String, dynamic> toJson() => {
     "total_products": totalProducts,
-    "low_stock": lowStock,
+    "out_of_stock": lowStock,
     "total_interests": totalInterests,
-    "featured": featured,
+    "approved": featured,
   };
 }
+

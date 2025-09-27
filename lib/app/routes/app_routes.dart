@@ -37,6 +37,7 @@ abstract class Routes {
   static const DASHABORD_MARKET_PLACE = _Paths.DASHABOARD_MARKET_PLACE;
   static const FEEDBACK_VIEW = _Paths.FEEDBACK_VIEW;
   static const FAQ = _Paths.FAQ;
+  static const INVENTORY = _Paths.INVENTORY;
 
   // Connector
   static const CONNECTOR_MAIN_TAB = _Paths.CONNECTOR_MAIN_TAB;
@@ -52,6 +53,8 @@ abstract class Routes {
   static const CONNECTOR_CUSTOMER_SUPPORT_TICKET = _Paths.CONNECTOR_CUSTOMER_SUPPORT_TICKET;
   static const CONNECTOR_REQUEST_DEMO = _Paths.CONNECTOR_REQUEST_DEMO;
   static const SUPPORT_REQUEST = _Paths.SUPPORT_REQUEST;
+  static const REFER_EARN = _Paths.REFER_EARN;
+  static const REPORT = _Paths.REPORT;
 
 }  
 
@@ -93,6 +96,9 @@ abstract class _Paths {
   static const DASHBOARD = '/dashboard';
   static const DASHABOARD_MARKET_PLACE = '/dashboard-market-place';
   static const SUPPORT_REQUEST = '/support-request';
+  static const REFER_EARN = '/refer-earn';
+  static const REPORT = '/report';
+  static const INVENTORY = '/inventory';
 
   // Connector
   static const CONNECTOR_MAIN_TAB = '/connector-main-tab';

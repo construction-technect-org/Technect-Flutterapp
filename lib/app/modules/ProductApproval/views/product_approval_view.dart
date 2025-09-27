@@ -1,9 +1,11 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/welcome_name.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/product_card.dart';
+import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
 
 class ProductApprovalView extends StatelessWidget {
   const ProductApprovalView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,15 +163,7 @@ class ProductApprovalView extends StatelessWidget {
                       onTap: () {
                         Get.toNamed(Routes.APPROVAL_INBOX);
                       },
-                      child: const ProductCard(
-                        statusText: 'Approved',
-                        statusColor: MyColors.green,
-                        productName: 'Premium M Sand',
-                        brandName: 'SV Manufacturers',
-                        locationText: 'Vasai Virar, Mahab Chowpatty',
-                        pricePerUnit: 123,
-                        stockCount: 0,
-                      ),
+                      child: ProductCard(product: Product()),
                     );
                   },
                 ),

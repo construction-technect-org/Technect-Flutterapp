@@ -7,6 +7,7 @@ class ProductManagementController extends GetxController {
   Rx<ProductListModel> productModel = ProductListModel().obs;
   RxList<Product> filteredProducts = <Product>[].obs;
   RxString searchQuery = ''.obs;
+  Rx<Statistics> statistics = Statistics().obs;
 
   @override
   void onInit() {
@@ -23,8 +24,12 @@ class ProductManagementController extends GetxController {
       filteredProducts.addAll(productModel.value.data?.products ?? []);
     } else {
       filteredProducts.clear();
-      filteredProducts.value = (productModel.value.data?.products ?? []).where((product) {
-        return (product.productName ?? '').toLowerCase().contains(value.toLowerCase()) ||
+      filteredProducts.value = (productModel.value.data?.products ?? []).where((
+        product,
+      ) {
+        return (product.productName ?? '').toLowerCase().contains(
+              value.toLowerCase(),
+            ) ||
             (product.brand ?? '').toLowerCase().contains(value.toLowerCase());
       }).toList();
     }
@@ -36,6 +41,7 @@ class ProductManagementController extends GetxController {
       productModel.value = await _service.getProductList();
       filteredProducts.clear();
       filteredProducts.addAll(productModel.value.data?.products ?? []);
+      statistics.value = productModel.value.data?.statistics ?? Statistics();
     } catch (e) {
       isLoading(false);
     } finally {

@@ -50,10 +50,16 @@ import 'package:construction_technect/app/modules/FAQ/bindings/faq_bindings.dart
 import 'package:construction_technect/app/modules/FAQ/views/faq_screen.dart';
 import 'package:construction_technect/app/modules/FeedBack/bindings/feedback_bindings.dart';
 import 'package:construction_technect/app/modules/FeedBack/views/feedback_view_screen.dart';
+import 'package:construction_technect/app/modules/Invetory/bindings/inventory_bindings.dart';
+import 'package:construction_technect/app/modules/Invetory/views/inventory_view.dart';
 import 'package:construction_technect/app/modules/Marketplace/bindings/market_place_binding.dart';
 import 'package:construction_technect/app/modules/Marketplace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
+import 'package:construction_technect/app/modules/ReferAndCoupon/bindings/refer_bindings.dart';
+import 'package:construction_technect/app/modules/ReferAndCoupon/views/refer_screen.dart';
+import 'package:construction_technect/app/modules/Report/bindings/report_bindings.dart';
+import 'package:construction_technect/app/modules/Report/views/report_view.dart';
 import 'package:construction_technect/app/modules/RoleDetails/bindings/role_details_binding.dart';
 import 'package:construction_technect/app/modules/RoleDetails/views/role_details_view.dart';
 import 'package:construction_technect/app/modules/RoleManagement/bindings/role_management_binding.dart';
@@ -258,7 +264,7 @@ class AppPages {
     // Connector
     GetPage(
       name: _Paths.CONNECTOR_MAIN_TAB,
-      page: () =>  const ConnectorMainTab(),
+      page: () => const ConnectorMainTab(),
       binding: ConnectorMainTabBinding(),
     ),
     GetPage(
@@ -266,8 +272,7 @@ class AppPages {
       page: () => const ConnectorMarketPlaceView(),
       binding: ConnectorMarketPlaceBinfing(),
     ),
-  
-  
+
     GetPage(
       name: _Paths.CONNECTOR_PROFILE,
       page: () => ConnectorProfileView(),
@@ -298,25 +303,25 @@ class AppPages {
       page: () => const DashboardMarketPlaceView(),
       binding: DashboardMarketPlaceBinding(),
     ),
-   
-      GetPage(
+
+    GetPage(
       name: Routes.CONNECTOR_SELECT_LOCATION,
-      page: () =>  ConnectorSelectLocationView(),
+      page: () => ConnectorSelectLocationView(),
       binding: ConnectorSelectLocationBinding(),
     ),
-     GetPage(
+    GetPage(
       name: Routes.CONNECTOR_ADD_LOCATION,
-      page: () =>  const ConnectorAddLocationView(),
+      page: () => const ConnectorAddLocationView(),
       binding: ConnectorAddLocationBinding(),
     ),
-     GetPage(
+    GetPage(
       name: Routes.CONNECTOR_ADD_LOCATION_MANUALLY,
-      page: () =>  const ConnectorAddLocationManuallyView(),
+      page: () => const ConnectorAddLocationManuallyView(),
       binding: ConnectorAddLocationManuallyBinding(),
     ),
     GetPage(
       name: Routes.CONNECTOR_PRODUCT_DETAILS,
-      page: () =>   ConnectorProductDetailsView(),
+      page: () => ConnectorProductDetailsView(),
       binding: ConnectorProductDetailsBindings(),
     ),
     GetPage(
@@ -326,23 +331,38 @@ class AppPages {
     ),
     GetPage(
       name: Routes.CONNECTOR_CONNECTION_INBOX,
-      page: () =>   ConnectorConnectionInboxVies(),
-      binding:   ConnectorConnectionInboxBinding(),
+      page: () => ConnectorConnectionInboxVies(),
+      binding: ConnectorConnectionInboxBinding(),
     ),
-     GetPage(
+    GetPage(
       name: Routes.CONNECTOR_CUSTOMER_SUPPORT_TICKET,
-      page: () =>   ConnectorCustomerSupportTicketView(),
-      binding:   ConnectorCustomerSupportTicketBinding(),
+      page: () => ConnectorCustomerSupportTicketView(),
+      binding: ConnectorCustomerSupportTicketBinding(),
     ),
-     GetPage(
+    GetPage(
       name: Routes.CONNECTOR_REQUEST_DEMO,
-      page: () =>   ConnectorRequestDemoView(),
-      binding:   ConnectorRequestDemoBinding(),
+      page: () => ConnectorRequestDemoView(),
+      binding: ConnectorRequestDemoBinding(),
     ),
     GetPage(
       name: Routes.SUPPORT_REQUEST,
-      page: () =>   const SupportRequestScreen(),
-      binding:   SupportRequestBindings(),
+      page: () => const SupportRequestScreen(),
+      binding: SupportRequestBindings(),
+    ),
+    GetPage(
+      name: Routes.REFER_EARN,
+      page: () => const ReferAndEarnScreen(),
+      binding: ReferBindings(),
+    ),
+    GetPage(
+      name: Routes.REPORT,
+      page: () => const ReportView(),
+      binding: ReportBinding(),
+    ),
+    GetPage(
+      name: Routes.INVENTORY,
+      page: () => const InventoryView(),
+      binding: InventoryBinding(),
     ),
   ];
 }

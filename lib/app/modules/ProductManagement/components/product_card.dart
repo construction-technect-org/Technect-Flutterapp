@@ -1,36 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
-    required this.statusText,
-    required this.statusColor,
-    required this.productName,
-    this.companyName,
-    required this.brandName,
-    required this.locationText,
-    required this.pricePerUnit,
-    required this.stockCount,
-    this.imageAsset,
-    this.imageUrl,
+    required this.product,
   });
 
-  final String statusText;
-  final Color statusColor;
-  final String productName;
-  final String? companyName;
-  final String brandName;
-  final String locationText;
-  final double pricePerUnit;
-  final int stockCount;
-  final String? imageAsset;
-  final String? imageUrl;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
+    final bool isActive = product.isActive ?? false;
+
     return Container(
       decoration: BoxDecoration(
         color: MyColors.white,
@@ -47,40 +32,42 @@ class ProductCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: (imageUrl != null && imageUrl!.isNotEmpty)
+                  child: (product.productImage != null &&
+                      product.productImage!.isNotEmpty)
                       ? CachedNetworkImage(
-                          imageUrl: "${APIConstants.bucketUrl}$imageUrl",
-                          width: 56,
-                          height: 57,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            width: 56,
-                            height: 57,
-                            decoration: const BoxDecoration(
-                              color: MyColors.grey1,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            child: const Center(
-                              child: CupertinoActivityIndicator(
-                                color: MyColors.primary,
-                              ),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Image.asset(
-                            imageAsset ?? Asset.Product,
-                            width: 56,
-                            height: 57,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : Image.asset(
-                          imageAsset ?? Asset.Product,
-                          width: 56,
-                          height: 57,
-                          fit: BoxFit.cover,
+                    imageUrl:
+                    "${APIConstants.bucketUrl}${product.productImage!}",
+                    width: 56,
+                    height: 57,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      width: 56,
+                      height: 57,
+                      decoration: const BoxDecoration(
+                        color: MyColors.grey1,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
                         ),
+                      ),
+                      child: const Center(
+                        child: CupertinoActivityIndicator(
+                          color: MyColors.primary,
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      Asset.Product,
+                      width: 56,
+                      height: 57,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                      : Image.asset(
+                    Asset.Product,
+                    width: 56,
+                    height: 57,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 SizedBox(width: 1.h),
                 Expanded(
@@ -92,56 +79,40 @@ class ProductCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              productName,
-                              style: MyTexts.bold18.copyWith(
+                              product.productName ?? "",
+                              style: MyTexts.bold16.copyWith(
+                                fontSize: 17.sp,
                                 color: MyColors.fontBlack,
+                                fontFamily: MyTexts.Roboto,
                               ),
                             ),
                           ),
+                          const Gap(5),
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10,
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: statusColor == MyColors.green
+                              color: isActive
                                   ? MyColors.paleGreen
                                   : MyColors.paleRed,
                               borderRadius: BorderRadius.circular(25),
                             ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  statusText,
-                                  style: MyTexts.regular14.copyWith(
-                                    color: statusColor,
-                                  ),
-                                ),
-                              ],
+                            child: Text(
+                              isActive ? "Active" : "Inactive",
+                              style: MyTexts.regular14.copyWith(
+                                fontFamily: MyTexts.Roboto,
+                                color: isActive
+                                    ? MyColors.green
+                                    : MyColors.red,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Company: ',
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.primary,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                            TextSpan(
-                              text: companyName ?? "-",
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.primary,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+
+                      const Gap(4),
                       RichText(
                         text: TextSpan(
                           children: [
@@ -153,7 +124,7 @@ class ProductCard extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: brandName??"-",
+                              text: product.brand ?? "-",
                               style: MyTexts.regular14.copyWith(
                                 color: MyColors.primary,
                                 fontFamily: MyTexts.Roboto,
@@ -167,33 +138,17 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-           const Gap(11),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on,
-                  size: 16,
-                  color: MyColors.graniteg,
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    locationText,
-                    style: MyTexts.regular14.copyWith(
-                      color: MyColors.graniteg,
-                      fontFamily: MyTexts.Roboto,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+
+            const Gap(12),
             Text(
-              '₹ ${pricePerUnit.toStringAsFixed(2)}/unit',
-              style: MyTexts.extraBold20.copyWith(
+              '₹ ${double.tryParse(product.price ?? "0")?.toStringAsFixed(2) ?? "0.00"}/${product.uom ?? ""}',
+              style: MyTexts.extraBold18.copyWith(
                 color: MyColors.primary,
                 fontFamily: MyTexts.Roboto,
               ),
             ),
+
+            const Gap(4),
             RichText(
               text: TextSpan(
                 children: [
@@ -205,7 +160,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: '45',
+                    text: (product.stockQuantity ?? 0).toString(),
                     style: MyTexts.regular14.copyWith(
                       color: MyColors.black,
                       fontFamily: MyTexts.Roboto,
@@ -214,6 +169,7 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
             ),
+
             SizedBox(height: 0.8.h),
             Row(
               mainAxisSize: MainAxisSize.min,
