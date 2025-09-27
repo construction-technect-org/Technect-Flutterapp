@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
+import 'package:construction_technect/app/modules/settings/views/setting_view.dart';
 import 'package:gap/gap.dart';
 
 class HomeView extends StatelessWidget {
@@ -286,7 +287,20 @@ class HomeView extends StatelessWidget {
                                 final item = controller.items[index];
                                 return GestureDetector(
                                   onTap: () {
-                                    Get.toNamed(Routes.APPROVAL_INBOX);
+                                    if (index == 0) {
+                                      Get.toNamed(Routes.APPROVAL_INBOX);
+                                    } else if (index == 1) {
+                                    } else if (index == 2) {
+                                    } else if (index == 3) {
+                                      Get.to(() => SettingView());
+                                    } else if (index == 4) {
+                                      Get.toNamed(
+                                        Routes.ROLE_MANAGEMENT,
+                                        arguments: {"isHome": true},
+                                      );
+                                    } else if (index == 5) {
+                                    } else if (index == 6) {
+                                    } else if (index == 7) {}
                                   },
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,

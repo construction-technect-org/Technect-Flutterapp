@@ -1,230 +1,154 @@
-import 'package:construction_technect/app/core/utils/dashed_circle.dart';
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/home/views/home_view.dart';
+import 'package:construction_technect/app/modules/settings/controller/setting_controller.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:gap/gap.dart';
 
 class SettingView extends StatelessWidget {
-  const SettingView({super.key});
+  SettingView({super.key});
+
+  final controller = Get.put<SettingController>(SettingController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        backgroundColor: MyColors.white,
-        elevation: 0,
-        centerTitle: false,
-        title: Text('Settings', style: MyTexts.regular20),
-      ),
+      appBar: CommonAppBar(title: const Text('Settings'), isCenter: false),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 6.sw),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            Row(
-              children: [
-                const DashedCircle(
-                  size: 81,
-                  color: MyColors.grey,
-                  strokeWidth: 1.2,
-                  assetImage: Asset.profil,
-                ),
-
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Mike Junior",
-                      overflow: TextOverflow.ellipsis,
-                      style: MyTexts.regular16.copyWith(color: MyColors.fontBlack),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "mike@constructiontechnet.com",
-                      overflow: TextOverflow.ellipsis,
-                      style: MyTexts.regular16.copyWith(color: MyColors.fontBlack),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
-            SizedBox(height: 2.h),
-            _buildMenuItem(
-              'My Profile',
-              icon: Icons.person_outline,
-              false,
-              onTap: () {
-                Get.toNamed(Routes.PROFILE);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Terms & Conditions',
-              customIcon: Image.asset(Asset.termscondi, height: 24, width: 24),
-
-              false,
-              onTap: () {},
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Rate/Feedback App',
-              false,
-              customIcon: Image.asset(Asset.rate, height: 24, width: 24),
-
-              onTap: () {},
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Share App',
-              icon: Icons.share_outlined,
-              true,
-              onTap: () {
-              
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'About Us',
-              customIcon: Image.asset(Asset.aboutUs, height: 24, width: 24),
-
-              false,
-              onTap: () {
-                 Get.toNamed(Routes.ROLE_MANAGEMENT);
-              },
-            ),
-
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Log Out',
-              false,
-              isDestructive: false,
-              icon: Icons.logout, // 👈 Material icon
-              onTap: () {
-                _showConfirmDialog(
-                  context,
-                  title: "Log Out",
-                  message: "Are you sure you want to log out?",
-                  confirmText: "Log Out",
-                  onConfirm: () {
-                    myPref.logout();
-                    Get.offAllNamed(Routes.LOGIN);
-                  },
-                );
-              },
-            ),
-
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Delete Account',
-              false,
-              isDestructive: false,
-              highlight: true,
-              icon: Icons.delete_forever, // 👈 Material delete icon
-              onTap: () {
-                _showConfirmDialog(
-                  context,
-                  title: "Delete Account",
-                  message:
-                      "This action cannot be undone. Are you sure you want to delete your account permanently?",
-                  confirmText: "Delete",
-                  onConfirm: () {
-                    // TODO: Implement delete account logic
-                    Get.back(); // Close dialog
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(
-    String title,
-    bool hasNotification, {
-    VoidCallback? onTap,
-    bool? isDestructive,
-    bool? highlight,
-    IconData? icon, // 👈 Material icons
-    Widget? customIcon, // 👈 Images/SVGs
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        decoration: BoxDecoration(
-          color: MyColors.menuTile,
-          borderRadius: BorderRadius.circular(7),
-        ),
-        child: Row(
-          children: [
-            if (customIcon != null) ...[
-              Stack(
+            const Gap(24),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: MyColors.grayD4),
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                      BlendMode.srcIn,
-                    ),
-                    child: customIcon,
-                  ),
-                  if (hasNotification)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
+                  Row(
+                    children: [
+                      Text(
+                        "Notifications",
+                        style: MyTexts.regular16.copyWith(
+                          color: Colors.black,
+                          fontFamily: MyTexts.Roboto,
                         ),
                       ),
-                    ),
-                ],
-              ),
-            ] else if (icon != null) ...[
-              Icon(
-                icon,
-                size: 24,
-                color: isDestructive == true ? MyColors.red : MyColors.primary,
-              ),
-            ] else ...[
-              Stack(
-                children: [
-                  SvgPicture.asset(
-                    Asset.menuSettingIcon,
-                    width: 24,
-                    height: 24,
-                    colorFilter: ColorFilter.mode(
-                      isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                      BlendMode.srcIn,
-                    ),
+                      const Spacer(),
+                      Obx(() {
+                        return CupertinoSwitch(
+                          activeTrackColor: MyColors.primary,
+
+                          value: controller.isNotification.value,
+                          onChanged: (val) {
+                            controller.isNotification.value = val ?? false;
+                          },
+                        );
+                      }),
+                    ],
                   ),
-                  if (hasNotification)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
+                  const Gap(5),
+                  const Divider(),
+                  const Gap(5),
+                  HeaderText(text: "Theme"),
+                  const Gap(3),
+                  Row(
+                    children: [
+                      Text(
+                        "Dark Mode",
+                        style: MyTexts.regular16.copyWith(
+                          color: Colors.black,
+                          fontFamily: MyTexts.Roboto,
                         ),
                       ),
+                      const Spacer(),
+                      Obx(() {
+                        return CupertinoSwitch(
+                          activeTrackColor: MyColors.primary,
+                          value: controller.isDarkMode.value,
+                          onChanged: (val) {
+                            controller.isDarkMode.value = val ?? false;
+                            controller.isLightMode.value =
+                                !controller.isLightMode.value;
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Light Mode",
+                        style: MyTexts.regular16.copyWith(
+                          color: Colors.black,
+                          fontFamily: MyTexts.Roboto,
+                        ),
+                      ),
+                      const Spacer(),
+                      Obx(() {
+                        return CupertinoSwitch(
+                          activeTrackColor: MyColors.primary,
+                          value: controller.isLightMode.value,
+                          onChanged: (val) {
+                            controller.isLightMode.value = val ?? false;
+                            controller.isDarkMode.value =
+                                !controller.isDarkMode.value;
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                  const Gap(5),
+                  const Divider(),
+                  const Gap(3),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        _showConfirmDialog(
+                          context,
+                          title: "Log Out",
+                          message: "Are you sure you want to log out?",
+                          confirmText: "Log Out",
+                          onConfirm: () {
+                            myPref.logout();
+                            Get.offAllNamed(Routes.LOGIN);
+                          },
+                        );
+                      },
+                      child: Text(
+                        "Log Account",
+                        style: MyTexts.medium16.copyWith(color: MyColors.red),
+                      ),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        _showConfirmDialog(
+                          context,
+                          title: "Delete Account",
+                          message:
+                              "This action cannot be undone. Are you sure you want to delete your account permanently?",
+                          confirmText: "Delete",
+                          onConfirm: () {
+                            // TODO: Implement delete account logic
+                            Get.back(); // Close dialog
+                          },
+                        );
+                      },
+                      child: Text(
+                        "Delete my Account",
+                        style: MyTexts.medium16.copyWith(color: MyColors.red),
+                      ),
+                    ),
+                  ),
                 ],
-              ),
-            ],
-
-            SizedBox(width: 4.w),
-            Text(
-              title,
-              style: MyTexts.medium16.copyWith(
-                color: isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                fontWeight: highlight == true ? FontWeight.w600 : FontWeight.w800,
               ),
             ),
           ],
@@ -264,19 +188,17 @@ void _showConfirmDialog(
           ),
         ],
       ),
-
-      // ===== Message =====
       content: Text(
         message,
         style: MyTexts.regular16.copyWith(color: Colors.black87, height: 1.4),
       ),
-
-      // ===== Actions =====
       actions: [
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             side: BorderSide(color: Colors.grey.shade400),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: () => Get.back(),
@@ -288,7 +210,9 @@ void _showConfirmDialog(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             elevation: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: onConfirm,

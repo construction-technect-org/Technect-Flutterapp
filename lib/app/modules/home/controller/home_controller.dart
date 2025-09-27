@@ -15,7 +15,7 @@ class HomeController extends GetxController {
     {"icon": Asset.report, "title": "Report"},
     {"icon": Asset.report, "title": "Analysis"},
     {"icon": Asset.setting, "title": "Setting"},
-    {"icon": Asset.insights, "title": "Insights"},
+    {"icon": Asset.insights, "title": "Team"},
     {"icon": Asset.cart, "title": "Inventory"},
     {"icon": Asset.warning, "title": "News"},
     {"icon": Asset.thumbup, "title": "Refer& Earn"},
