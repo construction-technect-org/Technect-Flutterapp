@@ -6,4 +6,5 @@ class ConnectorMainTabController extends GetxController {
   void changeTab(int index) {
     currentIndex.value = index;
   }
+
 }

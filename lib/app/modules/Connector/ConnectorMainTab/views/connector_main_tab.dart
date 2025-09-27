@@ -30,7 +30,7 @@ class ConnectorMainTab extends GetView<ConnectorMainTabController> {
       bottomNavigationBar: ColoredBox(
         color: MyColors.primary,
         child: SafeArea(
-          top: false, // we only care about bottom safe area
+          top: false, 
           child: Padding(
             padding: const EdgeInsets.only(top: 6.0),
             child: Theme(

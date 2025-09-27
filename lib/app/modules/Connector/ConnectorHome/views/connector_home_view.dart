@@ -2,11 +2,11 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/components/connector_home_components.dart';
-import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorHome/controllers/connector_home_controller.dart';
 import 'package:gap/gap.dart';
 
 class ConnectorHomeView extends StatelessWidget {
-  final HomeController controller = Get.put(HomeController());
+  final ConnectorHomeController controller = Get.put(ConnectorHomeController());
   final CommonController commonController = Get.find();
 
   @override

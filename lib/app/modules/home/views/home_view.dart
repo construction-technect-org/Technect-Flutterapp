@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                Get.toNamed(Routes.CONNECTOR_MAIN_TAB);
+                Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
               },
               child: Row(
                 children: [
