@@ -148,7 +148,10 @@ class MenuView extends StatelessWidget {
                     icon: Asset.gift,
 
                     title: "Refer & Get Coupons",
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.REFER_EARN);
+
+                    },
                   ),
                   const Gap(20),
 
