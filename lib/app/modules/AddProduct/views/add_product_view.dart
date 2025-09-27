@@ -220,13 +220,13 @@ class AddProductView extends GetView<AddProductController> {
                         enabled: !controller.isEdit,
                       ),
                       SizedBox(height: 2.h),
-                      if(controller.isEdit)
+                      // if(controller.isEdit)
                       Column(
                         children: [
                           Row(
                             children: [
                               Text(
-                                'Out of Stock',
+                                'In Stock',
                                 style: MyTexts.light16.copyWith(
                                   color: MyColors.lightBlue,
                                 ),
@@ -247,8 +247,8 @@ class AddProductView extends GetView<AddProductController> {
                               children: [
                                 SizedBox(height: 1.h),
                                 CommonTextField(
-                                  hintText: "ADD  NOTE",
-                                  controller: controller.noteStockController,
+                                  hintText: "Add  Stock",
+                                  controller: controller.stockController,
                                 ),
                               ],
                             ) : const SizedBox();

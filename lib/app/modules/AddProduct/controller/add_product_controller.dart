@@ -17,6 +17,7 @@ class AddProductController extends GetxController {
   final pageController = PageController();
   Product product = Product();
   ProductManagementController controller = Get.find();
+
   // ---------------- Form Controllers ----------------
 
   RxBool isOutStock = false.obs;
@@ -25,7 +26,6 @@ class AddProductController extends GetxController {
   final noteController = TextEditingController();
   final uocController = TextEditingController();
   final amountController = TextEditingController();
-
 
   final productNameController = TextEditingController();
   final stockController = TextEditingController();
@@ -55,8 +55,7 @@ class AddProductController extends GetxController {
   RxList<String> productNames = <String>[].obs;
 
   RxList<String> uomList = <String>["Kg", "Tones"].obs;
-  RxList<String> gstList = <String>["5%","12%", "18%","28%"].obs;
-
+  RxList<String> gstList = <String>["5%", "12%", "18%", "28%"].obs;
 
   // ---------------- Selections ----------------
   Rxn<String> selectedMainCategory = Rxn<String>();
@@ -110,12 +109,12 @@ class AddProductController extends GetxController {
     noteController.text = product.productNote ?? '';
     noteStockController.text = product.outOfStockNote ?? '';
     sizeController.text = product.grainSize ?? '';
-    isOutStock.value = product.outOfStock ?? false;
+    isOutStock.value = !(product.outOfStock ?? false);
     stockController.text = product.stockQuantity?.toString() ?? '';
     priceController.text = product.price ?? '';
-    if((product.gstPercentage??"").isNotEmpty) {
+    if ((product.gstPercentage ?? "").isNotEmpty) {
       selectedGST.value = "${product.gstPercentage?.split(".").first}%";
-      print( selectedGST.value );
+      print(selectedGST.value);
     }
     gstPriceController.text = product.gstAmount ?? '';
     termsController.text = product.termsAndConditions ?? '';
@@ -141,7 +140,8 @@ class AddProductController extends GetxController {
 
     // Set existing product image for display
     if (product.productImage != null && product.productImage!.isNotEmpty) {
-      pickedFilePath.value = "${APIConstants.bucketUrl}${product.productImage!}";
+      pickedFilePath.value =
+          "${APIConstants.bucketUrl}${product.productImage!}";
       pickedFileName.value = "Current product image";
     }
 
@@ -176,7 +176,9 @@ class AddProductController extends GetxController {
 
     selectedMainCategory.value = categoryName;
 
-    final selected = mainCategories.firstWhereOrNull((c) => c.name == categoryName);
+    final selected = mainCategories.firstWhereOrNull(
+      (c) => c.name == categoryName,
+    );
     selectedMainCategoryId.value = '${selected?.id ?? 0}';
     if (selected != null) {
       fetchSubCategories(selected.id ?? 0);
@@ -196,7 +198,9 @@ class AddProductController extends GetxController {
 
     selectedSubCategory.value = subCategoryName;
 
-    final selectedSub = subCategories.firstWhereOrNull((s) => s.name == subCategoryName);
+    final selectedSub = subCategories.firstWhereOrNull(
+      (s) => s.name == subCategoryName,
+    );
     selectedSubCategoryId.value = '${selectedSub?.id ?? 0}';
 
     if (selectedSub != null) {
@@ -243,12 +247,16 @@ class AddProductController extends GetxController {
       final result = await _service.getFilter(subCategoryId);
 
       if (result.success == true) {
-        filters.value = (result.data as List<FilterData>).map((e) => e).toList();
+        filters.value = (result.data as List<FilterData>)
+            .map((e) => e)
+            .toList();
         for (final FilterData filter in filters) {
           dynamicControllers[filter.filterName ?? ''] = TextEditingController();
         }
 
-        if (isEdit && _storedFilterValues != null && _storedFilterValues!.isNotEmpty) {
+        if (isEdit &&
+            _storedFilterValues != null &&
+            _storedFilterValues!.isNotEmpty) {
           _populateFilterControllers();
         }
       } else {
@@ -267,7 +275,9 @@ class AddProductController extends GetxController {
     if (_storedFilterValues == null || _storedFilterValues!.isEmpty) return;
 
     try {
-      final Map<String, dynamic> filterValues = jsonDecode(_storedFilterValues!);
+      final Map<String, dynamic> filterValues = jsonDecode(
+        _storedFilterValues!,
+      );
 
       // Populate each dynamic controller with its corresponding value
       filterValues.forEach((key, value) {
@@ -282,7 +292,9 @@ class AddProductController extends GetxController {
 
   void onProductSelected(String? productName) {
     selectedProduct.value = productName;
-    final selectedSub = productsList.firstWhereOrNull((s) => s.name == productName);
+    final selectedSub = productsList.firstWhereOrNull(
+      (s) => s.name == productName,
+    );
     selectedProductId.value = '${selectedSub?.id ?? 0}';
   }
 
@@ -352,11 +364,18 @@ class AddProductController extends GetxController {
 
   void gstCalculate() {
     final double amount =
-        double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
-            double.parse(selectedGST.value.toString().replaceAll("%", "").isEmpty ? '0.0' : (selectedGST.value.toString().replaceAll("%", ""))) /
+        double.parse(
+          priceController.text.isEmpty ? '0.0' : priceController.text,
+        ) *
+        double.parse(
+          selectedGST.value.toString().replaceAll("%", "").isEmpty
+              ? '0.0'
+              : (selectedGST.value.toString().replaceAll("%", "")),
+        ) /
         100;
     gstPriceController.text = amount.toStringAsFixed(2);
-    amountController.text = (amount + double.parse(priceController.text)).toStringAsFixed(2);
+    amountController.text = (amount + double.parse(priceController.text))
+        .toStringAsFixed(2);
   }
 
   Future<void> pickImage() async {
@@ -386,7 +405,6 @@ class AddProductController extends GetxController {
     //   SnackBars.errorSnackBar(content: 'Product code is required');
     //   isRequired = false;
     // }
-
     else if (selectedMainCategoryId.value == null) {
       SnackBars.errorSnackBar(content: 'Main category is required');
       isRequired = false;
@@ -399,22 +417,19 @@ class AddProductController extends GetxController {
     } else if (selectedUom.value == null) {
       SnackBars.errorSnackBar(content: 'UOM is required');
       isRequired = false;
-    }
-    else if (uocController.text.isEmpty) {
+    } else if (uocController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'UOC is required');
       isRequired = false;
-    }else if (priceController.text.isEmpty) {
+    } else if (priceController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Rate is required');
       isRequired = false;
-    } else if (selectedGST.value==null) {
+    } else if (selectedGST.value == null) {
       SnackBars.errorSnackBar(content: 'GST percentage is required');
       isRequired = false;
-    }
-    else if (noteController.text.isEmpty) {
+    } else if (noteController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Note is required');
       isRequired = false;
-    }
-    else if (termsController.text.isEmpty) {
+    } else if (termsController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Terms is required');
       isRequired = false;
     } else {
@@ -447,7 +462,7 @@ class AddProductController extends GetxController {
     }
   }
 
-  void navigate(){
+  void navigate() {
     hideKeyboard();
     final Map<String, String> payload = {};
     dynamicControllers.forEach((key, controller) {
@@ -457,48 +472,48 @@ class AddProductController extends GetxController {
     });
     final Product p = Product(
       // categoryProductName: selectedSubCategory.value,
-       productImage: pickedFilePath.value,
-      mainCategoryName:  selectedMainCategory.value,
+      productImage: pickedFilePath.value,
+      mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
-      productName:  productNameController.text,
+      productName: productNameController.text,
       shape: shapeController.text,
       brand: brandNameController.text,
-      mainCategoryId: int.parse(selectedMainCategoryId.value??"0"),
-      subCategoryId:int.parse( selectedSubCategoryId.value??"0"),
-      categoryProductId: int.parse( selectedProductId.value??"0"),
+      mainCategoryId: int.parse(selectedMainCategoryId.value ?? "0"),
+      subCategoryId: int.parse(selectedSubCategoryId.value ?? "0"),
+      categoryProductId: int.parse(selectedProductId.value ?? "0"),
       price: priceController.text,
       productCode: productCodeController.text,
       totalAmount: amountController.text,
-      grainSize:  sizeController.text,
+      grainSize: sizeController.text,
       size: packageSizeController.text,
       productNote: noteController.text,
-      gstPercentage: (selectedGST.value??"").replaceAll("%", ""),
+      gstPercentage: (selectedGST.value ?? "").replaceAll("%", ""),
       termsAndConditions: termsController.text,
       outOfStock: false,
+      stockQuantity: int.parse(stockController.text??"0"),
       uom: selectedUom.value,
       uoc: uocController.text,
       packageType: packageTypeController.text,
       packageSize: packageSizeController.text,
-      texture:  textureController.text,
+      texture: textureController.text,
       colour: colorController.text,
       isActive: isEnabled.value,
       isFeatured: false,
       sortOrder: 1,
-      filterValues:  json.encode(payload),
-
+      filterValues: json.encode(payload),
     );
     Get.toNamed(
       Routes.PRODUCT_DETAILS,
-      arguments: {"product": p,
-        "isFromAdd":true,
-      },
+      arguments: {"product": p, "isFromAdd": true},
     );
   }
 
   Future<void> createProduct() async {
     isLoading.value = true;
     Map<String, dynamic> fields = {};
-    final Map<String, String> selectedFiles = {"product_image": pickedFilePath.value};
+    final Map<String, String> selectedFiles = {
+      "product_image": pickedFilePath.value,
+    };
 
     final Map<String, String> payload = {};
     dynamicControllers.forEach((key, controller) {
@@ -521,10 +536,12 @@ class AddProductController extends GetxController {
       "total_amount": amountController.text,
       "grain_size": sizeController.text,
       "product_note": noteController.text,
-      "gst_percentage": (selectedGST.value??"").replaceAll("%", ""),
+      "gst_percentage": (selectedGST.value ?? "").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,
-      // "stock_quantity": "1",
-      "outofstock": false,
+      "stock_qty": isOutStock.value == true
+          ? int.parse(stockController.text ?? "0")
+          : 0,
+      "outofstock": !isOutStock.value,
       "brand": brandNameController.text,
       "uom": selectedUom.value,
       "uoc": uocController.text,
@@ -589,9 +606,9 @@ class AddProductController extends GetxController {
     fields = {
       "product_name": productNameController.text,
       "price": priceController.text,
-      "gst_percentage": (selectedGST.value??"").replaceAll("%", ""),
+      "gst_percentage": (selectedGST.value ?? "").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,
-      "stock_quantity": stockController.text,
+      "stock_qty": isOutStock.value ?  stockController.text : "0",
       "brand": brandNameController.text,
       "uom": selectedUom.value,
       "package_type": packageTypeController.text,
@@ -609,12 +626,9 @@ class AddProductController extends GetxController {
       "total_amount": amountController.text,
       "grain_size": sizeController.text,
       "product_note": noteController.text,
-      // "stock_quantity": "1",
       "outofstock_note": noteStockController.text,
-      "outofstock": isOutStock.value,
+      "outofstock": !isOutStock.value,
       "uoc": uocController.text,
-
-
     };
 
     try {
@@ -641,8 +655,6 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'Error updating product: $e');
     }
   }
-
-
 }
 
 /// product_code, uoc, total_amount, product_note,oos_note, grain_size

@@ -571,6 +571,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
   Widget _buildSpecificationsTable() {
     final product = controller.product;
     final specifications = [
+      {'label': 'Stock Quantity', 'value': product.stockQuantity.toString() ?? 'N/A'},
       {'label': 'Unit of Measure', 'value': product.uom ?? 'N/A'},
       {'label': 'Package Type', 'value': product.packageType ?? 'N/A'},
       {'label': 'Package Size', 'value': product.packageSize ?? 'N/A'},
