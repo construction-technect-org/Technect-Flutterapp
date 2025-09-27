@@ -288,10 +288,14 @@ class HomeView extends StatelessWidget {
                                 return GestureDetector(
                                   onTap: () {
                                     if (index == 0) {
-                                      Get.toNamed(Routes.APPROVAL_INBOX);
+                                      Get.toNamed(
+                                        Routes.APPROVAL_INBOX,
+                                        arguments: {"isInbox": true},
+                                      );
                                     } else if (index == 1) {
                                       Get.toNamed(Routes.REPORT);
                                     } else if (index == 2) {
+                                      Get.toNamed(Routes.REPORT);
                                     } else if (index == 3) {
                                       Get.to(() => SettingView());
                                     } else if (index == 4) {
@@ -302,6 +306,10 @@ class HomeView extends StatelessWidget {
                                     } else if (index == 5) {
                                       Get.toNamed(Routes.INVENTORY);
                                     } else if (index == 6) {
+                                      Get.toNamed(
+                                        Routes.APPROVAL_INBOX,
+                                        arguments: {"isInbox": false},
+                                      );
                                     } else if (index == 7) {
                                       Get.toNamed(Routes.REFER_EARN);
                                     }

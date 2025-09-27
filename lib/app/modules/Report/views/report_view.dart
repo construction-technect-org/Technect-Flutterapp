@@ -116,6 +116,8 @@ class ReportView extends GetView<ReportController> {
               ),
               const Gap(20),
               HeaderText(text: "Customer Support Ticket"),
+              const Gap(20),
+              const ReportGraph(),
             ],
           ),
         ),
@@ -211,108 +213,134 @@ class _ReportGraphState extends State<ReportGraph> {
   }
 
   void _updateMonthLabels() {
-    final DateTime now = DateTime.now(); // today = Sep
+    final DateTime now = DateTime.now();
     int length;
 
     switch (selectedRange) {
       case "Last 3 Months":
         length = 3;
-        break;
       case "Last 6 Months":
         length = 6;
-        break;
       case "1 Year":
         length = 12;
-        break;
       case "All Data":
-        length = 12; // extend if backend supports > 1 year
-        break;
+        length = 12;
       default:
         length = 6;
     }
 
     monthLabels = List.generate(length, (i) {
-      final DateTime month =
-      DateTime(now.year, now.month - (length - 1 - i)); // dynamic
-      return DateFormat.MMM().format(month); // "Jul", "Aug", "Sep"
+      final DateTime month = DateTime(
+        now.year,
+        now.month - (length - 1 - i),
+      );
+      return DateFormat.MMM().format(month);
     });
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Dropdown
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Graph Analysis",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            DropdownButton<String>(
-              value: selectedRange,
-              items: const [
-                DropdownMenuItem(value: "Last 3 Months", child: Text("Last 3 Months")),
-                DropdownMenuItem(value: "Last 6 Months", child: Text("Last 6 Months")),
-                DropdownMenuItem(value: "1 Year", child: Text("1 Year")),
-                DropdownMenuItem(value: "All Data", child: Text("All Data")),
-              ],
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    selectedRange = value;
-                    _updateMonthLabels();
-                  });
-                }
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: MyColors.grayD4),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Graph Analysis",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              DropdownButton<String>(
+                borderRadius: BorderRadius.circular(10),
+                value: selectedRange,
+                dropdownColor: Colors.white,
+                items: const [
+                  DropdownMenuItem(
+                    value: "Last 3 Months",
+                    child: Text("Last 3 Months"),
+                  ),
+                  DropdownMenuItem(
+                    value: "Last 6 Months",
+                    child: Text("Last 6 Months"),
+                  ),
+                  DropdownMenuItem(value: "1 Year", child: Text("1 Year")),
+                  DropdownMenuItem(value: "All Data", child: Text("All Data")),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedRange = value;
+                      _updateMonthLabels();
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 220,
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                barGroups: List.generate(monthLabels.length, (index) {
+                  int realIndex =
+                      DateTime.now().month - monthLabels.length + index;
+                  if (realIndex < 0) realIndex += 12;
 
-        // Bar Chart
-        SizedBox(
-          height: 220,
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceAround,
-              barGroups: List.generate(monthLabels.length, (index) {
-                int realIndex = DateTime.now().month - monthLabels.length + index;
-                if (realIndex < 0) realIndex += 12; // safe wrap
-
-                return BarChartGroupData(
-                  x: index,
-                  barRods: [
-                    BarChartRodData(toY: data["Connectors"]![realIndex].toDouble(), color: Colors.green),
-                    BarChartRodData(toY: data["Products"]![realIndex].toDouble(), color: Colors.blue),
-                    BarChartRodData(toY: data["Users"]![realIndex].toDouble(), color: Colors.orange),
-                  ],
-                );
-              }),
-              titlesData: FlTitlesData(
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      if (value.toInt() < monthLabels.length) {
-                        return Text(monthLabels[value.toInt()]);
-                      }
-                      return const Text("");
-                    },
+                  return BarChartGroupData(
+                    x: index,
+                    barRods: [
+                      BarChartRodData(
+                        toY: data["Connectors"]![realIndex],
+                        color: MyColors.green,
+                      ),
+                      BarChartRodData(
+                        toY: data["Products"]![realIndex],
+                        color: MyColors.primary,
+                      ),
+                      BarChartRodData(
+                        toY: data["Users"]![realIndex],
+                        color: MyColors.warning,
+                      ),
+                    ],
+                  );
+                }),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        if (value.toInt() < monthLabels.length) {
+                          return Text(monthLabels[value.toInt()]);
+                        }
+                        return const Text("");
+                      },
+                    ),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(interval: 20),
+                  ),
+                  leftTitles: const AxisTitles(
+                    sideTitles: SideTitles(interval: 20),
+                  ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(interval: 20),
                   ),
                 ),
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: true, interval: 20),
-                ),
+                gridData: const FlGridData(),
+                borderData: FlBorderData(show: false),
               ),
-              gridData: FlGridData(show: true),
-              borderData: FlBorderData(show: false),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

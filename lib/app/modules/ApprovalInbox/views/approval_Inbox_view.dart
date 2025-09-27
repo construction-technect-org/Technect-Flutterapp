@@ -127,91 +127,107 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: CommonAppBar(
-          title: const Text('Approval Inbox'),
+          title: Obx(() {
+            return Text(controller.isInbox.value ? 'Approval Inbox' : "NEWS");
+          }),
           isCenter: false,
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Gap(16),
-              HeaderText(text: "Statistics"),
-              const Gap(10),
-              Row(
-                children: [
-                  Expanded(
-                    child: StaticsCard(
-                      title: "Total Products",
-                      value: "123.4K",
-                      icon: Asset.noOfConectors,
-                      color: MyColors.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: StaticsCard(
-                      title: "Approved Products",
-                      value: "123.4K",
-                      icon: Asset.noOfConectors,
-                      color: MyColors.green,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
+        body: Obx(() {
+          return controller.isInbox.value
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Gap(16),
+                      HeaderText(text: "Statistics"),
+                      const Gap(10),
+                      Obx(() {
+                        return controller.isInbox.value
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Total Products",
+                                      value: "123.4K",
+                                      icon: Asset.noOfConectors,
+                                      color: MyColors.primary,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Approved Products",
+                                      value: "123.4K",
+                                      icon: Asset.noOfConectors,
+                                      color: MyColors.green,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
 
-                  Expanded(
-                    child: StaticsCard(
-                      title: "Rejected Products",
-                      value: "250",
-                      icon: Asset.noOfConectors,
-                      color: MyColors.red,
-                    ),
-                  ),
-                ],
-              ),
-              const Gap(10),
-              HeaderText(text: "Inbox"),
-              Expanded(
-                child: Obx(
-                  () => ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    itemCount: controller.approvalInboxList.length,
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Rejected Products",
+                                      value: "250",
+                                      icon: Asset.noOfConectors,
+                                      color: MyColors.red,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox();
+                      }),
+                      const Gap(10),
+                      HeaderText(text: "Inbox"),
+                      Expanded(
+                        child: Obx(
+                          () => ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            itemCount: controller.approvalInboxList.length,
 
-                    itemBuilder: (context, index) {
-                      final card = controller.approvalInboxList[index];
-                      IconData statusIcon;
-                      Color statusColor;
+                            itemBuilder: (context, index) {
+                              final card = controller.approvalInboxList[index];
+                              IconData statusIcon;
+                              Color statusColor;
 
-                      switch (card.status?.toLowerCase()) {
-                        case "pending":
-                          statusIcon = Icons.error_outline;
-                          statusColor = MyColors.warning;
-                        case "approved":
-                          statusIcon = Icons.check_circle_outline_outlined;
-                          statusColor = MyColors.green;
-                        case "rejected":
-                          statusIcon = Icons.cancel_outlined;
-                          statusColor = MyColors.red;
-                        default:
-                          statusIcon = Icons.error_outline;
-                          statusColor = MyColors.warning;
-                      }
-                      return buildStatusCard(
-                        title: card.title ?? "",
-                        icon: statusIcon,
-                        category: card.entityType ?? "",
-                        dateTime: card.createdAt ?? "",
-                        iconColor: statusColor,
-                        message: card.message ?? "",
-                        product: card.metadata?.productName ?? "",
-                      );
-                    },
+                              switch (card.status?.toLowerCase()) {
+                                case "pending":
+                                  statusIcon = Icons.error_outline;
+                                  statusColor = MyColors.warning;
+                                case "approved":
+                                  statusIcon =
+                                      Icons.check_circle_outline_outlined;
+                                  statusColor = MyColors.green;
+                                case "rejected":
+                                  statusIcon = Icons.cancel_outlined;
+                                  statusColor = MyColors.red;
+                                default:
+                                  statusIcon = Icons.error_outline;
+                                  statusColor = MyColors.warning;
+                              }
+                              return buildStatusCard(
+                                title: card.title ?? "",
+                                icon: statusIcon,
+                                category: card.entityType ?? "",
+                                dateTime: card.createdAt ?? "",
+                                iconColor: statusColor,
+                                message: card.message ?? "",
+                                product: card.metadata?.productName ?? "",
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-            ],
-          ),
-        ),
+                )
+              : Center(
+                  child: Text(
+                    "No News found !",
+                    style: MyTexts.medium14.copyWith(color: Colors.black),
+                  ),
+                );
+        }),
       ),
     );
   }
