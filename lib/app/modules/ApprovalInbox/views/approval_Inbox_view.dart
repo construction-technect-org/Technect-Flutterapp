@@ -16,7 +16,6 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
     required String category,
     required DateTime dateTime,
   }) {
-    print(dateTime);
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -121,144 +120,123 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
       isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar: CommonAppBar(
-          title: Obx(() {
-            return Text(controller.isInbox.value ? 'Approval Inbox' : "NEWS");
-          }),
-          isCenter: false,
-        ),
-        body: Obx(() {
-          return controller.isInbox.value
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Gap(16),
-                      HeaderText(text: "Statistics"),
-                      const Gap(10),
-                      Obx(() {
-                        return controller.isInbox.value
-                            ? Row(
-                                children: [
-                                  Expanded(
-                                    child: StaticsCard(
-                                      title: "Total Products",
-                                      value:
-                                          (controller
-                                                      .approvalInboxList
-                                                      .value
-                                                      .data
-                                                      ?.productStatistics
-                                                      ?.totalProducts ??
-                                                  0)
-                                              .toString(),
-                                      icon: Asset.noOfConectors,
-                                      color: MyColors.primary,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: StaticsCard(
-                                      title: "Approved Products",
-                                      value:
-                                          (controller
-                                                      .approvalInboxList
-                                                      .value
-                                                      .data
-                                                      ?.productStatistics
-                                                      ?.approvedProducts ??
-                                                  0)
-                                              .toString(),
-                                      icon: Asset.noOfConectors,
-                                      color: MyColors.green,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-
-                                  Expanded(
-                                    child: StaticsCard(
-                                      title: "Rejected Products",
-                                      value:
-                                          (controller
-                                                      .approvalInboxList
-                                                      .value
-                                                      .data
-                                                      ?.productStatistics
-                                                      ?.rejectedProducts ??
-                                                  0)
-                                              .toString(),
-                                      icon: Asset.noOfConectors,
-                                      color: MyColors.red,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : const SizedBox();
-                      }),
-                      const Gap(10),
-                      HeaderText(text: "Inbox"),
-                      Expanded(
-                        child: Obx(
-                          () => ListView.builder(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            itemCount:
-                                controller
-                                    .approvalInboxList
-                                    .value
-                                    .data
-                                    ?.approvalInbox
-                                    ?.length ??
-                                0,
-
-                            itemBuilder: (context, index) {
-                              final card =
-                                  controller
-                                      .approvalInboxList
-                                      .value
-                                      .data
-                                      ?.approvalInbox?[index] ??
-                                  ApprovalInbox();
-                              IconData statusIcon;
-                              Color statusColor;
-
-                              switch (card.status?.toLowerCase()) {
-                                case "pending":
-                                  statusIcon = Icons.error_outline;
-                                  statusColor = MyColors.warning;
-                                case "approved":
-                                  statusIcon = Icons.check_circle_outline_outlined;
-                                  statusColor = MyColors.green;
-                                case "rejected":
-                                  statusIcon = Icons.cancel_outlined;
-                                  statusColor = MyColors.red;
-                                default:
-                                  statusIcon = Icons.error_outline;
-                                  statusColor = MyColors.warning;
-                              }
-                              return buildStatusCard(
-                                title: card.title ?? "",
-                                icon: statusIcon,
-                                category: card.entityType ?? "",
-                                dateTime: card.createdAt ?? DateTime.now(),
-                                iconColor: statusColor,
-                                message: card.message ?? "",
-                                product: card.metadata?.productName ?? "",
-                              );
-                            },
-                          ),
-                        ),
+        appBar: CommonAppBar(title: const Text('Approval Inbox'), isCenter: false),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(16),
+              HeaderText(text: "Statistics"),
+              const Gap(10),
+              Obx(() {
+                return Row(
+                  children: [
+                    Expanded(
+                      child: StaticsCard(
+                        title: "Total Products",
+                        value:
+                            (controller
+                                        .approvalInboxList
+                                        .value
+                                        .data
+                                        ?.productStatistics
+                                        ?.totalProducts ??
+                                    0)
+                                .toString(),
+                        icon: Asset.noOfConectors,
+                        color: MyColors.primary,
                       ),
-                    ],
-                  ),
-                )
-              : Center(
-                  child: Text(
-                    "No News found !",
-                    style: MyTexts.medium14.copyWith(color: Colors.black),
-                  ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: StaticsCard(
+                        title: "Approved Products",
+                        value:
+                            (controller
+                                        .approvalInboxList
+                                        .value
+                                        .data
+                                        ?.productStatistics
+                                        ?.approvedProducts ??
+                                    0)
+                                .toString(),
+                        icon: Asset.noOfConectors,
+                        color: MyColors.green,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+
+                    Expanded(
+                      child: StaticsCard(
+                        title: "Rejected Products",
+                        value:
+                            (controller
+                                        .approvalInboxList
+                                        .value
+                                        .data
+                                        ?.productStatistics
+                                        ?.rejectedProducts ??
+                                    0)
+                                .toString(),
+                        icon: Asset.noOfConectors,
+                        color: MyColors.red,
+                      ),
+                    ),
+                  ],
                 );
-        }),
+              }),
+              const Gap(10),
+              HeaderText(text: "Inbox"),
+              Expanded(
+                child: Obx(
+                  () => ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    itemCount:
+                        controller.approvalInboxList.value.data?.approvalInbox?.length ??
+                        0,
+
+                    itemBuilder: (context, index) {
+                      final card =
+                          controller
+                              .approvalInboxList
+                              .value
+                              .data
+                              ?.approvalInbox?[index] ??
+                          ApprovalInbox();
+                      IconData statusIcon;
+                      Color statusColor;
+
+                      switch (card.status?.toLowerCase()) {
+                        case "pending":
+                          statusIcon = Icons.error_outline;
+                          statusColor = MyColors.warning;
+                        case "approved":
+                          statusIcon = Icons.check_circle_outline_outlined;
+                          statusColor = MyColors.green;
+                        case "rejected":
+                          statusIcon = Icons.cancel_outlined;
+                          statusColor = MyColors.red;
+                        default:
+                          statusIcon = Icons.error_outline;
+                          statusColor = MyColors.warning;
+                      }
+                      return buildStatusCard(
+                        title: card.title ?? "",
+                        icon: statusIcon,
+                        category: card.entityType ?? "",
+                        dateTime: card.createdAt ?? DateTime.now(),
+                        iconColor: statusColor,
+                        message: card.message ?? "",
+                        product: card.metadata?.productName ?? "",
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

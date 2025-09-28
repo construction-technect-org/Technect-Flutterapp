@@ -47,8 +47,7 @@ abstract class Routes {
   static const CONNECTOR_PRODUCT_DETAILS = _Paths.CONNECTOR_PRODUCT_DETAILS;
   static const CONNECTOR_SELECT_LOCATION = _Paths.CONNECTOR_SELECT_LOCATION;
   static const CONNECTOR_ADD_LOCATION = _Paths.CONNECTOR_ADD_LOCATION;
-  static const CONNECTOR_ADD_LOCATION_MANUALLY =
-      _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
+  static const CONNECTOR_ADD_LOCATION_MANUALLY = _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
   static const CONNECTOR_FILTER = _Paths.CONNECTOR_FILTER;
   static const CONNECTOR_CONNECTION_INBOX = _Paths.CONNECTOR_CONNECTION_INBOX;
   static const CONNECTOR_CUSTOMER_SUPPORT_TICKET =
@@ -58,6 +57,7 @@ abstract class Routes {
   static const CREATE_NEW_TICKET = _Paths.CREATE_NEW_TICKET;
   static const REFER_EARN = _Paths.REFER_EARN;
   static const REPORT = _Paths.REPORT;
+  static const NEWS = _Paths.NEWS;
 }
 
 abstract class _Paths {
@@ -101,7 +101,7 @@ abstract class _Paths {
   static const REFER_EARN = '/refer-earn';
   static const REPORT = '/report';
   static const INVENTORY = '/inventory';
-
+  static const NEWS = '/news';
   // Connector
   static const CONNECTOR_MAIN_TAB = '/connector-main-tab';
   static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
@@ -110,11 +110,9 @@ abstract class _Paths {
   static const CONNECTOR_PRODUCT_DETAILS = '/connector-product-details';
   static const CONNECTOR_SELECT_LOCATION = '/connector-select-location';
   static const CONNECTOR_ADD_LOCATION = '/connector-add-location';
-  static const CONNECTOR_ADD_LOCATION_MANUALLY =
-      '/connector-add-location-manually';
+  static const CONNECTOR_ADD_LOCATION_MANUALLY = '/connector-add-location-manually';
   static const CONNECTOR_FILTER = '/connector-filter';
   static const CONNECTOR_CONNECTION_INBOX = '/connector-connection-inbox';
-  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET =
-      '/connector-customer-support-ticket';
+  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET = '/connector-customer-support-ticket';
   static const CONNECTOR_REQUEST_DEMO = '/connector-request-demo';
 }

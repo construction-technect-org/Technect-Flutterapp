@@ -56,6 +56,8 @@ import 'package:construction_technect/app/modules/Invetory/bindings/inventory_bi
 import 'package:construction_technect/app/modules/Invetory/views/inventory_view.dart';
 import 'package:construction_technect/app/modules/Marketplace/bindings/market_place_binding.dart';
 import 'package:construction_technect/app/modules/Marketplace/views/market_place_view.dart';
+import 'package:construction_technect/app/modules/News/bindings/news_binding.dart';
+import 'package:construction_technect/app/modules/News/views/news_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
 import 'package:construction_technect/app/modules/ReferAndCoupon/bindings/refer_bindings.dart';
@@ -353,5 +355,6 @@ class AppPages {
       page: () => InventoryView(),
       binding: InventoryBinding(),
     ),
+    GetPage(name: Routes.NEWS, page: () => NewsView(), binding: NewsBinding()),
   ];
 }

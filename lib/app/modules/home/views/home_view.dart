@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
 import 'package:construction_technect/app/modules/settings/views/setting_view.dart';
@@ -112,64 +113,75 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
                     const Gap(10),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: MyColors.grayD4),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        // 👈 allows badge to overflow
-                        children: [
-                          SvgPicture.asset(Asset.notifications, width: 18, height: 18),
-                          Positioned(
-                            right: 0,
-                            top: 3,
-                            child: Container(
-                              width: 6.19,
-                              height: 6.19,
-                              decoration: const BoxDecoration(
-                                color: MyColors.red,
-                                shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () {
+                        ComingSoonDialog.showComingSoonDialog(
+                          featureName: 'Notification',
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: MyColors.grayD4),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            SvgPicture.asset(Asset.notifications, width: 18, height: 18),
+                            Positioned(
+                              right: 0,
+                              top: 3,
+                              child: Container(
+                                width: 6.19,
+                                height: 6.19,
+                                decoration: const BoxDecoration(
+                                  color: MyColors.red,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(width: 0.8.h),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: MyColors.grayD4),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          SvgPicture.asset(
-                            Asset.warning,
-                            width: 18,
-                            height: 18,
-                            colorFilter: const ColorFilter.mode(
-                              Colors.black,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 3,
-                            child: Container(
-                              width: 6.19,
-                              height: 6.19,
-                              decoration: const BoxDecoration(
-                                color: MyColors.red,
-                                shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () {
+                        ComingSoonDialog.showComingSoonDialog(featureName: 'Alert');
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: MyColors.grayD4),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            SvgPicture.asset(
+                              Asset.warning,
+                              width: 18,
+                              height: 18,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.black,
+                                BlendMode.srcIn,
                               ),
                             ),
-                          ),
-                        ],
+                            Positioned(
+                              right: 0,
+                              top: 3,
+                              child: Container(
+                                width: 6.19,
+                                height: 6.19,
+                                decoration: const BoxDecoration(
+                                  color: MyColors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -321,9 +333,15 @@ class HomeView extends StatelessWidget {
                                           arguments: {"isInbox": true},
                                         );
                                       } else if (index == 1) {
-                                        Get.toNamed(Routes.REPORT);
+                                        ComingSoonDialog.showComingSoonDialog(
+                                          featureName: 'Report',
+                                        );
+                                        // Get.toNamed(Routes.REPORT);
                                       } else if (index == 2) {
-                                        Get.toNamed(Routes.REPORT);
+                                        //Get.toNamed(Routes.REPORT);
+                                        ComingSoonDialog.showComingSoonDialog(
+                                          featureName: 'Analysis',
+                                        );
                                       } else if (index == 3) {
                                         Get.to(() => SettingView());
                                       } else if (index == 4) {
@@ -334,12 +352,12 @@ class HomeView extends StatelessWidget {
                                       } else if (index == 5) {
                                         Get.toNamed(Routes.INVENTORY);
                                       } else if (index == 6) {
-                                        Get.toNamed(
-                                          Routes.APPROVAL_INBOX,
-                                          arguments: {"isInbox": false},
-                                        );
+                                        Get.toNamed(Routes.NEWS);
                                       } else if (index == 7) {
-                                        Get.toNamed(Routes.REFER_EARN);
+                                        ComingSoonDialog.showComingSoonDialog(
+                                          featureName: 'Refer & Earn',
+                                        );
+                                        // Get.toNamed(Routes.REFER_EARN);
                                       }
                                     },
                                     child: Column(

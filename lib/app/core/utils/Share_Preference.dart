@@ -5,6 +5,7 @@ import 'package:construction_technect/app/modules/CustomerSupport/models/Support
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:construction_technect/app/modules/FAQ/model/faq_model.dart';
+import 'package:construction_technect/app/modules/News/models/news_model.dart';
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart'
     as ProductModel;
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
@@ -38,6 +39,7 @@ class AppSharedPreference {
   final cachedPriorities = ''.val('cachedPriorities');
   final productsData = <String, dynamic>{}.val('productsData');
   final supportTicketsData = <String, dynamic>{}.val('supportTicketsData');
+  final newsData = <String, dynamic>{}.val('newsData');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -483,6 +485,28 @@ class AppSharedPreference {
       }
     } catch (e) {
       log('Error getting support tickets model: $e');
+    }
+    return null;
+  }
+
+  // Store complete news model data
+  void setNewsModel(NewsModel newsModel) {
+    try {
+      newsData.val = newsModel.toJson();
+    } catch (e) {
+      log('Error saving news model: $e');
+    }
+  }
+
+  // Get complete news model data
+  NewsModel? getNewsModel() {
+    try {
+      final data = newsData.val;
+      if (data.isNotEmpty) {
+        return NewsModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting news model: $e');
     }
     return null;
   }

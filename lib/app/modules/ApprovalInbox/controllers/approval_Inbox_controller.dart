@@ -9,14 +9,10 @@ class ApprovalInboxController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    isInbox.value = Get.arguments["isInbox"] ?? false;
-    if (isInbox.value) {
-      fetchInbox();
-    }
+    fetchInbox();
   }
 
   RxBool isLoading = false.obs;
-  RxBool isInbox = false.obs;
   final ApprovalInboxService _service = ApprovalInboxService();
 
   Future<void> fetchInbox() async {
