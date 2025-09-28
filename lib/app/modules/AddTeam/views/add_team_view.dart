@@ -59,14 +59,9 @@ class AddTeamView extends GetView<AddTeamController> {
                   children: [
                     Text(
                       'User Role',
-                      style: MyTexts.light16.copyWith(
-                        color: MyColors.lightBlue,
-                      ),
+                      style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
                     ),
-                    Text(
-                      '*',
-                      style: MyTexts.regular16.copyWith(color: Colors.red),
-                    ),
+                    Text('*', style: MyTexts.regular16.copyWith(color: Colors.red)),
                   ],
                 ),
 
@@ -87,7 +82,6 @@ class AddTeamView extends GetView<AddTeamController> {
                   child: Obx(
                     () => RoundedButton(
                       buttonName: controller.isEdit.value ? "UPDATE" : 'ADD',
-                      isLoading: controller.isLoading.value,
                       onTap: () {
                         controller.filedValidation();
                       },

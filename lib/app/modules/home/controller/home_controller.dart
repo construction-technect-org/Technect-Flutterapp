@@ -324,17 +324,16 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
+
   Future<void> _loadTeamFromStorage() async {
-    final cachedTeam = myPref.getTeam();
-    final getTeamStats = myPref.getTeamStats(); // ✅ use team stats only
-    if (cachedTeam != null && cachedTeam.isNotEmpty) {
-      if (getTeamStats != null) {
-        statistics.value = Statistics(
-          totalTeamMember: getTeamStats.totalTeamMember,
-          activeTeamMember: getTeamStats.activeTeamMember,
-        );
+    final cachedTeamModel = myPref.getTeamModelData();
+    if (cachedTeamModel != null &&
+        cachedTeamModel.data != null &&
+        cachedTeamModel.data!.isNotEmpty) {
+      teamList.assignAll(cachedTeamModel.data!);
+      if (cachedTeamModel.statistics != null) {
+        statistics.value = cachedTeamModel.statistics!;
       }
-      teamList.assignAll(cachedTeam);
     } else {
       await fetchTeamList();
     }
@@ -349,20 +348,27 @@ class HomeController extends GetxController {
       if (result?.success == true) {
         teamList.clear();
         teamList.addAll(result?.data ?? []);
-        await myPref.saveTeam(teamList.toList());
 
         if (result?.statistics != null) {
           statistics.value = result!.statistics!;
-          await myPref.saveTeamStats(result.statistics!); // ✅ save team stats separately
         }
+        // Store the complete model
+        myPref.setTeamModelData(result!);
       }
     } catch (e) {
+      // Fallback to cached data if API fails
+      final cachedTeamModel = myPref.getTeamModelData();
+      if (cachedTeamModel != null && cachedTeamModel.data != null) {
+        teamList.assignAll(cachedTeamModel.data!);
+        if (cachedTeamModel.statistics != null) {
+          statistics.value = cachedTeamModel.statistics!;
+        }
+      }
       Get.printError(info: 'Error fetching team list: $e');
     } finally {
       isLoading.value = false;
     }
   }
-
 
   Future<void> refreshTeamList() async {
     await fetchTeamList();

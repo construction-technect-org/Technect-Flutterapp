@@ -29,7 +29,6 @@ class AppSharedPreference {
   final addressDataTimestamp = 0.val('addressDataTimestamp');
   final profileDataTimestamp = 0.val('profileDataTimestamp');
   final rolesData = <String, dynamic>{}.val('rolesData');
-  final rolesDataTimestamp = 0.val('rolesDataTimestamp');
   final teamData = <String, dynamic>{}.val('teamData');
   final teamStatsData = <String, dynamic>{}.val('teamStatsData');
   final faqData = <String, dynamic>{}.val('faqData');
@@ -136,7 +135,6 @@ class AppSharedPreference {
   // Roles data storage
   void setRolesData(Map<String, dynamic> roles) {
     rolesData.val = roles;
-    rolesDataTimestamp.val = DateTime.now().millisecondsSinceEpoch;
   }
 
   Map<String, dynamic>? getRolesData() {
@@ -147,13 +145,8 @@ class AppSharedPreference {
     return null;
   }
 
-  int getRolesDataTimestamp() {
-    return rolesDataTimestamp.val;
-  }
-
   void clearRolesData() {
     rolesData.val = {};
-    rolesDataTimestamp.val = 0;
   }
 
   // Helper methods for roles
@@ -398,6 +391,50 @@ class AppSharedPreference {
       }
     } catch (e) {
       log('Error getting priorities: $e');
+    }
+    return null;
+  }
+
+  // Store complete role model data
+  void setRoleModelData(GetAllRoleModel roleModel) {
+    try {
+      rolesData.val = roleModel.toJson();
+    } catch (e) {
+      log('Error saving role model: $e');
+    }
+  }
+
+  // Get complete role model data
+  GetAllRoleModel? getRoleModelData() {
+    try {
+      final data = rolesData.val;
+      if (data.isNotEmpty) {
+        return GetAllRoleModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting role model: $e');
+    }
+    return null;
+  }
+
+  // Store complete team model data
+  void setTeamModelData(TeamListModel teamModel) {
+    try {
+      teamData.val = teamModel.toJson();
+    } catch (e) {
+      log('Error saving team model: $e');
+    }
+  }
+
+  // Get complete team model data
+  TeamListModel? getTeamModelData() {
+    try {
+      final data = teamData.val;
+      if (data.isNotEmpty) {
+        return TeamListModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting team model: $e');
     }
     return null;
   }

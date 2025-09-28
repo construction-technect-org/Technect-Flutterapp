@@ -14,7 +14,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(5.w),
           child: Obx(
-                () => Column(
+            () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// Edit Button
@@ -45,11 +45,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 18,
-                        ),
+                        child: const Icon(Icons.edit, color: Colors.white, size: 18),
                       ),
                     ),
                   ],
@@ -85,11 +81,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                               shape: BoxShape.circle,
                             ),
                             child: Center(
-                              child: SvgPicture.asset(
-                                Asset.Admin,
-                                width: 18,
-                                height: 18,
-                              ),
+                              child: SvgPicture.asset(Asset.Admin, width: 18, height: 18),
                             ),
                           ),
                           SizedBox(width: 4.w),
@@ -117,9 +109,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                       SizedBox(height: 0.5.h),
                       Text(
                         controller.roleDescription.value,
-                        style: MyTexts.regular14.copyWith(
-                          color: MyColors.gray32,
-                        ),
+                        style: MyTexts.regular14.copyWith(color: MyColors.gray32),
                       ),
                       SizedBox(height: 2.h),
 
@@ -136,78 +126,81 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: MyColors.green),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.sp)),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 5.w,
-                            vertical: 1.h,
+                            borderRadius: BorderRadius.circular(30.sp),
                           ),
+                          padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
                           backgroundColor: MyColors.green.withOpacity(0.05),
                         ),
                         onPressed: () {},
                         child: Text(
                           controller.functionalities.toString(),
-                          style: MyTexts.regular16.copyWith(
-                            color: MyColors.green,
-                          ),
+                          style: MyTexts.regular16.copyWith(color: MyColors.green),
                         ),
                       ),
-                      SizedBox(height: 2.h),
 
-                      const Divider(thickness: 1.2, color: MyColors.grayD4),
-                      SizedBox(height: 2.h),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          /// Toggle
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Change Status",
-                                style: MyTexts.regular14.copyWith(
-                                  color: MyColors.fontBlack,
+                      Visibility(
+                        visible: false,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 2.h),
+                            const Divider(thickness: 1.2, color: MyColors.grayD4),
+                            SizedBox(height: 2.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                /// Toggle
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Change Status",
+                                      style: MyTexts.regular14.copyWith(
+                                        color: MyColors.fontBlack,
+                                      ),
+                                    ),
+                                    SizedBox(height: 0.5.h),
+                                    Switch(
+                                      activeColor: MyColors.green,
+                                      value: controller.roleStatus.value == 'Active',
+                                      onChanged: (value) {
+                                        controller.roleStatus.value = value
+                                            ? 'Active'
+                                            : 'InActive';
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(height: 0.5.h),
-                              Switch(
-                                activeColor: MyColors.green,
-                                value: controller.roleStatus.value == 'Active',
-                                onChanged: (value) {
-                                  controller.roleStatus.value =
-                                  value ? 'Active' : 'InActive';
-                                },
-                              ),
-                            ],
-                          ),
 
-                          /// Animated Status Badge
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 5.w,
-                              vertical: 1.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: controller.roleStatus.value == 'Active'
-                                  ? MyColors.green
-                                  : MyColors.red,
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
-                                  blurRadius: 8,
+                                /// Animated Status Badge
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5.w,
+                                    vertical: 1.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: controller.roleStatus.value == 'Active'
+                                        ? MyColors.green
+                                        : MyColors.red,
+                                    borderRadius: BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.05),
+                                        blurRadius: 8,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    controller.roleStatus.value,
+                                    style: MyTexts.regular16.copyWith(
+                                      color: MyColors.white,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                            child: Text(
-                              controller.roleStatus.value,
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.white,
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),

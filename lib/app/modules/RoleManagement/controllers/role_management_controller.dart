@@ -29,16 +29,12 @@ class RoleManagementController extends GetxController {
   }
 
   Future<void> _loadRolesFromStorage() async {
-    final cachedRoles = myPref.getRoles();
-    final getRoleStats = myPref.getRoleStats(); // ✅ use role stats only
-    if (cachedRoles != null && cachedRoles.isNotEmpty) {
-      if (getRoleStats != null) {
-        statistics.value = Statistics(
-          totalRoles: getRoleStats.totalRoles,
-          activeRoles: getRoleStats.activeRoles,
-        );
+    final cachedRoleModel = myPref.getRoleModelData();
+    if (cachedRoleModel != null && cachedRoleModel.data.isNotEmpty) {
+      roles.assignAll(cachedRoleModel.data);
+      if (cachedRoleModel.statistics != null) {
+        statistics.value = cachedRoleModel.statistics!;
       }
-      roles.assignAll(cachedRoles);
     } else {
       await fetchRoles();
     }
@@ -56,19 +52,25 @@ class RoleManagementController extends GetxController {
         roles.assignAll(result.data);
         if (result.statistics != null) {
           statistics.value = result.statistics!;
-          await myPref.saveRoleStats(result.statistics!); // ✅ save role stats separately
         }
-        await _saveRolesToStorage();
+        // Store the complete model
+        myPref.setRoleModelData(result);
+      }
+    } catch (e) {
+      // Fallback to cached data if API fails
+      final cachedRoleModel = myPref.getRoleModelData();
+      if (cachedRoleModel != null) {
+        roles.assignAll(cachedRoleModel.data);
+        if (cachedRoleModel.statistics != null) {
+          statistics.value = cachedRoleModel.statistics!;
+        }
       }
     } finally {
       isLoading.value = false;
     }
   }
 
-
-
   Future<void> refreshRoles() async {
     await fetchRoles();
   }
-
 }

@@ -77,9 +77,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                         child: Center(
                           child: Text(
                             ' + Add New Role',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.white,
-                            ),
+                            style: MyTexts.medium14.copyWith(color: MyColors.white),
                           ),
                         ),
                       ),
@@ -88,81 +86,85 @@ class RoleManagementView extends GetView<RoleManagementController> {
                 ),
                 const Gap(20),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Obx(
-                                  () => StatCard(
-                                    title: 'Total Roles',
-                                    value:
-                                        "${controller.statistics.value.totalRoles ?? "0"}",
-                                    icon: SvgPicture.asset(Asset.TotalProducts),
-                                    iconBackground: MyColors.yellowundertones,
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await controller.refreshRoles();
+                    },
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Obx(
+                                    () => StatCard(
+                                      title: 'Total Roles',
+                                      value:
+                                          "${controller.statistics.value.totalRoles ?? "0"}",
+                                      icon: SvgPicture.asset(Asset.TotalProducts),
+                                      iconBackground: MyColors.yellowundertones,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Obx(
-                                  () => StatCard(
-                                    title: 'Active Roles',
-                                    value:
-                                        "${controller.statistics.value.activeRoles ?? "0"}",
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Obx(
+                                    () => StatCard(
+                                      title: 'Active Roles',
+                                      value:
+                                          "${controller.statistics.value.activeRoles ?? "0"}",
 
-                                    icon: SvgPicture.asset(Asset.LowStock),
-                                    iconBackground: MyColors.paleRed,
+                                      icon: SvgPicture.asset(Asset.LowStock),
+                                      iconBackground: MyColors.paleRed,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const Gap(20),
-                        Obx(() {
-                          if (controller.isLoading.value) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
+                          const Gap(20),
+                          Obx(() {
+                            if (controller.isLoading.value) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
 
-                          if (controller.roles.isEmpty) {
-                            return const Padding(
-                              padding: EdgeInsets.only(top: 8.0),
-                              child: Center(child: Text("No roles found")),
-                            );
-                          }
-
-                          return ListView.separated(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            itemCount: controller.roles.length,
-                            shrinkWrap: true,
-                            physics: const ScrollPhysics(),
-                            separatorBuilder: (_, _) => SizedBox(width: 4.w),
-                            itemBuilder: (context, index) {
-                              final role = controller.roles[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(
-                                      Routes.ROLE_DETAILS,
-                                      arguments: {"getRole": role},
-                                    )?.then((value) {
-                                      controller.loadRoles();
-                                    });
-                                  },
-                                  child: RoleCard(role: role),
-                                ),
+                            if (controller.roles.isEmpty) {
+                              return const Padding(
+                                padding: EdgeInsets.only(top: 8.0),
+                                child: Center(child: Text("No roles found")),
                               );
-                            },
-                          );
-                        }),
-                      ],
+                            }
+
+                            return ListView.separated(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              itemCount: controller.roles.length,
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),
+                              separatorBuilder: (_, _) => SizedBox(width: 4.w),
+                              itemBuilder: (context, index) {
+                                final role = controller.roles[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.ROLE_DETAILS,
+                                        arguments: {"getRole": role},
+                                      )?.then((value) {
+                                        controller.loadRoles();
+                                      });
+                                    },
+                                    child: RoleCard(role: role),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -191,9 +193,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                           child: Center(
                             child: Text(
                               ' + Add New Team',
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.white,
-                              ),
+                              style: MyTexts.medium14.copyWith(color: MyColors.white),
                             ),
                           ),
                         ),
@@ -203,278 +203,248 @@ class RoleManagementView extends GetView<RoleManagementController> {
                 ),
 
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          const Gap(20),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Obx(
-                                  () => StatCard(
-                                    title: 'Total Team',
-                                    value:
-                                        "${homeController.statistics.value.totalTeamMember ?? '0'}",
-                                    icon: SvgPicture.asset(Asset.Featured),
-                                    iconBackground: MyColors.verypaleBlue,
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Obx(
-                                  () => StatCard(
-                                    title: 'Active Team',
-                                    value:
-                                        "${homeController.statistics.value.activeTeamMember ?? '0'}",
-                                    icon: SvgPicture.asset(
-                                      Asset.TotalInterests,
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await homeController.refreshTeamList();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            const Gap(20),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Obx(
+                                    () => StatCard(
+                                      title: 'Total Team',
+                                      value:
+                                          "${homeController.statistics.value.totalTeamMember ?? '0'}",
+                                      icon: SvgPicture.asset(Asset.Featured),
+                                      iconBackground: MyColors.verypaleBlue,
                                     ),
-                                    iconBackground: MyColors.warmOrange,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Obx(() {
-                            if (controller.isLoadingTeam.value) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
 
-                            if (homeController.teamList.isEmpty) {
-                              return const Padding(
-                                padding: EdgeInsets.only(top: 100.0),
-                                child: Center(
-                                  child: Text("No Team member found"),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Obx(
+                                    () => StatCard(
+                                      title: 'Active Team',
+                                      value:
+                                          "${homeController.statistics.value.activeTeamMember ?? '0'}",
+                                      icon: SvgPicture.asset(Asset.TotalInterests),
+                                      iconBackground: MyColors.warmOrange,
+                                    ),
+                                  ),
                                 ),
-                              );
-                            }
+                              ],
+                            ),
+                            Obx(() {
+                              if (controller.isLoadingTeam.value) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
 
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              physics: const ScrollPhysics(),
-                              itemCount: homeController.teamList.length,
-                              itemBuilder: (context, index) {
-                                final TeamListData user =
-                                    homeController.teamList[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    // Get.toNamed(
-                                    //   Routes.TEAM_DETAILS,
-                                    //   arguments: {
-                                    //     "team": homeController.teamList[index],
-                                    //   },
-                                    // );
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(bottom: 12),
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: MyColors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: MyColors.americanSilver,
+                              if (homeController.teamList.isEmpty) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(top: 100.0),
+                                  child: Center(child: Text("No Team member found")),
+                                );
+                              }
+
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                physics: const ScrollPhysics(),
+                                itemCount: homeController.teamList.length,
+                                itemBuilder: (context, index) {
+                                  final TeamListData user =
+                                      homeController.teamList[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      // Get.toNamed(
+                                      //   Routes.TEAM_DETAILS,
+                                      //   arguments: {
+                                      //     "team": homeController.teamList[index],
+                                      //   },
+                                      // );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(bottom: 12),
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: MyColors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: MyColors.americanSilver,
+                                        ),
                                       ),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 24,
-                                          child: ClipOval(
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  user.profilePhotoUrl ?? '',
-                                              width: 48,
-                                              height: 48,
-                                              fit: BoxFit.cover,
-                                              placeholder: (context, url) =>
-                                                  Container(
-                                                    width: 48,
-                                                    height: 48,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                          color: MyColors.grey1,
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                    child: const Center(
-                                                      child:
-                                                          CupertinoActivityIndicator(
-                                                            color: MyColors
-                                                                .primary,
-                                                            radius: 12,
-                                                          ),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 24,
+                                            child: ClipOval(
+                                              child: CachedNetworkImage(
+                                                imageUrl: user.profilePhotoUrl ?? '',
+                                                width: 48,
+                                                height: 48,
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) => Container(
+                                                  width: 48,
+                                                  height: 48,
+                                                  decoration: const BoxDecoration(
+                                                    color: MyColors.grey1,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: const Center(
+                                                    child: CupertinoActivityIndicator(
+                                                      color: MyColors.primary,
+                                                      radius: 12,
                                                     ),
                                                   ),
-                                              errorWidget:
-                                                  (
-                                                    context,
-                                                    url,
-                                                    error,
-                                                  ) => Container(
-                                                    width: 48,
-                                                    height: 48,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                          color:
-                                                              MyColors.grayD4,
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                    child: Icon(
-                                                      Icons.person,
-                                                      color: MyColors.black,
-                                                      size: 24,
+                                                ),
+                                                errorWidget: (context, url, error) =>
+                                                    Container(
+                                                      width: 48,
+                                                      height: 48,
+                                                      decoration: const BoxDecoration(
+                                                        color: MyColors.grayD4,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: Icon(
+                                                        Icons.person,
+                                                        color: MyColors.black,
+                                                        size: 24,
+                                                      ),
                                                     ),
-                                                  ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "${user.firstName ?? ""} ${user.lastName ?? ""}",
-                                                    style: MyTexts.bold18
-                                                        .copyWith(
-                                                          color: MyColors
-                                                              .fontBlack,
-                                                        ),
-                                                  ),
-                                                  const SizedBox(width: 6),
-                                                  const Spacer(),
-
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Get.toNamed(
-                                                        Routes.ADD_TEAM,
-                                                        arguments: {
-                                                          "data": user,
-                                                        },
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      width: 30,
-                                                      height: 30,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              8,
-                                                            ),
-                                                        color: MyColors
-                                                            .primary, // background with opacity
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      "${user.firstName ?? ""} ${user.lastName ?? ""}",
+                                                      style: MyTexts.bold18.copyWith(
+                                                        color: MyColors.fontBlack,
                                                       ),
-                                                      child: Center(
-                                                        child: Icon(
-                                                          Icons.edit,
-                                                          size: 20,
-                                                          // smaller so it fits inside 14x14 box
-                                                          color: MyColors.white,
+                                                    ),
+                                                    const SizedBox(width: 6),
+                                                    const Spacer(),
+
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Get.toNamed(
+                                                          Routes.ADD_TEAM,
+                                                          arguments: {"data": user},
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: 30,
+                                                        height: 30,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(8),
+                                                          color: MyColors
+                                                              .primary, // background with opacity
+                                                        ),
+                                                        child: Center(
+                                                          child: Icon(
+                                                            Icons.edit,
+                                                            size: 20,
+                                                            // smaller so it fits inside 14x14 box
+                                                            color: MyColors.white,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
+                                                    //
+                                                    // Container(
+                                                    //   padding:
+                                                    //       const EdgeInsets.symmetric(
+                                                    //         horizontal: 10,
+                                                    //         vertical: 4,
+                                                    //       ),
+                                                    //   decoration: BoxDecoration(
+                                                    //     color:
+                                                    //         MyColors.mediumSeaGreen,
+                                                    //     borderRadius:
+                                                    //         BorderRadius.circular(
+                                                    //           14.5,
+                                                    //         ),
+                                                    //   ),
+                                                    //   child: Text(
+                                                    //     "Admin",
+                                                    //     style: MyTexts.extraBold14
+                                                    //         .copyWith(
+                                                    //           color: MyColors.white,
+                                                    //         ),
+                                                    //   ),
+                                                    // ),
+                                                  ],
+                                                ),
+                                                const Gap(4),
+                                                Text(
+                                                  user.roleTitle ?? '',
+                                                  style: MyTexts.regular16.copyWith(
+                                                    color: MyColors.fontBlack,
+                                                    fontFamily: MyTexts.Roboto,
                                                   ),
-                                                  //
-                                                  // Container(
-                                                  //   padding:
-                                                  //       const EdgeInsets.symmetric(
-                                                  //         horizontal: 10,
-                                                  //         vertical: 4,
-                                                  //       ),
-                                                  //   decoration: BoxDecoration(
-                                                  //     color:
-                                                  //         MyColors.mediumSeaGreen,
-                                                  //     borderRadius:
-                                                  //         BorderRadius.circular(
-                                                  //           14.5,
-                                                  //         ),
-                                                  //   ),
-                                                  //   child: Text(
-                                                  //     "Admin",
-                                                  //     style: MyTexts.extraBold14
-                                                  //         .copyWith(
-                                                  //           color: MyColors.white,
-                                                  //         ),
-                                                  //   ),
-                                                  // ),
-                                                ],
-                                              ),
-                                              const Gap(4),
-                                              Text(
-                                                user.roleTitle ?? '',
-                                                style: MyTexts.regular16
-                                                    .copyWith(
-                                                      color: MyColors.fontBlack,
-                                                      fontFamily:
-                                                          MyTexts.Roboto,
-                                                    ),
-                                              ),
-                                              const Gap(4),
+                                                ),
+                                                const Gap(4),
 
-                                              Text(
-                                                "Email: ${user.emailId ?? ''}",
-                                                style: MyTexts.regular14
-                                                    .copyWith(
-                                                      color: MyColors.lightGray,
-                                                      fontFamily:
-                                                          MyTexts.Roboto,
-                                                    ),
-                                              ),
-                                              const Gap(4),
+                                                Text(
+                                                  "Email: ${user.emailId ?? ''}",
+                                                  style: MyTexts.regular14.copyWith(
+                                                    color: MyColors.lightGray,
+                                                    fontFamily: MyTexts.Roboto,
+                                                  ),
+                                                ),
+                                                const Gap(4),
 
-                                              Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.calendar_today,
-                                                    size: 16,
-                                                    color: Colors.green,
-                                                  ),
-                                                  const SizedBox(width: 6),
-                                                  Text(
-                                                    user.isActive == true
-                                                        ? 'Active'
-                                                        : 'DeActive',
-                                                    style: MyTexts.regular14
-                                                        .copyWith(
-                                                          fontFamily:
-                                                              MyTexts.Roboto,
-                                                          color: MyColors
-                                                              .mutedGreen,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.calendar_today,
+                                                      size: 16,
+                                                      color: Colors.green,
+                                                    ),
+                                                    const SizedBox(width: 6),
+                                                    Text(
+                                                      user.isActive == true
+                                                          ? 'Active'
+                                                          : 'DeActive',
+                                                      style: MyTexts.regular14.copyWith(
+                                                        fontFamily: MyTexts.Roboto,
+                                                        color: MyColors.mutedGreen,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                          }),
-                        ],
+                                  );
+                                },
+                              );
+                            }),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // ... keep the rest of the Team section exactly as is
-                // including ListView.builder for teamList
               ],
             ),
           ],
@@ -570,10 +540,7 @@ class RoleCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: MyColors.whiteBlue,
                       borderRadius: BorderRadius.circular(11),
