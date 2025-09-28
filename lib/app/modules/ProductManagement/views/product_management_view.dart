@@ -39,11 +39,11 @@ class ProductManagementView extends StatelessWidget {
                             },
                             borderRadius: 22,
                             hintText: 'Search',
-                            suffixIcon: SvgPicture.asset(
-                              Asset.filterIcon,
-                              height: 20,
-                              width: 20,
-                            ),
+                            // suffixIcon: SvgPicture.asset(
+                            //   Asset.filterIcon,
+                            //   height: 20,
+                            //   width: 20,
+                            // ),
                             prefixIcon: SvgPicture.asset(
                               Asset.searchIcon,
                               height: 16,

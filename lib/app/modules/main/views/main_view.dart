@@ -57,7 +57,9 @@ class MainTabBarView extends GetView<MainController> {
                       currentIndex: controller.currentIndex.value,
                       onTap: controller.changeTab,
                       selectedItemColor: MyColors.white,
-                      unselectedItemColor: MyColors.white.withValues(alpha: 0.25),
+                      unselectedItemColor: MyColors.white.withValues(
+                        alpha: 0.25,
+                      ),
                       selectedLabelStyle: MyTexts.medium13.copyWith(
                         color: MyColors.white,
                       ),

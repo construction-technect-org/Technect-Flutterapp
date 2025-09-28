@@ -1,6 +1,6 @@
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
 import 'package:construction_technect/app/modules/ProductManagement/service/product_management_service.dart';
-import 'package:get/get.dart';
 
 class ProductManagementController extends GetxController {
   RxBool isLoading = false.obs;
@@ -12,10 +12,21 @@ class ProductManagementController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchProducts();
+    _loadProductsFromStorage();
   }
 
   final ProductManagementService _service = ProductManagementService();
+
+  Future<void> _loadProductsFromStorage() async {
+    final cachedProductListModel = myPref.getProductListModel();
+    if (cachedProductListModel != null) {
+      productModel.value = cachedProductListModel;
+      filteredProducts.assignAll(cachedProductListModel.data?.products ?? []);
+      statistics.value = cachedProductListModel.data?.statistics ?? Statistics();
+    } else {
+      fetchProducts();
+    }
+  }
 
   void searchProduct(String value) {
     searchQuery.value = value;
@@ -24,12 +35,8 @@ class ProductManagementController extends GetxController {
       filteredProducts.addAll(productModel.value.data?.products ?? []);
     } else {
       filteredProducts.clear();
-      filteredProducts.value = (productModel.value.data?.products ?? []).where((
-        product,
-      ) {
-        return (product.productName ?? '').toLowerCase().contains(
-              value.toLowerCase(),
-            ) ||
+      filteredProducts.value = (productModel.value.data?.products ?? []).where((product) {
+        return (product.productName ?? '').toLowerCase().contains(value.toLowerCase()) ||
             (product.brand ?? '').toLowerCase().contains(value.toLowerCase());
       }).toList();
     }
@@ -44,12 +51,18 @@ class ProductManagementController extends GetxController {
   Future<void> fetchProducts() async {
     try {
       isLoading(true);
-      productModel.value = await _service.getProductList();
-      filteredProducts.clear();
-      filteredProducts.addAll(productModel.value.data?.products ?? []);
-      statistics.value = productModel.value.data?.statistics ?? Statistics();
+      final result = await _service.getProductList();
+      if (result.success == true) {
+        productModel.value = result;
+        filteredProducts.clear();
+        filteredProducts.addAll(result.data?.products ?? []);
+        statistics.value = result.data?.statistics ?? Statistics();
+        myPref.setProductListModel(result);
+      } else {
+        await _loadProductsFromStorage();
+      }
     } catch (e) {
-      isLoading(false);
+      await _loadProductsFromStorage();
     } finally {
       isLoading(false);
     }

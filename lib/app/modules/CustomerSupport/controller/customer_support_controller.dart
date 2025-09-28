@@ -3,17 +3,7 @@ import 'package:construction_technect/app/modules/CustomerSupport/models/Support
 import 'package:construction_technect/app/modules/CustomerSupport/services/SupportTicketCategoriesServices.dart';
 
 class CustomerSupportController extends GetxController {
-  final SupportTicketCategoriesServices _service =
-      SupportTicketCategoriesServices();
-
-  // Main Categories
-  final List<String> mainCategories = [
-    "Construction",
-    "Electrical",
-    "Plumbing",
-    "Interior",
-    "Painting",
-  ];
+  final SupportTicketCategoriesServices _service = SupportTicketCategoriesServices();
   RxString selectedMainCategory = "".obs;
   bool isEdit = false;
   RxString searchQuery = "".obs;
@@ -22,19 +12,36 @@ class CustomerSupportController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchMyTickets();
+    _loadTicketsFromStorage();
   }
 
   Rx<SupportMyTicketsModel> supportMyTickets = SupportMyTicketsModel().obs;
   RxList<Ticket> filteredTickets = <Ticket>[].obs;
 
+  Future<void> _loadTicketsFromStorage() async {
+    final cachedTicketsModel = myPref.getSupportTicketsModel();
+    if (cachedTicketsModel != null) {
+      supportMyTickets.value = cachedTicketsModel;
+      filteredTickets.assignAll(cachedTicketsModel.data?.tickets ?? []);
+    } else {
+      fetchMyTickets();
+    }
+  }
+
   Future<void> fetchMyTickets() async {
     try {
       isLoading.value = true;
-      supportMyTickets.value = await _service.supportMyTicketsModel();
-      filteredTickets.clear();
-      filteredTickets.addAll(supportMyTickets.value.data?.tickets ?? []);
+      final result = await _service.supportMyTicketsModel();
+      if (result.success == true) {
+        supportMyTickets.value = result;
+        filteredTickets.clear();
+        filteredTickets.addAll(result.data?.tickets ?? []);
+        myPref.setSupportTicketsModel(result);
+      } else {
+        await _loadTicketsFromStorage();
+      }
     } catch (e) {
+      await _loadTicketsFromStorage();
       SnackBars.errorSnackBar(content: 'Failed to fetch tickets: $e');
     } finally {
       isLoading.value = false;
@@ -48,25 +55,15 @@ class CustomerSupportController extends GetxController {
       filteredTickets.addAll(supportMyTickets.value.data?.tickets ?? []);
     } else {
       filteredTickets.clear();
-      filteredTickets.value = (supportMyTickets.value.data?.tickets ?? [])
-          .where((ticket) {
-            return (ticket.subject ?? '').toLowerCase().contains(
-                  value.toLowerCase(),
-                ) ||
-                (ticket.description ?? '').toLowerCase().contains(
-                  value.toLowerCase(),
-                ) ||
-                (ticket.ticketNumber ?? '').toLowerCase().contains(
-                  value.toLowerCase(),
-                ) ||
-                (ticket.categoryName ?? '').toLowerCase().contains(
-                  value.toLowerCase(),
-                ) ||
-                (ticket.priorityName ?? '').toLowerCase().contains(
-                  value.toLowerCase(),
-                );
-          })
-          .toList();
+      filteredTickets.value = (supportMyTickets.value.data?.tickets ?? []).where((
+        ticket,
+      ) {
+        return (ticket.subject ?? '').toLowerCase().contains(value.toLowerCase()) ||
+            (ticket.description ?? '').toLowerCase().contains(value.toLowerCase()) ||
+            (ticket.ticketNumber ?? '').toLowerCase().contains(value.toLowerCase()) ||
+            (ticket.categoryName ?? '').toLowerCase().contains(value.toLowerCase()) ||
+            (ticket.priorityName ?? '').toLowerCase().contains(value.toLowerCase());
+      }).toList();
     }
   }
 
@@ -76,7 +73,6 @@ class CustomerSupportController extends GetxController {
     filteredTickets.addAll(supportMyTickets.value.data?.tickets ?? []);
   }
 
-  // Handlers
   void onMainCategorySelected(String? value) {
     if (value != null) {
       selectedMainCategory.value = value;

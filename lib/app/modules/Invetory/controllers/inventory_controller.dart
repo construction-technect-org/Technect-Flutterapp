@@ -1,48 +1,82 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
+import 'package:construction_technect/app/modules/ProductManagement/service/product_management_service.dart';
 
 class InventoryController extends GetxController {
-  final statusCards = <Map<String, dynamic>>[].obs;
+  final ProductManagementService _productService = ProductManagementService();
+
+  RxBool isLoading = false.obs;
+  Rx<ProductListModel> productListModel = ProductListModel().obs;
+  RxList<Product> filteredProducts = <Product>[].obs;
+  RxString searchQuery = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadStatusCards();
+    _loadProductsFromStorage();
+    fetchProducts();
   }
 
-  void loadStatusCards() {
-    statusCards.value = [
-      {
-        "borderColor": MyColors.green,
-        "iconBgColor": MyColors.paleMagentaGreen,
-        "icon": Icons.check_circle_outline_outlined,
-        "iconColor": MyColors.green,
-        "message": "Your Product named M-Sand has been approved by the Admin",
-        "product": "M Sand",
-        "category": "Sand",
-        "dateTime": "12 Aug 2025, 08:00pm",
-      },
-      {
-        "borderColor": MyColors.red,
-        "iconBgColor": MyColors.mistyRosecolor,
-        "icon": Icons.cancel_outlined,
-        "iconColor": MyColors.red,
-        "message": "Your Product named M-Sand has been rejected by the Admin",
-        "product": "M Sand",
-        "category": "Sand",
-        "dateTime": "12 Aug 2025, 08:00pm",
-      },
-      {
-        "borderColor": MyColors.warning,
-        "iconBgColor": MyColors.oldLacelight,
-        "icon": Icons.error_outline,
-        "iconColor": MyColors.warning,
-        "message": "Your Product named M-Sand has been kept On Hold by the Admin",
-        "product": "M Sand",
-        "category": "Sand",
-        "dateTime": "12 Aug 2025, 08:00pm",
-      },
-    ];
+  Future<void> _loadProductsFromStorage() async {
+    final cachedProductListModel = myPref.getProductListModel();
+    if (cachedProductListModel != null) {
+      productListModel.value = cachedProductListModel;
+      filteredProducts.assignAll(cachedProductListModel.data?.products ?? []);
+    }
   }
 
-  RxBool isLoading = false.obs;
+  Future<void> fetchProducts() async {
+    try {
+      isLoading.value = true;
+      final result = await _productService.getProductList();
+      if (result.success == true) {
+        productListModel.value = result;
+        filteredProducts.assignAll(result.data?.products ?? []);
+        // Cache the complete model
+        myPref.setProductListModel(result);
+      } else {
+        // Fallback to cached data if API fails
+        await _loadProductsFromStorage();
+      }
+    } catch (e) {
+      // Fallback to cached data if API fails
+      await _loadProductsFromStorage();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void searchProducts(String? value) {
+    searchQuery.value = value ?? '';
+    if (value == null || value.isEmpty) {
+      filteredProducts.assignAll(productListModel.value.data?.products ?? []);
+    } else {
+      filteredProducts.assignAll(
+        (productListModel.value.data?.products ?? [])
+            .where(
+              (product) =>
+                  (product.productName?.toLowerCase().contains(
+                        value.toLowerCase(),
+                      ) ??
+                      false) ||
+                  (product.mainCategoryName?.toLowerCase().contains(
+                        value.toLowerCase(),
+                      ) ??
+                      false) ||
+                  (product.subCategoryName?.toLowerCase().contains(
+                        value.toLowerCase(),
+                      ) ??
+                      false) ||
+                  (product.brand?.toLowerCase().contains(value.toLowerCase()) ??
+                      false),
+            )
+            .toList(),
+      );
+    }
+  }
+
+  void clearSearch() {
+    searchQuery.value = '';
+    filteredProducts.assignAll(productListModel.value.data?.products ?? []);
+  }
 }

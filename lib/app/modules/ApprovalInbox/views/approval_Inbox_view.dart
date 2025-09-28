@@ -88,7 +88,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                         ),
                       ),
                       Text(
-                        (category ?? "").capitalizeFirst ?? "",
+                        category.capitalizeFirst ?? "",
                         style: MyTexts.medium14.copyWith(
                           color: MyColors.primary,
                           fontFamily: MyTexts.Roboto,
@@ -152,7 +152,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                                       ?.productStatistics
                                                       ?.totalProducts ??
                                                   0)
-                                              .toStringAsFixed(2),
+                                              .toString(),
                                       icon: Asset.noOfConectors,
                                       color: MyColors.primary,
                                     ),
@@ -169,7 +169,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                                       ?.productStatistics
                                                       ?.approvedProducts ??
                                                   0)
-                                              .toStringAsFixed(2),
+                                              .toString(),
                                       icon: Asset.noOfConectors,
                                       color: MyColors.green,
                                     ),
@@ -187,7 +187,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                                       ?.productStatistics
                                                       ?.rejectedProducts ??
                                                   0)
-                                              .toStringAsFixed(2),
+                                              .toString(),
                                       icon: Asset.noOfConectors,
                                       color: MyColors.red,
                                     ),

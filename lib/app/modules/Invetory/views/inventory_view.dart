@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/Invetory/controllers/inventory_controller.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/product_card.dart';
-import 'package:construction_technect/app/modules/ProductManagement/controllers/product_management_controller.dart';
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
 
@@ -21,72 +20,84 @@ class InventoryView extends GetView<InventoryController> {
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(16),
                 CommonTextField(
-                  onChange: (value) {},
+                  onChange: (value) {
+                    controller.searchProducts(value);
+                  },
                   borderRadius: 22,
                   hintText: 'Search',
-                  suffixIcon: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
+                  // suffixIcon: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
                   prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                 ),
-                Obx(
-                  () =>
-                      (Get.find<ProductManagementController>().filteredProducts.isEmpty &&
-                          Get.find<ProductManagementController>()
-                              .searchQuery
-                              .value
-                              .isNotEmpty)
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 100.0),
-                          child: Column(
-                            children: [
-                              const Gap(20),
-                              const Icon(
-                                Icons.search_off,
-                                size: 64,
-                                color: MyColors.grey,
-                              ),
-                              SizedBox(height: 2.h),
-                              Text(
-                                'No products found',
-                                style: MyTexts.medium18.copyWith(
-                                  color: MyColors.fontBlack,
-                                ),
-                              ),
-                              SizedBox(height: 0.5.h),
-                              Text(
-                                'Try searching with different keywords',
-                                style: MyTexts.regular14.copyWith(color: MyColors.grey),
-                              ),
-                            ],
+                Obx(() {
+                  if (controller.filteredProducts.isEmpty &&
+                      controller.searchQuery.value.isNotEmpty) {
+                    return Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Gap(20),
+                          const Icon(Icons.search_off, size: 64, color: MyColors.grey),
+                          SizedBox(height: 2.h),
+                          Text(
+                            'No products found',
+                            style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
                           ),
-                        )
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: Get.find<ProductManagementController>()
-                              .filteredProducts
-                              .length,
-                          separatorBuilder: (_, _) => const SizedBox(height: 12),
-                          itemBuilder: (context, index) {
-                            final Product product =
-                                Get.find<ProductManagementController>()
-                                    .filteredProducts[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Get.toNamed(
-                                  Routes.PRODUCT_DETAILS,
-                                  arguments: {"product": product, "isFromAdd": false},
-                                );
-                              },
-                              child: ProductCard(product: product),
-                            );
-                          },
-                        ),
-                ),
+                          SizedBox(height: 0.5.h),
+                          Text(
+                            'Try searching with different keywords',
+                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (controller.filteredProducts.isEmpty) {
+                    return Expanded(
+                      child: Column(
+                        children: [
+                          const Gap(20),
+                          const Icon(
+                            Icons.inventory_2_outlined,
+                            size: 64,
+                            color: MyColors.grey,
+                          ),
+                          SizedBox(height: 2.h),
+                          Text(
+                            'No products available',
+                            style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                          ),
+                          SizedBox(height: 0.5.h),
+                          Text(
+                            'Add your first product to get started',
+                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.filteredProducts.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final Product product = controller.filteredProducts[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Get.toNamed(
+                            Routes.PRODUCT_DETAILS,
+                            arguments: {"product": product, "isFromAdd": false},
+                          );
+                        },
+                        child: ProductCard(product: product),
+                      );
+                    },
+                  );
+                }),
               ],
             ),
           ),

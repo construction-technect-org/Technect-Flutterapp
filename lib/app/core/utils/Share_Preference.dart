@@ -5,6 +5,8 @@ import 'package:construction_technect/app/modules/CustomerSupport/models/Support
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:construction_technect/app/modules/FAQ/model/faq_model.dart';
+import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart'
+    as ProductModel;
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
@@ -34,6 +36,8 @@ class AppSharedPreference {
   final faqData = <String, dynamic>{}.val('faqData');
   final cachedCategories = ''.val('cachedCategories');
   final cachedPriorities = ''.val('cachedPriorities');
+  final productsData = <String, dynamic>{}.val('productsData');
+  final supportTicketsData = <String, dynamic>{}.val('supportTicketsData');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -435,6 +439,50 @@ class AppSharedPreference {
       }
     } catch (e) {
       log('Error getting team model: $e');
+    }
+    return null;
+  }
+
+  // Store complete product list model data
+  void setProductListModel(ProductModel.ProductListModel productListModel) {
+    try {
+      productsData.val = productListModel.toJson();
+    } catch (e) {
+      log('Error saving product list model: $e');
+    }
+  }
+
+  // Get complete product list model data
+  ProductModel.ProductListModel? getProductListModel() {
+    try {
+      final data = productsData.val;
+      if (data.isNotEmpty) {
+        return ProductModel.ProductListModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting product list model: $e');
+    }
+    return null;
+  }
+
+  // Store complete support tickets model data
+  void setSupportTicketsModel(SupportMyTicketsModel supportTicketsModel) {
+    try {
+      supportTicketsData.val = supportTicketsModel.toJson();
+    } catch (e) {
+      log('Error saving support tickets model: $e');
+    }
+  }
+
+  // Get complete support tickets model data
+  SupportMyTicketsModel? getSupportTicketsModel() {
+    try {
+      final data = supportTicketsData.val;
+      if (data.isNotEmpty) {
+        return SupportMyTicketsModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting support tickets model: $e');
     }
     return null;
   }

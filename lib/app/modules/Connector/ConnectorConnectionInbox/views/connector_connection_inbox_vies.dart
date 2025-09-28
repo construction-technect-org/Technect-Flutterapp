@@ -24,16 +24,12 @@ class ConnectorConnectionInboxVies extends GetView<ConnectorConnectionInboxContr
                 onChange: (value) {},
                 borderRadius: 22,
                 hintText: 'Search',
-                suffixIcon: SvgPicture.asset(
-                  Asset.filterIcon,
-                  height: 20,
-                  width: 20,
-                ),
-                prefixIcon: SvgPicture.asset(
-                  Asset.searchIcon,
-                  height: 16,
-                  width: 16,
-                ),
+                // suffixIcon: SvgPicture.asset(
+                //   Asset.filterIcon,
+                //   height: 20,
+                //   width: 20,
+                // ),
+                prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
               ),
             ),
             SizedBox(height: 2.h),
@@ -80,8 +76,7 @@ class ConnectorConnectionInboxVies extends GetView<ConnectorConnectionInboxContr
                                 SizedBox(width: 2.w),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "Mike Junior wants to connect with you",
@@ -120,15 +115,12 @@ class ConnectorConnectionInboxVies extends GetView<ConnectorConnectionInboxContr
                                       builder: (BuildContext context) {
                                         return Dialog(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
+                                            borderRadius: BorderRadius.circular(16),
                                           ),
                                           child: Container(
                                             padding: const EdgeInsets.all(20),
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
+                                              borderRadius: BorderRadius.circular(16),
                                               color: Colors.white,
                                             ),
                                             child: Column(
@@ -145,32 +137,25 @@ class ConnectorConnectionInboxVies extends GetView<ConnectorConnectionInboxContr
 
                                                 Text(
                                                   "Connect to CRM!",
-                                                  style: MyTexts.extraBold20
-                                                      .copyWith(
-                                                        color: MyColors.primary,
-                                                      ),
+                                                  style: MyTexts.extraBold20.copyWith(
+                                                    color: MyColors.primary,
+                                                  ),
                                                   textAlign: TextAlign.center,
                                                 ),
                                                 SizedBox(height: 1.h),
                                                 Text(
                                                   "To Proceed with your request, please connect to CRM.",
-                                                  style: MyTexts.regular16
-                                                      .copyWith(
-                                                        color: MyColors
-                                                            .dopelyColors,
-                                                    fontFamily:
-                                                    MyTexts
-                                                        .Roboto,
-                                                      ),
+                                                  style: MyTexts.regular16.copyWith(
+                                                    color: MyColors.dopelyColors,
+                                                    fontFamily: MyTexts.Roboto,
+                                                  ),
                                                   textAlign: TextAlign.center,
                                                 ),
                                                 const SizedBox(height: 24),
                                                 Center(
                                                   child: RoundedButton(
                                                     onTap: () {
-                                                      Navigator.of(
-                                                        context,
-                                                      ).pop();
+                                                      Navigator.of(context).pop();
                                                     },
                                                     buttonName: '',
                                                     borderRadius: 12,
@@ -182,14 +167,10 @@ class ConnectorConnectionInboxVies extends GetView<ConnectorConnectionInboxContr
                                                     child: Center(
                                                       child: Text(
                                                         'Proceed',
-                                                        style: MyTexts.medium16
-                                                            .copyWith(
-                                                              color: MyColors
-                                                                  .white,
-                                                              fontFamily:
-                                                                  MyTexts
-                                                                      .Roboto,
-                                                            ),
+                                                        style: MyTexts.medium16.copyWith(
+                                                          color: MyColors.white,
+                                                          fontFamily: MyTexts.Roboto,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -209,7 +190,7 @@ class ConnectorConnectionInboxVies extends GetView<ConnectorConnectionInboxContr
                                     "Connect",
                                     style: MyTexts.medium14.copyWith(
                                       color: MyColors.white,
-                                      fontFamily: MyTexts.Roboto
+                                      fontFamily: MyTexts.Roboto,
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
@@ -236,8 +217,7 @@ class ConnectorConnectionInboxVies extends GetView<ConnectorConnectionInboxContr
                                     "Disconnect",
                                     style: MyTexts.medium14.copyWith(
                                       color: MyColors.white,
-                                        fontFamily: MyTexts.Roboto
-
+                                      fontFamily: MyTexts.Roboto,
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(

@@ -53,11 +53,9 @@ class RoleManagementController extends GetxController {
         if (result.statistics != null) {
           statistics.value = result.statistics!;
         }
-        // Store the complete model
         myPref.setRoleModelData(result);
       }
     } catch (e) {
-      // Fallback to cached data if API fails
       final cachedRoleModel = myPref.getRoleModelData();
       if (cachedRoleModel != null) {
         roles.assignAll(cachedRoleModel.data);

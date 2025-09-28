@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/modules/home/models/AddressModel.dart';
+import 'package:construction_technect/app/modules/home/models/DashboardModel.dart';
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
 
 class HomeService {
@@ -21,6 +22,17 @@ class HomeService {
       final response = await _apiManager.get(url: APIConstants.address);
 
       return AddressModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<DashboardModel> getDashboard() async {
+    try {
+      final response = await _apiManager.get(
+        url: APIConstants.merchantDashboard,
+      );
+      return DashboardModel.fromJson(response);
     } catch (e) {
       rethrow;
     }

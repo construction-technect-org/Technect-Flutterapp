@@ -111,7 +111,7 @@ class HomeView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Gap(10),
+                    const Gap(10),
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -187,66 +187,109 @@ class HomeView extends StatelessWidget {
                           children: [
                             HeaderText(text: "Statics"),
                             const Gap(14),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: StaticsCard(
-                                    title: "Total Partners",
-                                    value: "123.4K",
-                                    icon: Asset.noOfPartner,
+                            Obx(
+                              () => Row(
+                                children: [
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Total Partners",
+                                      value:
+                                          (controller
+                                                      .dashboardData
+                                                      .value
+                                                      .data
+                                                      ?.totalPartnerProfiles ??
+                                                  0)
+                                              .toString(),
+                                      icon: Asset.noOfPartner,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: StaticsCard(
-                                    title: "Total Products",
-                                    value: "123.4K",
-                                    icon: Asset.noOfConectors,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Total Products",
+                                      value:
+                                          (controller
+                                                      .dashboardData
+                                                      .value
+                                                      .data
+                                                      ?.totalProducts ??
+                                                  0)
+                                              .toString(),
 
-                                Expanded(
-                                  child: StaticsCard(
-                                    title: "Total Connectors",
-                                    value: "250",
-                                    icon: Asset.noOfUsers,
+                                      icon: Asset.noOfConectors,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 12),
+
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Total Connectors",
+                                      value:
+                                          (controller
+                                                      .dashboardData
+                                                      .value
+                                                      .data
+                                                      ?.totalConnectorProfiles ??
+                                                  0)
+                                              .toString(),
+
+                                      icon: Asset.noOfUsers,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             const Gap(14),
                             HeaderText(text: "Notification"),
                             const Gap(14),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _buildNotiCard(
-                                    onTap: () {
-                                      Get.find<MainController>().currentIndex.value = 2;
-                                    },
-                                    title: "Support Ticket",
-                                    value: "04",
-                                    icon: Asset.warning,
-                                    color: MyColors.redgray,
+                            Obx(
+                              () => Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildNotiCard(
+                                      onTap: () {
+                                        Get.find<MainController>().currentIndex.value = 2;
+                                      },
+                                      title: "Support Ticket",
+                                      value:
+                                          (controller
+                                                      .dashboardData
+                                                      .value
+                                                      .data
+                                                      ?.merchantSupportTickets ??
+                                                  0)
+                                              .toString(),
+
+                                      icon: Asset.warning,
+                                      color: MyColors.redgray,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _buildNotiCard(
-                                    onTap: () {
-                                      Get.toNamed(
-                                        Routes.APPROVAL_INBOX,
-                                        arguments: {"isInbox": true},
-                                      );
-                                    },
-                                    title: "Inbox",
-                                    value: "02",
-                                    icon: Asset.thumbup,
-                                    color: MyColors.warning,
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: _buildNotiCard(
+                                      onTap: () {
+                                        Get.toNamed(
+                                          Routes.APPROVAL_INBOX,
+                                          arguments: {"isInbox": true},
+                                        );
+                                      },
+                                      title: "Inbox",
+                                      value:
+                                          (controller
+                                                      .dashboardData
+                                                      .value
+                                                      .data
+                                                      ?.merchantProductNotifications ??
+                                                  0)
+                                              .toString(),
+
+                                      icon: Asset.thumbup,
+                                      color: MyColors.warning,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                             const Gap(14),
                             HeaderText(text: "Quick Access"),

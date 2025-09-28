@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/CustomerSupport/models/Support
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/services/GetAllRoleService.dart';
 import 'package:construction_technect/app/modules/home/models/AddressModel.dart';
+import 'package:construction_technect/app/modules/home/models/DashboardModel.dart';
 import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 
@@ -32,6 +33,7 @@ class HomeController extends GetxController {
   Rx<ProfileModel> profileData = ProfileModel().obs;
   AddressModel addressData = AddressModel();
   RxList<TeamListData> teamList = <TeamListData>[].obs;
+  Rx<DashboardModel> dashboardData = DashboardModel().obs;
 
   bool _profileDialogShown = false;
 
@@ -305,6 +307,8 @@ class HomeController extends GetxController {
         Get.printError(info: 'Error refreshing home data: $e');
       }
     }
+
+    await fetchDashboardData();
   }
 
   Future<void> fetchProfileData() async {
@@ -323,6 +327,21 @@ class HomeController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> fetchDashboardData() async {
+    try {
+      final dashboardResponse = await homeService.getDashboard();
+      if (dashboardResponse.success == true) {
+        dashboardData.value = dashboardResponse;
+      }
+    } catch (e) {
+      Get.printError(info: 'Error fetching dashboard data: $e');
+    }
+  }
+
+  Future<void> refreshDashboardData() async {
+    await fetchDashboardData();
   }
 
   Future<void> _loadTeamFromStorage() async {
