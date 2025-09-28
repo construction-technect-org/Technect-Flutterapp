@@ -36,6 +36,8 @@ import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo
 import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo/views/connector_request_demo_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/bindings/create_new_ticket_binding.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/views/creat_new_ticket.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
@@ -348,6 +350,11 @@ class AppPages {
       name: Routes.SUPPORT_REQUEST,
       page: () => const SupportRequestScreen(),
       binding: SupportRequestBindings(),
+    ),
+    GetPage(
+      name: Routes.CREATE_NEW_TICKET,
+      page: () => CreatNewTicket(),
+      binding: CreateNewTicketBinding(),
     ),
     GetPage(
       name: Routes.REFER_EARN,

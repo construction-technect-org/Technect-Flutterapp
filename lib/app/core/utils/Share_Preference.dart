@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketCategoriesModel.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
+import 'package:construction_technect/app/modules/FAQ/model/faq_model.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/login/models/UserModel.dart';
@@ -28,6 +32,9 @@ class AppSharedPreference {
   final rolesDataTimestamp = 0.val('rolesDataTimestamp');
   final teamData = <String, dynamic>{}.val('teamData');
   final teamStatsData = <String, dynamic>{}.val('teamStatsData');
+  final faqData = <String, dynamic>{}.val('faqData');
+  final cachedCategories = ''.val('cachedCategories');
+  final cachedPriorities = ''.val('cachedPriorities');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -198,7 +205,10 @@ class AppSharedPreference {
   Future<void> saveTeam(List<TeamListData> team) async {
     try {
       final teamJson = team.map((member) => member.toJson()).toList();
-      setTeamData({'data': teamJson, 'timestamp': DateTime.now().millisecondsSinceEpoch});
+      setTeamData({
+        'data': teamJson,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
     } catch (e) {
       log('Error saving team: $e');
     }
@@ -271,7 +281,6 @@ class AppSharedPreference {
     return null;
   }
 
-
   Statistics? getTeamStats() {
     try {
       final data = getTeamStatsData();
@@ -283,7 +292,8 @@ class AppSharedPreference {
     }
     return null;
   }
-// Role stats data storage
+
+  // Role stats data storage
   final roleStatsData = <String, dynamic>{}.val('roleStatsData');
 
   void setRoleStatsData(Map<String, dynamic> stats) {
@@ -302,7 +312,7 @@ class AppSharedPreference {
     roleStatsData.val = {};
   }
 
-// Helper methods for role stats
+  // Helper methods for role stats
   Future<void> saveRoleStats(Statistics stats) async {
     try {
       setRoleStatsData({
@@ -326,4 +336,69 @@ class AppSharedPreference {
     return null;
   }
 
+  void setFAQData(FAQModel faq) {
+    faqData.val = faq.toJson();
+  }
+
+  FAQModel? getFAQData() {
+    final data = faqData.val;
+    if (data.isNotEmpty) {
+      return FAQModel.fromJson(data);
+    }
+    return null;
+  }
+
+  // Categories data storage
+  void setCategoriesData(List<SupportCategory> categories) {
+    try {
+      final categoriesJson = categories
+          .map((category) => category.toJson())
+          .toList();
+      cachedCategories.val = jsonEncode(categoriesJson);
+    } catch (e) {
+      log('Error saving categories: $e');
+    }
+  }
+
+  List<SupportCategory>? getCategoriesData() {
+    try {
+      final cachedData = cachedCategories.val;
+      if (cachedData.isNotEmpty) {
+        final List<dynamic> categoriesJson = jsonDecode(cachedData);
+        return categoriesJson
+            .map((json) => SupportCategory.fromJson(json))
+            .toList();
+      }
+    } catch (e) {
+      log('Error getting categories: $e');
+    }
+    return null;
+  }
+
+  // Priorities data storage
+  void setPrioritiesData(List<SupportPriority> priorities) {
+    try {
+      final prioritiesJson = priorities
+          .map((priority) => priority.toJson())
+          .toList();
+      cachedPriorities.val = jsonEncode(prioritiesJson);
+    } catch (e) {
+      log('Error saving priorities: $e');
+    }
+  }
+
+  List<SupportPriority>? getPrioritiesData() {
+    try {
+      final cachedData = cachedPriorities.val;
+      if (cachedData.isNotEmpty) {
+        final List<dynamic> prioritiesJson = jsonDecode(cachedData);
+        return prioritiesJson
+            .map((json) => SupportPriority.fromJson(json))
+            .toList();
+      }
+    } catch (e) {
+      log('Error getting priorities: $e');
+    }
+    return null;
+  }
 }

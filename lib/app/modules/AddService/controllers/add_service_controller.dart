@@ -27,7 +27,13 @@ class AddServiceController extends GetxController {
   RxList<String> serviceTypeNames = <String>[].obs;
   RxList<String> serviceNames = <String>[].obs;
 
-  RxList<String> uomList = <String>["Hour", "Day", "Week", "Month", "Project"].obs;
+  RxList<String> uomList = <String>[
+    "Hour",
+    "Day",
+    "Week",
+    "Month",
+    "Project",
+  ].obs;
 
   Rxn<String> selectedServiceType = Rxn<String>();
   Rxn<String> selectedService = Rxn<String>();
@@ -72,11 +78,14 @@ class AddServiceController extends GetxController {
     selectedServiceType.value = editingService.serviceTypeName ?? '';
     selectedService.value = editingService.serviceNameStandard ?? '';
 
-    selectedServiceTypeId.value = (editingService.serviceTypeId ?? 0).toString();
+    selectedServiceTypeId.value = (editingService.serviceTypeId ?? 0)
+        .toString();
     selectedServiceId.value = (editingService.serviceId ?? 0).toString();
 
-    if (editingService.serviceImage != null && editingService.serviceImage!.isNotEmpty) {
-      pickedFilePath.value = "${APIConstants.bucketUrl}${editingService.serviceImage!}";
+    if (editingService.serviceImage != null &&
+        editingService.serviceImage!.isNotEmpty) {
+      pickedFilePath.value =
+          "${APIConstants.bucketUrl}${editingService.serviceImage!}";
       pickedFileName.value = "Current service image";
     }
 
@@ -141,8 +150,12 @@ class AddServiceController extends GetxController {
   void gstCalculate() {
     if (priceController.text.isNotEmpty && gstController.text.isNotEmpty) {
       final double amount =
-          (double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
-              double.parse(gstController.text.isEmpty ? '0.0' : gstController.text)) /
+          (double.parse(
+                priceController.text.isEmpty ? '0.0' : priceController.text,
+              ) *
+              double.parse(
+                gstController.text.isEmpty ? '0.0' : gstController.text,
+              )) /
           100;
       gstPriceController.text = amount.toString();
     }
@@ -224,7 +237,9 @@ class AddServiceController extends GetxController {
   Future<void> createService() async {
     isLoading.value = true;
     Map<String, dynamic> fields = {};
-    final Map<String, String> selectedFiles = {"service_image": pickedFilePath.value};
+    final Map<String, String> selectedFiles = {
+      "service_image": pickedFilePath.value,
+    };
 
     fields = {
       "service_name": serviceNameController.text,
@@ -240,7 +255,10 @@ class AddServiceController extends GetxController {
     };
 
     try {
-      final response = await _service.createService(fields: fields, files: selectedFiles);
+      final response = await _service.createService(
+        fields: fields,
+        files: selectedFiles,
+      );
 
       if (response.success == true) {
         if (Get.isRegistered<ServiceManagementController>()) {

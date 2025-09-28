@@ -23,7 +23,7 @@ class StatCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 85,
+        height: 86,
         decoration: BoxDecoration(
           color: MyColors.white,
           borderRadius: BorderRadius.circular(12),

@@ -1,11 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 
 class ConnectorCustomerSupportTicketController extends GetxController {
- 
-
   // Main Categories
   final List<String> mainCategories = [
     "Construction",
@@ -31,9 +28,6 @@ class ConnectorCustomerSupportTicketController extends GetxController {
   RxBool isSubmitting = false.obs;
 
   // ---------------- New: Support My Tickets ----------------
-  RxList<SupportMyTickets> myTickets = <SupportMyTickets>[].obs;
+  // RxList<SupportMyTickets> myTickets = <SupportMyTickets>[].obs;
   RxBool isLoadingMyTickets = false.obs;
-
-
-
 }

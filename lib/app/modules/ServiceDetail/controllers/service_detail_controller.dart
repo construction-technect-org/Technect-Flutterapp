@@ -27,7 +27,9 @@ class ServiceDetailsController extends GetxController {
         }
         Get.back();
       } else {
-        SnackBars.errorSnackBar(content: response.message ?? 'Failed to delete service');
+        SnackBars.errorSnackBar(
+          content: response.message ?? 'Failed to delete service',
+        );
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error deleting service: $e');

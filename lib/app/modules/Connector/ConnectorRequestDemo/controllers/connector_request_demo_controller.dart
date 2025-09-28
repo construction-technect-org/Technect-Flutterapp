@@ -55,6 +55,7 @@ class ConnectorRequestDemoController extends GetxController {
         selectedMainCategory.value = "";
         emilaController.text = "";
         phoneNumberController.text="";
+        Get.back();
         SnackBars.successSnackBar(content: result.message);
       } else {
         selectedMainCategory.value = "";

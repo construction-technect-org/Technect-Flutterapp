@@ -24,38 +24,42 @@ class MenuView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 1.h),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  color: const Color(0xFFFFED29).withValues(alpha: 0.5),
-                ),
-                child: Row(
+              Visibility(
+                visible: false,
+                child: Column(
                   children: [
-                    SvgPicture.asset(Asset.gift),
-                    const Gap(13),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Get Couples for Every Referral",
-                          style: MyTexts.medium16.copyWith(
-                            fontFamily: MyTexts.Roboto,
-                            color: MyColors.primary,
+                    SizedBox(height: 1.h),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        color: const Color(0xFFFFED29).withValues(alpha: 0.5),
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(Asset.gift),
+                          const Gap(13),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Get Couples for Every Referral",
+                                style: MyTexts.medium16.copyWith(
+                                  fontFamily: MyTexts.Roboto,
+                                  color: MyColors.primary,
+                                ),
+                              ),
+                              Text(
+                                "Refer your business friends now!",
+                                style: MyTexts.regular14.copyWith(
+                                  fontFamily: MyTexts.Roboto,
+                                  color: MyColors.gray5D,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          "Refer your business friends now!",
-                          style: MyTexts.regular14.copyWith(
-                            fontFamily: MyTexts.Roboto,
-                            color: MyColors.gray5D,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -92,10 +96,7 @@ class MenuView extends StatelessWidget {
 
                     title: "Help & Support",
                     onTap: () {
-                      Get
-                          .find<MainController>()
-                          .currentIndex
-                          .value = 2;
+                      Get.find<MainController>().currentIndex.value = 2;
                     },
                   ),
                   const Gap(20),
@@ -104,9 +105,7 @@ class MenuView extends StatelessWidget {
 
                     title: "Tutorials",
                     onTap: () {
-                      openUrl(
-                        url: "https://www.youtube.com/watch?v=hcvmq-hcDIE",
-                      );
+                      openUrl(url: "https://www.youtube.com/watch?v=hcvmq-hcDIE");
                     },
                   ),
                   const Gap(20),
@@ -117,7 +116,6 @@ class MenuView extends StatelessWidget {
                     title: "F.A.Q.S",
                     onTap: () {
                       Get.toNamed(Routes.FAQ);
-
                     },
                   ),
                   const Gap(20),
@@ -127,52 +125,57 @@ class MenuView extends StatelessWidget {
                     title: "Feedback",
                     onTap: () {
                       Get.toNamed(Routes.FEEDBACK_VIEW);
-
                     },
                   ),
                 ],
               ),
               SizedBox(height: 2.h),
-              HearderText(text: "Others"),
-              Gap(1.h),
-              CommonContainer(
-                children: [
-                  CommonRowItem(
-                    icon: Asset.sub,
+              Visibility(
+                visible: false,
+                child: Column(
+                  children: [
+                    HearderText(text: "Others"),
+                    Gap(1.h),
+                    CommonContainer(
+                      children: [
+                        CommonRowItem(
+                          icon: Asset.sub,
+                          title: "Explore Subscription Plans",
+                          onTap: () {},
+                        ),
+                        const Gap(20),
+                        CommonRowItem(
+                          icon: Asset.gift,
 
-                    title: "Explore Subscription Plans",
-                    onTap: () {},
-                  ),
-                  const Gap(20),
-                  CommonRowItem(
-                    icon: Asset.gift,
+                          title: "Refer & Get Coupons",
+                          onTap: () {
+                            Get.toNamed(Routes.REFER_EARN);
+                          },
+                        ),
+                        const Gap(20),
 
-                    title: "Refer & Get Coupons",
-                    onTap: () {
-                      Get.toNamed(Routes.REFER_EARN);
+                        CommonRowItem(
+                          icon: Asset.link,
 
-                    },
-                  ),
-                  const Gap(20),
+                          title: "Use on Desktop",
+                          onTap: () {
+                            openUrl(url: "https://www.google.com");
+                          },
+                        ),
+                        const Gap(20),
+                        CommonRowItem(
+                          icon: Asset.notifications,
 
-                  CommonRowItem(
-                    icon: Asset.link,
-
-                    title: "Use on Desktop",
-                    onTap: () {
-                      openUrl(url: "https://www.google.com");
-                    },
-                  ),
-                  const Gap(20),
-                  CommonRowItem(
-                    icon: Asset.notifications,
-
-                    title: "Whats NEWS",
-                    onTap: () {},
-                  ),
-                ],
+                          title: "Whats NEWS",
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 2.h),
+                  ],
+                ),
               ),
-              SizedBox(height: 2.h),
+
               HearderText(text: "About"),
               Gap(1.h),
               CommonContainer(
@@ -197,10 +200,7 @@ class MenuView extends StatelessWidget {
                     icon: Asset.tc,
                     title: "Terms & Conditions",
                     onTap: () {
-                      openUrl(
-                        url:
-                        Constants.termsCondition
-                      );
+                      openUrl(url: Constants.termsCondition);
                     },
                   ),
                 ],
@@ -291,14 +291,15 @@ class MenuView extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(String title,
-      bool hasNotification, {
-        VoidCallback? onTap,
-        bool? isDestructive,
-        bool? highlight,
-        IconData? icon, // 👈 Material icons
-        Widget? customIcon, // 👈 Images/SVGs
-      }) {
+  Widget _buildMenuItem(
+    String title,
+    bool hasNotification, {
+    VoidCallback? onTap,
+    bool? isDestructive,
+    bool? highlight,
+    IconData? icon, // 👈 Material icons
+    Widget? customIcon, // 👈 Images/SVGs
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -335,55 +336,47 @@ class MenuView extends StatelessWidget {
                     ),
                 ],
               ),
-            ] else
-              if (icon != null) ...[
-                Icon(
-                  icon,
-                  size: 24,
-                  color: isDestructive == true ? MyColors.red : MyColors
-                      .primary,
-                ),
-              ] else
-                ...[
-                  Stack(
-                    children: [
-                      SvgPicture.asset(
-                        Asset.menuSettingIcon,
-                        width: 24,
-                        height: 24,
-                        colorFilter: ColorFilter.mode(
-                          isDestructive == true ? MyColors.red : MyColors
-                              .fontBlack,
-                          BlendMode.srcIn,
+            ] else if (icon != null) ...[
+              Icon(
+                icon,
+                size: 24,
+                color: isDestructive == true ? MyColors.red : MyColors.primary,
+              ),
+            ] else ...[
+              Stack(
+                children: [
+                  SvgPicture.asset(
+                    Asset.menuSettingIcon,
+                    width: 24,
+                    height: 24,
+                    colorFilter: ColorFilter.mode(
+                      isDestructive == true ? MyColors.red : MyColors.fontBlack,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  if (hasNotification)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
                         ),
                       ),
-                      if (hasNotification)
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                    ),
                 ],
+              ),
+            ],
 
             SizedBox(width: 4.w),
             Text(
               title,
               style: MyTexts.medium16.copyWith(
-                color: isDestructive == true
-                    ? MyColors.red
-                    : MyColors.fontBlack,
-                fontWeight: highlight == true
-                    ? FontWeight.w600
-                    : FontWeight.w800,
+                color: isDestructive == true ? MyColors.red : MyColors.fontBlack,
+                fontWeight: highlight == true ? FontWeight.w600 : FontWeight.w800,
               ),
             ),
           ],
@@ -394,7 +387,8 @@ class MenuView extends StatelessWidget {
 }
 
 /// Modern Confirmation Dialog
-void _showConfirmDialog(BuildContext context, {
+void _showConfirmDialog(
+  BuildContext context, {
   required String title,
   required String message,
   required String confirmText,
@@ -434,9 +428,7 @@ void _showConfirmDialog(BuildContext context, {
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             side: BorderSide(color: Colors.grey.shade400),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: () => Get.back(),
@@ -448,9 +440,7 @@ void _showConfirmDialog(BuildContext context, {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: onConfirm,
@@ -503,25 +493,15 @@ class CommonRowItem extends StatelessWidget {
             width: 20,
             child: SvgPicture.asset(
               icon,
-              colorFilter: const ColorFilter.mode(
-                MyColors.primary,
-                BlendMode.srcIn,
-              ),
+              colorFilter: const ColorFilter.mode(MyColors.primary, BlendMode.srcIn),
               height: 20,
               width: 20,
             ),
           ),
           const Gap(20),
-          Text(
-            title,
-            style: MyTexts.regular16.copyWith(color: MyColors.primary),
-          ),
+          Text(title, style: MyTexts.regular16.copyWith(color: MyColors.primary)),
           const Spacer(),
-          const Icon(
-            Icons.arrow_forward_ios,
-            color: MyColors.primary,
-            size: 16,
-          ),
+          const Icon(Icons.arrow_forward_ios, color: MyColors.primary, size: 16),
         ],
       ),
     );

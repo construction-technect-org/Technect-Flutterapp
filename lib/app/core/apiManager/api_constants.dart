@@ -13,8 +13,7 @@ class APIConstants {
   static const String login = "auth/login";
   static const String marketplaceUpdate = "auth/marketplace";
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
-  static const String forgotPasswordVerifyOtp =
-      "auth/forgot-password/verify-otp";
+  static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
   static const String forgotPasswordReset = "auth/forgot-password/reset";
   static const String profile = "auth/profile";
   static const String address = "address";
@@ -30,8 +29,7 @@ class APIConstants {
   static const String teamStatsOverview = "merchant/team/stats/overview";
   static const String roleDetailById = "merchant/role";
   static const String getMainCategories = "merchant/category/main";
-  static const String getSubCategories =
-      "merchant/category/sub?main_category_id=";
+  static const String getSubCategories = "merchant/category/sub?main_category_id=";
   static const String getProducts = "merchant/category/products/sub/";
   static const String getFilter = "merchant/category/filters/sub/";
   static const String getProductList = "merchant/product/list";
@@ -52,19 +50,18 @@ class APIConstants {
 
   // Service SupportTicket API
   static const String getSupportTicketCategories = "support-ticket/categories";
-  static const String  getSupportTicketPriorities = "support-ticket/priorities";
-  static const String  SupportTicketCreat = "support-ticket/create";
-  static const String  getSupportMyTickets = "support-ticket/my-tickets";
+  static const String getSupportTicketPriorities = "support-ticket/priorities";
+  static const String SupportTicketCreat = "support-ticket/create";
+  static const String getSupportMyTickets = "support-ticket/my-tickets";
 
+  // Connection Inbox API
+  static const String connectionInbox = "connection-request/merchant/inbox";
+  static const String acceptReject = "connection-request";
 
-/// Connector Api 
- static const String connectorCreate = "connector/create";
-static const String connectorUpdate = "connector/update";
+  /// Connector Api
+  static const String connectorCreate = "connector/create";
+  static const String connectorUpdate = "connector/update";
 
-
-//Connector products
-  static const String connectorProdcut= "connector/products";
-
-
-
+  //Connector products
+  static const String connectorProdcut = "connector/products";
 }

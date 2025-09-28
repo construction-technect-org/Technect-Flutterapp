@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart'
-    show Statistics, SupportMyTickets;
+import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/services/SupportTicketCategoriesServices.dart';
 
 class SupportRequestController extends GetxController {
@@ -11,13 +10,15 @@ class SupportRequestController extends GetxController {
   final SupportTicketCategoriesServices _service =
       SupportTicketCategoriesServices();
 
-  RxList<SupportMyTickets> myTickets = <SupportMyTickets>[].obs;
+  RxList<Ticket> myTickets = <Ticket>[].obs;
 
   Future<void> fetchMyTickets({required String status}) async {
     try {
       isLoading.value = true;
       final response = await _service.supportMyTicketsModel(filter: status);
-      myTickets.assignAll(response.data.tickets);
+      myTickets.clear();
+      myTickets.addAll(response.data?.tickets ?? []);
+      print('Tickets updated: ${myTickets.length} tickets');
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Failed to fetch tickets: $e');
     } finally {
@@ -27,7 +28,6 @@ class SupportRequestController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     if (Get.arguments != null) {
       fetchMyTickets(status: Get.arguments["status"]);

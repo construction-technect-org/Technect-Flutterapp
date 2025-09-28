@@ -1,19 +1,14 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
-import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/controller/customer_support_controller.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/creat_new_ticket.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/ticket_list_view.dart';
+import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
 import 'package:gap/gap.dart';
 
 class CustomerSupportView extends StatelessWidget {
-  final CustomerSupportController controller = Get.put(
-    CustomerSupportController(),
-  );
+  final CustomerSupportController controller = Get.put(CustomerSupportController());
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +35,8 @@ class CustomerSupportView extends StatelessWidget {
                 },
                 borderRadius: 22,
                 hintText: 'Search',
-                suffixIcon: SvgPicture.asset(
-                  Asset.filterIcon,
-                  height: 20,
-                  width: 20,
-                ),
-                prefixIcon: SvgPicture.asset(
-                  Asset.searchIcon,
-                  height: 16,
-                  width: 16,
-                ),
+                suffixIcon: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
+                prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
               ),
             ),
             SizedBox(height: 1.h),
@@ -77,15 +64,13 @@ class CustomerSupportView extends StatelessWidget {
                                     },
                                     title: 'Open Tickets',
                                     value:
-                                        "${controller.statistics.value.openTickets ?? 0}",
+                                        "${controller.supportMyTickets.value.data?.statistics?.openTickets ?? 0}",
                                     icon: SvgPicture.asset(
                                       Asset.warning,
                                       height: 20,
                                       width: 20,
                                     ),
-                                    iconBackground: MyColors.red.withValues(
-                                      alpha: 0.2,
-                                    ),
+                                    iconBackground: MyColors.red.withValues(alpha: 0.2),
                                   );
                                 }),
                               ),
@@ -101,7 +86,7 @@ class CustomerSupportView extends StatelessWidget {
                                     },
                                     title: 'In Progress',
                                     value:
-                                        "${controller.statistics.value.inProgressTickets ?? 0}",
+                                        "${controller.supportMyTickets.value.data?.statistics?.inProgressTickets ?? 0}",
                                     icon: const Icon(
                                       Icons.watch_later_outlined,
                                       size: 30,
@@ -129,15 +114,13 @@ class CustomerSupportView extends StatelessWidget {
                                     },
                                     title: 'Resolved',
                                     value:
-                                        "${controller.statistics.value.resolvedTickets ?? 0}",
+                                        "${controller.supportMyTickets.value.data?.statistics?.resolvedTickets ?? 0}",
                                     icon: const Icon(
                                       Icons.check_circle_rounded,
                                       size: 30,
                                       color: MyColors.green,
                                     ),
-                                    iconBackground: MyColors.green.withValues(
-                                      alpha: 0.2,
-                                    ),
+                                    iconBackground: MyColors.green.withValues(alpha: 0.2),
                                   );
                                 }),
                               ),
@@ -153,14 +136,15 @@ class CustomerSupportView extends StatelessWidget {
                                     },
                                     title: 'Avg Response',
                                     value:
-                                        "${controller.statistics.value.avgResponse ?? 0}",
+                                        "${controller.supportMyTickets.value.data?.statistics?.avgResponse ?? 0}",
                                     icon: const Icon(
                                       Icons.watch_later_outlined,
                                       size: 30,
                                       color: MyColors.primary,
                                     ),
-                                    iconBackground: MyColors.lightBlue
-                                        .withValues(alpha: 0.2),
+                                    iconBackground: MyColors.lightBlue.withValues(
+                                      alpha: 0.2,
+                                    ),
                                   );
                                 }),
                               ),
@@ -175,9 +159,7 @@ class CustomerSupportView extends StatelessWidget {
                                     Get.toNamed(Routes.CONNECTOR_REQUEST_DEMO);
                                   },
                                   style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(
-                                      color: MyColors.primary,
-                                    ),
+                                    side: const BorderSide(color: MyColors.primary),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
                                         12,
@@ -198,7 +180,7 @@ class CustomerSupportView extends StatelessWidget {
                                 child: Center(
                                   child: RoundedButton(
                                     onTap: () {
-                                      Get.to(CreatNewTicket());
+                                      Get.toNamed(Routes.CREATE_NEW_TICKET);
                                     },
                                     buttonName: '',
                                     borderRadius: 12,
@@ -223,15 +205,150 @@ class CustomerSupportView extends StatelessWidget {
                       ),
                     ),
                     Obx(() {
-                      if (controller.isLoadingMyTickets.value) {
-                        return const Center(child: Padding(
-                          padding: EdgeInsets.only(top: 70.0),
-                          child: CircularProgressIndicator(),
-                        ));
-                      } else {
-                        return TicketListView(list: controller.myTickets);
+                      if (controller.supportMyTickets.value.data?.tickets?.isEmpty ??
+                          true) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 80),
+                          child: Center(
+                            child: Text(
+                              "No tickets found !!",
+                              style: MyTexts.regular16.copyWith(color: Colors.black),
+                            ),
+                          ),
+                        );
                       }
-                    })
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16),
+                        itemCount:
+                            controller.supportMyTickets.value.data?.tickets?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          final ticket =
+                              controller.supportMyTickets.value.data?.tickets?[index] ??
+                              Ticket();
+
+                          return Card(
+                            color: MyColors.white,
+                            margin: const EdgeInsets.only(bottom: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(color: MyColors.americanSilver),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      _buildChip(
+                                        ticket.ticketNumber ?? "",
+                                        MyColors.white,
+                                        MyColors.black,
+                                        borderColor: MyColors.americanSilver,
+                                      ),
+                                      SizedBox(width: 2.w),
+                                      _buildChip(
+                                        ticket.statusName ?? "",
+                                        _getStatusBgColor(ticket.statusName ?? ""),
+                                        MyColors.white,
+                                        icon: _getStatusIcon(ticket.statusName ?? ""),
+                                      ),
+                                      SizedBox(width: 2.w),
+                                      _buildChip(
+                                        ticket.priorityName ?? "",
+                                        MyColors.white,
+                                        _getPriorityColor(ticket.priorityName ?? ""),
+                                        borderColor: _getPriorityColor(
+                                          ticket.priorityName ?? "",
+                                        ),
+                                        icon: _getPriorityIcon(ticket.priorityName ?? ""),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Text(
+                                    (ticket.subject ?? "").capitalizeFirst ?? "-",
+                                    style: MyTexts.medium18.copyWith(
+                                      color: MyColors.fontBlack,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.person_outline,
+                                        size: 18,
+                                        color: MyColors.darkGray,
+                                      ),
+                                      SizedBox(width: 0.4.w),
+                                      Text(
+                                        ticket.userMobile ?? "",
+                                        style: MyTexts.regular14.copyWith(
+                                          color: MyColors.darkGray,
+                                        ),
+                                      ),
+                                      SizedBox(width: 3.w),
+                                      const Icon(
+                                        Icons.category,
+                                        size: 16,
+                                        color: Colors.grey,
+                                      ),
+                                      SizedBox(width: 1.w),
+                                      Text(
+                                        ticket.categoryName ?? "",
+                                        style: MyTexts.regular14.copyWith(
+                                          color: MyColors.darkGray,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 0.8.h),
+                                  Text(
+                                    ticket.description ?? "",
+                                    style: MyTexts.regular14.copyWith(
+                                      color: MyColors.darkGray,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
+                                        style: MyTexts.bold15.copyWith(
+                                          color: MyColors.darkGray,
+                                          fontFamily: MyTexts.Roboto,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
+                                        style: MyTexts.bold15.copyWith(
+                                          color: MyColors.darkGray,
+                                          fontFamily: MyTexts.Roboto,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "● Assigned to: ${ticket.assignedTo?.toString() ?? "Unassigned"}",
+                                    style: MyTexts.bold15.copyWith(
+                                      color: MyColors.darkGray,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -241,158 +358,90 @@ class CustomerSupportView extends StatelessWidget {
       ),
     );
   }
-}
 
-class RequestDemoDialog extends StatefulWidget {
-  const RequestDemoDialog({super.key});
+  // Status color handling
+  Color _getStatusBgColor(String status) {
+    switch (status) {
+      case "In Progress":
+        return MyColors.warning;
+      case "Open":
+        return MyColors.red;
+      default:
+        return Colors.red;
+    }
+  }
 
-  @override
-  State<RequestDemoDialog> createState() => _RequestDemoDialogState();
-}
+  Color _getStatusTextColor(String status) {
+    switch (status) {
+      case "In Progress":
+      case "Open":
+        return MyColors.white;
+      default:
+        return MyColors.fontBlack;
+    }
+  }
 
-class _RequestDemoDialogState extends State<RequestDemoDialog> {
-  String? selectedOption;
-  final TextEditingController emailController = TextEditingController();
-  final CustomerSupportController controller = Get.put(
-    CustomerSupportController(),
-  );
+  /// Priority color handling
+  Color _getPriorityColor(String priority) {
+    switch (priority) {
+      case "Medium":
+        return MyColors.warning;
+      case "High":
+        return MyColors.red;
+      default:
+        return MyColors.fontBlack;
+    }
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: MyColors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Request Demo",
-                    style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.close, color: MyColors.red),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
+  /// Get icon for status
+  Widget? _getStatusIcon(String status) {
+    switch (status) {
+      case "In Progress":
+        return Image.asset(Asset.inprog, width: 14, height: 14);
+      case "Open":
+        return Image.asset(
+          Asset.operations,
+          width: 14,
+          height: 14,
+          color: MyColors.white,
+        );
+      default:
+        return null;
+    }
+  }
 
-              // Video placeholder
-              Container(
-                height: 159,
-                decoration: BoxDecoration(
-                  color: MyColors.progressRemaining,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.play_circle_fill,
-                    size: 48,
-                    color: MyColors.white,
-                  ),
-                ),
-              ),
+  /// Get icon for priority
+  Widget? _getPriorityIcon(String priority) {
+    switch (priority) {
+      case "Medium":
+        return Image.asset(Asset.management, width: 14, height: 14);
+      case "High":
+        return Image.asset(Asset.operations, width: 14, height: 14);
+      default:
+        return null;
+    }
+  }
 
-              // Dropdown
-              SizedBox(height: 2.h),
-              Row(
-                children: [
-                  Text(
-                    'Request Demo for',
-                    style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-                  ),
-                  Text(
-                    '*',
-                    style: MyTexts.light16.copyWith(color: MyColors.red),
-                  ),
-                ],
-              ),
-              SizedBox(height: 1.h),
-              CommonDropdown<String>(
-                hintText: "Select Main Category",
-                items: controller.mainCategories,
-                selectedValue: controller.selectedMainCategory,
-                // pass Rx directly
-                itemLabel: (item) => item,
-                onChanged: controller.isEdit
-                    ? null
-                    : (value) {
-                        controller.onMainCategorySelected(value);
-                      },
-                enabled: !controller.isEdit,
-              ),
-
-              SizedBox(height: 2.h),
-              // Price
-              Row(
-                children: [
-                  Text(
-                    'Company Email',
-                    style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
-                  ),
-                  Text(
-                    '*',
-                    style: MyTexts.light16.copyWith(color: MyColors.red),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 1.h),
-              CustomTextField(controller: emailController, onChanged: (p0) {}),
-              SizedBox(height: 2.h),
-
-              // Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text(
-                        "CANCEL",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: MyColors.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      onPressed: () {
-                        // Submit logic here
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "SUBMIT",
-                        style: TextStyle(color: MyColors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+  Widget _buildChip(
+    String text,
+    Color bgColor,
+    Color textColor, {
+    Color? borderColor,
+    Widget? icon,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: borderColor ?? Colors.transparent),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[icon, const SizedBox(width: 4)],
+          Text(text, style: MyTexts.bold14.copyWith(color: textColor)),
+        ],
       ),
     );
   }
