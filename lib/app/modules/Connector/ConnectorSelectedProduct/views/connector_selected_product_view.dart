@@ -41,18 +41,12 @@ class ConnectorSelectedProductView extends StatelessWidget {
 
                   switch (controller.currentPage.value) {
                     case 0:
-                      // Page 0 → Location selected?
                       isPageSwipeEnabled = controller.selectedSiteIndex.value != -1;
-                      break;
                     case 1:
-                      // Page 1 → Main category selected?
                       isPageSwipeEnabled =
                           controller.selectedMainCategoryIndex.value != -1;
-                      break;
                     case 2:
-                      // Page 2 → Subcategory or product selected?
                       isPageSwipeEnabled = controller.selectedProductIndex.value != -1;
-                      break;
                     default:
                       isPageSwipeEnabled = false;
                   }
@@ -418,7 +412,6 @@ class ConnectorSelectedProductView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: isSelected ? MyColors.primary : MyColors.grayD4,
-                          width: 1,
                         ),
                       ),
                       child: Row(
@@ -469,7 +462,6 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   itemCount: controller.subCategories.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
-                    childAspectRatio: 1,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                   ),
@@ -508,7 +500,6 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   itemCount: controller.categoryProducts.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
-                    childAspectRatio: 1,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                   ),
@@ -544,7 +535,6 @@ class ConnectorSelectedProductView extends StatelessWidget {
           children: [
             // Search & Filters
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 _buildButton(svgAsset: Asset.searchIcon, label: "Search Product"),
                 SizedBox(width: 2.w),
@@ -572,7 +562,6 @@ class ConnectorSelectedProductView extends StatelessWidget {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       items[index]["title"]!,
@@ -603,7 +592,7 @@ class ConnectorSelectedProductView extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: MyColors.primary,
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.white, width: 1),
+                              border: Border.all(color: Colors.white),
                             ),
                             child: const Icon(Icons.check, size: 14, color: Colors.white),
                           ),

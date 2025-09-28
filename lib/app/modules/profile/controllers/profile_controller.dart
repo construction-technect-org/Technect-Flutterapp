@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:path/path.dart';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
@@ -12,6 +11,7 @@ import 'package:construction_technect/app/modules/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/profile/services/document_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 
 class ProfileController extends GetxController {
   @override
@@ -21,13 +21,10 @@ class ProfileController extends GetxController {
 
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website.toString();
-      businessModel.value.businessEmail = merchantProfile?.businessEmail
+      businessModel.value.businessEmail = merchantProfile?.businessEmail.toString();
+      businessModel.value.businessContactNumber = merchantProfile?.businessContactNumber
           .toString();
-      businessModel.value.businessContactNumber = merchantProfile
-          ?.businessContactNumber
-          .toString();
-      businessModel.value.businessName = merchantProfile?.businessName
-          .toString();
+      businessModel.value.businessName = merchantProfile?.businessName.toString();
       businessModel.value.gstinNumber = merchantProfile?.gstinNumber.toString();
       print(businessHours);
 
@@ -75,20 +72,16 @@ class ProfileController extends GetxController {
       } else if (type == "udyam_certificate") {
         certificates[1].filePath = path;
         certificates[1].name = name;
-
       } else if (type == "mtc_certificate") {
         certificates[2].filePath = path;
         certificates[2].name = name;
-
       } else {
         // Add extra certificates dynamically
         certificates.add(
           CertificateModel(
-            title: (doc.documentType ?? type)
-                .replaceAll("_", " ")
-                .toUpperCase(),
+            title: (doc.documentType ?? type).replaceAll("_", " ").toUpperCase(),
             filePath: path,
-            name: doc.documentName??""
+            name: doc.documentName ?? "",
           ),
         );
       }
@@ -156,9 +149,7 @@ class ProfileController extends GetxController {
         );
         await homeController.fetchProfileData();
       } else {
-        SnackBars.errorSnackBar(
-          content: response.message ?? 'Failed to delete document',
-        );
+        SnackBars.errorSnackBar(content: response.message ?? 'Failed to delete document');
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error deleting document: $e');
@@ -214,7 +205,7 @@ class ProfileController extends GetxController {
 
       if (result != null) {
         certificates[index].filePath = result.files.first.path;
-        certificates[index].name = basename(result.files.first.path??"");
+        certificates[index].name = basename(result.files.first.path ?? "");
         certificates.refresh();
       } else {
         SnackBars.errorSnackBar(content: "No file selected");
@@ -260,19 +251,16 @@ class ProfileController extends GetxController {
 
       // Check if this is update or submit based on merchant ID
       final homeController = Get.find<HomeController>();
-      final merchantProfile =
-          homeController.profileData.value.data?.merchantProfile;
+      final merchantProfile = homeController.profileData.value.data?.merchantProfile;
       final isUpdate = merchantProfile?.id != null;
 
       final formFields = <String, dynamic>{
         'business_name': businessModel.value.businessName.toString(),
         'gstin_number': businessModel.value.gstinNumber.toString(),
         'business_email': businessModel.value.businessEmail.toString(),
-        'business_contact_number': businessModel.value.businessContactNumber
-            .toString(),
+        'business_contact_number': businessModel.value.businessContactNumber.toString(),
         'website': businessModel.value.website.toString(),
-        if (!isUpdate)
-          'business_hours': json.encode(businessHoursData.toList()),
+        if (!isUpdate) 'business_hours': json.encode(businessHoursData.toList()),
       };
 
       final files = <String, String>{};
@@ -295,11 +283,8 @@ class ProfileController extends GetxController {
       // For any additional certificates
       if (certificates.length > 3) {
         for (var i = 3; i < certificates.length; i++) {
-          if (!(certificates[i].filePath ?? "").startsWith(
-            "merchant-documents",
-          )) {
-            files[certificates[i].title ?? "certificate_$i"] =
-                certificates[i].filePath!;
+          if (!(certificates[i].filePath ?? "").startsWith("merchant-documents")) {
+            files[certificates[i].title] = certificates[i].filePath!;
           }
         }
       }
@@ -331,8 +316,7 @@ class ProfileController extends GetxController {
 
           if (isUpdate) {
             await homeController.fetchProfileData();
-            final updatedProfile =
-                homeController.profileData.value.data?.merchantProfile;
+            final updatedProfile = homeController.profileData.value.data?.merchantProfile;
             if (updatedProfile?.profileCompletionPercentage != null &&
                 updatedProfile!.profileCompletionPercentage! < 80) {
               commonController.hasProfileComplete.value = false;
@@ -351,7 +335,6 @@ class ProfileController extends GetxController {
             } else {
               Get.back();
               SnackBars.successSnackBar(content: "Profile update successfully");
-
             }
           } else {
             if (commonController.hasProfileComplete.value == false) {

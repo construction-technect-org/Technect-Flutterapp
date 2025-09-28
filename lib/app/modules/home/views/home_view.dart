@@ -115,9 +115,7 @@ class HomeView extends StatelessWidget {
                     const Gap(10),
                     GestureDetector(
                       onTap: () {
-                        ComingSoonDialog.showComingSoonDialog(
-                          featureName: 'Notification',
-                        );
+                        Get.toNamed(Routes.NOTIFICATIONS);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8),
@@ -411,8 +409,43 @@ class HomeView extends StatelessWidget {
                       SizedBox(
                         height: 120,
                         child: Obx(() {
+                          final teamMembers = controller.teamList.take(5).toList();
+
+                          if (teamMembers.isEmpty) {
+                            return Container(
+                              height: 100,
+                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.people_outline,
+                                      size: 32,
+                                      color: MyColors.grey,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'No team members',
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.grey,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Add team members to get started',
+                                      style: MyTexts.regular12.copyWith(
+                                        color: MyColors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+
                           return ListView.builder(
-                            itemCount: controller.teamList.take(5).length,
+                            itemCount: teamMembers.length,
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,

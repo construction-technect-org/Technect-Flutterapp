@@ -174,7 +174,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                       ],
                     ),
                   ),
-                  
+
                   SizedBox(height: 2.h),
 
                   /// Delivery Radius
@@ -405,13 +405,10 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
       ),
     );
   }
-
-
 }
 
 class _buildFeatureCard extends StatelessWidget {
   const _buildFeatureCard({
-    super.key,
     required this.controller,
     required this.isSelected,
     required this.item,

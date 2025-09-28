@@ -1,6 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 void hideKeyboard() {
   final context = Get.context;
@@ -15,10 +13,7 @@ void hideKeyboard() {
 Future<void> openUrl({required String url}) async {
   final Uri uri = Uri.parse(url);
   if (await canLaunchUrl(uri)) {
-    await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   } else {
     throw 'Could not launch $url';
   }

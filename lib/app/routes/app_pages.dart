@@ -58,6 +58,8 @@ import 'package:construction_technect/app/modules/Marketplace/bindings/market_pl
 import 'package:construction_technect/app/modules/Marketplace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/News/bindings/news_binding.dart';
 import 'package:construction_technect/app/modules/News/views/news_view.dart';
+import 'package:construction_technect/app/modules/Notifications/bindings/notification_binding.dart';
+import 'package:construction_technect/app/modules/Notifications/views/notification_view.dart';
 import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
 import 'package:construction_technect/app/modules/ReferAndCoupon/bindings/refer_bindings.dart';
@@ -356,5 +358,10 @@ class AppPages {
       binding: InventoryBinding(),
     ),
     GetPage(name: Routes.NEWS, page: () => NewsView(), binding: NewsBinding()),
+    GetPage(
+      name: Routes.NOTIFICATIONS,
+      page: () => NotificationView(),
+      binding: NotificationBinding(),
+    ),
   ];
 }

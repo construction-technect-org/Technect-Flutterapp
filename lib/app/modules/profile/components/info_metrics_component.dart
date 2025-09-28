@@ -40,11 +40,7 @@ class InfoMetricsComponent extends StatelessWidget {
                     color: const Color(0xFFFFED29),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Icon(
-                    Icons.photo_camera,
-                    size: 20,
-                    color: MyColors.black,
-                  ),
+                  child: Icon(Icons.photo_camera, size: 20, color: MyColors.black),
                 ),
               ),
             ],
@@ -62,8 +58,8 @@ class InfoMetricsComponent extends StatelessWidget {
             ),
             IconButton(
               padding: EdgeInsets.zero,
-              onPressed: ()  {
-                 Get.to(()=> EditProfile());
+              onPressed: () {
+                Get.to(() => EditProfile());
               },
               icon: const Icon(Icons.edit, color: Colors.black, size: 20),
             ),
@@ -107,8 +103,7 @@ class InfoMetricsComponent extends StatelessWidget {
             IconButton(
               padding: EdgeInsets.zero,
               onPressed: () async {
-                final previousData = (controller.businessHoursData ?? [])
-                    .toList();
+                final previousData = controller.businessHoursData.toList();
                 final result = await Get.toNamed(
                   Routes.BUSINESS_HOURS,
                   arguments: previousData.isNotEmpty ? previousData : null,
@@ -169,14 +164,10 @@ class InfoMetricsComponent extends StatelessWidget {
                           const Gap(6),
                           buildRow(
                             title: "Mobile Number",
-                            data:
-                                "${userData?.countryCode} ${userData?.mobileNumber}",
+                            data: "${userData?.countryCode} ${userData?.mobileNumber}",
                           ),
                           const Gap(6),
-                          buildRow(
-                            title: "Email ID",
-                            data: "${userData?.email}",
-                          ),
+                          buildRow(title: "Email ID", data: "${userData?.email}"),
                           const Gap(6),
                           buildRow(
                             title: "GSTIN",
@@ -284,7 +275,7 @@ class InfoMetricsComponent extends StatelessWidget {
       if (controller.businessHoursData.isEmpty) {
         return GestureDetector(
           onTap: () async {
-            final previousData = (controller.businessHoursData ?? []).toList();
+            final previousData = controller.businessHoursData.toList();
             final result = await Get.toNamed(
               Routes.BUSINESS_HOURS,
               arguments: previousData.isNotEmpty ? previousData : null,
@@ -350,10 +341,7 @@ class InfoMetricsComponent extends StatelessWidget {
         .toList();
 
     if (openDays.isEmpty) {
-      return Text(
-        "Closed",
-        style: MyTexts.medium14.copyWith(color: MyColors.red),
-      );
+      return Text("Closed", style: MyTexts.medium14.copyWith(color: MyColors.red));
     }
 
     String dayRange = "";

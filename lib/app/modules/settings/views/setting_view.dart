@@ -45,7 +45,7 @@ class SettingView extends StatelessWidget {
 
                           value: controller.isNotification.value,
                           onChanged: (val) {
-                            controller.isNotification.value = val ?? false;
+                            controller.isNotification.value = val;
                           },
                         );
                       }),
@@ -75,7 +75,7 @@ class SettingView extends StatelessWidget {
                                 activeTrackColor: MyColors.primary,
                                 value: controller.isDarkMode.value,
                                 onChanged: (val) {
-                                  controller.isDarkMode.value = val ?? false;
+                                  controller.isDarkMode.value = val;
                                   controller.isLightMode.value =
                                       !controller.isLightMode.value;
                                 },
@@ -98,7 +98,7 @@ class SettingView extends StatelessWidget {
                                 activeTrackColor: MyColors.primary,
                                 value: controller.isLightMode.value,
                                 onChanged: (val) {
-                                  controller.isLightMode.value = val ?? false;
+                                  controller.isLightMode.value = val;
                                   controller.isDarkMode.value =
                                       !controller.isDarkMode.value;
                                 },

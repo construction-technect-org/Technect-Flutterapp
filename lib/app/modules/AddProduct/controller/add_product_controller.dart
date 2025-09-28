@@ -104,7 +104,7 @@ class AddProductController extends GetxController {
   void _initializeEditMode() {
     productNameController.text = product.productName ?? '';
     productCodeController.text = product.productCode ?? '';
-    uocController.text = product.uoc.toString() ?? '';
+    uocController.text = product.uoc.toString();
     amountController.text = product.totalAmount ?? '';
     noteController.text = product.productNote ?? '';
     noteStockController.text = product.outOfStockNote ?? '';
@@ -140,8 +140,7 @@ class AddProductController extends GetxController {
 
     // Set existing product image for display
     if (product.productImage != null && product.productImage!.isNotEmpty) {
-      pickedFilePath.value =
-          "${APIConstants.bucketUrl}${product.productImage!}";
+      pickedFilePath.value = "${APIConstants.bucketUrl}${product.productImage!}";
       pickedFileName.value = "Current product image";
     }
 
@@ -176,9 +175,7 @@ class AddProductController extends GetxController {
 
     selectedMainCategory.value = categoryName;
 
-    final selected = mainCategories.firstWhereOrNull(
-      (c) => c.name == categoryName,
-    );
+    final selected = mainCategories.firstWhereOrNull((c) => c.name == categoryName);
     selectedMainCategoryId.value = '${selected?.id ?? 0}';
     if (selected != null) {
       fetchSubCategories(selected.id ?? 0);
@@ -198,9 +195,7 @@ class AddProductController extends GetxController {
 
     selectedSubCategory.value = subCategoryName;
 
-    final selectedSub = subCategories.firstWhereOrNull(
-      (s) => s.name == subCategoryName,
-    );
+    final selectedSub = subCategories.firstWhereOrNull((s) => s.name == subCategoryName);
     selectedSubCategoryId.value = '${selectedSub?.id ?? 0}';
 
     if (selectedSub != null) {
@@ -247,16 +242,12 @@ class AddProductController extends GetxController {
       final result = await _service.getFilter(subCategoryId);
 
       if (result.success == true) {
-        filters.value = (result.data as List<FilterData>)
-            .map((e) => e)
-            .toList();
+        filters.value = (result.data as List<FilterData>).map((e) => e).toList();
         for (final FilterData filter in filters) {
           dynamicControllers[filter.filterName ?? ''] = TextEditingController();
         }
 
-        if (isEdit &&
-            _storedFilterValues != null &&
-            _storedFilterValues!.isNotEmpty) {
+        if (isEdit && _storedFilterValues != null && _storedFilterValues!.isNotEmpty) {
           _populateFilterControllers();
         }
       } else {
@@ -275,9 +266,7 @@ class AddProductController extends GetxController {
     if (_storedFilterValues == null || _storedFilterValues!.isEmpty) return;
 
     try {
-      final Map<String, dynamic> filterValues = jsonDecode(
-        _storedFilterValues!,
-      );
+      final Map<String, dynamic> filterValues = jsonDecode(_storedFilterValues!);
 
       // Populate each dynamic controller with its corresponding value
       filterValues.forEach((key, value) {
@@ -292,9 +281,7 @@ class AddProductController extends GetxController {
 
   void onProductSelected(String? productName) {
     selectedProduct.value = productName;
-    final selectedSub = productsList.firstWhereOrNull(
-      (s) => s.name == productName,
-    );
+    final selectedSub = productsList.firstWhereOrNull((s) => s.name == productName);
     selectedProductId.value = '${selectedSub?.id ?? 0}';
   }
 
@@ -364,9 +351,7 @@ class AddProductController extends GetxController {
 
   void gstCalculate() {
     final double amount =
-        double.parse(
-          priceController.text.isEmpty ? '0.0' : priceController.text,
-        ) *
+        double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
         double.parse(
           selectedGST.value.toString().replaceAll("%", "").isEmpty
               ? '0.0'
@@ -374,8 +359,9 @@ class AddProductController extends GetxController {
         ) /
         100;
     gstPriceController.text = amount.toStringAsFixed(2);
-    amountController.text = (amount + double.parse(priceController.text))
-        .toStringAsFixed(2);
+    amountController.text = (amount + double.parse(priceController.text)).toStringAsFixed(
+      2,
+    );
   }
 
   Future<void> pickImage() async {
@@ -490,7 +476,7 @@ class AddProductController extends GetxController {
       gstPercentage: (selectedGST.value ?? "").replaceAll("%", ""),
       termsAndConditions: termsController.text,
       outOfStock: false,
-      stockQuantity: int.parse(stockController.text??"0"),
+      stockQuantity: int.parse(stockController.text),
       uom: selectedUom.value,
       uoc: uocController.text,
       packageType: packageTypeController.text,
@@ -502,18 +488,13 @@ class AddProductController extends GetxController {
       sortOrder: 1,
       filterValues: json.encode(payload),
     );
-    Get.toNamed(
-      Routes.PRODUCT_DETAILS,
-      arguments: {"product": p, "isFromAdd": true},
-    );
+    Get.toNamed(Routes.PRODUCT_DETAILS, arguments: {"product": p, "isFromAdd": true});
   }
 
   Future<void> createProduct() async {
     isLoading.value = true;
     Map<String, dynamic> fields = {};
-    final Map<String, String> selectedFiles = {
-      "product_image": pickedFilePath.value,
-    };
+    final Map<String, String> selectedFiles = {"product_image": pickedFilePath.value};
 
     final Map<String, String> payload = {};
     dynamicControllers.forEach((key, controller) {
@@ -538,9 +519,7 @@ class AddProductController extends GetxController {
       "product_note": noteController.text,
       "gst_percentage": (selectedGST.value ?? "").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,
-      "stock_qty": isOutStock.value == true
-          ? int.parse(stockController.text ?? "0")
-          : 0,
+      "stock_qty": isOutStock.value == true ? int.parse(stockController.text) : 0,
       "outofstock": !isOutStock.value,
       "brand": brandNameController.text,
       "uom": selectedUom.value,
@@ -608,7 +587,7 @@ class AddProductController extends GetxController {
       "price": priceController.text,
       "gst_percentage": (selectedGST.value ?? "").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,
-      "stock_qty": isOutStock.value ?  stockController.text : "0",
+      "stock_qty": isOutStock.value ? stockController.text : "0",
       "brand": brandNameController.text,
       "uom": selectedUom.value,
       "package_type": packageTypeController.text,

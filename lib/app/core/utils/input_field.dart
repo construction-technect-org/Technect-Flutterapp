@@ -78,11 +78,8 @@ class CommonTextField extends StatelessWidget {
                       fontFamily: MyTexts.Roboto,
                     ),
                   ),
-                  if(isRed==true)
-                  Text(
-                    '*',
-                    style: MyTexts.regular16.copyWith(color: Colors.red),
-                  ),
+                  if (isRed == true)
+                    Text('*', style: MyTexts.regular16.copyWith(color: Colors.red)),
                 ],
               ),
               const Gap(5),
@@ -115,40 +112,37 @@ class CommonTextField extends StatelessWidget {
           decoration: InputDecoration(
             prefixIcon: prefixIcon != null
                 ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal:  16),
-              child: prefixIcon,
-            )
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: prefixIcon,
+                  )
                 : null,
             suffixIcon: suffixIcon != null
                 ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: suffixIcon,
-            )
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: suffixIcon,
+                  )
                 : null,
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: MyColors.textFieldBorder),
-              borderRadius: BorderRadius.circular(borderRadius??10),
+              borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: MyColors.black),
-              borderRadius: BorderRadius.circular(borderRadius??10),
+              borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.red, width: 1),
-              borderRadius: BorderRadius.circular(borderRadius??10),
+              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.circular(borderRadius??10),
+              borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             isDense: true,
             filled: true,
-            fillColor: bgColor??Colors.white,
+            fillColor: bgColor ?? Colors.white,
             counterText: "",
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 12,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             errorStyle: MyTexts.regular13.copyWith(
               color: Colors.red,
               fontFamily: MyTexts.Roboto,

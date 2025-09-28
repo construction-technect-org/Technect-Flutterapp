@@ -26,9 +26,7 @@ class DashboardView extends GetView<DashboardController> {
                     Obx(
                       () => Text(
                         'Welcome ${controller.profileData.value.data?.user?.firstName}!',
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.fontBlack,
-                        ),
+                        style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                       ),
                     ),
                     Row(
@@ -58,7 +56,7 @@ class DashboardView extends GetView<DashboardController> {
                   ],
                 ),
               ),
-             Gap(10),
+              Gap(10),
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
@@ -128,10 +126,7 @@ class DashboardView extends GetView<DashboardController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 13,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                 child: Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
@@ -142,20 +137,14 @@ class DashboardView extends GetView<DashboardController> {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(
-                          Asset.searchIcon,
-                          height: 16,
-                          width: 16,
-                        ),
+                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                       ),
                       prefixIconConstraints: const BoxConstraints(
                         minWidth: 36,
                         minHeight: 36,
                       ),
                       hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(
-                        color: MyColors.darkGray,
-                      ),
+                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                       filled: true,
                       fillColor: MyColors.white,
                       contentPadding: const EdgeInsets.symmetric(
@@ -168,11 +157,7 @@ class DashboardView extends GetView<DashboardController> {
                       ),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(
-                          Asset.filterIcon,
-                          height: 20,
-                          width: 20,
-                        ),
+                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
                       ),
                     ),
                   ),
@@ -200,15 +185,11 @@ class DashboardView extends GetView<DashboardController> {
                   builder: (context, constraints) {
                     // Dynamically calculate item width
                     final double itemWidth =
-                        (constraints.maxWidth - (3 * 10)) /
-                        3; // 4 per row with spacing
+                        (constraints.maxWidth - (3 * 10)) / 3; // 4 per row with spacing
                     final double itemHeight = itemWidth + 10; // for icon + text
 
                     return GridView.builder(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 20,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: controller.features.length,
@@ -222,8 +203,7 @@ class DashboardView extends GetView<DashboardController> {
                         final item = controller.features[index];
 
                         return Obx(() {
-                          final isSelected =
-                              controller.selectedIndex.value == index;
+                          final isSelected = controller.selectedIndex.value == index;
                           return _buildFeatureCard(
                             controller: controller,
                             isSelected: isSelected,
@@ -264,16 +244,10 @@ class DashboardView extends GetView<DashboardController> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: _buildStatCard("Partners", "250", Asset.noOfUsers),
-                    ),
+                    Expanded(child: _buildStatCard("Partners", "250", Asset.noOfUsers)),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: _buildStatCard(
-                        "Connectors",
-                        "180",
-                        Asset.noOfConectors,
-                      ),
+                      child: _buildStatCard("Connectors", "180", Asset.noOfConectors),
                     ),
                   ],
                 ),
@@ -295,11 +269,8 @@ class DashboardView extends GetView<DashboardController> {
             onTap: () {
               if (controller.selectedIndex.value == 0) {
                 Get.toNamed(Routes.DASHABORD_MARKET_PLACE);
-              }
-              else{
-                SnackBars.errorSnackBar(
-                  content: 'Please select one feature',
-                );
+              } else {
+                SnackBars.errorSnackBar(content: 'Please select one feature');
               }
             },
           ),
@@ -333,10 +304,7 @@ class DashboardView extends GetView<DashboardController> {
                     style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    value,
-                    style: MyTexts.bold18.copyWith(color: MyColors.primary),
-                  ),
+                  Text(value, style: MyTexts.bold18.copyWith(color: MyColors.primary)),
                 ],
               ),
             ],
@@ -349,7 +317,6 @@ class DashboardView extends GetView<DashboardController> {
 
 class _buildFeatureCard extends StatelessWidget {
   const _buildFeatureCard({
-    super.key,
     required this.controller,
     required this.isSelected,
     required this.item,

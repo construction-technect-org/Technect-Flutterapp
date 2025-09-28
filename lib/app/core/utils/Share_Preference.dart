@@ -6,6 +6,7 @@ import 'package:construction_technect/app/modules/CustomerSupport/models/Support
 import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:construction_technect/app/modules/FAQ/model/faq_model.dart';
 import 'package:construction_technect/app/modules/News/models/news_model.dart';
+import 'package:construction_technect/app/modules/Notifications/models/notification_model.dart';
 import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart'
     as ProductModel;
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
@@ -40,6 +41,7 @@ class AppSharedPreference {
   final productsData = <String, dynamic>{}.val('productsData');
   final supportTicketsData = <String, dynamic>{}.val('supportTicketsData');
   final newsData = <String, dynamic>{}.val('newsData');
+  final notificationData = <String, dynamic>{}.val('notificationData');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -58,7 +60,6 @@ class AppSharedPreference {
     return UserModel.fromJson(userData);
   }
 
-  // Remember Me functionality
   void saveCredentials(String mobileNumber, String password) {
     savedMobileNumber.val = mobileNumber;
     savedPassword.val = password;
@@ -98,7 +99,6 @@ class AppSharedPreference {
     teamStatsData.val = {};
   }
 
-  // Address data storage
   void setAddressData(Map<String, dynamic> address) {
     addressData.val = address;
     addressDataTimestamp.val = DateTime.now().millisecondsSinceEpoch;
@@ -121,7 +121,6 @@ class AppSharedPreference {
     addressDataTimestamp.val = 0;
   }
 
-  // Profile data storage
   void setProfileData(Map<String, dynamic> profile) {
     profileData.val = profile;
   }
@@ -138,7 +137,6 @@ class AppSharedPreference {
     profileData.val = {};
   }
 
-  // Roles data storage
   void setRolesData(Map<String, dynamic> roles) {
     rolesData.val = roles;
   }
@@ -155,7 +153,6 @@ class AppSharedPreference {
     rolesData.val = {};
   }
 
-  // Helper methods for roles
   Future<void> saveRoles(List<GetAllRole> roles) async {
     try {
       final rolesJson = roles.map((role) => role.toJson()).toList();
@@ -200,7 +197,6 @@ class AppSharedPreference {
     teamData.val = {};
   }
 
-  // Helper methods for team
   Future<void> saveTeam(List<TeamListData> team) async {
     try {
       final teamJson = team.map((member) => member.toJson()).toList();
@@ -228,7 +224,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Team stats data storage
   void setTeamStatsData(Map<String, dynamic> stats) {
     teamStatsData.val = stats;
   }
@@ -245,7 +240,6 @@ class AppSharedPreference {
     teamStatsData.val = {};
   }
 
-  // Helper methods for team stats
   Future<void> saveTeamStats(Statistics stats) async {
     try {
       setTeamStatsData({
@@ -292,7 +286,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Role stats data storage
   final roleStatsData = <String, dynamic>{}.val('roleStatsData');
 
   void setRoleStatsData(Map<String, dynamic> stats) {
@@ -311,7 +304,6 @@ class AppSharedPreference {
     roleStatsData.val = {};
   }
 
-  // Helper methods for role stats
   Future<void> saveRoleStats(Statistics stats) async {
     try {
       setRoleStatsData({
@@ -347,7 +339,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Categories data storage
   void setCategoriesData(List<SupportCategory> categories) {
     try {
       final categoriesJson = categories
@@ -374,7 +365,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Priorities data storage
   void setPrioritiesData(List<SupportPriority> priorities) {
     try {
       final prioritiesJson = priorities
@@ -401,7 +391,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Store complete role model data
   void setRoleModelData(GetAllRoleModel roleModel) {
     try {
       rolesData.val = roleModel.toJson();
@@ -410,7 +399,6 @@ class AppSharedPreference {
     }
   }
 
-  // Get complete role model data
   GetAllRoleModel? getRoleModelData() {
     try {
       final data = rolesData.val;
@@ -423,7 +411,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Store complete team model data
   void setTeamModelData(TeamListModel teamModel) {
     try {
       teamData.val = teamModel.toJson();
@@ -432,7 +419,6 @@ class AppSharedPreference {
     }
   }
 
-  // Get complete team model data
   TeamListModel? getTeamModelData() {
     try {
       final data = teamData.val;
@@ -445,7 +431,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Store complete product list model data
   void setProductListModel(ProductModel.ProductListModel productListModel) {
     try {
       productsData.val = productListModel.toJson();
@@ -454,7 +439,6 @@ class AppSharedPreference {
     }
   }
 
-  // Get complete product list model data
   ProductModel.ProductListModel? getProductListModel() {
     try {
       final data = productsData.val;
@@ -467,7 +451,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Store complete support tickets model data
   void setSupportTicketsModel(SupportMyTicketsModel supportTicketsModel) {
     try {
       supportTicketsData.val = supportTicketsModel.toJson();
@@ -476,7 +459,6 @@ class AppSharedPreference {
     }
   }
 
-  // Get complete support tickets model data
   SupportMyTicketsModel? getSupportTicketsModel() {
     try {
       final data = supportTicketsData.val;
@@ -489,7 +471,6 @@ class AppSharedPreference {
     return null;
   }
 
-  // Store complete news model data
   void setNewsModel(NewsModel newsModel) {
     try {
       newsData.val = newsModel.toJson();
@@ -498,7 +479,6 @@ class AppSharedPreference {
     }
   }
 
-  // Get complete news model data
   NewsModel? getNewsModel() {
     try {
       final data = newsData.val;
@@ -507,6 +487,22 @@ class AppSharedPreference {
       }
     } catch (e) {
       log('Error getting news model: $e');
+    }
+    return null;
+  }
+
+  void setNotificationModel(NotificationModel notificationModel) {
+    notificationData.val = notificationModel.toJson();
+  }
+
+  NotificationModel? getNotificationModel() {
+    try {
+      final data = notificationData.val;
+      if (data.isNotEmpty) {
+        return NotificationModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting notification model: $e');
     }
     return null;
   }
