@@ -9,8 +9,6 @@ import 'package:construction_technect/app/modules/ProductManagement/model/produc
 import 'package:gap/gap.dart';
 
 class InventoryView extends GetView<InventoryController> {
-  const InventoryView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -27,79 +25,67 @@ class InventoryView extends GetView<InventoryController> {
               children: [
                 const Gap(16),
                 CommonTextField(
-                  onChange: (value) {
-                  },
+                  onChange: (value) {},
                   borderRadius: 22,
                   hintText: 'Search',
-                  suffixIcon: SvgPicture.asset(
-                    Asset.filterIcon,
-                    height: 20,
-                    width: 20,
-                  ),
-                  prefixIcon: SvgPicture.asset(
-                    Asset.searchIcon,
-                    height: 16,
-                    width: 16,
-                  ),
+                  suffixIcon: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
+                  prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                 ),
                 Obx(
-                      () => (Get.find<ProductManagementController>().filteredProducts.isEmpty &&
-                          Get.find<ProductManagementController>().searchQuery.value.isNotEmpty)
-                          ? Padding(
-                        padding: const EdgeInsets.only(top: 100.0),
-                        child: Column(
-                          children: [
-                            const Gap(20),
-                            const Icon(
-                              Icons.search_off,
-                              size: 64,
-                              color: MyColors.grey,
-                            ),
-                            SizedBox(height: 2.h),
-                            Text(
-                              'No products found',
-                              style: MyTexts.medium18.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                            SizedBox(height: 0.5.h),
-                            Text(
-                              'Try searching with different keywords',
-                              style: MyTexts.regular14.copyWith(
+                  () =>
+                      (Get.find<ProductManagementController>().filteredProducts.isEmpty &&
+                          Get.find<ProductManagementController>()
+                              .searchQuery
+                              .value
+                              .isNotEmpty)
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 100.0),
+                          child: Column(
+                            children: [
+                              const Gap(20),
+                              const Icon(
+                                Icons.search_off,
+                                size: 64,
                                 color: MyColors.grey,
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 2.h),
+                              Text(
+                                'No products found',
+                                style: MyTexts.medium18.copyWith(
+                                  color: MyColors.fontBlack,
+                                ),
+                              ),
+                              SizedBox(height: 0.5.h),
+                              Text(
+                                'Try searching with different keywords',
+                                style: MyTexts.regular14.copyWith(color: MyColors.grey),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: Get.find<ProductManagementController>()
+                              .filteredProducts
+                              .length,
+                          separatorBuilder: (_, _) => const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            final Product product =
+                                Get.find<ProductManagementController>()
+                                    .filteredProducts[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Get.toNamed(
+                                  Routes.PRODUCT_DETAILS,
+                                  arguments: {"product": product, "isFromAdd": false},
+                                );
+                              },
+                              child: ProductCard(product: product),
+                            );
+                          },
                         ),
-                      )
-                          : ListView.separated(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                        ),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: Get.find<ProductManagementController>().filteredProducts.length,
-                        separatorBuilder: (_, _) =>
-                        const SizedBox(height: 12),
-                        itemBuilder: (context, index) {
-                          final Product product =
-                          Get.find<ProductManagementController>().filteredProducts[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Get.toNamed(
-                                Routes.PRODUCT_DETAILS,
-                                arguments: {
-                                  "product": product,
-                                  "isFromAdd": false,
-                                },
-                              );
-                            },
-                            child: ProductCard(
-                              product: product,
-                            ),
-                          );
-                        },
-                      ),
                 ),
               ],
             ),
@@ -149,10 +135,7 @@ class ProductStatCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
-            Text(
-              value,
-              style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
-            ),
+            Text(value, style: MyTexts.bold16.copyWith(color: MyColors.fontBlack)),
             const Gap(10),
             Text(
               subtitle,
@@ -160,10 +143,7 @@ class ProductStatCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
-            Text(
-              subValue,
-              style: MyTexts.bold16.copyWith(color: subValueColor),
-            ),
+            Text(subValue, style: MyTexts.bold16.copyWith(color: subValueColor)),
           ],
         ),
       ),

@@ -7,9 +7,7 @@ import 'package:construction_technect/app/modules/ProductManagement/model/produc
 import 'package:gap/gap.dart';
 
 class ProductManagementView extends StatelessWidget {
-  final ProductManagementController controller = Get.put(
-    ProductManagementController(),
-  );
+  final ProductManagementController controller = Get.put(ProductManagementController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,7 @@ class ProductManagementView extends StatelessWidget {
         ),
         body: Obx(() {
           return controller.isLoading.value
-              ? const Center(child: CircularProgressIndicator(color: MyColors.primary,))
+              ? const Center(child: CircularProgressIndicator(color: MyColors.primary))
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -57,268 +55,246 @@ class ProductManagementView extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              child: SizedBox(
-                                height: 150,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: MyColors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            12,
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          controller.clearSearch();
+                          await controller.fetchProducts();
+                        },
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: SizedBox(
+                                  height: 150,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: MyColors.white,
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(color: MyColors.black),
                                           ),
-                                          border: Border.all(
-                                            color: MyColors.black,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 8,
                                           ),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 8,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SvgPicture.asset(
-                                              Asset.noOfConectors,
-                                            ),
-                                            const Gap(10),
-                                            Text(
-                                              "Total Products",
-                                              style: MyTexts.regular14.copyWith(
-                                                color: MyColors.black,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              SvgPicture.asset(Asset.noOfConectors),
+                                              const Gap(10),
+                                              Text(
+                                                "Total Products",
+                                                style: MyTexts.regular14.copyWith(
+                                                  color: MyColors.black,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                            ),
-                                            Text(
-                                              controller
-                                                  .statistics
-                                                  .value
-                                                  .totalProducts
-                                                  .toString(),
-                                              style: MyTexts.bold16.copyWith(
-                                                color: MyColors.fontBlack,
+                                              Text(
+                                                controller.statistics.value.totalProducts
+                                                    .toString(),
+                                                style: MyTexts.bold16.copyWith(
+                                                  color: MyColors.fontBlack,
+                                                ),
                                               ),
-                                            ),
-                                            const Gap(10),
-                                            Text(
-                                              "Active Products",
-                                              style: MyTexts.regular14.copyWith(
-                                                color: MyColors.black,
+                                              const Gap(10),
+                                              Text(
+                                                "Active Products",
+                                                style: MyTexts.regular14.copyWith(
+                                                  color: MyColors.black,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                            ),
-                                            Text(
-                                              controller
-                                                  .statistics
-                                                  .value
-                                                  .featured
-                                                  .toString(),
-                                              style: MyTexts.bold16.copyWith(
-                                                color: MyColors.green,
+                                              Text(
+                                                controller.statistics.value.featured
+                                                    .toString(),
+                                                style: MyTexts.bold16.copyWith(
+                                                  color: MyColors.green,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const Gap(12),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: MyColors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                          border: Border.all(
-                                            color: MyColors.americanSilver,
-                                          ),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 8,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Gap(10),
-                                            SvgPicture.asset(Asset.warning),
-                                            const Gap(10),
-                                            Text(
-                                              "Low Stock",
-                                              style: MyTexts.regular16.copyWith(
-                                                color: MyColors.gray53,
-                                                fontFamily: MyTexts.Roboto,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
+                                      const Gap(12),
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: MyColors.white,
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: MyColors.americanSilver,
                                             ),
-                                            Text(
-                                              controller
-                                                  .statistics
-                                                  .value
-                                                  .lowStock
-                                                  .toString(),
-                                              style: MyTexts.bold20.copyWith(
-                                                color: MyColors.redgray,
-                                                fontFamily: MyTexts.Roboto,
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 8,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Gap(10),
+                                              SvgPicture.asset(Asset.warning),
+                                              const Gap(10),
+                                              Text(
+                                                "Low Stock",
+                                                style: MyTexts.regular16.copyWith(
+                                                  color: MyColors.gray53,
+                                                  fontFamily: MyTexts.Roboto,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                               ),
-                                            ),
-                                          ],
+                                              Text(
+                                                controller.statistics.value.lowStock
+                                                    .toString(),
+                                                style: MyTexts.bold20.copyWith(
+                                                  color: MyColors.redgray,
+                                                  fontFamily: MyTexts.Roboto,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const Gap(12),
-                                    Expanded(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: MyColors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                          border: Border.all(
-                                            color: MyColors.americanSilver,
-                                          ),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 8,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            const Gap(10),
-                                            Text(
-                                              "Interest Products",
-                                              style: MyTexts.regular14.copyWith(
-                                                color: MyColors.black,
-                                                fontFamily: MyTexts.Roboto,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
+                                      const Gap(12),
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: MyColors.white,
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: MyColors.americanSilver,
                                             ),
-                                            const Gap(15),
-                                            Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  width: 55,
-                                                  height: 55,
-                                                  child: CircularProgressIndicator(
-                                                    value:
-                                                        double.parse(
-                                                          "${controller.statistics.value.totalInterests}",
-                                                        ) /
-                                                        100,
-                                                    strokeWidth: 8,
-                                                    backgroundColor: MyColors
-                                                        .profileRemaining,
-                                                    valueColor:
-                                                        const AlwaysStoppedAnimation<
-                                                          Color
-                                                        >(MyColors.redgray),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 8,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              const Gap(10),
+                                              Text(
+                                                "Interest Products",
+                                                style: MyTexts.regular14.copyWith(
+                                                  color: MyColors.black,
+                                                  fontFamily: MyTexts.Roboto,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const Gap(15),
+                                              Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 55,
+                                                    height: 55,
+                                                    child: CircularProgressIndicator(
+                                                      value:
+                                                          double.parse(
+                                                            "${controller.statistics.value.totalInterests}",
+                                                          ) /
+                                                          100,
+                                                      strokeWidth: 8,
+                                                      backgroundColor:
+                                                          MyColors.profileRemaining,
+                                                      valueColor:
+                                                          const AlwaysStoppedAnimation<
+                                                            Color
+                                                          >(MyColors.redgray),
+                                                    ),
                                                   ),
-                                                ),
-                                                Text(
-                                                  '${controller.statistics.value.totalInterests}%',
-                                                  style: MyTexts.medium16
-                                                      .copyWith(
-                                                        color: MyColors.black,
-                                                        fontFamily:
-                                                            MyTexts.Roboto,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                  Text(
+                                                    '${controller.statistics.value.totalInterests}%',
+                                                    style: MyTexts.medium16.copyWith(
+                                                      color: MyColors.black,
+                                                      fontFamily: MyTexts.Roboto,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Obx(
-                              () => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child:
-                                    (controller.filteredProducts.isEmpty &&
-                                        controller.searchQuery.value.isNotEmpty)
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 100.0,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            const Gap(20),
-                                            const Icon(
-                                              Icons.search_off,
-                                              size: 64,
-                                              color: MyColors.grey,
-                                            ),
-                                            SizedBox(height: 2.h),
-                                            Text(
-                                              'No products found',
-                                              style: MyTexts.medium18.copyWith(
-                                                color: MyColors.fontBlack,
-                                              ),
-                                            ),
-                                            SizedBox(height: 0.5.h),
-                                            Text(
-                                              'Try searching with different keywords',
-                                              style: MyTexts.regular14.copyWith(
+                              Obx(
+                                () => Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  child: controller.filteredProducts.isEmpty
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(top: 100.0),
+                                          child: Column(
+                                            children: [
+                                              const Gap(20),
+                                              Icon(
+                                                controller.searchQuery.value.isNotEmpty
+                                                    ? Icons.search_off
+                                                    : Icons.inventory_2_outlined,
+                                                size: 64,
                                                 color: MyColors.grey,
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(height: 2.h),
+                                              Text(
+                                                controller.searchQuery.value.isNotEmpty
+                                                    ? 'No products found'
+                                                    : 'No products available',
+                                                style: MyTexts.medium18.copyWith(
+                                                  color: MyColors.fontBlack,
+                                                ),
+                                              ),
+                                              SizedBox(height: 0.5.h),
+                                              Text(
+                                                controller.searchQuery.value.isNotEmpty
+                                                    ? 'Try searching with different keywords'
+                                                    : 'Add your first product to get started',
+                                                style: MyTexts.regular14.copyWith(
+                                                  color: MyColors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : ListView.separated(
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 20,
+                                          ),
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemCount: controller.filteredProducts.length,
+                                          separatorBuilder: (_, _) =>
+                                              const SizedBox(height: 12),
+                                          itemBuilder: (context, index) {
+                                            final Product product =
+                                                controller.filteredProducts[index];
+                                            return GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(
+                                                  Routes.PRODUCT_DETAILS,
+                                                  arguments: {
+                                                    "product": product,
+                                                    "isFromAdd": false,
+                                                  },
+                                                );
+                                              },
+                                              child: ProductCard(product: product),
+                                            );
+                                          },
                                         ),
-                                      )
-                                    : ListView.separated(
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 20,
-                                        ),
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount:
-                                            controller.filteredProducts.length,
-                                        separatorBuilder: (_, _) =>
-                                            const SizedBox(height: 12),
-                                        itemBuilder: (context, index) {
-                                          final Product product = controller
-                                              .filteredProducts[index];
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                Routes.PRODUCT_DETAILS,
-                                                arguments: {
-                                                  "product": product,
-                                                  "isFromAdd": false,
-                                                },
-                                              );
-                                            },
-                                            child: ProductCard(
-                                              product: product,
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

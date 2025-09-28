@@ -1,56 +1,48 @@
-class ApprovalInboxService {
+class ApprovalInboxModel {
   bool? success;
   Data? data;
 
-  ApprovalInboxService({this.success, this.data});
+  ApprovalInboxModel({this.success, this.data});
 
-  ApprovalInboxService.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
-  }
+  factory ApprovalInboxModel.fromJson(Map<String, dynamic> json) => ApprovalInboxModel(
+    success: json["success"],
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = success;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {"success": success, "data": data?.toJson()};
 }
 
 class Data {
-  List<Notifications>? notifications;
+  List<ApprovalInbox>? approvalInbox;
   Pagination? pagination;
+  ProductStatistics? productStatistics;
 
-  Data({this.notifications, this.pagination});
+  Data({this.approvalInbox, this.pagination, this.productStatistics});
 
-  Data.fromJson(Map<String, dynamic> json) {
-    if (json['notifications'] != null) {
-      notifications = <Notifications>[];
-      json['notifications'].forEach((v) {
-        notifications!.add(Notifications.fromJson(v));
-      });
-    }
-    pagination = json['pagination'] != null
-        ? Pagination.fromJson(json['pagination'])
-        : null;
-  }
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    approvalInbox: json["notifications"] == null
+        ? []
+        : List<ApprovalInbox>.from(
+            json["notifications"]!.map((x) => ApprovalInbox.fromJson(x)),
+          ),
+    pagination: json["pagination"] == null
+        ? null
+        : Pagination.fromJson(json["pagination"]),
+    productStatistics: json["product_statistics"] == null
+        ? null
+        : ProductStatistics.fromJson(json["product_statistics"]),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (notifications != null) {
-      data['notifications'] =
-          notifications!.map((v) => v.toJson()).toList();
-    }
-    if (pagination != null) {
-      data['pagination'] = pagination!.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "notifications": approvalInbox == null
+        ? []
+        : List<dynamic>.from(approvalInbox!.map((x) => x.toJson())),
+    "pagination": pagination?.toJson(),
+    "product_statistics": productStatistics?.toJson(),
+  };
 }
 
-class Notifications {
+class ApprovalInbox {
   int? id;
   int? userId;
   int? merchantProfileId;
@@ -62,84 +54,80 @@ class Notifications {
   String? status;
   bool? isRead;
   Metadata? metadata;
-  String? createdAt;
-  String? updatedAt;
-  Null? readAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  dynamic readAt;
 
-  Notifications(
-      {this.id,
-        this.userId,
-        this.merchantProfileId,
-        this.title,
-        this.message,
-        this.notificationType,
-        this.entityType,
-        this.entityId,
-        this.status,
-        this.isRead,
-        this.metadata,
-        this.createdAt,
-        this.updatedAt,
-        this.readAt});
+  ApprovalInbox({
+    this.id,
+    this.userId,
+    this.merchantProfileId,
+    this.title,
+    this.message,
+    this.notificationType,
+    this.entityType,
+    this.entityId,
+    this.status,
+    this.isRead,
+    this.metadata,
+    this.createdAt,
+    this.updatedAt,
+    this.readAt,
+  });
 
-  Notifications.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    merchantProfileId = json['merchant_profile_id'];
-    title = json['title'];
-    message = json['message'];
-    notificationType = json['notification_type'];
-    entityType = json['entity_type'];
-    entityId = json['entity_id'];
-    status = json['status'];
-    isRead = json['is_read'];
-    metadata = json['metadata'] != null
-        ? Metadata.fromJson(json['metadata'])
-        : null;
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    readAt = json['read_at'];
-  }
+  factory ApprovalInbox.fromJson(Map<String, dynamic> json) => ApprovalInbox(
+    id: json["id"],
+    userId: json["user_id"],
+    merchantProfileId: json["merchant_profile_id"],
+    title: json["title"],
+    message: json["message"],
+    notificationType: json["notification_type"],
+    entityType: json["entity_type"],
+    entityId: json["entity_id"],
+    status: json["status"],
+    isRead: json["is_read"],
+    metadata: json["metadata"] == null ? null : Metadata.fromJson(json["metadata"]),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    readAt: json["read_at"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['user_id'] = userId;
-    data['merchant_profile_id'] = merchantProfileId;
-    data['title'] = title;
-    data['message'] = message;
-    data['notification_type'] = notificationType;
-    data['entity_type'] = entityType;
-    data['entity_id'] = entityId;
-    data['status'] = status;
-    data['is_read'] = isRead;
-    if (metadata != null) {
-      data['metadata'] = metadata!.toJson();
-    }
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['read_at'] = readAt;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "user_id": userId,
+    "merchant_profile_id": merchantProfileId,
+    "title": title,
+    "message": message,
+    "notification_type": notificationType,
+    "entity_type": entityType,
+    "entity_id": entityId,
+    "status": status,
+    "is_read": isRead,
+    "metadata": metadata?.toJson(),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "read_at": readAt,
+  };
 }
 
 class Metadata {
   String? action;
   String? productName;
+  String? adminComment;
 
-  Metadata({this.action, this.productName});
+  Metadata({this.action, this.productName, this.adminComment});
 
-  Metadata.fromJson(Map<String, dynamic> json) {
-    action = json['action'];
-    productName = json['product_name'];
-  }
+  factory Metadata.fromJson(Map<String, dynamic> json) => Metadata(
+    action: json["action"],
+    productName: json["product_name"],
+    adminComment: json["admin_comment"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['action'] = action;
-    data['product_name'] = productName;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "action": action,
+    "product_name": productName,
+    "admin_comment": adminComment,
+  };
 }
 
 class Pagination {
@@ -150,19 +138,57 @@ class Pagination {
 
   Pagination({this.total, this.limit, this.offset, this.hasMore});
 
-  Pagination.fromJson(Map<String, dynamic> json) {
-    total = json['total'];
-    limit = json['limit'];
-    offset = json['offset'];
-    hasMore = json['has_more'];
-  }
+  factory Pagination.fromJson(Map<String, dynamic> json) => Pagination(
+    total: json["total"],
+    limit: json["limit"],
+    offset: json["offset"],
+    hasMore: json["has_more"],
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['total'] = total;
-    data['limit'] = limit;
-    data['offset'] = offset;
-    data['has_more'] = hasMore;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "total": total,
+    "limit": limit,
+    "offset": offset,
+    "has_more": hasMore,
+  };
+}
+
+class ProductStatistics {
+  int? totalProducts;
+  int? approvedProducts;
+  int? rejectedProducts;
+  int? pendingProducts;
+  int? holdProducts;
+  int? activeProducts;
+  int? inactiveProducts;
+
+  ProductStatistics({
+    this.totalProducts,
+    this.approvedProducts,
+    this.rejectedProducts,
+    this.pendingProducts,
+    this.holdProducts,
+    this.activeProducts,
+    this.inactiveProducts,
+  });
+
+  factory ProductStatistics.fromJson(Map<String, dynamic> json) => ProductStatistics(
+    totalProducts: json["total_products"],
+    approvedProducts: json["approved_products"],
+    rejectedProducts: json["rejected_products"],
+    pendingProducts: json["pending_products"],
+    holdProducts: json["hold_products"],
+    activeProducts: json["active_products"],
+    inactiveProducts: json["inactive_products"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "total_products": totalProducts,
+    "approved_products": approvedProducts,
+    "rejected_products": rejectedProducts,
+    "pending_products": pendingProducts,
+    "hold_products": holdProducts,
+    "active_products": activeProducts,
+    "inactive_products": inactiveProducts,
+  };
 }

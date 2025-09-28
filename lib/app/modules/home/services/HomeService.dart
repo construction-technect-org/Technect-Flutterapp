@@ -8,7 +8,7 @@ class HomeService {
 
   Future<ProfileModel> getProfile() async {
     try {
-        final response = await _apiManager.get(url: APIConstants.profile);
+      final response = await _apiManager.get(url: APIConstants.profile);
 
       return ProfileModel.fromJson(response);
     } catch (e) {

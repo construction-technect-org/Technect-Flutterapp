@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/AddTeam/controllers/add_team_controller.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
+import 'package:construction_technect/app/modules/RoleManagement/components/delete_team_dialog.dart';
 import 'package:construction_technect/app/modules/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
@@ -132,9 +134,30 @@ class RoleManagementView extends GetView<RoleManagementController> {
                             }
 
                             if (controller.roles.isEmpty) {
-                              return const Padding(
-                                padding: EdgeInsets.only(top: 8.0),
-                                child: Center(child: Text("No roles found")),
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Gap(20),
+                                  const Icon(
+                                    Icons.admin_panel_settings_outlined,
+                                    size: 64,
+                                    color: MyColors.grey,
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Text(
+                                    'No roles found',
+                                    style: MyTexts.medium18.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
+                                  ),
+                                  SizedBox(height: 0.5.h),
+                                  Text(
+                                    'Create your first role to get started',
+                                    style: MyTexts.regular14.copyWith(
+                                      color: MyColors.grey,
+                                    ),
+                                  ),
+                                ],
                               );
                             }
 
@@ -248,9 +271,30 @@ class RoleManagementView extends GetView<RoleManagementController> {
                               }
 
                               if (homeController.teamList.isEmpty) {
-                                return const Padding(
-                                  padding: EdgeInsets.only(top: 100.0),
-                                  child: Center(child: Text("No Team member found")),
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Gap(20),
+                                    const Icon(
+                                      Icons.people_outline,
+                                      size: 64,
+                                      color: MyColors.grey,
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Text(
+                                      'No team members found',
+                                      style: MyTexts.medium18.copyWith(
+                                        color: MyColors.fontBlack,
+                                      ),
+                                    ),
+                                    SizedBox(height: 0.5.h),
+                                    Text(
+                                      'Add your first team member to get started',
+                                      style: MyTexts.regular14.copyWith(
+                                        color: MyColors.grey,
+                                      ),
+                                    ),
+                                  ],
                                 );
                               }
 
@@ -361,6 +405,41 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                             Icons.edit,
                                                             size: 20,
                                                             // smaller so it fits inside 14x14 box
+                                                            color: MyColors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        DeleteTeamDialog.showDeleteTeamDialog(
+                                                          context,
+                                                          user,
+                                                          () async {
+                                                            final addTeamController =
+                                                                Get.find<
+                                                                  AddTeamController
+                                                                >();
+                                                            await addTeamController
+                                                                .deleteTeamMember(
+                                                                  user.id!,
+                                                                );
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: 30,
+                                                        height: 30,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(8),
+                                                          color: Colors.red,
+                                                        ),
+                                                        child: Center(
+                                                          child: Icon(
+                                                            Icons.delete,
+                                                            size: 20,
                                                             color: MyColors.white,
                                                           ),
                                                         ),

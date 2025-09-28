@@ -122,12 +122,7 @@ class HomeView extends StatelessWidget {
                         clipBehavior: Clip.none,
                         // 👈 allows badge to overflow
                         children: [
-                          SvgPicture.asset(
-                            Asset.notifications,
-                            // or 'assets/images/notifications.svg'
-                            width: 18,
-                            height: 18,
-                          ),
+                          SvgPicture.asset(Asset.notifications, width: 18, height: 18),
                           Positioned(
                             right: 0,
                             top: 3,
@@ -240,7 +235,10 @@ class HomeView extends StatelessWidget {
                                 Expanded(
                                   child: _buildNotiCard(
                                     onTap: () {
-                                      Get.toNamed(Routes.APPROVAL_INBOX);
+                                      Get.toNamed(
+                                        Routes.APPROVAL_INBOX,
+                                        arguments: {"isInbox": true},
+                                      );
                                     },
                                     title: "Inbox",
                                     value: "02",
@@ -490,25 +488,29 @@ class HomeView extends StatelessWidget {
             ),
             const Gap(12),
 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title ?? "",
-                  style: MyTexts.regular14.copyWith(
-                    color: MyColors.gray5D,
-                    fontFamily: MyTexts.Roboto,
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: MyTexts.regular14.copyWith(
+                      color: MyColors.gray5D,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
-                ),
-                Text(
-                  value ?? "",
-                  style: MyTexts.bold20.copyWith(
-                    color: MyColors.black,
-                    fontFamily: MyTexts.Roboto,
+                  Text(
+                    value ?? "",
+                    style: MyTexts.bold20.copyWith(
+                      color: MyColors.black,
+                      fontFamily: MyTexts.Roboto,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

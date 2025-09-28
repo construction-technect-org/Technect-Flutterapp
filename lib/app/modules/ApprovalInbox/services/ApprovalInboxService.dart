@@ -1,22 +1,23 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/modules/ApprovalInbox/model/approval_inbox_model.dart';
 
-class ApprovalinboxService {
+class ApprovalInboxService {
   final ApiManager _apiManager = ApiManager();
 
-
-
-  Future<ApprovalInboxService?> fetchAllNotification() async {
+  Future<ApprovalInboxModel> fetchApprovalInbox() async {
     try {
-      final response = await _apiManager.get(url: APIConstants.notifications);
+      final response = await _apiManager.get(
+        url: APIConstants.notificationsProduct,
+      );
       if (response != null) {
-        return ApprovalInboxService.fromJson(response);
+        return ApprovalInboxModel.fromJson(response);
       }
     } catch (e) {
       log("Error fetching roles: $e");
     }
-    return null;
+    return ApprovalInboxModel();
   }
 }

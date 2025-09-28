@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/AddTeam/controllers/add_team_controller.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
+import 'package:construction_technect/app/modules/RoleManagement/components/delete_team_dialog.dart';
 
 class AddTeamView extends GetView<AddTeamController> {
   const AddTeamView({super.key});
@@ -20,6 +21,29 @@ class AddTeamView extends GetView<AddTeamController> {
           appBar: CommonAppBar(
             title: Text(controller.isEdit.value ? "EDIT TEAM" : "ADD TEAM"),
             isCenter: false,
+            action: controller.isEdit.value
+                ? [
+                    IconButton(
+                      onPressed: () {
+                        DeleteTeamDialog.showDeleteTeamDialog(
+                          context,
+                          controller.teamDetailsModel.value,
+                          () {
+                            controller.deleteTeamMember(
+                              controller.teamDetailsModel.value.id!,
+                            );
+                            Get.back();
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        color: MyColors.red,
+                        size: 24,
+                      ),
+                    ),
+                  ]
+                : null,
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -59,9 +83,14 @@ class AddTeamView extends GetView<AddTeamController> {
                   children: [
                     Text(
                       'User Role',
-                      style: MyTexts.light16.copyWith(color: MyColors.lightBlue),
+                      style: MyTexts.light16.copyWith(
+                        color: MyColors.lightBlue,
+                      ),
                     ),
-                    Text('*', style: MyTexts.regular16.copyWith(color: Colors.red)),
+                    Text(
+                      '*',
+                      style: MyTexts.regular16.copyWith(color: Colors.red),
+                    ),
                   ],
                 ),
 

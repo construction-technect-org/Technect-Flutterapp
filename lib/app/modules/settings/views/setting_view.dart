@@ -52,55 +52,62 @@ class SettingView extends StatelessWidget {
                     ],
                   ),
                   const Gap(5),
-                  const Divider(),
-                  const Gap(5),
-                  HeaderText(text: "Theme"),
-                  const Gap(3),
-                  Row(
-                    children: [
-                      Text(
-                        "Dark Mode",
-                        style: MyTexts.regular16.copyWith(
-                          color: Colors.black,
-                          fontFamily: MyTexts.Roboto,
+                  Visibility(
+                    visible: false,
+                    child: Column(
+                      children: [
+                        const Divider(),
+                        const Gap(5),
+                        HeaderText(text: "Theme"),
+                        const Gap(3),
+                        Row(
+                          children: [
+                            Text(
+                              "Dark Mode",
+                              style: MyTexts.regular16.copyWith(
+                                color: Colors.black,
+                                fontFamily: MyTexts.Roboto,
+                              ),
+                            ),
+                            const Spacer(),
+                            Obx(() {
+                              return CupertinoSwitch(
+                                activeTrackColor: MyColors.primary,
+                                value: controller.isDarkMode.value,
+                                onChanged: (val) {
+                                  controller.isDarkMode.value = val ?? false;
+                                  controller.isLightMode.value =
+                                      !controller.isLightMode.value;
+                                },
+                              );
+                            }),
+                          ],
                         ),
-                      ),
-                      const Spacer(),
-                      Obx(() {
-                        return CupertinoSwitch(
-                          activeTrackColor: MyColors.primary,
-                          value: controller.isDarkMode.value,
-                          onChanged: (val) {
-                            controller.isDarkMode.value = val ?? false;
-                            controller.isLightMode.value =
-                                !controller.isLightMode.value;
-                          },
-                        );
-                      }),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Light Mode",
-                        style: MyTexts.regular16.copyWith(
-                          color: Colors.black,
-                          fontFamily: MyTexts.Roboto,
+                        Row(
+                          children: [
+                            Text(
+                              "Light Mode",
+                              style: MyTexts.regular16.copyWith(
+                                color: Colors.black,
+                                fontFamily: MyTexts.Roboto,
+                              ),
+                            ),
+                            const Spacer(),
+                            Obx(() {
+                              return CupertinoSwitch(
+                                activeTrackColor: MyColors.primary,
+                                value: controller.isLightMode.value,
+                                onChanged: (val) {
+                                  controller.isLightMode.value = val ?? false;
+                                  controller.isDarkMode.value =
+                                      !controller.isDarkMode.value;
+                                },
+                              );
+                            }),
+                          ],
                         ),
-                      ),
-                      const Spacer(),
-                      Obx(() {
-                        return CupertinoSwitch(
-                          activeTrackColor: MyColors.primary,
-                          value: controller.isLightMode.value,
-                          onChanged: (val) {
-                            controller.isLightMode.value = val ?? false;
-                            controller.isDarkMode.value =
-                                !controller.isDarkMode.value;
-                          },
-                        );
-                      }),
-                    ],
+                      ],
+                    ),
                   ),
                   const Gap(5),
                   const Divider(),
@@ -196,9 +203,7 @@ void _showConfirmDialog(
         OutlinedButton(
           style: OutlinedButton.styleFrom(
             side: BorderSide(color: Colors.grey.shade400),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: () => Get.back(),
@@ -210,9 +215,7 @@ void _showConfirmDialog(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
           ),
           onPressed: onConfirm,

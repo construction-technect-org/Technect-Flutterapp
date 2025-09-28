@@ -39,8 +39,8 @@ class AddTeamController extends GetxController {
 
   void loadTeamData() {
     isEdit.value = true;
-    fNameController.text=teamDetailsModel.value.firstName ?? '';
-    lNameController.text=teamDetailsModel.value.lastName ?? '';
+    fNameController.text = teamDetailsModel.value.firstName ?? '';
+    lNameController.text = teamDetailsModel.value.lastName ?? '';
     emialIdController.text = teamDetailsModel.value.emailId ?? '';
     phoneNumberController.text = teamDetailsModel.value.mobileNumber ?? '';
     selectedRole!.value = roles.firstWhere(
@@ -81,7 +81,7 @@ class AddTeamController extends GetxController {
         isLoading.value = false;
         Get.back();
       } else {
-        await addTeamService.addTeam(fields: fields,);
+        await addTeamService.addTeam(fields: fields);
         await homeController.refreshTeamList();
         // await roleController.fetchTeamStatsOverview();
         isLoading.value = false;
@@ -92,23 +92,48 @@ class AddTeamController extends GetxController {
       // Error snackbar is already shown by ApiManager
     }
   }
+
   Rxn<String> selectedCategory = Rxn<String>();
 
+  Future<void> deleteTeamMember(int teamMemberId) async {
+    try {
+      isLoading.value = true;
+      final response = await addTeamService.deleteTeamMember(teamMemberId);
+
+      if (response['success'] == true) {
+        SnackBars.successSnackBar(content: 'Team member deleted successfully');
+        // Refresh team list in home controller
+        await homeController.refreshTeamList();
+        // Also refresh the cached data
+        await homeController.fetchTeamList();
+      } else {
+        SnackBars.errorSnackBar(
+          content: response['message'] ?? 'Failed to delete team member',
+        );
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error deleting team member: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   Future<void> filedValidation() async {
-
     // Validate Full Name
     if (fNameController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'First name is required');
     } else if (fNameController.text.length < 3) {
-      SnackBars.errorSnackBar(content: 'First name must be at least 3 characters');
+      SnackBars.errorSnackBar(
+        content: 'First name must be at least 3 characters',
+      );
     }
     if (lNameController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'First name is required');
     } else if (lNameController.text.length < 2) {
-      SnackBars.errorSnackBar(content: 'Last name must be at least 2 characters');
-    }
-    else if (emialIdController.text.isEmpty) {
+      SnackBars.errorSnackBar(
+        content: 'Last name must be at least 2 characters',
+      );
+    } else if (emialIdController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Email is required');
     } else if (!GetUtils.isEmail(emialIdController.text)) {
       SnackBars.errorSnackBar(content: 'Please enter a valid email');
@@ -121,9 +146,7 @@ class AddTeamController extends GetxController {
     } else if (selectedCategory.value == "") {
       SnackBars.errorSnackBar(content: 'User role is required');
     } else if (!isEdit.value) {
-
-        await addTeam();
-
+      await addTeam();
     } else {
       await addTeam();
     }

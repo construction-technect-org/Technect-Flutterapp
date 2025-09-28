@@ -4,10 +4,10 @@ import 'package:construction_technect/app/modules/AddProduct/bindings/add_produc
 import 'package:construction_technect/app/modules/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/AddRole/bindings/add_role_binding.dart';
 import 'package:construction_technect/app/modules/AddRole/views/add_role_view.dart';
-import 'package:construction_technect/app/modules/AddTeam/bindings/add_team_binding.dart';
-import 'package:construction_technect/app/modules/AddTeam/views/add_team_view.dart';
 import 'package:construction_technect/app/modules/AddService/bindings/add_service_binding.dart';
 import 'package:construction_technect/app/modules/AddService/views/add_service_view.dart';
+import 'package:construction_technect/app/modules/AddTeam/bindings/add_team_binding.dart';
+import 'package:construction_technect/app/modules/AddTeam/views/add_team_view.dart';
 import 'package:construction_technect/app/modules/Address/bindings/address_bindings.dart';
 import 'package:construction_technect/app/modules/Address/views/address_view.dart';
 import 'package:construction_technect/app/modules/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
@@ -30,20 +30,20 @@ import 'package:construction_technect/app/modules/Connector/ConnectorCustomerSup
 import 'package:construction_technect/app/modules/Connector/ConnectorCustomerSupportTicket/views/connector_customer_support_ticket_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorFilters/bindings/connector_filter_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorFilters/views/connector_filters_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorMainTab/bindings/connector_main_tab_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorMainTab/views/connector_main_tab.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorProfile/views/connector_profile_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo/bindings/connector_request_demo_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo/views/connector_request_demo_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/bindings/create_new_ticket_binding.dart';
 import 'package:construction_technect/app/modules/CustomerSupport/views/creat_new_ticket.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProfile/views/connector_profile_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorMainTab/bindings/connector_main_tab_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorMainTab/views/connector_main_tab.dart';
 import 'package:construction_technect/app/modules/Dashboard/bindings/dashboard_binding.dart';
 import 'package:construction_technect/app/modules/Dashboard/views/dashboard_view.dart';
 import 'package:construction_technect/app/modules/DashboardMarketPlace/bindings/market_place_binding.dart';
@@ -66,10 +66,10 @@ import 'package:construction_technect/app/modules/RoleDetails/bindings/role_deta
 import 'package:construction_technect/app/modules/RoleDetails/views/role_details_view.dart';
 import 'package:construction_technect/app/modules/RoleManagement/bindings/role_management_binding.dart';
 import 'package:construction_technect/app/modules/RoleManagement/views/role_management_view.dart';
-import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
-import 'package:construction_technect/app/modules/ServiceManagement/views/service_management_view.dart';
 import 'package:construction_technect/app/modules/ServiceDetail/bindings/service_detail_binding.dart';
 import 'package:construction_technect/app/modules/ServiceDetail/views/service_detail_view.dart';
+import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
+import 'package:construction_technect/app/modules/ServiceManagement/views/service_management_view.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/bindings/sign_up_details_binding.dart';
 import 'package:construction_technect/app/modules/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_up_password_binding.dart';
@@ -111,11 +111,7 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(
-      name: _Paths.LOGIN,
-      page: () => const LoginView(),
-      binding: LoginBinding(),
-    ),
+    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -136,16 +132,8 @@ class AppPages {
       page: () => const ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(
-      name: _Paths.MAIN,
-      page: () => MainTabBarView(),
-      binding: MainBinding(),
-    ),
-    GetPage(
-      name: _Paths.PROFILE,
-      page: () => ProfileView(),
-      binding: ProfileBinding(),
-    ),
+    GetPage(name: _Paths.MAIN, page: () => MainTabBarView(), binding: MainBinding()),
+    GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
     GetPage(
       name: _Paths.EDIT_PROFILE,
       page: () => const EditProfileView(),
@@ -199,7 +187,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.APPROVAL_INBOX,
-      page: () => const ApprovalInboxView(),
+      page: () => ApprovalInboxView(),
       binding: ApprovalInboxBinding(),
     ),
     GetPage(
@@ -212,11 +200,7 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(
-      name: _Paths.FAQ,
-      page: () => const FaqScreen(),
-      binding: FAQBindings(),
-    ),
+    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
     GetPage(
       name: _Paths.TEAM_DETAILS,
       page: () => const TeamDetailsView(),
@@ -232,9 +216,7 @@ class AppPages {
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<ServiceManagementController>(
-          () => ServiceManagementController(),
-        );
+        Get.lazyPut<ServiceManagementController>(() => ServiceManagementController());
       }),
     ),
     GetPage(
@@ -368,7 +350,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.INVENTORY,
-      page: () => const InventoryView(),
+      page: () => InventoryView(),
       binding: InventoryBinding(),
     ),
   ];

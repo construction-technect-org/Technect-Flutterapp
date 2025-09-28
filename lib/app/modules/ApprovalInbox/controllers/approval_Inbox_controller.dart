@@ -4,30 +4,27 @@ import 'package:construction_technect/app/modules/ApprovalInbox/services/Approva
 
 class ApprovalInboxController extends GetxController {
   final statusCards = <Map<String, dynamic>>[].obs;
+  Rx<ApprovalInboxModel> approvalInboxList = ApprovalInboxModel().obs;
 
   @override
   void onInit() {
     super.onInit();
-    isInbox.value = Get.arguments["isInbox"];
-    fetchInbox();
+    isInbox.value = Get.arguments["isInbox"] ?? false;
+    if (isInbox.value) {
+      fetchInbox();
+    }
   }
+
   RxBool isLoading = false.obs;
   RxBool isInbox = false.obs;
-  final ApprovalinboxService _service = ApprovalinboxService();
-  final RxList<Notifications> approvalInboxList = <Notifications>[].obs;
+  final ApprovalInboxService _service = ApprovalInboxService();
 
   Future<void> fetchInbox() async {
     try {
       isLoading.value = true;
-      final result = await _service.fetchAllNotification();
-      if (result != null && result.success==true) {
-        approvalInboxList.assignAll((result.data??Data()).notifications??[]);
-      }
+      approvalInboxList.value = await _service.fetchApprovalInbox();
     } finally {
       isLoading.value = false;
     }
   }
-
-
-
 }

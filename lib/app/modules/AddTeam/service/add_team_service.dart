@@ -4,7 +4,6 @@ import 'package:construction_technect/app/modules/SignUpPassword/model/SignUpMod
 class AddTeamService {
   ApiManager apiManager = ApiManager();
 
-
   Future<SignUpModel> addTeam({
     required Map<String, dynamic> fields,
     Map<String, String>? files,
@@ -37,6 +36,17 @@ class AddTeamService {
       return SignUpModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in signup: $e , $st');
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteTeamMember(int teamMemberId) async {
+    try {
+      final response = await apiManager.delete(
+        url: "${APIConstants.team}/$teamMemberId",
+      );
+      return Map<String, dynamic>.from(response);
+    } catch (e, st) {
+      throw Exception('Error deleting team member: $e , $st');
     }
   }
 }

@@ -1,13 +1,12 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ApprovalInbox/controllers/approval_Inbox_controller.dart';
+import 'package:construction_technect/app/modules/ApprovalInbox/model/approval_inbox_model.dart';
 import 'package:construction_technect/app/modules/home/views/home_view.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 class ApprovalInboxView extends GetView<ApprovalInboxController> {
-  const ApprovalInboxView({super.key});
-
   Widget buildStatusCard({
     required IconData icon,
     required Color iconColor,
@@ -15,7 +14,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
     required String title,
     required String product,
     required String category,
-    required String dateTime,
+    required DateTime dateTime,
   }) {
     print(dateTime);
     return Container(
@@ -25,11 +24,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
         borderRadius: BorderRadius.circular(4),
         border: Border(left: BorderSide(color: iconColor, width: 3)),
         boxShadow: const [
-          BoxShadow(
-            color: MyColors.americanSilver,
-            blurRadius: 10,
-            offset: Offset(0, 6),
-          ),
+          BoxShadow(color: MyColors.americanSilver, blurRadius: 10, offset: Offset(0, 6)),
         ],
       ),
       child: Padding(
@@ -103,9 +98,9 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    DateFormat("dd MMM yyyy, hh:mma").format(
-                      DateTime.parse("2025-09-27T05:26:33.061Z").toLocal(),
-                    ),
+                    DateFormat(
+                      "dd MMM yyyy, hh:mma",
+                    ).format(DateTime.parse("2025-09-27T05:26:33.061Z").toLocal()),
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.darkGray,
                       fontFamily: MyTexts.Roboto,
@@ -149,7 +144,15 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                   Expanded(
                                     child: StaticsCard(
                                       title: "Total Products",
-                                      value: "123.4K",
+                                      value:
+                                          (controller
+                                                      .approvalInboxList
+                                                      .value
+                                                      .data
+                                                      ?.productStatistics
+                                                      ?.totalProducts ??
+                                                  0)
+                                              .toStringAsFixed(2),
                                       icon: Asset.noOfConectors,
                                       color: MyColors.primary,
                                     ),
@@ -158,7 +161,15 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                   Expanded(
                                     child: StaticsCard(
                                       title: "Approved Products",
-                                      value: "123.4K",
+                                      value:
+                                          (controller
+                                                      .approvalInboxList
+                                                      .value
+                                                      .data
+                                                      ?.productStatistics
+                                                      ?.approvedProducts ??
+                                                  0)
+                                              .toStringAsFixed(2),
                                       icon: Asset.noOfConectors,
                                       color: MyColors.green,
                                     ),
@@ -168,7 +179,15 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                   Expanded(
                                     child: StaticsCard(
                                       title: "Rejected Products",
-                                      value: "250",
+                                      value:
+                                          (controller
+                                                      .approvalInboxList
+                                                      .value
+                                                      .data
+                                                      ?.productStatistics
+                                                      ?.rejectedProducts ??
+                                                  0)
+                                              .toStringAsFixed(2),
                                       icon: Asset.noOfConectors,
                                       color: MyColors.red,
                                     ),
@@ -183,10 +202,23 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                         child: Obx(
                           () => ListView.builder(
                             padding: const EdgeInsets.symmetric(vertical: 20),
-                            itemCount: controller.approvalInboxList.length,
+                            itemCount:
+                                controller
+                                    .approvalInboxList
+                                    .value
+                                    .data
+                                    ?.approvalInbox
+                                    ?.length ??
+                                0,
 
                             itemBuilder: (context, index) {
-                              final card = controller.approvalInboxList[index];
+                              final card =
+                                  controller
+                                      .approvalInboxList
+                                      .value
+                                      .data
+                                      ?.approvalInbox?[index] ??
+                                  ApprovalInbox();
                               IconData statusIcon;
                               Color statusColor;
 
@@ -195,8 +227,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                   statusIcon = Icons.error_outline;
                                   statusColor = MyColors.warning;
                                 case "approved":
-                                  statusIcon =
-                                      Icons.check_circle_outline_outlined;
+                                  statusIcon = Icons.check_circle_outline_outlined;
                                   statusColor = MyColors.green;
                                 case "rejected":
                                   statusIcon = Icons.cancel_outlined;
@@ -209,7 +240,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                 title: card.title ?? "",
                                 icon: statusIcon,
                                 category: card.entityType ?? "",
-                                dateTime: card.createdAt ?? "",
+                                dateTime: card.createdAt ?? DateTime.now(),
                                 iconColor: statusColor,
                                 message: card.message ?? "",
                                 product: card.metadata?.productName ?? "",

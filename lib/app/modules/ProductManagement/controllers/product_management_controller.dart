@@ -35,6 +35,12 @@ class ProductManagementController extends GetxController {
     }
   }
 
+  void clearSearch() {
+    searchQuery.value = '';
+    filteredProducts.clear();
+    filteredProducts.addAll(productModel.value.data?.products ?? []);
+  }
+
   Future<void> fetchProducts() async {
     try {
       isLoading(true);
