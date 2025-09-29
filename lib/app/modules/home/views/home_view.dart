@@ -63,12 +63,14 @@ class HomeView extends StatelessWidget {
                     return (controller.profileData.value.data?.user?.image ??
                                 "")
                             .isEmpty
-                        ? Image.asset(Asset.profil, height: 40, width: 40)
+                        ? Image.asset(Asset.profil, height: 50, width: 50)
                         : ClipOval(
                             child: getImageView(
                               finalUrl:
                                   "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
                               fit: BoxFit.cover,
+                              height: 50,
+                              width: 50,
                             ),
                           );
                   }),
@@ -79,7 +81,7 @@ class HomeView extends StatelessWidget {
                       children: [
                         Obx(
                           () => Text(
-                            'Welcome ${controller.profileData.value.data?.user?.firstName}!',
+                            'Welcome ${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
                             style: MyTexts.medium16.copyWith(
                               color: MyColors.fontBlack,
                               fontFamily: MyTexts.Roboto,
@@ -110,22 +112,26 @@ class HomeView extends StatelessWidget {
                               SizedBox(width: 0.4.h),
                               Obx(
                                 () => Expanded(
-                                  child: Text(
-                                    controller.getCurrentAddress(),
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.textFieldBackground,
-                                      fontFamily: MyTexts.Roboto,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        controller.getCurrentAddress(),
+                                        style: MyTexts.medium14.copyWith(
+                                          color: MyColors.textFieldBackground,
+                                          fontFamily: MyTexts.Roboto,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      const Icon(
+                                        Icons.keyboard_arrow_down,
+                                        size: 16,
+                                        color: Colors.black54,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 4),
-                              const Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 16,
-                                color: Colors.black54,
                               ),
                             ],
                           ),
@@ -340,7 +346,7 @@ class HomeView extends StatelessWidget {
                           const Gap(14),
                           Container(
                             padding: const EdgeInsets.only(
-                              bottom: 18,
+                              // bottom: 18,
                               right: 18,
                               left: 18,
                             ),
@@ -487,45 +493,57 @@ class HomeView extends StatelessWidget {
                           );
                         }
 
-                        return ListView.builder(
-                          itemCount: teamMembers.length,
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return SizedBox(
-                              width: 100,
-                              child: Column(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child:  (controller.teamList[index].profilePhotoUrl ?? "")
-                                        .isEmpty
-                                        ? Image.asset(
-                                      Asset.aTeam,
-                                      height: 67,
-                                      width: 67,
-                                    )
-                                        : getImageView(
-                                      finalUrl:
-                                      controller.teamList[index].profilePhotoUrl ?? "",
-                                      height: 67,
-                                      width: 67,
+                        return Align(
+                          alignment: Alignment.topLeft,
+                          child: ListView.builder(
+                            itemCount: teamMembers.length,
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return SizedBox(
+                                width: 100,
+                                child: Column(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child:
+                                          (controller
+                                                      .teamList[index]
+                                                      .profilePhotoUrl ??
+                                                  "")
+                                              .isEmpty
+                                          ? Image.asset(
+                                              Asset.aTeam,
+                                              height: 67,
+                                              width: 67,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : getImageView(
+                                              finalUrl:
+                                                  controller
+                                                      .teamList[index]
+                                                      .profilePhotoUrl ??
+                                                  "",
+                                              height: 67,
+                                              width: 67,
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
-                                  ),
-                                  const Gap(12),
-                                  Text(
-                                    "${controller.teamList[index].firstName} ${controller.teamList[index].lastName}",
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.black,
+                                    const Gap(12),
+                                    Text(
+                                      "${controller.teamList[index].firstName} ${controller.teamList[index].lastName}",
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.black,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         );
                       }),
                     ),

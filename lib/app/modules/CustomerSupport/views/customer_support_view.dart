@@ -320,9 +320,11 @@ class CustomerSupportView extends StatelessWidget {
                                           SizedBox(height: 1.h),
                                           Text(
                                             (ticket.subject ?? "").capitalizeFirst ?? "-",
-                                            style: MyTexts.medium18.copyWith(
+                                            style: MyTexts.medium16
+                                                .copyWith(
                                               color: MyColors.fontBlack,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily:
+                                              MyTexts.Roboto,
                                             ),
                                           ),
                                           SizedBox(height: 1.h),
@@ -338,6 +340,7 @@ class CustomerSupportView extends StatelessWidget {
                                                 ticket.userMobile ?? "",
                                                 style: MyTexts.regular14.copyWith(
                                                   color: MyColors.darkGray,
+                                                  fontFamily: MyTexts.Roboto
                                                 ),
                                               ),
                                               SizedBox(width: 3.w),
@@ -351,6 +354,8 @@ class CustomerSupportView extends StatelessWidget {
                                                 ticket.categoryName ?? "",
                                                 style: MyTexts.regular14.copyWith(
                                                   color: MyColors.darkGray,
+                                                    fontFamily: MyTexts.Roboto
+
                                                 ),
                                               ),
                                             ],
@@ -368,7 +373,7 @@ class CustomerSupportView extends StatelessWidget {
                                             children: [
                                               Text(
                                                 "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
-                                                style: MyTexts.bold15.copyWith(
+                                                style: MyTexts.bold14.copyWith(
                                                   color: MyColors.darkGray,
                                                   fontFamily: MyTexts.Roboto,
                                                 ),
@@ -376,7 +381,7 @@ class CustomerSupportView extends StatelessWidget {
                                               const Spacer(),
                                               Text(
                                                 "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
-                                                style: MyTexts.bold15.copyWith(
+                                                style: MyTexts.bold14.copyWith(
                                                   color: MyColors.darkGray,
                                                   fontFamily: MyTexts.Roboto,
                                                 ),
@@ -386,7 +391,7 @@ class CustomerSupportView extends StatelessWidget {
                                           const SizedBox(height: 4),
                                           Text(
                                             "● Assigned to: ${ticket.assignedTo?.toString() ?? "Unassigned"}",
-                                            style: MyTexts.bold15.copyWith(
+                                            style: MyTexts.bold14.copyWith(
                                               color: MyColors.darkGray,
                                               fontFamily: MyTexts.Roboto,
                                             ),

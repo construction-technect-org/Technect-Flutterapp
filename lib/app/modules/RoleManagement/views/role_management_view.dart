@@ -108,28 +108,34 @@ class RoleManagementView extends GetView<RoleManagementController> {
                               children: [
                                 Expanded(
                                   child: Obx(
-                                    () => StatCard(
-                                      title: 'Total Roles',
-                                      value:
-                                          "${controller.statistics.value.totalRoles ?? "0"}",
-                                      icon: SvgPicture.asset(
-                                        Asset.TotalProducts,
-                                      ),
-                                      iconBackground: MyColors.yellowundertones,
-                                    ),
+                                        () =>
+                                        StatCard(
+                                          title: 'Total Roles',
+                                          value:
+                                          "${controller.statistics.value
+                                              .totalRoles ?? "0"}",
+                                          icon: SvgPicture.asset(
+                                            Asset.TotalProducts,
+                                          ),
+                                          iconBackground: MyColors
+                                              .yellowundertones,
+                                        ),
                                   ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Obx(
-                                    () => StatCard(
-                                      title: 'Active Roles',
-                                      value:
-                                          "${controller.statistics.value.activeRoles ?? "0"}",
+                                        () =>
+                                        StatCard(
+                                          title: 'Active Roles',
+                                          value:
+                                          "${controller.statistics.value
+                                              .activeRoles ?? "0"}",
 
-                                      icon: SvgPicture.asset(Asset.LowStock),
-                                      iconBackground: MyColors.paleRed,
-                                    ),
+                                          icon: SvgPicture.asset(
+                                              Asset.LowStock),
+                                          iconBackground: MyColors.paleRed,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -257,28 +263,33 @@ class RoleManagementView extends GetView<RoleManagementController> {
                               children: [
                                 Expanded(
                                   child: Obx(
-                                    () => StatCard(
-                                      title: 'Total Team',
-                                      value:
-                                          "${homeController.statistics.value.totalTeamMember ?? '0'}",
-                                      icon: SvgPicture.asset(Asset.Featured),
-                                      iconBackground: MyColors.verypaleBlue,
-                                    ),
+                                        () =>
+                                        StatCard(
+                                          title: 'Total Team',
+                                          value:
+                                          "${homeController.statistics.value
+                                              .totalTeamMember ?? '0'}",
+                                          icon: SvgPicture.asset(
+                                              Asset.Featured),
+                                          iconBackground: MyColors.verypaleBlue,
+                                        ),
                                   ),
                                 ),
 
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Obx(
-                                    () => StatCard(
-                                      title: 'Active Team',
-                                      value:
-                                          "${homeController.statistics.value.activeTeamMember ?? '0'}",
-                                      icon: SvgPicture.asset(
-                                        Asset.TotalInterests,
-                                      ),
-                                      iconBackground: MyColors.warmOrange,
-                                    ),
+                                        () =>
+                                        StatCard(
+                                          title: 'Active Team',
+                                          value:
+                                          "${homeController.statistics.value
+                                              .activeTeamMember ?? '0'}",
+                                          icon: SvgPicture.asset(
+                                            Asset.TotalInterests,
+                                          ),
+                                          iconBackground: MyColors.warmOrange,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -327,7 +338,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                 itemCount: homeController.teamList.length,
                                 itemBuilder: (context, index) {
                                   final TeamListData user =
-                                      homeController.teamList[index];
+                                  homeController.teamList[index];
                                   return GestureDetector(
                                     onTap: () {
                                       // Get.toNamed(
@@ -349,43 +360,46 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                       ),
                                       child: Row(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           CircleAvatar(
                                             radius: 24,
                                             child: ClipOval(
                                               child:
-                                                  (user.profilePhotoUrl ?? "")
-                                                      .isEmpty
+                                              (user.profilePhotoUrl ?? "")
+                                                  .isEmpty
                                                   ? Image.asset(
-                                                      Asset.aTeam,
-                                                      height: 48,
-                                                      width: 48,
-                                                    )
+                                                Asset.aTeam,
+                                                height: 48,
+                                                width: 48,
+                                              )
                                                   : getImageView(
-                                                      finalUrl:
-                                                          user.profilePhotoUrl ??
-                                                          '',
-                                                      height: 48,
-                                                      width: 48,
-                                                    ),
+                                                  finalUrl:
+                                                  user.profilePhotoUrl ??
+                                                      '',
+                                                  height: 48,
+                                                  width: 48,
+                                                  fit: BoxFit.cover
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(width: 12),
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      "${user.firstName ?? ""} ${user.lastName ?? ""}",
+                                                      "${user.firstName ??
+                                                          ""} ${user.lastName ??
+                                                          ""}",
                                                       style: MyTexts.bold18
                                                           .copyWith(
-                                                            color: MyColors
-                                                                .fontBlack,
-                                                          ),
+                                                        color: MyColors
+                                                            .fontBlack,
+                                                      ),
                                                     ),
                                                     const SizedBox(width: 6),
                                                     const Spacer(),
@@ -404,9 +418,9 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                         height: 30,
                                                         decoration: BoxDecoration(
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                8,
-                                                              ),
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
                                                           color: MyColors
                                                               .primary, // background with opacity
                                                         ),
@@ -416,7 +430,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                             size: 20,
                                                             // smaller so it fits inside 14x14 box
                                                             color:
-                                                                MyColors.white,
+                                                            MyColors.white,
                                                           ),
                                                         ),
                                                       ),
@@ -424,18 +438,19 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                     const SizedBox(width: 8),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        DeleteTeamDialog.showDeleteTeamDialog(
+                                                        DeleteTeamDialog
+                                                            .showDeleteTeamDialog(
                                                           context,
                                                           user,
-                                                          () async {
+                                                              () async {
                                                             final addTeamController =
-                                                                Get.find<
-                                                                  AddTeamController
-                                                                >();
+                                                            Get.find<
+                                                                AddTeamController
+                                                            >();
                                                             await addTeamController
                                                                 .deleteTeamMember(
-                                                                  user.id!,
-                                                                );
+                                                              user.id!,
+                                                            );
                                                           },
                                                         );
                                                       },
@@ -444,9 +459,9 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                         height: 30,
                                                         decoration: BoxDecoration(
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                8,
-                                                              ),
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
                                                           color: Colors.red,
                                                         ),
                                                         child: Center(
@@ -454,7 +469,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                             Icons.delete,
                                                             size: 20,
                                                             color:
-                                                                MyColors.white,
+                                                            MyColors.white,
                                                           ),
                                                         ),
                                                       ),
@@ -489,23 +504,24 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                   user.roleTitle ?? '',
                                                   style: MyTexts.regular16
                                                       .copyWith(
-                                                        color:
-                                                            MyColors.fontBlack,
-                                                        fontFamily:
-                                                            MyTexts.Roboto,
-                                                      ),
+                                                    color:
+                                                    MyColors.fontBlack,
+                                                    fontFamily:
+                                                    MyTexts.Roboto,
+                                                  ),
                                                 ),
                                                 const Gap(4),
 
                                                 Text(
-                                                  "Email: ${user.emailId ?? ''}",
+                                                  "Email: ${user.emailId ??
+                                                      ''}",
                                                   style: MyTexts.regular14
                                                       .copyWith(
-                                                        color:
-                                                            MyColors.lightGray,
-                                                        fontFamily:
-                                                            MyTexts.Roboto,
-                                                      ),
+                                                    color:
+                                                    MyColors.lightGray,
+                                                    fontFamily:
+                                                    MyTexts.Roboto,
+                                                  ),
                                                 ),
                                                 const Gap(4),
 
@@ -523,11 +539,11 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                           : 'DeActive',
                                                       style: MyTexts.regular14
                                                           .copyWith(
-                                                            fontFamily:
-                                                                MyTexts.Roboto,
-                                                            color: MyColors
-                                                                .mutedGreen,
-                                                          ),
+                                                        fontFamily:
+                                                        MyTexts.Roboto,
+                                                        color: MyColors
+                                                            .mutedGreen,
+                                                      ),
                                                     ),
                                                   ],
                                                 ),

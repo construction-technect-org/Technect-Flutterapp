@@ -5,10 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({
-    super.key,
-    required this.product,
-  });
+  const ProductCard({super.key, required this.product});
 
   final Product product;
 
@@ -32,42 +29,46 @@ class ProductCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: (product.productImage != null &&
-                      product.productImage!.isNotEmpty)
+                  child:
+                      (product.productImage != null &&
+                          product.productImage!.isNotEmpty)
                       ? CachedNetworkImage(
-                    imageUrl:
-                    "${APIConstants.bucketUrl}${product.productImage!}",
-                    width: 56,
-                    height: 57,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      width: 56,
-                      height: 57,
-                      decoration: const BoxDecoration(
-                        color: MyColors.grey1,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+                          imageUrl:
+                              "${APIConstants.bucketUrl}${product.productImage!}",
+                          width: 56,
+                          height: 57,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            width: 56,
+                            height: 57,
+                            decoration: const BoxDecoration(
+                              color: MyColors.grey1,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: const Center(
+                              child: CupertinoActivityIndicator(
+                                color: MyColors.primary,
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            Asset.Product,
+                            width: 56,
+                            height: 57,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.asset(
+                            Asset.Product,
+                            width: 56,
+                            height: 57,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      child: const Center(
-                        child: CupertinoActivityIndicator(
-                          color: MyColors.primary,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      Asset.Product,
-                      width: 56,
-                      height: 57,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                      : Image.asset(
-                    Asset.Product,
-                    width: 56,
-                    height: 57,
-                    fit: BoxFit.cover,
-                  ),
                 ),
                 SizedBox(width: 1.h),
                 Expanded(
@@ -80,8 +81,7 @@ class ProductCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               product.productName ?? "",
-                              style: MyTexts.bold16.copyWith(
-                                fontSize: 17.sp,
+                              style: MyTexts.medium16.copyWith(
                                 color: MyColors.fontBlack,
                                 fontFamily: MyTexts.Roboto,
                               ),
@@ -91,7 +91,7 @@ class ProductCard extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10,
-                              vertical: 4,
+                              vertical: 6,
                             ),
                             decoration: BoxDecoration(
                               color: isActive
@@ -103,16 +103,13 @@ class ProductCard extends StatelessWidget {
                               isActive ? "Active" : "Inactive",
                               style: MyTexts.regular14.copyWith(
                                 fontFamily: MyTexts.Roboto,
-                                color: isActive
-                                    ? MyColors.green
-                                    : MyColors.red,
+                                color: isActive ? MyColors.green : MyColors.red,
                               ),
                             ),
                           ),
                         ],
                       ),
-
-                      const Gap(4),
+                      const Gap(2),
                       RichText(
                         text: TextSpan(
                           children: [
@@ -142,7 +139,7 @@ class ProductCard extends StatelessWidget {
             const Gap(12),
             Text(
               '₹ ${double.tryParse(product.price ?? "0")?.toStringAsFixed(2) ?? "0.00"}/${product.uom ?? ""}',
-              style: MyTexts.extraBold18.copyWith(
+              style: MyTexts.bold18.copyWith(
                 color: MyColors.primary,
                 fontFamily: MyTexts.Roboto,
               ),

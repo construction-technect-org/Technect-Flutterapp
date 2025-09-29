@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -172,8 +173,8 @@ class EditProfileController extends GetxController {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile == null) return;
     final file = File(pickedFile.path);
-
-    selectedImage.value = file;
+    final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
+    selectedImage.value = File(compressedFile.path);
   }
 
   ApiManager apiManager = ApiManager();

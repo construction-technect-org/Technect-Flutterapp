@@ -66,10 +66,9 @@ class AddTeamView extends GetView<AddTeamController> {
                       }
 
                       final imagePath =
-                          controller.teamDetailsModel.value.profilePhotoUrl ?? "";
-                      final imageUrl = imagePath.isNotEmpty
-                          ? "${APIConstants.bucketUrl}$imagePath"
-                          : null;
+                          controller.teamDetailsModel.value.profilePhotoUrl ??
+                          "";
+                      final imageUrl = imagePath.isNotEmpty ? imagePath : null;
 
                       if (imageUrl == null) {
                         return const Icon(
@@ -94,9 +93,8 @@ class AddTeamView extends GetView<AddTeamController> {
                   child: ElevatedButton.icon(
                     onPressed: () => controller.pickImageBottomSheet(context),
                     icon: const Icon(Icons.camera_alt, color: Colors.white),
-                    label:  Text(
-                      controller.isEdit.value ?
-                      "Change Photo":"Upload Photo",
+                    label: Text(
+                      controller.isEdit.value ? "Change Photo" : "Upload Photo",
                       style: const TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(

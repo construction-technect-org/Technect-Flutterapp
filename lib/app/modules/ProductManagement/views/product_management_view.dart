@@ -7,7 +7,9 @@ import 'package:construction_technect/app/modules/ProductManagement/model/produc
 import 'package:gap/gap.dart';
 
 class ProductManagementView extends StatelessWidget {
-  final ProductManagementController controller = Get.put(ProductManagementController());
+  final ProductManagementController controller = Get.put(
+    ProductManagementController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,9 @@ class ProductManagementView extends StatelessWidget {
         ),
         body: Obx(() {
           return controller.isLoading.value
-              ? const Center(child: CircularProgressIndicator(color: MyColors.primary))
+              ? const Center(
+                  child: CircularProgressIndicator(color: MyColors.primary),
+                )
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -67,37 +71,49 @@ class ProductManagementView extends StatelessWidget {
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: SizedBox(
-                                  height: 150,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: IntrinsicHeight(
                                   child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
                                     children: [
                                       Expanded(
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: MyColors.white,
-                                            borderRadius: BorderRadius.circular(12),
-                                            border: Border.all(color: MyColors.black),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            border: Border.all(
+                                              color: MyColors.black,
+                                            ),
                                           ),
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 8,
                                             vertical: 8,
                                           ),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              SvgPicture.asset(Asset.noOfConectors),
+                                              SvgPicture.asset(
+                                                Asset.noOfConectors,
+                                              ),
                                               const Gap(10),
                                               Text(
                                                 "Total Products",
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.black,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.black,
+                                                    ),
                                               ),
                                               Text(
-                                                controller.statistics.value.totalProducts
+                                                controller
+                                                    .statistics
+                                                    .value
+                                                    .totalProducts
                                                     .toString(),
                                                 style: MyTexts.bold16.copyWith(
                                                   color: MyColors.fontBlack,
@@ -106,19 +122,22 @@ class ProductManagementView extends StatelessWidget {
                                               const Gap(10),
                                               Text(
                                                 "Active Products",
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.black,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.black,
+                                                    ),
                                               ),
                                               Text(
-                                                controller.statistics.value.featured
+                                                controller
+                                                    .statistics
+                                                    .value
+                                                    .featured
                                                     .toString(),
                                                 style: MyTexts.bold16.copyWith(
                                                   color: MyColors.green,
                                                 ),
                                               ),
+                                              const Gap(5),
                                             ],
                                           ),
                                         ),
@@ -128,7 +147,9 @@ class ProductManagementView extends StatelessWidget {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: MyColors.white,
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
                                             border: Border.all(
                                               color: MyColors.americanSilver,
                                             ),
@@ -138,26 +159,27 @@ class ProductManagementView extends StatelessWidget {
                                             vertical: 8,
                                           ),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               const Gap(10),
                                               SvgPicture.asset(Asset.warning),
                                               const Gap(10),
                                               Text(
                                                 "Low Stock",
-                                                style: MyTexts.regular16.copyWith(
-                                                  color: MyColors.gray53,
-                                                  fontFamily: MyTexts.Roboto,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
+                                                style: MyTexts.regular16
+                                                    .copyWith(
+                                                      color: MyColors.gray53,
+                                                    ),
                                               ),
                                               Text(
-                                                controller.statistics.value.lowStock
+                                                controller
+                                                    .statistics
+                                                    .value
+                                                    .lowStock
                                                     .toString(),
                                                 style: MyTexts.bold20.copyWith(
                                                   color: MyColors.redgray,
-                                                  fontFamily: MyTexts.Roboto,
                                                 ),
                                               ),
                                             ],
@@ -169,7 +191,9 @@ class ProductManagementView extends StatelessWidget {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: MyColors.white,
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
                                             border: Border.all(
                                               color: MyColors.americanSilver,
                                             ),
@@ -183,13 +207,13 @@ class ProductManagementView extends StatelessWidget {
                                               const Gap(10),
                                               Text(
                                                 "Interest Products",
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.black,
-                                                  fontFamily: MyTexts.Roboto,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.black,
+                                                    ),
                                                 textAlign: TextAlign.center,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                               const Gap(15),
                                               Stack(
@@ -200,13 +224,14 @@ class ProductManagementView extends StatelessWidget {
                                                     height: 55,
                                                     child: CircularProgressIndicator(
                                                       value:
-                                                          double.parse(
-                                                            "${controller.statistics.value.totalInterests}",
-                                                          ) /
+                                                          (double.tryParse(
+                                                                "${controller.statistics.value.totalInterests}",
+                                                              ) ??
+                                                              0) /
                                                           100,
                                                       strokeWidth: 8,
-                                                      backgroundColor:
-                                                          MyColors.profileRemaining,
+                                                      backgroundColor: MyColors
+                                                          .profileRemaining,
                                                       valueColor:
                                                           const AlwaysStoppedAnimation<
                                                             Color
@@ -215,10 +240,10 @@ class ProductManagementView extends StatelessWidget {
                                                   ),
                                                   Text(
                                                     '${controller.statistics.value.totalInterests}%',
-                                                    style: MyTexts.medium16.copyWith(
-                                                      color: MyColors.black,
-                                                      fontFamily: MyTexts.Roboto,
-                                                    ),
+                                                    style: MyTexts.medium16
+                                                        .copyWith(
+                                                          color: MyColors.black,
+                                                        ),
                                                   ),
                                                 ],
                                               ),
@@ -232,37 +257,53 @@ class ProductManagementView extends StatelessWidget {
                               ),
                               Obx(
                                 () => Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
                                   child: controller.filteredProducts.isEmpty
                                       ? Padding(
-                                          padding: const EdgeInsets.only(top: 100.0),
+                                          padding: const EdgeInsets.only(
+                                            top: 100.0,
+                                          ),
                                           child: Column(
                                             children: [
                                               const Gap(20),
                                               Icon(
-                                                controller.searchQuery.value.isNotEmpty
+                                                controller
+                                                        .searchQuery
+                                                        .value
+                                                        .isNotEmpty
                                                     ? Icons.search_off
-                                                    : Icons.inventory_2_outlined,
+                                                    : Icons
+                                                          .inventory_2_outlined,
                                                 size: 64,
                                                 color: MyColors.grey,
                                               ),
                                               SizedBox(height: 2.h),
                                               Text(
-                                                controller.searchQuery.value.isNotEmpty
+                                                controller
+                                                        .searchQuery
+                                                        .value
+                                                        .isNotEmpty
                                                     ? 'No products found'
                                                     : 'No products available',
-                                                style: MyTexts.medium18.copyWith(
-                                                  color: MyColors.fontBlack,
-                                                ),
+                                                style: MyTexts.medium18
+                                                    .copyWith(
+                                                      color: MyColors.fontBlack,
+                                                    ),
                                               ),
                                               SizedBox(height: 0.5.h),
                                               Text(
-                                                controller.searchQuery.value.isNotEmpty
+                                                controller
+                                                        .searchQuery
+                                                        .value
+                                                        .isNotEmpty
                                                     ? 'Try searching with different keywords'
                                                     : 'Add your first product to get started',
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.grey,
-                                                ),
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.grey,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -272,13 +313,16 @@ class ProductManagementView extends StatelessWidget {
                                           padding: const EdgeInsets.symmetric(
                                             vertical: 20,
                                           ),
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: controller.filteredProducts.length,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: controller
+                                              .filteredProducts
+                                              .length,
                                           separatorBuilder: (_, _) =>
                                               const SizedBox(height: 12),
                                           itemBuilder: (context, index) {
-                                            final Product product =
-                                                controller.filteredProducts[index];
+                                            final Product product = controller
+                                                .filteredProducts[index];
                                             return GestureDetector(
                                               onTap: () {
                                                 Get.toNamed(
@@ -289,7 +333,9 @@ class ProductManagementView extends StatelessWidget {
                                                   },
                                                 );
                                               },
-                                              child: ProductCard(product: product),
+                                              child: ProductCard(
+                                                product: product,
+                                              ),
                                             );
                                           },
                                         ),

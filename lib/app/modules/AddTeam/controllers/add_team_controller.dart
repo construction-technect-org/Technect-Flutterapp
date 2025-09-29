@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/RoleManagement/controllers/role_management_controller.dart';
@@ -24,7 +25,8 @@ class AddTeamController extends GetxController {
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile == null) return;
-    selectedImage.value = File(pickedFile.path);
+    final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
+    selectedImage.value = File(compressedFile.path);
   }
   Rx<File?> selectedImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();

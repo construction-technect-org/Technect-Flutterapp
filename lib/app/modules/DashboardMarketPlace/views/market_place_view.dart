@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/DashboardMarketPlace/controllers/market_place_controller.dart';
 
@@ -9,37 +10,18 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
     return LoaderWrapper(
       isLoading: controller.isLoading,
       child: Scaffold(
+        appBar: CommonAppBar(
+          isCenter: false,
+          title: const Text(  "MARKETPLACE",),
+        ),
         backgroundColor: MyColors.white,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ✅ Back + Title
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () => Get.back(),
-                      borderRadius: BorderRadius.circular(50),
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(width: 0.8.h),
-                    Text(
-                      "MARKETPLACE",
-                      style: MyTexts.medium18.copyWith(
-                        color: MyColors.fontBlack,
-                      ),
-                    ),
-                  ],
-                ),
                 SizedBox(height: 2.h),
-
-                // ✅ Marketplace Section
                 Text(
                   "Select Your Marketplace",
                   style: MyTexts.medium16.copyWith(color: MyColors.primary,
@@ -49,14 +31,13 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                 SizedBox(height: 1.h),
                 LayoutBuilder(
                   builder: (context, constraints) {
-                    // Dynamically calculate item width
                     final double itemWidth =
                         (constraints.maxWidth - (3 * 10)) /
                         1; // 4 per row with spacing
                     final double itemHeight = itemWidth + 5; // for icon + text
-
+            
                     return GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: controller.marketplaces.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -67,7 +48,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                       ),
                       itemBuilder: (context, index) {
                         final item = controller.marketplaces[index];
-
+            
                         return Obx(() {
                           final selected =
                               controller.selectedMarketplace.value ==
@@ -91,84 +72,69 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                     );
                   },
                 ),
-
+            
                 SizedBox(height: 2.h),
-
-                // ✅ Role Section
-                Expanded(
-                  child: Obx(() {
-                    return controller.selectedMarketplace.value.isEmpty
-                        ? const SizedBox()
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "ROLE",
-                                style: MyTexts.bold16.copyWith(
-                                  color: MyColors.fontBlack,
-                                  fontFamily: MyTexts.Roboto,
-                                ),
+                Obx(() {
+                  return controller.selectedMarketplace.value.isEmpty
+                      ? const SizedBox()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Select Your Role",
+                              style: MyTexts.medium16.copyWith(color: MyColors.primary,
+                                fontFamily: MyTexts.Roboto,
                               ),
-                              SizedBox(height: 0.6.h),
-                              Text(
-                                "Select Your Role",
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.profileRemaining,
-                                  fontFamily: MyTexts.Roboto,
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Expanded(
-                                child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    // Dynamically calculate item width
-                                    final double itemWidth =
-                                        (constraints.maxWidth - (3 * 10)) /
-                                        1; // 4 per row with spacing
-                                    final double itemHeight =
-                                        itemWidth + 1; // for icon + text
+                            ),
+                            SizedBox(height: 1.h),
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                // Dynamically calculate item width
+                                final double itemWidth =
+                                    (constraints.maxWidth - (3 * 10)) /
+                                    1; // 4 per row with spacing
+                                final double itemHeight =
+                                    itemWidth + 1; // for icon + text
 
-                                    return GridView.builder(
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: controller.roles.length,
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing: 10,
-                                            mainAxisSpacing: 10,
-                                            childAspectRatio:
-                                                itemWidth / itemHeight,
-                                          ),
-                                      itemBuilder: (context, index) {
-                                        final role = controller.roles[index];
+                                return GridView.builder(
+                                  physics:
+                                      const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: controller.roles.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                        childAspectRatio:
+                                            itemWidth / itemHeight,
+                                      ),
+                                  itemBuilder: (context, index) {
+                                    final role = controller.roles[index];
 
-                                        return Obx(() {
-                                          final selected =
-                                              controller.selectedRole.value ==
-                                              role['title'];
-                                          return _buildTile(
-                                            role['title'] ?? '',
-                                            role['icon'] ?? '',
-                                            selected,
-                                            () {
-                                              controller.selectRole(
-                                                role['title']!,
-                                              );
-                                            },
+                                    return Obx(() {
+                                      final selected =
+                                          controller.selectedRole.value ==
+                                          role['title'];
+                                      return _buildTile(
+                                        role['title'] ?? '',
+                                        role['icon'] ?? '',
+                                        selected,
+                                        () {
+                                          controller.selectRole(
+                                            role['title']!,
                                           );
-                                        });
-                                      },
-                                    );
+                                        },
+                                      );
+                                    });
                                   },
-                                ),
-                              ),
-                            ],
-                          );
-                  }),
-                ),
-
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                }),
+            
                 // ✅ Proceed Button
               ],
             ),

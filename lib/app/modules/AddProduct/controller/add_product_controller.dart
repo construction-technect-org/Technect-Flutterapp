@@ -400,7 +400,16 @@ class AddProductController extends GetxController {
     } else if (productNames.isNotEmpty && selectedProductId.value == null) {
       SnackBars.errorSnackBar(content: 'Product is required');
       isRequired = false;
-    } else if (selectedUom.value == null) {
+    }
+    else if ( isOutStock.value==true && stockController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: 'Stock Quantity is required');
+      isRequired = false;
+    }
+    else if ( isOutStock.value==true && int.parse(stockController.text)==0) {
+      SnackBars.errorSnackBar(content: 'Stock Quantity can not be zero');
+      isRequired = false;
+    }
+    else if (selectedUom.value == null) {
       SnackBars.errorSnackBar(content: 'UOM is required');
       isRequired = false;
     } else if (uocController.text.isEmpty) {

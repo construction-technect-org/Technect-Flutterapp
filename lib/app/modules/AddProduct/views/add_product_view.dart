@@ -249,6 +249,8 @@ class AddProductView extends GetView<AddProductController> {
                                 CommonTextField(
                                   hintText: "Add  Stock",
                                   controller: controller.stockController,
+                                 keyboardType: TextInputType.number,
+
                                 ),
                               ],
                             ) : const SizedBox();
