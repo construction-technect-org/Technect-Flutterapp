@@ -172,7 +172,6 @@ class EditProfileController extends GetxController {
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile == null) return;
-    final file = File(pickedFile.path);
     final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
     selectedImage.value = File(compressedFile.path);
   }
