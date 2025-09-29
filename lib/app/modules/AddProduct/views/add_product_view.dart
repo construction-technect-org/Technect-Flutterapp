@@ -46,21 +46,9 @@ class AddProductView extends GetView<AddProductController> {
                   child: Icon(Icons.arrow_back_ios, color: MyColors.black),
                 ),
               ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    controller.isEdit ? "EDIT PRODUCT" : "ADD PRODUCT",
-                    style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    "Enter Product Details",
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.shadeOfGray,
-                    ),
-                  ),
-                ],
+              title:    Text(
+                controller.isEdit ? "EDIT PRODUCT" : "ADD PRODUCT",
+
               ),
               isCenter: false,
             ),
