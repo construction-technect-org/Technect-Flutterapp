@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/home/components/coming_soon_dialog.dart';
@@ -52,12 +53,27 @@ class HomeView extends StatelessWidget {
           children: [
             SizedBox(height: 5.h),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+                vertical: 0,
+              ),
               child: Row(
                 children: [
-                  Image.asset(Asset.profil, height: 40, width: 40),
+                  Obx(() {
+                    return (controller.profileData.value.data?.user?.image ??
+                                "")
+                            .isEmpty
+                        ? Image.asset(Asset.profil, height: 40, width: 40)
+                        : ClipOval(
+                            child: getImageView(
+                              finalUrl:
+                                  "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                  }),
                   SizedBox(width: 1.h),
-                  Expanded(
+                  Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -68,16 +84,15 @@ class HomeView extends StatelessWidget {
                               color: MyColors.fontBlack,
                               fontFamily: MyTexts.Roboto,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Condition check
                             if (controller.getCurrentAddress().isNotEmpty) {
-                              // Navigate to SavedAddressesView
                               Get.toNamed(Routes.CONNECTOR_SELECT_LOCATION);
                             } else {
-                              // No address → stay on same screen or show info
                               Get.snackbar(
                                 "No Address",
                                 "Please add an address first",
@@ -87,17 +102,23 @@ class HomeView extends StatelessWidget {
                           },
                           child: Row(
                             children: [
-                              SvgPicture.asset(Asset.location, width: 9, height: 12.22),
+                              SvgPicture.asset(
+                                Asset.location,
+                                width: 9,
+                                height: 12.22,
+                              ),
                               SizedBox(width: 0.4.h),
                               Obx(
-                                () => Text(
-                                  controller.getCurrentAddress(),
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.textFieldBackground,
-                                    fontFamily: MyTexts.Roboto,
+                                () => Expanded(
+                                  child: Text(
+                                    controller.getCurrentAddress(),
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.textFieldBackground,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               const SizedBox(width: 4),
@@ -112,6 +133,7 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                   ),
+
                   const Gap(10),
                   GestureDetector(
                     onTap: () {
@@ -126,7 +148,11 @@ class HomeView extends StatelessWidget {
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          SvgPicture.asset(Asset.notifications, width: 18, height: 18),
+                          SvgPicture.asset(
+                            Asset.notifications,
+                            width: 18,
+                            height: 18,
+                          ),
                           Positioned(
                             right: 0,
                             top: 3,
@@ -146,7 +172,9 @@ class HomeView extends StatelessWidget {
                   SizedBox(width: 0.8.h),
                   GestureDetector(
                     onTap: () {
-                      ComingSoonDialog.showComingSoonDialog(featureName: 'Alert');
+                      ComingSoonDialog.showComingSoonDialog(
+                        featureName: 'Alert',
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -262,7 +290,10 @@ class HomeView extends StatelessWidget {
                                 Expanded(
                                   child: _buildNotiCard(
                                     onTap: () {
-                                      Get.find<MainController>().currentIndex.value = 2;
+                                      Get.find<MainController>()
+                                              .currentIndex
+                                              .value =
+                                          2;
                                     },
                                     title: "Support Ticket",
                                     value:
@@ -308,10 +339,17 @@ class HomeView extends StatelessWidget {
                           HeaderText(text: "Quick Access"),
                           const Gap(14),
                           Container(
-                            padding: const EdgeInsets.only(bottom: 18,right: 18,left: 18),
+                            padding: const EdgeInsets.only(
+                              bottom: 18,
+                              right: 18,
+                              left: 18,
+                            ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: MyColors.gray5D, width: 0.5),
+                              border: Border.all(
+                                color: MyColors.gray5D,
+                                width: 0.5,
+                              ),
                             ),
                             child: GridView.builder(
                               shrinkWrap: true,
@@ -412,7 +450,9 @@ class HomeView extends StatelessWidget {
                     SizedBox(
                       height: 120,
                       child: Obx(() {
-                        final teamMembers = controller.teamList.take(5).toList();
+                        final teamMembers = controller.teamList
+                            .take(5)
+                            .toList();
 
                         if (teamMembers.isEmpty) {
                           return Container(
@@ -459,8 +499,16 @@ class HomeView extends StatelessWidget {
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
-                                    child: Image.asset(
+                                    child:  (controller.teamList[index].profilePhotoUrl ?? "")
+                                        .isEmpty
+                                        ? Image.asset(
                                       Asset.aTeam,
+                                      height: 67,
+                                      width: 67,
+                                    )
+                                        : getImageView(
+                                      finalUrl:
+                                      controller.teamList[index].profilePhotoUrl ?? "",
                                       height: 67,
                                       width: 67,
                                     ),
@@ -529,7 +577,9 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
+              style: MyTexts.extraBold18.copyWith(
+                color: MyColors.textFieldBackground,
+              ),
             ),
           ],
         ),
@@ -569,7 +619,10 @@ class HomeView extends StatelessWidget {
                     icon ?? "",
                     height: 30,
                     width: 30,
-                    colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
+                    colorFilter: ColorFilter.mode(
+                      color ?? Colors.black,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
                 Container(
@@ -622,14 +675,21 @@ class StaticsCard extends StatelessWidget {
   Color? color;
   Color? bColor;
 
-  StaticsCard({super.key, this.icon, this.title, this.value, this.color,this.bColor});
+  StaticsCard({
+    super.key,
+    this.icon,
+    this.title,
+    this.value,
+    this.color,
+    this.bColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
       decoration: BoxDecoration(
-        border: Border.all(color:bColor?? MyColors.greyE5),
+        border: Border.all(color: bColor ?? MyColors.greyE5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -675,7 +735,10 @@ class HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.Roboto),
+      style: MyTexts.medium18.copyWith(
+        color: MyColors.black,
+        fontFamily: MyTexts.Roboto,
+      ),
     );
   }
 }

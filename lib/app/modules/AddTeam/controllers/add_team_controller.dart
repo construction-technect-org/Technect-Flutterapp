@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddTeamController extends GetxController {
   final fNameController = TextEditingController();
@@ -18,7 +21,13 @@ class AddTeamController extends GetxController {
   RxBool isEdit = false.obs;
   RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<GetAllRole>? selectedRole = GetAllRole().obs;
-
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile == null) return;
+    selectedImage.value = File(pickedFile.path);
+  }
+  Rx<File?> selectedImage = Rx<File?>(null);
+  final ImagePicker _picker = ImagePicker();
   @override
   void onInit() {
     _loadRolesFromStorage();
@@ -29,6 +38,39 @@ class AddTeamController extends GetxController {
     }
     super.onInit();
   }
+
+  Future<void> pickImageBottomSheet(BuildContext context) {
+    return Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text("Camera"),
+              onTap: () {
+                Get.back();
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo),
+              title: const Text("Gallery"),
+              onTap: () {
+                Get.back();
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 
   Future<void> _loadRolesFromStorage() async {
     final cachedRoles = myPref.getRoles();
@@ -53,8 +95,13 @@ class AddTeamController extends GetxController {
 
   Future<void> addTeam() async {
     isLoading.value = true;
+    Map<String, String>? files;
+
     Map<String, dynamic> fields = {};
     if (isEdit.value) {
+      if (selectedImage.value != null) {
+        files = {'profile_photo': selectedImage.value!.path};
+      }
       fields = {
         "first_name": fNameController.text,
         "last_name": lNameController.text,
@@ -63,6 +110,9 @@ class AddTeamController extends GetxController {
         "team_role_id": selectedRole?.value.id ?? '',
       };
     } else {
+      if (selectedImage.value != null) {
+        files = {'profile_photo': selectedImage.value!.path};
+      }
       fields = {
         "first_name": fNameController.text,
         "last_name": lNameController.text,
@@ -70,18 +120,21 @@ class AddTeamController extends GetxController {
         "mobile_number": phoneNumberController.text,
         "team_role_id": selectedRole?.value.id ?? '',
       };
+
     }
     try {
       if (isEdit.value) {
         await addTeamService.updateTeam(
           fields: fields,
+          files: files,
           id: '${teamDetailsModel.value.id ?? ''}',
         );
         await homeController.refreshTeamList();
         isLoading.value = false;
         Get.back();
       } else {
-        await addTeamService.addTeam(fields: fields);
+
+        await addTeamService.addTeam(fields: fields,files: files);
         await homeController.refreshTeamList();
         // await roleController.fetchTeamStatsOverview();
         isLoading.value = false;

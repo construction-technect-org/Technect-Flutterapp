@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 void hideKeyboard() {
@@ -17,4 +18,39 @@ Future<void> openUrl({required String url}) async {
   } else {
     throw 'Could not launch $url';
   }
+}
+
+CachedNetworkImage getImageView(
+    {required String finalUrl,
+      double height = 40,
+      double width = 40,
+      Decoration? shape,
+      BoxFit? fit,
+      Color? color}) {
+  return CachedNetworkImage(
+    imageUrl: finalUrl,
+    fit: fit,
+    height: height,
+    width: width,
+    placeholder: (context, url) => Container(
+      margin: const EdgeInsets.all(10),
+      height: height,
+      width: width,
+      child: const Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: MyColors.primary,
+        ),
+      ),
+    ),
+    errorWidget: (context, url, error) => SizedBox(
+      height: height,
+      width: width,
+      child: Container(
+          height: 50,
+          width: 50,
+          color: MyColors.grayD4,
+          child: Icon(Icons.error,color: MyColors.black,)),
+    ),
+  );
 }

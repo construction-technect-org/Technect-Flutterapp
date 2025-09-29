@@ -32,7 +32,7 @@ class EditProfile extends StatelessWidget {
             child: Column(
               children: [
                 Obx(() {
-                  // check if new image selected
+                  print(controller.profileData.value.data?.user?.image);
                   if (eController.selectedImage.value != null) {
                     return ClipOval(
                       child: Image.file(
@@ -43,23 +43,21 @@ class EditProfile extends StatelessWidget {
                       ),
                     );
                   }
-                  final imageUrl =
-                      "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image}";
 
+                  final imagePath = controller.profileData.value.data?.user?.image;
+                  final imageUrl = imagePath != null && imagePath.isNotEmpty
+                      ? "${APIConstants.bucketUrl}$imagePath"
+                      : null;
+
+                  if (imagePath == null) {
+                    return const Icon(
+                      Icons.account_circle,
+                      size: 100,
+                      color: Colors.grey,
+                    );
+                  }
                   return ClipOval(
-                    child: Image.network(
-                      imageUrl,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(
-                          Icons.account_circle,
-                          size: 100,
-                          color: Colors.grey,
-                        );
-                      },
-                    ),
+                    child: getImageView(finalUrl: imageUrl??"",height: 100,width: 100,fit: BoxFit.cover)
                   );
                 }),
                 const Gap(8),

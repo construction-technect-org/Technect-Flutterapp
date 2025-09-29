@@ -50,6 +50,61 @@ class AddTeamView extends GetView<AddTeamController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Center(
+                  child: GestureDetector(
+                    onTap: () => controller.pickImageBottomSheet(context),
+                    child: Obx(() {
+                      if (controller.selectedImage.value != null) {
+                        return ClipOval(
+                          child: Image.file(
+                            controller.selectedImage.value!,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      }
+
+                      final imagePath =
+                          controller.teamDetailsModel.value.profilePhotoUrl ?? "";
+                      final imageUrl = imagePath.isNotEmpty
+                          ? "${APIConstants.bucketUrl}$imagePath"
+                          : null;
+
+                      if (imageUrl == null) {
+                        return const Icon(
+                          Icons.account_circle,
+                          size: 100,
+                          color: Colors.grey,
+                        );
+                      }
+
+                      return ClipOval(
+                        child: getImageView(
+                          finalUrl: imageUrl,
+                          height: 100,
+                          width: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+                Center(
+                  child: ElevatedButton.icon(
+                    onPressed: () => controller.pickImageBottomSheet(context),
+                    icon: const Icon(Icons.camera_alt, color: Colors.white),
+                    label:  Text(
+                      controller.isEdit.value ?
+                      "Change Photo":"Upload Photo",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: MyColors.primary, // or Colors.blue
+                    ),
+                  ),
+                ),
+                SizedBox(height: 2.h),
                 CommonTextField(
                   hintText: "Enter your First name",
                   headerText: 'First Name',

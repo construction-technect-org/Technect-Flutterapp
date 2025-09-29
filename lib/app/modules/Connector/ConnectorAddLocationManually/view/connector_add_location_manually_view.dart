@@ -167,7 +167,7 @@ class ConnectorAddLocationManuallyView
 
         // ✅ Bottom Submit Button
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 22),
+          padding: const EdgeInsets.all(24),
           child: RoundedButton(
             buttonName: 'SUBMIT',
             onTap: () {
