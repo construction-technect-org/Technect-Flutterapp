@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/News/controllers/news_controll
 import 'package:construction_technect/app/modules/News/models/news_model.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:readmore/readmore.dart';
 
 class NewsView extends GetView<NewsController> {
   @override
@@ -20,7 +21,11 @@ class NewsView extends GetView<NewsController> {
               child: Column(
                 children: [
                   const Gap(20),
-                  const Icon(Icons.newspaper_outlined, size: 64, color: MyColors.grey),
+                  const Icon(
+                    Icons.newspaper_outlined,
+                    size: 64,
+                    color: MyColors.grey,
+                  ),
                   SizedBox(height: 2.h),
                   Text(
                     'No news available',
@@ -37,6 +42,8 @@ class NewsView extends GetView<NewsController> {
           }
 
           return RefreshIndicator(
+            color: Colors.white,
+            backgroundColor: MyColors.primary,
             onRefresh: controller.refreshNews,
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -59,9 +66,9 @@ class NewsView extends GetView<NewsController> {
         color: MyColors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: MyColors.grayD4),
-        boxShadow: const [
-          BoxShadow(color: MyColors.americanSilver, blurRadius: 8, offset: Offset(0, 2)),
-        ],
+        // boxShadow: const [
+        //   BoxShadow(color: MyColors.americanSilver, blurRadius: 8, offset: Offset(0, 2)),
+        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -71,7 +78,10 @@ class NewsView extends GetView<NewsController> {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: MyColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -81,34 +91,65 @@ class NewsView extends GetView<NewsController> {
                     style: MyTexts.regular12.copyWith(
                       color: MyColors.primary,
                       fontWeight: FontWeight.bold,
+                      fontFamily: MyTexts.Roboto,
                     ),
                   ),
                 ),
                 const Spacer(),
                 Text(
                   _formatDate(news.createdAt),
-                  style: MyTexts.regular12.copyWith(color: MyColors.grey),
+                  style: MyTexts.regular12.copyWith(
+                    color: MyColors.grey,
+                    fontFamily: MyTexts.Roboto,
+                  ),
                 ),
               ],
             ),
             const Gap(12),
             Text(
               news.title ?? '',
-              style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
+              style: MyTexts.bold16.copyWith(
+                color: MyColors.fontBlack,
+                fontFamily: MyTexts.Roboto,
+              ),
             ),
             const Gap(8),
-            Text(
+            ReadMoreText(
               news.description ?? '',
-              style: MyTexts.regular14.copyWith(color: MyColors.fontBlack, height: 1.4),
+              trimMode: TrimMode.Line,
+              style: MyTexts.regular14.copyWith(
+                color: MyColors.fontBlack,
+                height: 1.4,
+                fontFamily: MyTexts.Roboto,
+              ),
+              trimLines: 2,
+              colorClickableText: Colors.pink,
+              trimCollapsedText: 'Show more',
+              trimExpandedText: 'Show less',
+              moreStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                fontFamily: MyTexts.Roboto,
+                color: MyColors.primary,
+              ),
+              lessStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                fontFamily: MyTexts.Roboto,
+                color: MyColors.primary,
+              ),
             ),
             const Gap(12),
             Row(
               children: [
-                Icon(Icons.visibility, size: 16, color: MyColors.grey),
+                const Icon(Icons.visibility, size: 16, color: MyColors.grey),
                 const SizedBox(width: 4),
                 Text(
                   'Published',
-                  style: MyTexts.regular12.copyWith(color: MyColors.grey),
+                  style: MyTexts.regular12.copyWith(
+                    color: MyColors.grey,
+                    fontFamily: MyTexts.Roboto,
+                  ),
                 ),
               ],
             ),

@@ -53,7 +53,8 @@ class InventoryView extends GetView<InventoryController> {
                         ],
                       ),
                     );
-                  } else if (controller.filteredProducts.isEmpty) {
+                  } 
+                  else if (controller.filteredProducts.isEmpty) {
                     return Expanded(
                       child: Column(
                         children: [
@@ -78,24 +79,26 @@ class InventoryView extends GetView<InventoryController> {
                     );
                   }
 
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.filteredProducts.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final Product product = controller.filteredProducts[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(
-                            Routes.PRODUCT_DETAILS,
-                            arguments: {"product": product, "isFromAdd": false},
-                          );
-                        },
-                        child: ProductCard(product: product),
-                      );
-                    },
+                  return Expanded(
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: controller.filteredProducts.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final Product product = controller.filteredProducts[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              Routes.PRODUCT_DETAILS,
+                              arguments: {"product": product, "isFromAdd": false},
+                            );
+                          },
+                          child: ProductCard(product: product),
+                        );
+                      },
+                    ),
                   );
                 }),
               ],

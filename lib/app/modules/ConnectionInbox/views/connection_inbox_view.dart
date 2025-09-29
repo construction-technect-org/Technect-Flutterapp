@@ -7,7 +7,9 @@ import 'package:construction_technect/app/modules/ConnectionInbox/controllers/co
 import 'package:gap/gap.dart';
 
 class ConnectionInboxView extends StatelessWidget {
-  final ConnectionInboxController controller = Get.put(ConnectionInboxController());
+  final ConnectionInboxController controller = Get.put(
+    ConnectionInboxController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -32,45 +34,62 @@ class ConnectionInboxView extends StatelessWidget {
                   },
                   borderRadius: 22,
                   hintText: 'Search',
-                  // suffixIcon: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
-                  prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                  prefixIcon: SvgPicture.asset(
+                    Asset.searchIcon,
+                    height: 16,
+                    width: 16,
+                  ),
                 ),
               ),
               SizedBox(height: 2.h),
               Expanded(
                 child: RefreshIndicator(
+                  backgroundColor: MyColors.primary,
+                  color: Colors.white,
                   onRefresh: () async {
                     controller.clearSearch();
                     await controller.fetchConnections();
                   },
                   child: Obx(() {
                     if (controller.filteredConnections.isEmpty) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Gap(20),
-                          Icon(
-                            controller.searchQuery.value.isNotEmpty
-                                ? Icons.search_off
-                                : Icons.people_outline,
-                            size: 64,
-                            color: MyColors.grey,
+                      return SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Gap(20),
+                              Icon(
+                                controller.searchQuery.value.isNotEmpty
+                                    ? Icons.search_off
+                                    : Icons.people_outline,
+                                size: 64,
+                                color: MyColors.grey,
+                              ),
+                              SizedBox(height: 1.h),
+                              Text(
+                                controller.searchQuery.value.isNotEmpty
+                                    ? 'No connections found'
+                                    : 'No connection requests',
+                                style: MyTexts.medium18.copyWith(
+                                  color: MyColors.fontBlack,
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                              SizedBox(height: 0.5.h),
+                              Text(
+                                controller.searchQuery.value.isNotEmpty
+                                    ? 'Try searching with different keywords'
+                                    : 'Connection requests will appear here',
+                                style: MyTexts.regular14.copyWith(
+                                  color: MyColors.grey,
+                                  fontFamily: MyTexts.Roboto,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 1.h),
-                          Text(
-                            controller.searchQuery.value.isNotEmpty
-                                ? 'No connections found'
-                                : 'No connection requests',
-                            style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                          ),
-                          SizedBox(height: 0.5.h),
-                          Text(
-                            controller.searchQuery.value.isNotEmpty
-                                ? 'Try searching with different keywords'
-                                : 'Connection requests will appear here',
-                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
-                          ),
-                        ],
+                        ),
                       );
                     } else {
                       return ListView.builder(
@@ -78,7 +97,8 @@ class ConnectionInboxView extends StatelessWidget {
                         itemCount: controller.filteredConnections.length,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         itemBuilder: (context, index) {
-                          final connection = controller.filteredConnections[index];
+                          final connection =
+                              controller.filteredConnections[index];
                           return InkWell(
                             onTap: () {
                               Get.toNamed(Routes.CONNECTION_INBOX);
@@ -96,7 +116,10 @@ class ConnectionInboxView extends StatelessWidget {
                                   ),
                                 ],
                                 border: const Border(
-                                  left: BorderSide(color: MyColors.green, width: 2),
+                                  left: BorderSide(
+                                    color: MyColors.green,
+                                    width: 2,
+                                  ),
                                 ),
                               ),
                               child: Padding(
@@ -106,12 +129,15 @@ class ConnectionInboxView extends StatelessWidget {
                                   children: [
                                     // Top Row: Avatar + Text
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         CircleAvatar(
                                           radius: 22,
                                           child:
-                                              connection.connectorProfileImageUrl != null
+                                              connection
+                                                      .connectorProfileImageUrl !=
+                                                  null
                                               ? ClipOval(
                                                   child: CachedNetworkImage(
                                                     imageUrl:
@@ -121,42 +147,58 @@ class ConnectionInboxView extends StatelessWidget {
                                                     width: 44,
                                                     height: 44,
                                                     fit: BoxFit.cover,
-                                                    placeholder: (context, url) =>
-                                                        const ColoredBox(
-                                                          color: MyColors.lightGray,
+                                                    placeholder:
+                                                        (
+                                                          context,
+                                                          url,
+                                                        ) => const ColoredBox(
+                                                          color: MyColors
+                                                              .lightGray,
                                                           child: Center(
                                                             child:
                                                                 CircularProgressIndicator(),
                                                           ),
                                                         ),
-                                                    errorWidget: (context, url, error) =>
-                                                        Icon(
+                                                    errorWidget:
+                                                        (
+                                                          context,
+                                                          url,
+                                                          error,
+                                                        ) => Icon(
                                                           Icons.person,
                                                           color: MyColors.white,
                                                         ),
                                                   ),
                                                 )
-                                              : Icon(Icons.person, color: MyColors.white),
+                                              : Icon(
+                                                  Icons.person,
+                                                  color: MyColors.white,
+                                                ),
                                         ),
                                         SizedBox(width: 2.w),
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 "${connection.connectorName ?? 'Unknown'} wants to connect with you",
-                                                style: MyTexts.medium16.copyWith(
-                                                  color: MyColors.fontBlack,
-                                                  fontFamily: MyTexts.Roboto,
-                                                ),
+                                                style: MyTexts.medium16
+                                                    .copyWith(
+                                                      color: MyColors.fontBlack,
+                                                      fontFamily:
+                                                          MyTexts.Roboto,
+                                                    ),
                                               ),
                                               const Gap(4),
                                               Text(
                                                 "User   •   ${connection.createdAt?.toLocal().toString().split(' ')[0] ?? 'Unknown date'}",
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.fontBlack,
-                                                  fontFamily: MyTexts.Roboto,
-                                                ),
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.fontBlack,
+                                                      fontFamily:
+                                                          MyTexts.Roboto,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -215,7 +257,8 @@ class ConnectionInboxView extends StatelessWidget {
                                             backgroundColor: MyColors.primary,
                                             // Navy Blue
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30),
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
                                             ),
                                             padding: const EdgeInsets.symmetric(
                                               horizontal: 20,
@@ -246,7 +289,8 @@ class ConnectionInboxView extends StatelessWidget {
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: MyColors.red,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30),
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
                                             ),
                                             padding: const EdgeInsets.symmetric(
                                               horizontal: 20,

@@ -89,6 +89,8 @@ class RoleManagementView extends GetView<RoleManagementController> {
                 const Gap(20),
                 Expanded(
                   child: RefreshIndicator(
+                    backgroundColor: MyColors.primary,
+                    color: Colors.white,
                     onRefresh: () async {
                       await controller.refreshRoles();
                     },
@@ -227,6 +229,8 @@ class RoleManagementView extends GetView<RoleManagementController> {
 
                 Expanded(
                   child: RefreshIndicator(
+                    backgroundColor: MyColors.primary,
+                    color: Colors.white,
                     onRefresh: () async {
                       await homeController.refreshTeamList();
                     },

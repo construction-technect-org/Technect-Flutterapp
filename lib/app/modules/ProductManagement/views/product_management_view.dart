@@ -56,6 +56,8 @@ class ProductManagementView extends StatelessWidget {
                     ),
                     Expanded(
                       child: RefreshIndicator(
+                        backgroundColor: MyColors.primary,
+                        color: Colors.white,
                         onRefresh: () async {
                           controller.clearSearch();
                           await controller.fetchProducts();

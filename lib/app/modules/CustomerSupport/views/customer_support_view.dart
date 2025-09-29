@@ -45,6 +45,8 @@ class CustomerSupportView extends StatelessWidget {
             SizedBox(height: 1.h),
             Expanded(
               child: RefreshIndicator(
+                backgroundColor: MyColors.primary,
+                color: Colors.white,
                 onRefresh: () async {
                   controller.clearSearch();
                   await controller.fetchMyTickets();

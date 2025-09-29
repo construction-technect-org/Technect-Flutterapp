@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ApprovalInbox/controllers/approval_Inbox_controller.dart';
-import 'package:construction_technect/app/modules/ApprovalInbox/model/approval_inbox_model.dart';
 import 'package:construction_technect/app/modules/home/views/home_view.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
@@ -133,54 +132,44 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                 return Row(
                   children: [
                     Expanded(
-                      child: StaticsCard(
-                        title: "Total Products",
-                        value:
-                            (controller
-                                        .approvalInboxList
-                                        .value
-                                        .data
-                                        ?.productStatistics
-                                        ?.totalProducts ??
-                                    0)
-                                .toString(),
-                        icon: Asset.noOfConectors,
-                        color: MyColors.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: StaticsCard(
-                        title: "Approved Products",
-                        value:
-                            (controller
-                                        .approvalInboxList
-                                        .value
-                                        .data
-                                        ?.productStatistics
-                                        ?.approvedProducts ??
-                                    0)
-                                .toString(),
-                        icon: Asset.noOfConectors,
-                        color: MyColors.green,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
+                      child: GestureDetector(
+                        onTap: () => controller.selectedFilter.value = ApprovalFilter.all,
+                        child: StaticsCard(
+                          title: "Total Products",
+                          value: (controller.approvalInboxList.value.data?.productStatistics?.totalProducts ?? 0).toString(),
+                          icon: Asset.noOfConectors,
+                          color: MyColors.primary,
+                          bColor:  controller.selectedFilter.value == ApprovalFilter.all? MyColors.primary:null,
 
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
                     Expanded(
-                      child: StaticsCard(
-                        title: "Rejected Products",
-                        value:
-                            (controller
-                                        .approvalInboxList
-                                        .value
-                                        .data
-                                        ?.productStatistics
-                                        ?.rejectedProducts ??
-                                    0)
-                                .toString(),
-                        icon: Asset.noOfConectors,
-                        color: MyColors.red,
+                      child: GestureDetector(
+                        onTap: () => controller.selectedFilter.value = ApprovalFilter.approved,
+                        child: StaticsCard(
+                          title: "Approved Products",
+                          value: (controller.approvalInboxList.value.data?.productStatistics?.approvedProducts ?? 0).toString(),
+                          icon: Asset.noOfConectors,
+                          color: MyColors.green,
+                          bColor:  controller.selectedFilter.value == ApprovalFilter.approved? MyColors.primary:null,
+
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => controller.selectedFilter.value = ApprovalFilter.rejected,
+                        child: StaticsCard(
+                          title: "Rejected Products",
+                          value: (controller.approvalInboxList.value.data?.productStatistics?.rejectedProducts ?? 0).toString(),
+                          icon: Asset.noOfConectors,
+                          color: MyColors.red,
+                          bColor:  controller.selectedFilter.value == ApprovalFilter.rejected? MyColors.primary:null,
+
+                        ),
                       ),
                     ),
                   ],
@@ -190,48 +179,50 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
               HeaderText(text: "Inbox"),
               Expanded(
                 child: Obx(
-                  () => ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    itemCount:
-                        controller.approvalInboxList.value.data?.approvalInbox?.length ??
-                        0,
-
-                    itemBuilder: (context, index) {
-                      final card =
-                          controller
-                              .approvalInboxList
-                              .value
-                              .data
-                              ?.approvalInbox?[index] ??
-                          ApprovalInbox();
-                      IconData statusIcon;
-                      Color statusColor;
-
-                      switch (card.status?.toLowerCase()) {
-                        case "pending":
-                          statusIcon = Icons.error_outline;
-                          statusColor = MyColors.warning;
-                        case "approved":
-                          statusIcon = Icons.check_circle_outline_outlined;
-                          statusColor = MyColors.green;
-                        case "rejected":
-                          statusIcon = Icons.cancel_outlined;
-                          statusColor = MyColors.red;
-                        default:
-                          statusIcon = Icons.error_outline;
-                          statusColor = MyColors.warning;
-                      }
-                      return buildStatusCard(
-                        title: card.title ?? "",
-                        icon: statusIcon,
-                        category: card.entityType ?? "",
-                        dateTime: card.createdAt ?? DateTime.now(),
-                        iconColor: statusColor,
-                        message: card.message ?? "",
-                        product: card.metadata?.productName ?? "",
+                      () {
+                    final list = controller.filteredInbox;
+                    if (list.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "No data found",
+                          style: MyTexts.medium16.copyWith(color: MyColors.darkGray),
+                        ),
                       );
-                    },
-                  ),
+                    }
+                    return ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        final card = list[index];
+                        IconData statusIcon;
+                        Color statusColor;
+
+                        switch (card.status?.toLowerCase()) {
+                          case "approved":
+                            statusIcon = Icons.check_circle_outline_outlined;
+                            statusColor = MyColors.green;
+                            break;
+                          case "rejected":
+                            statusIcon = Icons.cancel_outlined;
+                            statusColor = MyColors.red;
+                            break;
+                          default:
+                            statusIcon = Icons.error_outline;
+                            statusColor = MyColors.warning;
+                        }
+
+                        return buildStatusCard(
+                          title: card.title ?? "",
+                          icon: statusIcon,
+                          category: card.entityType ?? "",
+                          dateTime: card.createdAt ?? DateTime.now(),
+                          iconColor: statusColor,
+                          message: card.message ?? "",
+                          product: card.metadata?.productName ?? "",
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ],
