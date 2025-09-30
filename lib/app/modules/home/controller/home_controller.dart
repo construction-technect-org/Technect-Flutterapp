@@ -242,7 +242,6 @@ class HomeController extends GetxController {
           (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
         hasAddress.value = true;
         addressData = addressResponse;
-
         myPref.setAddressData(addressResponse.toJson());
       } else {
         hasAddress.value = false;
@@ -253,6 +252,12 @@ class HomeController extends GetxController {
       hasAddress.value = false;
       Get.toNamed(Routes.ADDRESS);
     }
+  }
+
+  Rx<Address?> selectedAddress = Rx<Address?>(null);
+
+  void setSelectedAddress(Address address) {
+    selectedAddress.value = address;
   }
 
   String getCurrentAddress() {
@@ -393,16 +398,4 @@ class HomeController extends GetxController {
     await fetchTeamList();
   }
 
-  // Future<void> refreshAddressAndProfile() async {
-  //   // Refresh address data
-  //   await _refreshHomeData();
-  //
-  //   // Refresh profile data
-  //   await fetchProfileData();
-  //
-  //   // Re-check both address and profile completion
-  //   Future.delayed(const Duration(milliseconds: 300), () {
-  //     _checkAddressAndProfileCompletion();
-  //   });
-  // }
 }

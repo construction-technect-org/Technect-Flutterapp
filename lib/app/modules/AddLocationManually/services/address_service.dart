@@ -187,7 +187,7 @@ class AddressService {
 
 
 
-  Future<SavedAddressesModel> getProfile() async {
+  Future<SavedAddressesModel> getAddress() async {
     try {
         final response = await _apiManager.get(url: APIConstants.address);
 

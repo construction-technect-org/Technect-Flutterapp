@@ -2,7 +2,9 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/models/SavedAddressesModel.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/services/address_service.dart';
 import 'package:construction_technect/app/modules/Address/controller/address_controller.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AddLocationController extends GetxController {
   // Form controllers
@@ -28,22 +30,45 @@ class AddLocationController extends GetxController {
   final AddressService _addressService = AddressService();
 
   RxList<SavedAddresses> addresses = <SavedAddresses>[].obs;
+  RxString from = "".obs;
 
   @override
   void onInit() {
     super.onInit();
     if (Get.arguments != null) {
       isFromLogin.value = Get.arguments['isFromLogin'] ?? false;
-      addressLine1Controller.text=Get.find<AddressController>().place.value?.name??"";
-      addressLine2Controller.text=Get.find<AddressController>().place.value?.street??"";
-      cityController.text=Get.find<AddressController>().place.value?.locality??"";
-      landmarkController.text=Get.find<AddressController>().place.value?.subAdministrativeArea??"";
-      stateController.text=Get.find<AddressController>().place.value?.administrativeArea??"";
-      pinCodeController.text=Get.find<AddressController>().place.value?.postalCode??"";
     }
 
-    _handlePassedData();
-    fetchAddresses();
+    if (Get.arguments != null) {
+      from.value = Get.arguments["from"] ?? "";
+      if (from.value == "home") {
+        isEditing.value = true;
+        if (Get.arguments["isCLocation"] != null) {
+          if (Get.arguments["isOffice"] != null) {
+            selectedIndex.value = Get.arguments["isOffice"];
+          }
+          existingAddressId = Get.arguments['id'];
+          final Placemark place2 = Get.arguments["isCLocation"];
+          addressLine1Controller.text = place2.name ?? "";
+          addressLine2Controller.text = place2.street ?? "";
+          cityController.text = place2.locality ?? "";
+          landmarkController.text = place2.subAdministrativeArea ?? "";
+          stateController.text = place2.administrativeArea ?? "";
+          pinCodeController.text = place2.postalCode ?? "";
+        }
+      } else {
+        if (Get.arguments["isCLocation"] != null) {
+          final Placemark place2 = Get.arguments["isCLocation"];
+          addressLine1Controller.text = place2.name ?? "";
+          addressLine2Controller.text = place2.street ?? "";
+          cityController.text = place2.locality ?? "";
+          landmarkController.text = place2.subAdministrativeArea ?? "";
+          stateController.text = place2.administrativeArea ?? "";
+          pinCodeController.text = place2.postalCode ?? "";
+        }
+      }
+    }
+    // _handlePassedData();
   }
 
   // void _handlePassedData() {
@@ -69,11 +94,7 @@ class AddLocationController extends GetxController {
       if (arguments.containsKey('id')) {
         isEditing.value = true;
         existingAddressId = arguments['id'];
-
-        // pre-fill form
         _prefillForm(arguments);
-
-        // set type (office / factory)
         if (arguments['addressType']?.toLowerCase() == "office") {
           selectedIndex.value = 0;
         } else if (arguments['addressType']?.toLowerCase() == "factory") {
@@ -110,7 +131,6 @@ class AddLocationController extends GetxController {
 
       if (addressResponse.success == true) {
         myPref.setAddressData(addressResponse.toJson());
-        Get.printInfo(info: '💾 Manual Address: Updated address data cached');
       }
     } catch (e) {
       Get.printError(info: 'Error fetching address data: $e');
@@ -159,8 +179,7 @@ class AddLocationController extends GetxController {
       final addressType = selectedIndex.value == 0 ? "office" : "factory";
       final otherType = addressType == "office" ? "factory" : "office";
 
-      if (isEditing.value && existingAddressId != null) {
-        // Update only selected one
+      if (isEditing.value) {
         response = await _addressService.updateAddress(
           addressId: existingAddressId!,
           addressLine1: addressLine1Controller.text.trim(),
@@ -174,7 +193,6 @@ class AddLocationController extends GetxController {
           addressType: addressType,
         );
       } else {
-        // Always add selected one
         response = await _addressService.addAddressManually(
           addressLine1: addressLine1Controller.text.trim(),
           addressLine2: addressLine2Controller.text.trim(),
@@ -186,8 +204,6 @@ class AddLocationController extends GetxController {
           longitude: longitude,
           addressType: addressType,
         );
-
-        //  Always add the other type as well (compulsory both)
         if (response['success'] == true) {
           await _addressService.addAddressManually(
             addressLine1: addressLine1Controller.text.trim(),
@@ -199,16 +215,29 @@ class AddLocationController extends GetxController {
             latitude: latitude,
             longitude: longitude,
             addressType: otherType,
+            isDefault: false,
           );
         }
       }
 
       if (response['success'] == true) {
-        locationAdded.value = true;
         await _fetchAndStoreAddressData();
-        await Future.delayed(const Duration(seconds: 2));
-
-        Get.offAllNamed(Routes.DASHBOARD);
+        if (from.value == "register") {
+          locationAdded.value = true;
+          Get.offAllNamed(Routes.DASHBOARD);
+        } else if (from.value == "home") {
+          final addressResponse = await HomeService().getAddress();
+          if (addressResponse.success == true &&
+              (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
+            Get.find<HomeController>().hasAddress.value = true;
+            Get.find<HomeController>().addressData = addressResponse;
+            myPref.setAddressData(addressResponse.toJson());
+            Get.back();
+            SnackBars.successSnackBar(
+              content: response['message'] ?? 'Address edited successfully',
+            );
+          }
+        }
       } else {
         locationAdded.value = false;
         SnackBars.errorSnackBar(
@@ -222,99 +251,10 @@ class AddLocationController extends GetxController {
     }
   }
 
-  // Future<void> submitLocation() async {
-  //   if (addressLine1Controller.text.trim().isEmpty ||
-  //       landmarkController.text.trim().isEmpty ||
-  //       cityController.text.trim().isEmpty ||
-  //       stateController.text.trim().isEmpty ||
-  //       pinCodeController.text.trim().isEmpty) {
-  //     SnackBars.errorSnackBar(content: 'Please fill all required fields');
-  //     return;
-  //   }
-
-  //   if (pinCodeController.text.trim().length != 6) {
-  //     SnackBars.errorSnackBar(content: 'Please enter a valid 6-digit pin code');
-  //     return;
-  //   }
-
-  //   isLoading.value = true;
-
-  //   try {
-  //     final arguments = Get.arguments;
-  //     double? latitude;
-  //     double? longitude;
-  //     if (arguments != null && arguments is Map<String, dynamic>) {
-  //       latitude = arguments['latitude']?.toDouble();
-  //       longitude = arguments['longitude']?.toDouble();
-  //     }
-
-  //     Map<String, dynamic> response;
-
-  //     final addressType = selectedIndex.value == 0 ? "office" : "factory";
-
-  //     if (isEditing.value && existingAddressId != null) {
-  //       response = await _addressService.updateAddress(
-  //         addressId: existingAddressId!,
-  //         addressLine1: addressLine1Controller.text.trim(),
-  //         addressLine2: addressLine2Controller.text.trim(),
-  //         landmark: landmarkController.text.trim(),
-  //         city: cityController.text.trim(),
-  //         state: stateController.text.trim(),
-  //         pinCode: pinCodeController.text.trim(),
-  //         latitude: latitude,
-  //         longitude: longitude,
-  //         addressType: addressType,
-  //       );
-  //     } else {
-  //       response = await _addressService.addAddressManually(
-  //         addressLine1: addressLine1Controller.text.trim(),
-  //         addressLine2: addressLine2Controller.text.trim(),
-  //         landmark: landmarkController.text.trim(),
-  //         city: cityController.text.trim(),
-  //         state: stateController.text.trim(),
-  //         pinCode: pinCodeController.text.trim(),
-  //         latitude: latitude,
-  //         longitude: longitude,
-  //         addressType: addressType,
-  //       );
-
-  //       if (copyToOtherType.value) {
-  //         final otherType = addressType == "office" ? "factory" : "office";
-  //         await _addressService.addAddressManually(
-  //           addressLine1: addressLine1Controller.text.trim(),
-  //           addressLine2: addressLine2Controller.text.trim(),
-  //           landmark: landmarkController.text.trim(),
-  //           city: cityController.text.trim(),
-  //           state: stateController.text.trim(),
-  //           pinCode: pinCodeController.text.trim(),
-  //           latitude: latitude,
-  //           longitude: longitude,
-  //           addressType: otherType,
-  //         );
-  //       }
-  //     }
-
-  //     if (response['success'] == true) {
-  //       locationAdded.value = true;
-  //       await _fetchAndStoreAddressData();
-  //       await Future.delayed(const Duration(seconds: 2));
-
-  //        Get.offAllNamed(Routes.MAIN);
-  //     } else {
-  //       locationAdded.value = false;
-  //       SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to save address');
-  //     }
-  //   } catch (e) {
-  //     SnackBars.errorSnackBar(content: 'Error saving address: $e');
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
   Future<void> fetchAddresses() async {
     try {
       isLoading.value = true;
-      final response = await _addressService.getProfile();
+      final response = await _addressService.getAddress();
       addresses.value = response.data.addresses;
     } catch (e) {
       Get.snackbar("Error", "Failed to load addresses: $e");

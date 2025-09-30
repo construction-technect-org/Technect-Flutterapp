@@ -16,25 +16,28 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
         appBar: controller.locationAdded.value
             ? null // no appBar
             : PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight + 30), // adjust as needed
-          child: CommonAppBar(
-            isCenter: false,
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  controller.isEditing.value ? "Edit Location" : "Add Location Manually",
-                ),
-                Text(
-                  "Select your location for better tracking",
-                  style: MyTexts.medium14.copyWith(
-                    color: MyColors.shadeOfGray,
+                preferredSize: const Size.fromHeight(kToolbarHeight + 30),
+                // adjust as needed
+                child: CommonAppBar(
+                  isCenter: false,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.isEditing.value
+                            ? "Edit Location"
+                            : "Add Location Manually",
+                      ),
+                      Text(
+                        "Select your location for better tracking",
+                        style: MyTexts.medium14.copyWith(
+                          color: MyColors.shadeOfGray,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
         backgroundColor: MyColors.white,
         resizeToAvoidBottomInset: true,
         // ✅ allow body to resize on keyboard open
@@ -42,259 +45,275 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Obx(
-                  () =>
-              controller.locationAdded.value
+              () => controller.locationAdded.value
                   ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    Asset.locationComplete,
-                  ).paddingSymmetric(horizontal: 20),
-                  SizedBox(height: 2.h),
-                  Text(
-                    "Location Connected!",
-                    style: MyTexts.bold20.copyWith(
-                      color: MyColors.textFieldBackground,
-                    ),
-                  ),
-                  SizedBox(height: 1.h),
-                  Text(
-                    "Your location is successfully connected.",
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.grey1,
-                    ),
-                  ),
-                ],
-              )
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          Asset.locationComplete,
+                        ).paddingSymmetric(horizontal: 20),
+                        SizedBox(height: 2.h),
+                        Text(
+                          "Location Connected!",
+                          style: MyTexts.bold20.copyWith(
+                            color: MyColors.textFieldBackground,
+                          ),
+                        ),
+                        SizedBox(height: 1.h),
+                        Text(
+                          "Your location is successfully connected.",
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.grey1,
+                          ),
+                        ),
+                      ],
+                    )
                   : SingleChildScrollView(
-                // ✅ scroll instead of overflow
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Address Line 1',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
-                        ),
-                        Text(
-                          '*',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    CustomTextField(
-                      controller: controller.addressLine1Controller,
-                    ),
-                    SizedBox(height: 2.h),
-                    Row(
-                      children: [
-                        Text(
-                          'Address Line 2',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
-                        ),
-                        Text(
-                          '*',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    CustomTextField(
-                      controller: controller.addressLine2Controller,
-                    ),
-                    SizedBox(height: 2.h),
-                    Row(
-                      children: [
-                        Text(
-                          'Landmark',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
-                        ),
-                        Text(
-                          '*',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    CustomTextField(
-                      controller: controller.landmarkController,
-                    ),
-                    SizedBox(height: 2.h),
-                    Row(
-                      children: [
-                        Text(
-                          'City',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
-                        ),
-                        Text(
-                          '*',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    CustomTextField(
-                      controller: controller.cityController,
-                    ),
-                    SizedBox(height: 2.h),
-                    Row(
-                      children: [
-                        Text(
-                          'State',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
-                        ),
-                        Text(
-                          '*',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    CustomTextField(
-                      controller: controller.stateController,
-                    ),
-                    SizedBox(height: 2.h),
-                    Row(
-                      children: [
-                        Text(
-                          'Pin Code',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.lightBlue,
-                          ),
-                        ),
-                        Text(
-                          '*',
-                          style: MyTexts.light16.copyWith(
-                            color: MyColors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 1.h),
-                    CustomTextField(
-                      controller: controller.pinCodeController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(6),
-                      ],
-                    ),
-                    SizedBox(height: 2.h), // ✅ space before button
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'SAVE AS',
-                          style: MyTexts.regular16.copyWith(
-                            color: MyColors.fontBlack,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        // Add Location Type buttons
-                        Obx(
-                              () =>
-                          controller.showAddLocationOption.value
-                              ? Row(
+                      // ✅ scroll instead of overflow
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              _PillButton(
-                                label: 'Office',
-                                icon:
-                                Icons.business_center_outlined,
-                                selected:
-                                controller
-                                    .selectedIndex
-                                    .value ==
-                                    0,
-                                onTap: () =>
-                                    controller.setSelectedIndex(0),
-                              ),
-                              const SizedBox(width: 12),
-                              _PillButton(
-                                label: 'factory',
-                                icon: Icons.work_outline,
-                                selected:
-                                controller
-                                    .selectedIndex
-                                    .value ==
-                                    1,
-                                onTap: () =>
-                                    controller.setSelectedIndex(1),
-                              ),
-                            ],
-                          )
-                              : const SizedBox.shrink(),
-                        ),
-
-                        SizedBox(height: 2.h),
-                        // ✅ space before button
-                        // Checkbox for copying address
-                        Obx(
-                              () =>
-                          controller.showAddLocationOption.value
-                              ? Row(
-                            children: [
-                              Checkbox(
-                                value: controller
-                                    .copyToOtherType
-                                    .value,
-                                onChanged: (val) =>
-                                controller
-                                    .copyToOtherType
-                                    .value =
-                                    val ?? false,
-                              ),
-                              const SizedBox(width: 8),
                               Text(
-                                'Use same address for ${controller.selectedIndex
-                                    .value == 0 ? 'office' : 'factory'}',
-                                style: MyTexts.medium14,
+                                'Address Line 1',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.lightBlue,
+                                ),
+                              ),
+                              Text(
+                                '*',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.red,
+                                ),
                               ),
                             ],
-                          )
-                              : const SizedBox.shrink(),
-                        ),
-                        SizedBox(height: 4.h),
-                        // ✅ space before button
-                        Obx(
-                              () =>
-                              RoundedButton(
-                                buttonName: controller.isLoading.value
-                                    ? 'SUBMITTING...'
-                                    : 'SUBMIT',
-                                onTap: controller.isLoading.value
-                                    ? null
-                                    : () => controller.submitLocation(),
+                          ),
+                          SizedBox(height: 1.h),
+                          CustomTextField(
+                            controller: controller.addressLine1Controller,
+                          ),
+                          SizedBox(height: 2.h),
+                          Row(
+                            children: [
+                              Text(
+                                'Address Line 2',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.lightBlue,
+                                ),
                               ),
-                        ),
-                        SizedBox(height: 2.h),
-                        // ✅ bottom padding to avoid cut-off
-                      ],
+                              Text(
+                                '*',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 1.h),
+                          CustomTextField(
+                            controller: controller.addressLine2Controller,
+                          ),
+                          SizedBox(height: 2.h),
+                          Row(
+                            children: [
+                              Text(
+                                'Landmark',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.lightBlue,
+                                ),
+                              ),
+                              Text(
+                                '*',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 1.h),
+                          CustomTextField(
+                            controller: controller.landmarkController,
+                          ),
+                          SizedBox(height: 2.h),
+                          Row(
+                            children: [
+                              Text(
+                                'City',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.lightBlue,
+                                ),
+                              ),
+                              Text(
+                                '*',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 1.h),
+                          CustomTextField(
+                            controller: controller.cityController,
+                          ),
+                          SizedBox(height: 2.h),
+                          Row(
+                            children: [
+                              Text(
+                                'State',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.lightBlue,
+                                ),
+                              ),
+                              Text(
+                                '*',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 1.h),
+                          CustomTextField(
+                            controller: controller.stateController,
+                          ),
+                          SizedBox(height: 2.h),
+                          Row(
+                            children: [
+                              Text(
+                                'Pin Code',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.lightBlue,
+                                ),
+                              ),
+                              Text(
+                                '*',
+                                style: MyTexts.light16.copyWith(
+                                  color: MyColors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 1.h),
+                          CustomTextField(
+                            controller: controller.pinCodeController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(6),
+                            ],
+                          ),
+                          SizedBox(height: 2.h), // ✅ space before button
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Obx(() {
+                                return controller.from.value != "home"
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'SAVE AS',
+                                            style: MyTexts.regular16.copyWith(
+                                              color: MyColors.fontBlack,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          // Add Location Type buttons
+                                          Obx(
+                                            () =>
+                                                controller
+                                                    .showAddLocationOption
+                                                    .value
+                                                ? Row(
+                                                    children: [
+                                                      _PillButton(
+                                                        label: 'Office',
+                                                        icon: Icons
+                                                            .business_center_outlined,
+                                                        selected:
+                                                            controller
+                                                                .selectedIndex
+                                                                .value ==
+                                                            0,
+                                                        onTap: () => controller
+                                                            .setSelectedIndex(
+                                                              0,
+                                                            ),
+                                                      ),
+                                                      const SizedBox(width: 12),
+                                                      _PillButton(
+                                                        label: 'factory',
+                                                        icon:
+                                                            Icons.work_outline,
+                                                        selected:
+                                                            controller
+                                                                .selectedIndex
+                                                                .value ==
+                                                            1,
+                                                        onTap: () => controller
+                                                            .setSelectedIndex(
+                                                              1,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ),
+
+                                          SizedBox(height: 2.h),
+                                          // ✅ space before button
+                                          // Checkbox for copying address
+                                          Obx(
+                                            () =>
+                                                controller
+                                                    .showAddLocationOption
+                                                    .value
+                                                ? Row(
+                                                    children: [
+                                                      Checkbox(
+                                                        value: controller
+                                                            .copyToOtherType
+                                                            .value,
+                                                        onChanged: (val) =>
+                                                            controller
+                                                                    .copyToOtherType
+                                                                    .value =
+                                                                val ?? false,
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      Text(
+                                                        'Use same address for ${controller.selectedIndex.value == 0 ? 'office' : 'factory'}',
+                                                        style: MyTexts.medium14,
+                                                      ),
+                                                    ],
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox();
+                              }),
+                              SizedBox(height: 4.h),
+                              // ✅ space before button
+                              Obx(
+                                () => RoundedButton(
+                                  buttonName: controller.isLoading.value
+                                      ? 'SUBMITTING...'
+                                      : 'SUBMIT',
+                                  onTap: controller.isLoading.value
+                                      ? null
+                                      : () => controller.submitLocation(),
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+                              // ✅ bottom padding to avoid cut-off
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
             ),
           ),
         ),

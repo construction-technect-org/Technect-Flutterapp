@@ -10,10 +10,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
     return LoaderWrapper(
       isLoading: controller.isLoading,
       child: Scaffold(
-        appBar: CommonAppBar(
-          isCenter: false,
-          title: const Text(  "MARKETPLACE",),
-        ),
+        appBar: CommonAppBar(isCenter: false, title: const Text("MARKETPLACE")),
         backgroundColor: MyColors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
@@ -24,7 +21,8 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                 SizedBox(height: 2.h),
                 Text(
                   "Select Your Marketplace",
-                  style: MyTexts.medium16.copyWith(color: MyColors.primary,
+                  style: MyTexts.medium16.copyWith(
+                    color: MyColors.primary,
                     fontFamily: MyTexts.Roboto,
                   ),
                 ),
@@ -35,7 +33,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                         (constraints.maxWidth - (3 * 10)) /
                         1; // 4 per row with spacing
                     final double itemHeight = itemWidth + 5; // for icon + text
-            
+
                     return GridView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
@@ -48,7 +46,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                       ),
                       itemBuilder: (context, index) {
                         final item = controller.marketplaces[index];
-            
+
                         return Obx(() {
                           final selected =
                               controller.selectedMarketplace.value ==
@@ -72,7 +70,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                     );
                   },
                 ),
-            
+
                 SizedBox(height: 2.h),
                 Obx(() {
                   return controller.selectedMarketplace.value.isEmpty
@@ -82,7 +80,8 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                           children: [
                             Text(
                               "Select Your Role",
-                              style: MyTexts.medium16.copyWith(color: MyColors.primary,
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.primary,
                                 fontFamily: MyTexts.Roboto,
                               ),
                             ),
@@ -97,8 +96,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                                     itemWidth + 1; // for icon + text
 
                                 return GridView.builder(
-                                  physics:
-                                      const NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: controller.roles.length,
                                   gridDelegate:
@@ -111,7 +109,6 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                                       ),
                                   itemBuilder: (context, index) {
                                     final role = controller.roles[index];
-
                                     return Obx(() {
                                       final selected =
                                           controller.selectedRole.value ==
@@ -121,9 +118,16 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                                         role['icon'] ?? '',
                                         selected,
                                         () {
-                                          controller.selectRole(
-                                            role['title']!,
-                                          );
+                                          if (index == 0) {
+                                            controller.selectRole(
+                                              role['title']!,
+                                            );
+                                          } else {
+                                            SnackBars.successSnackBar(
+                                              content:
+                                                  'This feature will come soon',
+                                            );
+                                          }
                                         },
                                       );
                                     });
@@ -134,7 +138,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                           ],
                         );
                 }),
-            
+
                 // ✅ Proceed Button
               ],
             ),

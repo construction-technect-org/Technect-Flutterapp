@@ -3,9 +3,11 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
 import 'package:construction_technect/app/modules/settings/views/setting_view.dart';
 import 'package:gap/gap.dart';
+import 'package:geocoding/geocoding.dart';
 
 class HomeView extends StatelessWidget {
   final HomeController controller = Get.put(HomeController());
@@ -92,15 +94,102 @@ class HomeView extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (controller.getCurrentAddress().isNotEmpty) {
-                              // Get.toNamed(Routes.CONNECTOR_SELECT_LOCATION);
-                            } else {
+                            final addresses =
+                                controller.addressData.data?.addresses ?? [];
+
+                            if (addresses.isEmpty) {
                               Get.snackbar(
                                 "No Address",
                                 "Please add an address first",
                                 snackPosition: SnackPosition.BOTTOM,
                               );
+                              return;
                             }
+
+                            final officeAddress = addresses.firstWhere(
+                              (a) => a.addressType?.toLowerCase() == 'office',
+                              orElse: () => Address(),
+                            );
+
+                            final factoryAddress = addresses.firstWhere(
+                              (a) => a.addressType?.toLowerCase() == 'factory',
+                              orElse: () => Address(),
+                            );
+
+                            showModalBottomSheet(
+                              context: Get.context!,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                ),
+                              ),
+                              backgroundColor: Colors.white,
+                              builder: (context) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(
+                                      context,
+                                    ).viewInsets.bottom,
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Select Address",
+                                          style: MyTexts.extraBold18.copyWith(
+                                            color: MyColors.black,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child:
+                                                  officeAddress.addressType !=
+                                                      null
+                                                  ? _addressCard(
+                                                      address: officeAddress,
+                                                      addressType: officeAddress
+                                                          .addressType,
+                                                      isSelected:
+                                                          officeAddress
+                                                              .isDefault ??
+                                                          false,
+                                                    )
+                                                  : Container(),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child:
+                                                  factoryAddress.addressType !=
+                                                      null
+                                                  ? _addressCard(
+                                                      address: factoryAddress,
+
+                                                      addressType:
+                                                          factoryAddress
+                                                              .addressType,
+                                                      isSelected:
+                                                          factoryAddress
+                                                              .isDefault ??
+                                                          false,
+                                                    )
+                                                  : Container(),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 16),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
                           },
                           child: Row(
                             children: [
@@ -110,28 +199,20 @@ class HomeView extends StatelessWidget {
                                 height: 12.22,
                               ),
                               SizedBox(width: 0.4.h),
-                              Obx(
-                                () => Expanded(
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        controller.getCurrentAddress(),
-                                        style: MyTexts.medium14.copyWith(
-                                          color: MyColors.textFieldBackground,
-                                          fontFamily: MyTexts.Roboto,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(width: 4),
-                                      const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 16,
-                                        color: Colors.black54,
-                                      ),
-                                    ],
+                              Expanded(
+                                child: Text(
+                                  controller.getCurrentAddress(),
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.textFieldBackground,
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
+                              ),
+                              const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 16,
+                                color: Colors.black54,
                               ),
                             ],
                           ),
@@ -552,6 +633,81 @@ class HomeView extends StatelessWidget {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _addressCard({
+    Address? address,
+    String? addressType,
+    bool isSelected = false,
+  }) {
+    final displayText =
+        "${address?.addressLine1}, ${address?.addressLine2}, ${address?.landmark}, ${address?.city}, ${address?.state} , ${address?.pinCode}";
+    return GestureDetector(
+      onTap: () {
+        if (address?.isDefault != true) {
+          for (final a in controller.addressData.data?.addresses ?? []) {
+            a.isDefault = (a.id == address?.id);
+          }
+        }
+        Get.back();
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: MyColors.white,
+          border: Border.all(
+            color: isSelected ? MyColors.primary : MyColors.grayD4,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  addressType ?? "",
+                  style: MyTexts.medium14.copyWith(color: MyColors.primary),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    final Placemark place = Placemark(
+                      name: address?.addressLine1,
+                      subAdministrativeArea: address?.landmark,
+                      postalCode: address?.pinCode,
+                      administrativeArea: address?.state,
+                      locality: address?.city,
+                      street: address?.addressLine2,
+                    );
+                    Get.back();
+                    Get.toNamed(
+                      Routes.ADD_LOCATION_MANUALLY,
+                      arguments: {
+                        "from": "home",
+                        "isCLocation": place,
+                        "isOffice": addressType == "office" ? 0 : 1,
+                        "id": address?.id,
+                        "latitude": address?.latitude,
+                        "longitude": address?.longitude,
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.edit, size: 18),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              displayText ?? "",
+              style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
+            ),
+            const Gap(20),
           ],
         ),
       ),

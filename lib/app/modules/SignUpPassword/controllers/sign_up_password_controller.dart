@@ -113,9 +113,7 @@
 //     }
 //   }
 
-
 // }
-
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
@@ -183,7 +181,9 @@ class SignUpPasswordController extends GetxController {
       } else if (password.value != confirmPassword.value) {
         SnackBars.errorSnackBar(content: 'Passwords do not match');
       } else if (password.value.length < 8) {
-        SnackBars.errorSnackBar(content: 'Password must be at least 8 characters long');
+        SnackBars.errorSnackBar(
+          content: 'Password must be at least 8 characters long',
+        );
       }
       return;
     }
@@ -192,7 +192,9 @@ class SignUpPasswordController extends GetxController {
 
     try {
       if (userData == null) {
-        SnackBars.errorSnackBar(content: 'User data not found. Please try again.');
+        SnackBars.errorSnackBar(
+          content: 'User data not found. Please try again.',
+        );
         return;
       }
 
@@ -216,14 +218,13 @@ class SignUpPasswordController extends GetxController {
         if (signUpResponse.data?.user != null) {
           myPref.setUserModel(signUpResponse.data!.user!);
         }
-
         Get.to(
           () => SuccessScreen(
             title: "Success!",
             header: "Account created successfully !",
             image: Asset.forgetSImage,
             onTap: () {
-              Get.offAllNamed(Routes.ADDRESS);
+              Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register",});
             },
           ),
         );

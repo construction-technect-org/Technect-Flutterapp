@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/Address/controller/address_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -34,86 +35,19 @@ class AddressView extends GetView<AddressController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 1.h),
-                Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(22.5),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x1A000000), // light shadow (10% black)
-                        blurRadius: 8, // soften the shadow
-                        offset: Offset(0, 4), // move shadow down
-                      ),
-                    ],
+                CommonTextField(
+                  hintText: 'Search',
+                  borderRadius: 50,
+                  prefixIcon: SvgPicture.asset(
+                    Asset.searchIcon,
+                    height: 16,
+                    width: 16,
+                    color: MyColors.primary,
                   ),
-                  child: TextField(
-                    controller: controller.searchController,
-                    onChanged: (value) {
-                      controller.onSearchChanged(value);
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(
-                          Asset.searchIcon,
-                          height: 16,
-                          width: 16,
-                          color: MyColors.primary,
-                        ),
-                      ),
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 36,
-                        minHeight: 36,
-                      ),
-                      hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(
-                        color: MyColors.darkGray,
-                      ),
-                      filled: true,
-                      fillColor: MyColors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 12,
-                      ),
-
-                      // 🔹 Always show border with primary color
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(22.5),
-                        borderSide: const BorderSide(color: MyColors.primary),
-                      ),
-
-                      // 🔹 Also keep same style on focus
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(22.5),
-                        borderSide: const BorderSide(color: MyColors.primary),
-                      ),
-
-                      // suffixIcon: Obx(
-                      //   () => controller.isSearching.value
-                      //       ? const Padding(
-                      //           padding: EdgeInsets.all(14),
-                      //           child: SizedBox(
-                      //             width: 20,
-                      //             height: 20,
-                      //             child: CircularProgressIndicator(
-                      //               strokeWidth: 2,
-                      //               valueColor: AlwaysStoppedAnimation<Color>(
-                      //                 Colors.grey,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         )
-                      //       : Padding(
-                      //           padding: const EdgeInsets.all(14),
-                      //           child: SvgPicture.asset(
-                      //             Asset.filterIcon,
-                      //             height: 20,
-                      //             width: 20,
-                      //           ),
-                      //         ),
-                      // ),
-                    ),
-                  ),
+                  controller: controller.searchController,
+                  onChange: (value) {
+                    controller.onSearchChanged(value??"");
+                  },
                 ),
                 SizedBox(height: 2.h),
                 Center(
@@ -167,11 +101,11 @@ class AddressView extends GetView<AddressController> {
                             onTap: () {
                               if (controller.currentAddress.isNotEmpty) {
                                 controller.place.value = controller.place2;
-                                controller.navigateToManualAddress();
+                                controller.navigateToManualAddress(isCLocation: true);
                               } else {
                                 controller.useCurrentLocation().then((val) {
                                   controller.place.value = controller.place2;
-                                  controller.navigateToManualAddress();
+                                  controller.navigateToManualAddress(isCLocation: true);
                                 });
                               }
                             },

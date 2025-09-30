@@ -11,14 +11,15 @@ class AddressController extends GetxController {
   GoogleMapController? mapController;
 
   // Location data
-  final currentPosition = const LatLng(23.0225, 72.5714).obs; // Default to Ahmedabad
-  final selectedPosition = const LatLng(23.0225, 72.5714).obs;
+  final currentPosition = const LatLng(12.9716, 77.5946).obs;
+  final selectedPosition = const LatLng(12.9716, 77.5946).obs;
   final currentAddress = ''.obs;
   final searchController = TextEditingController();
   final isLoading = false.obs;
   final isGettingLocation = false.obs;
   final isSearching = false.obs;
   final isFromLogin = false.obs;
+  final isFromHome = false.obs;
 
   // Debounce timer for search
   Timer? _searchDebounce;
@@ -30,12 +31,18 @@ class AddressController extends GetxController {
   // Markers
   final markers = <MarkerId, Marker>{}.obs;
 
+  RxString from = "".obs;
+
   @override
   void onInit() {
     super.onInit();
     if (Get.arguments != null) {
+      from.value = Get.arguments["from"] ?? "";
       isFromLogin.value = Get.arguments['isFromLogin'] ?? false;
+      isFromHome.value = Get.arguments['isFromHome'] ?? false;
+      isFromHome.value = Get.arguments['isFromHome'] ?? false;
     }
+
     _handlePassedData();
     _initializeLocation();
   }
@@ -121,7 +128,9 @@ class AddressController extends GetxController {
       // Check if location services are enabled
       final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        Get.printInfo(info: 'Location services disabled, using default location');
+        Get.printInfo(
+          info: 'Location services disabled, using default location',
+        );
         return; // Use default location instead of showing dialog
       }
 
@@ -130,14 +139,17 @@ class AddressController extends GetxController {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          Get.printInfo(info: 'Location permission denied, using default location');
+          Get.printInfo(
+            info: 'Location permission denied, using default location',
+          );
           return; // Use default location instead of showing dialog
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
         Get.printInfo(
-          info: 'Location permission permanently denied, using default location',
+          info:
+              'Location permission permanently denied, using default location',
         );
         return; // Use default location instead of showing dialog
       }
@@ -162,7 +174,8 @@ class AddressController extends GetxController {
       }
 
       Get.printInfo(
-        info: 'Current location obtained: ${position.latitude}, ${position.longitude}',
+        info:
+            'Current location obtained: ${position.latitude}, ${position.longitude}',
       );
     } catch (e) {
       Get.printError(info: 'Error getting location: $e');
@@ -173,7 +186,6 @@ class AddressController extends GetxController {
     }
   }
 
-  // Update marker on map
   void _updateMarker() {
     markers.clear();
     markers[const MarkerId('selected_location')] = Marker(
@@ -236,7 +248,9 @@ class AddressController extends GetxController {
     Get.dialog(
       AlertDialog(
         title: const Text('Location Services Disabled'),
-        content: const Text('Please enable location services to use this feature.'),
+        content: const Text(
+          'Please enable location services to use this feature.',
+        ),
         actions: [
           TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           TextButton(
@@ -279,7 +293,10 @@ class AddressController extends GetxController {
   // Get address from coordinates
   Future<void> _getAddressFromCoordinates(double lat, double lng) async {
     try {
-      final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      final List<Placemark> placemarks = await placemarkFromCoordinates(
+        lat,
+        lng,
+      );
       if (placemarks.isNotEmpty) {
         place2 = placemarks[0];
         currentAddress.value =
@@ -329,7 +346,9 @@ class AddressController extends GetxController {
 
         // Move camera to searched location
         if (mapController != null) {
-          mapController!.animateCamera(CameraUpdate.newLatLngZoom(latLng, mapZoom.value));
+          mapController!.animateCamera(
+            CameraUpdate.newLatLngZoom(latLng, mapZoom.value),
+          );
         }
 
         _updateMarker();
@@ -342,38 +361,35 @@ class AddressController extends GetxController {
     }
   }
 
-  // Navigate to manual address with current location data
-  void navigateToManualAddress() {
-    final arguments = Get.arguments;
-    final Map<String, dynamic> addressData = {
-      'latitude': selectedPosition.value.latitude,
-      'longitude': selectedPosition.value.longitude,
-      'address': currentAddress.value,
-      'isFromLogin': isFromLogin.value,
-    };
+  void navigateToManualAddress({bool isCLocation = false}) {
+    // final arguments = Get.arguments;
+    // final Map<String, dynamic> addressData = {
+    //   'latitude': selectedPosition.value.latitude,
+    //   'longitude': selectedPosition.value.longitude,
+    //   'address': currentAddress.value,
+    //   'isFromLogin': isFromLogin.value,
+    // };
+    //
+    // // If we have existing address data, pass it along
+    // if (arguments != null && arguments is Map<String, dynamic>) {
+    //   if (arguments.containsKey('id')) {
+    //     addressData.addAll(arguments);
+    //   }
+    // }
 
-    // If we have existing address data, pass it along
-    if (arguments != null && arguments is Map<String, dynamic>) {
-      if (arguments.containsKey('id')) {
-        addressData.addAll(arguments);
-      }
-    }
-
-    Get.toNamed(Routes.ADD_LOCATION_MANUALLY, arguments: addressData);
+    Get.toNamed(
+      Routes.ADD_LOCATION_MANUALLY,
+      arguments: {
+        "from": from.value,
+        if (isCLocation) "isCLocation": place.value,
+      },
+    );
   }
 
   // Save location
   Future<void> saveLocation() async {
     isLoading.value = true;
-
     try {
-      // Get the selected coordinates
-      final lat = selectedPosition.value.latitude;
-      final lng = selectedPosition.value.longitude;
-
-      Get.printInfo(info: 'Selected Location: Lat: $lat, Lng: $lng');
-
-      // Navigate to manual address form with coordinates
       navigateToManualAddress();
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error saving location: $e');
