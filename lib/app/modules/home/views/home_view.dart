@@ -93,7 +93,7 @@ class HomeView extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             if (controller.getCurrentAddress().isNotEmpty) {
-                              Get.toNamed(Routes.CONNECTOR_SELECT_LOCATION);
+                              // Get.toNamed(Routes.CONNECTOR_SELECT_LOCATION);
                             } else {
                               Get.snackbar(
                                 "No Address",
@@ -383,10 +383,10 @@ class HomeView extends StatelessWidget {
                                       );
                                       // Get.toNamed(Routes.REPORT);
                                     } else if (index == 2) {
-                                      //Get.toNamed(Routes.REPORT);
-                                      ComingSoonDialog.showComingSoonDialog(
-                                        featureName: 'Analysis',
-                                      );
+                                      Get.toNamed(Routes.REPORT);
+                                      // ComingSoonDialog.showComingSoonDialog(
+                                      //   featureName: 'Analysis',
+                                      // );
                                     } else if (index == 3) {
                                       Get.to(() => SettingView());
                                     } else if (index == 4) {

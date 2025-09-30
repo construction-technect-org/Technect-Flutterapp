@@ -71,7 +71,7 @@ class RoundedButton extends StatelessWidget {
                       textAlign: textAlign,
                       style:
                           style ??
-                          MyTexts.bold18.copyWith(
+                          MyTexts.bold16.copyWith(
                             color: fontColor ?? MyColors.white,
                               fontFamily: MyTexts.Roboto
                           ),

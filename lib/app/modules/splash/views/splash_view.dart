@@ -100,8 +100,7 @@ class SplashView extends GetView<SplashController> {
       );
     }
 
-    // ✅ Handle Mobile
-    if (Device.screenType == ScreenType.mobile) {
+    else {
       return Scaffold(
         body: Stack(
           children: [
@@ -125,8 +124,5 @@ class SplashView extends GetView<SplashController> {
         ),
       );
     }
-
-    // ✅ Fallback for tablets / desktop (non-web)
-    return const Scaffold(body: Center(child: Text("Unsupported device")));
   }
 }

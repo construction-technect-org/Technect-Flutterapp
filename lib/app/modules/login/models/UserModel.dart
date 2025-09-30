@@ -13,6 +13,7 @@ class UserModel {
   String? marketPlaceRole;
   String? createdAt;
   String? updatedAt;
+  bool? isNotificationSend;
 
   UserModel({
     this.id,
@@ -24,6 +25,7 @@ class UserModel {
     this.countryCode,
     this.mobileNumber,
     this.email,
+    this.isNotificationSend,
     this.gst,
     this.marketPlace,
     this.marketPlaceRole,
@@ -46,6 +48,7 @@ class UserModel {
     createdAt: json["createdAt"],
     image: json["profileImage"],
     updatedAt: json["updatedAt"],
+    isNotificationSend: json["isNotificationSend"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -63,6 +66,7 @@ class UserModel {
     "gstNumber": gst,
     "createdAt": createdAt,
     "updatedAt": updatedAt,
+    "isNotificationSend": isNotificationSend,
   };
 
   // Helper method to get full name

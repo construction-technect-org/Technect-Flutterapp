@@ -9,6 +9,17 @@ class APIConstants {
   static const String sendOtp = "auth/send-otp";
   static const String resendOtp = "auth/resend-otp";
   static const String verifyOtp = "auth/verify-otp";
+
+
+  static const String notificationToggle = "notification-settings/toggle";
+
+
+  static const String deactivateSendOtp = "auth/deactivate/send-otp";
+  static const String deactivateVerifyOtp = "auth/deactivate/verify-otp";
+  static const String deleteSendOtp = "auth/delete/send-otp";
+  static const String deleteVerifyOtp = "auth/delete/verify-otp";
+
+
   static const String signup = "auth/signup";
   static const String login = "auth/login";
   static const String marketplaceUpdate = "auth/marketplace";
