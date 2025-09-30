@@ -118,78 +118,76 @@ class SettingView extends StatelessWidget {
                   const Gap(5),
                   const Divider(),
                   const Gap(3),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        _showConfirmDialog(
-                          context,
-                          title: "Log Out",
-                          message: "Are you sure you want to log out?",
-                          confirmText: "Log Out",
-                          onConfirm: () {
-                            myPref.logout();
-                            Get.offAllNamed(Routes.LOGIN);
-                          },
-                        );
-                      },
-                      child: Text(
-                        "Log Account",
-                        style: MyTexts.medium16.copyWith(color: MyColors.red),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Divider(),
+                      const Gap(12),
+                      HeaderText(text: "Account"),
+                      const Gap(8),
+                      _buildSettingAction(
+                        context,
+                        icon: Icons.logout,
+                        text: "Log Out",
+                        color: MyColors.red,
+                        onTap: () {
+                          _showConfirmDialog(
+                            context,
+                            title: "Log Out",
+                            message: "Are you sure you want to log out?",
+                            confirmText: "Log Out",
+                            onConfirm: () {
+                              myPref.logout();
+                              Get.offAllNamed(Routes.LOGIN);
+                            },
+                          );
+                        },
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        _showConfirmDialog(
-                          context,
-                          title: "Deactivate Account",
-                          message:
-                              "Are you sure you want to deactivate your account? You can reactivate it anytime by logging back in.",
-                          confirmText: "Deactivate",
-                          onConfirm: () {
-                            Get.back();
 
-                            Get.to(
-                              () =>
-                                  AccountActionScreen(actionType: "deactivate"),
-                            );
-                          },
-                        );
-                      },
-                      child: Text(
-                        "Deactivate my Account",
-                        style: MyTexts.medium16.copyWith(color: MyColors.red),
+                      // Deactivate
+                      _buildSettingAction(
+                        context,
+                        icon: Icons.pause_circle_filled,
+                        text: "Deactivate my Account",
+                        color: MyColors.red,
+                        onTap: () {
+                          _showConfirmDialog(
+                            context,
+                            title: "Deactivate Account",
+                            message:
+                            "Are you sure you want to deactivate your account? You can reactivate it anytime by logging back in.",
+                            confirmText: "Deactivate",
+                            onConfirm: () {
+                              Get.back();
+                              Get.to(() => AccountActionScreen(actionType: "deactivate"));
+                            },
+                          );
+                        },
                       ),
-                    ),
-                  ),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        _showConfirmDialog(
-                          context,
-                          title: "Delete Account",
-                          message:
-                              "This action cannot be undone. Are you sure you want to delete your account permanently?",
-                          confirmText: "Delete",
-                          onConfirm: () {
-                            Get.back();
-                            Get.to(
-                              () => AccountActionScreen(actionType: "delete"),
-                            );
-                          },
-                        );
-                      },
-                      child: Text(
-                        "Delete my Account",
-                        style: MyTexts.medium16.copyWith(color: MyColors.red),
+                      // Delete
+                      _buildSettingAction(
+                        context,
+                        icon: Icons.delete_forever,
+                        text: "Delete my Account",
+                        color: MyColors.red,
+                        onTap: () {
+                          _showConfirmDialog(
+                            context,
+                            title: "Delete Account",
+                            message:
+                            "This action cannot be undone. Are you sure you want to delete your account permanently?",
+                            confirmText: "Delete",
+                            onConfirm: () {
+                              Get.back();
+                              Get.to(() => AccountActionScreen(actionType: "delete"));
+                            },
+                          );
+                        },
                       ),
-                    ),
-                  ),
+                    ],
+                  )
+
                 ],
               ),
             ),
@@ -198,6 +196,40 @@ class SettingView extends StatelessWidget {
       ),
     );
   }
+  Widget _buildSettingAction(
+      BuildContext context, {
+        required IconData icon,
+        required String text,
+        required VoidCallback onTap,
+        Color? color,
+      }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: MyColors.red.withValues(alpha: 0.05),
+            border: Border.all(color: MyColors.red.withValues(alpha: 0.5)),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  text,
+                  style: MyTexts.medium14.copyWith(color: color ?? Colors.black,fontFamily: MyTexts.Roboto),
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: MyColors.red),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }
 
 /// Modern Confirmation Dialog
