@@ -36,6 +36,7 @@ CachedNetworkImage getImageView(
       margin: const EdgeInsets.all(10),
       height: height,
       width: width,
+      color: MyColors.grayD4,
       child: const Center(
         child: CircularProgressIndicator(
           strokeWidth: 2,
