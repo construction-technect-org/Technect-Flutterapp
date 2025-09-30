@@ -16,7 +16,9 @@ class ReportView extends GetView<ReportController> {
       isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar: CommonAppBar(title: const Text('Reports'), isCenter: false),
+        appBar: CommonAppBar(title: Obx(() {
+          return Text(controller.isReport.value ? 'Reports' : "Analysis");
+        }), isCenter: false),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -53,7 +55,19 @@ class ReportView extends GetView<ReportController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Good Morning ${Get.find<HomeController>().profileData.value.data?.user?.firstName ?? ""} ${Get.find<HomeController>().profileData.value.data?.user?.lastName ?? ""}!",
+                          "Good Morning ${Get
+                              .find<HomeController>()
+                              .profileData
+                              .value
+                              .data
+                              ?.user
+                              ?.firstName ?? ""} ${Get
+                              .find<HomeController>()
+                              .profileData
+                              .value
+                              .data
+                              ?.user
+                              ?.lastName ?? ""}!",
                           style: MyTexts.bold18.copyWith(
                             color: MyColors.primary,
                             fontFamily: MyTexts.Roboto,
@@ -68,17 +82,20 @@ class ReportView extends GetView<ReportController> {
                           ),
                         ),
                         const Gap(5),
-                        RoundedButton(
-                          buttonName: "Download Reports",
-                          onTap: () {},
-                          height: 24,
-                          width: 130,
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.white,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                          verticalPadding: 0,
-                        ),
+
+                        Obx(() {
+                          return controller.isReport.value ? RoundedButton(
+                            buttonName: "Download Reports",
+                            onTap: () {},
+                            height: 24,
+                            width: 130,
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.white,
+                              fontFamily: MyTexts.Roboto,
+                            ),
+                            verticalPadding: 0,
+                          ) : const SizedBox();
+                        }),
                       ],
                     ),
                   ),
@@ -115,9 +132,16 @@ class ReportView extends GetView<ReportController> {
                 ],
               ),
               const Gap(20),
-              HeaderText(text: "Customer Support Ticket"),
-              const Gap(20),
-              const ReportGraph(),
+              Obx(() {
+                return !controller.isReport.value ?  Column(
+                  children: [
+                    HeaderText(text: "Customer Support Ticket"),
+                    const Gap(20),
+                    const ReportGraph(),
+                  ],
+                ):const SizedBox();
+              })
+
             ],
           ),
         ),
@@ -291,7 +315,9 @@ class _ReportGraphState extends State<ReportGraph> {
                 alignment: BarChartAlignment.spaceAround,
                 barGroups: List.generate(monthLabels.length, (index) {
                   int realIndex =
-                      DateTime.now().month - monthLabels.length + index;
+                      DateTime
+                          .now()
+                          .month - monthLabels.length + index;
                   if (realIndex < 0) realIndex += 12;
 
                   return BarChartGroupData(

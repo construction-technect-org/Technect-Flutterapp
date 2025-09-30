@@ -215,7 +215,9 @@ class HomeView extends StatelessWidget {
                                       color: MyColors.textFieldBackground,
                                     ),
                                     children: [
-                                      TextSpan(text: controller.getCurrentAddress()),
+                                      TextSpan(
+                                        text: controller.getCurrentAddress(),
+                                      ),
                                       const WidgetSpan(
                                         alignment: PlaceholderAlignment.middle,
                                         child: Padding(
@@ -233,7 +235,6 @@ class HomeView extends StatelessWidget {
                               ),
                             ],
                           ),
-
                         ),
                       ],
                     ),
@@ -477,12 +478,19 @@ class HomeView extends StatelessWidget {
                                         arguments: {"isInbox": true},
                                       );
                                     } else if (index == 1) {
-                                      ComingSoonDialog.showComingSoonDialog(
-                                        featureName: 'Report',
+                                      Get.toNamed(
+                                        Routes.REPORT,
+                                        arguments: {"isReport": true},
                                       );
+                                      // ComingSoonDialog.showComingSoonDialog(
+                                      //   featureName: 'Report',
+                                      // );
                                       // Get.toNamed(Routes.REPORT);
                                     } else if (index == 2) {
-                                      Get.toNamed(Routes.REPORT);
+                                      Get.toNamed(
+                                        Routes.REPORT,
+                                        arguments: {"isReport": false},
+                                      );
                                       // ComingSoonDialog.showComingSoonDialog(
                                       //   featureName: 'Analysis',
                                       // );
@@ -735,7 +743,7 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildInfoCard({
-    required Widget icon, // 👈 change to Widget
+    required Widget icon,
     required String title,
     required String value,
   }) {
@@ -862,7 +870,7 @@ class HomeView extends StatelessWidget {
   }
 }
 
-class StaticsCard extends StatelessWidget {
+class StaticsCard extends StatefulWidget {
   String? icon;
   String? title;
   String? value;
@@ -879,11 +887,16 @@ class StaticsCard extends StatelessWidget {
   });
 
   @override
+  State<StaticsCard> createState() => _StaticsCardState();
+}
+
+class _StaticsCardState extends State<StaticsCard> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
       decoration: BoxDecoration(
-        border: Border.all(color: bColor ?? MyColors.greyE5),
+        border: Border.all(color: widget.bColor ?? MyColors.greyE5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -891,16 +904,19 @@ class StaticsCard extends StatelessWidget {
 
         children: [
           SvgPicture.asset(
-            icon ?? "",
+            widget.icon ?? "",
             height: 20,
             width: 20,
-            colorFilter: color == null
+            colorFilter: widget.color == null
                 ? null
-                : ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
+                : ColorFilter.mode(
+                    widget.color ?? Colors.black,
+                    BlendMode.srcIn,
+                  ),
           ),
           const Gap(6),
           Text(
-            title ?? "",
+            widget.title ?? "",
             overflow: TextOverflow.ellipsis,
             style: MyTexts.regular14.copyWith(
               color: MyColors.fontBlack,
@@ -908,7 +924,7 @@ class StaticsCard extends StatelessWidget {
             ),
           ),
           Text(
-            value ?? "",
+            widget.value ?? "",
             style: MyTexts.bold16.copyWith(
               color: MyColors.black,
               fontFamily: MyTexts.Roboto,
@@ -920,15 +936,20 @@ class StaticsCard extends StatelessWidget {
   }
 }
 
-class HeaderText extends StatelessWidget {
+class HeaderText extends StatefulWidget {
   String text;
 
   HeaderText({super.key, required this.text});
 
   @override
+  State<HeaderText> createState() => _HeaderTextState();
+}
+
+class _HeaderTextState extends State<HeaderText> {
+  @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      widget.text,
       style: MyTexts.medium18.copyWith(
         color: MyColors.black,
         fontFamily: MyTexts.Roboto,
