@@ -486,7 +486,7 @@ class AddProductController extends GetxController {
       gstPercentage: (selectedGST.value ?? "").replaceAll("%", ""),
       termsAndConditions: termsController.text,
       outOfStock: false,
-      stockQuantity: int.parse(stockController.text),
+      stockQuantity: int.parse(stockController.text.isEmpty?"0":stockController.text),
       uom: selectedUom.value,
       uoc: uocController.text,
       packageType: packageTypeController.text,
