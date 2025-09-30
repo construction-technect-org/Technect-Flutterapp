@@ -91,7 +91,7 @@ class SettingController extends GetxController {
         SnackBars.successSnackBar(
           content: "${actionType ?? "".capitalizeFirst} account completed",
         );
-        Get.back();
+        Get.offAllNamed(Routes.LOGIN);
       } else {
         SnackBars.errorSnackBar(
           content: otpResponse.message ?? 'OTP verification failed',
