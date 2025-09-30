@@ -84,18 +84,23 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                       vertical: 8,
                                     ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Row(
                                           children: [
                                             Text(
-                                              controller.product.outOfStock == true
+                                              controller.product.outOfStock ==
+                                                      true
                                                   ? "Out Of Stock"
                                                   : "In Stock",
                                               style: MyTexts.bold18.copyWith(
                                                 color:
-                                                    controller.product.outOfStock == true
+                                                    controller
+                                                            .product
+                                                            .outOfStock ==
+                                                        true
                                                     ? Colors.red
                                                     : Colors.green,
                                                 fontSize: 13,
@@ -108,7 +113,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color:
-                                                    controller.product.outOfStock == true
+                                                    controller
+                                                            .product
+                                                            .outOfStock ==
+                                                        true
                                                     ? Colors.red
                                                     : Colors.green,
                                               ),
@@ -161,7 +169,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           }),
                         ],
                       )
-                    : const Icon(Icons.image_not_supported, size: 60, color: Colors.grey),
+                    : const Icon(
+                        Icons.image_not_supported,
+                        size: 60,
+                        color: Colors.grey,
+                      ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
@@ -172,8 +184,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          controller.product.productName?.capitalizeFirst ?? '-',
-                          style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                          controller.product.productName?.capitalizeFirst ??
+                              '-',
+                          style: MyTexts.medium18.copyWith(
+                            color: MyColors.fontBlack,
+                          ),
                         ),
 
                         Obx(() {
@@ -206,20 +221,30 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     }),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
                         children: [
-                          rowText('Product Rate:', '${controller.product.price ?? 0}'),
+                          rowText(
+                            'Product Rate:',
+                            '${controller.product.price ?? 0}',
+                          ),
                           rowText(
                             'GST(${controller.product.gstPercentage ?? 0}%):',
                             '${controller.product.gstAmount ?? 0}',
                           ),
                           const Divider(),
-                          rowText('Ex Factory Price:', '136.00', isBold: true),
+                          rowText(
+                            'Total Price:',
+                            controller.product.totalAmount ?? "0",
+                            isBold: true,
+                          ),
                         ],
                       ),
                     ),
@@ -269,7 +294,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   text: TextSpan(
-                                    text: controller.product.mainCategoryName ?? '',
+                                    text:
+                                        controller.product.mainCategoryName ??
+                                        '',
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.green,
                                       fontFamily: MyTexts.Roboto,
@@ -304,7 +331,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   text: TextSpan(
-                                    text: controller.product.subCategoryName ?? '',
+                                    text:
+                                        controller.product.subCategoryName ??
+                                        '',
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.green,
                                       fontFamily: MyTexts.Roboto,
@@ -341,7 +370,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     ),
                     Text(
                       "GSTIN: ${controller.profileData.data?.merchantProfile?.gstinNumber ?? ''}",
-                      style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.fontBlack,
+                      ),
                     ),
                     SizedBox(height: 1.h),
                     const Divider(),
@@ -379,7 +410,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             Obx(
                               () => controller.showProductDetails.value
                                   ? Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Gap(10),
                                         HearderText(
@@ -394,7 +426,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                         SizedBox(height: 2.h),
                                         _buildFilterSpecificationsTable(),
                                         SizedBox(height: 2.h),
-                                        if ((controller.product.termsAndConditions ??
+                                        if ((controller
+                                                    .product
+                                                    .termsAndConditions ??
                                                 '') !=
                                             '') ...[
                                           HearderText(
@@ -405,14 +439,18 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                             ),
                                           ),
                                           Text(
-                                            controller.product.termsAndConditions ?? '',
+                                            controller
+                                                    .product
+                                                    .termsAndConditions ??
+                                                '',
                                             style: MyTexts.medium16.copyWith(
                                               color: MyColors.green,
                                               fontFamily: MyTexts.Roboto,
                                             ),
                                           ),
                                         ],
-                                        if ((controller.product.productNote ?? '') !=
+                                        if ((controller.product.productNote ??
+                                                '') !=
                                             '') ...[
                                           SizedBox(height: 1.h),
                                           HearderText(
@@ -423,7 +461,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                             ),
                                           ),
                                           Text(
-                                            controller.product.productNote ?? '',
+                                            controller.product.productNote ??
+                                                '',
                                             style: MyTexts.medium16.copyWith(
                                               color: MyColors.black,
                                               fontFamily: MyTexts.Roboto,
@@ -474,7 +513,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         children: [
           for (int i = 0; i < specifications.length; i += 2)
             Padding(
-              padding: EdgeInsets.only(bottom: i + 2 < specifications.length ? 12 : 0),
+              padding: EdgeInsets.only(
+                bottom: i + 2 < specifications.length ? 12 : 0,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -542,7 +583,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       {'label': 'Texture', 'value': product.texture ?? 'N/A'},
       {'label': 'Colour', 'value': product.colour ?? 'N/A'},
       {'label': 'Size', 'value': product.size ?? 'N/A'},
-      {'label': 'Unit of conversation', 'value': product.uoc?.toString() ?? 'N/A'},
+      {
+        'label': 'Unit of conversation',
+        'value': product.uoc?.toString() ?? 'N/A',
+      },
     ];
 
     return _buildSpecificationTable(specifications);
@@ -556,7 +600,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     if (filterValues.isEmpty) return const SizedBox.shrink();
 
     final specifications = filterValues.entries
-        .map((e) => {'label': _formatKeyName(e.key), 'value': e.value.toString()})
+        .map(
+          (e) => {'label': _formatKeyName(e.key), 'value': e.value.toString()},
+        )
         .toList();
 
     return Column(

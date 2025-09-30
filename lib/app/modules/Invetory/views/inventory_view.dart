@@ -38,7 +38,7 @@ class InventoryView extends GetView<InventoryController> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Gap(20),
+                          const Gap(50),
                           const Icon(Icons.search_off, size: 64, color: MyColors.grey),
                           SizedBox(height: 2.h),
                           Text(

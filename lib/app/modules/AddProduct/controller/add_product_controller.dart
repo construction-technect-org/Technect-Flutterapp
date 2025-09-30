@@ -468,6 +468,7 @@ class AddProductController extends GetxController {
     final Product p = Product(
       // categoryProductName: selectedSubCategory.value,
       productImage: pickedFilePath.value,
+      gstAmount: gstPriceController.text,
       mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
       productName: productNameController.text,
