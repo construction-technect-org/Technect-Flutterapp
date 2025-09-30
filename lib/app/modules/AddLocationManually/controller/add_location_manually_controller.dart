@@ -1,13 +1,11 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/models/SavedAddressesModel.dart';
 import 'package:construction_technect/app/modules/AddLocationManually/services/address_service.dart';
-import 'package:construction_technect/app/modules/Address/controller/address_controller.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/home/services/HomeService.dart';
 import 'package:geocoding/geocoding.dart';
 
 class AddLocationController extends GetxController {
-  // Form controllers
   final addressLine1Controller = TextEditingController();
   final addressLine2Controller = TextEditingController();
   final landmarkController = TextEditingController();
@@ -15,7 +13,6 @@ class AddLocationController extends GetxController {
   final stateController = TextEditingController();
   final pinCodeController = TextEditingController();
 
-  // State
   final isLoading = false.obs;
   final locationAdded = false.obs;
   final isEditing = false.obs;
@@ -25,8 +22,6 @@ class AddLocationController extends GetxController {
   RxInt selectedIndex = 0.obs; // 0=Office, 1=Factory
   RxBool copyToOtherType = false.obs;
   RxBool showAddLocationOption = true.obs;
-
-  // Service
   final AddressService _addressService = AddressService();
 
   RxList<SavedAddresses> addresses = <SavedAddresses>[].obs;
@@ -88,41 +83,41 @@ class AddLocationController extends GetxController {
   // }
   //
 
-  void _handlePassedData() {
-    final arguments = Get.arguments;
-    if (arguments != null && arguments is Map<String, dynamic>) {
-      if (arguments.containsKey('id')) {
-        isEditing.value = true;
-        existingAddressId = arguments['id'];
-        _prefillForm(arguments);
-        if (arguments['addressType']?.toLowerCase() == "office") {
-          selectedIndex.value = 0;
-        } else if (arguments['addressType']?.toLowerCase() == "factory") {
-          selectedIndex.value = 1;
-        }
-      } else if (arguments.containsKey('address_line1')) {
-        _prefillForm(arguments);
-      } else if (arguments.containsKey('latitude') &&
-          arguments.containsKey('longitude')) {
-        _prefillFromLocation(arguments);
-      }
-    }
-  }
+  // void _handlePassedData() {
+  //   final arguments = Get.arguments;
+  //   if (arguments != null && arguments is Map<String, dynamic>) {
+  //     if (arguments.containsKey('id')) {
+  //       isEditing.value = true;
+  //       existingAddressId = arguments['id'];
+  //       _prefillForm(arguments);
+  //       if (arguments['addressType']?.toLowerCase() == "office") {
+  //         selectedIndex.value = 0;
+  //       } else if (arguments['addressType']?.toLowerCase() == "factory") {
+  //         selectedIndex.value = 1;
+  //       }
+  //     } else if (arguments.containsKey('address_line1')) {
+  //       _prefillForm(arguments);
+  //     } else if (arguments.containsKey('latitude') &&
+  //         arguments.containsKey('longitude')) {
+  //       _prefillFromLocation(arguments);
+  //     }
+  //   }
+  // }
 
-  void _prefillForm(Map<String, dynamic> addressData) {
-    addressLine1Controller.text = addressData['address_line1'] ?? '';
-    addressLine2Controller.text = addressData['address_line2'] ?? '';
-    landmarkController.text = addressData['landmark'] ?? '';
-    cityController.text = addressData['city'] ?? '';
-    stateController.text = addressData['state'] ?? '';
-    pinCodeController.text = addressData['pin_code'] ?? '';
-  }
-
-  void _prefillFromLocation(Map<String, dynamic> locationData) {
-    if (locationData.containsKey('address_line1')) {
-      _prefillForm(locationData);
-    }
-  }
+  // void _prefillForm(Map<String, dynamic> addressData) {
+  //   addressLine1Controller.text = addressData['address_line1'] ?? '';
+  //   addressLine2Controller.text = addressData['address_line2'] ?? '';
+  //   landmarkController.text = addressData['landmark'] ?? '';
+  //   cityController.text = addressData['city'] ?? '';
+  //   stateController.text = addressData['state'] ?? '';
+  //   pinCodeController.text = addressData['pin_code'] ?? '';
+  // }
+  //
+  // void _prefillFromLocation(Map<String, dynamic> locationData) {
+  //   if (locationData.containsKey('address_line1')) {
+  //     _prefillForm(locationData);
+  //   }
+  // }
 
   Future<void> _fetchAndStoreAddressData() async {
     try {
@@ -218,6 +213,7 @@ class AddLocationController extends GetxController {
             isDefault: false,
           );
         }
+        myPref.setDefaultAdd(true);
       }
 
       if (response['success'] == true) {
@@ -250,18 +246,18 @@ class AddLocationController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  Future<void> fetchAddresses() async {
-    try {
-      isLoading.value = true;
-      final response = await _addressService.getAddress();
-      addresses.value = response.data.addresses;
-    } catch (e) {
-      Get.snackbar("Error", "Failed to load addresses: $e");
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  //
+  // Future<void> fetchAddresses() async {
+  //   try {
+  //     isLoading.value = true;
+  //     final response = await _addressService.getAddress();
+  //     addresses.value = response.data.addresses;
+  //   } catch (e) {
+  //     Get.snackbar("Error", "Failed to load addresses: $e");
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
   void setSelectedIndex(int index) {
     selectedIndex.value = index;

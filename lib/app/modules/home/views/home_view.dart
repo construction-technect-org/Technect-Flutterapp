@@ -146,42 +146,49 @@ class HomeView extends StatelessWidget {
                                           ),
                                         ),
                                         const SizedBox(height: 16),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child:
-                                                  officeAddress.addressType !=
-                                                      null
-                                                  ? _addressCard(
-                                                      address: officeAddress,
-                                                      addressType: officeAddress
-                                                          .addressType,
-                                                      isSelected:
-                                                          officeAddress
-                                                              .isDefault ??
-                                                          false,
-                                                    )
-                                                  : Container(),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child:
-                                                  factoryAddress.addressType !=
-                                                      null
-                                                  ? _addressCard(
-                                                      address: factoryAddress,
-
-                                                      addressType:
-                                                          factoryAddress
-                                                              .addressType,
-                                                      isSelected:
-                                                          factoryAddress
-                                                              .isDefault ??
-                                                          false,
-                                                    )
-                                                  : Container(),
-                                            ),
-                                          ],
+                                        IntrinsicHeight(
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Expanded(
+                                                child:
+                                                    officeAddress.addressType !=
+                                                        null
+                                                    ? _addressCard(
+                                                        address: officeAddress,
+                                                        addressType:
+                                                            officeAddress
+                                                                .addressType,
+                                                        isSelected:
+                                                            controller
+                                                                .isDefaultOffice
+                                                                .value ==
+                                                            true,
+                                                      )
+                                                    : Container(),
+                                              ),
+                                              const SizedBox(width: 16),
+                                              Expanded(
+                                                child:
+                                                    factoryAddress
+                                                            .addressType !=
+                                                        null
+                                                    ? _addressCard(
+                                                        address: factoryAddress,
+                                                        addressType:
+                                                            factoryAddress
+                                                                .addressType,
+                                                        isSelected:
+                                                            controller
+                                                                .isDefaultOffice
+                                                                .value ==
+                                                            false,
+                                                      )
+                                                    : Container(),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         const SizedBox(height: 16),
                                       ],
@@ -200,22 +207,33 @@ class HomeView extends StatelessWidget {
                               ),
                               SizedBox(width: 0.4.h),
                               Expanded(
-                                child: Text(
-                                  controller.getCurrentAddress(),
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.textFieldBackground,
-                                  ),
-                                  maxLines: 1,
+                                child: RichText(
                                   overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  text: TextSpan(
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.textFieldBackground,
+                                    ),
+                                    children: [
+                                      TextSpan(text: controller.getCurrentAddress()),
+                                      const WidgetSpan(
+                                        alignment: PlaceholderAlignment.middle,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 4),
+                                          child: Icon(
+                                            Icons.keyboard_arrow_down,
+                                            size: 16,
+                                            color: Colors.black54,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 16,
-                                color: Colors.black54,
                               ),
                             ],
                           ),
+
                         ),
                       ],
                     ),
@@ -648,10 +666,12 @@ class HomeView extends StatelessWidget {
         "${address?.addressLine1}, ${address?.addressLine2}, ${address?.landmark}, ${address?.city}, ${address?.state} , ${address?.pinCode}";
     return GestureDetector(
       onTap: () {
-        if (address?.isDefault != true) {
-          for (final a in controller.addressData.data?.addresses ?? []) {
-            a.isDefault = (a.id == address?.id);
-          }
+        if (addressType == "office") {
+          myPref.setDefaultAdd(true);
+          controller.isDefaultOffice.value = true;
+        } else {
+          controller.isDefaultOffice.value = false;
+          myPref.setDefaultAdd(false);
         }
         Get.back();
       },

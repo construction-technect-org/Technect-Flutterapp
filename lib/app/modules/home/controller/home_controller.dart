@@ -29,6 +29,7 @@ class HomeController extends GetxController {
 
   final isLoading = false.obs;
   final hasAddress = false.obs;
+  final isDefaultOffice = true.obs;
 
   Rx<ProfileModel> profileData = ProfileModel().obs;
   AddressModel addressData = AddressModel();
@@ -42,6 +43,7 @@ class HomeController extends GetxController {
     super.onInit();
     _initializeHomeData();
     _loadTeamFromStorage();
+    isDefaultOffice.value=myPref.getDefaultAdd();
   }
 
   @override
@@ -246,11 +248,11 @@ class HomeController extends GetxController {
       } else {
         hasAddress.value = false;
         myPref.clearAddressData();
-        Get.toNamed(Routes.ADDRESS);
+        Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register",});
       }
     } catch (e) {
       hasAddress.value = false;
-      Get.toNamed(Routes.ADDRESS);
+      Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register",});
     }
   }
 
@@ -291,7 +293,7 @@ class HomeController extends GetxController {
 
       Get.toNamed(Routes.ADDRESS, arguments: addressDataMap);
     } else {
-      Get.toNamed(Routes.ADDRESS);
+      Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register",});
     }
   }
 

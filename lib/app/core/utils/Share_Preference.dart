@@ -24,6 +24,7 @@ class AppSharedPreference {
   }
 
   final token = ''.val('token');
+  final isOffice = true.val('isOffice');
   final userModel = <String, dynamic>{}.val('userModel');
   final savedMobileNumber = ''.val('savedMobileNumber');
   final savedPassword = ''.val('savedPassword');
@@ -49,6 +50,14 @@ class AppSharedPreference {
 
   String getToken() {
     return token.val;
+  }
+
+  void setDefaultAdd(bool isDefaultOffice) {
+    isOffice.val = isDefaultOffice;
+  }
+
+  bool getDefaultAdd() {
+    return isOffice.val;
   }
 
   void setUserModel(UserModel user) {
@@ -91,6 +100,7 @@ class AppSharedPreference {
 
   void logout() {
     token.val = '';
+    isOffice.val = false;
     userModel.val = {};
     addressData.val = {};
     profileData.val = {};
