@@ -92,11 +92,9 @@ class LoginController extends GetxController {
                 //Get.to(() => HomeView());
 
                 //  Get.offAllNamed(Routes.MAIN);
-                if((loginResponse.data?.user?.marketPlace??"").isEmpty){
+                if ((loginResponse.data?.user?.marketPlace ?? "").isEmpty) {
                   Get.offAllNamed(Routes.DASHBOARD);
-
-                }
-                else{
+                } else {
                   Get.offAllNamed(Routes.MAIN);
                 }
               },
@@ -111,7 +109,7 @@ class LoginController extends GetxController {
               onTap: () {
                 Get.offAllNamed(
                   Routes.ADDRESS,
-                  arguments: {'isFromLogin': true},
+                  arguments: {"from": "register"},
                 );
               },
             ),
