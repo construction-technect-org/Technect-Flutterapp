@@ -35,7 +35,25 @@ class CertificationsComponent extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    const Icon(Icons.visibility, color: MyColors.primary),
+                    GestureDetector(
+                      onTap: () async {
+                        final url = cert.filePath;
+                        if (url != null && url.isNotEmpty && url.startsWith("merchant")) {
+                          final uri = Uri.parse(APIConstants.bucketUrl + url);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else {
+                          }
+                        }
+                      },
+                      child: const Icon(
+                        Icons.visibility,
+                        color: MyColors.primary,
+                      ),
+                    ),
                     if (cert.filePath != null)
                       IconButton(
                         icon: const Icon(Icons.delete, color: MyColors.red),
@@ -120,11 +138,9 @@ class CertificationsComponent extends StatelessWidget {
               onTap: () {
                 Get.to(() => const AddCertificate())?.then((val) {
                   if (val != null) {
-                    controller.certificates.add(val
-                    );
+                    controller.certificates.add(val);
                   }
                 });
-
               },
               child: RoundedButton(
                 width: 200,

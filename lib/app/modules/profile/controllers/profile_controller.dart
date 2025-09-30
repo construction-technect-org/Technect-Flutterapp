@@ -203,9 +203,17 @@ class ProfileController extends GetxController {
     try {
       final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-      if (result != null) {
-        certificates[index].filePath = result.files.first.path;
-        certificates[index].name = basename(result.files.first.path ?? "");
+      if (result != null && result.files.isNotEmpty) {
+        final file = result.files.first;
+        const maxSizeInBytes = 2 * 1024 * 1024;
+
+        if (file.size > maxSizeInBytes) {
+          SnackBars.errorSnackBar(content: "File size must be less than 2 MB");
+          return;
+        }
+
+        certificates[index].filePath = file.path;
+        certificates[index].name = basename(file.path ?? "");
         certificates.refresh();
       } else {
         SnackBars.errorSnackBar(content: "No file selected");
@@ -215,10 +223,28 @@ class ProfileController extends GetxController {
     }
   }
 
+
   Future<String?> pickFile() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
-    return result?.files.single.path;
+
+    if (result != null && result.files.isNotEmpty) {
+      final file = result.files.single;
+      final sizeInBytes = file.size;
+      const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB
+
+      if (sizeInBytes > maxSizeInBytes) {
+        SnackBars.errorSnackBar(
+          content: "File too large,please select a file smaller than 2 MB",
+        );
+        return null;
+      }
+
+      return file.path;
+    }
+
+    return null;
   }
+
 
   Rx<BusinessModel> businessModel = BusinessModel().obs;
 
