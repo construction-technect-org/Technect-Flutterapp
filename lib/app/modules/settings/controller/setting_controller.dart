@@ -11,7 +11,6 @@ class SettingController extends GetxController {
   final passwordController = TextEditingController();
   final otpController = TextEditingController();
 
-  // State
   final isPasswordVisible = false.obs;
   final isOtpStep = false.obs;
   final isLoading = false.obs;
@@ -37,7 +36,6 @@ class SettingController extends GetxController {
 
   SettingService settingService = SettingService();
 
-  // Request OTP
   Future<void> requestOtp({required bool isDeactivate}) async {
     if (!_validateInputs()) return;
     isLoading.value = true;
