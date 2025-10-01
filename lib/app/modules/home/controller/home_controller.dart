@@ -21,6 +21,16 @@ class HomeController extends GetxController {
     {"icon": Asset.warning, "title": "News"},
     {"icon": Asset.thumbup, "title": "Refer& Earn"},
   ];
+  final features = [
+    {"title": "Marketplace", "icon": Asset.marketplaceIcon},
+    {"title": "CRM", "icon": Asset.crmIcon},
+    {"title": "ERP", "icon": Asset.erpIcon},
+    {"title": "Projects", "icon": Asset.projectManagementIcon},
+    {"title": "HRMS", "icon": Asset.hrmsIcon},
+    {"title": "Portfolio", "icon": Asset.portfolioManagementIcon},
+    {"title": "OVP", "icon": Asset.ovpIcon},
+    {"title": "Construction", "icon": Asset.constructionTaxi},
+  ];
 
   RxInt selectedIndex = 0.obs;
 

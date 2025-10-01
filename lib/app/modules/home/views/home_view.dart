@@ -324,14 +324,92 @@ class HomeView extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 1.h),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: HeaderText(text: "Features"),
+                    ),
+                    SizedBox(height: 1.h),
+                    SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        shrinkWrap: true,
+                        itemCount: controller.features.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final item = controller.features[index];
+                          return Obx(() {
+                            final isSelected =
+                                controller.selectedIndex.value == index;
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                left: index == 0 ? 0 : 16.0,
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  // if(isSelected){
+                                  if (index == 0) {
+                                    controller.selectedIndex.value = index;
+                                  } else {
+                                    SnackBars.successSnackBar(
+                                      content: 'This feature will come soon',
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  width: 120,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? MyColors.primary
+                                          : MyColors.grayD4,
+                                    ),
+                                    color: isSelected
+                                        ? MyColors.yellow
+                                        : MyColors.greyE5,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        color: isSelected
+                                            ? MyColors.primary
+                                            : MyColors.grey,
 
+                                        item['icon']!,
+                                        height: 50, // responsive icon size
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        item["title"]!,
+                                        textAlign: TextAlign.center,
+                                        style: MyTexts.medium13.copyWith(
+                                          color: MyColors.fontBlack,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                        },
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(height: 2.h),
                           HeaderText(text: "Statics"),
                           const Gap(14),
                           Obx(
