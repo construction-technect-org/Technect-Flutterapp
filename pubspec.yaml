@@ -40,6 +40,7 @@ dependencies:
   youtube_player_flutter: ^9.1.2
   fl_chart: ^1.1.1
   readmore: ^3.0.0
+  month_picker_dialog: ^6.5.0
 
 
 
