@@ -29,10 +29,13 @@ class Analysis {
   SupportTicketAnalytics? supportTicketAnalytics;
   String? generatedAt;
   DateRange? dateRange;
+  OverallStatistics? overallStatistics;
+
 
   Analysis(
       {this.productAnalytics,
         this.teamAnalytics,
+        this.overallStatistics,
         this.roleAnalytics,
         this.supportTicketAnalytics,
         this.generatedAt,
@@ -52,6 +55,9 @@ class Analysis {
         ? SupportTicketAnalytics.fromJson(json['support_ticket_analytics'])
         : null;
     generatedAt = json['generated_at'];
+    overallStatistics = json['overall_statistics'] != null
+        ? OverallStatistics.fromJson(json['overall_statistics'])
+        : null;
     dateRange = json['date_range'] != null
         ? DateRange.fromJson(json['date_range'])
         : null;
@@ -71,6 +77,9 @@ class Analysis {
     if (supportTicketAnalytics != null) {
       data['support_ticket_analytics'] = supportTicketAnalytics!.toJson();
     }
+    if (overallStatistics != null) {
+      data['overall_statistics'] = overallStatistics!.toJson();
+    }
     data['generated_at'] = generatedAt;
     if (dateRange != null) {
       data['date_range'] = dateRange!.toJson();
@@ -79,6 +88,43 @@ class Analysis {
   }
 }
 
+class OverallStatistics {
+  int? totalConnectors;
+  int? activeConnectors;
+  int? totalUsers;
+  int? activeUsers;
+  int? totalProducts;
+  int? activeProducts;
+
+  OverallStatistics({
+    this.totalConnectors,
+    this.activeConnectors,
+    this.totalUsers,
+    this.activeUsers,
+    this.totalProducts,
+    this.activeProducts,
+  });
+
+  OverallStatistics.fromJson(Map<String, dynamic> json) {
+    totalConnectors = json['total_connectors'];
+    activeConnectors = json['active_connectors'];
+    totalUsers = json['total_users'];
+    activeUsers = json['active_users'];
+    totalProducts = json['total_products'];
+    activeProducts = json['active_products'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_connectors'] = totalConnectors;
+    data['active_connectors'] = activeConnectors;
+    data['total_users'] = totalUsers;
+    data['active_users'] = activeUsers;
+    data['total_products'] = totalProducts;
+    data['active_products'] = activeProducts;
+    return data;
+  }
+}
 // ------------------- PRODUCT -------------------
 class ProductAnalytics {
   int? totalProducts;

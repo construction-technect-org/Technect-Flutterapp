@@ -21,7 +21,7 @@ class ReportView extends GetView<ReportController> {
         backgroundColor: MyColors.white,
         appBar: CommonAppBar(
           title: Obx(
-            () => Text(controller.isReport.value ? 'Reports' : "Analysis"),
+                () => Text(controller.isReport.value ? 'Reports' : "Analysis"),
           ),
           isCenter: false,
         ),
@@ -35,31 +35,46 @@ class ReportView extends GetView<ReportController> {
                 _buildGreeting(),
                 const Gap(20),
 
-                const Row(
+                Row(
                   children: [
-                    ProductStatCard(
-                      iconAsset: Asset.noOfPartner,
-                      title: "Total Connectors",
-                      value: "123",
-                      subtitle: "Active Connectors",
-                      subValue: "122.4K",
-                    ),
-                    Gap(5),
-                    ProductStatCard(
-                      iconAsset: Asset.noOfConectors,
-                      title: "Total Products",
-                      value: "543",
-                      subtitle: "Active Products",
-                      subValue: "122.4K",
-                    ),
-                    Gap(5),
-                    ProductStatCard(
-                      iconAsset: Asset.noOfUsers,
-                      title: "Total Users",
-                      value: "340",
-                      subtitle: "Active Users",
-                      subValue: "122.4K",
-                    ),
+                    Obx(() {
+                      return ProductStatCard(
+                        iconAsset: Asset.noOfPartner,
+                        title: "Total Connectors",
+                        value: controller.analysisModel.value.overallStatistics
+                            ?.totalConnectors.toString() ?? "",
+                        subtitle: "Active Connectors",
+                        subValue: controller.analysisModel.value
+                            .overallStatistics?.activeConnectors.toString() ??
+                            "",
+                      );
+                    }),
+                    const Gap(5),
+                    Obx(() {
+                      return ProductStatCard(
+                        iconAsset: Asset.noOfConectors,
+                        title: "Total Products",
+                        value: controller.analysisModel.value.overallStatistics
+                            ?.totalProducts.toString() ?? "",
+                        subtitle: "Active Products",
+                        subValue: controller.analysisModel.value
+                            .overallStatistics
+                            ?.activeProducts.toString() ?? "",
+                      );
+                    }),
+                    const Gap(5),
+                    Obx(() {
+                      return ProductStatCard(
+                        iconAsset: Asset.noOfUsers,
+                        title: "Total Users",
+                        value: controller.analysisModel.value.overallStatistics
+                            ?.totalUsers.toString() ?? "",
+                        subtitle: "Active Users",
+                        subValue: controller.analysisModel.value
+                            .overallStatistics
+                            ?.activeUsers.toString() ?? "",
+                      );
+                    }),
                   ],
                 ),
                 const Gap(20),
@@ -73,29 +88,30 @@ class ReportView extends GetView<ReportController> {
                 _buildPeriodDropdown(),
                 const Gap(20),
                 Obx(
-                  () => controller.isReport.value == true
+                      () =>
+                  controller.isReport.value == true
                       ? RoundedButton(
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.white,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                          verticalPadding: 0,
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.white,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                    verticalPadding: 0,
 
-                          buttonName: "Download PDF",
-                          onTap: () {
-                            if (controller.selectedPeriod.value.isEmpty) {
-                              controller.downloadReportPdf(isPeriod: false);
-                            } else {
-                              controller.downloadReportPdf(isPeriod: true);
+                    buttonName: "Download PDF",
+                    onTap: () {
+                      if (controller.selectedPeriod.value.isEmpty) {
+                        controller.downloadReportPdf(isPeriod: false);
+                      } else {
+                        controller.downloadReportPdf(isPeriod: true);
 
-                              // controller.fetchReportByDD();
-                            }
-                            // PDF generation logic
-                            // generatePdfReport(controller.analysisModel.value);
-                          },
-                          width: 150,
-                          height: 48,
-                        )
+                        // controller.fetchReportByDD();
+                      }
+                      // PDF generation logic
+                      // generatePdfReport(controller.analysisModel.value);
+                    },
+                    width: 150,
+                    height: 48,
+                  )
                       : const SizedBox(),
                 ),
 
@@ -112,7 +128,12 @@ class ReportView extends GetView<ReportController> {
   }
 
   Widget _buildGreeting() {
-    final profile = Get.find<HomeController>().profileData.value.data?.user;
+    final profile = Get
+        .find<HomeController>()
+        .profileData
+        .value
+        .data
+        ?.user;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -137,7 +158,8 @@ class ReportView extends GetView<ReportController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Good Morning ${profile?.firstName ?? ""} ${profile?.lastName ?? ""}!",
+                "Good Morning ${profile?.firstName ?? ""} ${profile?.lastName ??
+                    ""}!",
                 style: MyTexts.bold18.copyWith(
                   color: MyColors.primary,
                   fontFamily: MyTexts.Roboto,
@@ -188,13 +210,14 @@ class ReportView extends GetView<ReportController> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Obx(
-                () => Text(
-                  controller.startMonth.value != null
-                      ? DateFormat(
-                          "MMM yyyy",
-                        ).format(controller.startMonth.value!)
-                      : "Start Month",
-                ),
+                    () =>
+                    Text(
+                      controller.startMonth.value != null
+                          ? DateFormat(
+                        "MMM yyyy",
+                      ).format(controller.startMonth.value!)
+                          : "Start Month",
+                    ),
               ),
             ),
           ),
@@ -214,7 +237,7 @@ class ReportView extends GetView<ReportController> {
               final picked = await showMonthPicker(
                 context: context,
                 initialDate:
-                    controller.endMonth.value ??
+                controller.endMonth.value ??
                     controller.startMonth.value!.add(const Duration(days: 30)),
                 firstDate: controller.startMonth.value!.add(
                   const Duration(days: 30),
@@ -241,13 +264,14 @@ class ReportView extends GetView<ReportController> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Obx(
-                () => Text(
-                  controller.endMonth.value != null
-                      ? DateFormat(
-                          "MMM yyyy",
-                        ).format(controller.endMonth.value!)
-                      : "End Month",
-                ),
+                    () =>
+                    Text(
+                      controller.endMonth.value != null
+                          ? DateFormat(
+                        "MMM yyyy",
+                      ).format(controller.endMonth.value!)
+                          : "End Month",
+                    ),
               ),
             ),
           ),
@@ -272,33 +296,34 @@ class ReportView extends GetView<ReportController> {
 
   Widget _buildPeriodDropdown() {
     return Obx(
-      () => Align(
-        alignment: Alignment.bottomRight,
-        child: Container(
-          margin: const EdgeInsets.only(top: 10),
-          width: controller.isReport.value ? null : 200,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            border: Border.all(color: MyColors.grayD4),
-            borderRadius: BorderRadius.circular(8),
+          () =>
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              margin: const EdgeInsets.only(top: 10),
+              width: controller.isReport.value ? null : 200,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                border: Border.all(color: MyColors.grayD4),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: DropdownButton<String>(
+                dropdownColor: Colors.white,
+                isExpanded: true,
+                underline: const SizedBox(),
+                value: controller.selectedPeriod.value.isEmpty
+                    ? null
+                    : controller.selectedPeriod.value,
+                hint: const Text("Select Period"),
+                items: controller.periodOptions
+                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                    .toList(),
+                onChanged: (val) {
+                  if (val != null) controller.onPeriodSelected(val);
+                },
+              ),
+            ),
           ),
-          child: DropdownButton<String>(
-            dropdownColor: Colors.white,
-            isExpanded: true,
-            underline: const SizedBox(),
-            value: controller.selectedPeriod.value.isEmpty
-                ? null
-                : controller.selectedPeriod.value,
-            hint: const Text("Select Period"),
-            items: controller.periodOptions
-                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                .toList(),
-            onChanged: (val) {
-              if (val != null) controller.onPeriodSelected(val);
-            },
-          ),
-        ),
-      ),
     );
   }
 

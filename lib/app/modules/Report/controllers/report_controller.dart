@@ -153,9 +153,9 @@ class ReportController extends GetxController {
     super.onInit();
     if (Get.arguments != null) {
       isReport.value = Get.arguments["isReport"];
-      if (isReport.value == false) {
-        fetchAnalysisByDD();
-      }
+      // if (isReport.value == false) {
+      fetchAnalysisByDD();
+      // }
     }
   }
 }
