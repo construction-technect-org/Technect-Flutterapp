@@ -48,9 +48,12 @@ CachedNetworkImage getImageView(
       height: height,
       width: width,
       child: Container(
-          height: 50,
-          width: 50,
-          color: MyColors.grayD4,
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: MyColors.grayD4,
+            shape: BoxShape.circle
+          ),
           child: Icon(Icons.error,color: MyColors.black,)),
     ),
   );

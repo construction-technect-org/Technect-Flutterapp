@@ -523,11 +523,7 @@ class HomeView extends StatelessWidget {
                           HeaderText(text: "Quick Access"),
                           const Gap(14),
                           Container(
-                            padding: const EdgeInsets.only(
-                              // bottom: 18,
-                              right: 18,
-                              left: 18,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
@@ -535,82 +531,66 @@ class HomeView extends StatelessWidget {
                                 width: 0.5,
                               ),
                             ),
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: controller.items.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                            child: SizedBox(
+                              height: 200,
+                              child: Center(
+                                child: GridView.builder(
+                                  padding: const EdgeInsets.all(16),
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: controller.items.length,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 4,
                                     mainAxisSpacing: 20,
                                     crossAxisSpacing: 12,
-                                    childAspectRatio: 1.4,
+                                    mainAxisExtent: 70
                                   ),
-                              itemBuilder: (context, index) {
-                                final item = controller.items[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    if (index == 0) {
-                                      Get.toNamed(
-                                        Routes.APPROVAL_INBOX,
-                                        arguments: {"isInbox": true},
-                                      );
-                                    } else if (index == 1) {
-                                      Get.toNamed(
-                                        Routes.REPORT,
-                                        arguments: {"isReport": true},
-                                      );
-                                      // ComingSoonDialog.showComingSoonDialog(
-                                      //   featureName: 'Report',
-                                      // );
-                                      // Get.toNamed(Routes.REPORT);
-                                    } else if (index == 2) {
-                                      Get.toNamed(
-                                        Routes.REPORT,
-                                        arguments: {"isReport": false},
-                                      );
-                                      // ComingSoonDialog.showComingSoonDialog(
-                                      //   featureName: 'Analysis',
-                                      // );
-                                    } else if (index == 3) {
-                                      Get.to(() => SettingView());
-                                    } else if (index == 4) {
-                                      Get.toNamed(
-                                        Routes.ROLE_MANAGEMENT,
-                                        arguments: {"isHome": true},
-                                      );
-                                    } else if (index == 5) {
-                                      Get.toNamed(Routes.INVENTORY);
-                                    } else if (index == 6) {
-                                      Get.toNamed(Routes.NEWS);
-                                    } else if (index == 7) {
-                                      ComingSoonDialog.showComingSoonDialog(
-                                        featureName: 'Refer & Earn',
-                                      );
-                                      // Get.toNamed(Routes.REFER_EARN);
-                                    }
-                                  },
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        item['icon'],
-                                        height: 28,
-                                        width: 28,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        item['title'],
-                                        textAlign: TextAlign.center,
-                                        style: MyTexts.regular14.copyWith(
-                                          color: MyColors.textFieldBackground,
-                                          fontFamily: MyTexts.Roboto,
+                                  itemBuilder: (context, index) {
+                                    final item = controller.items[index];
+                                    return Center(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (index == 0) {
+                                            Get.toNamed(Routes.APPROVAL_INBOX, arguments: {"isInbox": true});
+                                          } else if (index == 1) {
+                                            Get.toNamed(Routes.REPORT, arguments: {"isReport": true});
+                                          } else if (index == 2) {
+                                            Get.toNamed(Routes.REPORT, arguments: {"isReport": false});
+                                          } else if (index == 3) {
+                                            Get.to(() => SettingView());
+                                          } else if (index == 4) {
+                                            Get.toNamed(Routes.ROLE_MANAGEMENT, arguments: {"isHome": true});
+                                          } else if (index == 5) {
+                                            Get.toNamed(Routes.INVENTORY);
+                                          } else if (index == 6) {
+                                            Get.toNamed(Routes.NEWS);
+                                          } else if (index == 7) {
+                                            ComingSoonDialog.showComingSoonDialog(featureName: 'Refer & Earn');
+                                          }
+                                        },
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SvgPicture.asset(
+                                              item['icon'],
+                                              height: 28,
+                                              width: 28,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              item['title'],
+                                              textAlign: TextAlign.center,
+                                              style: MyTexts.regular14.copyWith(
+                                                color: MyColors.textFieldBackground,
+                                                fontFamily: MyTexts.Roboto,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                           const Gap(14),
