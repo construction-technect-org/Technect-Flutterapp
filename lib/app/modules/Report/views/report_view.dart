@@ -2,14 +2,17 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Report/controllers/report_controller.dart';
 import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/home/views/home_view.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:intl/intl.dart';
+import 'package:gap/gap.dart';
 
 class ReportView extends GetView<ReportController> {
   const ReportView({super.key});
 
+  @override
+  @override
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -17,9 +20,9 @@ class ReportView extends GetView<ReportController> {
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: CommonAppBar(
-          title: Obx(() {
-            return Text(controller.isReport.value ? 'Reports' : "Analysis");
-          }),
+          title: Obx(
+            () => Text(controller.isReport.value ? 'Reports' : "Analysis"),
+          ),
           isCenter: false,
         ),
         body: Padding(
@@ -29,73 +32,9 @@ class ReportView extends GetView<ReportController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(16),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          height: 102,
-                          width: 88,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color(0xFFC6D7E2),
-                          ),
-                        ),
-                        Image.asset(
-                          Asset.con,
-                          height: 102,
-                          width: 88,
-                          fit: BoxFit.fill,
-                        ),
-                      ],
-                    ),
-                    const Gap(15),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Good Morning ${Get.find<HomeController>().profileData.value.data?.user?.firstName ?? ""} ${Get.find<HomeController>().profileData.value.data?.user?.lastName ?? ""}!",
-                            style: MyTexts.bold18.copyWith(
-                              color: MyColors.primary,
-                              fontFamily: MyTexts.Roboto,
-                            ),
-                          ),
-                          const Gap(5),
-                          Text(
-                            "Use thi Platform to manage your team, merchants, services and get a analytic report about the connectors, products and partners.",
-                            style: MyTexts.regular13.copyWith(
-                              color: MyColors.black,
-                              fontFamily: MyTexts.Roboto,
-                            ),
-                          ),
-                          const Gap(5),
-
-                          Obx(() {
-                            return controller.isReport.value
-                                ? RoundedButton(
-                                    buttonName: "Download Reports",
-                                    onTap: () {},
-                                    height: 24,
-                                    width: 130,
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.white,
-                                      fontFamily: MyTexts.Roboto,
-                                    ),
-                                    verticalPadding: 0,
-                                  )
-                                : const SizedBox();
-                          }),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                _buildGreeting(),
                 const Gap(20),
+
                 const Row(
                   children: [
                     ProductStatCard(
@@ -124,333 +63,335 @@ class ReportView extends GetView<ReportController> {
                   ],
                 ),
                 const Gap(20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Obx(
-                        () => GestureDetector(
-                          onTap: () async {
-                            final picked = await showMonthPicker(
-                              context: context,
-                              initialDate:
-                                  controller.startMonth.value ?? DateTime.now(),
-                              monthPickerDialogSettings:
-                                  const MonthPickerDialogSettings(
-                                    dialogSettings: PickerDialogSettings(
-                                      dialogRoundedCornersRadius: 20,
-                                      dialogBackgroundColor: Colors.white,
-                                    ),
-                                    headerSettings: PickerHeaderSettings(
-                                      headerBackgroundColor: MyColors.primary,
-                                    ),
-                                  ),
-                            );
-                            if (picked != null) {
-                              controller.startMonth.value = picked;
 
-                              // Reset endMonth if it's out of new valid range
-                              if (controller.endMonth.value != null) {
-                                final minEnd = DateTime(
-                                  picked.year,
-                                  picked.month + 1,
-                                ); // next month
-                                final maxEnd = DateTime(
-                                  picked.year,
-                                  picked.month + 3,
-                                ); // 3 months later
-                                if (controller.endMonth.value!.isBefore(
-                                      minEnd,
-                                    ) ||
-                                    controller.endMonth.value!.isAfter(
-                                      maxEnd,
-                                    )) {
-                                  controller.endMonth.value = null;
-                                }
-                              }
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: MyColors.grayD4),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              controller.startMonth.value != null
-                                  ? DateFormat(
-                                      "MMM yyyy",
-                                    ).format(controller.startMonth.value!)
-                                  : "Start Month",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Gap(10),
-                    Expanded(
-                      child: Obx(
-                        () => GestureDetector(
-                          onTap: () async {
-                            if (controller.startMonth.value == null) {
-                              Get.snackbar(
-                                "Select Start Month",
-                                "Please select a start month first",
-                              );
-                              return;
-                            }
-
-                            final minEnd = DateTime(
-                              controller.startMonth.value!.year,
-                              controller.startMonth.value!.month + 1,
-                            );
-                            final maxEnd = DateTime(
-                              controller.startMonth.value!.year,
-                              controller.startMonth.value!.month + 2,
-                            );
-
-                            final picked = await showMonthPicker(
-                              context: context,
-                              initialDate: controller.endMonth.value ?? minEnd,
-                              firstDate: minEnd,
-                              lastDate: maxEnd,
-                            );
-                            if (picked != null) {
-                              controller.endMonth.value = picked;
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: MyColors.grayD4),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              controller.endMonth.value != null
-                                  ? DateFormat(
-                                      "MMM yyyy",
-                                    ).format(controller.endMonth.value!)
-                                  : "End Month",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Gap(10),
-                    RoundedButton(
-                      onTap: () => controller.fetchAnalysis(),
-                      buttonName: 'Apply',
-                      width: 100,
-                      height: 48,
-                      verticalPadding: 5,
-                      style: MyTexts.medium14.copyWith(
-                        color: Colors.white,
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                  ],
-                ),
+                HeaderText(text: "Select month and download report"),
                 const Gap(20),
 
+                _buildMonthFilter(context),
+
+                const Gap(20),
+                _buildPeriodDropdown(),
+                const Gap(20),
                 Obx(
-                  () => controller.isReport.value == false
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Container(
-                                width: 200,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: MyColors.grayD4),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Obx(() {
-                                  return DropdownButton<String>(
-                                    isExpanded: true,
-                                    dropdownColor: Colors.white,
-                                    value:
-                                        controller.selectedPeriod.value.isEmpty
-                                        ? null
-                                        : controller.selectedPeriod.value,
-                                    hint: Text(
-                                      "Select Period",
-                                      style: MyTexts.regular14.copyWith(
-                                        color: MyColors.gray32,
-                                      ),
-                                    ),
-                                    underline: const SizedBox(),
-                                    items: controller.periodOptions
-                                        .map(
-                                          (e) => DropdownMenuItem(
-                                            value: e,
-                                            child: Text(e),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (val) {
-                                      if (val != null) {
-                                        controller.selectedPeriod.value = val;
-                                        controller.fetchAnalysisByDD();
-                                      }
-                                    },
-                                  );
-                                }),
-                              ),
-                            ),
-                          ],
+                  () => controller.isReport.value == true
+                      ? RoundedButton(
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.white,
+                            fontFamily: MyTexts.Roboto,
+                          ),
+                          verticalPadding: 0,
+
+                          buttonName: "Download PDF",
+                          onTap: () {
+                            if (controller.selectedPeriod.value.isEmpty) {
+                              controller.downloadReportPdf(isPeriod: false);
+                            } else {
+                              controller.downloadReportPdf(isPeriod: true);
+
+                              // controller.fetchReportByDD();
+                            }
+                            // PDF generation logic
+                            // generatePdfReport(controller.analysisModel.value);
+                          },
+                          width: 150,
+                          height: 48,
                         )
                       : const SizedBox(),
                 ),
-                Obx(() {
-                  return !controller.isReport.value
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Gap(20),
-                            Obx(() {
-                              final analysis = controller.analysisModel.value;
-                              if (analysis.productAnalytics == null) {
-                                return const SizedBox();
-                              }
 
-                              return Column(
-                                children: [
-                                  ReportGraph(
-                                    title: "Products Analysis",
-                                    labels: analysis
-                                        .productAnalytics!
-                                        .monthlyBreakdown!
-                                        .map((e) => e.monthName!)
-                                        .toList(),
-                                    values: [
-                                      analysis
-                                          .productAnalytics!
-                                          .monthlyBreakdown!
-                                          .map((e) => e.productsAdded ?? 0)
-                                          .toList(),
-                                      analysis
-                                          .productAnalytics!
-                                          .monthlyBreakdown!
-                                          .map((e) => e.activeProducts ?? 0)
-                                          .toList(),
-                                      analysis
-                                          .productAnalytics!
-                                          .monthlyBreakdown!
-                                          .map((e) => e.rejectedProducts ?? 0)
-                                          .toList(),
-                                    ],
-                                    colors: const [
-                                      MyColors.primary,
-                                      MyColors.green,
-                                      Colors.red,
-                                    ],
-                                    legends: const [
-                                      "Products Added",
-                                      "Active Products",
-                                      "Rejected Products",
-                                    ],
-                                  ),
-                                  ReportGraph(
-                                    title: "Team Analysis",
-                                    labels: analysis
-                                        .teamAnalytics!
-                                        .monthlyBreakdown!
-                                        .map((e) => e.monthName!)
-                                        .toList(),
-                                    values: [
-                                      analysis.teamAnalytics!.monthlyBreakdown!
-                                          .map((e) => e.teamMembersAdded ?? 0)
-                                          .toList(),
-                                      analysis.teamAnalytics!.monthlyBreakdown!
-                                          .map(
-                                            (e) => e.availableTeamMembers ?? 0,
-                                          )
-                                          .toList(),
-                                    ],
-                                    colors: const [
-                                      MyColors.primary,
-                                      MyColors.green,
-                                    ],
-                                    legends: const [
-                                      "Added Member",
-                                      "Active Member",
-                                    ],
-                                  ),
-                                  ReportGraph(
-                                    title: "Role Analysis",
-                                    labels: analysis
-                                        .roleAnalytics!
-                                        .monthlyBreakdown!
-                                        .map((e) => e.monthName!)
-                                        .toList(),
-                                    values: [
-                                      analysis.roleAnalytics!.monthlyBreakdown!
-                                          .map((e) => e.rolesCreated ?? 0)
-                                          .toList(),
-                                      analysis.roleAnalytics!.monthlyBreakdown!
-                                          .map((e) => e.activeRoles ?? 0)
-                                          .toList(),
-                                    ],
-                                    colors: const [
-                                      MyColors.primary,
-                                      MyColors.green,
-                                    ],
-                                    legends: const [
-                                      "Role Created",
-                                      "Active Role",
-                                    ],
-                                  ),
-                                  ReportGraph(
-                                    title: "Support Ticket Analysis",
-                                    labels: analysis
-                                        .supportTicketAnalytics!
-                                        .monthlyBreakdown!
-                                        .map((e) => e.monthName!)
-                                        .toList(),
-                                    values: [
-                                      analysis
-                                          .supportTicketAnalytics!
-                                          .monthlyBreakdown!
-                                          .map((e) => e.openTickets ?? 0)
-                                          .toList(),
-                                      analysis
-                                          .supportTicketAnalytics!
-                                          .monthlyBreakdown!
-                                          .map((e) => e.closedTickets ?? 0)
-                                          .toList(),
-                                      analysis
-                                          .supportTicketAnalytics!
-                                          .monthlyBreakdown!
-                                          .map((e) => e.resolvedTickets ?? 0)
-                                          .toList(),
-                                    ],
-                                    colors: const [
-                                      Colors.orange,
-                                      Colors.red,
-                                      MyColors.green,
-                                    ],
-                                    legends: const [
-                                      "Open Tickets",
-                                      "Closed Tickets",
-                                      "Resoled Tickets",
-                                    ],
-                                  ),
-                                ],
-                              );
-                            }),
-                          ],
-                        )
-                      : const SizedBox();
-                }),
+                const Gap(20),
+
+                // Charts
+                _buildCharts(),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildGreeting() {
+    final profile = Get.find<HomeController>().profileData.value.data?.user;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 10),
+              height: 102,
+              width: 88,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: const Color(0xFFC6D7E2),
+              ),
+            ),
+            Image.asset(Asset.con, height: 102, width: 88, fit: BoxFit.fill),
+          ],
+        ),
+        const Gap(15),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Good Morning ${profile?.firstName ?? ""} ${profile?.lastName ?? ""}!",
+                style: MyTexts.bold18.copyWith(
+                  color: MyColors.primary,
+                  fontFamily: MyTexts.Roboto,
+                ),
+              ),
+              const Gap(5),
+              Text(
+                "Use this platform to manage your team, merchants, services and get analytic reports.",
+                style: MyTexts.regular13.copyWith(
+                  color: MyColors.black,
+                  fontFamily: MyTexts.Roboto,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMonthFilter(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: () async {
+              final picked = await showMonthPicker(
+                context: context,
+                initialDate: controller.startMonth.value ?? DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2050),
+                monthPickerDialogSettings: const MonthPickerDialogSettings(
+                  dialogSettings: PickerDialogSettings(
+                    dialogRoundedCornersRadius: 20,
+                    dialogBackgroundColor: Colors.white,
+                  ),
+                  headerSettings: PickerHeaderSettings(
+                    headerBackgroundColor: MyColors.primary,
+                  ),
+                ),
+              );
+              if (picked != null) controller.startMonth.value = picked;
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                border: Border.all(color: MyColors.grayD4),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Obx(
+                () => Text(
+                  controller.startMonth.value != null
+                      ? DateFormat(
+                          "MMM yyyy",
+                        ).format(controller.startMonth.value!)
+                      : "Start Month",
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 10),
+        Expanded(
+          child: GestureDetector(
+            onTap: () async {
+              if (controller.startMonth.value == null) {
+                Get.snackbar(
+                  "Select Start Month",
+                  "Please select a start month first",
+                );
+                return;
+              }
+              final picked = await showMonthPicker(
+                context: context,
+                initialDate:
+                    controller.endMonth.value ??
+                    controller.startMonth.value!.add(const Duration(days: 30)),
+                firstDate: controller.startMonth.value!.add(
+                  const Duration(days: 30),
+                ),
+                lastDate: controller.startMonth.value!.add(
+                  const Duration(days: 90),
+                ),
+                monthPickerDialogSettings: const MonthPickerDialogSettings(
+                  dialogSettings: PickerDialogSettings(
+                    dialogRoundedCornersRadius: 20,
+                    dialogBackgroundColor: Colors.white,
+                  ),
+                  headerSettings: PickerHeaderSettings(
+                    headerBackgroundColor: MyColors.primary,
+                  ),
+                ),
+              );
+              if (picked != null) controller.endMonth.value = picked;
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                border: Border.all(color: MyColors.grayD4),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Obx(
+                () => Text(
+                  controller.endMonth.value != null
+                      ? DateFormat(
+                          "MMM yyyy",
+                        ).format(controller.endMonth.value!)
+                      : "End Month",
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 10),
+        RoundedButton(
+          style: MyTexts.medium14.copyWith(
+            color: MyColors.white,
+            fontFamily: MyTexts.Roboto,
+          ),
+          verticalPadding: 0,
+
+          buttonName: "Apply",
+          onTap: controller.onApplyReport,
+          width: 100,
+          height: 48,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPeriodDropdown() {
+    return Obx(
+      () => Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          margin: const EdgeInsets.only(top: 10),
+          width: controller.isReport.value ? null : 200,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            border: Border.all(color: MyColors.grayD4),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DropdownButton<String>(
+            dropdownColor: Colors.white,
+            isExpanded: true,
+            underline: const SizedBox(),
+            value: controller.selectedPeriod.value.isEmpty
+                ? null
+                : controller.selectedPeriod.value,
+            hint: const Text("Select Period"),
+            items: controller.periodOptions
+                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                .toList(),
+            onChanged: (val) {
+              if (val != null) controller.onPeriodSelected(val);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCharts() {
+    return Obx(() {
+      if (!controller.isReport.value &&
+          controller.analysisModel.value.productAnalytics != null) {
+        final analysis = controller.analysisModel.value;
+        return Column(
+          children: [
+            ReportGraph(
+              title: "Products Analysis",
+              labels: analysis.productAnalytics!.monthlyBreakdown!
+                  .map((e) => e.monthName!)
+                  .toList(),
+              values: [
+                analysis.productAnalytics!.monthlyBreakdown!
+                    .map((e) => e.productsAdded ?? 0)
+                    .toList(),
+                analysis.productAnalytics!.monthlyBreakdown!
+                    .map((e) => e.activeProducts ?? 0)
+                    .toList(),
+                analysis.productAnalytics!.monthlyBreakdown!
+                    .map((e) => e.rejectedProducts ?? 0)
+                    .toList(),
+              ],
+              colors: const [MyColors.primary, MyColors.green, Colors.red],
+              legends: const [
+                "Products Added",
+                "Active Products",
+                "Rejected Products",
+              ],
+            ),
+            ReportGraph(
+              title: "Team Analysis",
+              labels: analysis.teamAnalytics!.monthlyBreakdown!
+                  .map((e) => e.monthName!)
+                  .toList(),
+              values: [
+                analysis.teamAnalytics!.monthlyBreakdown!
+                    .map((e) => e.teamMembersAdded ?? 0)
+                    .toList(),
+                analysis.teamAnalytics!.monthlyBreakdown!
+                    .map((e) => e.availableTeamMembers ?? 0)
+                    .toList(),
+              ],
+              colors: const [MyColors.primary, MyColors.green],
+              legends: const ["Added Member", "Active Member"],
+            ),
+            ReportGraph(
+              title: "Role Analysis",
+              labels: analysis.roleAnalytics!.monthlyBreakdown!
+                  .map((e) => e.monthName!)
+                  .toList(),
+              values: [
+                analysis.roleAnalytics!.monthlyBreakdown!
+                    .map((e) => e.rolesCreated ?? 0)
+                    .toList(),
+                analysis.roleAnalytics!.monthlyBreakdown!
+                    .map((e) => e.activeRoles ?? 0)
+                    .toList(),
+              ],
+              colors: const [MyColors.primary, MyColors.green],
+              legends: const ["Role Created", "Active Role"],
+            ),
+            ReportGraph(
+              title: "Support Ticket Analysis",
+              labels: analysis.supportTicketAnalytics!.monthlyBreakdown!
+                  .map((e) => e.monthName!)
+                  .toList(),
+              values: [
+                analysis.supportTicketAnalytics!.monthlyBreakdown!
+                    .map((e) => e.openTickets ?? 0)
+                    .toList(),
+                analysis.supportTicketAnalytics!.monthlyBreakdown!
+                    .map((e) => e.closedTickets ?? 0)
+                    .toList(),
+                analysis.supportTicketAnalytics!.monthlyBreakdown!
+                    .map((e) => e.resolvedTickets ?? 0)
+                    .toList(),
+              ],
+              colors: const [Colors.orange, Colors.red, MyColors.green],
+              legends: const [
+                "Open Tickets",
+                "Closed Tickets",
+                "Resoled Tickets",
+              ],
+            ),
+          ],
+        );
+      }
+      return const SizedBox();
+    });
   }
 }
 
