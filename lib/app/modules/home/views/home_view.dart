@@ -385,7 +385,9 @@ class HomeView extends StatelessWidget {
                                             : MyColors.grey,
 
                                         item['icon']!,
-                                        height: 50, // responsive icon size
+                                        width: 40,
+                                        fit: BoxFit.cover,
+                                        height: 40,
                                       ),
                                       const SizedBox(height: 6),
                                       Text(
