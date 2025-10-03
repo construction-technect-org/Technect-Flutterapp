@@ -182,7 +182,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                         SizedBox(height: 1.h),
                         PinCodeTextField(
                           appContext: context,
-                          length: 6,
+                          length: 4,
                           controller: controller.otpController,
                           onChanged: (value) {
                             controller.otp.value = value;

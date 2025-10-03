@@ -18,8 +18,10 @@ class Data {
   UserModel? user;
   MerchantProfile? merchantProfile;
   ConnectorProfile? connectorProfile;
+  Referral? referral;
 
-  Data({this.user, this.merchantProfile,this.connectorProfile});
+
+  Data({this.user, this.merchantProfile, this.connectorProfile, this.referral});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
@@ -29,12 +31,71 @@ class Data {
     connectorProfile: json["connectorProfile"] == null
         ? null
         : ConnectorProfile.fromJson(json["connectorProfile"]),
+    referral: json["referral"] == null
+        ? null
+        : Referral.fromJson(json["referral"]),
   );
 
   Map<String, dynamic> toJson() => {
     "user": user?.toJson(),
     "merchantProfile": merchantProfile?.toJson(),
-    "connectorProfile": connectorProfile?.toJson(),
+    "connectorProfile": connectorProfile?.toJson(),        "referral": referral?.toJson(),
+
+
+  };
+}
+class Referral {
+  String? myReferralCode;
+  int? totalReferrals;
+  int? totalEarnings;
+  List<ReferralUser>? recentReferrals;
+
+  Referral({
+    this.myReferralCode,
+    this.totalReferrals,
+    this.totalEarnings,
+    this.recentReferrals,
+  });
+
+  factory Referral.fromJson(Map<String, dynamic> json) => Referral(
+    myReferralCode: json["my_referral_code"],
+    totalReferrals: json["total_referrals"],
+    totalEarnings: json["total_earnings"],
+    recentReferrals: json["recent_referrals"] == null
+        ? []
+        : List<ReferralUser>.from(
+        json["recent_referrals"]!.map((x) => ReferralUser.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "my_referral_code": myReferralCode,
+    "total_referrals": totalReferrals,
+    "total_earnings": totalEarnings,
+    "recent_referrals":
+    recentReferrals?.map((x) => x.toJson()).toList() ?? [],
+  };
+}
+
+class ReferralUser {
+  int? id;
+  String? name;
+  String? email;
+  String? joinedAt;
+
+  ReferralUser({this.id, this.name, this.email, this.joinedAt});
+
+  factory ReferralUser.fromJson(Map<String, dynamic> json) => ReferralUser(
+    id: json["id"],
+    name: json["name"],
+    email: json["email"],
+    joinedAt: json["joined_at"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "email": email,
+    "joined_at": joinedAt,
   };
 }
 

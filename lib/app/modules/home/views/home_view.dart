@@ -292,9 +292,8 @@ class HomeView extends StatelessWidget {
                   SizedBox(width: 0.8.h),
                   GestureDetector(
                     onTap: () {
-                      ComingSoonDialog.showComingSoonDialog(
-                        featureName: 'Alert',
-                      );
+                      Get.toNamed(Routes.NEWS);
+
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -587,9 +586,11 @@ class HomeView extends StatelessWidget {
                                           } else if (index == 6) {
                                             Get.toNamed(Routes.NEWS);
                                           } else if (index == 7) {
-                                            ComingSoonDialog
-                                                .showComingSoonDialog(
-                                                featureName: 'Refer & Earn');
+                                            Get.toNamed(Routes.REFER_EARN);
+
+                                            // ComingSoonDialog
+                                            //     .showComingSoonDialog(
+                                            //     featureName: 'Refer & Earn');
                                           }
                                         },
                                         child: Column(

@@ -160,8 +160,8 @@ class ForgotPasswordController extends GetxController {
       return false;
     }
 
-    if (otp.value.length < 6) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid OTP');
+    if (otp.value.length < 4) {
+      SnackBars.errorSnackBar(content: 'Please enter 4 valid OTP');
       return false;
     }
 
@@ -227,7 +227,7 @@ class ForgotPasswordController extends GetxController {
             image: Asset.forgetSImage,
             header: "Password reset successfully !",
             onTap: () {
-              Get.back();
+             Get.offAllNamed(Routes.LOGIN);
               Get.back();
             },
           ),
@@ -238,7 +238,6 @@ class ForgotPasswordController extends GetxController {
         );
       }
     } catch (e) {
-      // Error is already shown by ApiManager
     } finally {
       isLoading.value = false;
     }

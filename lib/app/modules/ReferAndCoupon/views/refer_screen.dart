@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -18,7 +19,7 @@ class ReferAndEarnScreen extends StatelessWidget {
           children: [
             const Gap(16),
             Text(
-              "Copy App Link",
+              "Share App With Coupon Code",
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
                 fontFamily: MyTexts.Roboto,
@@ -35,18 +36,22 @@ class ReferAndEarnScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      "khsa.gytjn.link.yunn",
+                      APIConstants.appUrl,
                       style: MyTexts.regular16.copyWith(
                         color: MyColors.warning,
                         fontFamily: MyTexts.Roboto,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  const Gap(20),
                   GestureDetector(
                     onTap: () {
                       SharePlus.instance.share(
                         ShareParams(
-                          text: 'check this app: khsa.gytjn.link.yunn',
+                          text:
+                              'Hello Friend 👋\n\nDownload the CONSTRUCTION TECHNECT App from the link below and use my referral code to get instant discounts & rewards on your purchases.\n\n${APIConstants.appUrl}\n\nReferral Code: ${Get.find<HomeController>().profileData.value.data?.referral?.myReferralCode ?? ""}\n\nShared by: ${(Get.find<HomeController>().profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(Get.find<HomeController>().profileData.value.data?.user?.lastName ?? "").capitalizeFirst}',
                         ),
                       );
                     },
@@ -132,10 +137,19 @@ class ReferAndEarnScreen extends StatelessWidget {
                       color: MyColors.primary,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      "45",
-                      style: MyTexts.bold16.copyWith(color: Colors.white),
-                    ),
+                    child: Obx(() {
+                      return Text(
+                        Get.find<HomeController>()
+                                .profileData
+                                .value
+                                .data
+                                ?.referral
+                                ?.totalReferrals
+                                .toString() ??
+                            "0",
+                        style: MyTexts.bold16.copyWith(color: Colors.white),
+                      );
+                    }),
                   ),
                 ],
               ),

@@ -36,7 +36,10 @@ CachedNetworkImage getImageView(
       margin: const EdgeInsets.all(10),
       height: height,
       width: width,
-      color: MyColors.grayD4,
+      decoration: const BoxDecoration(
+          color: MyColors.grayD4,
+          shape: BoxShape.circle
+      ),
       child: const Center(
         child: CircularProgressIndicator(
           strokeWidth: 2,
@@ -50,7 +53,7 @@ CachedNetworkImage getImageView(
       child: Container(
           height: height,
           width: width,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: MyColors.grayD4,
             shape: BoxShape.circle
           ),
