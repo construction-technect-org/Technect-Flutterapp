@@ -22,7 +22,7 @@ class WelcomeName extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  controller.navigateToEditAddress();
+                  // controller.navigateToEditAddress();
                 },
                 child: Row(
                   children: [

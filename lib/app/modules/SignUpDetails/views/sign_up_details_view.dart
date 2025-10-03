@@ -185,7 +185,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                       SizedBox(height: 0.5.h),
                       PinCodeTextField(
                         appContext: context,
-                        length: 6,
+                        length: 4,
                         controller: controller.otpController,
                         onChanged: (value) {
                           controller.otp.value = value;

@@ -12,6 +12,7 @@ Future<void> initService() async {
 
 Future<void> main() async {
   await initService();
+
   runApp(
     ResponsiveSizer(
       builder: (context, orientation, screenType) {

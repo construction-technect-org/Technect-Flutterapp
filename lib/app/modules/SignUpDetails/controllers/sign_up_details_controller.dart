@@ -181,8 +181,8 @@ class SignUpDetailsController extends GetxController {
   Future<void> proceedToPassword() async {
     if (!otpVerify.value) {
       // Verify OTP API first
-      if (otp.value.isEmpty || otp.value.length < 6) {
-        SnackBars.errorSnackBar(content: 'Please enter a valid 6-digit OTP');
+      if (otp.value.isEmpty || otp.value.length < 4) {
+        SnackBars.errorSnackBar(content: 'Please enter a valid 4-digit OTP');
         return;
       }
 
@@ -211,8 +211,8 @@ class SignUpDetailsController extends GetxController {
 
   // Verify OTP method
   Future<void> verifyOtp() async {
-    if (otp.value.isEmpty || otp.value.length < 6) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid 6-digit OTP');
+    if (otp.value.isEmpty || otp.value.length < 4) {
+      SnackBars.errorSnackBar(content: 'Please enter a valid 4-digit OTP');
       return;
     }
 
@@ -233,7 +233,7 @@ class SignUpDetailsController extends GetxController {
               // Default role ID
               firstName: firstName.value,
               lastName: lastName.value,
-              countryCode: "+91",
+              countryCode: countryCode.value,
               mobileNumber: mobileNumber.value,
               email: email.value,
               gst: gstController.text

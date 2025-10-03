@@ -59,8 +59,6 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _refreshHomeData();
-
     Future.delayed(const Duration(milliseconds: 500), () {
       _checkAddressAndProfileCompletion();
     });
@@ -68,10 +66,6 @@ class HomeController extends GetxController {
 
   Future<void> _initializeHomeData() async {
     _loadCachedData();
-
-    if (!_hasCachedAddressData()) {
-      await _checkAddressAndNavigate();
-    }
 
     await fetchProfileData();
   }
@@ -82,28 +76,18 @@ class HomeController extends GetxController {
   }
 
   void _checkAddressAndProfileCompletion() {
-    // First check if address is available
-    if (!_hasCachedAddressData()) {
-      // No address available - navigate to address screen (no profile dialog)
-      _checkAddressAndNavigate();
-      return;
-    }
-
-    // Address is available - now check profile completion
     _checkProfileCompletion();
   }
 
   void _checkProfileCompletion() {
-    // final bool isPartner=profileData.value.data?.user?.roleName=="Partner";
     final merchantProfile = profileData.value.data?.merchantProfile;
-    final connectorProfile = profileData.value.data?.connectorProfile;
 
     final completionPercentage =
         merchantProfile?.profileCompletionPercentage ??
-        connectorProfile?.profileCompletionPercentage ??
+
         0;
 
-    if (merchantProfile != null || connectorProfile != null) {
+    if (merchantProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
     }
 
@@ -173,28 +157,13 @@ class HomeController extends GetxController {
   }
 
   void _handleProfileDialogTap() {
-    final role = profileData.value.data?.user?.roleName;
-
-    final bool isPartner =
-        role?.toLowerCase() == "merchant" ||
-        role?.toLowerCase() == "civil engineer" ||
-        role?.toLowerCase() == "architect" ||
-        role?.toLowerCase() == "designer";
-    if (isPartner == true) {
-      Get.toNamed(Routes.PROFILE);
-    } else {
-      Get.toNamed(Routes.CONNECTOR_PROFILE);
-    }
+    Get.toNamed(Routes.PROFILE);
   }
 
   void resetProfileDialogFlag() {
     _profileDialogShown = false;
   }
 
-  void checkProfileCompletionManually() {
-    _profileDialogShown = false;
-    _checkProfileCompletion();
-  }
 
   void onReturnFromEditProfile() {
     if (!commonController.hasProfileComplete.value) {
@@ -246,31 +215,6 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> _checkAddressAndNavigate() async {
-    try {
-      final addressResponse = await homeService.getAddress();
-
-      if (addressResponse.success == true &&
-          (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
-        hasAddress.value = true;
-        addressData = addressResponse;
-        myPref.setAddressData(addressResponse.toJson());
-      } else {
-        hasAddress.value = false;
-        myPref.clearAddressData();
-        Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register",});
-      }
-    } catch (e) {
-      hasAddress.value = false;
-      Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register",});
-    }
-  }
-
-  Rx<Address?> selectedAddress = Rx<Address?>(null);
-
-  void setSelectedAddress(Address address) {
-    selectedAddress.value = address;
-  }
 
   String getCurrentAddress() {
     if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
@@ -278,54 +222,6 @@ class HomeController extends GetxController {
       return '${currentAddress.addressLine1 ?? ''}, ${currentAddress.city ?? ''}, ${currentAddress.state ?? ''}';
     }
     return 'No address found';
-  }
-
-  void navigateToEditAddress() {
-    if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
-      final currentAddress = addressData.data!.addresses!.first;
-      final addressDataMap = {
-        'id': currentAddress.id,
-        'address_line1': currentAddress.addressLine1,
-        'address_line2': currentAddress.addressLine2,
-        'landmark': currentAddress.landmark,
-        'city': currentAddress.city,
-        'state': currentAddress.state,
-        'pin_code': currentAddress.pinCode,
-        'latitude': currentAddress.latitude != null
-            ? double.tryParse(currentAddress.latitude!)
-            : null,
-        'longitude': currentAddress.longitude != null
-            ? double.tryParse(currentAddress.longitude!)
-            : null,
-        'address_type': currentAddress.addressType,
-        'is_default': currentAddress.isDefault,
-      };
-
-      Get.toNamed(Routes.ADDRESS, arguments: addressDataMap);
-    } else {
-      Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register",});
-    }
-  }
-
-  Future<void> _refreshHomeData() async {
-    if (!_hasCachedAddressData()) {
-      try {
-        final addressResponse = await homeService.getAddress();
-        if (addressResponse.success == true &&
-            (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
-          hasAddress.value = true;
-          addressData = addressResponse;
-          myPref.setAddressData(addressResponse.toJson());
-        } else {
-          hasAddress.value = false;
-          myPref.clearAddressData();
-        }
-      } catch (e) {
-        Get.printError(info: 'Error refreshing home data: $e');
-      }
-    }
-
-    await fetchDashboardData();
   }
 
   Future<void> fetchProfileData() async {
