@@ -21,7 +21,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           title: const Text("Product Details"),
           isCenter: false,
           action: [
-            SvgPicture.asset(Asset.link),
+            // SvgPicture.asset(Asset.link),
             IconButton(
               onPressed: () {},
               icon: const Icon(Icons.more_vert, color: Colors.black),

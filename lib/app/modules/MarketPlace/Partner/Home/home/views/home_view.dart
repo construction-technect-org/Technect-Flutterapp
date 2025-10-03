@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/views/setting_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
@@ -62,19 +65,18 @@ class HomeView extends StatelessWidget {
                 children: [
                   Obx(() {
                     return (controller.profileData.value.data?.user?.image ??
-                        "")
-                        .isEmpty
+                                "")
+                            .isEmpty
                         ? Image.asset(Asset.profil, height: 50, width: 50)
                         : ClipOval(
-                      child: getImageView(
-                        finalUrl:
-                        "${APIConstants.bucketUrl}${controller.profileData.value
-                            .data?.user?.image ?? ""}",
-                        fit: BoxFit.cover,
-                        height: 50,
-                        width: 50,
-                      ),
-                    );
+                            child: getImageView(
+                              finalUrl:
+                                  "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                              fit: BoxFit.cover,
+                              height: 50,
+                              width: 50,
+                            ),
+                          );
                   }),
                   SizedBox(width: 1.h),
                   Flexible(
@@ -82,20 +84,15 @@ class HomeView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Obx(
-                              () =>
-                              Text(
-                                'Welcome ${(controller.profileData.value.data
-                                    ?.user?.firstName ?? "")
-                                    .capitalizeFirst} ${(controller.profileData
-                                    .value.data?.user?.lastName ?? "")
-                                    .capitalizeFirst}!',
-                                style: MyTexts.medium16.copyWith(
-                                  color: MyColors.fontBlack,
-                                  fontFamily: MyTexts.Roboto,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                          () => Text(
+                            'Welcome ${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.fontBlack,
+                              fontFamily: MyTexts.Roboto,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -112,14 +109,12 @@ class HomeView extends StatelessWidget {
                             }
 
                             final officeAddress = addresses.firstWhere(
-                                  (a) =>
-                              a.addressType?.toLowerCase() == 'office',
+                              (a) => a.addressType?.toLowerCase() == 'office',
                               orElse: () => Address(),
                             );
 
                             final factoryAddress = addresses.firstWhere(
-                                  (a) =>
-                              a.addressType?.toLowerCase() == 'factory',
+                              (a) => a.addressType?.toLowerCase() == 'factory',
                               orElse: () => Address(),
                             );
 
@@ -135,19 +130,16 @@ class HomeView extends StatelessWidget {
                               builder: (context) {
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                    bottom: MediaQuery
-                                        .of(
+                                    bottom: MediaQuery.of(
                                       context,
-                                    )
-                                        .viewInsets
-                                        .bottom,
+                                    ).viewInsets.bottom,
                                   ),
                                   child: Container(
                                     padding: const EdgeInsets.all(16),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Select Address",
@@ -159,42 +151,42 @@ class HomeView extends StatelessWidget {
                                         IntrinsicHeight(
                                           child: Row(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
+                                                CrossAxisAlignment.stretch,
                                             children: [
                                               Expanded(
                                                 child:
-                                                officeAddress.addressType !=
-                                                    null
+                                                    officeAddress.addressType !=
+                                                        null
                                                     ? _addressCard(
-                                                  address: officeAddress,
-                                                  addressType:
-                                                  officeAddress
-                                                      .addressType,
-                                                  isSelected:
-                                                  controller
-                                                      .isDefaultOffice
-                                                      .value ==
-                                                      true,
-                                                )
+                                                        address: officeAddress,
+                                                        addressType:
+                                                            officeAddress
+                                                                .addressType,
+                                                        isSelected:
+                                                            controller
+                                                                .isDefaultOffice
+                                                                .value ==
+                                                            true,
+                                                      )
                                                     : Container(),
                                               ),
                                               const SizedBox(width: 16),
                                               Expanded(
                                                 child:
-                                                factoryAddress
-                                                    .addressType !=
-                                                    null
+                                                    factoryAddress
+                                                            .addressType !=
+                                                        null
                                                     ? _addressCard(
-                                                  address: factoryAddress,
-                                                  addressType:
-                                                  factoryAddress
-                                                      .addressType,
-                                                  isSelected:
-                                                  controller
-                                                      .isDefaultOffice
-                                                      .value ==
-                                                      false,
-                                                )
+                                                        address: factoryAddress,
+                                                        addressType:
+                                                            factoryAddress
+                                                                .addressType,
+                                                        isSelected:
+                                                            controller
+                                                                .isDefaultOffice
+                                                                .value ==
+                                                            false,
+                                                      )
                                                     : Container(),
                                               ),
                                             ],
@@ -227,11 +219,13 @@ class HomeView extends StatelessWidget {
                                       ),
                                       children: [
                                         TextSpan(
-                                          text: controller.getCurrentAddress().value,
+                                          text: controller
+                                              .getCurrentAddress()
+                                              .value,
                                         ),
                                         const WidgetSpan(
-                                          alignment: PlaceholderAlignment
-                                              .middle,
+                                          alignment:
+                                              PlaceholderAlignment.middle,
                                           child: Padding(
                                             padding: EdgeInsets.only(left: 4),
                                             child: Icon(
@@ -292,7 +286,6 @@ class HomeView extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.NEWS);
-
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -427,114 +420,111 @@ class HomeView extends StatelessWidget {
                           HeaderText(text: "Statics"),
                           const Gap(14),
                           Obx(
-                                () =>
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: StaticsCard(
-                                        title: "Total Partners",
-                                        value:
+                            () => Row(
+                              children: [
+                                Expanded(
+                                  child: StaticsCard(
+                                    title: "Total Partners",
+                                    value:
                                         (controller
-                                            .dashboardData
-                                            .value
-                                            .data
-                                            ?.totalPartnerProfiles ??
-                                            0)
+                                                    .dashboardData
+                                                    .value
+                                                    .data
+                                                    ?.totalPartnerProfiles ??
+                                                0)
                                             .toString(),
-                                        icon: Asset.noOfPartner,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: StaticsCard(
-                                        title: "Total Products",
-                                        value:
-                                        (controller
-                                            .dashboardData
-                                            .value
-                                            .data
-                                            ?.totalProducts ??
-                                            0)
-                                            .toString(),
-
-                                        icon: Asset.noOfConectors,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-
-                                    Expanded(
-                                      child: StaticsCard(
-                                        title: "Total Connectors",
-                                        value:
-                                        (controller
-                                            .dashboardData
-                                            .value
-                                            .data
-                                            ?.totalConnectorProfiles ??
-                                            0)
-                                            .toString(),
-
-                                        icon: Asset.noOfUsers,
-                                      ),
-                                    ),
-                                  ],
+                                    icon: Asset.noOfPartner,
+                                  ),
                                 ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: StaticsCard(
+                                    title: "Total Products",
+                                    value:
+                                        (controller
+                                                    .dashboardData
+                                                    .value
+                                                    .data
+                                                    ?.totalProducts ??
+                                                0)
+                                            .toString(),
+
+                                    icon: Asset.noOfConectors,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+
+                                Expanded(
+                                  child: StaticsCard(
+                                    title: "Total Connectors",
+                                    value:
+                                        (controller
+                                                    .dashboardData
+                                                    .value
+                                                    .data
+                                                    ?.totalConnectorProfiles ??
+                                                0)
+                                            .toString(),
+
+                                    icon: Asset.noOfUsers,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           const Gap(14),
                           HeaderText(text: "Notification"),
                           const Gap(14),
                           Obx(
-                                () =>
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: _buildNotiCard(
-                                        onTap: () {
-                                          Get
-                                              .find<MainController>()
+                            () => Row(
+                              children: [
+                                Expanded(
+                                  child: _buildNotiCard(
+                                    onTap: () {
+                                      Get.find<MainController>()
                                               .currentIndex
                                               .value =
                                           2;
-                                        },
-                                        title: "Support Ticket",
-                                        value:
+                                    },
+                                    title: "Support Ticket",
+                                    value:
                                         (controller
-                                            .dashboardData
-                                            .value
-                                            .data
-                                            ?.merchantSupportTickets ??
-                                            0)
+                                                    .dashboardData
+                                                    .value
+                                                    .data
+                                                    ?.merchantSupportTickets ??
+                                                0)
                                             .toString(),
 
-                                        icon: Asset.warning,
-                                        color: MyColors.redgray,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: _buildNotiCard(
-                                        onTap: () {
-                                          Get.toNamed(
-                                            Routes.APPROVAL_INBOX,
-                                            arguments: {"isInbox": true},
-                                          );
-                                        },
-                                        title: "Inbox",
-                                        value:
-                                        (controller
-                                            .dashboardData
-                                            .value
-                                            .data
-                                            ?.merchantProductNotifications ??
-                                            0)
-                                            .toString(),
-
-                                        icon: Asset.thumbup,
-                                        color: MyColors.warning,
-                                      ),
-                                    ),
-                                  ],
+                                    icon: Asset.warning,
+                                    color: MyColors.redgray,
+                                  ),
                                 ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildNotiCard(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.APPROVAL_INBOX,
+                                        arguments: {"isInbox": true},
+                                      );
+                                    },
+                                    title: "Inbox",
+                                    value:
+                                        (controller
+                                                    .dashboardData
+                                                    .value
+                                                    .data
+                                                    ?.merchantProductNotifications ??
+                                                0)
+                                            .toString(),
+
+                                    icon: Asset.thumbup,
+                                    color: MyColors.warning,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           const Gap(14),
                           HeaderText(text: "Quick Access"),
@@ -555,41 +545,52 @@ class HomeView extends StatelessWidget {
                                   padding: const EdgeInsets.all(16),
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: controller.items.length,
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4,
-                                      mainAxisSpacing: 20,
-                                      crossAxisSpacing: 12,
-                                      mainAxisExtent: 70
-                                  ),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        mainAxisSpacing: 20,
+                                        crossAxisSpacing: 12,
+                                        mainAxisExtent: 70,
+                                      ),
                                   itemBuilder: (context, index) {
                                     final item = controller.items[index];
                                     return Center(
                                       child: GestureDetector(
                                         onTap: () {
                                           if (index == 0) {
-                                            Get.toNamed(Routes.APPROVAL_INBOX,
-                                                arguments: {"isInbox": true});
+                                            Get.toNamed(
+                                              Routes.APPROVAL_INBOX,
+                                              arguments: {"isInbox": true},
+                                            );
                                           } else if (index == 1) {
-                                            Get.toNamed(Routes.REPORT,
-                                                arguments: {"isReport": true});
+                                            Get.toNamed(
+                                              Routes.REPORT,
+                                              arguments: {"isReport": true},
+                                            );
                                           } else if (index == 2) {
-                                            Get.toNamed(Routes.REPORT,
-                                                arguments: {"isReport": false});
+                                            Get.toNamed(
+                                              Routes.REPORT,
+                                              arguments: {"isReport": false},
+                                            );
                                           } else if (index == 3) {
                                             Get.to(() => SettingView());
                                           } else if (index == 4) {
-                                            Get.toNamed(Routes.ROLE_MANAGEMENT,
-                                                arguments: {"isHome": true});
+                                            Get.toNamed(
+                                              Routes.ROLE_MANAGEMENT,
+                                              arguments: {"isHome": true},
+                                            );
                                           } else if (index == 5) {
                                             Get.toNamed(Routes.INVENTORY);
                                           } else if (index == 6) {
                                             Get.toNamed(Routes.NEWS);
                                           } else if (index == 7) {
-                                            Get.toNamed(Routes.REFER_EARN);
-
-                                            // ComingSoonDialog
-                                            //     .showComingSoonDialog(
-                                            //     featureName: 'Refer & Earn');
+                                            if (Platform.isAndroid) {
+                                              Get.toNamed(Routes.REFER_EARN);
+                                            } else {
+                                              ComingSoonDialog.showComingSoonDialog(
+                                                featureName: 'Refer & Earn',
+                                              );
+                                            }
                                           }
                                         },
                                         child: Column(
@@ -699,33 +700,31 @@ class HomeView extends StatelessWidget {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child:
-                                      (controller
-                                          .teamList[index]
-                                          .profilePhotoUrl ??
-                                          "")
-                                          .isEmpty
+                                          (controller
+                                                      .teamList[index]
+                                                      .profilePhotoUrl ??
+                                                  "")
+                                              .isEmpty
                                           ? Image.asset(
-                                        Asset.aTeam,
-                                        height: 67,
-                                        width: 67,
-                                        fit: BoxFit.cover,
-                                      )
+                                              Asset.aTeam,
+                                              height: 67,
+                                              width: 67,
+                                              fit: BoxFit.cover,
+                                            )
                                           : getImageView(
-                                        finalUrl:
-                                        controller
-                                            .teamList[index]
-                                            .profilePhotoUrl ??
-                                            "",
-                                        height: 67,
-                                        width: 67,
-                                        fit: BoxFit.cover,
-                                      ),
+                                              finalUrl:
+                                                  controller
+                                                      .teamList[index]
+                                                      .profilePhotoUrl ??
+                                                  "",
+                                              height: 67,
+                                              width: 67,
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
                                     const Gap(12),
                                     Text(
-                                      "${controller.teamList[index]
-                                          .firstName} ${controller
-                                          .teamList[index].lastName}",
+                                      "${controller.teamList[index].firstName} ${controller.teamList[index].lastName}",
                                       style: MyTexts.medium14.copyWith(
                                         color: MyColors.black,
                                       ),
@@ -757,8 +756,7 @@ class HomeView extends StatelessWidget {
     bool isSelected = false,
   }) {
     final displayText =
-        "${address?.addressLine1}, ${address?.addressLine2}, ${address
-        ?.landmark}, ${address?.city}, ${address?.state} , ${address?.pinCode}";
+        "${address?.addressLine1}, ${address?.addressLine2}, ${address?.landmark}, ${address?.city}, ${address?.state} , ${address?.pinCode}";
     return GestureDetector(
       onTap: () {
         if (addressType == "office") {
@@ -769,7 +767,6 @@ class HomeView extends StatelessWidget {
           myPref.setDefaultAdd(false);
           controller.isDefaultOffice.value = false;
           controller.isDefaultOffice.refresh();
-
         }
         Get.back();
       },
@@ -1000,9 +997,9 @@ class _StaticsCardState extends State<StaticsCard> {
             colorFilter: widget.color == null
                 ? null
                 : ColorFilter.mode(
-              widget.color ?? Colors.black,
-              BlendMode.srcIn,
-            ),
+                    widget.color ?? Colors.black,
+                    BlendMode.srcIn,
+                  ),
           ),
           const Gap(6),
           Text(
