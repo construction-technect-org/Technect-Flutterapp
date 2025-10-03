@@ -31,7 +31,7 @@ class WelcomeName extends StatelessWidget {
                     Obx(
                       () => Expanded(
                         child: Text(
-                          controller.getCurrentAddress(),
+                          controller.getCurrentAddress().value,
                           overflow: TextOverflow.ellipsis,
                           style: MyTexts.medium14.copyWith(
                             color: MyColors.textFieldBackground,

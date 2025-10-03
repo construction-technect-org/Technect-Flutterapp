@@ -53,6 +53,7 @@ class HomeController extends GetxController {
     super.onInit();
     _initializeHomeData();
     _loadTeamFromStorage();
+    refreshDashboardData();
     isDefaultOffice.value=myPref.getDefaultAdd();
   }
 
@@ -216,12 +217,15 @@ class HomeController extends GetxController {
   }
 
 
-  String getCurrentAddress() {
+  RxString getCurrentAddress() {
     if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
-      final currentAddress = addressData.data!.addresses!.first;
-      return '${currentAddress.addressLine1 ?? ''}, ${currentAddress.city ?? ''}, ${currentAddress.state ?? ''}';
+      final int index = addressData.data?.addresses?.indexWhere((e)=>e.addressType=="office") ??0;
+      final int factoryIndex = addressData.data?.addresses?.indexWhere((e)=>e.addressType=="factory")??0;
+      final address = addressData.data!.addresses?[isDefaultOffice.value==true?index:factoryIndex];
+
+      return '${address?.addressLine1}, ${address?.city}, ${address?.state} , ${address?.pinCode}'.obs;
     }
-    return 'No address found';
+    return 'No address found'.obs;
   }
 
   Future<void> fetchProfileData() async {
