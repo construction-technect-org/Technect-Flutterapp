@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/custom_switch.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/BusinessHours/controller/business_hours_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/controller/business_hours_controller.dart';
 
 class BusinessHoursView extends GetView<BusinessHoursController> {
   @override

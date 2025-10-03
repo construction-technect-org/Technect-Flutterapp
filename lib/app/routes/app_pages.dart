@@ -12,8 +12,6 @@ import 'package:construction_technect/app/modules/Authentication/forgotPassword/
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/forgot_password_view.dart';
 import 'package:construction_technect/app/modules/Authentication/login/bindings/login_binding.dart';
 import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
-import 'package:construction_technect/app/modules/BusinessHours/bindings/business_hours_bindings.dart';
-import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/bindings/add_kyc_binding.dart';
@@ -60,6 +58,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedB
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedBack/views/feedback_view_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/bindings/news_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/views/news_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/bindings/business_hours_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/bindings/profile_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/profile_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/bindings/refer_bindings.dart';
