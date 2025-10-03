@@ -9,9 +9,9 @@
 
 
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
-import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
-import 'package:construction_technect/app/modules/login/models/UserModel.dart';
+import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
 class ConnectorProfileController extends GetxController {
   final selectedTabIndex = 0.obs;

@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/controllers/connector_market_place_controller.dart';
-import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/stat_card.dart';
 
 class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
   const ConnectorMarketPlaceView({super.key});
@@ -129,7 +129,7 @@ class ConnectorMarketPlaceView extends GetView<ConnectorMarketPlaceController> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
-                  "Marketplace",
+                  "Marketplacee",
                   style: MyTexts.extraBold18.copyWith(color: MyColors.fontBlack),
                 ),
               ),

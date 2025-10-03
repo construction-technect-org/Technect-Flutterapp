@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/home/models/AddressModel.dart';
-import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
-import 'package:construction_technect/app/modules/home/services/HomeService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 
 class ConnectorSelectLocationController extends GetxController {
   RxBool isLoading = false.obs;
@@ -9,7 +9,7 @@ class ConnectorSelectLocationController extends GetxController {
 
 
   final features = [
-    {"title": "Marketplace", "icon": Asset.marketplaceIcon},
+    {"title": "Marketplacee", "icon": Asset.marketplaceIcon},
     {"title": "CRM", "icon": Asset.crmIcon},
     {"title": "ERP", "icon": Asset.erpIcon},
     {"title": "Projects", "icon": Asset.projectManagementIcon},
@@ -21,7 +21,7 @@ class ConnectorSelectLocationController extends GetxController {
 
   void onFeatureTap(String featureName) {
     // Navigate based on feature
-    if (featureName == "Marketplace") {
+    if (featureName == "Marketplacee") {
       Get.toNamed(Routes.MARKET_PLACE);
     }
   }

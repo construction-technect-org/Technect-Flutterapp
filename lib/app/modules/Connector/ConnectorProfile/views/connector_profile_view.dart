@@ -2,7 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/components/connector_info_metrics_component.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
-import 'package:construction_technect/app/modules/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 
 class ConnectorProfileView extends GetView<ConnectorProfileController> {
   ConnectorProfileView({super.key});

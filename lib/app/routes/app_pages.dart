@@ -1,23 +1,21 @@
-import 'package:construction_technect/app/modules/AddLocationManually/bindings/add_location_manually_binding.dart';
-import 'package:construction_technect/app/modules/AddLocationManually/views/add_location_manually_view.dart';
-import 'package:construction_technect/app/modules/AddProduct/bindings/add_product_binding.dart';
-import 'package:construction_technect/app/modules/AddProduct/views/add_product_view.dart';
-import 'package:construction_technect/app/modules/AddRole/bindings/add_role_binding.dart';
-import 'package:construction_technect/app/modules/AddRole/views/add_role_view.dart';
-import 'package:construction_technect/app/modules/AddService/bindings/add_service_binding.dart';
-import 'package:construction_technect/app/modules/AddService/views/add_service_view.dart';
-import 'package:construction_technect/app/modules/AddTeam/bindings/add_team_binding.dart';
-import 'package:construction_technect/app/modules/AddTeam/views/add_team_view.dart';
-import 'package:construction_technect/app/modules/Address/bindings/address_bindings.dart';
-import 'package:construction_technect/app/modules/Address/views/address_view.dart';
-import 'package:construction_technect/app/modules/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
-import 'package:construction_technect/app/modules/ApprovalInbox/views/approval_Inbox_view.dart';
+import 'package:construction_technect/app/modules/Authentication/Location/AddLocationManually/bindings/add_location_manually_binding.dart';
+import 'package:construction_technect/app/modules/Authentication/Location/AddLocationManually/views/add_location_manually_view.dart';
+import 'package:construction_technect/app/modules/Authentication/Location/Address/bindings/address_bindings.dart';
+import 'package:construction_technect/app/modules/Authentication/Location/Address/views/address_view.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/bindings/sign_up_details_binding.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPassword/bindings/sign_up_password_binding.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPassword/views/sign_up_password_view.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/bindings/sign_up_role_binding.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/views/sign_up_role_view.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/bindings/forgot_password_binding.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/forgot_password_view.dart';
+import 'package:construction_technect/app/modules/Authentication/login/bindings/login_binding.dart';
+import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/BusinessHours/bindings/business_hours_bindings.dart';
 import 'package:construction_technect/app/modules/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
-import 'package:construction_technect/app/modules/ConnectionInbox/bindings/connection_inbox_binding.dart';
-import 'package:construction_technect/app/modules/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/bindings/add_kyc_binding.dart';
 import 'package:construction_technect/app/modules/Connector/AddKyc/views/add_kyc_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/bindings/Connector_add_location_binding.dart';
@@ -42,62 +40,54 @@ import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo
 import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo/views/connector_request_demo_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/bindings/create_new_ticket_binding.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/creat_new_ticket.dart';
-import 'package:construction_technect/app/modules/Dashboard/bindings/dashboard_binding.dart';
-import 'package:construction_technect/app/modules/Dashboard/views/dashboard_view.dart';
-import 'package:construction_technect/app/modules/DashboardMarketPlace/bindings/market_place_binding.dart';
-import 'package:construction_technect/app/modules/DashboardMarketPlace/views/market_place_view.dart';
-import 'package:construction_technect/app/modules/FAQ/bindings/faq_bindings.dart';
-import 'package:construction_technect/app/modules/FAQ/views/faq_screen.dart';
-import 'package:construction_technect/app/modules/FeedBack/bindings/feedback_bindings.dart';
-import 'package:construction_technect/app/modules/FeedBack/views/feedback_view_screen.dart';
-import 'package:construction_technect/app/modules/Invetory/bindings/inventory_bindings.dart';
-import 'package:construction_technect/app/modules/Invetory/views/inventory_view.dart';
-import 'package:construction_technect/app/modules/Marketplace/bindings/market_place_binding.dart';
-import 'package:construction_technect/app/modules/Marketplace/views/market_place_view.dart';
-import 'package:construction_technect/app/modules/News/bindings/news_binding.dart';
-import 'package:construction_technect/app/modules/News/views/news_view.dart';
-import 'package:construction_technect/app/modules/Notifications/bindings/notification_binding.dart';
-import 'package:construction_technect/app/modules/Notifications/views/notification_view.dart';
-import 'package:construction_technect/app/modules/ProductDetail/bindings/product_detail_binding.dart';
-import 'package:construction_technect/app/modules/ProductDetail/views/product_detail_view.dart';
-import 'package:construction_technect/app/modules/ReferAndCoupon/bindings/refer_bindings.dart';
-import 'package:construction_technect/app/modules/ReferAndCoupon/views/refer_screen.dart';
-import 'package:construction_technect/app/modules/Report/bindings/report_bindings.dart';
-import 'package:construction_technect/app/modules/Report/views/report_view.dart';
-import 'package:construction_technect/app/modules/RoleDetails/bindings/role_details_binding.dart';
-import 'package:construction_technect/app/modules/RoleDetails/views/role_details_view.dart';
-import 'package:construction_technect/app/modules/RoleManagement/bindings/role_management_binding.dart';
-import 'package:construction_technect/app/modules/RoleManagement/views/role_management_view.dart';
+import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/bindings/dashboard_binding.dart';
+import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/dashboard_view.dart';
+import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMarketPlace/bindings/market_place_binding.dart';
+import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMarketPlace/views/market_place_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/views/notification_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/views/approval_Inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/bindings/inventory_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/views/inventory_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/bindings/report_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/views/report_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/bindings/faq_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/views/faq_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedBack/bindings/feedback_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedBack/views/feedback_view_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/bindings/news_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/views/news_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/bindings/profile_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/profile_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/bindings/refer_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/views/refer_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/bindings/add_role_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/views/add_role_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/bindings/add_team_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/views/add_team_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleDetails/bindings/role_details_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleDetails/views/role_details_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/bindings/role_management_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/role_management_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/TeamDetails/bindings/team_details_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/TeamDetails/views/team_details_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/bindings/add_product_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/views/add_product_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/bindings/product_detail_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/views/product_detail_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/bindings/create_new_ticket_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/creat_new_ticket.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/SuppoerRequestFilter/bindings/support_request_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/SuppoerRequestFilter/views/support_request_screen.dart';
 import 'package:construction_technect/app/modules/ServiceDetail/bindings/service_detail_binding.dart';
 import 'package:construction_technect/app/modules/ServiceDetail/views/service_detail_view.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/views/service_management_view.dart';
-import 'package:construction_technect/app/modules/SignUpDetails/bindings/sign_up_details_binding.dart';
-import 'package:construction_technect/app/modules/SignUpDetails/views/sign_up_details_view.dart';
-import 'package:construction_technect/app/modules/SignUpPassword/bindings/sign_up_password_binding.dart';
-import 'package:construction_technect/app/modules/SignUpPassword/views/sign_up_password_view.dart';
-import 'package:construction_technect/app/modules/SignUpRole/bindings/sign_up_role_binding.dart';
-import 'package:construction_technect/app/modules/SignUpRole/views/sign_up_role_view.dart';
-import 'package:construction_technect/app/modules/SuppoerRequestPArtner/bindings/support_request_bindings.dart';
-import 'package:construction_technect/app/modules/SuppoerRequestPArtner/views/support_request_screen.dart';
-import 'package:construction_technect/app/modules/TeamDetails/bindings/team_details_binding.dart';
-import 'package:construction_technect/app/modules/TeamDetails/views/team_details_view.dart';
-import 'package:construction_technect/app/modules/UpdateYourCertifications/bindings/update_your_certifications_binding.dart';
-import 'package:construction_technect/app/modules/UpdateYourCertifications/views/update_your_certifications_view.dart';
-import 'package:construction_technect/app/modules/editProfile/bindings/edit_profile_bindings.dart';
-import 'package:construction_technect/app/modules/editProfile/views/edit_profile_view.dart';
-import 'package:construction_technect/app/modules/forgotPassword/bindings/forgot_password_binding.dart';
-import 'package:construction_technect/app/modules/forgotPassword/views/forgot_password_view.dart';
-import 'package:construction_technect/app/modules/location/bindings/location_binding.dart';
-import 'package:construction_technect/app/modules/location/views/location_view.dart';
-import 'package:construction_technect/app/modules/login/bindings/login_binding.dart';
-import 'package:construction_technect/app/modules/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/main/bindings/main_binding.dart';
 import 'package:construction_technect/app/modules/main/views/main_view.dart';
-import 'package:construction_technect/app/modules/profile/bindings/profile_binding.dart';
-import 'package:construction_technect/app/modules/profile/views/profile_view.dart';
 import 'package:construction_technect/app/modules/splash/bindings/splash_binding.dart';
 import 'package:construction_technect/app/modules/splash/views/splash_view.dart';
 import 'package:get/get.dart';
@@ -139,20 +129,11 @@ class AppPages {
     GetPage(name: _Paths.MAIN, page: () => MainTabBarView(), binding: MainBinding()),
     GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
     GetPage(
-      name: _Paths.EDIT_PROFILE,
-      page: () => const EditProfileView(),
-      binding: EditProfileBinding(),
-    ),
-    GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
       binding: BusinessHoursBinding(),
     ),
-    GetPage(
-      name: _Paths.UPDATE_YOUR_CERTIFICATION,
-      page: () => const UpdateYourCertificationsView(),
-      binding: UpdateYourCertificationsBinding(),
-    ),
+
     GetPage(
       name: _Paths.ADDRESS,
       page: () => const AddressView(),
@@ -210,11 +191,7 @@ class AppPages {
       page: () => const TeamDetailsView(),
       binding: TeamDetailsBinding(),
     ),
-    GetPage(
-      name: _Paths.MARKET_PLACE,
-      page: () => MarketPlaceView(),
-      binding: MarketPlaceBinding(),
-    ),
+
 
     GetPage(
       name: _Paths.SERVICE_MANAGEMENT,
@@ -223,11 +200,7 @@ class AppPages {
         Get.lazyPut<ServiceManagementController>(() => ServiceManagementController());
       }),
     ),
-    GetPage(
-      name: _Paths.ADD_SERVICE,
-      page: () => const AddServiceView(),
-      binding: AddServiceBinding(),
-    ),
+
     GetPage(
       name: _Paths.SERVICE_DETAILS,
       page: () => ServiceDetailsView(),
@@ -243,11 +216,7 @@ class AppPages {
       page: () => ConnectionInboxView(),
       binding: ConnectionInboxBinding(),
     ),
-    GetPage(
-      name: _Paths.LOCATION,
-      page: () => const LocationView(),
-      binding: LocationBinding(),
-    ),
+
 
     // Connector
     GetPage(
@@ -270,16 +239,6 @@ class AppPages {
       name: _Paths.ADD_KYC,
       page: () => const AddKycView(),
       binding: AddKycBinding(),
-    ),
-    GetPage(
-      name: Routes.MARKET_PLACE,
-      page: () => MarketPlaceView(),
-      binding: MarketPlaceBinding(),
-    ),
-    GetPage(
-      name: Routes.MARKET_PLACE,
-      page: () => MarketPlaceView(),
-      binding: MarketPlaceBinding(),
     ),
     GetPage(
       name: Routes.DASHBOARD,

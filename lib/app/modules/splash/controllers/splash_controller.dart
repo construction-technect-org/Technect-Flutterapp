@@ -29,7 +29,7 @@ class SplashController extends GetxController {
     final savedToken = myPref.getToken();
 
     if (savedToken.isNotEmpty) {
-      // Token exists, navigate directly to home screen
+      // Token exists, navigate directly to Home screen
       _navigateToHome();
     } else {
       // No token, show splash screen then navigate to login

@@ -1,11 +1,13 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/ConnectionInbox/views/connection_inbox_view.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/customer_support_view.dart';
-import 'package:construction_technect/app/modules/ProductManagement/views/product_management_view.dart';
-import 'package:construction_technect/app/modules/home/views/home_view.dart';
+
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/views/product_management_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
-import 'package:construction_technect/app/modules/menu/views/menu_view.dart';
+
 
 class MainTabBarView extends GetView<MainController> {
   final CommonController commonController = Get.put(CommonController());

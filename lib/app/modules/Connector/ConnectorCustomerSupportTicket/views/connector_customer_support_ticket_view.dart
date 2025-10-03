@@ -5,8 +5,8 @@ import 'package:construction_technect/app/modules/Connector/ConnectorCustomerSup
 import 'package:construction_technect/app/modules/Connector/ConnectorCustomerSupportTicket/views/connector_ticket_list_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/Connector/ConnectorSupportRequest/views/connector_support_request_view.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/views/creat_new_ticket.dart';
-import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/stat_card.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/creat_new_ticket.dart';
 import 'package:gap/gap.dart';
 
 class ConnectorCustomerSupportTicketView extends StatelessWidget {

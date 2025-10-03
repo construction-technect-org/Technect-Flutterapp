@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:construction_technect/app/modules/CustomerSupport/models/SupportMyTicketsModel.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketCategoriesModel.dart';
-import 'package:construction_technect/app/modules/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
-import 'package:construction_technect/app/modules/FAQ/model/faq_model.dart';
-import 'package:construction_technect/app/modules/News/models/news_model.dart';
-import 'package:construction_technect/app/modules/Notifications/models/notification_model.dart';
-import 'package:construction_technect/app/modules/ProductManagement/model/product_model.dart'
-    as ProductModel;
-import 'package:construction_technect/app/modules/RoleManagement/models/GetAllRoleModel.dart';
-import 'package:construction_technect/app/modules/RoleManagement/models/GetTeamListModel.dart';
-import 'package:construction_technect/app/modules/login/models/UserModel.dart';
+import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/model/connectionModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/models/notification_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/model/faq_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/models/news_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart' as ProductModel;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart' hide Statistics;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:get_storage/get_storage.dart';
 
 class AppSharedPreference {

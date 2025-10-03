@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/AddLocationManually/models/SavedAddressesModel.dart';
+import 'package:construction_technect/app/modules/Authentication/Location/AddLocationManually/models/SavedAddressesModel.dart';
 
 class ConnectorAddLocationManuallyController extends GetxController {
   // Form controllers

@@ -1,0 +1,715 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/controllers/add_team_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/components/delete_team_dialog.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/stat_card.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:gap/gap.dart';
+
+class RoleManagementView extends GetView<RoleManagementController> {
+  final HomeController homeController = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    final initialTabIndex = Get.arguments != null ? 1 : 0;
+
+    return DefaultTabController(
+      length: 2, // Roles & Teams
+      initialIndex: initialTabIndex,
+      child: Scaffold(
+        backgroundColor: MyColors.white,
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            behavior: HitTestBehavior.translucent,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Icon(Icons.arrow_back_ios, color: MyColors.black),
+            ),
+          ),
+          backgroundColor: MyColors.white,
+          elevation: 0,
+          leadingWidth: 40,
+          title: Text(
+            "Teams & Roles",
+            style: MyTexts.medium18.copyWith(
+              color: Colors.black,
+              fontFamily: MyTexts.Roboto,
+            ),
+          ),
+          bottom: const TabBar(
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelColor: MyColors.primary,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: MyColors.primary,
+            tabs: [
+              Tab(text: 'Roles'),
+              Tab(text: 'Teams'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 25, right: 24, top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      HearderText(text: "Role Management"),
+                      RoundedButton(
+                        onTap: () {
+                          Get.toNamed(Routes.ADD_ROLE);
+                        },
+                        buttonName: '',
+                        borderRadius: 10,
+                        width: 28.w,
+                        height: 35,
+                        verticalPadding: 0,
+                        horizontalPadding: 0,
+                        child: Center(
+                          child: Text(
+                            ' + Add New Role',
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(20),
+                Expanded(
+                  child: RefreshIndicator(
+                    backgroundColor: MyColors.primary,
+                    color: Colors.white,
+                    onRefresh: () async {
+                      await controller.refreshRoles();
+                    },
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18.0,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Obx(
+                                        () =>
+                                        StatCard(
+                                          title: 'Total Roles',
+                                          value:
+                                          "${controller.statistics.value.totalRoles ?? "0"}",
+                                          icon: SvgPicture.asset(
+                                            Asset.TotalProducts,
+                                          ),
+                                          iconBackground: MyColors
+                                              .yellowundertones,
+                                        ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Obx(
+                                        () =>
+                                        StatCard(
+                                          title: 'Active Roles',
+                                          value:
+                                          "${controller.statistics.value
+                                              .activeRoles ?? "0"}",
+
+                                          icon: SvgPicture.asset(
+                                              Asset.LowStock),
+                                          iconBackground: MyColors.paleRed,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Gap(20),
+                          Obx(() {
+                            if (controller.isLoading.value) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+
+                            if (controller.roles.isEmpty) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Gap(20),
+                                  const Icon(
+                                    Icons.admin_panel_settings_outlined,
+                                    size: 64,
+                                    color: MyColors.grey,
+                                  ),
+                                  SizedBox(height: 1.h),
+                                  Text(
+                                    'No roles found',
+                                    style: MyTexts.medium18.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
+                                  ),
+                                  SizedBox(height: 0.5.h),
+                                  Text(
+                                    'Create your first role to get started',
+                                    style: MyTexts.regular14.copyWith(
+                                      color: MyColors.grey,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+
+                            return ListView.separated(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              itemCount: controller.roles.length,
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),
+                              separatorBuilder: (_, _) => SizedBox(width: 4.w),
+                              itemBuilder: (context, index) {
+                                final role = controller.roles[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.ROLE_DETAILS,
+                                        arguments: {"getRole": role},
+                                      )?.then((value) {
+                                        controller.loadRoles();
+                                      });
+                                    },
+                                    child: RoleCard(role: role),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 25, right: 24, top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      HearderText(text: "Team Management"),
+                      Center(
+                        child: RoundedButton(
+                          onTap: () {
+                            Get.toNamed(Routes.ADD_TEAM);
+                          },
+                          buttonName: '',
+                          borderRadius: 10,
+                          width: 28.w,
+                          height: 35,
+                          verticalPadding: 0,
+                          horizontalPadding: 0,
+                          child: Center(
+                            child: Text(
+                              ' + Add New Team',
+                              style: MyTexts.medium14.copyWith(
+                                color: MyColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Expanded(
+                  child: RefreshIndicator(
+                    backgroundColor: MyColors.primary,
+                    color: Colors.white,
+                    onRefresh: () async {
+                      await homeController.refreshTeamList();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            const Gap(20),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Obx(
+                                        () =>
+                                        StatCard(
+                                          title: 'Total Team',
+                                          value:
+                                          "${homeController.statistics.value
+                                              .totalTeamMember ?? '0'}",
+                                          icon: SvgPicture.asset(
+                                              Asset.Featured),
+                                          iconBackground: MyColors.verypaleBlue,
+                                        ),
+                                  ),
+                                ),
+
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Obx(
+                                        () =>
+                                        StatCard(
+                                          title: 'Active Team',
+                                          value:
+                                          "${homeController.statistics.value
+                                              .activeTeamMember ?? '0'}",
+                                          icon: SvgPicture.asset(
+                                            Asset.TotalInterests,
+                                          ),
+                                          iconBackground: MyColors.warmOrange,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Obx(() {
+                              if (controller.isLoadingTeam.value) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+
+                              if (homeController.teamList.isEmpty) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Gap(20),
+                                    const Icon(
+                                      Icons.people_outline,
+                                      size: 64,
+                                      color: MyColors.grey,
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Text(
+                                      'No team members found',
+                                      style: MyTexts.medium18.copyWith(
+                                        color: MyColors.fontBlack,
+                                      ),
+                                    ),
+                                    SizedBox(height: 0.5.h),
+                                    Text(
+                                      'Add your first team member to get started',
+                                      style: MyTexts.regular14.copyWith(
+                                        color: MyColors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                physics: const ScrollPhysics(),
+                                itemCount: homeController.teamList.length,
+                                itemBuilder: (context, index) {
+                                  final TeamListData user =
+                                  homeController.teamList[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      // Get.toNamed(
+                                      //   Routes.TEAM_DETAILS,
+                                      //   arguments: {
+                                      //     "team": homeController.teamList[index],
+                                      //   },
+                                      // );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(bottom: 12),
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: MyColors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: MyColors.americanSilver,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 24,
+                                            child: ClipOval(
+                                              child:
+                                              (user.profilePhotoUrl ?? "")
+                                                  .isEmpty
+                                                  ? Image.asset(
+                                                Asset.aTeam,
+                                                height: 48,
+                                                width: 48,
+                                              )
+                                                  : getImageView(
+                                                  finalUrl:
+                                                  user.profilePhotoUrl ??
+                                                      '',
+                                                  height: 48,
+                                                  width: 48,
+                                                  fit: BoxFit.cover
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      "${user.firstName ??
+                                                          ""} ${user.lastName ??
+                                                          ""}",
+                                                      style: MyTexts.bold18
+                                                          .copyWith(
+                                                        color: MyColors
+                                                            .fontBlack,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 6),
+                                                    const Spacer(),
+
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Get.toNamed(
+                                                          Routes.ADD_TEAM,
+                                                          arguments: {
+                                                            "data": user,
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: 30,
+                                                        height: 30,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
+                                                          color: MyColors
+                                                              .primary, // background with opacity
+                                                        ),
+                                                        child: Center(
+                                                          child: Icon(
+                                                            Icons.edit,
+                                                            size: 20,
+                                                            // smaller so it fits inside 14x14 box
+                                                            color:
+                                                            MyColors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        DeleteTeamDialog
+                                                            .showDeleteTeamDialog(
+                                                          context,
+                                                          user,
+                                                              () async {
+                                                            final addTeamController =
+                                                            Get.find<
+                                                                AddTeamController
+                                                            >();
+                                                            await addTeamController
+                                                                .deleteTeamMember(
+                                                              user.id!,
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: 30,
+                                                        height: 30,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                            8,
+                                                          ),
+                                                          color: Colors.red,
+                                                        ),
+                                                        child: Center(
+                                                          child: Icon(
+                                                            Icons.delete,
+                                                            size: 20,
+                                                            color:
+                                                            MyColors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    //
+                                                    // Container(
+                                                    //   padding:
+                                                    //       const EdgeInsets.symmetric(
+                                                    //         horizontal: 10,
+                                                    //         vertical: 4,
+                                                    //       ),
+                                                    //   decoration: BoxDecoration(
+                                                    //     color:
+                                                    //         MyColors.mediumSeaGreen,
+                                                    //     borderRadius:
+                                                    //         BorderRadius.circular(
+                                                    //           14.5,
+                                                    //         ),
+                                                    //   ),
+                                                    //   child: Text(
+                                                    //     "Admin",
+                                                    //     style: MyTexts.extraBold14
+                                                    //         .copyWith(
+                                                    //           color: MyColors.white,
+                                                    //         ),
+                                                    //   ),
+                                                    // ),
+                                                  ],
+                                                ),
+                                                const Gap(4),
+                                                Text(
+                                                  user.roleTitle ?? '',
+                                                  style: MyTexts.regular16
+                                                      .copyWith(
+                                                    color:
+                                                    MyColors.fontBlack,
+                                                    fontFamily:
+                                                    MyTexts.Roboto,
+                                                  ),
+                                                ),
+                                                const Gap(4),
+
+                                                Text(
+                                                  "Email: ${user.emailId ??
+                                                      ''}",
+                                                  style: MyTexts.regular14
+                                                      .copyWith(
+                                                    color:
+                                                    MyColors.lightGray,
+                                                    fontFamily:
+                                                    MyTexts.Roboto,
+                                                  ),
+                                                ),
+                                                const Gap(4),
+
+                                                Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.calendar_today,
+                                                      size: 16,
+                                                      color: Colors.green,
+                                                    ),
+                                                    const SizedBox(width: 6),
+                                                    Text(
+                                                      user.isActive == true
+                                                          ? 'Active'
+                                                          : 'DeActive',
+                                                      style: MyTexts.regular14
+                                                          .copyWith(
+                                                        fontFamily:
+                                                        MyTexts.Roboto,
+                                                        color: MyColors
+                                                            .mutedGreen,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RoleCard extends StatelessWidget {
+  final GetAllRole role;
+
+  const RoleCard({super.key, required this.role});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: MyColors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: role.isActive == true ? MyColors.green : MyColors.red,
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(5.w, 2.h, 5.w, 3.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // header row
+                Row(
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 3.h,
+                      decoration: BoxDecoration(
+                        color: MyColors.paleBluecolor, // background color
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          Asset.Admin,
+                          width: 14.54, // scale as needed
+                          height: 13,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 3.w),
+                    Expanded(
+                      // 👈 this fixes overflow issue
+                      child: Text(
+                        role.roleTitle ?? '',
+                        style: MyTexts.medium18.copyWith(
+                          color: MyColors.fontBlack,
+                          fontFamily: MyTexts.Roboto,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 2.h),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      margin: const EdgeInsets.only(top: 6, right: 6),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: MyColors.philippineGray,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        role.roleDescription ?? '',
+                        style: MyTexts.regular14.copyWith(
+                          color: MyColors.gray32,
+                          fontFamily: MyTexts.Roboto,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(6),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: MyColors.whiteBlue,
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: Text(
+                      "Users: ${role.teamMemberCount ?? '0'} ",
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.fontBlack,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Edit Button
+        /* Positioned(
+          right: 3.w,
+          top: 3.h,
+          child: GestureDetector(
+            // Inside RoleCard
+            // onTap: () {
+            //   final controller = Get.put(AddRoleController());
+            //   controller.loadRoleData(role); // pass role model from API
+            //   Get.toNamed(Routes.ADD_ROLE);
+            // },
+
+            // inside RoleCard
+            onTap: () {
+              final controller = Get.put(AddRoleController());
+              controller.loadRoleData(role); // pass selected role
+              Get.toNamed(Routes.ADD_ROLE);
+            },
+
+            child: Container(
+              width: 27,
+              height: 26,
+              decoration: BoxDecoration(
+                color: MyColors.primary,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.edit, size: 16, color: Colors.white),
+            ),
+          ),
+        ),*/
+      ],
+    );
+  }
+}

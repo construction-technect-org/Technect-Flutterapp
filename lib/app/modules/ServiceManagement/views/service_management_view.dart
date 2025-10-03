@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/welcome_name.dart';
-import 'package:construction_technect/app/modules/ProductManagement/components/stat_card.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/components/service_card.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/model/service_model.dart';

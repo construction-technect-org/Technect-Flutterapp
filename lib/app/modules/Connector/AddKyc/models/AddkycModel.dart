@@ -1,4 +1,5 @@
-import 'package:construction_technect/app/modules/home/models/ProfileModel.dart';
+
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
 class AddkycModel {
   bool success;

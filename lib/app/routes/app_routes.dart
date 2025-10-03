@@ -32,7 +32,6 @@ abstract class Routes {
   static const SERVICE_DETAILS = _Paths.SERVICE_DETAILS;
   static const CHAT_SYSTEM = _Paths.CHAT_SYSTEM;
   static const CONNECTION_INBOX = _Paths.CONNECTION_INBOX;
-  static const LOCATION = _Paths.LOCATION;
   static const DASHBOARD = _Paths.DASHBOARD;
   static const DASHABORD_MARKET_PLACE = _Paths.DASHABOARD_MARKET_PLACE;
   static const FEEDBACK_VIEW = _Paths.FEEDBACK_VIEW;
@@ -64,7 +63,7 @@ abstract class Routes {
 
 abstract class _Paths {
   _Paths._();
-  static const HOME = '/home';
+  static const HOME = '/Home';
   static const PROJECTS = '/projects';
   static const SPLASH = '/splash';
   static const LOGIN = '/login';
@@ -95,7 +94,6 @@ abstract class _Paths {
   static const SERVICE_DETAILS = '/service-details';
   static const CHAT_SYSTEM = '/chat-system';
   static const CONNECTION_INBOX = '/connection-inbox';
-  static const LOCATION = '/location';
   static const DASHBOARD = '/dashboard';
   static const DASHABOARD_MARKET_PLACE = '/dashboard-market-place';
   static const SUPPORT_REQUEST = '/support-request';
