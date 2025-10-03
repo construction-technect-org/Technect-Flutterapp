@@ -431,6 +431,14 @@ class AddProductController extends GetxController {
   }
 
   void createProductValidation() {
+    String? lastError;
+
+    for (final filter in filters) {
+      final controller = dynamicControllers[filter.filterName];
+      if (controller?.text.trim().isEmpty ?? true) {
+        lastError = "${filter.filterLabel ?? 'Field'} is required";
+      }
+    }
     if (brandNameController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Brand name is required');
     } else if (packageTypeController.text.isEmpty) {
@@ -443,7 +451,12 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'Texture is required');
     } else if (colorController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Color is required');
-    } else {
+    }
+    else if (lastError != null) {
+      SnackBars.errorSnackBar(content: lastError);
+      return;
+    }
+    else {
       if (isEdit) {
         updateProduct();
       } else {

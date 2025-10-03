@@ -374,7 +374,7 @@ class HomeView extends StatelessWidget {
                                 child: Container(
                                   width: 120,
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
+                                    horizontal: 16,
                                   ),
                                   decoration: BoxDecoration(
                                     border: Border.all(

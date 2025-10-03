@@ -582,7 +582,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       {'label': 'Shape', 'value': product.shape ?? 'N/A'},
       {'label': 'Texture', 'value': product.texture ?? 'N/A'},
       {'label': 'Colour', 'value': product.colour ?? 'N/A'},
-      {'label': 'Size', 'value': product.size ?? 'N/A'},
       {
         'label': 'Unit of conversation',
         'value': product.uoc?.toString() ?? 'N/A',
