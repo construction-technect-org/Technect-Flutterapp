@@ -14,34 +14,34 @@ import 'package:construction_technect/app/modules/Authentication/login/bindings/
 import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
-import 'package:construction_technect/app/modules/Connector/AddKyc/bindings/add_kyc_binding.dart';
-import 'package:construction_technect/app/modules/Connector/AddKyc/views/add_kyc_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/bindings/Connector_add_location_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorAddLocation/views/connector_add_location_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorAddLocationManually/bindings/connector_add_location_manually_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorAddLocationManually/view/connector_add_location_manually_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorConnectionInbox/bindings/connector_connection_inbox_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorConnectionInbox/views/connector_connection_inbox_vies.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorCustomerSupportTicket/bindings/connector_customer_support_ticket_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorCustomerSupportTicket/views/connector_customer_support_ticket_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorFilters/bindings/connector_filter_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorFilters/views/connector_filters_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorMainTab/bindings/connector_main_tab_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorMainTab/views/connector_main_tab.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorProfile/views/connector_profile_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo/bindings/connector_request_demo_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorRequestDemo/views/connector_request_demo_view.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/bindings/dashboard_binding.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/dashboard_view.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMarketPlace/bindings/market_place_binding.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMarketPlace/views/market_place_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/bindings/add_kyc_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/views/add_kyc_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocation/bindings/connector_add_location_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocation/views/connector_add_location_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocationManually/bindings/connector_add_location_manually_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocationManually/view/connector_add_location_manually_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/bindings/connector_connection_inbox_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/views/connector_connection_inbox_vies.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorCustomerSupportTicket/bindings/connector_customer_support_ticket_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorCustomerSupportTicket/views/connector_customer_support_ticket_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/bindings/connector_filter_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/views/connector_filters_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMainTab/bindings/connector_main_tab_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMainTab/views/connector_main_tab.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/views/connector_profile_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorRequestDemo/bindings/connector_request_demo_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorRequestDemo/views/connector_request_demo_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
@@ -82,12 +82,12 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/creat_new_ticket.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/SuppoerRequestFilter/bindings/support_request_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/SuppoerRequestFilter/views/support_request_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/bindings/bottom_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/views/bottom_view.dart';
 import 'package:construction_technect/app/modules/ServiceDetail/bindings/service_detail_binding.dart';
 import 'package:construction_technect/app/modules/ServiceDetail/views/service_detail_view.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/views/service_management_view.dart';
-import 'package:construction_technect/app/modules/main/bindings/main_binding.dart';
-import 'package:construction_technect/app/modules/main/views/main_view.dart';
 import 'package:construction_technect/app/modules/splash/bindings/splash_binding.dart';
 import 'package:construction_technect/app/modules/splash/views/splash_view.dart';
 import 'package:get/get.dart';
@@ -126,7 +126,7 @@ class AppPages {
       page: () => const ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(name: _Paths.MAIN, page: () => MainTabBarView(), binding: MainBinding()),
+    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
     GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
@@ -221,13 +221,13 @@ class AppPages {
     // Connector
     GetPage(
       name: _Paths.CONNECTOR_MAIN_TAB,
-      page: () => const ConnectorMainTab(),
+      page: () => const ConnectorBottom(),
       binding: ConnectorMainTabBinding(),
     ),
     GetPage(
       name: _Paths.CONNECTOR_MARKET_PLACE,
       page: () => const ConnectorMarketPlaceView(),
-      binding: ConnectorMarketPlaceBinfing(),
+      binding: ConnectorMarketPlaceBinding(),
     ),
 
     GetPage(
@@ -268,7 +268,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.CONNECTOR_PRODUCT_DETAILS,
-      page: () => ConnectorProductDetailsView(),
+      page: () => const ConnectorProductDetailsView(),
       binding: ConnectorProductDetailsBindings(),
     ),
     GetPage(

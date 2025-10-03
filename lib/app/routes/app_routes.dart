@@ -71,7 +71,7 @@ abstract class _Paths {
   static const SIGN_UP_DETAILS = '/sign-up-details';
   static const SIGN_UP_PASSWORD = '/sign-up-password';
   static const FORGOT_PASSWORD = '/forgot-password';
-  static const MAIN = '/main';
+  static const MAIN = '/bottom';
   static const PROFILE = '/profile';
   static const EDIT_PROFILE = '/edit-profile';
   static const BUSINESS_HOURS = '/business-hours';
@@ -105,7 +105,7 @@ abstract class _Paths {
   static const NOTIFICATIONS = '/notifications';
 
   // Connector
-  static const CONNECTOR_MAIN_TAB = '/connector-main-tab';
+  static const CONNECTOR_MAIN_TAB = '/connector-bottom-tab';
   static const CONNECTOR_MARKET_PLACE = '/connector-market-place';
   static const CONNECTOR_PROFILE = '/connector-profile';
   static const ADD_KYC = '/add-kyc';

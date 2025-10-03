@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/Connector/ConnectorHome/views/connector_home_view.dart';
-import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorHome/views/connector_home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:gap/gap.dart';
 
 class MenuView extends StatelessWidget {
@@ -96,7 +96,7 @@ class MenuView extends StatelessWidget {
 
                     title: "Help & Support",
                     onTap: () {
-                      Get.find<MainController>().currentIndex.value = 2;
+                      Get.find<BottomController>().currentIndex.value = 2;
                     },
                   ),
                   const Gap(20),

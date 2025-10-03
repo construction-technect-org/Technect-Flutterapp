@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
@@ -7,7 +6,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
-import 'package:construction_technect/app/modules/main/controllers/main_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -481,7 +480,7 @@ class HomeView extends StatelessWidget {
                                 Expanded(
                                   child: _buildNotiCard(
                                     onTap: () {
-                                      Get.find<MainController>()
+                                      Get.find<BottomController>()
                                               .currentIndex
                                               .value =
                                           2;

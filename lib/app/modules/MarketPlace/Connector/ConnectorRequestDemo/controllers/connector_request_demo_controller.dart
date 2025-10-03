@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/RequestDemo/service/RequestDemoService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorRequestDemo/service/RequestDemoService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
