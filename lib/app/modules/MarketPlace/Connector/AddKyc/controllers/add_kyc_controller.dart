@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/models/AddkycModel.dart';
@@ -27,7 +28,6 @@ class AddKycController extends GetxController {
     populateFromArguments(Get.arguments);
   }
 
-  /// Prefill from arguments
   void populateFromArguments(dynamic args) {
     if (_populatedFromArgs) return;
     if (args == null) return;
@@ -44,22 +44,53 @@ class AddKycController extends GetxController {
       panController.text = args['pan_number'] ?? '';
 
       // Populate existing files for preview
-      if (args['aadhaar_front'] != null) selectedDocuments['aadhaarFront'] = PlatformFile(name: 'aadhaar_front', path: args['aadhaar_front'], size: 5);
-      if (args['aadhaar_back'] != null) selectedDocuments['aadhaarBack'] = PlatformFile(name: 'aadhaar_back', path: args['aadhaar_back'], size: 5);
-      if (args['pan_front'] != null) selectedDocuments['panFront'] = PlatformFile(name: 'pan_front', path: args['pan_front'], size: 5);
-      if (args['pan_back'] != null) selectedDocuments['panBack'] = PlatformFile(name: 'pan_back', path: args['pan_back'], size: 5);
+      if (args['aadhaar_front'] != null) {
+        selectedDocuments['aadhaarFront'] = PlatformFile(
+          name: 'aadhaar_front',
+          path: args['aadhaar_front'],
+          size: 5,
+        );
+      }
+      if (args['aadhaar_back'] != null) {
+        selectedDocuments['aadhaarBack'] = PlatformFile(
+          name: 'aadhaar_back',
+          path: args['aadhaar_back'],
+          size: 5,
+        );
+      }
+      if (args['pan_front'] != null) {
+        selectedDocuments['panFront'] = PlatformFile(
+          name: 'pan_front',
+          path: args['pan_front'],
+          size: 5,
+        );
+      }
+      if (args['pan_back'] != null) {
+        selectedDocuments['panBack'] = PlatformFile(
+          name: 'pan_back',
+          path: args['pan_back'],
+          size: 5,
+        );
+      }
     }
 
     _populatedFromArgs = true;
   }
 
-  /// Pick file
   Future<void> pickFile(String key) async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null && result.files.isNotEmpty) {
+      final file = result.files.first;
+      const maxSizeInBytes = 2 * 1024 * 1024;
+
+      if (file.size > maxSizeInBytes) {
+        SnackBars.errorSnackBar(content: "File size must be less than 2 MB");
+        return;
+      }
+
       selectedDocuments[key] = result.files.first;
     } else {
-      SnackBars.errorSnackBar(content: "No file selected for $key");
+      SnackBars.errorSnackBar(content: "No file selected");
     }
   }
 
@@ -72,7 +103,9 @@ class AddKycController extends GetxController {
       SnackBars.errorSnackBar(content: "Please enter Aadhaar Number");
       return false;
     } else if (!aadhaarReg.hasMatch(aadhaar)) {
-      SnackBars.errorSnackBar(content: "Invalid Aadhaar Number. Must be 12 digits");
+      SnackBars.errorSnackBar(
+        content: "Invalid Aadhaar Number. Must be 12 digits",
+      );
       return false;
     }
 
@@ -89,7 +122,9 @@ class AddKycController extends GetxController {
         !selectedDocuments.containsKey("aadhaarBack") ||
         !selectedDocuments.containsKey("panFront") ||
         !selectedDocuments.containsKey("panBack")) {
-      SnackBars.errorSnackBar(content: "Please upload all required KYC documents");
+      SnackBars.errorSnackBar(
+        content: "Please upload all required KYC documents",
+      );
       return false;
     }
 
@@ -105,10 +140,18 @@ class AddKycController extends GetxController {
 
   Map<String, String> _buildFiles() {
     final files = <String, String>{};
-    if (selectedDocuments.containsKey("aadhaarFront")) files["aadhaar_front"] = selectedDocuments["aadhaarFront"]!.path!;
-    if (selectedDocuments.containsKey("aadhaarBack")) files["aadhaar_back"] = selectedDocuments["aadhaarBack"]!.path!;
-    if (selectedDocuments.containsKey("panFront")) files["pan_front"] = selectedDocuments["panFront"]!.path!;
-    if (selectedDocuments.containsKey("panBack")) files["pan_back"] = selectedDocuments["panBack"]!.path!;
+    if (selectedDocuments.containsKey("aadhaarFront")) {
+      files["aadhaar_front"] = selectedDocuments["aadhaarFront"]!.path!;
+    }
+    if (selectedDocuments.containsKey("aadhaarBack")) {
+      files["aadhaar_back"] = selectedDocuments["aadhaarBack"]!.path!;
+    }
+    if (selectedDocuments.containsKey("panFront")) {
+      files["pan_front"] = selectedDocuments["panFront"]!.path!;
+    }
+    if (selectedDocuments.containsKey("panBack")) {
+      files["pan_back"] = selectedDocuments["panBack"]!.path!;
+    }
     return files;
   }
 
@@ -121,7 +164,10 @@ class AddKycController extends GetxController {
       final files = _buildFiles().isNotEmpty ? _buildFiles() : null;
 
       if (kycId.value != null) {
-        final response = await kycService.updateProduct(fields: fields, files: files);
+        final response = await kycService.updateProduct(
+          fields: fields,
+          files: files,
+        );
         if (response.success) {
           _setControllers(response.data);
           Get.back(result: response.data);
@@ -130,7 +176,10 @@ class AddKycController extends GetxController {
           SnackBars.errorSnackBar(content: response.message);
         }
       } else {
-        final response = await kycService.connectorCreateProduct(fields: fields, files: files);
+        final response = await kycService.connectorCreateProduct(
+          fields: fields,
+          files: files,
+        );
         if (response.success) {
           final commonController = Get.find<CommonController>();
 
@@ -138,14 +187,17 @@ class AddKycController extends GetxController {
           _setControllers(response.data);
           // Get.back(result: response.data);
           // if (commonController.hasProfileComplete.value == false) {
-            commonController.hasProfileComplete.value = true;
+          commonController.hasProfileComplete.value = true;
           Get.offAll(
-                () => SuccessScreen(
+            () => SuccessScreen(
               title: "Success!",
               header: "Thanks for Connecting !",
               onTap: () {
-                Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
-
+                if (myPref.getRole() == "merchant_partner") {
+                  Get.offAllNamed(Routes.MAIN);
+                } else {
+                  Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
+                }
               },
             ),
           );
@@ -154,7 +206,6 @@ class AddKycController extends GetxController {
           //   Get.back();
           // }
           // SnackBars.successSnackBar(content: "KYC Created Successfully");
-
         } else {
           SnackBars.errorSnackBar(content: response.message);
         }
@@ -170,9 +221,33 @@ class AddKycController extends GetxController {
     aadhaarController.text = data.aadhaarNumber;
     panController.text = data.panNumber;
 
-    if (data.aadhaarFront != null) selectedDocuments['aadhaarFront'] = PlatformFile(name: 'aadhaar_front', path: data.aadhaarFront, size: 5);
-    if (data.aadhaarBack != null) selectedDocuments['aadhaarBack'] = PlatformFile(name: 'aadhaar_back', path: data.aadhaarBack, size: 5);
-    if (data.panFront != null) selectedDocuments['panFront'] = PlatformFile(name: 'pan_front', path: data.panFront, size: 5);
-    if (data.panBack != null) selectedDocuments['panBack'] = PlatformFile(name: 'pan_back', path: data.panBack, size: 5);
+    if (data.aadhaarFront != null) {
+      selectedDocuments['aadhaarFront'] = PlatformFile(
+        name: 'aadhaar_front',
+        path: data.aadhaarFront,
+        size: 5,
+      );
+    }
+    if (data.aadhaarBack != null) {
+      selectedDocuments['aadhaarBack'] = PlatformFile(
+        name: 'aadhaar_back',
+        path: data.aadhaarBack,
+        size: 5,
+      );
+    }
+    if (data.panFront != null) {
+      selectedDocuments['panFront'] = PlatformFile(
+        name: 'pan_front',
+        path: data.panFront,
+        size: 5,
+      );
+    }
+    if (data.panBack != null) {
+      selectedDocuments['panBack'] = PlatformFile(
+        name: 'pan_back',
+        path: data.panBack,
+        size: 5,
+      );
+    }
   }
 }

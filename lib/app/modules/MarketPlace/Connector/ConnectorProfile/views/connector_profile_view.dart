@@ -14,7 +14,6 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: CommonAppBar(isCenter: false, title: Text("Profile".toUpperCase())),
-
       body: Padding(
         padding: EdgeInsets.zero,
         child: Column(
@@ -22,7 +21,6 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
             SizedBox(height: 2.h),
             _buildProfileBanner(),
             SizedBox(height: 2.h),
-
             Expanded(
               child: Column(
                 children: [

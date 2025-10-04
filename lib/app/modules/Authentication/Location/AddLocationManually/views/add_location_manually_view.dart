@@ -46,28 +46,30 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Obx(
               () => controller.locationAdded.value
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          Asset.locationComplete,
-                        ).paddingSymmetric(horizontal: 20),
-                        SizedBox(height: 2.h),
-                        Text(
-                          "Location Connected!",
-                          style: MyTexts.bold20.copyWith(
-                            color: MyColors.textFieldBackground,
+                  ? Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            Asset.locationComplete,
+                          ).paddingSymmetric(horizontal: 20),
+                          SizedBox(height: 2.h),
+                          Text(
+                            "Location Connected!",
+                            style: MyTexts.bold20.copyWith(
+                              color: MyColors.textFieldBackground,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 1.h),
-                        Text(
-                          "Your location is successfully connected.",
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.grey1,
+                          SizedBox(height: 1.h),
+                          Text(
+                            "Your location is successfully connected.",
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.grey1,
+                            ),
                           ),
-                        ),
-                      ],
-                    )
+                        ],
+                      ),
+                  )
                   : SingleChildScrollView(
                       // ✅ scroll instead of overflow
                       child: Column(
@@ -284,7 +286,7 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                                                       ),
                                                       const SizedBox(width: 8),
                                                       Text(
-                                                        'Use same address for ${controller.selectedIndex.value == 0 ? 'office' : 'factory'}',
+                                                        'Use same address for ${controller.selectedIndex.value == 1 ? 'office' : 'factory'}',
                                                         style: MyTexts.medium14,
                                                       ),
                                                     ],

@@ -11,28 +11,21 @@ class SplashController extends GetxController {
   }
 
   Future<void> _checkInternetAndNavigate() async {
-    // Check internet connectivity first
     final connectivityResult = await Connectivity().checkConnectivity();
 
     if (connectivityResult.contains(ConnectivityResult.none)) {
-      // No internet connection
       _showNoInternetDialog();
       return;
     }
-
-    // Internet available, proceed with token check
     _checkTokenAndNavigate();
   }
 
   void _checkTokenAndNavigate() {
-    // Check if user has a valid token
     final savedToken = myPref.getToken();
 
     if (savedToken.isNotEmpty) {
-      // Token exists, navigate directly to Home screen
       _navigateToHome();
     } else {
-      // No token, show splash screen then navigate to login
       _startSplashTimer();
     }
   }
@@ -41,7 +34,9 @@ class SplashController extends GetxController {
     Get.dialog(
       AlertDialog(
         title: const Text('No Internet Connection'),
-        content: const Text('Please check your internet connection and try again.'),
+        content: const Text(
+          'Please check your internet connection and try again.',
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -57,14 +52,23 @@ class SplashController extends GetxController {
   }
 
   void _navigateToHome() {
-    if (Device.screenType == ScreenType.mobile) {
-      // Show splash for a brief moment even with token
+    // if (Device.screenType == ScreenType.mobile) {
+    //   // Show splash for a brief moment even with token
       Future.delayed(const Duration(seconds: 3), () {
-        Get.offAllNamed(Routes.MAIN);
+        print(myPref.role.val);
+        if (myPref.role.val == "merchant_partner") {
+          Get.offAllNamed(Routes.MAIN);
+        } else if (myPref.role.val == "merchant_connector") {
+          Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
+        }
+        else{
+          Get.offAllNamed(Routes.LOGIN);
+
+        }
       });
-    } else {
-      Get.offAllNamed(Routes.MAIN);
-    }
+    // } else {
+    //   Get.offAllNamed(Routes.MAIN);
+    // }
   }
 
   void _startSplashTimer() {

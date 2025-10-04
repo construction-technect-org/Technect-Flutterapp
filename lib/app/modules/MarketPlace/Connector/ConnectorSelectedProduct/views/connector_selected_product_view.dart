@@ -1,677 +1,170 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/components/connector_category_card.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/components/connector_product_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 
 class ConnectorSelectedProductView extends StatelessWidget {
-  final ConnectorSelectedProductController controller = Get.put(
-    ConnectorSelectedProductController(),
-  );
-  final CommonController commonController = Get.find();
-  final List<Map<String, String>> items = [
-    {
-      "title": "Main Category",
-      "image": Asset.Product, // replace with your asset
-      "label": "Construction Materials",
-    },
-    {"title": "Category", "image": Asset.Product, "label": "Fine Aggregate"},
-    {"title": "Sub-Category", "image": Asset.Product, "label": "Sand"},
-    {"title": "Product", "image": Asset.Product, "label": "Manufacture Sand"},
-  ];
+   ConnectorSelectedProductView({super.key});
+
+  final controller = Get.put<ConnectorSelectedProductController>(ConnectorSelectedProductController());
   @override
   Widget build(BuildContext context) {
-    return LoaderWrapper(
-      isLoading: controller.isLoading,
-      child: Scaffold(
-        backgroundColor: MyColors.white,
-        body: SafeArea(
-          child: Column(
-            children: [
-              _buildAppBar(),
-              Obx(
-                () => controller.currentPage.value == 0
-                    ? _buildSearchBar()
-                    : const SizedBox.shrink(),
-              ),
-              Expanded(
-                child: Obx(() {
-                  bool isPageSwipeEnabled;
-
-                  switch (controller.currentPage.value) {
-                    case 0:
-                      isPageSwipeEnabled = controller.selectedSiteIndex.value != -1;
-                    case 1:
-                      isPageSwipeEnabled =
-                          controller.selectedMainCategoryIndex.value != -1;
-                    case 2:
-                      isPageSwipeEnabled = controller.selectedProductIndex.value != -1;
-                    default:
-                      isPageSwipeEnabled = false;
-                  }
-
-                  return PageView.builder(
-                    controller: controller.pageController,
-                    physics: isPageSwipeEnabled
-                        ? const BouncingScrollPhysics()
-                        : const NeverScrollableScrollPhysics(),
-                    itemCount: 3,
-                    onPageChanged: (index) {
-                      controller.currentPage.value = index;
-                    },
-                    itemBuilder: (context, index) {
-                      if (index == 0) return _locationContent();
-                      if (index == 1) return _productDetailsContent();
-                      return _subCategoryContent();
-                    },
-                  );
-                }),
-              ),
-            ],
-          ),
-        ),
+    return Scaffold(
+      backgroundColor: MyColors.white,
+      appBar: AppBar(
+        title: const Text("Select Category"),
+        actions: [
+          IconButton(
+            icon: SvgPicture.asset(Asset.filterIcon, width: 20, height: 20),
+            onPressed: () => _openFilterSheet(context),
+          )
+        ],
       ),
-    );
-  }
-
-  Widget _buildAppBar() {
-    return Obx(() {
-      final page = controller.currentPage.value;
-
-      if (page == 2) {
-        return AppBar(
-          forceMaterialTransparency: true,
-          automaticallyImplyLeading: false,
-          backgroundColor: MyColors.white,
-          elevation: 0,
-          title: Row(
-            children: [
-              Image.asset(Asset.profil, height: 40, width: 40),
-              SizedBox(width: 1.h),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome Kirti',
-                    style: MyTexts.medium16.copyWith(
-                      color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                      SizedBox(width: 0.4.h),
-                      Text(
-                        "Sadashiv Peth, Pune",
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.textFieldBackground,
-                          fontFamily: MyTexts.Roboto,
-                        ),
-                      ),
-                      SizedBox(width: 0.4.w),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                        color: Colors.black54,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const Spacer(),
-              _iconWithBadge(Asset.notifications),
-              SizedBox(width: 0.8.h),
-              _iconWithBadge(Asset.warning),
-            ],
+      body: Obx(() {
+        return GridView.builder(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
           ),
-        );
-      }
-      // For other pages, keep your original back button / title AppBar
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: Row(
-          children: [
-            InkWell(
+          itemCount: controller.mainCategories.length,
+          itemBuilder: (context, index) {
+            final item = controller.mainCategories[index];
+            return GestureDetector(
               onTap: () {
-                if (page > 0) {
-                  controller.goToPage(page - 1);
-                } else {
-                  Get.back();
-                }
+                controller.selectMainCategory(index);
+                Get.to(() => ConnectorConfirmCategoryView(
+                  selectedIndex: index,
+                  categories: controller.mainCategories,
+                ));
               },
-              borderRadius: BorderRadius.circular(50),
-              child: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              page == 0 ? "PRODUCT DETAILS" : "SELECT YOUR PRODUCT",
-              style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-            ),
-            const Spacer(),
-            if (page == 0) ...[
-              _iconWithBadge(Asset.notifications),
-              SizedBox(width: 0.8.h),
-              _iconWithBadge(Asset.warning),
-            ],
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
-      child: CommonTextField(
-        onChange: (value) {},
-        borderRadius: 22,
-        hintText: 'Search',
-        suffixIcon: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
-        prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
-      ),
-    );
-  }
-
-  Widget _iconWithBadge(String asset) {
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        border: Border.all(color: MyColors.hexGray92),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          SvgPicture.asset(asset, width: 28, height: 28),
-          Positioned(
-            right: 0,
-            top: 3,
-            child: Container(
-              width: 6.19,
-              height: 6.19,
-              decoration: const BoxDecoration(
-                color: MyColors.red,
-                shape: BoxShape.circle,
+              child: ConnectorCategoryCard(
+                category: CategoryItem(item.name, Asset.Product),
               ),
-            ),
-          ),
-        ],
-      ),
+            );
+          },
+        );
+      }),
     );
   }
 
-  Widget _locationContent() {
-    return Obx(() {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "Select a Location",
-              style: MyTexts.medium20.copyWith(color: MyColors.fontBlack),
-            ),
-          ),
-          SizedBox(height: 2.h),
-
-          /// Delivery Radius
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+  void _openFilterSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Obx(() {
+          return Padding(
+            padding: const EdgeInsets.all(16),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Within Radius ",
-                      style: MyTexts.regular16.copyWith(
-                        color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: MyColors.textFieldBorder),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "5 KM",
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.fontBlack,
-                              fontFamily: MyTexts.Roboto,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.keyboard_arrow_up,
-                                size: 18,
-                                color: Colors.black,
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_down,
-                                size: 18,
-                                color: Colors.black,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                Text("Select Delivery Radius", style: MyTexts.medium16),
+                Slider(
+                  min: 1,
+                  max: 50,
+                  divisions: 10,
+                  value: controller.mapZoom.value,
+                  label: "${controller.mapZoom.value.toInt()} KM",
+                  onChanged: (val) => controller.mapZoom.value = val,
                 ),
-                SizedBox(height: 1.h),
-                const Divider(color: MyColors.brightGray1),
+                ElevatedButton(
+                  onPressed: () => Get.back(),
+                  child: const Text("Apply"),
+                ),
               ],
             ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
-            child: _bottomOptions(),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "Recent Location",
-              style: MyTexts.regular16.copyWith(color: MyColors.darkGrayishRed),
-            ),
-          ),
-          SizedBox(height: 2.h),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ListView.builder(
-                itemCount: controller.sites.length,
-                itemBuilder: (context, index) {
-                  final isSelected = controller.selectedSiteIndex.value == index;
-                  return GestureDetector(
-                    onTap: () {
-                      controller.selectSite(index);
-                      controller.goToPage(1);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: isSelected ? MyColors.primary : MyColors.grayD4,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isSelected ? MyColors.primary : MyColors.grayD4,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              'Site ${index + 1}',
-                              style: MyTexts.regular14.copyWith(
-                                color: isSelected ? MyColors.white : MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 0.8.h),
-                          Text(
-                            controller.sites[index],
-                            style: MyTexts.regular14.copyWith(
-                              color: MyColors.fontBlack,
-                              fontFamily: MyTexts.Roboto,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      );
-    });
-  }
-
-  Widget _bottomOptions() {
-    return Container(
-      decoration: BoxDecoration(
-        color: MyColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: MyColors.grayD4),
-      ),
-      child: Column(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.add, color: MyColors.primary, size: 16),
-            title: Text(
-              "Add Location Manually",
-              style: MyTexts.regular16.copyWith(color: MyColors.fontBlack),
-            ),
-            onTap: () => Get.toNamed(Routes.CONNECTOR_ADD_LOCATION),
-          ),
-          Divider(height: 1, color: MyColors.gray5D.withAlpha(30)),
-          ListTile(
-            leading: const Icon(Icons.my_location, color: MyColors.primary, size: 16),
-            title: Text(
-              "Use your Current Location",
-              style: MyTexts.regular16.copyWith(color: MyColors.fontBlack),
-            ),
-          ),
-        ],
-      ),
+          );
+        });
+      },
     );
   }
+}
 
-  Widget _productDetailsContent() {
-    return Obx(() {
-      return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Main Category
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Text(
-                "Select Main Category",
-                style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-              ),
+
+class ConnectorConfirmCategoryView extends StatelessWidget {
+  final int selectedIndex;
+  final List<ConnectorCategory> categories;
+
+  const ConnectorConfirmCategoryView({
+    super.key,
+    required this.selectedIndex,
+    required this.categories,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedCategory = categories[selectedIndex];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Confirm Category"),
+      ),
+      body: Column(
+        children: [
+          // Selected category highlighted
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: ConnectorCategoryCard(
+              category: CategoryItem(selectedCategory.name, Asset.Product),
+              isSelected: true,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: List.generate(controller.mainCategories.length, (index) {
-                  final item = controller.mainCategories[index];
-                  final isSelected = controller.selectedMainCategoryIndex.value == index;
-                  return GestureDetector(
-                    onTap: () => controller.selectMainCategory(index),
-                    child: Container(
-                      width: 249,
-                      height: 49,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: isSelected ? MyColors.yellow : MyColors.grayF2,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSelected ? MyColors.primary : MyColors.grayD4,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.asset(
-                              Asset.constuctionMaterial,
-                              width: 40,
-                              height: 40,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(width: 2.w),
-                          Expanded(
-                            child: Text(
-                              item.name,
-                              style: MyTexts.medium16.copyWith(
-                                fontFamily: MyTexts.Roboto,
-                                color: isSelected ? MyColors.primary : MyColors.fontBlack,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ),
+          ),
+          const Divider(),
 
-            // Sub Category
-            if (controller.subCategories.isNotEmpty) ...[
-              SizedBox(height: 1.h),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-                child: Text(
-                  "Select Sub-Category",
-                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.subCategories.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemBuilder: (context, index) {
-                    final isSelected = controller.selectedSubCategoryIndex.value == index;
-                    return GestureDetector(
-                      onTap: () => controller.selectSubCategory(index),
-                      child: ConnectorCategoryCard(
-                        category: CategoryItem(
-                          controller.subCategories[index].name,
-                          Asset.Product,
-                        ),
-                        isSelected: isSelected,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-
-            // Category Product (NEW)
-            if (controller.categoryProducts.isNotEmpty) ...[
-              SizedBox(height: 1.h),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-                child: Text(
-                  "Select  Product",
-                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.categoryProducts.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemBuilder: (context, index) {
-                    final isSelected =
-                        controller.selectedProductCategoryIndex.value == index;
-                    return GestureDetector(
-                      onTap: () => controller.selectProductItem(index),
-                      child: ConnectorCategoryCard(
-                        category: CategoryItem(
-                          controller.categoryProducts[index].name,
-                          Asset.Product,
-                        ),
-                        isSelected: isSelected,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _subCategoryContent() {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Search & Filters
-            Row(
-              children: [
-                _buildButton(svgAsset: Asset.searchIcon, label: "Search Product"),
-                SizedBox(width: 2.w),
-                _buildButton(
-                  svgAsset: Asset.connectorLocation,
-                  label: "Location",
-                  trailing: Icons.arrow_drop_down,
-                ),
-                SizedBox(width: 2.w),
-                _buildButton(svgAsset: Asset.filterIcon, label: "Specification"),
-              ],
-            ),
-            SizedBox(height: 2.h),
-
-            // Grid of items
-            GridView.builder(
-              shrinkWrap: true, // Important: allows GridView to take minimal height
-              physics: const NeverScrollableScrollPhysics(), // Disable GridView scrolling
+          // Other categories
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                mainAxisSpacing: 12,
+                crossAxisCount: 3,
                 crossAxisSpacing: 12,
-                childAspectRatio: 0.75,
+                mainAxisSpacing: 12,
               ),
-              itemCount: items.length,
+              itemCount: categories.length,
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Text(
-                      items[index]["title"]!,
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                    SizedBox(height: 0.5.h),
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Image.asset(
-                            items[index]["image"]!,
-                            height: 54,
-                            width: 63,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Positioned(
-                          top: -5,
-                          right: -5,
-                          child: Container(
-                            height: 20,
-                            width: 20,
-                            decoration: BoxDecoration(
-                              color: MyColors.primary,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.white),
-                            ),
-                            child: const Icon(Icons.check, size: 14, color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 0.9.h),
-                    Text(
-                      items[index]["label"]!,
-                      textAlign: TextAlign.center,
-                      style: MyTexts.regular12.copyWith(
-                        color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                  ],
+                if (index == selectedIndex) return const SizedBox.shrink();
+                final item = categories[index];
+                return ConnectorCategoryCard(
+                  category: CategoryItem(item.name, Asset.Product),
                 );
               },
             ),
+          ),
 
-            SizedBox(height: 2.h),
-            // List of products
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0),
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 12), // space below each card
-                  child: ConnectorProductCard(
-                    statusText: 'Active',
-                    statusColor: MyColors.green,
-                    productName: 'Premium M Sand',
-                    companyName: "M M manufacturers",
-                    brandName: 'SV Manufacturers',
-                    locationText: 'Vasai Virar, Mahab Chowpatty',
-                    pricePerUnit: 1234,
-                    stockCount: 10,
-                    imageAsset: Asset.Product,
-                  ),
-                );
+          // Select button
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: () {
+                Get.to(() => ConnectorProductView(
+                  category: selectedCategory,
+                ));
               },
+              child: const Text("Select"),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-Widget _buildButton({
-  String? imageAsset, // For PNG/JPG
-  String? svgAsset, // For SVG
-  required String label,
-  IconData? trailing,
-}) {
-  return Container(
-    width: 110,
-    height: 30,
-    decoration: BoxDecoration(
-      color: MyColors.white,
-      borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: MyColors.greyFour),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (imageAsset != null)
-          Image.asset(imageAsset, width: 10, height: 10, fit: BoxFit.contain),
-        if (svgAsset != null) SvgPicture.asset(svgAsset, width: 10, height: 10),
-        if (imageAsset != null || svgAsset != null)
-          const SizedBox(width: 8), // 5 pixels spacing after the image
-        Text(label, style: MyTexts.medium12.copyWith(color: MyColors.fontBlack)),
-        if (trailing != null) ...[
-          const SizedBox(width: 20),
-          Icon(Icons.keyboard_arrow_down, size: 16, color: Colors.black),
-        ],
-      ],
-    ),
-  );
+class ConnectorProductView extends StatelessWidget {
+  final ConnectorCategory category;
+
+  const ConnectorProductView({super.key, required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(category.name)),
+      body: Center(
+        child: Text("Products of ${category.name} will be shown here"),
+      ),
+    );
+  }
 }

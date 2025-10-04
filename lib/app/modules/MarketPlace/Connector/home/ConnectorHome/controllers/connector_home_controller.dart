@@ -2,13 +2,14 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart' hide Statisctics;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
 
-class HomeController extends GetxController {
+class ConnectorHomeController extends GetxController {
+  RxInt selectedIndex = 0.obs;
+  final isLoading = false.obs;
+
   CommonController commonController = Get.find();
 
   final List<Map<String, dynamic>> items = [
@@ -32,12 +33,8 @@ class HomeController extends GetxController {
     {"title": "Construction", "icon": Asset.constructionTaxi},
   ];
 
-  RxInt selectedIndex = 0.obs;
-
   HomeService homeService = HomeService();
-  GetAllRoleService roleService = GetAllRoleService();
 
-  final isLoading = false.obs;
   final hasAddress = false.obs;
   final isDefaultOffice = true.obs;
 
@@ -52,9 +49,8 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     _initializeHomeData();
-    _loadTeamFromStorage();
     refreshDashboardData();
-    isDefaultOffice.value=myPref.getDefaultAdd();
+    isDefaultOffice.value = myPref.getDefaultAdd();
   }
 
   @override
@@ -71,19 +67,22 @@ class HomeController extends GetxController {
     await fetchProfileData();
   }
 
+  bool _hasCachedAddressData() {
+    final cachedData = myPref.getAddressData();
+    return cachedData != null && cachedData.isNotEmpty;
+  }
+
   void _checkAddressAndProfileCompletion() {
     _checkProfileCompletion();
   }
 
   void _checkProfileCompletion() {
-    final merchantProfile = profileData.value.data?.merchantProfile;
+    final connectorProfile = profileData.value.data?.connectorProfile;
 
     final completionPercentage =
-        merchantProfile?.profileCompletionPercentage ??
+        connectorProfile?.profileCompletionPercentage ?? 0;
 
-        0;
-
-    if (merchantProfile != null) {
+    if (connectorProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
     }
 
@@ -153,19 +152,17 @@ class HomeController extends GetxController {
   }
 
   void _handleProfileDialogTap() {
-    if((profileData.value.data?.user?.roleName??"").toLowerCase()=="House-Owner".toLowerCase()){
+    if ((profileData.value.data?.user?.roleName ?? "").toLowerCase() ==
+        "House-Owner".toLowerCase()) {
       Get.toNamed(Routes.CONNECTOR_PROFILE);
-    }
-    else{
+    } else {
       Get.toNamed(Routes.PROFILE);
-
     }
   }
 
   void resetProfileDialogFlag() {
     _profileDialogShown = false;
   }
-
 
   void onReturnFromEditProfile() {
     if (!commonController.hasProfileComplete.value) {
@@ -217,14 +214,24 @@ class HomeController extends GetxController {
     }
   }
 
-
   RxString getCurrentAddress() {
     if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
-      final int index = addressData.data?.addresses?.indexWhere((e)=>e.addressType=="office") ??0;
-      final int factoryIndex = addressData.data?.addresses?.indexWhere((e)=>e.addressType=="factory")??0;
-      final address = addressData.data!.addresses?[isDefaultOffice.value==true?index:factoryIndex];
+      final int index =
+          addressData.data?.addresses?.indexWhere(
+            (e) => e.addressType == "office",
+          ) ??
+          0;
+      final int factoryIndex =
+          addressData.data?.addresses?.indexWhere(
+            (e) => e.addressType == "factory",
+          ) ??
+          0;
+      final address = addressData
+          .data!
+          .addresses?[isDefaultOffice.value == true ? index : factoryIndex];
 
-      return '${address?.addressLine1}, ${address?.city}, ${address?.state} , ${address?.pinCode}'.obs;
+      return '${address?.addressLine1}, ${address?.city}, ${address?.state} , ${address?.pinCode}'
+          .obs;
     }
     return 'No address found'.obs;
   }
@@ -261,54 +268,4 @@ class HomeController extends GetxController {
   Future<void> refreshDashboardData() async {
     await fetchDashboardData();
   }
-
-  Future<void> _loadTeamFromStorage() async {
-    final cachedTeamModel = myPref.getTeamModelData();
-    if (cachedTeamModel != null &&
-        cachedTeamModel.data != null &&
-        cachedTeamModel.data!.isNotEmpty) {
-      teamList.assignAll(cachedTeamModel.data!);
-      if (cachedTeamModel.statistics != null) {
-        statistics.value = cachedTeamModel.statistics!;
-      }
-    } else {
-      await fetchTeamList();
-    }
-  }
-
-  Rx<Statistics> statistics = Statistics().obs;
-
-  Future<void> fetchTeamList() async {
-    try {
-      isLoading.value = true;
-      final TeamListModel? result = await roleService.fetchAllTeam();
-      if (result?.success == true) {
-        teamList.clear();
-        teamList.addAll(result?.data ?? []);
-
-        if (result?.statistics != null) {
-          statistics.value = result!.statistics!;
-        }
-        // Store the complete model
-        myPref.setTeamModelData(result!);
-      }
-    } catch (e) {
-      // Fallback to cached data if API fails
-      final cachedTeamModel = myPref.getTeamModelData();
-      if (cachedTeamModel != null && cachedTeamModel.data != null) {
-        teamList.assignAll(cachedTeamModel.data!);
-        if (cachedTeamModel.statistics != null) {
-          statistics.value = cachedTeamModel.statistics!;
-        }
-      }
-      Get.printError(info: 'Error fetching team list: $e');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> refreshTeamList() async {
-    await fetchTeamList();
-  }
-
 }

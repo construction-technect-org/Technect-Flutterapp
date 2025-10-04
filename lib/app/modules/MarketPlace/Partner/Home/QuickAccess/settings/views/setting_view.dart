@@ -116,8 +116,8 @@ class SettingView extends StatelessWidget {
                     ),
                   ),
                   const Gap(5),
-                  const Divider(),
-                  const Gap(3),
+                  // const Divider(),
+                  // const Gap(3),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -361,7 +361,7 @@ class AccountActionScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     PinCodeTextField(
                       appContext: context,
-                      length: 6,
+                      length: 4,
                       controller: controller.otpController,
                       onChanged: (value) =>
                           controller.otpController.text = value,

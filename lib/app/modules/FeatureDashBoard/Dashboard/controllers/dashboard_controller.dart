@@ -5,10 +5,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 
 class DashboardController extends GetxController {
   RxBool isLoading = false.obs;
-  final TextEditingController searchController = TextEditingController();
 
   final features = [
-    {"title": "Marketplacee", "icon": Asset.marketplaceIcon},
+    {"title": "Marketplace", "icon": Asset.marketplaceIcon},
     {"title": "CRM", "icon": Asset.crmIcon},
     {"title": "ERP", "icon": Asset.erpIcon},
     {"title": "Projects", "icon": Asset.projectManagementIcon},
@@ -19,26 +18,12 @@ class DashboardController extends GetxController {
   ];
 
   void onFeatureTap(String featureName) {
-    // Navigate based on feature
-    if (featureName == "Marketplacee") {
+    if (featureName == "Marketplace") {
       Get.toNamed(Routes.MARKET_PLACE);
     }
   }
 
-  // RxInt selectedIndex = 0.obs;
-  // ignore: type_annotate_public_apis
-  var selectedIndex = (-1).obs;
-
-  //   Future<bool> firstPartValidation() async {
-  //     bool isRequired = false;
-  //     if (selectedIndex==null) {
-  //       SnackBars.errorSnackBar(content: 'Service image is required');
-  //       isRequired = false;
-  //     } else {
-  //       isRequired = true;
-  //     }
-  //     return isRequired;
-  //   }
+  RxInt selectedIndex = (-1).obs;
   HomeService homeService = HomeService();
 
   Rx<ProfileModel> profileData = ProfileModel().obs;
@@ -60,8 +45,6 @@ class DashboardController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  //address
   Rx<AddressModel> addressData = AddressModel().obs;
 
   RxString address = "".obs;
@@ -87,6 +70,9 @@ class DashboardController extends GetxController {
         myPref.clearAddressData();
       }
     } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     } finally {
       getCurrentAddress();
     }

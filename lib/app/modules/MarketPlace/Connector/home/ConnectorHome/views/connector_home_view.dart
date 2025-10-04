@@ -1,8 +1,7 @@
-import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorHome/components/connector_home_components.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorHome/controllers/connector_home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/components/connector_home_components.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
 import 'package:gap/gap.dart';
 
 class ConnectorHomeView extends StatelessWidget {
@@ -15,37 +14,37 @@ class ConnectorHomeView extends StatelessWidget {
       isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar: CommonAppBar(
-          leadingWidth: 165,
-          leading: Container(
-            padding: const EdgeInsets.all(7),
-            height: 49,
-            margin: const EdgeInsets.only(left: 13, top: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: MyColors.yellow,
-              border: Border.all(color: MyColors.black),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.MAIN);
-              },
-              child: Row(
-                children: [
-                  SvgPicture.asset(Asset.connectorSvg, width: 24, height: 24),
-                  const Gap(8),
-                  Text(
-                    "Join As Partner",
-                    style: MyTexts.regular14.copyWith(
-                      color: Colors.black,
-                      fontFamily: MyTexts.Roboto,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        // appBar: CommonAppBar(
+        //   leadingWidth: 190,
+        //   leading: Container(
+        //     padding: const EdgeInsets.all(7),
+        //     height: 49,
+        //     margin: const EdgeInsets.only(left: 13, top: 10),
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(12),
+        //       color: MyColors.yellow,
+        //       border: Border.all(color: MyColors.black),
+        //     ),
+        //     child: GestureDetector(
+        //       onTap: () {
+        //         Get.toNamed(Routes.MAIN);
+        //       },
+        //       child: Row(
+        //         children: [
+        //           SvgPicture.asset(Asset.connectorSvg, width: 24, height: 24),
+        //           const Gap(8),
+        //           Text(
+        //             "Join As Partner",
+        //             style: MyTexts.regular14.copyWith(
+        //               color: Colors.black,
+        //               fontFamily: MyTexts.Roboto,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(

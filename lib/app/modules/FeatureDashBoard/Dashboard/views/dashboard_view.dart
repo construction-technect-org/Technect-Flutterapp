@@ -1,169 +1,84 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/controllers/dashboard_controller.dart';
-import 'package:gap/gap.dart';
 
 class DashboardView extends GetView<DashboardController> {
-  // final HomeController homeController = Get.put(HomeController());
-
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
       isLoading: controller.isLoading,
-      child: Scaffold(
-        appBar: AppBar(
-          forceMaterialTransparency: true,
-          automaticallyImplyLeading: false,
-          backgroundColor: MyColors.white,
-          elevation: 0,
-          title: Row(
-            children: [
-              Image.asset(Asset.profil, height: 40, width: 40),
-              SizedBox(width: 1.h),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Obx(
-                      () => Text(
-                        'Welcome ${controller.profileData.value.data?.user?.firstName}!',
-                        style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(Asset.location, width: 9, height: 12.22),
-                        SizedBox(width: 0.4.h),
-                        Expanded(
-                          child: Obx(
-                            () => Text(
-                              controller.address.value,
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.textFieldBackground,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+      child: GestureDetector(
+        onTap: hideKeyboard,
+        child: Scaffold(
+          appBar: AppBar(
+            forceMaterialTransparency: true,
+            automaticallyImplyLeading: false,
+            backgroundColor: MyColors.white,
+            elevation: 0,
+            title: Row(
+              children: [
+                Image.asset(Asset.profil, height: 40, width: 40),
+                SizedBox(width: 1.h),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Obx(
+                        () => Text(
+                          'Welcome ${controller.profileData.value.data?.user?.firstName}!',
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.fontBlack,
                           ),
                         ),
-                        const SizedBox(width: 4),
-                        const Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 16,
-                          color: Colors.black54,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Gap(10),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  border: Border.all(color: MyColors.hexGray92),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Stack(
-                  clipBehavior: Clip.none, // 👈 allows badge to overflow
-                  children: [
-                    SvgPicture.asset(
-                      Asset.notifications,
-                      // or 'assets/images/notifications.svg'
-                      width: 20,
-                      height: 20,
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 3,
-                      child: Container(
-                        width: 6.19,
-                        height: 6.19,
-                        decoration: const BoxDecoration(
-                          color: MyColors.red,
-                          shape: BoxShape.circle,
-                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: 0.8.h),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  border: Border.all(color: MyColors.hexGray92),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Stack(
-                  clipBehavior: Clip.none, // 👈 allows badge to overflow
-                  children: [
-                    SvgPicture.asset(
-                      Asset.warning, // or 'assets/images/notifications.svg'
-                      width: 20,
-                      height: 20,
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 3,
-                      child: Container(
-                        width: 6.19,
-                        height: 6.19,
-                        decoration: const BoxDecoration(
-                          color: MyColors.red,
-                          shape: BoxShape.circle,
-                        ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            Asset.location,
+                            width: 9,
+                            height: 12.22,
+                          ),
+                          SizedBox(width: 0.4.h),
+                          Expanded(
+                            child: Obx(() {
+                              return RichText(
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                text: TextSpan(
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.textFieldBackground,
+                                  ),
+                                  children: [
+                                    TextSpan(text: controller.address.value),
+                                    const WidgetSpan(
+                                      alignment: PlaceholderAlignment.middle,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 4),
+                                        child: Icon(
+                                          Icons.keyboard_arrow_down,
+                                          size: 16,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        backgroundColor: MyColors.white,
-        body: SafeArea(
-          child: Column(
+          backgroundColor: MyColors.white,
+          body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: MyColors.white,
-                    borderRadius: BorderRadius.circular(22.5),
-                    border: Border.all(color: MyColors.grayD4),
-                  ),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 18, right: 8),
-                        child: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
-                      ),
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 36,
-                        minHeight: 36,
-                      ),
-                      hintText: 'Search',
-                      hintStyle: MyTexts.medium16.copyWith(color: MyColors.darkGray),
-                      filled: true,
-                      fillColor: MyColors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 12,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(22.5),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 1.h),
+              SizedBox(height: 1.2.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
@@ -172,8 +87,6 @@ class DashboardView extends GetView<DashboardController> {
                 ),
               ),
               SizedBox(height: 1.h),
-
-              /// ✅ FIXED GridView
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
 
@@ -185,11 +98,15 @@ class DashboardView extends GetView<DashboardController> {
                   builder: (context, constraints) {
                     // Dynamically calculate item width
                     final double itemWidth =
-                        (constraints.maxWidth - (3 * 10)) / 3; // 4 per row with spacing
+                        (constraints.maxWidth - (3 * 10)) /
+                        3; // 4 per row with spacing
                     final double itemHeight = itemWidth + 10; // for icon + text
 
                     return GridView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 20,
+                      ),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: controller.features.length,
@@ -203,14 +120,14 @@ class DashboardView extends GetView<DashboardController> {
                         final item = controller.features[index];
 
                         return Obx(() {
-                          final isSelected = controller.selectedIndex.value == index;
+                          final isSelected =
+                              controller.selectedIndex.value == index;
                           return _buildFeatureCard(
                             controller: controller,
                             isSelected: isSelected,
                             item: item,
                             itemWidth: itemWidth,
                             onTap: () {
-                              // if(isSelected){
                               if (index == 0) {
                                 controller.selectedIndex.value = index;
                               } else {
@@ -218,10 +135,6 @@ class DashboardView extends GetView<DashboardController> {
                                   content: 'This feature will come soon',
                                 );
                               }
-                              // }
-                              // else{
-                              //
-                              // }
                             },
                           );
                         });
@@ -239,40 +152,42 @@ class DashboardView extends GetView<DashboardController> {
                 ),
               ),
               SizedBox(height: 1.h),
-              // ✅ Stats Row
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    Expanded(child: _buildStatCard("Partners", "250", Asset.noOfUsers)),
+                    Expanded(
+                      child: _buildStatCard("Partners", "250", Asset.noOfUsers),
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: _buildStatCard("Connectors", "180", Asset.noOfConectors),
+                      child: _buildStatCard(
+                        "Connectors",
+                        "180",
+                        Asset.noOfConectors,
+                      ),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 1.h),
-              // ✅ World Map
               Expanded(
                 child: Center(child: Image.asset(Asset.worldMap, width: 90.w)),
               ),
-
-              // ✅ Proceed Button
             ],
           ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.only(left: 2.h, right: 2.h, bottom: 2.h),
-          child: RoundedButton(
-            buttonName: 'PROCEED',
-            onTap: () {
-              if (controller.selectedIndex.value == 0) {
-                Get.toNamed(Routes.DASHABORD_MARKET_PLACE);
-              } else {
-                SnackBars.errorSnackBar(content: 'Please select one feature');
-              }
-            },
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.only(left: 2.h, right: 2.h, bottom: 2.h),
+            child: RoundedButton(
+              buttonName: 'PROCEED',
+              onTap: () {
+                if (controller.selectedIndex.value == 0) {
+                  Get.toNamed(Routes.DASHABORD_MARKET_PLACE);
+                } else {
+                  SnackBars.errorSnackBar(content: 'Please select one feature');
+                }
+              },
+            ),
           ),
         ),
       ),
@@ -304,7 +219,10 @@ class DashboardView extends GetView<DashboardController> {
                     style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                   ),
                   const SizedBox(height: 4),
-                  Text(value, style: MyTexts.bold18.copyWith(color: MyColors.primary)),
+                  Text(
+                    value,
+                    style: MyTexts.bold18.copyWith(color: MyColors.primary),
+                  ),
                 ],
               ),
             ],

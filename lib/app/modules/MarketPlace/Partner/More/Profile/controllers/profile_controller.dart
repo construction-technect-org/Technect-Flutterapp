@@ -348,12 +348,17 @@ class ProfileController extends GetxController {
             }
             if (commonController.hasProfileComplete.value == false) {
               commonController.hasProfileComplete.value = true;
+
               Get.offAll(
                 () => SuccessScreen(
                   title: "Success!",
                   header: "Thanks for Connecting !",
                   onTap: () {
-                    Get.offAllNamed(Routes.MAIN);
+                    if (myPref.getRole() == "merchant_partner") {
+                      Get.offAllNamed(Routes.MAIN);
+                    } else {
+                      Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
+                    }
                   },
                 ),
               );
@@ -369,7 +374,11 @@ class ProfileController extends GetxController {
                   title: "Success!",
                   header: "Thanks for Connecting !",
                   onTap: () {
-                    Get.offAllNamed(Routes.MAIN);
+                    if (myPref.getRole() == "merchant_partner") {
+                      Get.offAllNamed(Routes.MAIN);
+                    } else {
+                      Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
+                    }
                   },
                 ),
               );

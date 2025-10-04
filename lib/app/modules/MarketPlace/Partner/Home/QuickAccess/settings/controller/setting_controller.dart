@@ -72,7 +72,7 @@ class SettingController extends GetxController {
       SnackBars.errorSnackBar(content: 'Please enter OTP');
       return;
     }
-    if (otpController.text.length < 6) {
+    if (otpController.text.length < 4) {
       SnackBars.errorSnackBar(content: 'Please enter a valid OTP');
       return;
     }

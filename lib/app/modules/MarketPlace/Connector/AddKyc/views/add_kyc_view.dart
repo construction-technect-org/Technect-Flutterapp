@@ -75,7 +75,7 @@ class _AddKycViewState extends State<AddKycView> {
                 CommonTextField(
                   maxLength: 10,
                   // inputFormatters: [
-                  //   // UpperCaseTextFormatter()
+                  //   UpperCaseTextFormatter()
                   // ],
                   headerText: "PAN Card Number",
                   hintText: "Enter your PAN Card Number",

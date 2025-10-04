@@ -62,7 +62,7 @@ class LoginController extends GetxController {
         password: passwordController.text,
       );
 
-      if (loginResponse.success == true) {
+        if (loginResponse.success == true) {
         if (loginResponse.data?.token != null) {
           myPref.setToken(loginResponse.data?.token ?? '');
         }

@@ -51,8 +51,10 @@ class DashboardMarketPlaceController extends GetxController {
         isLoading.value = false;
 
         if (selectedRole.value.trim().toLowerCase() == "partner") {
+          myPref.setRole("merchant_partner");
           Get.offAllNamed(Routes.MAIN);
         } else {
+          myPref.setRole("merchant_connector");
           Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
         }
       } else {
@@ -62,8 +64,6 @@ class DashboardMarketPlaceController extends GetxController {
       }
     } catch (e) {
       isLoading.value = false;
-
-      // Error is already shown by ApiManager
     } finally {
       isLoading.value = false;
     }

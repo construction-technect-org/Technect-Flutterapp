@@ -18,9 +18,8 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 2.h),
                 Text(
-                  "Select Your Marketplacee",
+                  "Select Your Marketplace",
                   style: MyTexts.medium16.copyWith(
                     color: MyColors.primary,
                     fontFamily: MyTexts.Roboto,
@@ -118,16 +117,19 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                                         role['icon'] ?? '',
                                         selected,
                                         () {
-                                          if (index == 0) {
-                                            controller.selectRole(
-                                              role['title']!,
-                                            );
-                                          } else {
-                                            SnackBars.successSnackBar(
-                                              content:
-                                                  'This feature will come soon',
-                                            );
-                                          }
+                                          controller.selectRole(
+                                            role['title']!,
+                                          );
+                                          // if (index == 0) {
+                                          //   controller.selectRole(
+                                          //     role['title']!,
+                                          //   );
+                                          // } else {
+                                          //   SnackBars.successSnackBar(
+                                          //     content:
+                                          //         'This feature will come soon',
+                                          //   );
+                                          // }
                                         },
                                       );
                                     });
@@ -138,8 +140,6 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                           ],
                         );
                 }),
-
-                // ✅ Proceed Button
               ],
             ),
           ),
