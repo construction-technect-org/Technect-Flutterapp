@@ -62,7 +62,7 @@ class LoginController extends GetxController {
         password: passwordController.text,
       );
 
-        if (loginResponse.success == true) {
+      if (loginResponse.success == true) {
         if (loginResponse.data?.token != null) {
           myPref.setToken(loginResponse.data?.token ?? '');
         }
@@ -71,6 +71,12 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
+        if (loginResponse.data?.user?.marketPlaceRole?.toLowerCase() ==
+            "partner") {
+          myPref.setRole("merchant_partner");
+        } else {
+          myPref.setRole("merchant_connector");
+        }
         if (rememberMe.value) {
           myPref.saveCredentials(
             mobileController.text,
@@ -89,13 +95,16 @@ class LoginController extends GetxController {
               title: "Success!",
               header: "Thanks for Connecting !",
               onTap: () {
-                //Get.to(() => HomeView());
 
-                //  Get.offAllNamed(Routes.MAIN);
                 if ((loginResponse.data?.user?.marketPlace ?? "").isEmpty) {
                   Get.offAllNamed(Routes.DASHBOARD);
                 } else {
-                  Get.offAllNamed(Routes.MAIN);
+                  if (loginResponse.data?.user?.marketPlaceRole?.toLowerCase() ==
+                      "partner") {
+                    Get.offAllNamed(Routes.MAIN);
+                  } else {
+                    Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
+                  }
                 }
               },
             ),

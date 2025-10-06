@@ -12,7 +12,7 @@ CreateProductModel createProductModelFromJson(String str) => CreateProductModel.
 
 String createProductModelToJson(CreateProductModel data) => json.encode(data.toJson());
 
-class CreateProductModel {
+class   CreateProductModel {
   final bool? success;
   final Product? data;
   final String? message;

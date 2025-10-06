@@ -52,11 +52,11 @@ class Data {
   };
 }
 
+
 class Product {
   final int? id;
   final int? merchantProfileId;
   final String? productName;
-  final String? productCode;
   final String? productImage;
   final int? mainCategoryId;
   final int? subCategoryId;
@@ -69,32 +69,29 @@ class Product {
   final String? texture;
   final String? colour;
   final String? size;
-  final String? grainSize;
-  final String? weight;
   final String? price;
   final String? gstPercentage;
   final String? gstAmount;
   final String? termsAndConditions;
-  final bool? isActive;
-  final bool? isFeatured;
-  final bool? outOfStock;
-  final int? sortOrder;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final int? stockQuantity;
-  final String? stockStatus;
-  final String? totalAmount;
-  final int? lowStockThreshold;
-  final String? uoc;
+  final String? createdAt;
+  final String? updatedAt;
   final String? averageRating;
   final int? totalRatings;
   final int? ratingCount;
+  final String? productCode;
+  final String? uoc;
+  final String? totalAmount;
+  final String? productNote;
+  final bool? outOfStock;
+  final bool? isActive;
+  final String? approvalStatus;
   final String? mainCategoryName;
   final String? subCategoryName;
   final String? categoryProductName;
-  final String? filterValues;
-  final String? productNote;
-  final String? outOfStockNote;
+  final int? stockQty;
+
+  /// ✅ FIXED: filter_values now Map type, not String
+  final Map<String, dynamic>? filterValues;
 
   Product({
     this.id,
@@ -103,131 +100,121 @@ class Product {
     this.productImage,
     this.mainCategoryId,
     this.subCategoryId,
-    this.productCode,
     this.categoryProductId,
     this.brand,
     this.uom,
     this.packageType,
     this.packageSize,
     this.shape,
+    this.isActive,
     this.texture,
-    this.grainSize,
-    this.totalAmount,
-    this.outOfStock,
-    this.productNote,
     this.colour,
     this.size,
-    this.weight,
-    this.uoc,
     this.price,
     this.gstPercentage,
-    this.outOfStockNote,
     this.gstAmount,
     this.termsAndConditions,
-    this.isActive,
-    this.isFeatured,
-    this.sortOrder,
     this.createdAt,
     this.updatedAt,
-    this.stockQuantity,
-    this.stockStatus,
-    this.lowStockThreshold,
     this.averageRating,
     this.totalRatings,
     this.ratingCount,
+    this.productCode,
+    this.uoc,
+    this.totalAmount,
+    this.productNote,
+    this.outOfStock,
+    this.approvalStatus,
     this.mainCategoryName,
     this.subCategoryName,
     this.categoryProductName,
+    this.stockQty,
     this.filterValues,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-    id: json["id"],
-    merchantProfileId: json["merchant_profile_id"],
-    productName: json["product_name"],
-    uoc: json["uoc"].toString(),
-    productCode: json["product_code"],
-    productImage: json["product_image"],
-    mainCategoryId: json["main_category_id"],
-    subCategoryId: json["sub_category_id"],
-    categoryProductId: json["category_product_id"],
-    brand: json["brand"],
-    uom: json["uom"],
-    outOfStockNote: json["outofstock_note"],
-    productNote: json["product_note"],
-    totalAmount: json["total_amount"].toString(),
-    packageType: json["package_type"],
-    packageSize: json["package_size"],
-    shape: json["shape"],
-    texture: json["texture"],
-    grainSize: json["grain_size"],
-    colour: json["colour"],
-    size: json["size"],
-    outOfStock: json["outofstock"],
-    weight: json["weight"],
-    price: json["price"],
-    gstPercentage: json["gst_percentage"],
-    gstAmount: json["gst_amount"],
-    termsAndConditions: json["terms_and_conditions"],
-    isActive: json["is_active"],
-    isFeatured: json["is_featured"],
-    sortOrder: json["sort_order"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    stockQuantity: json["stock_qty"],
-    stockStatus: json["stock_status"],
-    lowStockThreshold: json["low_stock_threshold"],
-    averageRating: json["average_rating"],
-    totalRatings: json["total_ratings"],
-    ratingCount: json["rating_count"],
-    mainCategoryName: json["main_category_name"],
-    subCategoryName: json["sub_category_name"],
-    categoryProductName: json["category_product_name"],
-    filterValues: json["filter_values"],
-  );
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json["id"],
+      merchantProfileId: json["merchant_profile_id"],
+      productName: json["product_name"],
+      productImage: json["product_image"],
+      mainCategoryId: json["main_category_id"],
+      subCategoryId: json["sub_category_id"],
+      categoryProductId: json["category_product_id"],
+      brand: json["brand"],
+      uom: json["uom"],
+      isActive: json["isActive"],
+      packageType: json["package_type"],
+      packageSize: json["package_size"],
+      shape: json["shape"],
+      texture: json["texture"],
+      colour: json["colour"],
+      size: json["size"],
+      price: json["price"],
+      gstPercentage: json["gst_percentage"],
+      gstAmount: json["gst_amount"],
+      termsAndConditions: json["terms_and_conditions"],
+      createdAt: json["created_at"],
+      updatedAt: json["updated_at"],
+      averageRating: json["average_rating"],
+      totalRatings: json["total_ratings"],
+      ratingCount: json["rating_count"],
+      productCode: json["product_code"],
+      uoc: json["uoc"],
+      totalAmount: json["total_amount"],
+      productNote: json["product_note"],
+      outOfStock: json["outofstock"],
+      approvalStatus: json["approval_status"],
+      mainCategoryName: json["main_category_name"],
+      subCategoryName: json["sub_category_name"],
+      categoryProductName: json["category_product_name"],
+      stockQty: json["stock_qty"],
+
+      /// ✅ FIX — correctly parse nested map
+      filterValues: json["filter_values"] != null
+          ? Map<String, dynamic>.from(json["filter_values"])
+          : null,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "merchant_profile_id": merchantProfileId,
     "product_name": productName,
     "product_image": productImage,
-    "product_code": productCode,
     "main_category_id": mainCategoryId,
     "sub_category_id": subCategoryId,
     "category_product_id": categoryProductId,
     "brand": brand,
     "uom": uom,
     "package_type": packageType,
-    "product_note": productNote,
-    "grain_size": grainSize,
     "package_size": packageSize,
     "shape": shape,
-    "uoc": uoc,
-    "total_amount": totalAmount,
-    "outofstock_note": outOfStockNote,
+    "isActive": isActive,
     "texture": texture,
     "colour": colour,
-    "outofstock": outOfStock,
     "size": size,
-    "weight": weight,
     "price": price,
     "gst_percentage": gstPercentage,
     "gst_amount": gstAmount,
     "terms_and_conditions": termsAndConditions,
-    "is_active": isActive,
-    "is_featured": isFeatured,
-    "sort_order": sortOrder,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "stock_qty": stockQuantity,
-    "stock_status": stockStatus,
-    "low_stock_threshold": lowStockThreshold,
+    "created_at": createdAt,
+    "updated_at": updatedAt,
     "average_rating": averageRating,
     "total_ratings": totalRatings,
     "rating_count": ratingCount,
+    "product_code": productCode,
+    "uoc": uoc,
+    "total_amount": totalAmount,
+    "product_note": productNote,
+    "outofstock": outOfStock,
+    "approval_status": approvalStatus,
     "main_category_name": mainCategoryName,
     "sub_category_name": subCategoryName,
     "category_product_name": categoryProductName,
+    "stock_qty": stockQty,
+
+    /// ✅ FIX — export nested map as-is
     "filter_values": filterValues,
   };
 }

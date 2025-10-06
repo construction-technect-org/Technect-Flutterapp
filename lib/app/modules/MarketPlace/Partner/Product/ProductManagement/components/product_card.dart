@@ -157,7 +157,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: (product.stockQuantity ?? 0).toString(),
+                    text: (product.stockQty ?? 0).toString(),
                     style: MyTexts.regular14.copyWith(
                       color: MyColors.black,
                       fontFamily: MyTexts.Roboto,

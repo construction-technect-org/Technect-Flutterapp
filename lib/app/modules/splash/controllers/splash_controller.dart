@@ -54,18 +54,16 @@ class SplashController extends GetxController {
   void _navigateToHome() {
     // if (Device.screenType == ScreenType.mobile) {
     //   // Show splash for a brief moment even with token
-      Future.delayed(const Duration(seconds: 3), () {
-        print(myPref.role.val);
-        if (myPref.role.val == "merchant_partner") {
-          Get.offAllNamed(Routes.MAIN);
-        } else if (myPref.role.val == "merchant_connector") {
-          Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
-        }
-        else{
-          Get.offAllNamed(Routes.LOGIN);
-
-        }
-      });
+    Future.delayed(const Duration(seconds: 3), () {
+      print(myPref.role.val);
+      if (myPref.role.val == "merchant_partner") {
+        Get.offAllNamed(Routes.MAIN);
+      } else if (myPref.role.val == "merchant_connector") {
+        Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
+      } else {
+        Get.offAllNamed(Routes.LOGIN);
+      }
+    });
     // } else {
     //   Get.offAllNamed(Routes.MAIN);
     // }

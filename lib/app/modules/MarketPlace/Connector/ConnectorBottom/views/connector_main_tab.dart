@@ -1,4 +1,3 @@
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/controllers/connector_main_tab_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/views/connector_connection_inbox_vies.dart';
@@ -30,7 +29,7 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
       bottomNavigationBar: ColoredBox(
         color: MyColors.primary,
         child: SafeArea(
-          top: false, 
+          top: false,
           child: Padding(
             padding: const EdgeInsets.only(top: 6.0),
             child: Theme(
@@ -47,7 +46,9 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
                   onTap: controller.changeTab,
                   selectedItemColor: MyColors.white,
                   unselectedItemColor: MyColors.white.withOpacity(0.25),
-                  selectedLabelStyle: MyTexts.medium13.copyWith(color: MyColors.white),
+                  selectedLabelStyle: MyTexts.medium13.copyWith(
+                    color: MyColors.white,
+                  ),
                   unselectedLabelStyle: MyTexts.medium13.copyWith(
                     color: MyColors.white.withOpacity(0.25),
                   ),

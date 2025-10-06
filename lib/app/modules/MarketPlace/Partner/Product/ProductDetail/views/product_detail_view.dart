@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
@@ -6,6 +5,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/controllers/product_detail_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
@@ -20,13 +20,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         appBar: CommonAppBar(
           title: const Text("Product Details"),
           isCenter: false,
-          action: [
-            // SvgPicture.asset(Asset.link),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.more_vert, color: Colors.black),
-            ),
-          ],
+          // action: [
+          //   // SvgPicture.asset(Asset.link),
+          //   IconButton(
+          //     onPressed: () {},
+          //     icon: const Icon(Icons.more_vert, color: Colors.black),
+          //   ),
+          // ],
         ),
         bottomNavigationBar: Obx(
           () => controller.isFromAdd.value == true
@@ -123,45 +123,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                             ),
                                           ],
                                         ),
-
-                                        // Right side: rating
-                                        Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.orangeAccent,
-                                              size: 18,
-                                            ),
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.orangeAccent,
-                                              size: 18,
-                                            ),
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.orangeAccent,
-                                              size: 18,
-                                            ),
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.orangeAccent,
-                                              size: 18,
-                                            ),
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.orangeAccent,
-                                              size: 18,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              "(4.9/5)",
-                                              style: MyTexts.regular14.copyWith(
-                                                color: Colors.black,
-                                                fontFamily: MyTexts.Roboto,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                        buildRatingRow(controller.product),
                                       ],
                                     ),
                                   )
@@ -489,6 +451,39 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     );
   }
 
+  Widget buildRatingRow(Product product) {
+    final double averageRating =
+        double.tryParse(product.averageRating ?? '0') ?? 0.0;
+    final int totalRatings = product.totalRatings ?? 0;
+
+    final int fullStars = averageRating.floor();
+    final bool hasHalfStar = (averageRating - fullStars) >= 0.5;
+
+    return Row(
+      children: [
+        for (int i = 0; i < fullStars; i++)
+          const Icon(Icons.star, color: Colors.orangeAccent, size: 18),
+
+        if (hasHalfStar)
+          const Icon(Icons.star_half, color: Colors.orangeAccent, size: 18),
+        for (int i = 0; i < (5 - fullStars - (hasHalfStar ? 1 : 0)); i++)
+          const Icon(Icons.star, color: Colors.grey, size: 18),
+
+        const SizedBox(width: 4),
+
+        Text(
+          totalRatings == 0
+              ? "(No ratings yet)"
+              : "(${averageRating.toStringAsFixed(1)}/5)",
+          style: MyTexts.regular14.copyWith(
+            color: Colors.black,
+            fontFamily: MyTexts.Roboto,
+          ),
+        ),
+      ],
+    );
+  }
+
   String _formatKeyName(String key) {
     return key
         .replaceAll('_', ' ')
@@ -575,34 +570,31 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
   Widget _buildSpecificationsTable() {
     final product = controller.product;
     final specifications = [
-      {'label': 'Stock Quantity', 'value': product.stockQuantity.toString()},
-      {'label': 'Unit of Measure', 'value': product.uom ?? 'N/A'},
-      {'label': 'Package Type', 'value': product.packageType ?? 'N/A'},
-      {'label': 'Package Size', 'value': product.packageSize ?? 'N/A'},
-      {'label': 'Shape', 'value': product.shape ?? 'N/A'},
-      {'label': 'Texture', 'value': product.texture ?? 'N/A'},
-      {'label': 'Colour', 'value': product.colour ?? 'N/A'},
-      {
-        'label': 'Unit of conversation',
-        'value': product.uoc?.toString() ?? 'N/A',
-      },
+      {'label': 'Stock Quantity', 'value': product.stockQty.toString()},
     ];
 
     return _buildSpecificationTable(specifications);
   }
 
   Widget _buildFilterSpecificationsTable() {
-    final Map<String, dynamic> filterValues = jsonDecode(
-      controller.product.filterValues ?? '{}',
-    );
+    final filterValues = controller.product.filterValues;
 
-    if (filterValues.isEmpty) return const SizedBox.shrink();
+    if (filterValues == null || filterValues.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
-    final specifications = filterValues.entries
-        .map(
-          (e) => {'label': _formatKeyName(e.key), 'value': e.value.toString()},
-        )
-        .toList();
+    final specifications = filterValues.entries.map((e) {
+      final valueMap = e.value is Map<String, dynamic>
+          ? e.value as Map<String, dynamic>
+          : {};
+      final displayValue =
+          valueMap['display_value'] ?? valueMap['value'] ?? e.value.toString();
+
+      return {
+        'label': valueMap['label'].toString(),
+        'value': displayValue.toString(),
+      };
+    }).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -9,77 +9,84 @@ class GetFilterModel {
     success: json["success"],
     data: json["data"] == null
         ? []
-        : List<FilterData>.from(json["data"]!.map((x) => FilterData.fromJson(x))),
+        : List<FilterData>.from(
+        json["data"].map((x) => FilterData.fromJson(x))),
     message: json["message"],
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
 
 class FilterData {
   final int? id;
-  final int? subCategoryId;
+  final int? productId;
   final String? filterName;
   final String? filterLabel;
   final String? filterType;
-  final dynamic filterOptions;
   final String? unit;
+  final String? minValue;
+  final String? maxValue;
   final bool? isRequired;
-  final bool? isActive;
-  final int? sortOrder;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  final List<String>? dropdownList;
+  final String? productName;
   final String? subCategoryName;
+  final String? mainCategoryName;
 
   FilterData({
     this.id,
-    this.subCategoryId,
+    this.productId,
     this.filterName,
     this.filterLabel,
     this.filterType,
-    this.filterOptions,
     this.unit,
+    this.minValue,
+    this.maxValue,
     this.isRequired,
-    this.isActive,
-    this.sortOrder,
-    this.createdAt,
-    this.updatedAt,
+    this.dropdownList,
+    this.productName,
     this.subCategoryName,
+    this.mainCategoryName,
   });
 
   factory FilterData.fromJson(Map<String, dynamic> json) => FilterData(
     id: json["id"],
-    subCategoryId: json["sub_category_id"],
+    productId: json["product_id"],
     filterName: json["filter_name"],
     filterLabel: json["filter_label"],
     filterType: json["filter_type"],
-    filterOptions: json["filter_options"],
     unit: json["unit"],
+    minValue: json["min_value"],
+    maxValue: json["max_value"],
     isRequired: json["is_required"],
-    isActive: json["is_active"],
-    sortOrder: json["sort_order"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    dropdownList: json["dropdown_list"] == null
+        ? []
+        : List<String>.from(json["dropdown_list"].map((x) => x)),
+    productName: json["product_name"],
     subCategoryName: json["sub_category_name"],
+    mainCategoryName: json["main_category_name"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "sub_category_id": subCategoryId,
+    "product_id": productId,
     "filter_name": filterName,
     "filter_label": filterLabel,
     "filter_type": filterType,
-    "filter_options": filterOptions,
     "unit": unit,
+    "min_value": minValue,
+    "max_value": maxValue,
     "is_required": isRequired,
-    "is_active": isActive,
-    "sort_order": sortOrder,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
+    "dropdown_list": dropdownList == null
+        ? []
+        : List<dynamic>.from(dropdownList!.map((x) => x)),
+    "product_name": productName,
     "sub_category_name": subCategoryName,
+    "main_category_name": mainCategoryName,
   };
 }
