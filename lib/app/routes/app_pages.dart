@@ -113,7 +113,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SIGN_UP_DETAILS,
-      page: () => const SignUpDetailsView(),
+      page: () =>  SignUpDetailsView(),
       binding: SignUpDetailsBinding(),
     ),
     GetPage(
