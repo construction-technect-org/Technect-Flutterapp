@@ -138,7 +138,7 @@ class ProductCard extends StatelessWidget {
 
             const Gap(12),
             Text(
-              '₹ ${double.tryParse(product.price ?? "0")?.toStringAsFixed(2) ?? "0.00"}/${product.uom ?? ""}',
+              '₹ ${double.tryParse(product.price ?? "0")?.toStringAsFixed(2) ?? "0.00"}/${product.filterValues?["uom"]["value"] ?? ""}',
               style: MyTexts.bold18.copyWith(
                 color: MyColors.primary,
                 fontFamily: MyTexts.Roboto,
