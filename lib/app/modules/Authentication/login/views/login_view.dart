@@ -53,6 +53,7 @@ class LoginView extends GetView<LoginController> {
                             ),
                             const Gap(30),
                             CommonPhoneField(
+                              
                               headerText: "Mobile Number",
                               controller: controller.mobileController,
                               focusNode: controller.mobileFocusNode,

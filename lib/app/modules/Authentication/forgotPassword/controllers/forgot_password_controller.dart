@@ -170,7 +170,7 @@ class ForgotPasswordController extends GetxController {
 
   // Reset password
   Future<void> resetPassword() async {
-    if (!_validatePasswords()) return;
+    // if (!_validatePasswords()) return;
 
     if (!otpVerify.value) {
       if (otpSend.value) {

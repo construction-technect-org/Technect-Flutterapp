@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validators.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/stepper_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
@@ -48,12 +49,13 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                           headerText: "First Name",
                           hintText: "Enter your first name",
                           controller: controller.firstNameController,
-                          validator: (val) {
-                            if ((val ?? "").isEmpty) {
-                              return "Please enter first name";
-                            }
-                            return null;
-                          },
+                          validator: validateName,
+                          // validator: (val) {
+                          //   if ((val ?? "").isEmpty) {
+                          //     return "Please enter first name";
+                          //   }
+                          //   return null;
+                          // },
                         ),
                         SizedBox(height: 1.8.h),
                         // Last Name
@@ -61,12 +63,13 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                           headerText: "Last Name",
                           hintText: "Enter your last name",
                           controller: controller.lastNameController,
-                          validator: (val) {
-                            if ((val ?? "").isEmpty) {
-                              return "Please enter last name";
-                            }
-                            return null;
-                          },
+                          validator: validateName,
+                          // validator: (val) {
+                          //   if ((val ?? "").isEmpty) {
+                          //     return "Please enter last name";
+                          //   }
+                          //   return null;
+                          // },
                         ),
                         SizedBox(height: 1.8.h),
                         CommonTextField(
@@ -74,15 +77,16 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                           hintText: "Enter your email address",
                           keyboardType: TextInputType.emailAddress,
                           controller: controller.emailController,
-                          validator: (val) {
-                            if ((val ?? "").isEmpty) {
-                              return "Please enter email";
-                            }
-                            if (!GetUtils.isEmail(val!)) {
-                              return "Please enter valid email";
-                            }
-                            return null;
-                          },
+                          validator: validateEmail,
+                          // validator: (val) {
+                          //   if ((val ?? "").isEmpty) {
+                          //     return "Please enter email";
+                          //   }
+                          //   if (!GetUtils.isEmail(val!)) {
+                          //     return "Please enter valid email";
+                          //   }
+                          //   return null;
+                          // },
                         ),
                         SizedBox(height: 1.8.h),
                         CommonTextField(
@@ -137,7 +141,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                               );
                             }
                             if (!controller.isResendVisible.value) {
-                              return const SizedBox();
+                              return const SizedBox.shrink();
                             } else {
                               return Container(
                                 margin: const EdgeInsets.only(right: 8),
@@ -191,76 +195,88 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                         ),
                         SizedBox(height: 1.8.h),
                         // OTP Field
-                        Row(
-                          children: [
-                            Text(
-                              'Enter OTP',
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.lightBlue,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                            Text(
-                              '*',
-                              style: MyTexts.regular16.copyWith(
-                                color: Colors.red,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 0.5.h),
-                        PinCodeTextField(
-                          appContext: context,
-                          length: 4,
-                          controller: controller.otpController,
-                          onChanged: (value) {
-                            controller.otp.value = value;
-                          },
-                          onCompleted: (value) {
-                            controller.otp.value = value;
-                          },
-                          keyboardType: TextInputType.number,
-                          textStyle: MyTexts.extraBold16.copyWith(
-                            color: MyColors.primary,
-                          ),
-                          pinTheme: PinTheme(
-                            shape: PinCodeFieldShape.box,
-                            borderRadius: BorderRadius.circular(12),
-                            borderWidth: 0.5,
-                            fieldHeight: 57,
-                            fieldWidth: 57,
-                            activeFillColor: MyColors.white,
-                            inactiveFillColor: MyColors.white,
-                            selectedFillColor: MyColors.white,
-                            activeColor: MyColors.primary,
-                            inactiveColor: MyColors.textFieldBorder,
-                            selectedColor: MyColors.primary,
-                          ),
-                          enableActiveFill: true,
-                          animationType: AnimationType.fade,
-                        ),
                         Obx(() {
-                          return !controller.otpSend.value
-                              ? const SizedBox()
-                              : Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Countdown(
-                                    controller: controller.countdownController,
-                                    seconds: 30,
-                                    interval: const Duration(milliseconds: 100),
-                                    build: (_, double time) {
-                                      return Text(
-                                        "Resend in 00:${time.ceil().toString().padLeft(2, '0')}",
-                                        style: MyTexts.bold16.copyWith(
-                                          color: MyColors.green,
+                          if (controller.otpSend.value == false) {
+                            return const SizedBox.shrink();
+                          }
+                          return Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Enter OTP',
+                                    style: MyTexts.regular16.copyWith(
+                                      color: MyColors.lightBlue,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                  ),
+                                  Text(
+                                    '*',
+                                    style: MyTexts.regular16.copyWith(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 0.5.h),
+                              PinCodeTextField(
+                                appContext: context,
+                                length: 4,
+                                controller: controller.otpController,
+                                onChanged: (value) {
+                                  controller.otp.value = value;
+                                },
+                                onCompleted: (value) {
+                                  controller.otp.value = value;
+                                },
+                                keyboardType: TextInputType.number,
+                                textStyle: MyTexts.extraBold16.copyWith(
+                                  color: MyColors.primary,
+                                ),
+                                pinTheme: PinTheme(
+                                  shape: PinCodeFieldShape.box,
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderWidth: 0.5,
+                                  fieldHeight: 57,
+                                  fieldWidth: 57,
+                                  activeFillColor: MyColors.white,
+                                  inactiveFillColor: MyColors.white,
+                                  selectedFillColor: MyColors.white,
+                                  activeColor: MyColors.primary,
+                                  inactiveColor: MyColors.textFieldBorder,
+                                  selectedColor: MyColors.primary,
+                                ),
+                                enableActiveFill: true,
+                                animationType: AnimationType.fade,
+                              ),
+                              Obx(() {
+                                return !controller.otpSend.value
+                                    ? const SizedBox()
+                                    : Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Countdown(
+                                          controller:
+                                              controller.countdownController,
+                                          seconds: 30,
+                                          interval: const Duration(
+                                            milliseconds: 100,
+                                          ),
+                                          build: (_, double time) {
+                                            return Text(
+                                              "Resend in 00:${time.ceil().toString().padLeft(2, '0')}",
+                                              style: MyTexts.bold16.copyWith(
+                                                color: MyColors.green,
+                                              ),
+                                            );
+                                          },
+                                          onFinished: () {
+                                            controller.onCountdownFinish();
+                                          },
                                         ),
                                       );
-                                    },
-                                    onFinished: () {
-                                      controller.onCountdownFinish();
-                                    },
-                                  ),
-                                );
+                              }),
+                            ],
+                          );
                         }),
                         SizedBox(height: 2.h),
                       ],
