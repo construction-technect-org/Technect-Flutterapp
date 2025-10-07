@@ -63,6 +63,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/bindings/business_hours_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/bindings/profile_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/bindings/edit_profile_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/views/edit_profile_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/profile_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/bindings/refer_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/views/refer_screen.dart';
@@ -224,7 +226,7 @@ class AppPages {
       binding: SettingBinding(),
     ),
 
-
+    GetPage( name: _Paths.EDIT_PROFILE, page: () => const EditProfileView(), binding: EditProfileBinding(), ),
     // Connector
     GetPage(
       name: _Paths.CONNECTOR_MAIN_TAB,
