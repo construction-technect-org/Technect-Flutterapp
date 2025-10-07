@@ -68,6 +68,7 @@ class CommonDropdown<T> extends StatelessWidget {
                 ? selectedValue.value
                 : null,
             isExpanded: true,
+            menuMaxHeight: 200,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: validator,
             decoration: InputDecoration(

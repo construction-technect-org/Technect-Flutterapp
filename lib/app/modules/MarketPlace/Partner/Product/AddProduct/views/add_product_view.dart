@@ -1,6 +1,6 @@
+import 'dart:io';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
-import 'package:construction_technect/app/core/utils/dashed_circle.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/stepper_widget_add_product.dart';
@@ -61,7 +61,6 @@ class AddProductView extends GetView<AddProductController> {
                   padding: const EdgeInsets.all(16),
                   child: Form(
                     key: formKey2,
-                    // autovalidateMode: AutovalidateMode.,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -76,65 +75,154 @@ class AddProductView extends GetView<AddProductController> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 2.h),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Obx(
-                              () => DashedCircle(
-                                size: 81,
-                                color: MyColors.grey,
-                                strokeWidth: 1.2,
-                                assetImage: Asset.profil,
-                                file: controller.pickedFilePath.value,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Obx(
-                                () => Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: MyColors.primary,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                          padding: EdgeInsets.zero,
+                        SizedBox(height: 1.h),
+                        Obx(
+                          () => SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                ...controller.pickedFilePathList.map(
+                                  (path) => Stack(
+                                    alignment: Alignment.topRight,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 8.0,
+                                          top: 8,
                                         ),
-                                        onPressed: controller.pickImage,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
                                           ),
-                                          child: Text(
-                                            "Choose Image",
-                                            style: MyTexts.regular16.copyWith(
-                                              color: MyColors.white,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Get.dialog(
+                                                Dialog(
+                                                  backgroundColor: Colors.white,
+                                                  insetPadding:
+                                                      const EdgeInsets.all(20),
+                                                  child: Stack(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    children: [
+                                                      InteractiveViewer(
+                                                        child:
+                                                            path.contains(
+                                                              'http',
+                                                            )
+                                                            ? Image.network(
+                                                                path,
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                                width: double
+                                                                    .infinity,
+                                                                height: double
+                                                                    .infinity,
+                                                              )
+                                                            : Image.file(
+                                                                File(path),
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                                width: double
+                                                                    .infinity,
+                                                                height: double
+                                                                    .infinity,
+                                                              ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              16.0,
+                                                            ),
+                                                        child: GestureDetector(
+                                                          onTap: () =>
+                                                              Get.back(),
+                                                          child: const Icon(
+                                                            Icons.close,
+                                                            color: Colors.black,
+                                                            size: 30,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: path.contains('http')
+                                                ? getImageView(
+                                                    finalUrl: path ?? "",
+                                                    width: 80,
+                                                    height: 80,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Image.file(
+                                                    File(path),
+                                                    width: 80,
+                                                    height: 80,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 4,
+                                        right: 4,
+                                        child: GestureDetector(
+                                          onTap: () => controller
+                                              .pickedFilePathList
+                                              .remove(path),
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: Colors.red,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            padding: const EdgeInsets.all(3),
+                                            child: const Icon(
+                                              Icons.close,
+                                              size: 16,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      controller.pickedFileName.value == ''
-                                          ? "Upload Product Image"
-                                          : controller.pickedFileName.value,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: MyTexts.regular16.copyWith(
-                                        color: MyColors.fontBlack,
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
+                                if (controller.pickedFilePathList.length < 5)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: 8.0,
+                                      top: 8,
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: controller.pickImage,
+                                      child: Container(
+                                        width: 80,
+                                        height: 80,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: MyColors.grey,
+                                            width: 1.2,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          color: Colors.grey.shade100,
+                                        ),
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.add,
+                                            size: 30,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                         SizedBox(height: 3.h),
                         CommonTextField(
@@ -413,9 +501,9 @@ class AddProductView extends GetView<AddProductController> {
                           child: RoundedButton(
                             buttonName: 'PROCEED',
                             onTap: () async {
-                              if (controller.pickedFilePath.value.isEmpty) {
+                              if (controller.pickedFilePathList.isEmpty) {
                                 SnackBars.errorSnackBar(
-                                  content: 'Product image is required',
+                                  content: 'Please upload at least one image',
                                 );
                                 return;
                               }
@@ -474,7 +562,7 @@ class AddProductView extends GetView<AddProductController> {
                               final controllerField = controller
                                   .dynamicControllers[filter.filterName];
 
-                              // Dropdown type
+                              // 🔹 Single Dropdown
                               if (filter.filterType == 'dropdown') {
                                 controller.dropdownValues.putIfAbsent(
                                   filter.filterName!,
@@ -508,7 +596,215 @@ class AddProductView extends GetView<AddProductController> {
                                   ),
                                 );
                               }
-                              // Number type filter
+
+                              if (filter.filterType == 'dropdown_multiple') {
+                                controller.multiDropdownValues.putIfAbsent(
+                                  filter.filterName!,
+                                  () => <String>[].obs,
+                                );
+
+                                // RxString for showing validation error
+                                final RxString errorText = ''.obs;
+
+                                final selectedList = controller
+                                    .multiDropdownValues[filter.filterName]!;
+
+                                return Obx(
+                                  () => Padding(
+                                    padding: EdgeInsets.only(bottom: 2.h),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              filter.filterLabel ?? '',
+                                              style: MyTexts.regular16.copyWith(
+                                                color: MyColors.lightBlue,
+                                                fontFamily: MyTexts.Roboto,
+                                              ),
+                                            ),
+                                            const Text(
+                                              '*',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Gap(5),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            final List<String> items =
+                                                (filter.dropdownList ?? [])
+                                                    .cast<String>();
+
+                                            final selected = await showDialog<List<String>>(
+                                              context: context,
+                                              builder: (_) {
+                                                final tempSelection =
+                                                    selectedList.toSet().obs;
+                                                return AlertDialog(
+                                                  backgroundColor: Colors.white,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          10,
+                                                        ),
+                                                  ),
+                                                  title: Text(
+                                                    "Select ${filter.filterLabel ?? ''}",
+                                                  ),
+                                                  titleTextStyle: MyTexts
+                                                      .medium14
+                                                      .copyWith(
+                                                        color: MyColors.primary,
+                                                        fontFamily:
+                                                            MyTexts.Roboto,
+                                                      ),
+                                                  content: Obx(
+                                                    () => SingleChildScrollView(
+                                                      child: Column(
+                                                        children: items.map((
+                                                          item,
+                                                        ) {
+                                                          final isSelected =
+                                                              tempSelection
+                                                                  .contains(
+                                                                    item,
+                                                                  );
+                                                          return CheckboxListTile(
+                                                            title: Text(item),
+                                                            value: isSelected,
+                                                            onChanged: (checked) {
+                                                              if (checked ==
+                                                                  true) {
+                                                                tempSelection
+                                                                    .add(item);
+                                                              } else {
+                                                                tempSelection
+                                                                    .remove(
+                                                                      item,
+                                                                    );
+                                                              }
+                                                            },
+                                                          );
+                                                        }).toList(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () => Get.back(
+                                                        result: tempSelection
+                                                            .toList(),
+                                                      ),
+                                                      child: const Text("OK"),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+
+                                            if (selected != null) {
+                                              selectedList.assignAll(selected);
+                                              controller
+                                                  .dynamicControllers[filter
+                                                      .filterName]
+                                                  ?.text = selected.join(
+                                                ', ',
+                                              );
+
+                                              // 🧠 Validation: clear error if at least one item selected
+                                              if (selectedList.isNotEmpty) {
+                                                errorText.value = '';
+                                              }
+                                            }
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 14,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: errorText.isNotEmpty
+                                                    ? Colors.red
+                                                    : MyColors.grey.withOpacity(
+                                                        0.4,
+                                                      ),
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    selectedList.isEmpty
+                                                        ? "Select ${filter.filterLabel ?? ''}"
+                                                        : selectedList.join(
+                                                            ', ',
+                                                          ),
+                                                    style: selectedList.isEmpty
+                                                        ? MyTexts.regular16
+                                                              .copyWith(
+                                                                color: MyColors
+                                                                    .primary
+                                                                    .withOpacity(
+                                                                      0.5,
+                                                                    ),
+                                                                fontFamily:
+                                                                    MyTexts
+                                                                        .Roboto,
+                                                              )
+                                                        : MyTexts.medium16
+                                                              .copyWith(
+                                                                color: MyColors
+                                                                    .primary,
+                                                                fontFamily:
+                                                                    MyTexts
+                                                                        .Roboto,
+                                                              ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                                const Icon(
+                                                  Icons
+                                                      .keyboard_arrow_down_rounded,
+                                                  size: 24,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        if (errorText.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 4,
+                                              left: 8,
+                                            ),
+                                            child: Text(
+                                              errorText.value,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+
                               if (filter.filterType == 'number') {
                                 final min = double.tryParse(
                                   filter.minValue?.toString() ?? '',
@@ -562,15 +858,18 @@ class AddProductView extends GetView<AddProductController> {
                                 );
                               }
 
-                              //  text type
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 2.h),
                                 child: CommonTextField(
-                                  keyboardType: TextInputType.number,
                                   headerText: filter.filterLabel ?? '',
                                   hintText: "Enter ${filter.filterLabel ?? ''}",
                                   controller: controllerField,
-
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return "Please enter a value";
+                                    }
+                                    return null;
+                                  },
                                   suffixIcon: filter.unit != null
                                       ? Padding(
                                           padding: const EdgeInsets.only(
@@ -593,21 +892,41 @@ class AddProductView extends GetView<AddProductController> {
 
                         SizedBox(height: 2.h),
                         Center(
-                          child:  RoundedButton(
-                              buttonName: 'SUBMIT',
-                              onTap: () async {
-                                if (formKey1.currentState!.validate()) {
-                                  if (await controller.firstPartValidation()) {
-                                    hideKeyboard();
-                                    controller.submitProduct(formKey1);
-                                  }
-                                } else {
+                          child: RoundedButton(
+                            buttonName: 'SUBMIT',
+                            onTap: () async {
+                              hideKeyboard();
+
+                              if (!formKey1.currentState!.validate()) {
+                                SnackBars.errorSnackBar(
+                                  content:
+                                      "Please fill all required fields properly",
+                                );
+                                return;
+                              }
+
+                              bool allValid = true;
+
+                              controller.multiDropdownValues.forEach((
+                                key,
+                                list,
+                              ) {
+                                if (list.isEmpty) {
+                                  allValid = false;
                                   SnackBars.errorSnackBar(
                                     content:
-                                    "Please fill all required fields properly",
+                                        "Please select at least one value for $key",
                                   );
                                 }
-                              }),
+                              });
+
+                              if (!allValid) return;
+
+                              if (await controller.firstPartValidation()) {
+                                controller.submitProduct(formKey1);
+                              }
+                            },
+                          ),
                         ),
                       ],
                     ),

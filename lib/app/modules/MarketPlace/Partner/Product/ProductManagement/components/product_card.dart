@@ -30,11 +30,10 @@ class ProductCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child:
-                      (product.productImage != null &&
-                          product.productImage!.isNotEmpty)
+                      ((product.images??[]).isNotEmpty)
                       ? CachedNetworkImage(
                           imageUrl:
-                              "${APIConstants.bucketUrl}${product.productImage!}",
+                              "${APIConstants.bucketUrl}${product.images?.first.s3Key}",
                           width: 56,
                           height: 57,
                           fit: BoxFit.cover,

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
@@ -51,87 +52,150 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 decoration: const BoxDecoration(color: MyColors.grayF2),
                 alignment: Alignment.center,
                 child:
-                    (controller.product.productImage != null &&
-                        controller.product.productImage!.isNotEmpty)
+                    (
+                        (controller.product.images??[]).isNotEmpty)
                     ? Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Obx(() {
-                            return controller.isFromAdd.value == false
-                                ? Image.network(
-                                    "${APIConstants.bucketUrl}${controller.product.productImage!}",
-                                    fit: BoxFit.contain,
-                                    height: 35.h,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return const Icon(
-                                        Icons.broken_image,
-                                        size: 60,
-                                        color: Colors.grey,
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        // Image list
+                        Obx(() {
+                          final isNetwork = controller.isFromAdd.value == false;
+                          final List<String> imageUrls = [];
+                          print("isNetwork==>$isNetwork");
+
+                          if (isNetwork) {
+                            // From API (network)
+                            if (controller.product.images != null &&
+                                controller.product.images!.isNotEmpty) {
+                              imageUrls.addAll(
+                                controller.product.images!
+                                    .map((img) =>
+                                "${APIConstants.bucketUrl}${img.s3Key ?? controller.product.productImage ?? ''}")
+                                    .toList(),
+                              );
+                            } else if (controller.product.productImage != null) {
+                              imageUrls.add(
+                                  "${APIConstants.bucketUrl}${controller.product.productImage!}");
+                            }
+                          } else {
+                            // From local files
+                            if (
+                                controller.product.images!.isNotEmpty) {
+                              imageUrls.addAll(
+                                controller.product.images!
+                                    .map((img) =>
+                                img.s3Url ?? controller.product.productImage ?? '')
+                                    .toList(),
+                              );
+                            } else if (controller.product.productImage != null) {
+                              imageUrls.add(
+                                  "${APIConstants.bucketUrl}${controller.product.productImage!}");
+                            }
+                          }
+
+                          if (imageUrls.isEmpty) {
+                            return const Center(
+                              child: Icon(Icons.broken_image, size: 60, color: Colors.grey),
+                            );
+                          }
+                          return SizedBox(
+                            height: 35.h,
+                            child: Center(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: imageUrls.length,
+                                itemBuilder: (context, index) {
+                                  final imagePath = imageUrls[index];
+                                  final isHttp = imagePath.startsWith('http');
+                                  return GestureDetector(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) => Dialog(
+                                          insetPadding: const EdgeInsets.all(16),
+                                          child: InteractiveViewer(
+                                            child: isHttp
+                                                ? Image.network(imagePath, fit: BoxFit.contain)
+                                                : Image.file(File(imagePath), fit: BoxFit.contain),
+                                          ),
+                                        ),
                                       );
                                     },
-                                  )
-                                : Image.file(
-                                    File(controller.product.productImage ?? ""),
-                                    height: 35.h,
-                                  );
-                          }),
-
-                          Obx(() {
-                            return controller.isFromAdd.value == false
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                      vertical: 8,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              controller.product.outOfStock ==
-                                                      true
-                                                  ? "Out Of Stock"
-                                                  : "In Stock",
-                                              style: MyTexts.bold18.copyWith(
-                                                color:
-                                                    controller
-                                                            .product
-                                                            .outOfStock ==
-                                                        true
-                                                    ? Colors.red
-                                                    : Colors.green,
-                                                fontSize: 13,
-                                              ),
-                                            ),
-                                            const Gap(4),
-                                            Container(
-                                              height: 10,
-                                              width: 10,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color:
-                                                    controller
-                                                            .product
-                                                            .outOfStock ==
-                                                        true
-                                                    ? Colors.red
-                                                    : Colors.green,
-                                              ),
-                                            ),
-                                          ],
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: isHttp
+                                            ? Image.network(
+                                          imagePath,
+                                          fit: BoxFit.cover,
+                                          height: 35.h,
+                                          width: 35.h,
+                                          errorBuilder: (context, error, stackTrace) =>
+                                          const Icon(Icons.broken_image,
+                                              size: 60, color: Colors.grey),
+                                        )
+                                            : Image.file(
+                                          File(imagePath),
+                                          fit: BoxFit.cover,
+                                          height: 35.h,
+                                          width: 35.h,
                                         ),
-                                        buildRatingRow(controller.product),
-                                      ],
+                                      ),
                                     ),
-                                  )
-                                : const SizedBox();
-                          }),
-                        ],
-                      )
-                    : const Icon(
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        }),
+
+                        // Bottom Info: stock + rating
+                        Obx(() {
+                          return controller.isFromAdd.value == false
+                              ? Padding(
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      controller.product.outOfStock == true
+                                          ? "Out Of Stock"
+                                          : "In Stock",
+                                      style: MyTexts.bold18.copyWith(
+                                        color: controller.product.outOfStock == true
+                                            ? Colors.red
+                                            : Colors.green,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    const Gap(4),
+                                    Container(
+                                      height: 10,
+                                      width: 10,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: controller.product.outOfStock == true
+                                            ? Colors.red
+                                            : Colors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                buildRatingRow(controller.product),
+                              ],
+                            ),
+                          )
+                              : const SizedBox();
+                        }),
+                      ],
+                    )
+                        : const Icon(
                         Icons.image_not_supported,
                         size: 60,
                         color: Colors.grey,
@@ -584,14 +648,37 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     }
 
     final specifications = filterValues.entries.map((e) {
-      final valueMap = e.value is Map<String, dynamic>
-          ? e.value as Map<String, dynamic>
-          : {};
-      final displayValue =
-          valueMap['display_value'] ?? valueMap['value'] ?? e.value.toString();
+      final value = e.value;
+      Map<String, dynamic> valueMap = {};
+
+      // 🟩 Handle nested map type
+      if (value is Map<String, dynamic>) {
+        valueMap = value;
+      }
+
+      var displayValue = valueMap['display_value'] ?? valueMap['value'] ?? value;
+
+      // 🟦 Handle if it's a JSON array in string format
+      if (displayValue is String &&
+          displayValue.trim().startsWith('[') &&
+          displayValue.trim().endsWith(']')) {
+        try {
+          final decoded = jsonDecode(displayValue);
+          if (decoded is List) {
+            displayValue = decoded.join(', ');
+          }
+        } catch (_) {
+          // not a valid JSON list, keep as string
+        }
+      }
+
+      // 🟨 Handle if it's a Dart List directly
+      if (displayValue is List) {
+        displayValue = displayValue.join(', ');
+      }
 
       return {
-        'label': valueMap['label'].toString(),
+        'label': (valueMap['label'] ?? e.key).toString(),
         'value': displayValue.toString(),
       };
     }).toList();

@@ -58,8 +58,7 @@ class AddProductController extends GetxController {
 
   // ---------------- State ----------------
   RxBool showExtraFields = false.obs;
-  RxString pickedFileName = "".obs;
-  RxString pickedFilePath = "".obs;
+  RxList<String> pickedFilePathList = <String>[].obs;
   RxBool isEnabled = true.obs;
   RxBool isLoading = false.obs;
 
@@ -81,10 +80,18 @@ class AddProductController extends GetxController {
   Future<void> initCalled() async {
     await fetchMainCategories();
     if (isEdit && product.subCategoryId != null) {
+      _storedFilterValues = product.filterValues;
       await fetchSubCategories(product.mainCategoryId ?? 0);
       await fetchProducts(product.subCategoryId ?? 0);
-      await getFilter(product.subCategoryId ?? 0);
-      _initializeEditMode();
+      await getFilter(product.categoryProductId ?? 0);
+      selectedMainCategory.value = product.mainCategoryName ?? '';
+      selectedSubCategory.value = product.subCategoryName ?? '';
+      selectedProduct.value = product.categoryProductName ?? '';
+
+      selectedMainCategoryId.value = (product.mainCategoryId ?? 0).toString();
+      selectedSubCategoryId.value = (product.subCategoryId ?? 0).toString();
+      selectedProductId.value = (product.categoryProductId ?? 0).toString();
+
     }
   }
 
@@ -103,20 +110,12 @@ class AddProductController extends GetxController {
     gstPriceController.text = product.gstAmount ?? '';
     termsController.text = product.termsAndConditions ?? '';
     brandNameController.text = product.brand ?? '';
-    selectedMainCategory.value = product.mainCategoryName ?? '';
-    selectedSubCategory.value = product.subCategoryName ?? '';
-    selectedProduct.value = product.categoryProductName ?? '';
-
-    selectedMainCategoryId.value = (product.mainCategoryId ?? 0).toString();
-    selectedSubCategoryId.value = (product.subCategoryId ?? 0).toString();
-    selectedProductId.value = (product.categoryProductId ?? 0).toString();
-
-    if (product.productImage != null && product.productImage!.isNotEmpty) {
-      pickedFilePath.value =
-          "${APIConstants.bucketUrl}${product.productImage!}";
-      pickedFileName.value = "Current product image";
+    if ((product.images ?? []).isNotEmpty) {
+      for (final image in product.images!) {
+          pickedFilePathList.add("${APIConstants.bucketUrl}${image.s3Key!}");
+      }
     }
-    _storedFilterValues = product.filterValues;
+
   }
 
   Map<String, dynamic>? _storedFilterValues;
@@ -175,7 +174,6 @@ class AddProductController extends GetxController {
 
     if (selectedSub != null) {
       await fetchProducts(selectedSub.id ?? 0);
-      await getFilter(selectedSub.id ?? 0);
     }
   }
 
@@ -211,6 +209,7 @@ class AddProductController extends GetxController {
 
   Map<String, TextEditingController> dynamicControllers = {};
   final Map<String, Rxn<String>> dropdownValues = {};
+  final Map<String, RxList<String>> multiDropdownValues = {};
 
   Future<void> getFilter(int subCategoryId) async {
     try {
@@ -224,7 +223,11 @@ class AddProductController extends GetxController {
         for (final FilterData filter in filters) {
           if (filter.filterType == 'dropdown') {
             dropdownValues[filter.filterName ?? ''] = Rxn<String>();
-          } else {
+          }
+          else if (filter.filterType == 'dropdown_multiple') {
+            multiDropdownValues[filter.filterName ?? ''] = <String>[].obs;
+          }
+          else {
             dynamicControllers[filter.filterName ?? ''] =
                 TextEditingController();
           }
@@ -254,20 +257,50 @@ class AddProductController extends GetxController {
       final Map<String, dynamic> filterValues = _storedFilterValues!;
 
       filterValues.forEach((key, value) {
-        String? actualValue;
+        dynamic actualValue;
 
+        // 🟩 If API sends structured object {label, value}
         if (value is Map<String, dynamic>) {
-          actualValue = value['value']?.toString();
+          actualValue = value['value'];
         } else {
-          actualValue = value?.toString();
+          actualValue = value;
         }
 
-        if (actualValue == null || actualValue.isEmpty) return;
+        // 🟦 If stored value is JSON string list → decode it
+        if (actualValue is String &&
+            actualValue.trim().startsWith('[') &&
+            actualValue.trim().endsWith(']')) {
+          try {
+            actualValue = jsonDecode(actualValue);
+          } catch (_) {}
+        }
 
+        // 🟨 Now assign based on field type
+        if (actualValue == null) return;
+
+        // Text fields
         if (dynamicControllers.containsKey(key)) {
-          dynamicControllers[key]!.text = actualValue;
-        } else if (dropdownValues.containsKey(key)) {
-          dropdownValues[key]!.value = actualValue;
+          if (actualValue is List) {
+            dynamicControllers[key]!.text = actualValue.join(', ');
+          } else {
+            dynamicControllers[key]!.text = actualValue.toString();
+          }
+        }
+        // Dropdown (single)
+        else if (dropdownValues.containsKey(key)) {
+          if (actualValue is String) {
+            dropdownValues[key]!.value = actualValue;
+          } else if (actualValue is List && actualValue.isNotEmpty) {
+            dropdownValues[key]!.value = actualValue.first.toString();
+          }
+        }
+        // Dropdown multiple (list)
+        else if (multiDropdownValues.containsKey(key)) {
+          final listValue = (actualValue is List)
+              ? actualValue.map((e) => e.toString()).toList()
+              : [actualValue.toString()];
+
+          multiDropdownValues[key]!.assignAll(listValue);
         }
       });
     } catch (e) {
@@ -275,14 +308,13 @@ class AddProductController extends GetxController {
     }
   }
 
-
   Future<void> onProductSelected(String? productName) async {
     selectedProduct.value = productName;
-    final selectedSub = productsList.firstWhereOrNull(
+    final selectedCategorySub = productsList.firstWhereOrNull(
       (s) => s.name == productName,
     );
-    selectedProductId.value = '${selectedSub?.id ?? 0}';
-    await getFilter(selectedSub?.id ?? 0);
+    selectedProductId.value = '${selectedCategorySub?.id ?? 0}';
+    await getFilter(selectedCategorySub?.id ?? 0);
   }
 
   // ---------------- API Calls ----------------
@@ -371,8 +403,7 @@ class AddProductController extends GetxController {
 
       if (result != null && result.path.isNotEmpty) {
         final XFile file = result;
-        pickedFileName.value = file.name;
-        pickedFilePath.value = file.path;
+        pickedFilePathList.add(file.path);
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Failed to pick file: $e', time: 3);
@@ -381,10 +412,7 @@ class AddProductController extends GetxController {
 
   Future<bool> firstPartValidation() async {
     bool isRequired = false;
-    if (pickedFilePath.value.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Product image is required');
-      isRequired = false;
-    } else if (productNameController.text.isEmpty) {
+  if (productNameController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Product name is required');
       isRequired = false;
     }
@@ -459,7 +487,15 @@ class AddProductController extends GetxController {
         if (selectedValue != null && selectedValue.isNotEmpty) {
           filterValues[filterName] = selectedValue;
         }
-      } else {
+      }
+      else if (filter.filterType == 'dropdown_multiple') {
+        final selectedList = multiDropdownValues[filterName];
+        if (selectedList != null && selectedList.isNotEmpty) {
+          filterValues[filterName] = selectedList.toList();
+        }
+
+      }
+      else {
         final textValue = dynamicControllers[filterName]?.text.trim();
         if (textValue != null && textValue.isNotEmpty) {
           filterValues[filterName] = textValue;
@@ -471,6 +507,7 @@ class AddProductController extends GetxController {
 
     return filterValues;
   }
+
   Map<String, dynamic> buildFilterValues2() {
     final Map<String, dynamic> filterValues = {};
 
@@ -486,8 +523,7 @@ class AddProductController extends GetxController {
         if (selectedValue != null && selectedValue.isNotEmpty) {
           value = selectedValue;
         }
-      }
-      else {
+      } else {
         final textValue = dynamicControllers[filterName]?.text.trim();
         if (textValue != null && textValue.isNotEmpty) {
           value = textValue;
@@ -497,12 +533,14 @@ class AddProductController extends GetxController {
       if (value != null && value.isNotEmpty) {
         filterValues[filterName] = {
           "value": value,
-          "display_value": value== filter.unit? value: value +
-              (filter.unit != null && filter.unit!.isNotEmpty
-                  ? " ${filter.unit}"
-                  : ""),
+          "display_value": value == filter.unit
+              ? value
+              : value +
+                    (filter.unit != null && filter.unit!.isNotEmpty
+                        ? " ${filter.unit}"
+                        : ""),
           "unit": filter.unit,
-            "label": filter.filterLabel ?? _formatKeyName(filterName),
+          "label": filter.filterLabel ?? _formatKeyName(filterName),
           "type": filter.filterType ?? "text",
         };
       }
@@ -513,24 +551,28 @@ class AddProductController extends GetxController {
     }
     return filterValues;
   }
+
   String _formatKeyName(String key) {
     return key
         .replaceAll('_', ' ')
         .split(' ')
         .map(
           (word) => word.isNotEmpty
-          ? word[0].toUpperCase() + word.substring(1).toLowerCase()
-          : word,
-    )
+              ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+              : word,
+        )
         .join(' ');
   }
 
-
   void navigate() {
     hideKeyboard();
+    final List<ProductImage> productImages = pickedFilePathList.map((file) {
+      return ProductImage(
+        s3Url: file,
+      );
+    }).toList();
     final Product p = Product(
-      // categoryProductName: selectedSubCategory.value,
-      productImage: pickedFilePath.value,
+      images:productImages,
       gstAmount: gstPriceController.text,
       mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
@@ -560,9 +602,17 @@ class AddProductController extends GetxController {
   Future<void> createProduct() async {
     isLoading.value = true;
     Map<String, dynamic> fields = {};
-    final Map<String, String> selectedFiles = {
-      "product_image": pickedFilePath.value,
-    };
+    final imageList = pickedFilePathList;
+    int index = 1;
+    final Map<String, String> selectedFiles = {};
+    for (final path in imageList) {
+      if (path.contains('http')) {
+        fields["image_$index"] = path;
+      } else {
+        selectedFiles["image_$index"] = path;
+      }
+      index++;
+    }
 
     final Map<String, String> payload = {};
     dynamicControllers.forEach((key, controller) {
@@ -597,7 +647,7 @@ class AddProductController extends GetxController {
       "filter_values": jsonEncode(buildFilterValues()),
     });
     try {
-        final addTeamResponse = await _service.createProduct(
+      final addTeamResponse = await _service.createProduct(
         fields: fields,
         files: selectedFiles,
       );
@@ -625,14 +675,14 @@ class AddProductController extends GetxController {
     Map<String, dynamic> fields = {};
 
     final Map<String, String> selectedFiles = {};
-    final String existingImageUrl =
-        "${APIConstants.bucketUrl}${product.productImage ?? ''}";
-
-    if (pickedFilePath.value.isNotEmpty &&
-        pickedFilePath.value != existingImageUrl &&
-        !pickedFilePath.value.contains('http')) {
-      selectedFiles["product_image"] = pickedFilePath.value;
-    }
+    // final String existingImageUrl =
+    //     "${APIConstants.bucketUrl}${product.productImage ?? ''}";
+    //
+    // if (pickedFilePath.value.isNotEmpty &&
+    //     pickedFilePath.value != existingImageUrl &&
+    //     !pickedFilePath.value.contains('http')) {
+    //   selectedFiles["product_image"] = pickedFilePath.value;
+    // }
 
     fields = {
       "product_name": productNameController.text,
@@ -677,4 +727,3 @@ class AddProductController extends GetxController {
     }
   }
 }
-

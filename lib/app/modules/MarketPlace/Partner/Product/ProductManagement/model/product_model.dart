@@ -7,7 +7,29 @@ import 'dart:convert';
 ProductListModel getFilterModelFromJson(String str) => ProductListModel.fromJson(json.decode(str));
 
 String getFilterModelToJson(ProductListModel data) => json.encode(data.toJson());
+class ProductImage {
+  final String? s3Key;
+  final String? s3Url;
+  final int? sortOrder;
 
+  ProductImage({
+    this.s3Key,
+    this.s3Url,
+    this.sortOrder,
+  });
+
+  factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
+    s3Key: json["s3_key"],
+    s3Url: json["s3_url"],
+    sortOrder: json["sort_order"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "s3_key": s3Key,
+    "s3_url": s3Url,
+    "sort_order": sortOrder,
+  };
+}
 class ProductListModel {
   final bool? success;
   final Data? data;
@@ -89,9 +111,9 @@ class Product {
   final String? subCategoryName;
   final String? categoryProductName;
   final int? stockQty;
-
-  /// ✅ FIXED: filter_values now Map type, not String
   final Map<String, dynamic>? filterValues;
+  final List<ProductImage>? images;
+
 
   Product({
     this.id,
@@ -130,6 +152,8 @@ class Product {
     this.categoryProductName,
     this.stockQty,
     this.filterValues,
+    this.images,
+
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -169,11 +193,13 @@ class Product {
       subCategoryName: json["sub_category_name"],
       categoryProductName: json["category_product_name"],
       stockQty: json["stock_qty"],
-
-      /// ✅ FIX — correctly parse nested map
       filterValues: json["filter_values"] != null
           ? Map<String, dynamic>.from(json["filter_values"])
           : null,
+      images: json["images"] == null
+          ? []
+          : List<ProductImage>.from(
+          json["images"].map((x) => ProductImage.fromJson(x))),
     );
   }
 
@@ -213,9 +239,10 @@ class Product {
     "sub_category_name": subCategoryName,
     "category_product_name": categoryProductName,
     "stock_qty": stockQty,
-
-    /// ✅ FIX — export nested map as-is
     "filter_values": filterValues,
+    "images": images == null
+        ? []
+        : List<dynamic>.from(images!.map((x) => x.toJson())),
   };
 }
 
