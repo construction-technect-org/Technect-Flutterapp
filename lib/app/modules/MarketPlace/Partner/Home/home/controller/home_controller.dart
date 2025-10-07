@@ -2,7 +2,8 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart' hide Statisctics;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart'
+    hide Statisctics;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
@@ -52,9 +53,8 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     _initializeHomeData();
-    _loadTeamFromStorage();
     refreshDashboardData();
-    isDefaultOffice.value=myPref.getDefaultAdd();
+    isDefaultOffice.value = myPref.getDefaultAdd();
   }
 
   @override
@@ -79,9 +79,7 @@ class HomeController extends GetxController {
     final merchantProfile = profileData.value.data?.merchantProfile;
 
     final completionPercentage =
-        merchantProfile?.profileCompletionPercentage ??
-
-        0;
+        merchantProfile?.profileCompletionPercentage ?? 0;
 
     if (merchantProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
@@ -101,48 +99,53 @@ class HomeController extends GetxController {
     }
 
     Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
-        child: GestureDetector(
-          onTap: () {
-            _handleProfileDialogTap();
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(13),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(Asset.pendingIcon, height: 80),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Complete your Profile',
-                    style: MyTexts.medium18.copyWith(
-                      color: MyColors.textFieldBackground,
-                      fontFamily: MyTexts.Roboto,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Profile Pending',
-                    style: MyTexts.medium16.copyWith(
-                      color: MyColors.warning,
-                      fontFamily: MyTexts.Roboto,
-                    ),
+      PopScope(
+        canPop: false,
+        child: Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(13),
+          ),
+          child: GestureDetector(
+            onTap: () {
+              _handleProfileDialogTap();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(13),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                 ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(Asset.pendingIcon, height: 80),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Complete your Profile',
+                      style: MyTexts.medium18.copyWith(
+                        color: MyColors.textFieldBackground,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Profile Pending',
+                      style: MyTexts.medium16.copyWith(
+                        color: MyColors.warning,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -153,19 +156,17 @@ class HomeController extends GetxController {
   }
 
   void _handleProfileDialogTap() {
-    if((profileData.value.data?.user?.roleName??"").toLowerCase()=="House-Owner".toLowerCase()){
+    if ((profileData.value.data?.user?.roleName ?? "").toLowerCase() ==
+        "House-Owner".toLowerCase()) {
       Get.toNamed(Routes.CONNECTOR_PROFILE);
-    }
-    else{
+    } else {
       Get.toNamed(Routes.PROFILE);
-
     }
   }
 
   void resetProfileDialogFlag() {
     _profileDialogShown = false;
   }
-
 
   void onReturnFromEditProfile() {
     if (!commonController.hasProfileComplete.value) {
@@ -217,14 +218,24 @@ class HomeController extends GetxController {
     }
   }
 
-
   RxString getCurrentAddress() {
     if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
-      final int index = addressData.data?.addresses?.indexWhere((e)=>e.addressType=="office") ??0;
-      final int factoryIndex = addressData.data?.addresses?.indexWhere((e)=>e.addressType=="factory")??0;
-      final address = addressData.data!.addresses?[isDefaultOffice.value==true?index:factoryIndex];
+      final int index =
+          addressData.data?.addresses?.indexWhere(
+            (e) => e.addressType == "office",
+          ) ??
+          0;
+      final int factoryIndex =
+          addressData.data?.addresses?.indexWhere(
+            (e) => e.addressType == "factory",
+          ) ??
+          0;
+      final address = addressData
+          .data!
+          .addresses?[isDefaultOffice.value == true ? index : factoryIndex];
 
-      return '${address?.addressLine1}, ${address?.city}, ${address?.state} , ${address?.pinCode}'.obs;
+      return '${address?.addressLine1}, ${address?.city}, ${address?.state} , ${address?.pinCode}'
+          .obs;
     }
     return 'No address found'.obs;
   }
@@ -239,6 +250,15 @@ class HomeController extends GetxController {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
+        if ((profileData
+                    .value
+                    .data
+                    ?.merchantProfile
+                    ?.profileCompletionPercentage ??
+                0) >=
+            90) {
+          _loadTeamFromStorage();
+        }
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');
@@ -310,5 +330,4 @@ class HomeController extends GetxController {
   Future<void> refreshTeamList() async {
     await fetchTeamList();
   }
-
 }

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/views/setting_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
@@ -11,7 +10,7 @@ import 'package:gap/gap.dart';
 import 'package:geocoding/geocoding.dart';
 
 class HomeView extends StatelessWidget {
-  final HomeController controller = Get.put(HomeController());
+  final HomeController controller = Get.put<HomeController>(HomeController());
   final CommonController commonController = Get.find();
 
   @override
@@ -572,7 +571,9 @@ class HomeView extends StatelessWidget {
                                               arguments: {"isReport": false},
                                             );
                                           } else if (index == 3) {
-                                            Get.to(() => SettingView());
+
+                                            Get.toNamed(
+                                                Routes.SETTING);
                                           } else if (index == 4) {
                                             Get.toNamed(
                                               Routes.ROLE_MANAGEMENT,

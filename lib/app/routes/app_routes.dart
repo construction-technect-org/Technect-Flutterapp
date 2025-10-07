@@ -59,6 +59,7 @@ abstract class Routes {
   static const REPORT = _Paths.REPORT;
   static const NEWS = _Paths.NEWS;
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
+  static const SETTING = _Paths.SETTING;
 }
 
 abstract class _Paths {
@@ -94,6 +95,7 @@ abstract class _Paths {
   static const SERVICE_DETAILS = '/service-details';
   static const CHAT_SYSTEM = '/chat-system';
   static const CONNECTION_INBOX = '/connection-inbox';
+  static const SETTING = '/setting';
   static const DASHBOARD = '/dashboard';
   static const DASHABOARD_MARKET_PLACE = '/dashboard-market-place';
   static const SUPPORT_REQUEST = '/support-request';

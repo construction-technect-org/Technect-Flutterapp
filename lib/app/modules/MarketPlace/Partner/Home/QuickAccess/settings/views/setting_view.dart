@@ -9,10 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class SettingView extends StatelessWidget {
-  SettingView({super.key});
-
-  final controller = Get.put<SettingController>(SettingController());
+class SettingView extends GetView<SettingController> {
+  const SettingView({super.key});
 
   @override
   Widget build(BuildContext context) {

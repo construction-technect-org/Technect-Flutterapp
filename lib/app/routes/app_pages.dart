@@ -52,6 +52,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/views/inventory_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/bindings/report_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/views/report_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/bindings/setting_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/views/setting_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/bindings/faq_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/views/faq_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedBack/bindings/feedback_bindings.dart';
@@ -215,6 +217,11 @@ class AppPages {
       name: _Paths.CONNECTION_INBOX,
       page: () => ConnectionInboxView(),
       binding: ConnectionInboxBinding(),
+    ),
+    GetPage(
+      name: _Paths.SETTING,
+      page: () => const SettingView(),
+      binding: SettingBinding(),
     ),
 
 
