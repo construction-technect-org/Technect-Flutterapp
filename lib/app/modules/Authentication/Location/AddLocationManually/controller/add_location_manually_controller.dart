@@ -246,6 +246,7 @@ class AddLocationController extends GetxController {
       isLoading.value = false;
     }
   }
+
   //
   // Future<void> fetchAddresses() async {
   //   try {

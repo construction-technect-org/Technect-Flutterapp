@@ -105,7 +105,11 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -113,21 +117,29 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SIGN_UP_DETAILS,
-      page: () =>  SignUpDetailsView(),
+      page: () => SignUpDetailsView(),
       binding: SignUpDetailsBinding(),
     ),
     GetPage(
       name: _Paths.SIGN_UP_PASSWORD,
-      page: () => const SignUpPasswordView(),
+      page: () => SignUpPasswordView(),
       binding: SignUpPasswordBinding(),
     ),
     GetPage(
       name: _Paths.FORGOT_PASSWORD,
-      page: () => const ForgotPasswordView(),
+      page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
-    GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
+    GetPage(
+      name: _Paths.MAIN,
+      page: () => BottomBarView(),
+      binding: BottomBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => ProfileView(),
+      binding: ProfileBinding(),
+    ),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
@@ -142,12 +154,12 @@ class AppPages {
 
     GetPage(
       name: _Paths.ADD_LOCATION_MANUALLY,
-      page: () => const AddLocationManuallyView(),
+      page: () => AddLocationManuallyView(),
       binding: AddLocationBinding(),
     ),
     GetPage(
       name: _Paths.ADD_PRODUCT,
-      page: () =>  AddProductView(),
+      page: () => AddProductView(),
       binding: AddProductBinding(),
     ),
     GetPage(
@@ -185,19 +197,24 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
+    GetPage(
+      name: _Paths.FAQ,
+      page: () => const FaqScreen(),
+      binding: FAQBindings(),
+    ),
     GetPage(
       name: _Paths.TEAM_DETAILS,
       page: () => const TeamDetailsView(),
       binding: TeamDetailsBinding(),
     ),
 
-
     GetPage(
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<ServiceManagementController>(() => ServiceManagementController());
+        Get.lazyPut<ServiceManagementController>(
+          () => ServiceManagementController(),
+        );
       }),
     ),
 
@@ -216,7 +233,6 @@ class AppPages {
       page: () => ConnectionInboxView(),
       binding: ConnectionInboxBinding(),
     ),
-
 
     // Connector
     GetPage(

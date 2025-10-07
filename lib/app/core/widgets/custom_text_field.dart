@@ -67,7 +67,9 @@ class CustomTextField extends StatelessWidget {
               color: borderColor ?? MyColors.textFieldBorder, // 👈 Use here
             ),
           ),
-          child: TextField(
+          child: TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: validator,
             controller: controller,
             obscureText: obscureText ?? false,
             style: MyTexts.extraBold16.copyWith(
@@ -87,6 +89,7 @@ class CustomTextField extends StatelessWidget {
                   ? MyTexts.medium16.copyWith(color: MyColors.grey)
                   : null,
               border: InputBorder.none,
+
               suffixIcon: suffix,
               prefixIcon: prefix,
               prefixIconConstraints: const BoxConstraints(

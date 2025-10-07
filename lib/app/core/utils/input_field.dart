@@ -79,7 +79,10 @@ class CommonTextField extends StatelessWidget {
                     ),
                   ),
                   if (isRed == true)
-                    Text('*', style: MyTexts.regular16.copyWith(color: Colors.red)),
+                    Text(
+                      '*',
+                      style: MyTexts.regular16.copyWith(color: Colors.red),
+                    ),
                 ],
               ),
               const Gap(5),
@@ -142,11 +145,15 @@ class CommonTextField extends StatelessWidget {
             filled: true,
             fillColor: bgColor ?? Colors.white,
             counterText: "",
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
             errorStyle: MyTexts.regular13.copyWith(
               color: Colors.red,
               fontFamily: MyTexts.Roboto,
             ),
+            errorMaxLines: 2,
             hintText: hintText,
             hintStyle: MyTexts.regular16.copyWith(
               color: MyColors.primary.withValues(alpha: 0.5),
