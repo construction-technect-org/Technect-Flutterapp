@@ -28,8 +28,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/views/connector_main_tab.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/bindings/connector_connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/views/connector_connection_inbox_vies.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorCustomerSupportTicket/bindings/connector_customer_support_ticket_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorCustomerSupportTicket/views/connector_customer_support_ticket_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/bindings/connector_filter_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/views/connector_filters_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
@@ -38,10 +36,14 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/views/connector_profile_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorRequestDemo/bindings/connector_request_demo_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorRequestDemo/views/connector_request_demo_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/AddSupportTickets/views/connector_create_new_ticket.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/CustomerSupport/bindings/connector_create_new_ticket_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/bindings/connector_request_demo_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/views/connector_request_demo_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/SuppoerRequestFilter/bindings/connector_support_request_bindings.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/SuppoerRequestFilter/views/connector_support_request_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
@@ -84,6 +86,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Pr
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/views/product_detail_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/bindings/create_new_ticket_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/creat_new_ticket.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/RequestDemo/bindings/request_demo_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/RequestDemo/views/request_demo_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/SuppoerRequestFilter/bindings/support_request_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/SuppoerRequestFilter/views/support_request_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/bindings/bottom_binding.dart';
@@ -109,11 +113,7 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(
-      name: _Paths.LOGIN,
-      page: () => const LoginView(),
-      binding: LoginBinding(),
-    ),
+    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -134,16 +134,8 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(
-      name: _Paths.MAIN,
-      page: () => BottomBarView(),
-      binding: BottomBinding(),
-    ),
-    GetPage(
-      name: _Paths.PROFILE,
-      page: () => ProfileView(),
-      binding: ProfileBinding(),
-    ),
+    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
+    GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
@@ -201,11 +193,7 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(
-      name: _Paths.FAQ,
-      page: () => const FaqScreen(),
-      binding: FAQBindings(),
-    ),
+    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
     GetPage(
       name: _Paths.TEAM_DETAILS,
       page: () => const TeamDetailsView(),
@@ -216,9 +204,7 @@ class AppPages {
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<ServiceManagementController>(
-          () => ServiceManagementController(),
-        );
+        Get.lazyPut<ServiceManagementController>(() => ServiceManagementController());
       }),
     ),
 
@@ -312,14 +298,9 @@ class AppPages {
       binding: ConnectorConnectionInboxBinding(),
     ),
     GetPage(
-      name: Routes.CONNECTOR_CUSTOMER_SUPPORT_TICKET,
-      page: () => ConnectorCustomerSupportTicketView(),
-      binding: ConnectorCustomerSupportTicketBinding(),
-    ),
-    GetPage(
-      name: Routes.CONNECTOR_REQUEST_DEMO,
-      page: () => ConnectorRequestDemoView(),
-      binding: ConnectorRequestDemoBinding(),
+      name: Routes.REQUEST_DEMO,
+      page: () => RequestDemoView(),
+      binding: RequestDemoBinding(),
     ),
     GetPage(
       name: Routes.SUPPORT_REQUEST,
@@ -351,6 +332,21 @@ class AppPages {
       name: Routes.NOTIFICATIONS,
       page: () => NotificationView(),
       binding: NotificationBinding(),
+    ),
+    GetPage(
+      name: Routes.CONNECTOR_CREATE_NEW_TICKET,
+      page: () => ConnectorCreateNewTicket(),
+      binding: ConnectorCreateNewTicketBinding(),
+    ),
+    GetPage(
+      name: Routes.CONNECTOR_SUPPORT_REQUEST,
+      page: () => ConnectorSupportRequestScreen(),
+      binding: ConnectorSupportRequestBindings(),
+    ),
+    GetPage(
+      name: Routes.CONNECTOR_REQUEST_DEMO,
+      page: () => ConnectorRequestDemoView(),
+      binding: ConnectorRequestDemoBinding(),
     ),
   ];
 }

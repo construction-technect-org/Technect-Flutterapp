@@ -12,22 +12,18 @@ class APIConstants {
   static const String resendOtp = "auth/resend-otp";
   static const String verifyOtp = "auth/verify-otp";
 
-
   static const String notificationToggle = "notification-settings/toggle";
-
 
   static const String deactivateSendOtp = "auth/deactivate/send-otp";
   static const String deactivateVerifyOtp = "auth/deactivate/verify-otp";
   static const String deleteSendOtp = "auth/delete/send-otp";
   static const String deleteVerifyOtp = "auth/delete/verify-otp";
 
-
   static const String signup = "auth/signup";
   static const String login = "auth/login";
   static const String marketplaceUpdate = "auth/marketplace";
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
-  static const String forgotPasswordVerifyOtp =
-      "auth/forgot-password/verify-otp";
+  static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
   static const String forgotPasswordReset = "auth/forgot-password/reset";
   static const String profile = "auth/profile";
   static const String address = "address";
@@ -43,8 +39,7 @@ class APIConstants {
   static const String teamStatsOverview = "merchant/team/stats/overview";
   static const String roleDetailById = "merchant/role";
   static const String getMainCategories = "merchant/category/main";
-  static const String getSubCategories =
-      "merchant/category/sub?main_category_id=";
+  static const String getSubCategories = "merchant/category/sub?main_category_id=";
   static const String getProducts = "merchant/category/products/sub/";
   static const String getFilter = "merchant/category/filters/sub/";
   static const String getProductList = "merchant/product/list";
@@ -57,7 +52,7 @@ class APIConstants {
   static const String merchantDashboard = "merchant/dashboard";
   static const String newsMerchant = "news/merchant";
   static const String merchantAnalytics = "merchant/analytics";
-  static const String merchantReport= "merchant/analytics/pdf";
+  static const String merchantReport = "merchant/analytics/pdf";
 
   // Service Management APIs
   static const String getServiceList = "service/merchant/list";
@@ -84,4 +79,17 @@ class APIConstants {
 
   //Connector products
   static const String connectorProdcut = "connector/products";
+
+  // Connector SupportTicket API
+  static const String getConnectorSupportTicketCategories =
+      "connector/support-ticket/categories";
+  static const String getConnectorSupportTicketPriorities =
+      "connector/support-ticket/priorities";
+  static const String ConnectorSupportTicketCreate = "connector/support-ticket/create";
+  static const String getConnectorSupportMyTickets =
+      "connector/support-ticket/my-tickets";
+
+  // Connector Demo Request API
+  static const String connectorDemoRequest = "connector/demo-request/my-requests";
+  static const String connectorDemoRequestCreate = "connector/demo-request/create";
 }

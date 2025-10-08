@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/model/connectionModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/models/notification_model.dart';
@@ -7,8 +8,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/m
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/models/news_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart' as ProductModel;
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart' hide Statistics;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart'
+    as ProductModel;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart'
+    hide Statistics;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 import 'package:get_storage/get_storage.dart';
@@ -39,8 +42,13 @@ class AppSharedPreference {
   final faqData = <String, dynamic>{}.val('faqData');
   final cachedCategories = ''.val('cachedCategories');
   final cachedPriorities = ''.val('cachedPriorities');
+  final cachedConnectorCategories = ''.val('cachedConnectorCategories');
+  final cachedConnectorPriorities = ''.val('cachedConnectorPriorities');
   final productsData = <String, dynamic>{}.val('productsData');
   final supportTicketsData = <String, dynamic>{}.val('supportTicketsData');
+  final connectorSupportTicketsData = <String, dynamic>{}.val(
+    'connectorSupportTicketsData',
+  );
   final newsData = <String, dynamic>{}.val('newsData');
   final notificationData = <String, dynamic>{}.val('notificationData');
 
@@ -57,7 +65,7 @@ class AppSharedPreference {
   }
 
   String getRole() {
-    return role.val ;
+    return role.val;
   }
 
   void setDefaultAdd(bool isDefaultOffice) {
@@ -219,10 +227,7 @@ class AppSharedPreference {
   Future<void> saveTeam(List<TeamListData> team) async {
     try {
       final teamJson = team.map((member) => member.toJson()).toList();
-      setTeamData({
-        'data': teamJson,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-      });
+      setTeamData({'data': teamJson, 'timestamp': DateTime.now().millisecondsSinceEpoch});
     } catch (e) {
       log('Error saving team: $e');
     }
@@ -360,9 +365,7 @@ class AppSharedPreference {
 
   void setCategoriesData(List<SupportCategory> categories) {
     try {
-      final categoriesJson = categories
-          .map((category) => category.toJson())
-          .toList();
+      final categoriesJson = categories.map((category) => category.toJson()).toList();
       cachedCategories.val = jsonEncode(categoriesJson);
     } catch (e) {
       log('Error saving categories: $e');
@@ -374,9 +377,7 @@ class AppSharedPreference {
       final cachedData = cachedCategories.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> categoriesJson = jsonDecode(cachedData);
-        return categoriesJson
-            .map((json) => SupportCategory.fromJson(json))
-            .toList();
+        return categoriesJson.map((json) => SupportCategory.fromJson(json)).toList();
       }
     } catch (e) {
       log('Error getting categories: $e');
@@ -386,9 +387,7 @@ class AppSharedPreference {
 
   void setPrioritiesData(List<SupportPriority> priorities) {
     try {
-      final prioritiesJson = priorities
-          .map((priority) => priority.toJson())
-          .toList();
+      final prioritiesJson = priorities.map((priority) => priority.toJson()).toList();
       cachedPriorities.val = jsonEncode(prioritiesJson);
     } catch (e) {
       log('Error saving priorities: $e');
@@ -400,9 +399,7 @@ class AppSharedPreference {
       final cachedData = cachedPriorities.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> prioritiesJson = jsonDecode(cachedData);
-        return prioritiesJson
-            .map((json) => SupportPriority.fromJson(json))
-            .toList();
+        return prioritiesJson.map((json) => SupportPriority.fromJson(json)).toList();
       }
     } catch (e) {
       log('Error getting priorities: $e');
@@ -486,6 +483,71 @@ class AppSharedPreference {
       }
     } catch (e) {
       log('Error getting support tickets model: $e');
+    }
+    return null;
+  }
+
+  // Connector Support Methods
+  void setConnectorCategoriesData(List<SupportCategory> categories) {
+    try {
+      final categoriesJson = categories.map((category) => category.toJson()).toList();
+      cachedConnectorCategories.val = jsonEncode(categoriesJson);
+    } catch (e) {
+      log('Error saving connector categories: $e');
+    }
+  }
+
+  List<SupportCategory>? getConnectorCategoriesData() {
+    try {
+      final cachedData = cachedConnectorCategories.val;
+      if (cachedData.isNotEmpty) {
+        final List<dynamic> categoriesJson = jsonDecode(cachedData);
+        return categoriesJson.map((json) => SupportCategory.fromJson(json)).toList();
+      }
+    } catch (e) {
+      log('Error getting connector categories: $e');
+    }
+    return null;
+  }
+
+  void setConnectorPrioritiesData(List<SupportPriority> priorities) {
+    try {
+      final prioritiesJson = priorities.map((priority) => priority.toJson()).toList();
+      cachedConnectorPriorities.val = jsonEncode(prioritiesJson);
+    } catch (e) {
+      log('Error saving connector priorities: $e');
+    }
+  }
+
+  List<SupportPriority>? getConnectorPrioritiesData() {
+    try {
+      final cachedData = cachedConnectorPriorities.val;
+      if (cachedData.isNotEmpty) {
+        final List<dynamic> prioritiesJson = jsonDecode(cachedData);
+        return prioritiesJson.map((json) => SupportPriority.fromJson(json)).toList();
+      }
+    } catch (e) {
+      log('Error getting connector priorities: $e');
+    }
+    return null;
+  }
+
+  void setConnectorSupportTicketsModel(SupportMyTicketsModel supportTicketsModel) {
+    try {
+      connectorSupportTicketsData.val = supportTicketsModel.toJson();
+    } catch (e) {
+      log('Error saving connector support tickets model: $e');
+    }
+  }
+
+  SupportMyTicketsModel? getConnectorSupportTicketsModel() {
+    try {
+      final data = connectorSupportTicketsData.val;
+      if (data.isNotEmpty) {
+        return SupportMyTicketsModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting connector support tickets model: $e');
     }
     return null;
   }

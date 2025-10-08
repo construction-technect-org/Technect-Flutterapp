@@ -18,11 +18,7 @@ class SupportTicketCreateModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'data': data.toJson(),
-      'message': message,
-    };
+    return {'success': success, 'data': data.toJson(), 'message': message};
   }
 }
 
@@ -30,6 +26,7 @@ class SupportTicketCreat {
   final int id;
   final String ticketNumber;
   final int userId;
+  final int? connectorProfileId;
   final int merchantProfileId;
   final int categoryId;
   final int priorityId;
@@ -51,6 +48,7 @@ class SupportTicketCreat {
     required this.id,
     required this.ticketNumber,
     required this.userId,
+    required this.connectorProfileId,
     required this.merchantProfileId,
     required this.categoryId,
     required this.priorityId,
@@ -75,6 +73,7 @@ class SupportTicketCreat {
       ticketNumber: json['ticket_number'] ?? '',
       userId: json['user_id'] ?? 0,
       merchantProfileId: json['merchant_profile_id'] ?? 0,
+      connectorProfileId: json["connector_profile_id"] ?? 0,
       categoryId: json['category_id'] ?? 0,
       priorityId: json['priority_id'] ?? 0,
       statusId: json['status_id'] ?? 0,
@@ -82,7 +81,9 @@ class SupportTicketCreat {
       description: json['description'] ?? '',
       assignedTo: json['assigned_to'],
       resolutionNotes: json['resolution_notes'],
-      resolvedAt: json['resolved_at'] != null ? DateTime.parse(json['resolved_at']) : null,
+      resolvedAt: json['resolved_at'] != null
+          ? DateTime.parse(json['resolved_at'])
+          : null,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       categoryName: json['category_name'] ?? '',
@@ -98,6 +99,7 @@ class SupportTicketCreat {
       'id': id,
       'ticket_number': ticketNumber,
       'user_id': userId,
+      "connector_profile_id": connectorProfileId,
       'merchant_profile_id': merchantProfileId,
       'category_id': categoryId,
       'priority_id': priorityId,

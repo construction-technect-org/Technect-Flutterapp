@@ -1,13 +1,15 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/CustomerSupport/controller/connector_customer_support_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/stat_card.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/controller/customer_support_controller.dart';
 import 'package:gap/gap.dart';
 
-class CustomerSupportView extends StatelessWidget {
-  final CustomerSupportController controller = Get.put(CustomerSupportController());
+class ConnectorCustomerSupportView extends StatelessWidget {
+  final ConnectorCustomerSupportController controller = Get.put(
+    ConnectorCustomerSupportController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +71,7 @@ class CustomerSupportView extends StatelessWidget {
                                     return StatCard(
                                       onTap: () {
                                         Get.toNamed(
-                                          Routes.SUPPORT_REQUEST,
+                                          Routes.CONNECTOR_SUPPORT_REQUEST,
                                           arguments: {"status": "open"},
                                         );
                                       },
@@ -91,7 +93,7 @@ class CustomerSupportView extends StatelessWidget {
                                     return StatCard(
                                       onTap: () {
                                         Get.toNamed(
-                                          Routes.SUPPORT_REQUEST,
+                                          Routes.CONNECTOR_SUPPORT_REQUEST,
                                           arguments: {"status": "inprogress"},
                                         );
                                       },
@@ -119,7 +121,7 @@ class CustomerSupportView extends StatelessWidget {
                                     return StatCard(
                                       onTap: () {
                                         Get.toNamed(
-                                          Routes.SUPPORT_REQUEST,
+                                          Routes.CONNECTOR_SUPPORT_REQUEST,
                                           arguments: {"status": "resolved"},
                                         );
                                       },
@@ -143,7 +145,7 @@ class CustomerSupportView extends StatelessWidget {
                                     return StatCard(
                                       onTap: () {
                                         Get.toNamed(
-                                          Routes.SUPPORT_REQUEST,
+                                          Routes.CONNECTOR_SUPPORT_REQUEST,
                                           arguments: {"status": "resolved"},
                                         );
                                       },
@@ -169,7 +171,7 @@ class CustomerSupportView extends StatelessWidget {
                                 Expanded(
                                   child: OutlinedButton(
                                     onPressed: () {
-                                      Get.toNamed(Routes.REQUEST_DEMO);
+                                      Get.toNamed(Routes.CONNECTOR_REQUEST_DEMO);
                                     },
                                     style: OutlinedButton.styleFrom(
                                       side: const BorderSide(color: MyColors.primary),
@@ -193,7 +195,7 @@ class CustomerSupportView extends StatelessWidget {
                                   child: Center(
                                     child: RoundedButton(
                                       onTap: () {
-                                        Get.toNamed(Routes.CREATE_NEW_TICKET);
+                                        Get.toNamed(Routes.CONNECTOR_CREATE_NEW_TICKET);
                                       },
                                       buttonName: '',
                                       borderRadius: 12,

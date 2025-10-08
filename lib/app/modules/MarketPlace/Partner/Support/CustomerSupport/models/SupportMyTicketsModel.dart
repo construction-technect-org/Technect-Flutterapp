@@ -134,6 +134,7 @@ class Ticket {
   String? ticketNumber;
   int? userId;
   int? merchantProfileId;
+  int? connectorProfileId;
   int? categoryId;
   int? priorityId;
   int? statusId;
@@ -155,6 +156,7 @@ class Ticket {
     this.ticketNumber,
     this.userId,
     this.merchantProfileId,
+    this.connectorProfileId,
     this.categoryId,
     this.priorityId,
     this.statusId,
@@ -177,6 +179,7 @@ class Ticket {
     ticketNumber: json["ticket_number"],
     userId: json["user_id"],
     merchantProfileId: json["merchant_profile_id"],
+    connectorProfileId: json["connector_profile_id"],
     categoryId: json["category_id"],
     priorityId: json["priority_id"],
     statusId: json["status_id"],
@@ -199,6 +202,7 @@ class Ticket {
     "ticket_number": ticketNumber,
     "user_id": userId,
     "merchant_profile_id": merchantProfileId,
+    "connector_profile_id": connectorProfileId,
     "category_id": categoryId,
     "priority_id": priorityId,
     "status_id": statusId,
