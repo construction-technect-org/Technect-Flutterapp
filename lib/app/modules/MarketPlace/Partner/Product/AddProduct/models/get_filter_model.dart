@@ -90,3 +90,46 @@ class FilterData {
     "main_category_name": mainCategoryName,
   };
 }
+class ConnectorFilterModel {
+  String? filterName;
+  String? filterType;
+  double? min;
+  double? max;
+  List<String>? options;
+
+  ConnectorFilterModel({
+    this.filterName,
+    this.filterType,
+    this.min,
+    this.max,
+    this.options,
+  });
+
+  factory ConnectorFilterModel.fromJson(Map<String, dynamic> json) {
+    return ConnectorFilterModel(
+      filterName: json['filter_name'],
+      filterType: json['filter_type'],
+      min: (json['min'] ?? json['min_value']) != null
+          ? double.tryParse(json['min'].toString()) ??
+          double.tryParse(json['min_value'].toString())
+          : null,
+      max: (json['max'] ?? json['max_value']) != null
+          ? double.tryParse(json['max'].toString()) ??
+          double.tryParse(json['max_value'].toString())
+          : null,
+      options: (json['options'] ??
+          json['dropdown_list'] ??
+          [])
+          .map<String>((e) => e.toString())
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'filter_name': filterName,
+    'filter_type': filterType,
+    'min': min,
+    'max': max,
+    'options': options,
+  };
+}

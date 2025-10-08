@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -86,27 +87,7 @@ class ConnectorSelectedProductController extends GetxController {
       curve: Curves.easeInOut,
     );
   }
-  RxList<Product> filteredProducts = <Product>[].obs;
 
-  RxString searchQuery = ''.obs;
-
-  Future<void> getAllProducts() async {
-    try {
-      isLoading.value = true;
-
-      final res = await services.connectorProduct(
-        mainCategoryId: selectedMainCategoryId.value ?? '',
-        subCategoryId: selectedSubCategoryId.value ?? '',
-        categoryProductId: selectedProductId.value ?? '',
-      );
-      filteredProducts.value = res.data?.products ?? [];
-
-    } catch (e) {
-      Get.snackbar("Error", "Failed to load products: $e");
-    } finally {
-      isLoading.value = false;
-    }
-  }
 
   RxList<ConnectorCategory> categoryProducts = <ConnectorCategory>[].obs;
 
@@ -137,6 +118,28 @@ class ConnectorSelectedProductController extends GetxController {
   RxList<String> productNames = <String>[].obs;
   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
   RxList<SubCategory> subCategories = <SubCategory>[].obs;
+
+  RxList<Product> filteredProducts = <Product>[].obs;
+
+  RxString searchQuery = ''.obs;
+
+  Future<void> getAllProducts() async {
+    try {
+      isLoading.value = true;
+
+      final res = await services.connectorProduct(
+        mainCategoryId: selectedMainCategoryId.value ?? '',
+        subCategoryId: selectedSubCategoryId.value ?? '',
+        categoryProductId: selectedProductId.value ?? '',
+      );
+      filteredProducts.value = res.data?.products ?? [];
+
+    } catch (e) {
+      Get.snackbar("Error", "Failed to load products: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   Future<void> fetchMainCategories() async {
     try {
@@ -220,6 +223,47 @@ class ConnectorSelectedProductController extends GetxController {
       productsList.clear();
       productNames.clear();
       selectedProduct.value = null;
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  RxList<FilterData> filters = <FilterData>[].obs;
+
+  Future<void> getFilter(String subCategoryId) async {
+    try {
+      isLoading(true);
+      final result = await AddProductService().getFilter(int.parse(subCategoryId));
+
+      if (result.success == true) {
+        filters.value = (result.data as List<FilterData>)
+            .map((e) => e)
+            .toList();
+        // for (final FilterData filter in filters) {
+        //   if (filter.filterType == 'dropdown') {
+        //     dropdownValues[filter.filterName ?? ''] = Rxn<String>();
+        //   }
+        //   else if (filter.filterType == 'dropdown_multiple') {
+        //     multiDropdownValues[filter.filterName ?? ''] = <String>[].obs;
+        //   }
+        //   else {
+        //     dynamicControllers[filter.filterName ?? ''] =
+        //         TextEditingController();
+        //   }
+        // }
+        //
+        // if (isEdit &&
+        //     _storedFilterValues != null &&
+        //     _storedFilterValues!.isNotEmpty) {
+        //   _populateFilterControllers();
+        // }
+      } else {
+        filters.clear();
+      }
+      isLoading(false);
+    } catch (e) {
+      isLoading(false);
+      filters.clear();
     } finally {
       isLoading(false);
     }

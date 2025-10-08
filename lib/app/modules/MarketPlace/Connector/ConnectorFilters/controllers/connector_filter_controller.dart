@@ -1,56 +1,84 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 
 class ConnectorFilterController extends GetxController {
-  /// Search text field
-  final TextEditingController searchController = TextEditingController();
+  RxList<ConnectorFilterModel> filters = <ConnectorFilterModel>[].obs;
+  RxMap<String, dynamic> selectedFilters = <String, dynamic>{}.obs;
+  Map<String, Rx<RangeValues>> rangeValues = {};
+  Map<String, RxList<String>> multiSelectValues = {};
+  RxBool isLoad = false.obs;
 
-  /// Selected values
-  RxnString selectedBrand = RxnString('Jeevan Brand');
-  RxnString selectedUOM = RxnString();
-  RxnString selectedShape = RxnString();
-  RxnString selectedTexture = RxnString();
-  RxnString selectedSize = RxnString();
-  RxnString selectedWeight = RxnString();
+  @override
+  void onInit() {
+    super.onInit();
 
-  /// Options
-  final List<String> brands = ['Tejas Brand', 'Ambuja Brand', 'Jeevan Brand'];
-  final List<String> uoms = ['Kg', 'Ton', 'Bag'];
-  final List<String> shapes = ['Round', 'Square', 'Rectangle'];
-  final List<String> textures = ['Smooth', 'Rough', 'Matte'];
-  final List<String> sizes = ['Small', 'Medium', 'Large'];
-  final List<String> weights = ['Light', 'Medium', 'Heavy'];
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      isLoad.value = true;
 
-  /// Track which section is currently expanded
-  RxString expandedSection = ''.obs; // empty means none expanded
+      final selectedProductId =
+          Get.find<ConnectorSelectedProductController>().selectedProductId.value ?? "";
 
-  /// Reset filters
-  void clear() {
-    searchController.clear();
-    selectedBrand.value = null;
-    selectedUOM.value = null;
-    selectedShape.value = null;
-    selectedTexture.value = null;
-    selectedSize.value = null;
-    selectedWeight.value = null;
-    expandedSection.value = '';
+      await Get.find<ConnectorSelectedProductController>()
+          .getFilter(selectedProductId);
+
+      final otherFilters = Get.find<ConnectorSelectedProductController>().filters;
+
+      filters.assignAll(
+        otherFilters.map(
+              (f) => ConnectorFilterModel(
+            filterName: f.filterLabel,
+            filterType: f.filterType,
+            min: double.tryParse(f.minValue ?? '0'),
+            max: double.tryParse(f.maxValue ?? '100'),
+            options: f.dropdownList,
+          ),
+        ),
+      );
+
+      initFilterControllers();
+      isLoad.value = false;
+    });
   }
 
-  /// Apply filters
-  void apply(BuildContext context) {
-    final filters = {
-      'search': searchController.text,
-      'brand': selectedBrand.value,
-      'uom': selectedUOM.value,
-      'shape': selectedShape.value,
-      'texture': selectedTexture.value,
-      'size': selectedSize.value,
-      'weight': selectedWeight.value,
-    };
+  void initFilterControllers() {
+    for (final filter in filters) {
+      if (filter.filterType == 'number') {
+        rangeValues[filter.filterName ?? ''] =
+            RangeValues(filter.min ?? 0, filter.max ?? 0).obs;
+      } else if (filter.filterType == 'dropdown_multiple') {
+        multiSelectValues[filter.filterName ?? ''] = <String>[].obs;
+      } else if (filter.filterType == 'dropdown') {
+        selectedFilters[filter.filterName ?? ''] = ''.obs;
+      } else {
+        selectedFilters[filter.filterName ?? ''] = ''.obs;
+      }
+    }
+  }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Applied: $filters')),
-    );
+  RxList<String> expandedSection = <String>[].obs;
 
-    // Or use: Get.back(result: filters);
+  Map<String, dynamic> getFinalFilterData() {
+    final data = <String, dynamic>{};
+
+    for (final filter in filters) {
+      final name = filter.filterName ?? '';
+
+      if (filter.filterType == 'number') {
+        final range = rangeValues[name]?.value;
+        if (range != null) {
+          data[name] = {'min': range.start, 'max': range.end};
+        }
+      } else if (filter.filterType == 'dropdown_multiple') {
+        data[name] = multiSelectValues[name]?.toList() ?? [];
+      } else if (filter.filterType == 'dropdown') {
+        data[name] = selectedFilters[name]?.value ?? '';
+      } else {
+        data[name] = selectedFilters[name]?.value ?? '';
+      }
+    }
+
+    print("✅ Final Filter Data: $data");
+    return data;
   }
 }

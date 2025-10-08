@@ -1,264 +1,222 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/controllers/connector_filter_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
+import 'package:gap/gap.dart';
+import 'package:flutter/material.dart';
 
-class ConnectorFiltersView extends GetView<ConnectorFilterController> {
+class ConnectorFiltersView extends StatefulWidget {
   const ConnectorFiltersView({super.key});
+
+  @override
+  State<ConnectorFiltersView> createState() => _ConnectorFiltersViewState();
+}
+
+class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
+  final controller = Get.put<ConnectorFilterController>(
+    ConnectorFilterController(),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        centerTitle: false,
-        titleSpacing: 0,
-        elevation: 0,
-        backgroundColor: MyColors.backgroundColor,
-        automaticallyImplyLeading: false,
-      ),
-      body: Stack(
-        children: [
-          Container(color: MyColors.backgroundColor),
+      backgroundColor: MyColors.white,
+      appBar: CommonAppBar(title: const Text("Filters")),
 
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                color: MyColors.white,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
+      // ✅ Bottom buttons
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: [
+            Expanded(
+              child: RoundedButton(
+                color: Colors.white,
+                borderColor: MyColors.primary,
+                style: MyTexts.bold16.copyWith(color: MyColors.primary),
+                buttonName: "Clear All",
+                onTap: () {
+                  controller.selectedFilters.clear();
+                  controller.multiSelectValues.clear();
+                  controller.initFilterControllers();
+                },
               ),
-              child: SafeArea(
+            ),
+            const Gap(16),
+            Expanded(
+              child: RoundedButton(
+                buttonName: "Apply",
+                onTap: () {
+                  controller.getFinalFilterData();
+                  // Get.back();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // ✅ Main body
+      body: Obx(() {
+        if (controller.isLoad.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: controller.filters.length,
+          itemBuilder: (context, index) {
+            final filter = controller.filters[index];
+            final isExpanded = controller.expandedSection.contains(
+              filter.filterName,
+            );
+
+            return Obx(
+              () => AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.15),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 🔙 Back
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: InkWell(
-                        onTap: () => Get.back(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.arrow_back_ios_new, size: 20),
-                            const SizedBox(width: 8),
-                            Text(
-                              "Filters",
-                              style: MyTexts.medium20.copyWith(
-                                color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                          ],
+                    ListTile(
+                      title: Text(
+                        filter.filterName ?? '',
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.fontBlack,
+                          fontFamily: MyTexts.Roboto,
                         ),
                       ),
-                    ),
-
-                    // 🔍 Search bar
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: MyColors.white,
-                          borderRadius: BorderRadius.circular(22.5),
-                          border: Border.all(color: MyColors.chineseSilver),
-                        ),
-                        child: TextFormField(
-                          controller: controller.searchController,
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.only(left: 18, right: 8),
-                              child: SvgPicture.asset(
-                                Asset.searchIcon,
-                                height: 16,
-                                width: 16,
-                              ),
-                            ),
-                            prefixIconConstraints: const BoxConstraints(
-                              minWidth: 36,
-                              minHeight: 36,
-                            ),
-                            hintText: 'Search “filter or type”',
-                            hintStyle: MyTexts.medium16.copyWith(
-                              color: MyColors.darkGray,
-                            ),
-                            filled: true,
-                            fillColor: MyColors.white,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 12,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22.5),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
+                      trailing: Icon(
+                        isExpanded
+                            ? Icons.keyboard_arrow_up_rounded
+                            : Icons.keyboard_arrow_down_rounded,
+                        color: MyColors.grey,
                       ),
-                    ),
+                      onTap: () {
+                        if (controller.expandedSection.contains(
+                          filter.filterName,
+                        )) {
+                          controller.expandedSection.remove(filter.filterName ?? ''
+                          );
+                        } else {
+                          controller.expandedSection.add(filter.filterName ?? ''
+                          );
+                        }
 
-                    // ListView with filters
-                    Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        children: [
-                          SizedBox(height: 0.6.h),
-                          // Brand section
-                          _expandableSection(
-                            "Brand",
-                            controller.brands,
-                            controller.selectedBrand,
-                          ),
-                          _expandableSection(
-                            "UOM",
-                            controller.uoms,
-                            controller.selectedUOM,
-                          ),
-                          _expandableSection(
-                            "Shape",
-                            controller.shapes,
-                            controller.selectedShape,
-                          ),
-                          _expandableSection(
-                            "Texture",
-                            controller.textures,
-                            controller.selectedTexture,
-                          ),
-                          _expandableSection(
-                            "Size",
-                            controller.sizes,
-                            controller.selectedSize,
-                          ),
-                          _expandableSection(
-                            "Weight",
-                            controller.weights,
-                            controller.selectedWeight,
-                          ),
-                        ],
-                      ),
+                        setState(() {});
+                      },
                     ),
-
-                    // Bottom buttons
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: controller.clear,
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: Colors.red.shade200),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                              ),
-                              child: Text(
-                                'Clear',
-                                style: MyTexts.medium18.copyWith(
-                                  color: MyColors.red,
-                                  fontFamily: MyTexts.Roboto,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: (){},
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                backgroundColor: MyColors.primary,
-                              ),
-                              child: Text(
-                                'Apply',
-                                style: MyTexts.medium18.copyWith(
-                                  color: MyColors.white,
-                                  fontFamily: MyTexts.Roboto,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 250),
+                      crossFadeState: isExpanded
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      firstChild: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        child: _buildFilterBody(filter),
                       ),
+                      secondChild: const SizedBox.shrink(),
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
+            );
+          },
+        );
+      }),
     );
   }
 
-  /// Section header text
-  Widget _sectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-      child: Text(
-        title,
-        style: MyTexts.medium16.copyWith(
-          color: MyColors.fontBlack,
-          fontFamily: MyTexts.Roboto,
-        ),
-      ),
-    );
-  }
-
-  /// Expandable section with radio list
-  Widget _expandableSection(String title, List<String> options, RxnString selectedValue) {
-    return Obx(() {
-      final isExpanded = controller.expandedSection.value == title;
-      return Column(
-        children: [
-          ListTile(
-            title: Text(
-              title,
-              style: MyTexts.medium16.copyWith(
-                color: MyColors.fontBlack,
-                fontFamily: MyTexts.Geometric,
-              ),
+  Widget _buildFilterBody(ConnectorFilterModel filter) {
+    switch (filter.filterType) {
+      case 'number':
+        final range = controller.rangeValues[filter.filterName]!;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RangeSlider(
+              values: range.value,
+              min: filter.min ?? 0,
+              max: filter.max ?? 100,
+              divisions: 10,
+              activeColor: MyColors.primary,
+              onChanged: (val) => range.value = val,
             ),
-            onTap: () {
-              if (isExpanded) {
-                controller.expandedSection.value = ''; // collapse if same clicked
-              } else {
-                controller.expandedSection.value = title; // open new section
-              }
-            },
-          ),
-          if (isExpanded)
-            Column(
-              children: options.map((o) {
-                return RadioListTile<String>(
-                  value: o,
-                  groupValue: selectedValue.value,
-                  onChanged: (val) => selectedValue.value = val,
-                  title: Text(
-                    o,
-                    style: MyTexts.medium16.copyWith(
-                      color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Geometric,
-                    ),
-                  ),
-                  activeColor: MyColors.primary,
-                  dense: true,
-                  visualDensity: VisualDensity.compact,
-                  contentPadding: const EdgeInsets.only(left: 8),
+            Text(
+              "From ${range.value.start.toStringAsFixed(1)} to ${range.value.end.toStringAsFixed(1)}",
+              style: MyTexts.regular14.copyWith(color: MyColors.grey),
+            ),
+          ],
+        );
+
+      // ✅ dropdown → use checkable chips (single select)
+      case 'dropdown':
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children:
+              filter.options?.map((opt) {
+                final selected =
+                    controller.selectedFilters[filter.filterName]?.value == opt;
+                return FilterChip(
+                  label: Text(opt),
+                  selected: selected,
+                  backgroundColor: Colors.white,
+                  surfaceTintColor: Colors.transparent,
+                  onSelected: (val) {
+                    if (val) {
+                      controller.selectedFilters[filter.filterName]?.value =
+                          opt;
+                    } else {
+                      controller.selectedFilters[filter.filterName]?.value = '';
+                    }
+                    setState(() {});
+                  },
+                  selectedColor: MyColors.primary.withOpacity(0.15),
+                  checkmarkColor: MyColors.primary,
                 );
-              }).toList(),
-            ),
-          const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Divider()),
-        ],
-      );
-    });
+              }).toList() ??
+              [],
+        );
+
+      // ✅ dropdown_multiple → multi-select chips
+      case 'dropdown_multiple':
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children:
+              filter.options?.map((opt) {
+                final list = controller.multiSelectValues[filter.filterName]!;
+                final selected = list.contains(opt);
+                return FilterChip(
+                  label: Text(opt),
+                  selected: selected,
+                  onSelected: (val) {
+                    if (val) {
+                      list.add(opt);
+                    } else {
+                      list.remove(opt);
+                    }
+                    setState(() {});
+                  },
+                  selectedColor: MyColors.primary.withOpacity(0.15),
+                  checkmarkColor: MyColors.primary,
+                );
+              }).toList() ??
+              [],
+        );
+
+      default:
+        return const SizedBox();
+    }
   }
 }
