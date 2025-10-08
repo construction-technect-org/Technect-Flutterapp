@@ -8,7 +8,6 @@ import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
-import 'package:get_storage/get_storage.dart';
 
 class AddProductView extends GetView<AddProductController> {
   AddProductView({super.key});
@@ -79,105 +78,100 @@ class AddProductView extends GetView<AddProductController> {
                         SizedBox(height: 1.h),
                         if (controller.isEdit)
                           Obx(
-                                () =>
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: List.generate(5, (index) {
-                                      final path = controller.imageSlots[index];
+                            () => SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: List.generate(5, (index) {
+                                  final path = controller.imageSlots[index];
 
-                                      if (path != null) {
-                                        return Stack(
-                                          alignment: Alignment.topRight,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                right: 8.0,
-                                                top: 8,
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius
-                                                    .circular(
-                                                  12,
-                                                ),
-                                                child: GestureDetector(
-                                                  // onTap: () => controller.showFullImage(path),
-                                                  child: path.contains('http')
-                                                      ? getImageView(
-                                                    finalUrl: path,
-                                                    width: 80,
-                                                    height: 80,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                      : Image.file(
-                                                    File(path),
-                                                    width: 80,
-                                                    height: 80,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              top: 4,
-                                              right: 4,
-                                              child: GestureDetector(
-                                                onTap: () =>
-                                                    controller.removeImageAt(
-                                                        index),
-                                                child: Container(
-                                                  decoration: const BoxDecoration(
-                                                    color: Colors.red,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  padding: const EdgeInsets.all(
-                                                      3),
-                                                  child: const Icon(
-                                                    Icons.close,
-                                                    size: 16,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      } else {
-                                        return Padding(
+                                  if (path != null) {
+                                    return Stack(
+                                      alignment: Alignment.topRight,
+                                      children: [
+                                        Padding(
                                           padding: const EdgeInsets.only(
                                             right: 8.0,
                                             top: 8,
                                           ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            child: GestureDetector(
+                                              // onTap: () => controller.showFullImage(path),
+                                              child: path.contains('http')
+                                                  ? getImageView(
+                                                      finalUrl: path,
+                                                      width: 80,
+                                                      height: 80,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.file(
+                                                      File(path),
+                                                      width: 80,
+                                                      height: 80,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 4,
+                                          right: 4,
                                           child: GestureDetector(
-                                            onTap: controller.pickImageEdit,
+                                            onTap: () =>
+                                                controller.removeImageAt(index),
                                             child: Container(
-                                              width: 80,
-                                              height: 80,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: MyColors.grey,
-                                                  width: 1.2,
-                                                ),
-                                                borderRadius: BorderRadius
-                                                    .circular(
-                                                  12,
-                                                ),
-                                                color: Colors.grey.shade100,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.red,
+                                                shape: BoxShape.circle,
                                               ),
-                                              child: const Center(
-                                                child: Icon(
-                                                  Icons.add,
-                                                  size: 30,
-                                                  color: Colors.grey,
-                                                ),
+                                              padding: const EdgeInsets.all(3),
+                                              child: const Icon(
+                                                Icons.close,
+                                                size: 16,
+                                                color: Colors.white,
                                               ),
                                             ),
                                           ),
-                                        );
-                                      }
-                                    }),
-                                  ),
-                                ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 8.0,
+                                        top: 8,
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: controller.pickImageEdit,
+                                        child: Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: MyColors.grey,
+                                              width: 1.2,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            color: Colors.grey.shade100,
+                                          ),
+                                          child: const Center(
+                                            child: Icon(
+                                              Icons.add,
+                                              size: 30,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }),
+                              ),
+                            ),
                           ),
                         if (!controller.isEdit)
                           Obx(() {
@@ -186,121 +180,116 @@ class AddProductView extends GetView<AddProductController> {
                               child: Row(
                                 children: [
                                   ...controller.pickedFilePathList.map(
-                                        (path) =>
-                                        Stack(
-                                          alignment: Alignment.topRight,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                right: 8.0,
-                                                top: 8,
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius
-                                                    .circular(
-                                                  12,
-                                                ),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Get.dialog(
-                                                      Dialog(
-                                                        backgroundColor: Colors
-                                                            .white,
-                                                        insetPadding:
+                                    (path) => Stack(
+                                      alignment: Alignment.topRight,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            right: 8.0,
+                                            top: 8,
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Get.dialog(
+                                                  Dialog(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    insetPadding:
                                                         const EdgeInsets.all(
-                                                            20),
-                                                        child: Stack(
-                                                          alignment:
+                                                          20,
+                                                        ),
+                                                    child: Stack(
+                                                      alignment:
                                                           Alignment.topRight,
-                                                          children: [
-                                                            InteractiveViewer(
-                                                              child:
+                                                      children: [
+                                                        InteractiveViewer(
+                                                          child:
                                                               path.contains(
                                                                 'http',
                                                               )
-                                                                  ? Image
-                                                                  .network(
-                                                                path,
-                                                                fit: BoxFit
-                                                                    .contain,
-                                                                width: double
-                                                                    .infinity,
-                                                                height: double
-                                                                    .infinity,
-                                                              )
-                                                                  : Image.file(
-                                                                File(path),
-                                                                fit: BoxFit
-                                                                    .contain,
-                                                                width: double
-                                                                    .infinity,
-                                                                height: double
-                                                                    .infinity,
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                              const EdgeInsets
-                                                                  .all(
+                                                              ? Image.network(
+                                                                  path,
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: double
+                                                                      .infinity,
+                                                                )
+                                                              : Image.file(
+                                                                  File(path),
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: double
+                                                                      .infinity,
+                                                                ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets.all(
                                                                 16.0,
                                                               ),
-                                                              child: GestureDetector(
-                                                                onTap: () =>
-                                                                    Get.back(),
-                                                                child: const Icon(
-                                                                  Icons.close,
-                                                                  color: Colors
-                                                                      .black,
-                                                                  size: 30,
-                                                                ),
-                                                              ),
+                                                          child: GestureDetector(
+                                                            onTap: () =>
+                                                                Get.back(),
+                                                            child: const Icon(
+                                                              Icons.close,
+                                                              color:
+                                                                  Colors.black,
+                                                              size: 30,
                                                             ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: path.contains('http')
-                                                      ? getImageView(
-                                                    finalUrl: path ?? "",
-                                                    width: 80,
-                                                    height: 80,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                      : Image.file(
-                                                    File(path),
-                                                    width: 80,
-                                                    height: 80,
-                                                    fit: BoxFit.cover,
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
+                                                );
+                                              },
+                                              child: path.contains('http')
+                                                  ? getImageView(
+                                                      finalUrl: path ?? "",
+                                                      width: 80,
+                                                      height: 80,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.file(
+                                                      File(path),
+                                                      width: 80,
+                                                      height: 80,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                             ),
-                                            Positioned(
-                                              top: 4,
-                                              right: 4,
-                                              child: GestureDetector(
-                                                onTap: () =>
-                                                    controller
-                                                        .pickedFilePathList
-                                                        .remove(path),
-                                                child: Container(
-                                                  decoration: const BoxDecoration(
-                                                    color: Colors.red,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  padding: const EdgeInsets.all(
-                                                      3),
-                                                  child: const Icon(
-                                                    Icons.close,
-                                                    size: 16,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
+                                        Positioned(
+                                          top: 4,
+                                          right: 4,
+                                          child: GestureDetector(
+                                            onTap: () => controller
+                                                .pickedFilePathList
+                                                .remove(path),
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                color: Colors.red,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              padding: const EdgeInsets.all(3),
+                                              child: const Icon(
+                                                Icons.close,
+                                                size: 16,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   if (controller.pickedFilePathList.length < 5)
                                     Padding(
@@ -339,14 +328,12 @@ class AddProductView extends GetView<AddProductController> {
                           }),
                         SizedBox(height: 3.h),
                         CommonTextField(
-                          headerText: 'Product Name',
-                          hintText: "ENTER YOUR PRODUCT NAME",
-                          controller: controller.productNameController,
+                          headerText: 'Brand Name',
+                          hintText: "ENTER PRODUCT BRAND NAME",
+                          controller: controller.brandNameController,
                           validator: (val) {
-                            if (val == null || val
-                                .trim()
-                                .isEmpty) {
-                              return "Please enter product name";
+                            if (val == null || val.trim().isEmpty) {
+                              return "Please enter brand name";
                             }
                             return null;
                           },
@@ -376,8 +363,8 @@ class AddProductView extends GetView<AddProductController> {
                           onChanged: controller.isEdit
                               ? null
                               : (value) {
-                            controller.onMainCategorySelected(value);
-                          },
+                                  controller.onMainCategorySelected(value);
+                                },
                           enabled: !controller.isEdit,
                         ),
                         SizedBox(height: 2.h),
@@ -396,8 +383,8 @@ class AddProductView extends GetView<AddProductController> {
                           onChanged: controller.isEdit
                               ? null
                               : (value) {
-                            controller.onSubCategorySelected(value);
-                          },
+                                  controller.onSubCategorySelected(value);
+                                },
                           enabled: !controller.isEdit,
                         ),
                         SizedBox(height: 2.h),
@@ -425,28 +412,28 @@ class AddProductView extends GetView<AddProductController> {
                             Obx(() {
                               return controller.isOutStock.value
                                   ? Column(
-                                children: [
-                                  SizedBox(height: 1.h),
-                                  CommonTextField(
-                                    hintText: "Add  Stock",
-                                    controller:
-                                    controller.stockController,
-                                    keyboardType: TextInputType.number,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return "Please enter stock";
-                                      }
-                                      if (double.tryParse(val) == null) {
-                                        return "Enter valid number";
-                                      }
-                                      if (int.tryParse(val) == 0) {
-                                        return "Stock can not be zero";
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ],
-                              )
+                                      children: [
+                                        SizedBox(height: 1.h),
+                                        CommonTextField(
+                                          hintText: "Add  Stock",
+                                          controller:
+                                              controller.stockController,
+                                          keyboardType: TextInputType.number,
+                                          validator: (val) {
+                                            if (val == null || val.isEmpty) {
+                                              return "Please enter stock";
+                                            }
+                                            if (double.tryParse(val) == null) {
+                                              return "Enter valid number";
+                                            }
+                                            if (int.tryParse(val) == 0) {
+                                              return "Stock can not be zero";
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ],
+                                    )
                                   : const SizedBox();
                             }),
                             SizedBox(height: 2.h),
@@ -472,8 +459,8 @@ class AddProductView extends GetView<AddProductController> {
                                   onChanged: controller.isEdit
                                       ? null
                                       : (val) {
-                                    controller.onProductSelected(val);
-                                  },
+                                          controller.onProductSelected(val);
+                                        },
                                   enabled: !controller.isEdit,
                                 ),
                                 SizedBox(height: 2.h),
@@ -592,9 +579,7 @@ class AddProductView extends GetView<AddProductController> {
                           maxLine: 3,
                           controller: controller.noteController,
                           validator: (val) {
-                            if (val == null || val
-                                .trim()
-                                .isEmpty) {
+                            if (val == null || val.trim().isEmpty) {
                               return "Please enter note";
                             }
                             return null;
@@ -605,9 +590,7 @@ class AddProductView extends GetView<AddProductController> {
                           headerText: 'Terms & Conditions',
                           hintText: "ADD  CONDITIONS",
                           validator: (val) {
-                            if (val == null || val
-                                .trim()
-                                .isEmpty) {
+                            if (val == null || val.trim().isEmpty) {
                               return "Please enter terms & condition";
                             }
                             return null;
@@ -620,7 +603,8 @@ class AddProductView extends GetView<AddProductController> {
                           child: RoundedButton(
                             buttonName: 'PROCEED',
                             onTap: () async {
-                              if (controller.pickedFilePathList.isEmpty && !controller.isEdit) {
+                              if (controller.pickedFilePathList.isEmpty &&
+                                  !controller.isEdit) {
                                 SnackBars.errorSnackBar(
                                   content: 'Please upload at least one image',
                                 );
@@ -628,7 +612,9 @@ class AddProductView extends GetView<AddProductController> {
                               }
                               if (controller.isEdit) {
                                 final hasImage = controller.imageSlots.any(
-                                      (path) => path != null && path.toString().trim().isNotEmpty,
+                                  (path) =>
+                                      path != null &&
+                                      path.toString().trim().isNotEmpty,
                                 );
                                 if (!hasImage) {
                                   SnackBars.errorSnackBar(
@@ -638,18 +624,16 @@ class AddProductView extends GetView<AddProductController> {
                                 }
                               }
                               if (formKey2.currentState!.validate()) {
-                                if (await controller.firstPartValidation()) {
-                                  controller.showExtraFields.value = true;
-                                  controller.pageController.animateToPage(
-                                    1,
-                                    duration: const Duration(milliseconds: 500),
-                                    curve: Curves.easeInOut,
-                                  );
-                                }
+                                controller.showExtraFields.value = true;
+                                controller.pageController.animateToPage(
+                                  1,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeInOut,
+                                );
                               } else {
                                 SnackBars.errorSnackBar(
                                   content:
-                                  "Please fill all required fields properly",
+                                      "Please fill all required fields properly",
                                 );
                               }
                             },
@@ -670,20 +654,6 @@ class AddProductView extends GetView<AddProductController> {
                       children: [
                         const StepperWidgetAddProduct(currentStep: 2),
                         SizedBox(height: 3.h),
-                        CommonTextField(
-                          headerText: 'Brand Name',
-                          hintText: "ENTER PRODUCT BRAND NAME",
-                          controller: controller.brandNameController,
-                          validator: (val) {
-                            if (val == null || val
-                                .trim()
-                                .isEmpty) {
-                              return "Please enter brand name";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 2.h),
                         Obx(() {
                           return ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
@@ -698,7 +668,7 @@ class AddProductView extends GetView<AddProductController> {
                               if (filter.filterType == 'dropdown') {
                                 controller.dropdownValues.putIfAbsent(
                                   filter.filterName!,
-                                      () => Rxn<String>(),
+                                  () => Rxn<String>(),
                                 );
 
                                 return Padding(
@@ -706,13 +676,12 @@ class AddProductView extends GetView<AddProductController> {
                                   child: CommonDropdown<String>(
                                     headerText: filter.filterLabel ?? '',
                                     hintText:
-                                    "Select ${filter.filterLabel ?? ''}",
+                                        "Select ${filter.filterLabel ?? ''}",
                                     items: (filter.dropdownList ?? [])
                                         .cast<String>(),
                                     validator: (val) {
                                       if (val == null || val.isEmpty) {
-                                        return "Please select ${filter
-                                            .filterLabel ?? 'a value'}";
+                                        return "Please select ${filter.filterLabel ?? 'a value'}";
                                       }
                                       return null;
                                     },
@@ -721,9 +690,9 @@ class AddProductView extends GetView<AddProductController> {
                                     itemLabel: (item) => item,
                                     onChanged: (val) {
                                       controller
-                                          .dynamicControllers[filter
-                                          .filterName]
-                                          ?.text =
+                                              .dynamicControllers[filter
+                                                  .filterName]
+                                              ?.text =
                                           val ?? '';
                                     },
                                   ),
@@ -733,7 +702,7 @@ class AddProductView extends GetView<AddProductController> {
                               if (filter.filterType == 'dropdown_multiple') {
                                 controller.multiDropdownValues.putIfAbsent(
                                   filter.filterName!,
-                                      () => <String>[].obs,
+                                  () => <String>[].obs,
                                 );
 
                                 // RxString for showing validation error
@@ -743,217 +712,198 @@ class AddProductView extends GetView<AddProductController> {
                                     .multiDropdownValues[filter.filterName]!;
 
                                 return Obx(
-                                      () =>
-                                      Padding(
-                                        padding: EdgeInsets.only(bottom: 2.h),
-                                        child: Column(
-                                          crossAxisAlignment:
+                                  () => Padding(
+                                    padding: EdgeInsets.only(bottom: 2.h),
+                                    child: Column(
+                                      crossAxisAlignment:
                                           CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
                                           children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  filter.filterLabel ?? '',
-                                                  style: MyTexts.regular16
-                                                      .copyWith(
-                                                    color: MyColors.lightBlue,
-                                                    fontFamily: MyTexts.Roboto,
-                                                  ),
-                                                ),
-                                                const Text(
-                                                  '*',
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ],
+                                            Text(
+                                              filter.filterLabel ?? '',
+                                              style: MyTexts.regular16.copyWith(
+                                                color: MyColors.lightBlue,
+                                                fontFamily: MyTexts.Roboto,
+                                              ),
                                             ),
-                                            const Gap(5),
-                                            GestureDetector(
-                                              onTap: () async {
-                                                final List<String> items =
+                                            const Text(
+                                              '*',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Gap(5),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            final List<String> items =
                                                 (filter.dropdownList ?? [])
                                                     .cast<String>();
 
-                                                final selected = await showDialog<
-                                                    List<String>>(
-                                                  context: context,
-                                                  builder: (_) {
-                                                    final tempSelection =
-                                                        selectedList
-                                                            .toSet()
-                                                            .obs;
-                                                    return AlertDialog(
-                                                      backgroundColor: Colors
-                                                          .white,
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius:
+                                            final selected = await showDialog<List<String>>(
+                                              context: context,
+                                              builder: (_) {
+                                                final tempSelection =
+                                                    selectedList.toSet().obs;
+                                                return AlertDialog(
+                                                  backgroundColor: Colors.white,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
                                                         BorderRadius.circular(
                                                           10,
                                                         ),
-                                                      ),
-                                                      title: Text(
-                                                        "Select ${filter
-                                                            .filterLabel ??
-                                                            ''}",
-                                                      ),
-                                                      titleTextStyle: MyTexts
-                                                          .medium14
-                                                          .copyWith(
+                                                  ),
+                                                  title: Text(
+                                                    "Select ${filter.filterLabel ?? ''}",
+                                                  ),
+                                                  titleTextStyle: MyTexts
+                                                      .medium14
+                                                      .copyWith(
                                                         color: MyColors.primary,
                                                         fontFamily:
-                                                        MyTexts.Roboto,
+                                                            MyTexts.Roboto,
                                                       ),
-                                                      content: Obx(
-                                                            () =>
-                                                            SingleChildScrollView(
-                                                              child: Column(
-                                                                children: items
-                                                                    .map((
-                                                                    item,) {
-                                                                  final isSelected =
-                                                                  tempSelection
-                                                                      .contains(
+                                                  content: Obx(
+                                                    () => SingleChildScrollView(
+                                                      child: Column(
+                                                        children: items.map((
+                                                          item,
+                                                        ) {
+                                                          final isSelected =
+                                                              tempSelection
+                                                                  .contains(
                                                                     item,
                                                                   );
-                                                                  return CheckboxListTile(
-                                                                    title: Text(
-                                                                        item),
-                                                                    value: isSelected,
-                                                                    onChanged: (
-                                                                        checked) {
-                                                                      if (checked ==
-                                                                          true) {
-                                                                        tempSelection
-                                                                            .add(
-                                                                            item);
-                                                                      } else {
-                                                                        tempSelection
-                                                                            .remove(
-                                                                          item,
-                                                                        );
-                                                                      }
-                                                                    },
-                                                                  );
-                                                                }).toList(),
-                                                              ),
-                                                            ),
+                                                          return CheckboxListTile(
+                                                            title: Text(item),
+                                                            value: isSelected,
+                                                            onChanged: (checked) {
+                                                              if (checked ==
+                                                                  true) {
+                                                                tempSelection
+                                                                    .add(item);
+                                                              } else {
+                                                                tempSelection
+                                                                    .remove(
+                                                                      item,
+                                                                    );
+                                                              }
+                                                            },
+                                                          );
+                                                        }).toList(),
                                                       ),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () =>
-                                                              Get.back(
-                                                                result: tempSelection
-                                                                    .toList(),
-                                                              ),
-                                                          child: const Text(
-                                                              "OK"),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-
-                                                if (selected != null) {
-                                                  selectedList.assignAll(
-                                                      selected);
-                                                  controller
-                                                      .dynamicControllers[filter
-                                                      .filterName]
-                                                      ?.text = selected.join(
-                                                    ', ',
-                                                  );
-
-                                                  // 🧠 Validation: clear error if at least one item selected
-                                                  if (selectedList.isNotEmpty) {
-                                                    errorText.value = '';
-                                                  }
-                                                }
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                  horizontal: 12,
-                                                  vertical: 14,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: errorText.isNotEmpty
-                                                        ? Colors.red
-                                                        : MyColors.grey
-                                                        .withOpacity(
-                                                      0.4,
                                                     ),
                                                   ),
-                                                  borderRadius:
-                                                  BorderRadius.circular(10),
-                                                  color: Colors.white,
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        selectedList.isEmpty
-                                                            ? "Select ${filter
-                                                            .filterLabel ?? ''}"
-                                                            : selectedList.join(
-                                                          ', ',
-                                                        ),
-                                                        style: selectedList
-                                                            .isEmpty
-                                                            ? MyTexts.regular16
-                                                            .copyWith(
-                                                          color: MyColors
-                                                              .primary
-                                                              .withOpacity(
-                                                            0.5,
-                                                          ),
-                                                          fontFamily:
-                                                          MyTexts
-                                                              .Roboto,
-                                                        )
-                                                            : MyTexts.medium16
-                                                            .copyWith(
-                                                          color: MyColors
-                                                              .primary,
-                                                          fontFamily:
-                                                          MyTexts
-                                                              .Roboto,
-                                                        ),
-                                                        overflow:
-                                                        TextOverflow.ellipsis,
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () => Get.back(
+                                                        result: tempSelection
+                                                            .toList(),
                                                       ),
-                                                    ),
-                                                    const Icon(
-                                                      Icons
-                                                          .keyboard_arrow_down_rounded,
-                                                      size: 24,
+                                                      child: const Text("OK"),
                                                     ),
                                                   ],
-                                                ),
-                                              ),
+                                                );
+                                              },
+                                            );
+
+                                            if (selected != null) {
+                                              selectedList.assignAll(selected);
+                                              controller
+                                                  .dynamicControllers[filter
+                                                      .filterName]
+                                                  ?.text = selected.join(
+                                                ', ',
+                                              );
+
+                                              // 🧠 Validation: clear error if at least one item selected
+                                              if (selectedList.isNotEmpty) {
+                                                errorText.value = '';
+                                              }
+                                            }
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 14,
                                             ),
-                                            if (errorText.isNotEmpty)
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  top: 4,
-                                                  left: 8,
-                                                ),
-                                                child: Text(
-                                                  errorText.value,
-                                                  style: const TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 12,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: errorText.isNotEmpty
+                                                    ? Colors.red
+                                                    : MyColors.grey.withOpacity(
+                                                        0.4,
+                                                      ),
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    selectedList.isEmpty
+                                                        ? "Select ${filter.filterLabel ?? ''}"
+                                                        : selectedList.join(
+                                                            ', ',
+                                                          ),
+                                                    style: selectedList.isEmpty
+                                                        ? MyTexts.regular16
+                                                              .copyWith(
+                                                                color: MyColors
+                                                                    .primary
+                                                                    .withOpacity(
+                                                                      0.5,
+                                                                    ),
+                                                                fontFamily:
+                                                                    MyTexts
+                                                                        .Roboto,
+                                                              )
+                                                        : MyTexts.medium16
+                                                              .copyWith(
+                                                                color: MyColors
+                                                                    .primary,
+                                                                fontFamily:
+                                                                    MyTexts
+                                                                        .Roboto,
+                                                              ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                 ),
-                                              ),
-                                          ],
+                                                const Icon(
+                                                  Icons
+                                                      .keyboard_arrow_down_rounded,
+                                                  size: 24,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        if (errorText.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 4,
+                                              left: 8,
+                                            ),
+                                            child: Text(
+                                              errorText.value,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
                                 );
                               }
 
@@ -969,12 +919,12 @@ class AddProductView extends GetView<AddProductController> {
                                   padding: EdgeInsets.only(bottom: 2.h),
                                   child: CommonTextField(
                                     keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
+                                        const TextInputType.numberWithOptions(
+                                          decimal: true,
+                                        ),
                                     headerText: filter.filterLabel ?? '',
                                     hintText:
-                                    "Enter ${filter.filterLabel ?? ''}",
+                                        "Enter ${filter.filterLabel ?? ''}",
                                     controller: controllerField,
                                     validator: (val) {
                                       if (val == null || val.isEmpty) {
@@ -994,17 +944,17 @@ class AddProductView extends GetView<AddProductController> {
                                     },
                                     suffixIcon: filter.unit != null
                                         ? Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 8.0,
-                                        top: 12.0,
-                                      ),
-                                      child: Text(
-                                        filter.unit!,
-                                        style: MyTexts.medium14.copyWith(
-                                          color: MyColors.primary,
-                                        ),
-                                      ),
-                                    )
+                                            padding: const EdgeInsets.only(
+                                              right: 8.0,
+                                              top: 12.0,
+                                            ),
+                                            child: Text(
+                                              filter.unit!,
+                                              style: MyTexts.medium14.copyWith(
+                                                color: MyColors.primary,
+                                              ),
+                                            ),
+                                          )
                                         : null,
                                   ),
                                 );
@@ -1024,17 +974,17 @@ class AddProductView extends GetView<AddProductController> {
                                   },
                                   suffixIcon: filter.unit != null
                                       ? Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 8.0,
-                                      top: 8.0,
-                                    ),
-                                    child: Text(
-                                      filter.unit!,
-                                      style: MyTexts.regular14.copyWith(
-                                        color: MyColors.grey,
-                                      ),
-                                    ),
-                                  )
+                                          padding: const EdgeInsets.only(
+                                            right: 8.0,
+                                            top: 8.0,
+                                          ),
+                                          child: Text(
+                                            filter.unit!,
+                                            style: MyTexts.regular14.copyWith(
+                                              color: MyColors.grey,
+                                            ),
+                                          ),
+                                        )
                                       : null,
                                 ),
                               );
@@ -1046,35 +996,35 @@ class AddProductView extends GetView<AddProductController> {
                         Center(
                           child: RoundedButton(
                             buttonName: 'SUBMIT',
-                            onTap: () async {
+                            onTap: () {
                               hideKeyboard();
 
                               if (!formKey1.currentState!.validate()) {
                                 SnackBars.errorSnackBar(
                                   content:
-                                  "Please fill all required fields properly",
+                                      "Please fill all required fields properly",
                                 );
                                 return;
                               }
 
                               bool allValid = true;
 
-                              controller.multiDropdownValues.forEach((key,
-                                  list,) {
+                              controller.multiDropdownValues.forEach((
+                                key,
+                                list,
+                              ) {
                                 if (list.isEmpty) {
                                   allValid = false;
                                   SnackBars.errorSnackBar(
                                     content:
-                                    "Please select at least one value for $key",
+                                        "Please select at least one value for $key",
                                   );
                                 }
                               });
 
                               if (!allValid) return;
 
-                              if (await controller.firstPartValidation()) {
-                                controller.submitProduct(formKey1);
-                              }
+                              controller.submitProduct(formKey1);
                             },
                           ),
                         ),

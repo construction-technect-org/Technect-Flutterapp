@@ -473,57 +473,14 @@ class AddProductController extends GetxController {
   }
 
 
-  Future<bool> firstPartValidation() async {
-    bool isRequired = false;
-  if (productNameController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Product name is required');
-      isRequired = false;
-    }
-    // else if (productCodeController.text.isEmpty) {
-    //   SnackBars.errorSnackBar(content: 'Product code is required');
-    //   isRequired = false;
-    // }
-    else if (selectedMainCategoryId.value == null) {
-      SnackBars.errorSnackBar(content: 'Main category is required');
-      isRequired = false;
-    } else if (selectedSubCategoryId.value == null) {
-      SnackBars.errorSnackBar(content: 'Sub category is required');
-      isRequired = false;
-    } else if (productNames.isNotEmpty && selectedProductId.value == null) {
-      SnackBars.errorSnackBar(content: 'Product is required');
-      isRequired = false;
-    } else if (isOutStock.value == true && stockController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Stock Quantity is required');
-      isRequired = false;
-    } else if (isOutStock.value == true &&
-        int.parse(stockController.text) == 0) {
-      SnackBars.errorSnackBar(content: 'Stock Quantity can not be zero');
-      isRequired = false;
-    } else if (priceController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Rate is required');
-      isRequired = false;
-    } else if (selectedGST.value == null) {
-      SnackBars.errorSnackBar(content: 'GST percentage is required');
-      isRequired = false;
-    } else if (noteController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Note is required');
-      isRequired = false;
-    } else if (termsController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Terms is required');
-      isRequired = false;
-    } else {
-      isRequired = true;
-    }
-    return isRequired;
-  }
 
   void createProductValidation(GlobalKey<FormState> formKey) {
     final form = formKey.currentState;
 
-    if (brandNameController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Brand name is required');
-      return;
-    }
+    // if (brandNameController.text.isEmpty) {
+    //   SnackBars.errorSnackBar(content: 'Brand name is required');
+    //   return;
+    // }
 
     if (form != null && !form.validate()) {
       return;
@@ -684,7 +641,6 @@ class AddProductController extends GetxController {
       }
     });
     fields = {
-      "product_name": productNameController.text,
       "main_category_id": selectedMainCategoryId.value,
       "sub_category_id": selectedSubCategoryId.value,
     };
@@ -768,7 +724,6 @@ class AddProductController extends GetxController {
 
     // 🟨 Step 4: Add product fields
     fields.addAll({
-      "product_name": productNameController.text,
       "price": priceController.text,
       "gst_percentage": (selectedGST.value ?? "").replaceAll("%", ""),
       "terms_and_conditions": termsController.text,
