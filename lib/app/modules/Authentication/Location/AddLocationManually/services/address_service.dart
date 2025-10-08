@@ -110,6 +110,7 @@ class AddressService {
     required String city,
     required String state,
     required String pinCode,
+    required String country,
     double? latitude,
     double? longitude,
     bool isDefault = true,
@@ -124,6 +125,7 @@ class AddressService {
         'state': state,
         'pin_code': pinCode,
         'is_default': isDefault,
+        'country': country,
         'address_type': addressType,
       };
 
@@ -151,6 +153,7 @@ class AddressService {
     required String landmark,
     required String city,
     required String state,
+    required String country,
     required String pinCode,
     double? latitude,
     double? longitude,
@@ -165,6 +168,7 @@ class AddressService {
         'city': city,
         'state': state,
         'pin_code': pinCode,
+        'country': country,
         'is_default': isDefault,
         'address_type': addressType,
       };

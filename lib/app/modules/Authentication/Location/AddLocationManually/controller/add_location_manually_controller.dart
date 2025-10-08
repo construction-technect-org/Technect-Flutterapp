@@ -183,12 +183,14 @@ class AddLocationController extends GetxController {
           city: cityController.text.trim(),
           state: stateController.text.trim(),
           pinCode: pinCodeController.text.trim(),
+          country: cityController.text.trim(),
           latitude: latitude,
           longitude: longitude,
           addressType: addressType,
         );
       } else {
         response = await _addressService.addAddressManually(
+          country: cityController.text.trim(),
           addressLine1: addressLine1Controller.text.trim(),
           addressLine2: addressLine2Controller.text.trim(),
           landmark: landmarkController.text.trim(),
@@ -201,6 +203,7 @@ class AddLocationController extends GetxController {
         );
         if (response['success'] == true) {
           await _addressService.addAddressManually(
+            country: cityController.text.trim(),
             addressLine1: addressLine1Controller.text.trim(),
             addressLine2: addressLine2Controller.text.trim(),
             landmark: landmarkController.text.trim(),
