@@ -620,11 +620,22 @@ class AddProductView extends GetView<AddProductController> {
                           child: RoundedButton(
                             buttonName: 'PROCEED',
                             onTap: () async {
-                              if (controller.pickedFilePathList.isEmpty) {
+                              if (controller.pickedFilePathList.isEmpty && !controller.isEdit) {
                                 SnackBars.errorSnackBar(
                                   content: 'Please upload at least one image',
                                 );
                                 return;
+                              }
+                              if (controller.isEdit) {
+                                final hasImage = controller.imageSlots.any(
+                                      (path) => path != null && path.toString().trim().isNotEmpty,
+                                );
+                                if (!hasImage) {
+                                  SnackBars.errorSnackBar(
+                                    content: 'Please upload at least one image',
+                                  );
+                                  return;
+                                }
                               }
                               if (formKey2.currentState!.validate()) {
                                 if (await controller.firstPartValidation()) {

@@ -431,7 +431,7 @@ class AddProductController extends GetxController {
     try {
       final XFile? picked = await CommonConstant().pickImageFromGallery();
       if (picked != null && picked.path.isNotEmpty) {
-        // 🟩 Step 1: remove all 'remove_image_x' entries that no longer match empty slots
+        // 🟩 Step 1: Remove stale remove flags for occupied slots
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
@@ -443,23 +443,35 @@ class AddProductController extends GetxController {
           removedImages.remove(key);
         }
 
-        // 🟨 Step 2: find the first empty slot
+        // 🟨 Step 2: Find first empty slot
         final emptyIndex = imageSlots.indexWhere((e) => e == null);
 
         if (emptyIndex != -1) {
-          // 🟦 Step 3: cancel its removal (if it was removed before)
+          // 🟦 Step 3: Cancel its removal flag (if existed)
           removedImages.remove("remove_image_${emptyIndex + 1}");
 
-          // 🟧 Step 4: assign the new file to that slot
+          // 🟧 Step 4: Assign new file
           imageSlots[emptyIndex] = picked.path;
         } else {
           SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
+        }
+
+        // 🟥 Step 5: Cleanup: remove remove flags if at least one valid image exists
+        final hasAnyImage = imageSlots.any((e) => e != null && e.toString().isNotEmpty);
+        if (hasAnyImage) {
+          removedImages.removeWhere((key, value) {
+            final index = int.parse(key.split('_').last) - 1;
+            return index >= 0 &&
+                index < imageSlots.length &&
+                imageSlots[index] != null;
+          });
         }
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Failed to pick image: $e", time: 3);
     }
   }
+
 
   Future<bool> firstPartValidation() async {
     bool isRequired = false;
@@ -727,24 +739,34 @@ class AddProductController extends GetxController {
     final Map<String, dynamic> fields = {};
     final Map<String, String> selectedFiles = {};
 
+    // 🟩 Step 1: Prepare a copy of remove map
+    final Map<String, String> tempRemoved = Map.from(removedImages);
+
+    // 🟦 Step 2: Rebuild fields and remove flags properly
     for (int i = 0; i < imageSlots.length; i++) {
       final path = imageSlots[i];
       final key = "image_${i + 1}";
 
-      if (path == null) {
-        // If null, do nothing — will be handled by removedImages
-      } else if (path.contains('http')) {
-        // existing image (unchanged)
+      if (path == null || path.trim().isEmpty) {
+        // slot is empty => keep/remove flag
+        tempRemoved["remove_image_${i + 1}"] = "remove";
+        continue;
+      }
+
+      // slot has an image, so ensure it's not marked removed
+      tempRemoved.remove("remove_image_${i + 1}");
+
+      if (path.contains('http')) {
         fields[key] = path;
       } else {
-        // newly picked local file
         selectedFiles[key] = path;
       }
     }
 
-    // add removal info
-    fields.addAll(removedImages);
+    // 🟥 Step 3: Add remove flags to fields
+    fields.addAll(tempRemoved);
 
+    // 🟨 Step 4: Add product fields
     fields.addAll({
       "product_name": productNameController.text,
       "price": priceController.text,
@@ -785,5 +807,6 @@ class AddProductController extends GetxController {
       isLoading.value = false;
     }
   }
+
 
 }
