@@ -330,6 +330,7 @@ class ProductManagementView extends StatelessWidget {
                                                   arguments: {
                                                     "product": product,
                                                     "isFromAdd": false,
+                                                    "isFromConnector": false,
                                                   },
                                                 );
                                               },

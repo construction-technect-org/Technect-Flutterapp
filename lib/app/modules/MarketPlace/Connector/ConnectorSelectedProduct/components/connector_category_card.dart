@@ -12,19 +12,23 @@ class ConnectorCategoryCard extends StatelessWidget {
   final CategoryItem category;
   final bool isSelected;
 
-  const ConnectorCategoryCard({Key? key, required this.category, this.isSelected = false})
-    : super(key: key);
+  const ConnectorCategoryCard({
+    Key? key,
+    required this.category,
+    this.isSelected = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Stack(
-          clipBehavior: Clip.none, // <-- important to allow overflow
+          clipBehavior: Clip.none,
           children: [
             Container(
-              width: 68,
-              height: 68,
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: isSelected ? MyColors.primary : Colors.transparent,
@@ -33,33 +37,33 @@ class ConnectorCategoryCard extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.asset(category.imagePath),
+                child: Image.asset(category.imagePath, fit: BoxFit.cover),
               ),
             ),
             if (isSelected)
               Positioned(
-                top: -5, // move it slightly above the container
-                right: -5, // move it slightly outside the border
+                top: -5,
+                right: -5,
                 child: Container(
                   height: 20,
                   width: 20,
                   decoration: BoxDecoration(
                     color: MyColors.primary,
                     borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: Colors.white, width: 1), // optional outline
+                    border: Border.all(color: Colors.white, width: 1),
                   ),
                   child: const Icon(Icons.check, size: 14, color: Colors.white),
                 ),
               ),
           ],
         ),
-        SizedBox(height: 0.6.h),
-        Flexible(
+        const SizedBox(height: 4),
+        SizedBox(
+          width: 100,
           child: Text(
             category.name,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            softWrap: false,
             textAlign: TextAlign.center,
             style: MyTexts.medium12.copyWith(
               color: isSelected ? MyColors.primary : MyColors.fontBlack,

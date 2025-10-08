@@ -93,7 +93,9 @@ class InventoryView extends GetView<InventoryController> {
                           onTap: () {
                             Get.toNamed(
                               Routes.PRODUCT_DETAILS,
-                              arguments: {"product": product, "isFromAdd": false},
+                              arguments: {"product": product, "isFromAdd": false,
+                                "isFromConnector": false,
+                              },
                             );
                           },
                           child: ProductCard(product: product),

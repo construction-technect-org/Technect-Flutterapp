@@ -79,7 +79,7 @@ class APIConstants {
   static const String connectorUpdate = "connector/update";
 
   //Connector products
-  static const String connectorProdcut = "connector/products";
+  static const String connectorProduct = "connector/product/products";
 
   // Connector SupportTicket API
   static const String getConnectorSupportTicketCategories =

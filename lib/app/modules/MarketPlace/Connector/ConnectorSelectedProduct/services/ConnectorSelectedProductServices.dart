@@ -5,23 +5,34 @@ class ConnectorSelectedProductServices {
   ApiManager apiManager = ApiManager();
 
   Future<ConnectorSelectedProductModel> connectorProduct({
-    int? mainCategoryId,
-    int? subCategoryId,
-    int? categoryProductId,
+    String? mainCategoryId,
+    String? subCategoryId,
+    String? categoryProductId,
     int page = 1,
     int limit = 20,
+    Map<String, dynamic>? filters,
+
   }) async {
     try {
-      String url = "${APIConstants.connectorProdcut}?";
-      if (mainCategoryId != null) url += 'main_category_id=$mainCategoryId&';
-      if (subCategoryId != null) url += 'sub_category_id=$subCategoryId&';
-      if (categoryProductId != null) url += 'category_product_id=$categoryProductId&';
-      url += 'page=$page&limit=$limit';
+      const String url = APIConstants.connectorProduct;
+      final Map<String, dynamic> body = {
+        if (mainCategoryId != null && mainCategoryId.isNotEmpty)
+          "main_category_id": mainCategoryId,
+        if (subCategoryId != null && subCategoryId.isNotEmpty)
+          "sub_category_id": subCategoryId,
+        if (categoryProductId != null && categoryProductId.isNotEmpty)
+          "category_product_id": categoryProductId,
+        "page": page,
+        "limit": limit,
+        if (filters != null && filters.isNotEmpty) "filters": filters,
+      };
 
       debugPrint('Calling API: $url');
-
-      final response = await apiManager.get(url: url);
-
+      // ✅ Send POST request via your apiManager
+      final response = await apiManager.postObject(
+        url: url,
+        body: body,
+      );
       debugPrint('Response: $response');
 
       return ConnectorSelectedProductModel.fromJson(response);
@@ -31,6 +42,8 @@ class ConnectorSelectedProductServices {
       throw Exception('Error fetching products: $e');
     }
   }
+
+
 }
 
 

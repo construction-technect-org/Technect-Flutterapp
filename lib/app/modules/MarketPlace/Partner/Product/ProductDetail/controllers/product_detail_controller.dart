@@ -11,6 +11,7 @@ class ProductDetailsController extends GetxController {
   );
   final RxBool showProductDetails = false.obs;
   final RxBool isFromAdd = false.obs;
+  final RxBool isFromConnector = false.obs;
   final RxBool isLoading = false.obs;
   final ProductDetailService _service = ProductDetailService();
 
@@ -19,7 +20,10 @@ class ProductDetailsController extends GetxController {
     final argument = Get.arguments as Map;
     product = argument['product'] ?? Product();
     isFromAdd.value = argument["isFromAdd"];
-    fetchReview(product.id??0);
+    isFromConnector.value = argument["isFromConnector"];
+    if(!isFromConnector.value){
+      fetchReview(product.id??0);
+    }
     super.onInit();
   }
 

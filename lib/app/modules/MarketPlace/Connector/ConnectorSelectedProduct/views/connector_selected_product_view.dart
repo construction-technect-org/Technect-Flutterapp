@@ -1,54 +1,174 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/components/all_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/components/connector_category_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 
 class ConnectorSelectedProductView extends StatelessWidget {
-   ConnectorSelectedProductView({super.key});
+  ConnectorSelectedProductView({super.key});
 
-  final controller = Get.put<ConnectorSelectedProductController>(ConnectorSelectedProductController());
+  final controller = Get.put(ConnectorSelectedProductController());
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.white,
-      appBar: AppBar(
-        title: const Text("Select Category"),
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset(Asset.filterIcon, width: 20, height: 20),
-            onPressed: () => _openFilterSheet(context),
-          )
-        ],
-      ),
-      body: Obx(() {
-        return GridView.builder(
-          padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
+    return LoaderWrapper(
+      isLoading: controller.isLoading,
+      child: Scaffold(
+        backgroundColor: MyColors.white,
+        appBar: CommonAppBar(
+          title: const Text("Product"),
+          isCenter: false,
+          leading: const SizedBox(),
+          leadingWidth: 0,
+          action: [
+            IconButton(
+              icon: SvgPicture.asset(Asset.filterIcon, width: 20, height: 20),
+              onPressed: () => _openFilterSheet(context),
+            )
+          ],
+        ),
+        body: Obx(() {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (controller.mainCategories.isNotEmpty) ...[
+                  Text("Main Categories", style: MyTexts.medium16),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: List.generate(
+                      controller.mainCategories.length,
+                          (index) {
+                        final item = controller.mainCategories[index];
+                        final isSelected = controller.selectedMainCategoryIndex.value == index;
+                        return GestureDetector(
+                          onTap: () async {
+                            controller.selectedMainCategoryIndex.value = index;
+                            controller.selectedMainCategoryId.value = (item.id ?? 0).toString();
+
+                            controller.selectedSubCategoryIndex.value = -1;
+                            controller.selectedSubCategoryId.value = null;
+                            controller.selectedProductIndex.value = -1;
+                            controller.selectedProductId.value = null;
+
+                            controller.productsList.clear();
+
+                            await controller.fetchSubCategories(item.id ?? 0);
+                          },
+
+                          child: ConnectorCategoryCard(
+                            category: CategoryItem(item.name ?? "", Asset.Product),
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+
+                if (controller.subCategories.isNotEmpty) ...[
+                  const SizedBox(height: 24),
+                  Text("Sub Categories", style: MyTexts.medium16),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: List.generate(
+                      controller.subCategories.length,
+                          (index) {
+                        final item = controller.subCategories[index];
+                        final isSelected = controller.selectedSubCategoryIndex.value == index;
+                        return GestureDetector(
+                          onTap: () async {
+                            controller.selectedSubCategoryIndex.value = index;
+                            controller.selectedSubCategoryId.value = (item.id ?? 0).toString();
+
+                            controller.selectedProductIndex.value = -1;
+                            controller.selectedProductId.value = null;
+                            controller.productsList.clear();
+
+                            try {
+                              await controller.fetchProducts(item.id ?? 0);
+                            } catch (e) {
+                              Get.snackbar("Error", "Failed to load products");
+                            }
+                          },
+                          child: ConnectorCategoryCard(
+                            category: CategoryItem(item.name ?? "", Asset.Product),
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+                if (controller.productsList.isNotEmpty) ...[
+                  const SizedBox(height: 24),
+                  Text("Products", style: MyTexts.medium16),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: List.generate(
+                      controller.productsList.length,
+                          (index) {
+                        final item = controller.productsList[index];
+                        final isSelected = controller.selectedProductIndex.value == index;
+                        return GestureDetector(
+                          onTap: () {
+                            controller.selectedProductIndex.value = index;
+                            controller.selectedProductId.value = (item.id ?? 0).toString();
+                          },
+
+                          child: ConnectorCategoryCard(
+                            category: CategoryItem(item.name ?? "", Asset.Product),
+                            isSelected: isSelected,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+
+              ],
+            ),
+          );
+        }),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 24),
+          child: RoundedButton(
+            buttonName: "Next",
+            onTap: () async {
+              final mainSelected = controller.selectedMainCategoryIndex.value != -1;
+              final subSelected = controller.selectedSubCategoryIndex.value != -1;
+              final productSelected = controller.selectedProductIndex.value != -1;
+
+              if (!mainSelected) {
+                SnackBars.errorSnackBar(content: "Please select a main category first.",);
+                return;
+              }
+
+              if (!subSelected) {
+                SnackBars.errorSnackBar(content:  "Please select a sub category.",);
+                return;
+              }
+
+              if (!productSelected) {
+                SnackBars.errorSnackBar(content:   "Please select a product before continuing.",);
+                return;
+              }
+              await controller.getAllProducts();
+              Get.to(()=>const AllProduct());
+              // Get.toNamed('/nextScreen');
+            },
           ),
-          itemCount: controller.mainCategories.length,
-          itemBuilder: (context, index) {
-            final item = controller.mainCategories[index];
-            return GestureDetector(
-              onTap: () {
-                controller.selectMainCategory(index);
-                Get.to(() => ConnectorConfirmCategoryView(
-                  selectedIndex: index,
-                  categories: controller.mainCategories,
-                ));
-              },
-              child: ConnectorCategoryCard(
-                category: CategoryItem(item.name, Asset.Product),
-              ),
-            );
-          },
-        );
-      }),
+        ),
+      ),
     );
   }
-
   void _openFilterSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -80,91 +200,6 @@ class ConnectorSelectedProductView extends StatelessWidget {
           );
         });
       },
-    );
-  }
-}
-
-
-class ConnectorConfirmCategoryView extends StatelessWidget {
-  final int selectedIndex;
-  final List<ConnectorCategory> categories;
-
-  const ConnectorConfirmCategoryView({
-    super.key,
-    required this.selectedIndex,
-    required this.categories,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final selectedCategory = categories[selectedIndex];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Confirm Category"),
-      ),
-      body: Column(
-        children: [
-          // Selected category highlighted
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: ConnectorCategoryCard(
-              category: CategoryItem(selectedCategory.name, Asset.Product),
-              isSelected: true,
-            ),
-          ),
-          const Divider(),
-
-          // Other categories
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                if (index == selectedIndex) return const SizedBox.shrink();
-                final item = categories[index];
-                return ConnectorCategoryCard(
-                  category: CategoryItem(item.name, Asset.Product),
-                );
-              },
-            ),
-          ),
-
-          // Select button
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: () {
-                Get.to(() => ConnectorProductView(
-                  category: selectedCategory,
-                ));
-              },
-              child: const Text("Select"),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ConnectorProductView extends StatelessWidget {
-  final ConnectorCategory category;
-
-  const ConnectorProductView({super.key, required this.category});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(category.name)),
-      body: Center(
-        child: Text("Products of ${category.name} will be shown here"),
-      ),
     );
   }
 }

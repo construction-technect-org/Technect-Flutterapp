@@ -1,6 +1,11 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorSelectedProductController extends GetxController {
@@ -29,9 +34,9 @@ class ConnectorSelectedProductController extends GetxController {
   RxInt selectedSiteIndex = 0.obs;
 
   /// Category & Product Selection
-  RxList<ConnectorCategory> mainCategories = <ConnectorCategory>[].obs;
-  RxList<ConnectorCategory> subCategories = <ConnectorCategory>[].obs;
-  RxList<ConnectorCategory> categoryProducts = <ConnectorCategory>[].obs;
+  // RxList<ConnectorCategory> mainCategories = <ConnectorCategory>[].obs;
+  // RxList<ConnectorCategory> subCategories = <ConnectorCategory>[].obs;
+  // RxList<ConnectorCategory> categoryProducts = <ConnectorCategory>[].obs;
   RxList<Product> products = <Product>[].obs;
 
   RxInt selectedMainCategoryIndex = (-1).obs;
@@ -45,7 +50,6 @@ class ConnectorSelectedProductController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    pageController = PageController();
     fetchMainCategories();
   }
 
@@ -82,72 +86,30 @@ class ConnectorSelectedProductController extends GetxController {
       curve: Curves.easeInOut,
     );
   }
+  RxList<Product> filteredProducts = <Product>[].obs;
 
-  /// MAIN CATEGORY SELECTION
-  Future<void> selectMainCategory(int index) async {
-    selectedMainCategoryIndex.value = index;
-    selectedSubCategoryIndex.value = -1;
-    selectedProductCategoryIndex.value = -1;
-    selectedProductIndex.value = -1;
+  RxString searchQuery = ''.obs;
 
-    subCategories.clear();
-    categoryProducts.clear();
-    products.clear();
-
+  Future<void> getAllProducts() async {
     try {
       isLoading.value = true;
+
       final res = await services.connectorProduct(
-        mainCategoryId: mainCategories[index].id,
+        mainCategoryId: selectedMainCategoryId.value ?? '',
+        subCategoryId: selectedSubCategoryId.value ?? '',
+        categoryProductId: selectedProductId.value ?? '',
       );
-      subCategories.value = res.data?.filters.subCategories ?? [];
+      filteredProducts.value = res.data?.products ?? [];
+
     } catch (e) {
-      Get.snackbar("Error", "Failed to load subcategories: $e");
+      Get.snackbar("Error", "Failed to load products: $e");
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// SUBCATEGORY SELECTION
-  Future<void> selectSubCategory(int index) async {
-    selectedSubCategoryIndex.value = index;
-    selectedProductCategoryIndex.value = -1;
-    selectedProductIndex.value = -1;
+  RxList<ConnectorCategory> categoryProducts = <ConnectorCategory>[].obs;
 
-    categoryProducts.clear();
-    products.clear();
-
-    try {
-      isLoading.value = true;
-      final res = await services.connectorProduct(
-        mainCategoryId: mainCategories[selectedMainCategoryIndex.value].id,
-        subCategoryId: subCategories[index].id,
-      );
-      categoryProducts.value = res.data?.filters.categoryProducts ?? [];
-    } catch (e) {
-      Get.snackbar("Error", "Failed to load category products: $e");
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
- /// FETCH MAIN CATEGORIES
-  Future<void> fetchMainCategories() async {
-    try {
-      isLoading.value = true;
-      final res = await services.connectorProduct();
-      mainCategories.value = res.data?.filters.mainCategories ?? [];
-    } catch (e) {
-      Get.snackbar("Error", "Failed to load bottom categories: $e");
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  /// PRODUCT SELECTION
-  void selectProductItem(int index) {
-    selectedProductIndex.value = index;
-    goToPage(2); // Slide to next screen
-  }
 
   /// OPTIONAL: RESET SELECTIONS
   void resetSelections() {
@@ -159,6 +121,108 @@ class ConnectorSelectedProductController extends GetxController {
     subCategories.clear();
     categoryProducts.clear();
     products.clear();
+  }
+
+  //////////////
+
+  RxList<CategoryProduct> productsList = <CategoryProduct>[].obs;
+  Rxn<String> selectedMainCategory = Rxn<String>();
+  Rxn<String> selectedSubCategory = Rxn<String>();
+  Rxn<String> selectedProduct = Rxn<String>();
+  Rxn<String> selectedMainCategoryId = Rxn<String>();
+  Rxn<String> selectedSubCategoryId = Rxn<String>();
+  Rxn<String> selectedProductId = Rxn<String>();
+  RxList<String> mainCategoryNames = <String>[].obs;
+  RxList<String> subCategoryNames = <String>[].obs;
+  RxList<String> productNames = <String>[].obs;
+  RxList<MainCategory> mainCategories = <MainCategory>[].obs;
+  RxList<SubCategory> subCategories = <SubCategory>[].obs;
+
+  Future<void> fetchMainCategories() async {
+    try {
+      isLoading(true);
+      final result = await AddProductService().mainCategory();
+      if ((result.success) == true) {
+        mainCategories.value = result.data ?? [];
+        mainCategoryNames.value =
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
+                [];
+      } else {
+        mainCategories.clear();
+        mainCategoryNames.clear();
+      }
+    } catch (e) {
+      mainCategories.clear();
+      mainCategoryNames.clear();
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> fetchSubCategories(int mainCategoryId) async {
+    try {
+      isLoading(true);
+      final result = await AddProductService().subCategory(mainCategoryId);
+      if ((result.success) == true) {
+        subCategories.value = result.data ?? [];
+        subCategoryNames.value =
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
+                [];
+      } else {
+        subCategories.clear();
+        subCategoryNames.clear();
+      }
+
+      selectedSubCategory.value = null;
+      productsList.clear();
+      productNames.clear();
+      selectedProduct.value = null;
+    } catch (e) {
+      subCategories.clear();
+      subCategoryNames.clear();
+      productsList.clear();
+      productNames.clear();
+      selectedProduct.value = null;
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> fetchProducts(int subCategoryId) async {
+    try {
+      isLoading(true);
+      final result = await AddProductService().productsBySubCategory(subCategoryId);
+
+      if ((result.success) == true) {
+        productsList.value = result.data ?? [];
+        productNames.value =
+            result.data
+                ?.map((e) => e.name)
+                .where((name) => name != null)
+                .cast<String>()
+                .toList() ??
+                [];
+        selectedProduct.value = null;
+      } else {
+        productsList.clear();
+        productNames.clear();
+        selectedProduct.value = null;
+      }
+    } catch (e) {
+      productsList.clear();
+      productNames.clear();
+      selectedProduct.value = null;
+    } finally {
+      isLoading(false);
+    }
   }
 
  

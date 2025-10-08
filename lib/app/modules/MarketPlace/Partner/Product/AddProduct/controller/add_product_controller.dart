@@ -615,7 +615,10 @@ class AddProductController extends GetxController {
     );
     Get.toNamed(
       Routes.PRODUCT_DETAILS,
-      arguments: {"product": p, "isFromAdd": true},
+      arguments: {"product": p, "isFromAdd": true,
+        "isFromConnector": false,
+
+      },
     );
   }
 

@@ -1,3 +1,5 @@
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
+
 class ConnectorSelectedProductModel {
   final bool success;
   final String message;
@@ -56,29 +58,6 @@ class ConnectorSelectedProductData {
   }
 }
 
-class Product {
-  final int id;
-  final String name;
-
-  Product({
-    required this.id,
-    required this.name,
-  });
-
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "name": name,
-    };
-  }
-}
 
 class Pagination {
   final int currentPage;
