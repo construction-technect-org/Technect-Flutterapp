@@ -20,6 +20,9 @@ class AddProductController extends GetxController {
 
   // ---------------- Form Controllers ----------------
 
+  RxList<String?> imageSlots = List<String?>.filled(5, null).obs;
+  Map<String, String> removedImages = {};
+
   RxBool isOutStock = true.obs;
   final productCodeController = TextEditingController();
   final noteStockController = TextEditingController();
@@ -115,8 +118,23 @@ class AddProductController extends GetxController {
           pickedFilePathList.add("${APIConstants.bucketUrl}${image.s3Key!}");
       }
     }
+    // 🟩 Always create 5 slots
+    imageSlots.value = List<String?>.filled(5, null);
+
+    // 🟨 Fill existing images
+    final existingImages = product.images ?? [];
+    for (int i = 0; i < existingImages.length && i < 5; i++) {
+      imageSlots[i] = "${APIConstants.bucketUrl}${existingImages[i].s3Key!}";
+    }
 
   }
+  void removeImageAt(int index) {
+    if (imageSlots[index] != null) {
+      removedImages["remove_image_${index + 1}"] = "remove";
+      imageSlots[index] = null;
+    }
+  }
+
 
   Map<String, dynamic>? _storedFilterValues;
 
@@ -409,6 +427,39 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'Failed to pick file: $e', time: 3);
     }
   }
+  Future<void> pickImageEdit() async {
+    try {
+      final XFile? picked = await CommonConstant().pickImageFromGallery();
+      if (picked != null && picked.path.isNotEmpty) {
+        // 🟩 Step 1: remove all 'remove_image_x' entries that no longer match empty slots
+        final toRemove = <String>[];
+        removedImages.forEach((key, value) {
+          final index = int.parse(key.split('_').last) - 1;
+          if (index >= 0 && index < imageSlots.length && imageSlots[index] != null) {
+            toRemove.add(key);
+          }
+        });
+        for (final key in toRemove) {
+          removedImages.remove(key);
+        }
+
+        // 🟨 Step 2: find the first empty slot
+        final emptyIndex = imageSlots.indexWhere((e) => e == null);
+
+        if (emptyIndex != -1) {
+          // 🟦 Step 3: cancel its removal (if it was removed before)
+          removedImages.remove("remove_image_${emptyIndex + 1}");
+
+          // 🟧 Step 4: assign the new file to that slot
+          imageSlots[emptyIndex] = picked.path;
+        } else {
+          SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
+        }
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: "Failed to pick image: $e", time: 3);
+    }
+  }
 
   Future<bool> firstPartValidation() async {
     bool isRequired = false;
@@ -672,19 +723,29 @@ class AddProductController extends GetxController {
   /// Update existing product
   Future<void> updateProduct() async {
     isLoading.value = true;
-    Map<String, dynamic> fields = {};
 
+    final Map<String, dynamic> fields = {};
     final Map<String, String> selectedFiles = {};
-    // final String existingImageUrl =
-    //     "${APIConstants.bucketUrl}${product.productImage ?? ''}";
-    //
-    // if (pickedFilePath.value.isNotEmpty &&
-    //     pickedFilePath.value != existingImageUrl &&
-    //     !pickedFilePath.value.contains('http')) {
-    //   selectedFiles["product_image"] = pickedFilePath.value;
-    // }
 
-    fields = {
+    for (int i = 0; i < imageSlots.length; i++) {
+      final path = imageSlots[i];
+      final key = "image_${i + 1}";
+
+      if (path == null) {
+        // If null, do nothing — will be handled by removedImages
+      } else if (path.contains('http')) {
+        // existing image (unchanged)
+        fields[key] = path;
+      } else {
+        // newly picked local file
+        selectedFiles[key] = path;
+      }
+    }
+
+    // add removal info
+    fields.addAll(removedImages);
+
+    fields.addAll({
       "product_name": productNameController.text,
       "price": priceController.text,
       "gst_percentage": (selectedGST.value ?? "").replaceAll("%", ""),
@@ -700,30 +761,29 @@ class AddProductController extends GetxController {
       "product_note": noteController.text,
       "outofstock": !isOutStock.value,
       "outofstock_note": noteStockController.text,
-    };
+    });
 
     try {
-      final updateResponse = await _service.updateProduct(
+      final res = await _service.updateProduct(
         productId: product.id!,
         fields: fields,
         files: selectedFiles.isNotEmpty ? selectedFiles : null,
       );
 
-      if (updateResponse.success == true) {
+      if (res.success == true) {
         await controller.fetchProducts();
-        isLoading.value = false;
-
         Get.back();
         Get.back();
       } else {
-        isLoading.value = false;
         SnackBars.errorSnackBar(
-          content: updateResponse.message ?? 'Something went wrong!!',
+          content: res.message ?? 'Something went wrong!',
         );
       }
     } catch (e) {
-      isLoading.value = false;
       SnackBars.errorSnackBar(content: 'Error updating product: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
+
 }
