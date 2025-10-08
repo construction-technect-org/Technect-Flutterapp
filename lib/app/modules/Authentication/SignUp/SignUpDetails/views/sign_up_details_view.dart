@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/utils/validators.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/stepper_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
@@ -49,45 +48,64 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                           headerText: "First Name",
                           hintText: "Enter your first name",
                           controller: controller.firstNameController,
-                          validator: validateName,
-                          // validator: (val) {
-                          //   if ((val ?? "").isEmpty) {
-                          //     return "Please enter first name";
-                          //   }
-                          //   return null;
-                          // },
+                          autofillHints: const [AutofillHints.givenName],
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(30),
+                            NameInputFormatter(),
+                          ],
+                          validator: (value) =>
+                              validateName(value, fieldName: "First name"),
                         ),
+
                         SizedBox(height: 1.8.h),
-                        // Last Name
+
                         CommonTextField(
                           headerText: "Last Name",
                           hintText: "Enter your last name",
                           controller: controller.lastNameController,
-                          validator: validateName,
-                          // validator: (val) {
-                          //   if ((val ?? "").isEmpty) {
-                          //     return "Please enter last name";
-                          //   }
-                          //   return null;
-                          // },
+                          autofillHints: const [AutofillHints.familyName],
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(30),
+                            NameInputFormatter(),
+                          ],
+                          validator: (value) =>
+                              validateName(value, fieldName: "Last name"),
                         ),
                         SizedBox(height: 1.8.h),
-                        CommonTextField(
-                          headerText: "Email ID",
-                          hintText: "Enter your email address",
-                          keyboardType: TextInputType.emailAddress,
-                          controller: controller.emailController,
-                          validator: validateEmail,
-                          // validator: (val) {
-                          //   if ((val ?? "").isEmpty) {
-                          //     return "Please enter email";
-                          //   }
-                          //   if (!GetUtils.isEmail(val!)) {
-                          //     return "Please enter valid email";
-                          //   }
-                          //   return null;
-                          // },
+                        Focus(
+                          onFocusChange: (hasFocus) async {
+                            if (!hasFocus) {
+                              final email = controller.emailController.text.trim();
+
+                              // Only check if email has value and valid format
+                              if (email.isNotEmpty && controller.isValidEmail(email)) {
+                                final isAvailable =
+                                await controller.signUpService.checkEmail(email: email);
+
+                                if (!isAvailable) {
+                                  SnackBars.errorSnackBar(
+                                      content: "This email is already registered");
+                                }
+                              } else if (email.isNotEmpty && !controller.isValidEmail(email)) {
+                                SnackBars.errorSnackBar(content: "Please enter a valid email address");
+                              }
+                            }
+                          },
+                          child: CommonTextField(
+                            headerText: "Email ID",
+                            hintText: "Enter your email address",
+                            controller: controller.emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            autofillHints: const [AutofillHints.email],
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(50),
+                              EmailInputFormatter(),
+                            ],
+                            validator: validateEmail,
+                          ),
                         ),
+
+
                         SizedBox(height: 1.8.h),
                         CommonTextField(
                           isRed: false,

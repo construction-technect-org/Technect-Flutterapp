@@ -1,27 +1,4 @@
-String? validateName(String? value) {
-  if (value == null || value.trim().isEmpty) {
-    return "Please enter a name";
-  }
-  final nameRegExp = RegExp(r"^[a-zA-Z\s]+$");
-  if (!nameRegExp.hasMatch(value.trim())) {
-    return "Name should only contain letters and spaces";
-  }
-  if (value.trim().length < 2) {
-    return "Name should be at least 2 characters long";
-  }
-  return null;
-}
 
-String? validatePassword(String? value) {
-  if (value == null || value.isEmpty) {
-    return "Please enter password";
-  }
-  final passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[\W_])(?!.*\s).{8,}$');
-  if (!passwordRegExp.hasMatch(value)) {
-    return "Password must be at least 8 characters, contain uppercase, special char and no spaces";
-  }
-  return null;
-}
 
 String? validateEmail(String? value) {
   if (value == null || value.isEmpty) {

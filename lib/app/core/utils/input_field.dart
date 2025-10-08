@@ -1,6 +1,136 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:gap/gap.dart';
 
+bool isValidEmail(String? email) {
+  if (email == null || email.isEmpty) return false;
+  return RegExp(
+    r'^[A-Za-z0-9._%+-]*[A-Za-z]+[A-Za-z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  ).hasMatch(email);
+}
+String? validateEmail(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return "Please enter email";
+  }
+  if (!isValidEmail(value.trim())) {
+    return "Please enter a valid email address";
+  }
+  return null;
+}
+
+
+String? validateName(String? value, {String fieldName = "Name"}) {
+  if (value == null || value.trim().isEmpty) {
+    return "Please enter $fieldName";
+  }
+  if (value.trim().length < 2) {
+    return "$fieldName must be at least 2 characters long";
+  }
+  if (!RegExp(r'^[A-Z][a-zA-Z]*$').hasMatch(value.trim())) {
+    return "$fieldName must start with uppercase and contain only letters";
+  }
+  return null;
+}
+
+class NameInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String newText = newValue.text.replaceAll(RegExp(r'[^a-zA-Z]'), '');
+    if (newText.isNotEmpty) {
+      newText = newText[0].toUpperCase() +
+          (newText.length > 1 ? newText.substring(1).toLowerCase() : '');
+    }
+    final int diff = newValue.text.length - newText.length;
+    int newOffset = newValue.selection.baseOffset - diff;
+
+    newOffset = newOffset.clamp(0, newText.length);
+
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newOffset),
+    );
+  }
+}
+
+class EmailInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    final String newText = newValue.text.replaceAll(' ', '').toLowerCase();
+    final int diff = newValue.text.length - newText.length;
+    int newOffset = newValue.selection.baseOffset - diff;
+    newOffset = newOffset.clamp(0, newText.length);
+
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newOffset),
+    );
+  }
+}
+
+
+
+String capitalize(String value) {
+  if (value.trim().isEmpty) return "";
+  return "${value[0].toUpperCase()}${value.substring(1).toLowerCase()}";
+}
+
+String? validatePassword(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Please enter password";
+  }
+
+  final List<String> errors = [];
+
+  if (value.length < 8) {
+    errors.add("• At least 8 characters");
+  }
+
+  if (!RegExp(r'[A-Z]').hasMatch(value)) {
+    errors.add("• At least 1 uppercase letter");
+  }
+
+  if (!RegExp(r'\d').hasMatch(value)) {
+    errors.add("• At least 1 number");
+  }
+
+  if (!RegExp(r'[!@#\$&*~%^()_+=\[{\]};:<>|./?,-]').hasMatch(value)) {
+    errors.add("• At least 1 special character");
+  }
+
+  if (errors.isNotEmpty) {
+    return errors.join("\n"); // 🔥 show all errors together
+  }
+
+  return null; // ✅ valid password
+}
+
+
+bool isValidPassword(String? password) {
+  if (password == null || password.isEmpty) return false;
+  return RegExp(
+    r'^(?=.*[A-Za-z])(?=.*[!@#$%^&*(),.?":{}|<>]).+$',
+  ).hasMatch(password);
+}
+
+bool isValidUsername(String? username) {
+  if (username == null || username.isEmpty) return false;
+  return RegExp(
+    r'^(?!.*[_.]{2})[a-zA-Z0-9](?:[a-zA-Z0-9._]{1,}[a-zA-Z0-9])?$',
+  ).hasMatch(username);
+}
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return newValue.copyWith(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
+  }
+}
 class CommonTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final bool showDivider; // <-- new

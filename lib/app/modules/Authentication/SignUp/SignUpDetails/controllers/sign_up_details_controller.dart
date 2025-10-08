@@ -75,11 +75,11 @@ class SignUpDetailsController extends GetxController {
         lastName.value.isNotEmpty &&
         mobileNumber.value.isNotEmpty &&
         email.value.isNotEmpty &&
-        true==isGstValid &&
-        _isValidEmail(email.value);
+        true == isGstValid &&
+        isValidEmail(email.value);
   }
 
-  bool _isValidEmail(String email) {
+  bool isValidEmail(String email) {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 
@@ -114,25 +114,24 @@ class SignUpDetailsController extends GetxController {
       await resendOtp();
     }
   }
+
   Future<bool> verifyGStNumber() async {
     if (gstController.text.trim().isEmpty) {
       return true;
-    }
-    else{
+    } else {
       if (gstController.text.trim().length != 15) {
-        SnackBars.errorSnackBar(content: "GST number must be exactly 15 characters");
+        SnackBars.errorSnackBar(
+          content: "GST number must be exactly 15 characters",
+        );
         return false;
-
       }
       if (!_isValidGSTNumber(gstController.text.trim())) {
         SnackBars.errorSnackBar(content: "Please enter a valid GST number");
         return false;
-
       }
     }
 
     return true;
-
   }
 
   bool _isValidGSTNumber(String gst) {
@@ -198,7 +197,7 @@ class SignUpDetailsController extends GetxController {
           countryCode: countryCode.value,
           mobileNumber: mobileNumber.value,
           email: email.value,
-          gst: gstController.text
+          gst: gstController.text,
         );
         Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
       } else {
@@ -208,6 +207,33 @@ class SignUpDetailsController extends GetxController {
       }
     }
   }
+
+  Future<bool> checkEmail() async {
+    if (email.value.isEmpty) {
+      SnackBars.errorSnackBar(content: "Please enter email first");
+      return false;
+    }
+
+    if (!isValidEmail(email.value)) {
+      SnackBars.errorSnackBar(content: "Please enter a valid email address");
+      return false;
+    }
+
+    try {
+      final isAvailable = await signUpService.checkEmail(email: email.value);
+
+      if (!isAvailable) {
+        SnackBars.errorSnackBar(content: "This email is already registered");
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      SnackBars.errorSnackBar(content: "Error verifying email. Please try again");
+      return false;
+    }
+  }
+
 
   // Verify OTP method
   Future<void> verifyOtp() async {
@@ -236,7 +262,7 @@ class SignUpDetailsController extends GetxController {
               countryCode: countryCode.value,
               mobileNumber: mobileNumber.value,
               email: email.value,
-              gst: gstController.text
+              gst: gstController.text,
             );
             Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
           } else {

@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/model/faq_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/models/rating_model.dart';
 
 class ProductDetailService {

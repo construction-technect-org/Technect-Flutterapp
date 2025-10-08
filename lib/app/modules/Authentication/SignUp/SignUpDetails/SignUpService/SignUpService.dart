@@ -5,6 +5,20 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPa
 class SignUpService {
   ApiManager apiManager = ApiManager();
 
+  Future<bool> checkEmail({required String email}) async {
+    try {
+      final response = await apiManager.postObject(
+        url: APIConstants.checkEmail,
+        body: {"email": email},
+      );
+      final bool isAvailable = response["data"]["available"] ?? false;
+      return isAvailable;
+    } catch (e, st) {
+      throw Exception('Error checking email: $e , $st');
+    }
+  }
+
+
   Future<OtpModel> sendOtp({required String mobileNumber}) async {
     try {
       final response = await apiManager.postObject(
