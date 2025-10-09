@@ -34,6 +34,7 @@ class APIConstants {
   static const String addRole = "merchant/role/create";
   static const String getAllRole = "merchant/role/list";
   static const String updateRole = "merchant/role";
+  static const String deleteRole = "merchant/role/";
   static const String team = "merchant/team";
   static const String createProduct = "merchant/product/create";
   static const String updateProduct = "merchant/product/";

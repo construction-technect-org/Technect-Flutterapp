@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
@@ -7,12 +9,12 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Pr
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 
-
 class BottomBarView extends GetView<BottomController> {
   final CommonController commonController = Get.put(CommonController());
 
   @override
   Widget build(BuildContext context) {
+    log('Token ~~~>> ${myPref.getToken()}');
     return Scaffold(
       body: Obx(() {
         switch (controller.currentIndex.value) {
@@ -58,9 +60,7 @@ class BottomBarView extends GetView<BottomController> {
                       currentIndex: controller.currentIndex.value,
                       onTap: controller.changeTab,
                       selectedItemColor: MyColors.white,
-                      unselectedItemColor: MyColors.white.withValues(
-                        alpha: 0.25,
-                      ),
+                      unselectedItemColor: MyColors.white.withValues(alpha: 0.25),
                       selectedLabelStyle: MyTexts.medium13.copyWith(
                         color: MyColors.white,
                       ),

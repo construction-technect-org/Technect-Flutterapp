@@ -74,4 +74,13 @@ class RoleService {
       return UpdatedRoleModel(success: false, data: null, message: e.toString());
     }
   }
+
+  Future<Map<String, dynamic>> deleteRole(String id) async {
+    try {
+      final response = await _apiManager.delete(url: "${APIConstants.deleteRole}$id");
+      return Map<String, dynamic>.from(response);
+    } catch (e, st) {
+      throw Exception('Error deleting team member: $e , $st');
+    }
+  }
 }

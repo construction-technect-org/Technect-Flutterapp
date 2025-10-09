@@ -15,10 +15,7 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: CommonAppBar(
-        isCenter: false,
-        title: Text("Profile".toUpperCase()),
-      ),
+      appBar: CommonAppBar(isCenter: false, title: Text("Profile".toUpperCase())),
 
       body: Padding(
         padding: EdgeInsets.zero,
@@ -27,33 +24,35 @@ class ProfileView extends GetView<ProfileController> {
             SizedBox(height: 2.h),
             _buildProfileBanner(),
             SizedBox(height: 2.h),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 1.h),
-              _buildTabBar(),
-              SizedBox(height: 1.h),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _buildTabContent(),
-                ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 1.h),
+                  _buildTabBar(),
+                  SizedBox(height: 1.h),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: _buildTabContent(),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
           ],
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(24.0),
         child: RoundedButton(
-          buttonName: controller.merchantProfile!=null? "SAVE":"PROCEED",
+          buttonName: controller.merchantProfile != null ? "SAVE" : "PROCEED",
           onTap: () {
             for (var cert in controller.certificates) {
               if (cert.isDefault && (cert.filePath == null || cert.filePath!.isEmpty)) {
-                SnackBars.errorSnackBar(content: "Please upload all relevant certificates");
+                SnackBars.errorSnackBar(
+                  content: "Please upload all relevant certificates",
+                );
                 return;
               }
             }
@@ -61,8 +60,7 @@ class ProfileView extends GetView<ProfileController> {
               SnackBars.errorSnackBar(content: "Please fill business metrics");
             } else if (controller.businessHoursData.isEmpty) {
               SnackBars.errorSnackBar(content: "Please fill business hours");
-            }
-            else {
+            } else {
               controller.handleMerchantData();
               //27ABCDE1234F1Z5
             }
@@ -97,9 +95,7 @@ class ProfileView extends GetView<ProfileController> {
                     value: progressValue,
                     strokeWidth: 8,
                     backgroundColor: MyColors.profileRemaining,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      MyColors.green,
-                    ),
+                    valueColor: const AlwaysStoppedAnimation<Color>(MyColors.green),
                   ),
                 ),
                 Text(
@@ -128,9 +124,7 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                   SizedBox(height: 0.5.h),
                   Text(
-                    completionPercentage > 90
-                        ? "Profile Verified"
-                        : 'Profile Pending',
+                    completionPercentage > 90 ? "Profile Verified" : 'Profile Pending',
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.warning,
                       fontFamily: MyTexts.Roboto,
@@ -158,8 +152,7 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             _buildTabItem(0, 'Info & Metrics'),
             _buildTabItem(1, 'Certifications'),
-            if (hasMarketplaceTab)
-              _buildTabItem(2, 'Marketplacee Performance'),
+            if (hasMarketplaceTab) _buildTabItem(2, 'Marketplace Performance'),
           ],
         ),
       );
@@ -217,6 +210,6 @@ class ProfileView extends GetView<ProfileController> {
       return SingleChildScrollView(child: content);
     });
   }
-
 }
+
 ///27ABCDE1234F1Z5

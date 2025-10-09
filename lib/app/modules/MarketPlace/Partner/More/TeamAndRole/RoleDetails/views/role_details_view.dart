@@ -1,6 +1,8 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleDetails/controllers/role_details_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/components/delete_team_dialog.dart';
+import 'package:gap/gap.dart';
 
 class RoleDetailsView extends GetView<RoleDetailsController> {
   const RoleDetailsView({super.key});
@@ -21,6 +23,30 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    InkWell(
+                      onTap: () {
+                        DeleteRoleDialog.showDeleteRoleDialog(context, () async {
+                          await controller.deleteRole(controller.roleId.value);
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: MyColors.primary.withOpacity(0.2),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(Icons.delete, color: Colors.white, size: 18),
+                      ),
+                    ),
+                    const Gap(10),
                     InkWell(
                       onTap: () {
                         Get.toNamed(

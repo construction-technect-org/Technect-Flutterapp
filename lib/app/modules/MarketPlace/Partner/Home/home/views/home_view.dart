@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
@@ -55,16 +56,11 @@ class HomeView extends StatelessWidget {
           children: [
             SizedBox(height: 5.h),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18.0,
-                vertical: 0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: Row(
                 children: [
                   Obx(() {
-                    return (controller.profileData.value.data?.user?.image ??
-                                "")
-                            .isEmpty
+                    return (controller.profileData.value.data?.user?.image ?? "").isEmpty
                         ? Image.asset(Asset.profil, height: 50, width: 50)
                         : ClipOval(
                             child: getImageView(
@@ -128,16 +124,13 @@ class HomeView extends StatelessWidget {
                               builder: (context) {
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(
-                                      context,
-                                    ).viewInsets.bottom,
+                                    bottom: MediaQuery.of(context).viewInsets.bottom,
                                   ),
                                   child: Container(
                                     padding: const EdgeInsets.all(16),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Select Address",
@@ -152,14 +145,11 @@ class HomeView extends StatelessWidget {
                                                 CrossAxisAlignment.stretch,
                                             children: [
                                               Expanded(
-                                                child:
-                                                    officeAddress.addressType !=
-                                                        null
+                                                child: officeAddress.addressType != null
                                                     ? _addressCard(
                                                         address: officeAddress,
                                                         addressType:
-                                                            officeAddress
-                                                                .addressType,
+                                                            officeAddress.addressType,
                                                         isSelected:
                                                             controller
                                                                 .isDefaultOffice
@@ -170,15 +160,11 @@ class HomeView extends StatelessWidget {
                                               ),
                                               const SizedBox(width: 16),
                                               Expanded(
-                                                child:
-                                                    factoryAddress
-                                                            .addressType !=
-                                                        null
+                                                child: factoryAddress.addressType != null
                                                     ? _addressCard(
                                                         address: factoryAddress,
                                                         addressType:
-                                                            factoryAddress
-                                                                .addressType,
+                                                            factoryAddress.addressType,
                                                         isSelected:
                                                             controller
                                                                 .isDefaultOffice
@@ -200,11 +186,7 @@ class HomeView extends StatelessWidget {
                           },
                           child: Row(
                             children: [
-                              SvgPicture.asset(
-                                Asset.location,
-                                width: 9,
-                                height: 12.22,
-                              ),
+                              SvgPicture.asset(Asset.location, width: 9, height: 12.22),
                               SizedBox(width: 0.4.h),
                               Expanded(
                                 child: Obx(() {
@@ -217,13 +199,10 @@ class HomeView extends StatelessWidget {
                                       ),
                                       children: [
                                         TextSpan(
-                                          text: controller
-                                              .getCurrentAddress()
-                                              .value,
+                                          text: controller.getCurrentAddress().value,
                                         ),
                                         const WidgetSpan(
-                                          alignment:
-                                              PlaceholderAlignment.middle,
+                                          alignment: PlaceholderAlignment.middle,
                                           child: Padding(
                                             padding: EdgeInsets.only(left: 4),
                                             child: Icon(
@@ -259,11 +238,7 @@ class HomeView extends StatelessWidget {
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          SvgPicture.asset(
-                            Asset.notifications,
-                            width: 18,
-                            height: 18,
-                          ),
+                          SvgPicture.asset(Asset.notifications, width: 18, height: 18),
                           Positioned(
                             right: 0,
                             top: 3,
@@ -345,12 +320,9 @@ class HomeView extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final item = controller.features[index];
                           return Obx(() {
-                            final isSelected =
-                                controller.selectedIndex.value == index;
+                            final isSelected = controller.selectedIndex.value == index;
                             return Padding(
-                              padding: EdgeInsets.only(
-                                left: index == 0 ? 0 : 16.0,
-                              ),
+                              padding: EdgeInsets.only(left: index == 0 ? 0 : 16.0),
                               child: GestureDetector(
                                 onTap: () {
                                   // if(isSelected){
@@ -364,18 +336,14 @@ class HomeView extends StatelessWidget {
                                 },
                                 child: Container(
                                   width: 120,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       color: isSelected
                                           ? MyColors.primary
                                           : MyColors.grayD4,
                                     ),
-                                    color: isSelected
-                                        ? MyColors.yellow
-                                        : MyColors.greyE5,
+                                    color: isSelected ? MyColors.yellow : MyColors.greyE5,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Column(
@@ -479,10 +447,7 @@ class HomeView extends StatelessWidget {
                                 Expanded(
                                   child: _buildNotiCard(
                                     onTap: () {
-                                      Get.find<BottomController>()
-                                              .currentIndex
-                                              .value =
-                                          2;
+                                      Get.find<BottomController>().currentIndex.value = 2;
                                     },
                                     title: "Support Ticket",
                                     value:
@@ -531,10 +496,7 @@ class HomeView extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: MyColors.gray5D,
-                                width: 0.5,
-                              ),
+                              border: Border.all(color: MyColors.gray5D, width: 0.5),
                             ),
                             child: SizedBox(
                               height: 200,
@@ -571,9 +533,7 @@ class HomeView extends StatelessWidget {
                                               arguments: {"isReport": false},
                                             );
                                           } else if (index == 3) {
-
-                                            Get.toNamed(
-                                                Routes.SETTING);
+                                            Get.toNamed(Routes.SETTING);
                                           } else if (index == 4) {
                                             Get.toNamed(
                                               Routes.ROLE_MANAGEMENT,
@@ -606,8 +566,7 @@ class HomeView extends StatelessWidget {
                                               item['title'],
                                               textAlign: TextAlign.center,
                                               style: MyTexts.regular14.copyWith(
-                                                color: MyColors
-                                                    .textFieldBackground,
+                                                color: MyColors.textFieldBackground,
                                                 fontFamily: MyTexts.Roboto,
                                               ),
                                             ),
@@ -648,9 +607,7 @@ class HomeView extends StatelessWidget {
                     SizedBox(
                       height: 120,
                       child: Obx(() {
-                        final teamMembers = controller.teamList
-                            .take(5)
-                            .toList();
+                        final teamMembers = controller.teamList.take(5).toList();
 
                         if (teamMembers.isEmpty) {
                           return Container(
@@ -700,9 +657,7 @@ class HomeView extends StatelessWidget {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child:
-                                          (controller
-                                                      .teamList[index]
-                                                      .profilePhotoUrl ??
+                                          (controller.teamList[index].profilePhotoUrl ??
                                                   "")
                                               .isEmpty
                                           ? Image.asset(
@@ -750,11 +705,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _addressCard({
-    Address? address,
-    String? addressType,
-    bool isSelected = false,
-  }) {
+  Widget _addressCard({Address? address, String? addressType, bool isSelected = false}) {
     final displayText =
         "${address?.addressLine1}, ${address?.addressLine2}, ${address?.landmark}, ${address?.city}, ${address?.state} , ${address?.pinCode}";
     return GestureDetector(
@@ -774,9 +725,7 @@ class HomeView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: MyColors.white,
-          border: Border.all(
-            color: isSelected ? MyColors.primary : MyColors.grayD4,
-          ),
+          border: Border.all(color: isSelected ? MyColors.primary : MyColors.grayD4),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -866,9 +815,7 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(
-                color: MyColors.textFieldBackground,
-              ),
+              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
             ),
           ],
         ),
@@ -908,10 +855,7 @@ class HomeView extends StatelessWidget {
                     icon ?? "",
                     height: 30,
                     width: 30,
-                    colorFilter: ColorFilter.mode(
-                      color ?? Colors.black,
-                      BlendMode.srcIn,
-                    ),
+                    colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
                   ),
                 ),
                 Container(
@@ -964,14 +908,7 @@ class StaticsCard extends StatefulWidget {
   Color? color;
   Color? bColor;
 
-  StaticsCard({
-    super.key,
-    this.icon,
-    this.title,
-    this.value,
-    this.color,
-    this.bColor,
-  });
+  StaticsCard({super.key, this.icon, this.title, this.value, this.color, this.bColor});
 
   @override
   State<StaticsCard> createState() => _StaticsCardState();
@@ -996,10 +933,7 @@ class _StaticsCardState extends State<StaticsCard> {
             width: 20,
             colorFilter: widget.color == null
                 ? null
-                : ColorFilter.mode(
-                    widget.color ?? Colors.black,
-                    BlendMode.srcIn,
-                  ),
+                : ColorFilter.mode(widget.color ?? Colors.black, BlendMode.srcIn),
           ),
           const Gap(6),
           Text(
@@ -1037,10 +971,7 @@ class _HeaderTextState extends State<HeaderText> {
   Widget build(BuildContext context) {
     return Text(
       widget.text,
-      style: MyTexts.medium18.copyWith(
-        color: MyColors.black,
-        fontFamily: MyTexts.Roboto,
-      ),
+      style: MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.Roboto),
     );
   }
 }
