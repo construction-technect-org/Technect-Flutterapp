@@ -168,17 +168,6 @@ class InfoMetricsComponent extends StatelessWidget {
                           ),
                           const Gap(6),
                           buildRow(title: "Email ID", data: "${userData?.email}"),
-                          const Gap(6),
-                          buildRow(
-                            title: "GSTIN",
-                            data:
-                                userData?.gst ??
-                                Get.find<ProfileController>()
-                                    .businessModel
-                                    .value
-                                    .gstinNumber ??
-                                '-',
-                          ),
                           SizedBox(height: 0.5.h),
                         ],
                       );
@@ -235,6 +224,15 @@ class InfoMetricsComponent extends StatelessWidget {
                 );
               }),
               const Gap(6),
+              buildRow(
+                title: "GSTIN",
+                data:
+                    controller.userData?.gst ??
+                    controller.businessModel.value.gstinNumber ??
+                    '-',
+              ),
+              const Gap(6),
+
               Obx(() {
                 return buildRow(
                   title: "Mobile Number",

@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/controller/edit_profile_controller.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:gap/gap.dart';
 
 class UpperCaseTextFormatter extends TextInputFormatter {
@@ -37,30 +37,11 @@ class EditProfileView extends GetView<EditProfileController> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Obx(
-                () => Row(
-                  children: [
-                    if (controller.currentStep.value > 1) ...[
-                      Expanded(
-                        child: RoundedButton(
-                          buttonName: 'BACK',
-                          onTap: () {
-                            controller.previousStep();
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 2.w),
-                    ],
-                    Expanded(
-                      child: RoundedButton(
-                        buttonName: controller.currentStep.value == 1
-                            ? 'UPDATE'
-                            : 'UPDATE',
-                        onTap: () {
-                          controller.updateProfile();
-                        },
-                      ),
-                    ),
-                  ],
+                () => RoundedButton(
+                  buttonName: 'UPDATE',
+                  onTap: () {
+                    controller.updateProfile();
+                  },
                 ).paddingOnly(bottom: 30, right: 20, left: 20),
               ),
             ],
@@ -72,17 +53,6 @@ class EditProfileView extends GetView<EditProfileController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 1.h),
-                // Obx(
-                //   () => Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //     children: [
-                //       StepperEditProfileWidget(
-                //         currentStep: controller.currentStep.value,
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // SizedBox(height: 2.h),
                 SizedBox(height: 0.6.h),
                 Text(
                   "Update your Business Details",
@@ -91,48 +61,8 @@ class EditProfileView extends GetView<EditProfileController> {
                     fontFamily: MyTexts.Roboto,
                   ),
                 ),
-                // Obx(() {
-                //   return controller.currentStep.value == 1
-                //       ? const SizedBox.shrink()
-                //       : SizedBox(height: 3.h);
-                // }),
-
-                // Row(
-                //   children: [
-                //     Obx(
-                //       () => controller.currentStep.value == 1
-                //           ? const SizedBox.shrink()
-                //           : SvgPicture.asset(
-                //               Asset.certificateIcon,
-                //               width: 20,
-                //               height: 20,
-                //             ),
-                //     ),
-                //
-                //     SizedBox(width: 1.w),
-                //     Obx(
-                //       () => Text(
-                //         controller.currentStep.value == 1
-                //             ? ""
-                //             : "Certifications & Licenses",
-                //         style: MyTexts.medium16.copyWith(
-                //           color: MyColors.black,
-                //           fontFamily: MyTexts.Roboto,
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // SizedBox(height: 2.h),
-                //
-                // // Step 1: Business Details
                 const Gap(20),
-                Obx(
-                  () => controller.currentStep.value == 1
-                      ? _buildBusinessDetailsStep()
-                      : _buildCertificationsStep(),
-                ),
-
+                Obx(() => _buildBusinessDetailsStep()),
                 SizedBox(height: 4.h),
               ],
             ),
@@ -160,6 +90,7 @@ class EditProfileView extends GetView<EditProfileController> {
           headerText: "Website",
           controller: controller.businessWebsiteController,
           keyboardType: TextInputType.text,
+          validator: ValidationUtils.validateWebsiteUrl,
         ),
         SizedBox(height: 2.h),
         CommonTextField(
@@ -167,6 +98,7 @@ class EditProfileView extends GetView<EditProfileController> {
           hintText: "adcdef@gmail.com",
           controller: controller.businessEmailController,
           keyboardType: TextInputType.emailAddress,
+          validator: ValidationUtils.validateBusinessEmail,
         ),
         SizedBox(height: 2.h),
         CommonTextField(
@@ -179,11 +111,11 @@ class EditProfileView extends GetView<EditProfileController> {
             LengthLimitingTextInputFormatter(15),
             UpperCaseTextFormatter(),
           ],
+          validator: ValidationUtils.validateGSTINNumber,
         ),
         SizedBox(height: 2.h),
         CommonTextField(
           hintText: "+91 9292929929",
-
           headerText: "Business Contact Number",
           controller: controller.businessContactController,
           keyboardType: TextInputType.phone,
@@ -191,6 +123,7 @@ class EditProfileView extends GetView<EditProfileController> {
             FilteringTextInputFormatter.digitsOnly,
             LengthLimitingTextInputFormatter(10),
           ],
+          validator: ValidationUtils.validateBusinessContactNumber,
         ),
         // SizedBox(height: 2.h),
         // CommonTextField(
@@ -378,115 +311,5 @@ class EditProfileView extends GetView<EditProfileController> {
         // ),
       ],
     );
-  }
-
-  Widget _buildCertificationsStep() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildCertificationItem('GST', 'Select File you want to upload '),
-        SizedBox(height: 1.7.h),
-        _buildCertificationItem('UDYAM', 'Select File you want to upload'),
-      ],
-    );
-  }
-
-  Widget _buildCertificationItem(String title, String organization) {
-    return Obx(() {
-      final isSelected = controller.isDocumentSelected(title);
-      final fileName = controller.getSelectedDocumentName(title);
-
-      return GestureDetector(
-        onTap: () {
-          controller.pickFile(title);
-        },
-        child: DottedBorder(
-          options: RectDottedBorderOptions(
-            color: isSelected ? MyColors.primary : const Color(0xFF8C8C8C),
-            dashPattern: [5, 5],
-          ),
-          child: Stack(
-            children: [
-              /// Main card content
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// Icon
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFD9F0FF),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: SvgPicture.asset(
-                          Asset.certificateIcon,
-                          colorFilter: const ColorFilter.mode(
-                            MyColors.primary,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 2.w),
-
-                    /// Title + Organization/File
-                    Text(
-                      title,
-                      style: MyTexts.medium22.copyWith(
-                        color: MyColors.black,
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                    Text(
-                      (isSelected && fileName != null) ? fileName : organization,
-                      style: MyTexts.regular14.copyWith(
-                        color: const Color(0xFF717171),
-                        fontFamily: MyTexts.Roboto,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              /// Top-right action icons
-              Positioned(
-                right: 20,
-                top: 20,
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: SvgPicture.asset(Asset.eyeIcon, width: 26, height: 20),
-                    ),
-                    const SizedBox(width: 16),
-                    GestureDetector(
-                      onTap: () {},
-                      child: SvgPicture.asset(Asset.delete, width: 20, height: 20),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
   }
 }

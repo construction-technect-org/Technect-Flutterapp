@@ -12,6 +12,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
+
 class ProfileController extends GetxController {
   @override
   void onInit() {
@@ -200,7 +201,7 @@ class ProfileController extends GetxController {
 
   Future<void> pickAndSetCertificateFile(int index) async {
     try {
-      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+      final result = await FilePicker.platform.pickFiles();
 
       if (result != null && result.files.isNotEmpty) {
         final file = result.files.first;
@@ -209,6 +210,58 @@ class ProfileController extends GetxController {
         if (file.size > maxSizeInBytes) {
           SnackBars.errorSnackBar(content: "File size must be less than 2 MB");
           return;
+        }
+
+        final fileName = file.name.toLowerCase();
+        final fileExtension = fileName.split('.').last;
+        final allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx', 'txt'];
+
+        if (!fileName.contains('.')) {
+          SnackBars.errorSnackBar(
+            content:
+                "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
+          );
+          return;
+        }
+
+        final disallowedExtensions = [
+          'rtf',
+          'odt',
+          'xls',
+          'xlsx',
+          'ppt',
+          'pptx',
+          'zip',
+          'rar',
+          'exe',
+          'bat',
+          'sh',
+        ];
+        if (disallowedExtensions.contains(fileExtension)) {
+          SnackBars.errorSnackBar(
+            content:
+                "RTF, ODT, and other document files are not allowed. Only PDF, JPG, PNG, DOC, and TXT files are accepted for certificates.",
+          );
+          return;
+        }
+
+        if (!allowedExtensions.contains(fileExtension)) {
+          SnackBars.errorSnackBar(
+            content: "Only PDF, JPG, and PNG files are allowed for certificates",
+          );
+          return;
+        }
+
+        if (file.bytes != null) {
+          final bytes = file.bytes!;
+          final isValidFile = _validateFileType(bytes, fileExtension);
+
+          if (!isValidFile) {
+            SnackBars.errorSnackBar(
+              content: "Invalid file format. Please select a valid PDF, JPG, or PNG file",
+            );
+            return;
+          }
         }
 
         certificates[index].filePath = file.path;
@@ -222,9 +275,8 @@ class ProfileController extends GetxController {
     }
   }
 
-
   Future<String?> pickFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    final result = await FilePicker.platform.pickFiles();
 
     if (result != null && result.files.isNotEmpty) {
       final file = result.files.single;
@@ -238,12 +290,68 @@ class ProfileController extends GetxController {
         return null;
       }
 
+      // Robust validation for file extension and MIME type
+      final fileName = file.name.toLowerCase();
+      final fileExtension = fileName.split('.').last;
+      final allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx', 'txt'];
+
+      // Check if file has an extension
+      if (!fileName.contains('.')) {
+        SnackBars.errorSnackBar(
+          content:
+              "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
+        );
+        return null;
+      }
+
+      // Check for explicitly disallowed file types
+      final disallowedExtensions = [
+        'rtf',
+        'odt',
+        'xls',
+        'xlsx',
+        'ppt',
+        'pptx',
+        'zip',
+        'rar',
+        'exe',
+        'bat',
+        'sh',
+      ];
+      if (disallowedExtensions.contains(fileExtension)) {
+        SnackBars.errorSnackBar(
+          content:
+              "RTF, ODT, and other document files are not allowed. Only PDF, JPG, PNG, DOC, and TXT files are accepted for certificates.",
+        );
+        return null;
+      }
+
+      // Check file extension
+      if (!allowedExtensions.contains(fileExtension)) {
+        SnackBars.errorSnackBar(
+          content: "Only PDF, JPG, PNG, DOC, and TXT files are allowed for certificates",
+        );
+        return null;
+      }
+
+      // Additional MIME type validation for extra security
+      if (file.bytes != null) {
+        final bytes = file.bytes!;
+        final isValidFile = _validateFileType(bytes, fileExtension);
+
+        if (!isValidFile) {
+          SnackBars.errorSnackBar(
+            content: "Invalid file format. Please select a valid PDF, JPG, or PNG file",
+          );
+          return null;
+        }
+      }
+
       return file.path;
     }
 
     return null;
   }
-
 
   Rx<BusinessModel> businessModel = BusinessModel().obs;
 
@@ -253,6 +361,73 @@ class ProfileController extends GetxController {
 
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
   EditProfileService editProfileService = EditProfileService();
+
+  // Validate file type by checking file signatures (magic numbers)
+  bool _validateFileType(List<int> bytes, String extension) {
+    if (bytes.length < 4) return false;
+
+    // Check file signatures
+    switch (extension.toLowerCase()) {
+      case 'pdf':
+        // PDF files start with %PDF
+        final pdfSignature = String.fromCharCodes(bytes.take(4));
+        return pdfSignature == '%PDF';
+
+      case 'jpg':
+      case 'jpeg':
+        // JPEG files start with FF D8 FF
+        return bytes.length >= 3 &&
+            bytes[0] == 0xFF &&
+            bytes[1] == 0xD8 &&
+            bytes[2] == 0xFF;
+
+      case 'png':
+        // PNG files start with 89 50 4E 47
+        return bytes.length >= 4 &&
+            bytes[0] == 0x89 &&
+            bytes[1] == 0x50 &&
+            bytes[2] == 0x4E &&
+            bytes[3] == 0x47;
+
+      case 'doc':
+      case 'docx':
+        // DOC/DOCX files have specific signatures
+        // DOC files start with D0 CF 11 E0 (OLE signature)
+        // DOCX files are ZIP archives with specific structure
+        if (bytes.length >= 4) {
+          // Check for OLE signature (DOC files)
+          if (bytes[0] == 0xD0 &&
+              bytes[1] == 0xCF &&
+              bytes[2] == 0x11 &&
+              bytes[3] == 0xE0) {
+            return true;
+          }
+          // Check for ZIP signature (DOCX files)
+          if (bytes[0] == 0x50 &&
+              bytes[1] == 0x4B &&
+              bytes[2] == 0x03 &&
+              bytes[3] == 0x04) {
+            return true;
+          }
+        }
+        return false;
+
+      case 'txt':
+        // TXT files are plain text, so we'll be more lenient
+        // Check if it contains mostly printable ASCII characters
+        if (bytes.isEmpty) return true;
+        int printableCount = 0;
+        for (int byte in bytes) {
+          if (byte >= 32 && byte <= 126 || byte == 9 || byte == 10 || byte == 13) {
+            printableCount++;
+          }
+        }
+        return printableCount >= (bytes.length * 0.8); // 80% printable characters
+
+      default:
+        return false;
+    }
+  }
 
   String? _normalizeTime(dynamic time) {
     if (time == null || time.toString().isEmpty) return null;
@@ -399,7 +574,7 @@ class ProfileController extends GetxController {
         );
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'An error occurred: $e');
+      // No Error show
     } finally {
       isLoading.value = false;
     }

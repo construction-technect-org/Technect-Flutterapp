@@ -65,10 +65,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                 Obx(() {
                   return CupertinoSwitch(
                     value:
-                    controller
-                        .merchantProfile
-                        ?.verificationStatus
-                        ?.businessLicense ??
+                        controller.merchantProfile?.verificationStatus?.businessLicense ??
                         false,
                     onChanged: (val) {},
                   );
@@ -90,10 +87,10 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                 Obx(() {
                   return CupertinoSwitch(
                     value:
-                    controller
-                        .merchantProfile
-                        ?.verificationStatus
-                        ?.qualityAssurance ??
+                        controller
+                            .merchantProfile
+                            ?.verificationStatus
+                            ?.qualityAssurance ??
                         false,
                     onChanged: (val) {
                       // controller
@@ -122,7 +119,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
           children: [
             const Gap(20),
             Text(
-              'Marketplacee Performance',
+              'Marketplace Performance',
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
                 fontFamily: MyTexts.Roboto,
@@ -130,8 +127,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             ),
             SizedBox(height: 1.5.h),
             Obx(() {
-              final completionPercentage =
-                  controller.profileCompletionPercentage;
+              final completionPercentage = controller.profileCompletionPercentage;
               final progressValue = completionPercentage / 100.0;
 
               return Column(
@@ -217,9 +213,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                   return Text(
                     controller.merchantProfile?.memberSince != null
                         ? DateFormat('dd MM yyyy').format(
-                            DateTime.parse(
-                              controller.merchantProfile!.memberSince!,
-                            ),
+                            DateTime.parse(controller.merchantProfile!.memberSince!),
                           )
                         : 'Unknown',
                     style: MyTexts.bold14.copyWith(
@@ -266,11 +260,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildPerformanceMetricItem(
-    String label,
-    String value,
-    Color valueColor,
-  ) {
+  Widget _buildPerformanceMetricItem(String label, String value, Color valueColor) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/TeamStatsModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
@@ -11,6 +12,7 @@ class RoleManagementController extends GetxController {
   Rx<Statistics> statistics = Statistics().obs;
 
   final Rx<TeamStatsModel?> teamStats = Rx<TeamStatsModel?>(null);
+  AddTeamService addTeamService = AddTeamService();
   HomeController homeController = Get.find();
   final isLoading = false.obs;
   final isLoadingTeam = false.obs;
@@ -63,6 +65,21 @@ class RoleManagementController extends GetxController {
           statistics.value = cachedRoleModel.statistics!;
         }
       }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> deleteTeamMember(int teamMemberId) async {
+    try {
+      isLoading.value = true;
+      final response = await addTeamService.deleteTeamMember(teamMemberId);
+      if (response['success'] == true) {
+        await homeController.refreshTeamList();
+        await homeController.fetchTeamList();
+      }
+    } catch (e) {
+      // No Commit
     } finally {
       isLoading.value = false;
     }

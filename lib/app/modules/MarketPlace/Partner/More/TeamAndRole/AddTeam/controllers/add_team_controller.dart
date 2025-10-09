@@ -7,7 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
-
 import 'package:image_picker/image_picker.dart';
 
 class AddTeamController extends GetxController {
@@ -29,6 +28,7 @@ class AddTeamController extends GetxController {
     final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
     selectedImage.value = File(compressedFile.path);
   }
+
   Rx<File?> selectedImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();
   @override
@@ -73,7 +73,6 @@ class AddTeamController extends GetxController {
       ),
     );
   }
-
 
   Future<void> _loadRolesFromStorage() async {
     final cachedRoles = myPref.getRoles();
@@ -123,7 +122,6 @@ class AddTeamController extends GetxController {
         "mobile_number": phoneNumberController.text,
         "team_role_id": selectedRole?.value.id ?? '',
       };
-
     }
     try {
       if (isEdit.value) {
@@ -136,8 +134,7 @@ class AddTeamController extends GetxController {
         isLoading.value = false;
         Get.back();
       } else {
-
-        await addTeamService.addTeam(fields: fields,files: files);
+        await addTeamService.addTeam(fields: fields, files: files);
         await homeController.refreshTeamList();
         // await roleController.fetchTeamStatsOverview();
         isLoading.value = false;
@@ -179,16 +176,12 @@ class AddTeamController extends GetxController {
     if (fNameController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'First name is required');
     } else if (fNameController.text.length < 3) {
-      SnackBars.errorSnackBar(
-        content: 'First name must be at least 3 characters',
-      );
+      SnackBars.errorSnackBar(content: 'First name must be at least 3 characters');
     }
     if (lNameController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'First name is required');
     } else if (lNameController.text.length < 2) {
-      SnackBars.errorSnackBar(
-        content: 'Last name must be at least 2 characters',
-      );
+      SnackBars.errorSnackBar(content: 'Last name must be at least 2 characters');
     } else if (emialIdController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Email is required');
     } else if (!GetUtils.isEmail(emialIdController.text)) {

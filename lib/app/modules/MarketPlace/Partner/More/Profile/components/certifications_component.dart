@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
@@ -28,7 +30,7 @@ class CertificationsComponent extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      cert.title,
+                      '${cert.title}${cert.isDefault ? "*" : ''}',
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.fontBlack,
                         fontFamily: MyTexts.Roboto,
@@ -38,21 +40,110 @@ class CertificationsComponent extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         final url = cert.filePath;
-                        if (url != null && url.isNotEmpty && url.startsWith("merchant")) {
-                          final uri = Uri.parse(APIConstants.bucketUrl + url);
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(
-                              uri,
-                              mode: LaunchMode.externalApplication,
-                            );
-                          } else {
+                        final fileName = cert.name ?? '';
+
+                        if (url != null && url.isNotEmpty) {
+                          final fileExtension = fileName.toLowerCase().split('.').last;
+                          final isImage = [
+                            'jpg',
+                            'jpeg',
+                            'png',
+                            'gif',
+                            'bmp',
+                            'webp',
+                          ].contains(fileExtension);
+                          final isPdf = fileExtension == 'pdf';
+                          if (url.startsWith("merchant")) {
+                            final uri = Uri.parse(APIConstants.bucketUrl + url);
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          } else if (url.startsWith("/") ||
+                              url.contains("file://") ||
+                              url.contains("storage/") ||
+                              url.contains("CoreSimulator") ||
+                              url.contains("tmp/")) {
+                            try {
+                              final file = File(url);
+                              final fileExists = await file.exists();
+
+                              if (fileExists) {
+                                final uri = Uri.file(url);
+
+                                if (isImage) {
+                                  final imageLaunchMethods = [
+                                    () async => await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    ),
+                                    () async => await launchUrl(uri),
+                                    () async => await launchUrl(uri),
+                                  ];
+
+                                  bool launched = false;
+                                  for (final method in imageLaunchMethods) {
+                                    if (!launched) {
+                                      try {
+                                        await method();
+                                        launched = true;
+                                      } catch (e) {}
+                                    }
+                                  }
+
+                                  if (!launched) {
+                                    SnackBars.errorSnackBar(
+                                      content:
+                                          "Cannot open image. No image viewer available.",
+                                    );
+                                  }
+                                } else if (isPdf) {
+                                  final pdfLaunchMethods = [
+                                    () async => await launchUrl(
+                                      uri,
+                                      mode: LaunchMode.externalApplication,
+                                    ),
+                                    () async => await launchUrl(uri),
+                                    () async => await launchUrl(uri),
+                                    () async => await launchUrl(Uri.parse('file://$url')),
+                                  ];
+
+                                  bool launched = false;
+                                  for (final method in pdfLaunchMethods) {
+                                    if (!launched) {
+                                      try {
+                                        await method();
+                                        launched = true;
+                                      } catch (e) {}
+                                    }
+                                  }
+
+                                  if (!launched) {
+                                    SnackBars.errorSnackBar(
+                                      content:
+                                          "Cannot open PDF. No PDF viewer available.",
+                                    );
+                                  }
+                                } else {
+                                  SnackBars.errorSnackBar(
+                                    content: "Only PDF and image files are supported.",
+                                  );
+                                }
+                              } else {
+                                SnackBars.errorSnackBar(content: "File not found");
+                              }
+                            } catch (e) {
+                              SnackBars.errorSnackBar(content: "Unable to open file: $e");
+                            }
+                          } else if (url.startsWith("http://") ||
+                              url.startsWith("https://")) {
+                            final uri = Uri.parse(url);
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
                           }
                         }
                       },
-                      child: const Icon(
-                        Icons.visibility,
-                        color: MyColors.primary,
-                      ),
+                      child: const Icon(Icons.visibility, color: MyColors.primary),
                     ),
                     if (cert.filePath != null)
                       IconButton(
@@ -112,11 +203,7 @@ class CertificationsComponent extends StatelessWidget {
                           Column(
                             children: [
                               const Gap(14),
-                              Image.asset(
-                                Asset.pdfImage,
-                                height: 50,
-                                width: 32,
-                              ),
+                              _buildFileIcon(cert.name ?? ''),
                               const Gap(14),
                               Text(
                                 "File uploaded: ${cert.name}",
@@ -155,6 +242,61 @@ class CertificationsComponent extends StatelessWidget {
         ],
       );
     });
+  }
+
+  Widget _buildFileIcon(String fileName) {
+    final extension = fileName.toLowerCase().split('.').last;
+
+    switch (extension) {
+      case 'pdf':
+        return Image.asset(Asset.pdfImage, height: 50, width: 32);
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+      case 'bmp':
+      case 'webp':
+        return Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+            color: MyColors.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(Icons.image, color: MyColors.primary, size: 30),
+        );
+      case 'doc':
+      case 'docx':
+        return Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+            color: Colors.blue.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(Icons.description, color: Colors.blue, size: 30),
+        );
+      case 'txt':
+        return Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+            color: Colors.grey.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(Icons.text_snippet, color: Colors.grey, size: 30),
+        );
+      default:
+        return Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+            color: Colors.orange.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(Icons.warning, color: Colors.orange, size: 30),
+        );
+    }
   }
 
   Widget _buildCertificationItem(
@@ -206,7 +348,6 @@ class CertificationsComponent extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 2.w),
-                // Content
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -78,8 +78,7 @@ class HomeController extends GetxController {
   void _checkProfileCompletion() {
     final merchantProfile = profileData.value.data?.merchantProfile;
 
-    final completionPercentage =
-        merchantProfile?.profileCompletionPercentage ?? 0;
+    final completionPercentage = merchantProfile?.profileCompletionPercentage ?? 0;
 
     if (merchantProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
@@ -102,9 +101,7 @@ class HomeController extends GetxController {
       PopScope(
         canPop: false,
         child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(13),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
           child: GestureDetector(
             onTap: () {
               _handleProfileDialogTap();
@@ -180,8 +177,7 @@ class HomeController extends GetxController {
 
   void _checkProfileCompletionAfterEdit() {
     final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ??
-        0;
+        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
 
     if (profileData.value.data?.merchantProfile != null) {
       commonController.hasProfileComplete.value = completionPercentage >= 90;
@@ -221,15 +217,9 @@ class HomeController extends GetxController {
   RxString getCurrentAddress() {
     if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
       final int index =
-          addressData.data?.addresses?.indexWhere(
-            (e) => e.addressType == "office",
-          ) ??
-          0;
+          addressData.data?.addresses?.indexWhere((e) => e.addressType == "office") ?? 0;
       final int factoryIndex =
-          addressData.data?.addresses?.indexWhere(
-            (e) => e.addressType == "factory",
-          ) ??
-          0;
+          addressData.data?.addresses?.indexWhere((e) => e.addressType == "factory") ?? 0;
       final address = addressData
           .data!
           .addresses?[isDefaultOffice.value == true ? index : factoryIndex];
@@ -245,17 +235,11 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true &&
-          profileResponse.data?.user != null) {
+      if (profileResponse.success == true && profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
-        if ((profileData
-                    .value
-                    .data
-                    ?.merchantProfile
-                    ?.profileCompletionPercentage ??
-                0) >=
+        if ((profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0) >=
             90) {
           _loadTeamFromStorage();
         }

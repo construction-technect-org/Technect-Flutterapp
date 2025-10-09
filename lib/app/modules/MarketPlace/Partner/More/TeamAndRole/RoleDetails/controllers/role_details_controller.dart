@@ -1,3 +1,5 @@
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/AddRoleService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +11,8 @@ class RoleDetailsController extends GetxController {
   RxString functionalities = "".obs;
   RxString roleStatus = "Active".obs;
   RxBool isLoading = false.obs;
+  RoleService roleService = RoleService();
+  RoleManagementController roleManagementController = Get.find();
 
   @override
   void onInit() {
@@ -19,9 +23,26 @@ class RoleDetailsController extends GetxController {
   void handlePassedData() {
     final arguments = Get.arguments;
     roleDetailsModel = arguments?['getRole'] ?? GetAllRole();
+    roleId.value = (roleDetailsModel?.id ?? 0).toString();
     roleTitle.value = roleDetailsModel?.roleTitle ?? "Admin";
     roleStatus.value = roleDetailsModel?.isActive == true ? "Active" : "InActive";
     roleDescription.value = roleDetailsModel?.roleDescription ?? '';
     functionalities.value = roleDetailsModel?.functionalities ?? '';
+  }
+
+  Future<void> deleteRole(String id) async {
+    try {
+      isLoading.value = true;
+      final response = await roleService.deleteRole(id);
+
+      if (response['success'] == true) {
+        await roleManagementController.fetchRoles();
+      }
+      Get.back();
+    } catch (e) {
+      // No Error
+    } finally {
+      isLoading.value = false;
+    }
   }
 }
