@@ -20,8 +20,6 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: CommonAppBar(title: const Text("Filters")),
-
-      // ✅ Bottom buttons
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
@@ -57,12 +55,10 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
         ),
       ),
 
-      // ✅ Main body
       body: Obx(() {
         if (controller.isLoad.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
         return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: controller.filters.length,
@@ -91,7 +87,7 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
                   children: [
                     ListTile(
                       title: Text(
-                        filter.filterName ?? '',
+                        filter.label ?? '',
                         style: MyTexts.medium16.copyWith(
                           color: MyColors.fontBlack,
                           fontFamily: MyTexts.Roboto,
@@ -161,8 +157,6 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
             ),
           ],
         );
-
-      // ✅ dropdown → use checkable chips (single select)
       case 'dropdown':
         return Wrap(
           spacing: 8,
@@ -172,10 +166,18 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
                 final selected =
                     controller.selectedFilters[filter.filterName]?.value == opt;
                 return FilterChip(
-                  label: Text(opt),
+                  label: Text(
+                    opt,
+                    style: TextStyle(
+                      color: selected ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   selected: selected,
                   backgroundColor: Colors.white,
+                  selectedColor: MyColors.primary,
                   surfaceTintColor: Colors.transparent,
+                  checkmarkColor: Colors.white,
                   onSelected: (val) {
                     if (val) {
                       controller.selectedFilters[filter.filterName]?.value =
@@ -185,14 +187,11 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
                     }
                     setState(() {});
                   },
-                  selectedColor: MyColors.primary.withOpacity(0.15),
-                  checkmarkColor: MyColors.primary,
                 );
               }).toList() ??
               [],
         );
 
-      // ✅ dropdown_multiple → multi-select chips
       case 'dropdown_multiple':
         return Wrap(
           spacing: 8,
@@ -202,8 +201,18 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
                 final list = controller.multiSelectValues[filter.filterName]!;
                 final selected = list.contains(opt);
                 return FilterChip(
-                  label: Text(opt),
+                  label: Text(
+                    opt,
+                    style: TextStyle(
+                      color: selected ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   selected: selected,
+                  backgroundColor: Colors.white,
+                  selectedColor: MyColors.primary,
+                  checkmarkColor: Colors.white,
+                  surfaceTintColor: Colors.transparent,
                   onSelected: (val) {
                     if (val) {
                       list.add(opt);
@@ -212,8 +221,6 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
                     }
                     setState(() {});
                   },
-                  selectedColor: MyColors.primary.withOpacity(0.15),
-                  checkmarkColor: MyColors.primary,
                 );
               }).toList() ??
               [],

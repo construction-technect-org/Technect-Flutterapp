@@ -9,6 +9,7 @@ class ConnectorFilterController extends GetxController {
   Map<String, RxList<String>> multiSelectValues = {};
   RxBool isLoad = false.obs;
 
+
   @override
   void onInit() {
     super.onInit();
@@ -17,21 +18,27 @@ class ConnectorFilterController extends GetxController {
       isLoad.value = true;
 
       final selectedProductId =
-          Get.find<ConnectorSelectedProductController>().selectedProductId.value ?? "";
+          Get.find<ConnectorSelectedProductController>()
+              .selectedProductId
+              .value ??
+          "";
 
-      await Get.find<ConnectorSelectedProductController>()
-          .getFilter(selectedProductId);
+      await Get.find<ConnectorSelectedProductController>().getFilter(
+        selectedProductId,
+      );
 
-      final otherFilters = Get.find<ConnectorSelectedProductController>().filters;
+      final otherFilters =
+          Get.find<ConnectorSelectedProductController>().filters;
 
       filters.assignAll(
         otherFilters.map(
-              (f) => ConnectorFilterModel(
-            filterName: f.filterLabel,
+          (f) => ConnectorFilterModel(
+            filterName: f.filterName,
             filterType: f.filterType,
             min: double.tryParse(f.minValue ?? '0'),
             max: double.tryParse(f.maxValue ?? '100'),
             options: f.dropdownList,
+            label: f.filterLabel,
           ),
         ),
       );
@@ -41,11 +48,14 @@ class ConnectorFilterController extends GetxController {
     });
   }
 
+
   void initFilterControllers() {
     for (final filter in filters) {
       if (filter.filterType == 'number') {
-        rangeValues[filter.filterName ?? ''] =
-            RangeValues(filter.min ?? 0, filter.max ?? 0).obs;
+        rangeValues[filter.filterName ?? ''] = RangeValues(
+          filter.min ?? 0,
+          filter.max ?? 0,
+        ).obs;
       } else if (filter.filterType == 'dropdown_multiple') {
         multiSelectValues[filter.filterName ?? ''] = <String>[].obs;
       } else if (filter.filterType == 'dropdown') {
@@ -88,7 +98,7 @@ class ConnectorFilterController extends GetxController {
 
         case 'dropdown':
           final selectedValue = selectedFilters[name]?.value;
-          if (selectedValue != null && selectedValue.isNotEmpty==true) {
+          if (selectedValue != null && selectedValue.isNotEmpty == true) {
             filtersMap[name] = {
               "type": "list",
               "filter_type": "dropdown",
@@ -99,7 +109,7 @@ class ConnectorFilterController extends GetxController {
 
         default:
           final selected = selectedFilters[name]?.value ?? '';
-          if (selected.isNotEmpty==true) {
+          if (selected.isNotEmpty == true) {
             filtersMap[name] = {
               "type": "list",
               "filter_type": filter.filterType ?? 'dropdown',

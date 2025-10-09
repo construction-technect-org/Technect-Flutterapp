@@ -9,7 +9,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -473,60 +472,6 @@ class ConnectorHomeView extends StatelessWidget {
                                               .toString(),
 
                                       icon: Asset.noOfUsers,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Gap(14),
-                            HeaderText(text: "Notification"),
-                            const Gap(14),
-                            Obx(
-                              () => Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildNotiCard(
-                                      onTap: () {
-                                        Get.find<BottomController>()
-                                                .currentIndex
-                                                .value =
-                                            2;
-                                      },
-                                      title: "Support Ticket",
-                                      value:
-                                          (controller
-                                                      .dashboardData
-                                                      .value
-                                                      .data
-                                                      ?.merchantSupportTickets ??
-                                                  0)
-                                              .toString(),
-
-                                      icon: Asset.warning,
-                                      color: MyColors.redgray,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: _buildNotiCard(
-                                      onTap: () {
-                                        Get.toNamed(
-                                          Routes.APPROVAL_INBOX,
-                                          arguments: {"isInbox": true},
-                                        );
-                                      },
-                                      title: "Inbox",
-                                      value:
-                                          (controller
-                                                      .dashboardData
-                                                      .value
-                                                      .data
-                                                      ?.merchantProductNotifications ??
-                                                  0)
-                                              .toString(),
-
-                                      icon: Asset.thumbup,
-                                      color: MyColors.warning,
                                     ),
                                   ),
                                 ],

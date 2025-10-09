@@ -471,60 +471,6 @@ class HomeView extends StatelessWidget {
                             ),
                           ),
                           const Gap(14),
-                          HeaderText(text: "Notification"),
-                          const Gap(14),
-                          Obx(
-                            () => Row(
-                              children: [
-                                Expanded(
-                                  child: _buildNotiCard(
-                                    onTap: () {
-                                      Get.find<BottomController>()
-                                              .currentIndex
-                                              .value =
-                                          2;
-                                    },
-                                    title: "Support Ticket",
-                                    value:
-                                        (controller
-                                                    .dashboardData
-                                                    .value
-                                                    .data
-                                                    ?.merchantSupportTickets ??
-                                                0)
-                                            .toString(),
-
-                                    icon: Asset.warning,
-                                    color: MyColors.redgray,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _buildNotiCard(
-                                    onTap: () {
-                                      Get.toNamed(
-                                        Routes.APPROVAL_INBOX,
-                                        arguments: {"isInbox": true},
-                                      );
-                                    },
-                                    title: "Inbox",
-                                    value:
-                                        (controller
-                                                    .dashboardData
-                                                    .value
-                                                    .data
-                                                    ?.merchantProductNotifications ??
-                                                0)
-                                            .toString(),
-
-                                    icon: Asset.thumbup,
-                                    color: MyColors.warning,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Gap(14),
                           HeaderText(text: "Quick Access"),
                           const Gap(14),
                           Container(

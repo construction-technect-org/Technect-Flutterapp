@@ -1,5 +1,10 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/controllers/connector_main_tab_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
+import 'package:gap/gap.dart';
 
 class ConnectorMenuView extends StatelessWidget {
   const ConnectorMenuView({super.key});
@@ -8,221 +13,287 @@ class ConnectorMenuView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        backgroundColor: MyColors.white,
-        elevation: 0,
-        centerTitle: false,
-        leading: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SvgPicture.asset(Asset.menuIcon, width: 24, height: 24),
-        ),
-        title: Text('Menu', style: MyTexts.regular20),
+      appBar: CommonAppBar(
+        isCenter: false,
+        leading: const SizedBox(),
+        leadingWidth: 0,
+        title: const Text("MENU"),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 6.sw),
-        child: Column(
-          children: [
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Wish list',
-              false,
-              customIcon: SvgPicture.asset(Asset.wishlistIcon),
-              onTap: () {
-               // Get.toNamed(Routes.WISH_LIST);
-
-               Get.to(() => WishListView());
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Connection Inbox',
-              true,
-              customIcon: Image.asset(Asset.vectorIcon, height: 24, width: 24),
-              onTap: () {
-                //  Get.toNamed(Routes.CONNECTION_INBOX);
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Support Ticket',
-              true,
-              customIcon: SvgPicture.asset(Asset.suportTicket),
-              onTap: () {
-                // Get.to(() => CustomerSupportView());
-              },
-            ),
-            SizedBox(height: 1.h),
-            _buildMenuItem(
-              'Settings',
-            customIcon: SvgPicture.asset(Asset.settingsIcon, height: 24, width: 24),
-
-              false,
-              onTap: () {
-                Get.toNamed(Routes.CONNECTOR_PROFILE);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(
-    String title,
-    bool hasNotification, {
-    VoidCallback? onTap,
-    bool? isDestructive,
-    bool? highlight,
-    IconData? icon, // 👈 Material icons
-    Widget? customIcon, // 👈 Images/SVGs
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        decoration: BoxDecoration(
-          color: MyColors.menuTile,
-          borderRadius: BorderRadius.circular(7),
-        ),
-        child: Row(
-          children: [
-            if (customIcon != null) ...[
-              Stack(
-                children: [
-                  ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                      BlendMode.srcIn,
-                    ),
-                    child: customIcon,
-                  ),
-                  if (hasNotification)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Visibility(
+                visible: false,
+                child: Column(
+                  children: [
+                    SizedBox(height: 1.h),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        color: const Color(0xFFFFED29).withValues(alpha: 0.5),
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(Asset.gift),
+                          const Gap(13),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Get Couples for Every Referral",
+                                style: MyTexts.medium16.copyWith(
+                                  fontFamily: MyTexts.Roboto,
+                                  color: MyColors.primary,
+                                ),
+                              ),
+                              Text(
+                                "Refer your business friends now!",
+                                style: MyTexts.regular14.copyWith(
+                                  fontFamily: MyTexts.Roboto,
+                                  color: MyColors.gray5D,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                ],
+                  ],
+                ),
               ),
-            ] else if (icon != null) ...[
-              Icon(
-                icon,
-                size: 24,
-                color: isDestructive == true ? MyColors.red : MyColors.primary,
-              ),
-            ] else ...[
-              Stack(
+              SizedBox(height: 2.h),
+              HearderText(text: "Profile"),
+              Gap(1.h),
+              CommonContainer(
                 children: [
-                  SvgPicture.asset(
-                    Asset.menuSettingIcon,
-                    width: 24,
-                    height: 24,
-                    colorFilter: ColorFilter.mode(
-                      isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                      BlendMode.srcIn,
-                    ),
+                  CommonRowItem(
+                    icon: Asset.profile,
+                    title: "Profile Details",
+                    onTap: () {
+                      Get.toNamed(Routes.PROFILE);
+                    },
                   ),
-                  if (hasNotification)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
+                  // const Gap(20),
+                  // CommonRowItem(
+                  //   icon: Asset.peoples,
+                  //   title: "Teams & Roles",
+                  //   onTap: () {
+                  //     Get.toNamed(Routes.ROLE_MANAGEMENT);
+                  //   },
+                  // ),
                 ],
               ),
+              SizedBox(height: 2.h),
+              HearderText(text: "Support"),
+              Gap(1.h),
+              CommonContainer(
+                children: [
+                  CommonRowItem(
+                    icon: Asset.suportTicket,
+                    title: "Help & Support",
+                    onTap: () {
+                      Get.find<ConnectorBottomController>().currentIndex.value =
+                          2;
+                    },
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.youtube,
+
+                    title: "Tutorials",
+                    onTap: () {
+                      openUrl(
+                        url: "https://www.youtube.com/watch?v=hcvmq-hcDIE",
+                      );
+                    },
+                  ),
+                  const Gap(20),
+
+                  CommonRowItem(
+                    icon: Asset.faq,
+
+                    title: "F.A.Q.S",
+                    onTap: () {
+                      Get.toNamed(Routes.FAQ);
+                    },
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.feed,
+
+                    title: "Feedback",
+                    onTap: () {
+                      Get.toNamed(Routes.FEEDBACK_VIEW);
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 2.h),
+              Visibility(
+                visible: false,
+                child: Column(
+                  children: [
+                    HearderText(text: "Others"),
+                    Gap(1.h),
+                    CommonContainer(
+                      children: [
+                        CommonRowItem(
+                          icon: Asset.sub,
+                          title: "Explore Subscription Plans",
+                          onTap: () {},
+                        ),
+                        const Gap(20),
+                        CommonRowItem(
+                          icon: Asset.gift,
+
+                          title: "Refer & Get Coupons",
+                          onTap: () {
+                            Get.toNamed(Routes.REFER_EARN);
+                          },
+                        ),
+                        const Gap(20),
+
+                        CommonRowItem(
+                          icon: Asset.link,
+
+                          title: "Use on Desktop",
+                          onTap: () {
+                            openUrl(url: "https://www.google.com");
+                          },
+                        ),
+                        const Gap(20),
+                        CommonRowItem(
+                          icon: Asset.notifications,
+
+                          title: "Whats NEWS",
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 2.h),
+                  ],
+                ),
+              ),
+
+              HearderText(text: "About"),
+              Gap(1.h),
+              CommonContainer(
+                children: [
+                  CommonRowItem(
+                    icon: Asset.info,
+                    title: "About Us",
+                    onTap: () {
+                      openUrl(url: Constants.aboutUS);
+                    },
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.policy,
+                    title: "Privacy Policy",
+                    onTap: () {
+                      openUrl(url: Constants.privacyPolicy);
+                    },
+                  ),
+                  const Gap(20),
+                  CommonRowItem(
+                    icon: Asset.tc,
+                    title: "Terms & Conditions",
+                    onTap: () {
+                      openUrl(url: Constants.termsCondition);
+                    },
+                  ),
+                ],
+              ),
+              const Gap(20),
+
+              // _buildMenuItem(
+              //   'Service Management',
+              //   false,
+              //   onTap: () {
+              //     Get.toNamed(Routes.SERVICE_MANAGEMENT);
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Product Management',
+              //   customIcon: SvgPicture.asset(
+              //     Asset.productManagement,
+              //     height: 24,
+              //     width: 24,
+              //   ),
+              //
+              //   false,
+              //   onTap: () {
+              //     Get.to(() => ProductManagementView());
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Approval Inbox',
+              //   true,
+              //   customIcon: Image.asset(
+              //     Asset.vectorIcon,
+              //     height: 24,
+              //     width: 24,
+              //   ),
+              //
+              //   onTap: () {
+              //     Get.to(() => const ProductApprovalView());
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Connection Inbox',
+              //   true,
+              //   customIcon: Image.asset(Asset.crmIcon, height: 24, width: 24),
+              //   onTap: () {
+              //     Get.toNamed(Routes.CONNECTION_INBOX);
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Role Management',
+              //   customIcon: SvgPicture.asset(Asset.role, height: 24, width: 24),
+              //
+              //   false,
+              //   onTap: () {
+              //     Get.toNamed(Routes.ROLE_MANAGEMENT);
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Support Ticket',
+              //   true,
+              //   customIcon: SvgPicture.asset(Asset.suportTicket),
+              //   onTap: () {
+              //     Get.to(() => CustomerSupportView());
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              // _buildMenuItem(
+              //   'Settings',
+              //   false,
+              //   customIcon: SvgPicture.asset(Asset.settingsIcon),
+              //
+              //   onTap: () {
+              //     Get.to(() => const SettingView());
+              //   },
+              //
+              //   // onTap: () {
+              //   //   Get.toNamed(Routes.PROFILE);
+              //   // },
+              // ),
             ],
-
-            SizedBox(width: 4.w),
-            Text(
-              title,
-              style: MyTexts.medium16.copyWith(
-                color: isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                fontWeight: highlight == true ? FontWeight.w600 : FontWeight.w800,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
-}
-
-/// Modern Confirmation Dialog
-void _showConfirmDialog(
-  BuildContext context, {
-  required String title,
-  required String message,
-  required String confirmText,
-  required VoidCallback onConfirm,
-}) {
-  Get.dialog(
-    AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: Colors.white,
-      titlePadding: const EdgeInsets.all(20),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      title: Row(
-        children: [
-          const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              title,
-              style: MyTexts.medium16.copyWith(
-                color: Colors.red,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-
-      // ===== Message =====
-      content: Text(
-        message,
-        style: MyTexts.regular16.copyWith(color: Colors.black87, height: 1.4),
-      ),
-
-      // ===== Actions =====
-      actions: [
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            side: BorderSide(color: Colors.grey.shade400),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-          ),
-          onPressed: () => Get.back(),
-          child: const Text("Cancel", style: TextStyle(color: Colors.black87)),
-        ),
-        ElevatedButton.icon(
-          icon: const Icon(Icons.logout, size: 18, color: Colors.white),
-          label: Text(confirmText, style: const TextStyle(color: Colors.white)),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            elevation: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-          ),
-          onPressed: onConfirm,
-        ),
-      ],
-    ),
-    barrierDismissible: false,
-  );
 }

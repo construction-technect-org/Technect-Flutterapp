@@ -92,6 +92,7 @@ class FilterData {
 }
 class ConnectorFilterModel {
   String? filterName;
+  String? label;
   String? filterType;
   double? min;
   double? max;
@@ -101,6 +102,7 @@ class ConnectorFilterModel {
     this.filterName,
     this.filterType,
     this.min,
+    this.label,
     this.max,
     this.options,
   });
@@ -109,6 +111,7 @@ class ConnectorFilterModel {
     return ConnectorFilterModel(
       filterName: json['filter_name'],
       filterType: json['filter_type'],
+      label: json['label'],
       min: (json['min'] ?? json['min_value']) != null
           ? double.tryParse(json['min'].toString()) ??
           double.tryParse(json['min_value'].toString())
@@ -128,6 +131,7 @@ class ConnectorFilterModel {
   Map<String, dynamic> toJson() => {
     'filter_name': filterName,
     'filter_type': filterType,
+    'label': label,
     'min': min,
     'max': max,
     'options': options,

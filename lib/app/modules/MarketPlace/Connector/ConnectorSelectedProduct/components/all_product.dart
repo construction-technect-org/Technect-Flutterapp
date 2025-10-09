@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/controllers/connector_filter_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/product_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
@@ -12,25 +13,41 @@ class AllProduct extends GetView<ConnectorSelectedProductController> {
   Widget build(BuildContext context) {
     return LoaderWrapper(
       isLoading: controller.isLoading,
-      child: Scaffold(
-        appBar: CommonAppBar(
-          title: const Text("Products"),
-          action: [
-            IconButton(
-              onPressed: () {
-                Get.toNamed(Routes.CONNECTOR_FILTER);
+      child: WillPopScope(
+        onWillPop: () async {
+          Get.delete<ConnectorFilterController>();
+          Get.back(); // if needed
+          return true; // Allow the pop
+        },
+        child: Scaffold(
+          appBar: CommonAppBar(
+            leading: GestureDetector(
+              onTap: () {
+                Get.delete<ConnectorFilterController>();
+                Get.back();
               },
-              icon: const Icon(Icons.filter_list_alt),
+              behavior: HitTestBehavior.translucent,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Icon(Icons.arrow_back_ios, color: MyColors.black),
+              ),
             ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        body: Obx(
-              () =>
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: controller.filteredProducts.isEmpty
-                    ? Stack(
+            title: const Text("Products"),
+            action: [
+              IconButton(
+                onPressed: () {
+                  Get.toNamed(Routes.CONNECTOR_FILTER);
+                },
+                icon: const Icon(Icons.filter_list_alt),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.white,
+          body: Obx(
+            () => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: controller.filteredProducts.isEmpty
+                  ? Stack(
                       alignment: AlignmentGeometry.topRight,
                       children: [
                         Center(
@@ -59,77 +76,96 @@ class AllProduct extends GetView<ConnectorSelectedProductController> {
                                 controller.searchQuery.value.isNotEmpty
                                     ? 'Try searching with different keywords'
                                     : 'Try searching with different category',
-                                style: MyTexts.regular14.copyWith(color: MyColors.grey),
+                                style: MyTexts.regular14.copyWith(
+                                  color: MyColors.grey,
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        Obx(()  {
-                          return controller.isFilterApply.value? Align(
-                              alignment: AlignmentGeometry.topRight,
-                              child: RoundedButton(
-                                  height: 40,
-                                  width: 120,
-                                  onTap: () async {
-                                    await controller.getAllProducts();
-                                  },
-                                  fontSize: 20,
-                                  verticalPadding: 0,
-                                  style: MyTexts.medium14.copyWith(color: Colors
-                                      .white, fontFamily: MyTexts.Roboto),
-                                  buttonName: "Remove Filter")):const SizedBox();
+                        Obx(() {
+                          return controller.isFilterApply.value
+                              ? Align(
+                                  alignment: AlignmentGeometry.topRight,
+                                  child: RoundedButton(
+                                    height: 40,
+                                    width: 120,
+                                    onTap: () async {
+                                      await controller.getAllProducts();
+                                      Get.delete<ConnectorFilterController>();
+                                      Get.put<ConnectorFilterController>(ConnectorFilterController());
+                                    },
+                                    fontSize: 20,
+                                    verticalPadding: 0,
+                                    style: MyTexts.medium14.copyWith(
+                                      color: Colors.white,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                    buttonName: "Remove Filter",
+                                  ),
+                                )
+                              : const SizedBox();
                         }),
                       ],
                     )
-                    : Column(
-                  children: [
-                    Obx(()  {
-                      return controller.isFilterApply.value? Align(
-                          alignment: AlignmentGeometry.topRight,
-                          child: RoundedButton(
-                              height: 40,
-                              width: 120,
-                              onTap: () async {
-                                await controller.getAllProducts();
-                              },
-                              fontSize: 20,
-                              verticalPadding: 0,
-                              style: MyTexts.medium14.copyWith(color: Colors
-                                  .white, fontFamily: MyTexts.Roboto),
-                              buttonName: "Remove Filter")):const SizedBox();
-                    }),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: controller.filteredProducts.length,
-                          separatorBuilder: (_, _) =>
-                          const SizedBox(height: 12),
-                          itemBuilder: (context, index) {
-                            final Product product =
-                            controller.filteredProducts[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Get.toNamed(
-                                  Routes.PRODUCT_DETAILS,
-                                  arguments: {
-                                    "product": product,
-                                    "isFromAdd": false,
-                                    "isFromConnector": true,
+                  : Column(
+                      children: [
+                        Obx(() {
+                          return controller.isFilterApply.value
+                              ? Align(
+                                  alignment: AlignmentGeometry.topRight,
+                                  child: RoundedButton(
+                                    height: 40,
+                                    width: 120,
+                                    onTap: () async {
+                                      await controller.getAllProducts();
+                                      Get.delete<ConnectorFilterController>();
+                                      Get.put<ConnectorFilterController>(ConnectorFilterController());
+                                    },
+                                    fontSize: 20,
+                                    verticalPadding: 0,
+                                    style: MyTexts.medium14.copyWith(
+                                      color: Colors.white,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                    buttonName: "Remove Filter",
+                                  ),
+                                )
+                              : const SizedBox();
+                        }),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: controller.filteredProducts.length,
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: 12),
+                              itemBuilder: (context, index) {
+                                final Product product =
+                                    controller.filteredProducts[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(
+                                      Routes.PRODUCT_DETAILS,
+                                      arguments: {
+                                        "product": product,
+                                        "isFromAdd": false,
+                                        "isFromConnector": true,
+                                      },
+                                    );
                                   },
+                                  child: ProductCard(product: product),
                                 );
                               },
-                              child: ProductCard(product: product),
-                            );
-                          },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+            ),
+          ),
         ),
       ),
     );
