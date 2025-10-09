@@ -41,7 +41,7 @@ class CustomerSupportController extends GetxController {
         await _loadTicketsFromStorage();
       }
     } catch (e) {
-      await _loadTicketsFromStorage();
+      // await _loadTicketsFromStorage();
       SnackBars.errorSnackBar(content: 'Failed to fetch tickets: $e');
     } finally {
       isLoading.value = false;
