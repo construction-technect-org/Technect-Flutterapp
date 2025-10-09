@@ -59,26 +59,58 @@ class ConnectorFilterController extends GetxController {
   RxList<String> expandedSection = <String>[].obs;
 
   Map<String, dynamic> getFinalFilterData() {
-    final data = <String, dynamic>{};
+    final filtersMap = <String, dynamic>{};
 
     for (final filter in filters) {
       final name = filter.filterName ?? '';
 
-      if (filter.filterType == 'number') {
-        final range = rangeValues[name]?.value;
-        if (range != null) {
-          data[name] = {'min': range.start, 'max': range.end};
-        }
-      } else if (filter.filterType == 'dropdown_multiple') {
-        data[name] = multiSelectValues[name]?.toList() ?? [];
-      } else if (filter.filterType == 'dropdown') {
-        data[name] = selectedFilters[name]?.value ?? '';
-      } else {
-        data[name] = selectedFilters[name]?.value ?? '';
+      switch (filter.filterType) {
+        case 'number':
+          final range = rangeValues[name]?.value;
+          if (range != null) {
+            filtersMap[name] = {
+              "type": "range",
+              "filter_type": "number",
+              "min": range.start,
+              "max": range.end,
+            };
+          }
+          break;
+
+        case 'dropdown_multiple':
+          final list = multiSelectValues[name]?.toList() ?? [];
+          filtersMap[name] = {
+            "type": "list",
+            "filter_type": "dropdown_multiple",
+            "list": list,
+          };
+          break;
+
+        case 'dropdown':
+          final selectedValue = selectedFilters[name]?.value;
+          if (selectedValue != null && selectedValue.isNotEmpty==true) {
+            filtersMap[name] = {
+              "type": "list",
+              "filter_type": "dropdown",
+              "list": [selectedValue],
+            };
+          }
+          break;
+
+        default:
+          final selected = selectedFilters[name]?.value ?? '';
+          if (selected.isNotEmpty==true) {
+            filtersMap[name] = {
+              "type": "list",
+              "filter_type": filter.filterType ?? 'dropdown',
+              "list": [selected],
+            };
+          }
+          break;
       }
     }
 
-    print("✅ Final Filter Data: $data");
-    return data;
+    print("✅ Final Filter Data (for API): $filtersMap");
+    return filtersMap;
   }
 }

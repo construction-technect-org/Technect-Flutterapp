@@ -6,6 +6,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
 class ConnectorSupportTicketCategoriesServices {
   ApiManager apiManager = ApiManager();
 
+
   /// Category
   Future<SupportTicketCategoriesModel> supportTicketCategories() async {
     try {

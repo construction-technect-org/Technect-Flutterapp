@@ -1,9 +1,9 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/controllers/connector_filter_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:gap/gap.dart';
-import 'package:flutter/material.dart';
 
 class ConnectorFiltersView extends StatefulWidget {
   const ConnectorFiltersView({super.key});
@@ -13,9 +13,7 @@ class ConnectorFiltersView extends StatefulWidget {
 }
 
 class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
-  final controller = Get.put<ConnectorFilterController>(
-    ConnectorFilterController(),
-  );
+  final controller = Get.find<ConnectorFilterController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +43,13 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
             Expanded(
               child: RoundedButton(
                 buttonName: "Apply",
-                onTap: () {
-                  controller.getFinalFilterData();
-                  // Get.back();
+                onTap: () async {
+                  final filtersData = controller.getFinalFilterData();
+
+                  await Get.find<ConnectorSelectedProductController>()
+                      .getAllProducts(filter: true, filtersData: filtersData);
+
+                  Get.back();
                 },
               ),
             ),
@@ -105,10 +107,12 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
                         if (controller.expandedSection.contains(
                           filter.filterName,
                         )) {
-                          controller.expandedSection.remove(filter.filterName ?? ''
+                          controller.expandedSection.remove(
+                            filter.filterName ?? '',
                           );
                         } else {
-                          controller.expandedSection.add(filter.filterName ?? ''
+                          controller.expandedSection.add(
+                            filter.filterName ?? '',
                           );
                         }
 

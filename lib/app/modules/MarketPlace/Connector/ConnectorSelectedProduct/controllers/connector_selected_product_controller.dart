@@ -10,10 +10,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Pr
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorSelectedProductController extends GetxController {
- 
   /// Loading & Search
   RxBool isLoading = false.obs;
   RxBool isSearching = false.obs;
+  RxBool isFilterApply = false.obs;
   final TextEditingController searchController = TextEditingController();
 
   /// Page Controller
@@ -46,7 +46,8 @@ class ConnectorSelectedProductController extends GetxController {
   RxInt selectedProductIndex = (-1).obs;
 
   /// Services
-  final ConnectorSelectedProductServices services = ConnectorSelectedProductServices();
+  final ConnectorSelectedProductServices services =
+      ConnectorSelectedProductServices();
 
   @override
   void onInit() {
@@ -88,9 +89,7 @@ class ConnectorSelectedProductController extends GetxController {
     );
   }
 
-
   RxList<ConnectorCategory> categoryProducts = <ConnectorCategory>[].obs;
-
 
   /// OPTIONAL: RESET SELECTIONS
   void resetSelections() {
@@ -123,7 +122,10 @@ class ConnectorSelectedProductController extends GetxController {
 
   RxString searchQuery = ''.obs;
 
-  Future<void> getAllProducts() async {
+  Future<void> getAllProducts({
+    Map<String, dynamic>? filtersData,
+    bool? filter = false,
+  }) async {
     try {
       isLoading.value = true;
 
@@ -131,9 +133,14 @@ class ConnectorSelectedProductController extends GetxController {
         mainCategoryId: selectedMainCategoryId.value ?? '',
         subCategoryId: selectedSubCategoryId.value ?? '',
         categoryProductId: selectedProductId.value ?? '',
+        filters: filtersData ?? {},
       );
+      if (filter == true) {
+        isFilterApply.value = true;
+      } else {
+        isFilterApply.value = false;
+      }
       filteredProducts.value = res.data?.products ?? [];
-
     } catch (e) {
       Get.snackbar("Error", "Failed to load products: $e");
     } finally {
@@ -153,7 +160,7 @@ class ConnectorSelectedProductController extends GetxController {
                 .where((name) => name != null)
                 .cast<String>()
                 .toList() ??
-                [];
+            [];
       } else {
         mainCategories.clear();
         mainCategoryNames.clear();
@@ -178,7 +185,7 @@ class ConnectorSelectedProductController extends GetxController {
                 .where((name) => name != null)
                 .cast<String>()
                 .toList() ??
-                [];
+            [];
       } else {
         subCategories.clear();
         subCategoryNames.clear();
@@ -202,7 +209,9 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> fetchProducts(int subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().productsBySubCategory(subCategoryId);
+      final result = await AddProductService().productsBySubCategory(
+        subCategoryId,
+      );
 
       if ((result.success) == true) {
         productsList.value = result.data ?? [];
@@ -212,7 +221,7 @@ class ConnectorSelectedProductController extends GetxController {
                 .where((name) => name != null)
                 .cast<String>()
                 .toList() ??
-                [];
+            [];
         selectedProduct.value = null;
       } else {
         productsList.clear();
@@ -233,7 +242,9 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> getFilter(String subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().getFilter(int.parse(subCategoryId));
+      final result = await AddProductService().getFilter(
+        int.parse(subCategoryId),
+      );
 
       if (result.success == true) {
         filters.value = (result.data as List<FilterData>)
@@ -268,6 +279,4 @@ class ConnectorSelectedProductController extends GetxController {
       isLoading(false);
     }
   }
-
- 
 }

@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/controllers/connector_filter_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/components/all_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/components/connector_category_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
@@ -24,7 +25,7 @@ class ConnectorSelectedProductView extends StatelessWidget {
             IconButton(
               icon: SvgPicture.asset(Asset.filterIcon, width: 20, height: 20),
               onPressed: () => _openFilterSheet(context),
-            )
+            ),
           ],
         ),
         body: Obx(() {
@@ -39,33 +40,37 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
-                    children: List.generate(
-                      controller.mainCategories.length,
-                          (index) {
-                        final item = controller.mainCategories[index];
-                        final isSelected = controller.selectedMainCategoryIndex.value == index;
-                        return GestureDetector(
-                          onTap: () async {
-                            controller.selectedMainCategoryIndex.value = index;
-                            controller.selectedMainCategoryId.value = (item.id ?? 0).toString();
+                    children: List.generate(controller.mainCategories.length, (
+                      index,
+                    ) {
+                      final item = controller.mainCategories[index];
+                      final isSelected =
+                          controller.selectedMainCategoryIndex.value == index;
+                      return GestureDetector(
+                        onTap: () async {
+                          controller.selectedMainCategoryIndex.value = index;
+                          controller.selectedMainCategoryId.value =
+                              (item.id ?? 0).toString();
 
-                            controller.selectedSubCategoryIndex.value = -1;
-                            controller.selectedSubCategoryId.value = null;
-                            controller.selectedProductIndex.value = -1;
-                            controller.selectedProductId.value = null;
+                          controller.selectedSubCategoryIndex.value = -1;
+                          controller.selectedSubCategoryId.value = null;
+                          controller.selectedProductIndex.value = -1;
+                          controller.selectedProductId.value = null;
 
-                            controller.productsList.clear();
+                          controller.productsList.clear();
 
-                            await controller.fetchSubCategories(item.id ?? 0);
-                          },
+                          await controller.fetchSubCategories(item.id ?? 0);
+                        },
 
-                          child: ConnectorCategoryCard(
-                            category: CategoryItem(item.name ?? "", Asset.Product),
-                            isSelected: isSelected,
+                        child: ConnectorCategoryCard(
+                          category: CategoryItem(
+                            item.name ?? "",
+                            Asset.Product,
                           ),
-                        );
-                      },
-                    ),
+                          isSelected: isSelected,
+                        ),
+                      );
+                    }),
                   ),
                 ],
 
@@ -76,33 +81,37 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
-                    children: List.generate(
-                      controller.subCategories.length,
-                          (index) {
-                        final item = controller.subCategories[index];
-                        final isSelected = controller.selectedSubCategoryIndex.value == index;
-                        return GestureDetector(
-                          onTap: () async {
-                            controller.selectedSubCategoryIndex.value = index;
-                            controller.selectedSubCategoryId.value = (item.id ?? 0).toString();
+                    children: List.generate(controller.subCategories.length, (
+                      index,
+                    ) {
+                      final item = controller.subCategories[index];
+                      final isSelected =
+                          controller.selectedSubCategoryIndex.value == index;
+                      return GestureDetector(
+                        onTap: () async {
+                          controller.selectedSubCategoryIndex.value = index;
+                          controller.selectedSubCategoryId.value =
+                              (item.id ?? 0).toString();
 
-                            controller.selectedProductIndex.value = -1;
-                            controller.selectedProductId.value = null;
-                            controller.productsList.clear();
+                          controller.selectedProductIndex.value = -1;
+                          controller.selectedProductId.value = null;
+                          controller.productsList.clear();
 
-                            try {
-                              await controller.fetchProducts(item.id ?? 0);
-                            } catch (e) {
-                              Get.snackbar("Error", "Failed to load products");
-                            }
-                          },
-                          child: ConnectorCategoryCard(
-                            category: CategoryItem(item.name ?? "", Asset.Product),
-                            isSelected: isSelected,
+                          try {
+                            await controller.fetchProducts(item.id ?? 0);
+                          } catch (e) {
+                            Get.snackbar("Error", "Failed to load products");
+                          }
+                        },
+                        child: ConnectorCategoryCard(
+                          category: CategoryItem(
+                            item.name ?? "",
+                            Asset.Product,
                           ),
-                        );
-                      },
-                    ),
+                          isSelected: isSelected,
+                        ),
+                      );
+                    }),
                   ),
                 ],
                 if (controller.productsList.isNotEmpty) ...[
@@ -112,56 +121,69 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
-                    children: List.generate(
-                      controller.productsList.length,
-                          (index) {
-                        final item = controller.productsList[index];
-                        final isSelected = controller.selectedProductIndex.value == index;
-                        return GestureDetector(
-                          onTap: () {
-                            controller.selectedProductIndex.value = index;
-                            controller.selectedProductId.value = (item.id ?? 0).toString();
-                          },
+                    children: List.generate(controller.productsList.length, (
+                      index,
+                    ) {
+                      final item = controller.productsList[index];
+                      final isSelected =
+                          controller.selectedProductIndex.value == index;
+                      return GestureDetector(
+                        onTap: () {
+                          controller.selectedProductIndex.value = index;
+                          controller.selectedProductId.value = (item.id ?? 0)
+                              .toString();
+                        },
 
-                          child: ConnectorCategoryCard(
-                            category: CategoryItem(item.name ?? "", Asset.Product),
-                            isSelected: isSelected,
+                        child: ConnectorCategoryCard(
+                          category: CategoryItem(
+                            item.name ?? "",
+                            Asset.Product,
                           ),
-                        );
-                      },
-                    ),
+                          isSelected: isSelected,
+                        ),
+                      );
+                    }),
                   ),
                 ],
-
               ],
             ),
           );
         }),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 24),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
           child: RoundedButton(
             buttonName: "Next",
             onTap: () async {
-              final mainSelected = controller.selectedMainCategoryIndex.value != -1;
-              final subSelected = controller.selectedSubCategoryIndex.value != -1;
-              final productSelected = controller.selectedProductIndex.value != -1;
+              final mainSelected =
+                  controller.selectedMainCategoryIndex.value != -1;
+              final subSelected =
+                  controller.selectedSubCategoryIndex.value != -1;
+              final productSelected =
+                  controller.selectedProductIndex.value != -1;
 
               if (!mainSelected) {
-                SnackBars.errorSnackBar(content: "Please select a main category first.",);
+                SnackBars.errorSnackBar(
+                  content: "Please select a main category first.",
+                );
                 return;
               }
 
               if (!subSelected) {
-                SnackBars.errorSnackBar(content:  "Please select a sub category.",);
+                SnackBars.errorSnackBar(
+                  content: "Please select a sub category.",
+                );
                 return;
               }
 
               if (!productSelected) {
-                SnackBars.errorSnackBar(content:   "Please select a product before continuing.",);
+                SnackBars.errorSnackBar(
+                  content: "Please select a product before continuing.",
+                );
                 return;
               }
               await controller.getAllProducts();
-              Get.to(()=>const AllProduct());
+              Get.put<ConnectorFilterController>(ConnectorFilterController());
+              Get.to(() => const AllProduct());
               // Get.toNamed('/nextScreen');
             },
           ),
@@ -169,6 +191,7 @@ class ConnectorSelectedProductView extends StatelessWidget {
       ),
     );
   }
+
   void _openFilterSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
