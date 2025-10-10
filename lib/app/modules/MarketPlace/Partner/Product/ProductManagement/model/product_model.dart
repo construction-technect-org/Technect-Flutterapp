@@ -107,6 +107,9 @@ class Product {
   final String? address;
   final bool? outOfStock;
   final bool? isActive;
+  final bool? isNotify;
+  final String? status;
+  final bool? isInWishList;
   final String? approvalStatus;
   final String? mainCategoryName;
   final String? subCategoryName;
@@ -117,11 +120,12 @@ class Product {
   final List<ProductImage>? images;
 
 
-  Product({
+  Product( {
     this.id,
     this.merchantProfileId,
     this.productName,
     this.productImage,
+    this.isNotify,
     this.mainCategoryId,
     this.subCategoryId,
     this.categoryProductId,
@@ -130,9 +134,11 @@ class Product {
     this.packageType,
     this.address,
     this.packageSize,
+    this.isActive,
+    this.isInWishList,
     this.shape,
     this.distanceKm,
-    this.isActive,
+    this.status,
     this.texture,
     this.colour,
     this.size,
@@ -199,6 +205,9 @@ class Product {
       subCategoryName: json["sub_category_name"],
       categoryProductName: json["category_product_name"],
       stockQty: json["stock_qty"],
+      status: json["connection_request_status"],
+      isNotify: json["has_stock_notification"],
+      isInWishList: json["is_in_wishlist"],
       filterValues: json["filter_values"] != null
           ? Map<String, dynamic>.from(json["filter_values"])
           : null,
@@ -248,6 +257,9 @@ class Product {
     "category_product_name": categoryProductName,
     "stock_qty": stockQty,
     "filter_values": filterValues,
+    "connection_request_status": status,
+    "has_stock_notification": isNotify,
+    "is_in_wishlist": isInWishList,
     "images": images == null
         ? []
         : List<dynamic>.from(images!.map((x) => x.toJson())),

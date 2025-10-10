@@ -475,13 +475,13 @@ class AddProductView extends GetView<AddProductController> {
                           children: [
                             Expanded(
                               child: CommonTextField(
-                                headerText: 'Rate',
-                                hintText: "ENTER RATE",
+                                headerText: 'Ex Factory Price',
+                                hintText: "ENTER PRICE",
                                 controller: controller.priceController,
                                 keyboardType: TextInputType.number,
                                 validator: (val) {
                                   if (val == null || val.isEmpty) {
-                                    return "Please enter rate";
+                                    return "Please enter price";
                                   }
                                   if (double.tryParse(val) == null) {
                                     return "Enter valid number";
@@ -541,7 +541,7 @@ class AddProductView extends GetView<AddProductController> {
                             Expanded(
                               child: CommonTextField(
                                 readOnly: true,
-                                headerText: 'Amount',
+                                headerText: 'Ex Factory Amount',
                                 hintText: "ENTER AMOUNT",
                                 controller: controller.amountController,
                                 keyboardType: TextInputType.number,

@@ -106,4 +106,6 @@ class APIConstants {
 
   // Connector Site address
   static const String connectorSiteAddress = "connector/site-location";
+  static const String notifyME = "connector/stock-notification/request";
+  static const String addToConnect = "connector/connection-request/send";
 }

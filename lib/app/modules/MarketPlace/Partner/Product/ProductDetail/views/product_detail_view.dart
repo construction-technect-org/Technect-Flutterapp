@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/controllers/product_detail_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
@@ -16,10 +17,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       isLoading: (controller.isFromConnector.value == true)
           ? false.obs
           : (controller.isFromAdd.value
-          ? Get
-          .find<AddProductController>()
-          .isLoading
-          : false.obs),
+                ? Get.find<AddProductController>().isLoading
+                : false.obs),
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: CommonAppBar(
@@ -34,23 +33,44 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           // ],
         ),
         bottomNavigationBar: Obx(
-              () =>
-          controller.isFromAdd.value == true
+          () =>
+              (controller.isFromAdd.value == false &&
+                  controller.isFromConnector.value == false)
+              ? const SizedBox()
+              : controller.isFromAdd.value == true &&
+                    controller.isFromConnector.value == false
               ? Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: RoundedButton(
-              buttonName: 'SUBMIT',
-              onTap: Get
-                  .find<AddProductController>()
-                  .isLoading
-                  .value
-                  ? null
-                  : Get
-                  .find<AddProductController>()
-                  .createProduct,
-            ),
-          )
-              : const SizedBox(),
+                  padding: const EdgeInsets.all(24.0),
+                  child: RoundedButton(
+                    buttonName: 'SUBMIT',
+                    onTap: Get.find<AddProductController>().isLoading.value
+                        ? null
+                        : Get.find<AddProductController>().createProduct,
+                  ),
+                )
+              : controller.product.status == null
+              ? Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: RoundedButton(
+                    buttonName: 'Add to connect',
+                    onTap: () {
+                      ConnectionDialogs.showSendConnectionDialog(
+                        context,
+                        controller.product,
+                      );
+                      Get.back();
+                    },
+                  ),
+                )
+              : Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: RoundedButton(
+                  color: MyColors.grey,
+                  buttonName: ( controller.product.status?? "") == "pending"
+                      ? "Request Sent"
+                      : controller.product.status??"",
+                ),
+              ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -66,191 +86,179 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     alignment: Alignment.center,
                     child: ((controller.product.images ?? []).isNotEmpty)
                         ? Obx(() {
-                      final isNetwork =
-                          controller.isFromAdd.value == false;
-                      final List<String> imageUrls = [];
-                      if (isNetwork) {
-                        // From API (network)
-                        if (controller.product.images != null &&
-                            controller.product.images!.isNotEmpty) {
-                          imageUrls.addAll(
-                            controller.product.images!
-                                .map(
-                                  (img) =>
-                              "${APIConstants.bucketUrl}${img.s3Key ??
-                                  controller.product.productImage ?? ''}",
-                            )
-                                .toList(),
-                          );
-                        } else if (controller.product.productImage !=
-                            null) {
-                          imageUrls.add(
-                            "${APIConstants.bucketUrl}${controller.product
-                                .productImage!}",
-                          );
-                        }
-                      } else {
-                        // From local files
-                        if (controller.product.images!.isNotEmpty) {
-                          imageUrls.addAll(
-                            controller.product.images!
-                                .map(
-                                  (img) =>
-                              img.s3Url ??
-                                  controller.product.productImage ??
-                                  '',
-                            )
-                                .toList(),
-                          );
-                        } else if (controller.product.productImage !=
-                            null) {
-                          imageUrls.add(
-                            "${APIConstants.bucketUrl}${controller.product
-                                .productImage!}",
-                          );
-                        }
-                      }
+                            final isNetwork =
+                                controller.isFromAdd.value == false;
+                            final List<String> imageUrls = [];
+                            if (isNetwork) {
+                              if (controller.product.images != null &&
+                                  controller.product.images!.isNotEmpty) {
+                                imageUrls.addAll(
+                                  controller.product.images!
+                                      .map(
+                                        (img) =>
+                                            "${APIConstants.bucketUrl}${img.s3Key ?? controller.product.productImage ?? ''}",
+                                      )
+                                      .toList(),
+                                );
+                              } else if (controller.product.productImage !=
+                                  null) {
+                                imageUrls.add(
+                                  "${APIConstants.bucketUrl}${controller.product.productImage!}",
+                                );
+                              }
+                            } else {
+                              // From local files
+                              if (controller.product.images!.isNotEmpty) {
+                                imageUrls.addAll(
+                                  controller.product.images!
+                                      .map(
+                                        (img) =>
+                                            img.s3Url ??
+                                            controller.product.productImage ??
+                                            '',
+                                      )
+                                      .toList(),
+                                );
+                              } else if (controller.product.productImage !=
+                                  null) {
+                                imageUrls.add(
+                                  "${APIConstants.bucketUrl}${controller.product.productImage!}",
+                                );
+                              }
+                            }
 
-                      if (imageUrls.isEmpty) {
-                        return const Center(
-                          child: Icon(
-                            Icons.broken_image,
+                            if (imageUrls.isEmpty) {
+                              return const Center(
+                                child: Icon(
+                                  Icons.broken_image,
+                                  size: 60,
+                                  color: Colors.grey,
+                                ),
+                              );
+                            }
+                            return SizedBox(
+                              height: 35.h,
+                              child: Center(
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: imageUrls.length,
+                                  itemBuilder: (context, index) {
+                                    final imagePath = imageUrls[index];
+                                    final isHttp = imagePath.startsWith('http');
+                                    return GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => Dialog(
+                                            insetPadding: const EdgeInsets.all(
+                                              16,
+                                            ),
+                                            child: InteractiveViewer(
+                                              child: isHttp
+                                                  ? Image.network(
+                                                      imagePath,
+                                                      fit: BoxFit.contain,
+                                                    )
+                                                  : Image.file(
+                                                      File(imagePath),
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          child: isHttp
+                                              ? Image.network(
+                                                  imagePath,
+                                                  fit: BoxFit.cover,
+                                                  height: 35.h,
+                                                  width: 35.h,
+                                                  errorBuilder:
+                                                      (
+                                                        context,
+                                                        error,
+                                                        stackTrace,
+                                                      ) => const Icon(
+                                                        Icons.broken_image,
+                                                        size: 60,
+                                                        color: Colors.grey,
+                                                      ),
+                                                )
+                                              : Image.file(
+                                                  File(imagePath),
+                                                  fit: BoxFit.cover,
+                                                  height: 35.h,
+                                                  width: 35.h,
+                                                ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          })
+                        : const Icon(
+                            Icons.image_not_supported,
                             size: 60,
                             color: Colors.grey,
                           ),
-                        );
-                      }
-                      return SizedBox(
-                        height: 35.h,
-                        child: Center(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: imageUrls.length,
-                            itemBuilder: (context, index) {
-                              final imagePath = imageUrls[index];
-                              final isHttp = imagePath.startsWith('http');
-                              return GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) =>
-                                        Dialog(
-                                          insetPadding: const EdgeInsets.all(
-                                            16,
-                                          ),
-                                          child: InteractiveViewer(
-                                            child: isHttp
-                                                ? Image.network(
-                                              imagePath,
-                                              fit: BoxFit.contain,
-                                            )
-                                                : Image.file(
-                                              File(imagePath),
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                        ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 4.0,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                      8,
-                                    ),
-                                    child: isHttp
-                                        ? Image.network(
-                                      imagePath,
-                                      fit: BoxFit.cover,
-                                      height: 35.h,
-                                      width: 35.h,
-                                      errorBuilder:
-                                          (context,
-                                          error,
-                                          stackTrace,) =>
-                                      const Icon(
-                                        Icons.broken_image,
-                                        size: 60,
-                                        color: Colors.grey,
-                                      ),
-                                    )
-                                        : Image.file(
-                                      File(imagePath),
-                                      fit: BoxFit.cover,
-                                      height: 35.h,
-                                      width: 35.h,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    })
-                        : const Icon(
-                      Icons.image_not_supported,
-                      size: 60,
-                      color: Colors.grey,
-                    ),
                   ),
                   Obx(() {
-                    print(controller.isFromAdd.value);
-                    print(controller.isFromConnector.value);
                     return (controller.isFromAdd.value == false &&
-                        controller.isFromConnector.value == false)
+                            controller.isFromConnector.value == false)
                         ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 8,
-                      ),
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                controller.product.outOfStock ==
-                                    true
-                                    ? "Out Of Stock"
-                                    : "In Stock",
-                                style: MyTexts.bold18.copyWith(
-                                  color:
-                                  controller
-                                      .product
-                                      .outOfStock ==
-                                      true
-                                      ? Colors.red
-                                      : Colors.green,
-                                  fontSize: 13,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      controller.product.outOfStock == true
+                                          ? "Out Of Stock"
+                                          : "In Stock",
+                                      style: MyTexts.bold18.copyWith(
+                                        color:
+                                            controller.product.outOfStock ==
+                                                true
+                                            ? Colors.red
+                                            : Colors.green,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    const Gap(4),
+                                    Container(
+                                      height: 10,
+                                      width: 10,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color:
+                                            controller.product.outOfStock ==
+                                                true
+                                            ? Colors.red
+                                            : Colors.green,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const Gap(4),
-                              Container(
-                                height: 10,
-                                width: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color:
-                                  controller
-                                      .product
-                                      .outOfStock ==
-                                      true
-                                      ? Colors.red
-                                      : Colors.green,
-                                ),
-                              ),
-                            ],
-                          ),
-                          buildRatingRow(controller.product),
-                        ],
-                      ),
-                    )
+                                buildRatingRow(controller.product),
+                              ],
+                            ),
+                          )
                         : const SizedBox();
                   }),
                 ],
@@ -264,43 +272,50 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          controller.product.categoryProductName?.capitalizeFirst ??
+                          controller
+                                  .product
+                                  .categoryProductName
+                                  ?.capitalizeFirst ??
                               '-',
                           style: MyTexts.medium18.copyWith(
                             color: MyColors.fontBlack,
-                            fontFamily: MyTexts.Roboto
+                            fontFamily: MyTexts.Roboto,
                           ),
                         ),
 
                         Obx(() {
                           return (controller.isFromAdd.value == false &&
-                              controller.isFromConnector.value == false)
+                                  controller.isFromConnector.value == false)
                               ? TextButton.icon(
-                            onPressed: controller.onEditProduct,
-                            icon: SvgPicture.asset(
-                              Asset.editIcon,
-                              width: 16,
-                              height: 16,
-                              colorFilter: const ColorFilter.mode(
-                                MyColors.primary,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            label: Text(
-                              "Edit",
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.primary,
-                                fontFamily: MyTexts.Roboto,
-                              ),
-                            ),
-                          )
+                                  onPressed: controller.onEditProduct,
+                                  icon: SvgPicture.asset(
+                                    Asset.editIcon,
+                                    width: 16,
+                                    height: 16,
+                                    colorFilter: const ColorFilter.mode(
+                                      MyColors.primary,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  label: Text(
+                                    "Edit",
+                                    style: MyTexts.regular16.copyWith(
+                                      color: MyColors.primary,
+                                      fontFamily: MyTexts.Roboto,
+                                    ),
+                                  ),
+                                )
                               : const SizedBox();
                         }),
                       ],
                     ),
                     Obx(() {
-                      return Gap((controller.isFromAdd.value == false &&
-                          controller.isFromConnector.value == false) ? 0 : 20);
+                      return Gap(
+                        (controller.isFromAdd.value == false &&
+                                controller.isFromConnector.value == false)
+                            ? 0
+                            : 20,
+                      );
                     }),
                     Container(
                       width: double.infinity,
@@ -315,7 +330,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       child: Column(
                         children: [
                           rowText(
-                            'Product Rate:',
+                            'Ex Factory Product Rate:',
                             '${controller.product.price ?? 0}',
                           ),
                           rowText(
@@ -324,7 +339,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           ),
                           const Divider(),
                           rowText(
-                            'Total Price:',
+                            'Ex Factory Price:',
                             controller.product.totalAmount ?? "0",
                             isBold: true,
                           ),
@@ -378,7 +393,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   maxLines: 1,
                                   text: TextSpan(
                                     text:
-                                    controller.product.mainCategoryName ??
+                                        controller.product.mainCategoryName ??
                                         '',
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.green,
@@ -415,7 +430,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   maxLines: 1,
                                   text: TextSpan(
                                     text:
-                                    controller.product.subCategoryName ??
+                                        controller.product.subCategoryName ??
                                         '',
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.green,
@@ -439,8 +454,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     ),
                     SizedBox(height: 0.5.h),
                     Text(
-                      "GSTIN: ${controller.profileData.data?.merchantProfile
-                          ?.gstinNumber ?? ''}",
+                      "GSTIN: ${controller.profileData.data?.merchantProfile?.gstinNumber ?? ''}",
                       style: MyTexts.medium14.copyWith(
                         color: MyColors.fontBlack,
                       ),
@@ -469,305 +483,290 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 ),
                                 const Spacer(),
                                 Obx(
-                                      () =>
-                                      Icon(
-                                        controller.showProductDetails.value
-                                            ? Icons.keyboard_arrow_up
-                                            : Icons.keyboard_arrow_down,
-                                        color: MyColors.primary,
-                                      ),
+                                  () => Icon(
+                                    controller.showProductDetails.value
+                                        ? Icons.keyboard_arrow_up
+                                        : Icons.keyboard_arrow_down,
+                                    color: MyColors.primary,
+                                  ),
                                 ),
                               ],
                             ),
                             Obx(
-                                  () =>
-                              controller.showProductDetails.value
+                              () => controller.showProductDetails.value
                                   ? Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  const Gap(10),
-                                  HearderText(
-                                    text: "Product Specifications:",
-                                    textStyle: MyTexts.bold16.copyWith(
-                                      color: MyColors.black,
-                                      fontFamily: MyTexts.Roboto,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  _buildSpecificationsTable(),
-                                  SizedBox(height: 2.h),
-                                  _buildFilterSpecificationsTable(),
-                                  SizedBox(height: 2.h),
-                                  if ((controller
-                                      .product
-                                      .termsAndConditions ??
-                                      '') !=
-                                      '') ...[
-                                    HearderText(
-                                      text: "Terms & Condition:",
-                                      textStyle: MyTexts.bold16.copyWith(
-                                        color: MyColors.black,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ),
-                                    Text(
-                                      controller
-                                          .product
-                                          .termsAndConditions ??
-                                          '',
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.green,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ),
-                                  ],
-                                  if ((controller.product.productNote ??
-                                      '') !=
-                                      '') ...[
-                                    SizedBox(height: 1.h),
-                                    HearderText(
-                                      text: "Notes:",
-                                      textStyle: MyTexts.bold16.copyWith(
-                                        color: MyColors.black,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ),
-                                    Text(
-                                      controller.product.productNote ??
-                                          '',
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.black,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ).paddingOnly(bottom: 1.h),
-                                  ],
-
-                                  SizedBox(height: 2.h),
-                                  Obx(() {
-                                    return !controller.isFromConnector.value? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
+                                        const Gap(10),
                                         HearderText(
-                                          text: "Product Ratings:",
+                                          text: "Product Specifications:",
                                           textStyle: MyTexts.bold16.copyWith(
                                             color: MyColors.black,
                                             fontFamily: MyTexts.Roboto,
                                           ),
                                         ),
-                                        SizedBox(height: 1.h),
-                                        Obx(() {
-                                          return controller
-                                              .reviewList
-                                              .isNotEmpty
-                                              ? ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                            const NeverScrollableScrollPhysics(),
-                                            itemCount: controller
-                                                .reviewList
-                                                .length,
-                                            padding:
-                                            const EdgeInsets.symmetric(
-                                              vertical: 8,
+                                        const SizedBox(height: 10),
+                                        _buildSpecificationsTable(),
+                                        SizedBox(height: 2.h),
+                                        _buildFilterSpecificationsTable(),
+                                        SizedBox(height: 2.h),
+                                        if ((controller
+                                                    .product
+                                                    .termsAndConditions ??
+                                                '') !=
+                                            '') ...[
+                                          HearderText(
+                                            text: "Terms & Condition:",
+                                            textStyle: MyTexts.bold16.copyWith(
+                                              color: MyColors.black,
+                                              fontFamily: MyTexts.Roboto,
                                             ),
-                                            itemBuilder: (context, index) {
-                                              final review = controller
-                                                  .reviewList[index];
-                                              return Container(
-                                                margin:
-                                                const EdgeInsets.only(
-                                                  bottom: 12,
-                                                ),
-                                                padding:
-                                                const EdgeInsets.all(
-                                                  14,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                    12,
-                                                  ),
-                                                  border: Border.all(
-                                                    color:
-                                                    MyColors.greyE5,
-                                                  ),
-                                                  color: Colors.white,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(
-                                                        0.08,
-                                                      ),
-                                                      blurRadius: 6,
-                                                      offset:
-                                                      const Offset(
-                                                        0,
-                                                        3,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment
-                                                      .start,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        ...List.generate(
-                                                          5,
-                                                              (i) =>
-                                                              Icon(
-                                                                i <
-                                                                    (review
-                                                                        .rating ??
-                                                                        0)
-                                                                    ? Icons
-                                                                    .star
-                                                                    : Icons
-                                                                    .star_border_rounded,
-                                                                color: Colors
-                                                                    .amber,
-                                                                size: 20,
-                                                              ),
-                                                        ),
-                                                        const Spacer(),
-                                                        Text(
-                                                          DateFormat(
-                                                            'dd MMM yyyy',
-                                                          ).format(
-                                                            DateTime.parse(
-                                                              review
-                                                                  .createdAt ??
-                                                                  "",
-                                                            ),
-                                                          ),
-                                                          style: MyTexts
-                                                              .regular14
-                                                              .copyWith(
-                                                            color: MyColors
-                                                                .black,
-                                                            fontFamily:
-                                                            MyTexts
-                                                                .Roboto,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 8,
-                                                    ),
+                                          ),
+                                          Text(
+                                            controller
+                                                    .product
+                                                    .termsAndConditions ??
+                                                '',
+                                            style: MyTexts.medium16.copyWith(
+                                              color: MyColors.green,
+                                              fontFamily: MyTexts.Roboto,
+                                            ),
+                                          ),
+                                        ],
+                                        if ((controller.product.productNote ??
+                                                '') !=
+                                            '') ...[
+                                          SizedBox(height: 1.h),
+                                          HearderText(
+                                            text: "Notes:",
+                                            textStyle: MyTexts.bold16.copyWith(
+                                              color: MyColors.black,
+                                              fontFamily: MyTexts.Roboto,
+                                            ),
+                                          ),
+                                          Text(
+                                            controller.product.productNote ??
+                                                '',
+                                            style: MyTexts.medium16.copyWith(
+                                              color: MyColors.black,
+                                              fontFamily: MyTexts.Roboto,
+                                            ),
+                                          ).paddingOnly(bottom: 1.h),
+                                        ],
 
-                                                    /// 💬 Review Text
-                                                    Text(
-                                                      review.reviewText ??
-                                                          '',
-                                                      style: MyTexts
-                                                          .medium16
+                                        SizedBox(height: 2.h),
+                                        Obx(() {
+                                          return !controller
+                                                  .isFromConnector
+                                                  .value
+                                              ? Column(
+                                                  children: [
+                                                    HearderText(
+                                                      text: "Product Ratings:",
+                                                      textStyle: MyTexts.bold16
                                                           .copyWith(
-                                                        color: MyColors
-                                                            .black,
-                                                        fontFamily:
-                                                        MyTexts
-                                                            .Roboto,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 8,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        CircleAvatar(
-                                                          radius: 16,
-                                                          backgroundColor:
-                                                          MyColors
-                                                              .primary
-                                                              .withOpacity(
-                                                            0.1,
+                                                            color:
+                                                                MyColors.black,
+                                                            fontFamily:
+                                                                MyTexts.Roboto,
                                                           ),
-                                                          child: Text(
-                                                            review
-                                                                .isAnonymous ??
-                                                                false
-                                                                ? "A"
-                                                                : (review
-                                                                .userName
-                                                                ?.substring(
-                                                                0, 1)
-                                                                .toUpperCase() ??
-                                                                "?"),
-                                                            style: MyTexts
-                                                                .medium16
-                                                                .copyWith(
-                                                              color: MyColors
-                                                                  .primary,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontFamily:
-                                                              MyTexts
-                                                                  .Roboto,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Expanded(
-                                                          child: Text(
-                                                            review
-                                                                .isAnonymous ??
-                                                                false
-                                                                ? "Anonymous User"
-                                                                : (review
-                                                                .userName ??
-                                                                ""),
-                                                            style: MyTexts
-                                                                .regular14
-                                                                .copyWith(
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w600,
-                                                              color: MyColors
-                                                                  .dustyGray,
-                                                              fontFamily:
-                                                              MyTexts
-                                                                  .Roboto,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
                                                     ),
+                                                    SizedBox(height: 1.h),
+                                                    Obx(() {
+                                                      return controller
+                                                              .reviewList
+                                                              .isNotEmpty
+                                                          ? ListView.builder(
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                                  const NeverScrollableScrollPhysics(),
+                                                              itemCount:
+                                                                  controller
+                                                                      .reviewList
+                                                                      .length,
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    vertical: 8,
+                                                                  ),
+                                                              itemBuilder: (context, index) {
+                                                                final review =
+                                                                    controller
+                                                                        .reviewList[index];
+                                                                return Container(
+                                                                  margin:
+                                                                      const EdgeInsets.only(
+                                                                        bottom:
+                                                                            12,
+                                                                      ),
+                                                                  padding:
+                                                                      const EdgeInsets.all(
+                                                                        14,
+                                                                      ),
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          12,
+                                                                        ),
+                                                                    border: Border.all(
+                                                                      color: MyColors
+                                                                          .greyE5,
+                                                                    ),
+                                                                    color: Colors
+                                                                        .white,
+                                                                    boxShadow: [
+                                                                      BoxShadow(
+                                                                        color: Colors
+                                                                            .grey
+                                                                            .withOpacity(
+                                                                              0.08,
+                                                                            ),
+                                                                        blurRadius:
+                                                                            6,
+                                                                        offset:
+                                                                            const Offset(
+                                                                              0,
+                                                                              3,
+                                                                            ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Row(
+                                                                        children: [
+                                                                          ...List.generate(
+                                                                            5,
+                                                                            (
+                                                                              i,
+                                                                            ) => Icon(
+                                                                              i <
+                                                                                      (review.rating ??
+                                                                                          0)
+                                                                                  ? Icons.star
+                                                                                  : Icons.star_border_rounded,
+                                                                              color: Colors.amber,
+                                                                              size: 20,
+                                                                            ),
+                                                                          ),
+                                                                          const Spacer(),
+                                                                          Text(
+                                                                            DateFormat(
+                                                                              'dd MMM yyyy',
+                                                                            ).format(
+                                                                              DateTime.parse(
+                                                                                review.createdAt ??
+                                                                                    "",
+                                                                              ),
+                                                                            ),
+                                                                            style: MyTexts.regular14.copyWith(
+                                                                              color: MyColors.black,
+                                                                              fontFamily: MyTexts.Roboto,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+
+                                                                      /// 💬 Review Text
+                                                                      Text(
+                                                                        review.reviewText ??
+                                                                            '',
+                                                                        style: MyTexts.medium16.copyWith(
+                                                                          color:
+                                                                              MyColors.black,
+                                                                          fontFamily:
+                                                                              MyTexts.Roboto,
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          CircleAvatar(
+                                                                            radius:
+                                                                                16,
+                                                                            backgroundColor: MyColors.primary.withOpacity(
+                                                                              0.1,
+                                                                            ),
+                                                                            child: Text(
+                                                                              review.isAnonymous ??
+                                                                                      false
+                                                                                  ? "A"
+                                                                                  : (review.userName
+                                                                                            ?.substring(
+                                                                                              0,
+                                                                                              1,
+                                                                                            )
+                                                                                            .toUpperCase() ??
+                                                                                        "?"),
+                                                                              style: MyTexts.medium16.copyWith(
+                                                                                color: MyColors.primary,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: MyTexts.Roboto,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          ),
+                                                                          Expanded(
+                                                                            child: Text(
+                                                                              review.isAnonymous ??
+                                                                                      false
+                                                                                  ? "Anonymous User"
+                                                                                  : (review.userName ??
+                                                                                        ""),
+                                                                              style: MyTexts.regular14.copyWith(
+                                                                                fontWeight: FontWeight.w600,
+                                                                                color: MyColors.dustyGray,
+                                                                                fontFamily: MyTexts.Roboto,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              },
+                                                            )
+                                                          : Padding(
+                                                              padding:
+                                                                  const EdgeInsets.only(
+                                                                    bottom:
+                                                                        16.0,
+                                                                  ),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  "No review given yet",
+                                                                  style: MyTexts
+                                                                      .regular14
+                                                                      .copyWith(
+                                                                        color: MyColors
+                                                                            .dustyGray,
+                                                                        fontFamily:
+                                                                            MyTexts.Roboto,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                    }),
                                                   ],
-                                                ),
-                                              );
-                                            },
-                                          )
-                                              : Padding(
-                                            padding:
-                                            const EdgeInsets.only(
-                                              bottom: 16.0,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "No review given yet",
-                                                style: MyTexts.regular14
-                                                    .copyWith(
-                                                  color: MyColors
-                                                      .dustyGray,
-                                                  fontFamily:
-                                                  MyTexts.Roboto,
-                                                ),
-                                              ),
-                                            ),
-                                          );
+                                                )
+                                              : const SizedBox();
                                         }),
                                       ],
-                                    ):const SizedBox();
-                                  }),
-
-                                ],
-                              )
+                                    )
                                   : const SizedBox.shrink(),
                             ),
                           ],
@@ -822,11 +821,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         .replaceAll('_', ' ')
         .split(' ')
         .map(
-          (word) =>
-      word.isNotEmpty
-          ? word[0].toUpperCase() + word.substring(1).toLowerCase()
-          : word,
-    )
+          (word) => word.isNotEmpty
+              ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+              : word,
+        )
         .join(' ');
   }
 
@@ -987,7 +985,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
             verticalInside: BorderSide(color: MyColors.grayD4),
           ),
           children: [
-
             /// ✅ Header Row
             TableRow(
               decoration: const BoxDecoration(color: MyColors.primary),
@@ -1015,31 +1012,30 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               ],
             ),
             ...specifications.map(
-                  (spec) =>
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          spec['label']!,
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.primary,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        ),
+              (spec) => TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      spec['label']!,
+                      style: MyTexts.regular14.copyWith(
+                        color: MyColors.primary,
+                        fontFamily: MyTexts.Roboto,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          spec['value']!,
-                          style: MyTexts.medium16.copyWith(
-                            color: Colors.black,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      spec['value']!,
+                      style: MyTexts.medium16.copyWith(
+                        color: Colors.black,
+                        fontFamily: MyTexts.Roboto,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -225,6 +225,7 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                                     children: [
                                       CircleAvatar(
                                         radius: 22,
+                                        backgroundColor: MyColors.grey,
                                         child:
                                             connection
                                                     .connectorProfileImageUrl !=

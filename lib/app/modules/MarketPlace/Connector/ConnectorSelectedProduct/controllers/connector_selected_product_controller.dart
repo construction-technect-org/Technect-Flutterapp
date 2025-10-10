@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
@@ -35,10 +37,6 @@ class ConnectorSelectedProductController extends GetxController {
   RxBool isLoadingAddresses = false.obs;
   RxInt selectedSiteIndex = 0.obs;
 
-  /// Category & Product Selection
-  // RxList<ConnectorCategory> mainCategories = <ConnectorCategory>[].obs;
-  // RxList<ConnectorCategory> subCategories = <ConnectorCategory>[].obs;
-  // RxList<ConnectorCategory> categoryProducts = <ConnectorCategory>[].obs;
   RxList<Product> products = <Product>[].obs;
 
   RxInt selectedMainCategoryIndex = (-1).obs;
@@ -46,7 +44,8 @@ class ConnectorSelectedProductController extends GetxController {
   RxInt selectedProductIndex = (-1).obs;
 
   /// Services
-  final ConnectorSelectedProductServices services = ConnectorSelectedProductServices();
+  final ConnectorSelectedProductServices services =
+      ConnectorSelectedProductServices();
 
   @override
   void onInit() {
@@ -77,6 +76,25 @@ class ConnectorSelectedProductController extends GetxController {
   /// SITE SELECTION
   void selectSite(int index) {
     selectedSiteIndex.value = index;
+  }
+
+  void searchProduct(String value) {
+    searchQuery.value = value;
+
+    if (value.isEmpty) {
+      filteredProducts.assignAll(dummyFilteredProducts);
+      filteredProducts.refresh();
+    } else {
+      final lower = value.toLowerCase();
+      final results = dummyFilteredProducts.where((product) {
+        return (product.categoryProductName ?? '').toLowerCase().contains(lower) ||
+            (product.address ?? '').toLowerCase().contains(lower) ||
+            (product.brand ?? '').toLowerCase().contains(lower) ||
+            (product.price ?? '').toLowerCase().contains(lower);
+      }).toList();
+
+      filteredProducts.assignAll(results);
+    }
   }
 
   /// PAGE NAVIGATION
@@ -117,6 +135,7 @@ class ConnectorSelectedProductController extends GetxController {
   RxList<SubCategory> subCategories = <SubCategory>[].obs;
   Rx<Datum> selectedAddress = Datum().obs;
   RxList<Product> filteredProducts = <Product>[].obs;
+  RxList<Product> dummyFilteredProducts = <Product>[].obs;
 
   RxString searchQuery = ''.obs;
 
@@ -137,7 +156,7 @@ class ConnectorSelectedProductController extends GetxController {
         filters: filtersData ?? {},
         latitude: latitude,
         longitude: longitude,
-        radius: radius
+        radius: radius,
       );
       if (filter == true) {
         isFilterApply.value = true;
@@ -145,9 +164,59 @@ class ConnectorSelectedProductController extends GetxController {
         isFilterApply.value = false;
       }
       filteredProducts.clear();
+      dummyFilteredProducts.clear();
       filteredProducts.value = res.data?.products ?? [];
+      dummyFilteredProducts.value = res.data?.products ?? [];
     } catch (e) {
-      Get.snackbar("Error", "Failed to load products: $e");
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> notifyMeApi({int? mID}) async {
+    try {
+      isLoading.value = true;
+      final res = await services.notifyMe(mID: mID);
+      if (res.success == true) {
+        await getAllProducts(
+          radius: selectedRadius.value,
+          longitude: selectedAddress.value.longitude,
+          latitude: selectedAddress.value.latitude,
+        );
+        SnackBars.successSnackBar(content: res.message);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> addToConnectApi({int? mID, int? pID, String? message}) async {
+    try {
+      isLoading.value = true;
+      final res = await services.addToConnect(
+        mID: mID,
+        message: message,
+        pID: pID,
+      );
+      if (res.success == true) {
+        await getAllProducts(
+          radius: selectedRadius.value,
+          longitude: selectedAddress.value.longitude,
+          latitude: selectedAddress.value.latitude,
+        );
+        SnackBars.successSnackBar(content: res.message);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     } finally {
       isLoading.value = false;
     }
@@ -214,7 +283,9 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> fetchProducts(int subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().productsBySubCategory(subCategoryId);
+      final result = await AddProductService().productsBySubCategory(
+        subCategoryId,
+      );
 
       if ((result.success) == true) {
         productsList.value = result.data ?? [];
@@ -245,10 +316,14 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> getFilter(String subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().getFilter(int.parse(subCategoryId));
+      final result = await AddProductService().getFilter(
+        int.parse(subCategoryId),
+      );
 
       if (result.success == true) {
-        filters.value = (result.data as List<FilterData>).map((e) => e).toList();
+        filters.value = (result.data as List<FilterData>)
+            .map((e) => e)
+            .toList();
         // for (final FilterData filter in filters) {
         //   if (filter.filterType == 'dropdown') {
         //     dropdownValues[filter.filterName ?? ''] = Rxn<String>();
@@ -296,7 +371,9 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> deleteSiteAddress(int siteId) async {
     try {
       isLoading.value = true;
-      final response = await SiteLocationService.deleteSiteLocation(siteId.toString());
+      final response = await SiteLocationService.deleteSiteLocation(
+        siteId.toString(),
+      );
       if (response.success == true) {
         await getSiteAddresses();
         siteAddressList.removeWhere((address) => address.id == siteId);

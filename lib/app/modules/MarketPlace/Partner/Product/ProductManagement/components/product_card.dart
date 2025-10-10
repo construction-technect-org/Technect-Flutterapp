@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
@@ -45,7 +47,9 @@ class ProductCard extends StatelessWidget {
                             width: Get.width / 2 - 24,
                             decoration: const BoxDecoration(
                               color: MyColors.grey1,
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                             ),
                             child: const Center(
                               child: CupertinoActivityIndicator(
@@ -69,18 +73,36 @@ class ProductCard extends StatelessWidget {
                           ),
                         ),
                 ),
-                if (isPartner == false)
-                Container(
-                  margin: const EdgeInsets.only(right: 12,top: 12),
-                  height: 32,
-                  width: 32,
-                  padding: const EdgeInsets.all(3),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
+                if (product.outOfStock == true || product.stockQty == 0)
+                  Container(
+                    height: 176,
+                    width: Get.width / 2 - 24,
+                    decoration: const BoxDecoration(
+                      color: Colors.black38,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Out of stock",
+                        style: MyTexts.medium16.copyWith(
+                          color: Colors.white,
+                          fontFamily: MyTexts.Roboto,
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Center(child: Icon(CupertinoIcons.heart)),
-                ),
+                if (isPartner == false)
+                  Container(
+                    margin: const EdgeInsets.only(right: 12, top: 12),
+                    height: 32,
+                    width: 32,
+                    padding: const EdgeInsets.all(3),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(child: Icon(CupertinoIcons.heart)),
+                  ),
               ],
             ),
             Padding(
@@ -123,7 +145,8 @@ class ProductCard extends StatelessWidget {
                       const Gap(4),
                       Expanded(
                         child: Text(
-                          product.address ?? "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
+                          product.address ??
+                              "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
                           style: MyTexts.regular14.copyWith(
                             color: MyColors.fontBlack,
                             fontFamily: MyTexts.Roboto,
@@ -174,17 +197,62 @@ class ProductCard extends StatelessWidget {
                         ),
                     ],
                   ),
-                  if (isPartner == false)
-                  const Gap(8),
-                  if (isPartner == false)
-                  RoundedButton(
-                    fontSize: 10,
-                    buttonName: "Add to Connect",
-                    borderRadius: 9,
-                    height: 40,
-                    verticalPadding: 0,
-                    width: Get.width / 2 - 24,
-                  ),
+                  if (isPartner == false) const Gap(8),
+                  if (isPartner == false) ...[
+                    if ((product.status == null) && (product.stockQty != 0))
+                      RoundedButton(
+                        onTap: () {
+                          ConnectionDialogs.showSendConnectionDialog(
+                            context,
+                            product,
+                          );
+                        },
+                        fontSize: 10,
+                        buttonName: "Add to Connect",
+                        borderRadius: 9,
+                        height: 40,
+                        verticalPadding: 0,
+                        width: Get.width / 2 - 24,
+                      )
+                    else if (product.status != null)
+                      RoundedButton(
+                        fontSize: 10,
+                        buttonName:( product.status??"") == "pending"
+                            ? "Request Sent"
+                            : product.status??"",
+                        borderRadius: 9,
+                        height: 40,
+                        verticalPadding: 0,
+                        width: Get.width / 2 - 24,
+                        color: MyColors.grey,
+                      )
+                    else if (product.isNotify == false &&
+                        (product.outOfStock == true || product.stockQty == 0))
+                      RoundedButton(
+                        onTap: () {
+                          Get.find<ConnectorSelectedProductController>()
+                              .notifyMeApi(mID: product.id);
+                        },
+                        fontSize: 10,
+                        buttonName: "Notify Me",
+                        borderRadius: 9,
+                        height: 40,
+                        verticalPadding: 0,
+                        width: Get.width / 2 - 24,
+                      )
+                    else if (product.isNotify == true)
+                      // 🚫 Already Notified (disabled)
+                      RoundedButton(
+                        onTap: null,
+                        fontSize: 10,
+                        buttonName: "Notified",
+                        borderRadius: 9,
+                        height: 40,
+                        verticalPadding: 0,
+                        width: Get.width / 2 - 24,
+                        color: MyColors.grey,
+                      ),
+                  ],
                   const Gap(4),
                 ],
               ),

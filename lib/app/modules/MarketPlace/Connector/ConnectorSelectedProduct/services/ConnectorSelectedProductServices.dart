@@ -44,4 +44,46 @@ class ConnectorSelectedProductServices {
       throw Exception('Error fetching products: $e');
     }
   }
+
+  Future<ConnectorSelectedProductModel> notifyMe({int? mID}) async {
+    try {
+      const String url = APIConstants.notifyME;
+      final Map<String, dynamic> body = {"merchant_product_id": mID};
+      debugPrint('Calling API: $url');
+      // ✅ Send POST request via your apiManager
+      final response = await apiManager.postObject(url: url, body: body);
+      debugPrint('Response: $response');
+
+      return ConnectorSelectedProductModel.fromJson(response);
+    } catch (e, st) {
+      debugPrint('Error: $e');
+      debugPrint('StackTrace: $st');
+      throw Exception('Error fetching products: $e');
+    }
+  }
+
+  Future<ConnectorSelectedProductModel> addToConnect({
+    int? mID,
+    int? pID,
+    String? message,
+  }) async {
+    try {
+      const String url = APIConstants.addToConnect;
+      final Map<String, dynamic> body = {
+        "merchant_profile_id": mID,
+        "product_id": pID,
+        "message": message ?? "",
+      };
+      debugPrint('Calling API: $url');
+      // ✅ Send POST request via your apiManager
+      final response = await apiManager.postObject(url: url, body: body);
+      debugPrint('Response: $response');
+
+      return ConnectorSelectedProductModel.fromJson(response);
+    } catch (e, st) {
+      debugPrint('Error: $e');
+      debugPrint('StackTrace: $st');
+      throw Exception('Error fetching products: $e');
+    }
+  }
 }
