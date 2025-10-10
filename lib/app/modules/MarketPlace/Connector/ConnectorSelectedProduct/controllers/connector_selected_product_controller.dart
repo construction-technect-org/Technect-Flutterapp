@@ -122,6 +122,9 @@ class ConnectorSelectedProductController extends GetxController {
 
   Future<void> getAllProducts({
     Map<String, dynamic>? filtersData,
+    int? radius,
+    String? latitude,
+    String? longitude,
     bool? filter = false,
   }) async {
     try {
@@ -132,12 +135,16 @@ class ConnectorSelectedProductController extends GetxController {
         subCategoryId: selectedSubCategoryId.value ?? '',
         categoryProductId: selectedProductId.value ?? '',
         filters: filtersData ?? {},
+        latitude: latitude,
+        longitude: longitude,
+        radius: radius
       );
       if (filter == true) {
         isFilterApply.value = true;
       } else {
         isFilterApply.value = false;
       }
+      filteredProducts.clear();
       filteredProducts.value = res.data?.products ?? [];
     } catch (e) {
       Get.snackbar("Error", "Failed to load products: $e");

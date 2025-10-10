@@ -104,13 +104,14 @@ class Product {
   final String? uoc;
   final String? totalAmount;
   final String? productNote;
-  final String? location;
+  final String? address;
   final bool? outOfStock;
   final bool? isActive;
   final String? approvalStatus;
   final String? mainCategoryName;
   final String? subCategoryName;
   final String? categoryProductName;
+  final String? distanceKm;
   final int? stockQty;
   final Map<String, dynamic>? filterValues;
   final List<ProductImage>? images;
@@ -127,9 +128,10 @@ class Product {
     this.brand,
     this.uom,
     this.packageType,
-    this.location,
+    this.address,
     this.packageSize,
     this.shape,
+    this.distanceKm,
     this.isActive,
     this.texture,
     this.colour,
@@ -176,8 +178,9 @@ class Product {
       texture: json["texture"],
       colour: json["colour"],
       size: json["size"],
+      distanceKm: json["distance_km"].toString(),
       price: json["price"],
-      location: json["location"],
+      address: json["address"],
       gstPercentage: json["gst_percentage"],
       gstAmount: json["gst_amount"],
       termsAndConditions: json["terms_and_conditions"],
@@ -220,11 +223,12 @@ class Product {
     "package_size": packageSize,
     "shape": shape,
     "isActive": isActive,
+    "distance_km": distanceKm,
     "texture": texture,
     "colour": colour,
     "size": size,
     "price": price,
-    "location": location,
+    "address": address,
     "gst_percentage": gstPercentage,
     "gst_amount": gstAmount,
     "terms_and_conditions": termsAndConditions,

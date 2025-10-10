@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/controllers/connector_filter_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/product_card.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
 
 class AllProduct extends GetView<ConnectorSelectedProductController> {
@@ -93,7 +92,9 @@ class AllProduct extends GetView<ConnectorSelectedProductController> {
                                     onTap: () async {
                                       await controller.getAllProducts();
                                       Get.delete<ConnectorFilterController>();
-                                      Get.put<ConnectorFilterController>(ConnectorFilterController());
+                                      Get.put<ConnectorFilterController>(
+                                        ConnectorFilterController(),
+                                      );
                                     },
                                     fontSize: 20,
                                     verticalPadding: 0,
@@ -120,7 +121,9 @@ class AllProduct extends GetView<ConnectorSelectedProductController> {
                                     onTap: () async {
                                       await controller.getAllProducts();
                                       Get.delete<ConnectorFilterController>();
-                                      Get.put<ConnectorFilterController>(ConnectorFilterController());
+                                      Get.put<ConnectorFilterController>(
+                                        ConnectorFilterController(),
+                                      );
                                     },
                                     fontSize: 20,
                                     verticalPadding: 0,
@@ -133,32 +136,42 @@ class AllProduct extends GetView<ConnectorSelectedProductController> {
                                 )
                               : const SizedBox();
                         }),
+                        const Gap(10),
+
+                        const Gap(10),
                         Expanded(
                           child: SingleChildScrollView(
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: controller.filteredProducts.length,
-                              separatorBuilder: (_, _) =>
-                                  const SizedBox(height: 12),
-                              itemBuilder: (context, index) {
-                                final Product product =
-                                    controller.filteredProducts[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(
-                                      Routes.PRODUCT_DETAILS,
-                                      arguments: {
-                                        "product": product,
-                                        "isFromAdd": false,
-                                        "isFromConnector": true,
-                                      },
-                                    );
-                                  },
-                                  child: ProductCard(product: product),
-                                );
-                              },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16.0,
+                              ),
+                              child: Wrap(
+                                spacing: 12,
+                                runSpacing: 12,
+                                children: controller.filteredProducts.map((
+                                  product,
+                                ) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.PRODUCT_DETAILS,
+                                        arguments: {
+                                          "product": product,
+                                          "isFromAdd": false,
+                                          "isFromConnector": true,
+                                        },
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      width: Get.width / 2 - 24,
+                                      child: ProductCard(
+                                        product: product,
+                                        isPartner: false,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
                         ),

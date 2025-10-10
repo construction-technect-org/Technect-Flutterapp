@@ -69,8 +69,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       final isNetwork =
                           controller.isFromAdd.value == false;
                       final List<String> imageUrls = [];
-                      print("isNetwork==>$isNetwork");
-
                       if (isNetwork) {
                         // From API (network)
                         if (controller.product.images != null &&
@@ -200,8 +198,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     ),
                   ),
                   Obx(() {
+                    print(controller.isFromAdd.value);
+                    print(controller.isFromConnector.value);
                     return (controller.isFromAdd.value == false &&
-                        controller.isFromConnector.value == true)
+                        controller.isFromConnector.value == false)
                         ? Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
@@ -264,10 +264,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          controller.product.productName?.capitalizeFirst ??
+                          controller.product.categoryProductName?.capitalizeFirst ??
                               '-',
                           style: MyTexts.medium18.copyWith(
                             color: MyColors.fontBlack,
+                            fontFamily: MyTexts.Roboto
                           ),
                         ),
 
@@ -437,19 +438,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ),
                     ),
                     SizedBox(height: 0.5.h),
-                    Row(
-                      children: [
-                        Text(
-                          controller.product.brand ?? '',
-                          style: MyTexts.extraBold18.copyWith(
-                            color: MyColors.primary,
-                            fontFamily: MyTexts.Roboto,
-                          ),
-                        ),
-                        SizedBox(width: 1.w),
-                        Image.asset(Asset.virify, height: 4.h, width: 4.w),
-                      ],
-                    ),
                     Text(
                       "GSTIN: ${controller.profileData.data?.merchantProfile
                           ?.gstinNumber ?? ''}",
@@ -916,6 +904,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
   Widget _buildSpecificationsTable() {
     final product = controller.product;
     final specifications = [
+      {'label': 'Brand name', 'value': product.brand.toString()},
       {'label': 'Stock Quantity', 'value': product.stockQty.toString()},
     ];
 

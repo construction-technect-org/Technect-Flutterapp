@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/controllers/connector_filter_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/components/all_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/components/connector_category_card.dart';
@@ -65,15 +66,17 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
-                    children: List.generate(controller.mainCategories.length, (index) {
+                    children: List.generate(controller.mainCategories.length, (
+                      index,
+                    ) {
                       final item = controller.mainCategories[index];
                       final isSelected =
                           controller.selectedMainCategoryIndex.value == index;
                       return GestureDetector(
                         onTap: () async {
                           controller.selectedMainCategoryIndex.value = index;
-                          controller.selectedMainCategoryId.value = (item.id ?? 0)
-                              .toString();
+                          controller.selectedMainCategoryId.value =
+                              (item.id ?? 0).toString();
 
                           controller.selectedSubCategoryIndex.value = -1;
                           controller.selectedSubCategoryId.value = null;
@@ -86,7 +89,10 @@ class ConnectorSelectedProductView extends StatelessWidget {
                         },
 
                         child: ConnectorCategoryCard(
-                          category: CategoryItem(item.name ?? "", Asset.Product),
+                          category: CategoryItem(
+                            item.name ?? "",
+                            Asset.Product,
+                          ),
                           isSelected: isSelected,
                         ),
                       );
@@ -101,15 +107,17 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
-                    children: List.generate(controller.subCategories.length, (index) {
+                    children: List.generate(controller.subCategories.length, (
+                      index,
+                    ) {
                       final item = controller.subCategories[index];
                       final isSelected =
                           controller.selectedSubCategoryIndex.value == index;
                       return GestureDetector(
                         onTap: () async {
                           controller.selectedSubCategoryIndex.value = index;
-                          controller.selectedSubCategoryId.value = (item.id ?? 0)
-                              .toString();
+                          controller.selectedSubCategoryId.value =
+                              (item.id ?? 0).toString();
 
                           controller.selectedProductIndex.value = -1;
                           controller.selectedProductId.value = null;
@@ -122,7 +130,10 @@ class ConnectorSelectedProductView extends StatelessWidget {
                           }
                         },
                         child: ConnectorCategoryCard(
-                          category: CategoryItem(item.name ?? "", Asset.Product),
+                          category: CategoryItem(
+                            item.name ?? "",
+                            Asset.Product,
+                          ),
                           isSelected: isSelected,
                         ),
                       );
@@ -136,17 +147,24 @@ class ConnectorSelectedProductView extends StatelessWidget {
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
-                    children: List.generate(controller.productsList.length, (index) {
+                    children: List.generate(controller.productsList.length, (
+                      index,
+                    ) {
                       final item = controller.productsList[index];
-                      final isSelected = controller.selectedProductIndex.value == index;
+                      final isSelected =
+                          controller.selectedProductIndex.value == index;
                       return GestureDetector(
                         onTap: () {
                           controller.selectedProductIndex.value = index;
-                          controller.selectedProductId.value = (item.id ?? 0).toString();
+                          controller.selectedProductId.value = (item.id ?? 0)
+                              .toString();
                         },
 
                         child: ConnectorCategoryCard(
-                          category: CategoryItem(item.name ?? "", Asset.Product),
+                          category: CategoryItem(
+                            item.name ?? "",
+                            Asset.Product,
+                          ),
                           isSelected: isSelected,
                         ),
                       );
@@ -161,14 +179,19 @@ class ConnectorSelectedProductView extends StatelessWidget {
           () => (controller.selectedProductId.value ?? '').isEmpty
               ? const SizedBox()
               : Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 24,
+                  ),
                   child: RoundedButton(
                     buttonName: "Next",
                     onTap: () async {
                       final mainSelected =
                           controller.selectedMainCategoryIndex.value != -1;
-                      final subSelected = controller.selectedSubCategoryIndex.value != -1;
-                      final productSelected = controller.selectedProductIndex.value != -1;
+                      final subSelected =
+                          controller.selectedSubCategoryIndex.value != -1;
+                      final productSelected =
+                          controller.selectedProductIndex.value != -1;
 
                       if (!mainSelected) {
                         SnackBars.errorSnackBar(
@@ -178,7 +201,9 @@ class ConnectorSelectedProductView extends StatelessWidget {
                       }
 
                       if (!subSelected) {
-                        SnackBars.errorSnackBar(content: "Please select a sub category.");
+                        SnackBars.errorSnackBar(
+                          content: "Please select a sub category.",
+                        );
                         return;
                       }
 
@@ -188,17 +213,18 @@ class ConnectorSelectedProductView extends StatelessWidget {
                         );
                         return;
                       }
-                      if ((controller.selectedAddress.value.id ?? 0) != 0) {
-                      } else {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.white,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
                           ),
-                          builder: (context) => SelectLocationBottomSheet(),
-                        );
-                      }
+                        ),
+                        builder: (context) => SelectLocationBottomSheet(),
+                      );
                     },
                   ),
                 ),
@@ -240,50 +266,49 @@ class SelectLocationBottomSheet extends StatelessWidget {
             ),
             const Gap(16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  "Within Radius",
-                  style: MyTexts.regular14.copyWith(
-                    color: MyColors.primary,
-                    fontFamily: MyTexts.Roboto,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueGrey),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Obx(
-                        () => Text(
-                          "${controller.selectedRadius.value.toInt()} KM",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              controller.selectedRadius.value += 1;
-                            },
-                            child: const Icon(Icons.arrow_drop_up, size: 18),
+                Obx(
+                      () => Expanded(
+                        child: CommonTextField(
+                          suffixIcon:    Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  controller.selectedRadius.value += 1;
+                                },
+                                child: const Icon(Icons.arrow_drop_up, size: 18),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  if (controller.selectedRadius.value > 1) {
+                                    controller.selectedRadius.value -= 1;
+                                  }
+                                },
+                                child: const Icon(Icons.arrow_drop_down, size: 18),
+                              ),
+                            ],
                           ),
-                          InkWell(
-                            onTap: () {
-                              if (controller.selectedRadius.value > 1) {
-                                controller.selectedRadius.value -= 1;
-                              }
-                            },
-                            child: const Icon(Icons.arrow_drop_down, size: 18),
-                          ),
-                        ],
+                                            controller: TextEditingController(
+                        text: controller.selectedRadius.value
+                            .toInt()
+                            .toString(),
+                                            ),
+                                        
+                                            keyboardType: TextInputType.number,
+                                            onChange: (val) {
+                        final int? value = int.tryParse(val??"");
+                        if (value != null && value >= 0) {
+                          controller.selectedRadius.value = value;
+                        }
+                                            },
+                                          ),
                       ),
-                    ],
-                  ),
                 ),
+                const SizedBox(width: 4),
+                const Text(" KM"),
+                const Gap(20),
               ],
             ),
             const Gap(16),
@@ -301,7 +326,9 @@ class SelectLocationBottomSheet extends StatelessWidget {
                     title: const Text("Add Location Manually"),
                     onTap: () {
                       Get.back();
-                      Get.toNamed(Routes.CONNECTOR_SITE_LOCATION)?.then((value) {
+                      Get.toNamed(Routes.CONNECTOR_SITE_LOCATION)?.then((
+                        value,
+                      ) {
                         controller.getSiteAddresses();
                       });
                     },
@@ -336,13 +363,18 @@ class SelectLocationBottomSheet extends StatelessWidget {
                       },
                       child: Obx(
                         () => Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 4,
+                          ),
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: MyColors.white,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: controller.selectedAddress.value.id == address.id
+                              color:
+                                  controller.selectedAddress.value.id ==
+                                      address.id
                                   ? MyColors.primary
                                   : MyColors.primary.withValues(alpha: 0.3),
                             ),
@@ -361,7 +393,9 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  color: MyColors.primary.withValues(alpha: 0.1),
+                                  color: MyColors.primary.withValues(
+                                    alpha: 0.1,
+                                  ),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: const Icon(
@@ -412,8 +446,12 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                           vertical: 2,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: MyColors.primary.withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(12),
+                                          color: MyColors.primary.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
                                         child: Text(
                                           'Default',
@@ -436,7 +474,9 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                     child: Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue.withValues(alpha: 0.1),
+                                        color: Colors.blue.withValues(
+                                          alpha: 0.1,
+                                        ),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: const Icon(
@@ -454,7 +494,9 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                     child: Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Colors.red.withValues(alpha: 0.1),
+                                        color: Colors.red.withValues(
+                                          alpha: 0.1,
+                                        ),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: const Icon(
@@ -479,8 +521,15 @@ class SelectLocationBottomSheet extends StatelessWidget {
                 buttonName: 'Continue',
                 onTap: () async {
                   if ((controller.selectedAddress.value.id ?? 0) != 0) {
-                    await controller.getAllProducts();
-                    Get.put<ConnectorFilterController>(ConnectorFilterController());
+                    await controller.getAllProducts(
+                      radius: controller.selectedRadius.value,
+                      longitude: controller.selectedAddress.value.longitude,
+                      latitude: controller.selectedAddress.value.latitude,
+                    );
+                    Get.put<ConnectorFilterController>(
+                      ConnectorFilterController(),
+                    );
+                    Get.back();
                     Get.to(() => const AllProduct());
                     return;
                   }

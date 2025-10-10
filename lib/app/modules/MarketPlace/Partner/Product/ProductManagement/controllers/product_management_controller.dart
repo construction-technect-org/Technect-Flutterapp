@@ -36,8 +36,11 @@ class ProductManagementController extends GetxController {
     } else {
       filteredProducts.clear();
       filteredProducts.value = (productModel.value.data?.products ?? []).where((product) {
-        return (product.productName ?? '').toLowerCase().contains(value.toLowerCase()) ||
-            (product.brand ?? '').toLowerCase().contains(value.toLowerCase());
+        return (product.categoryProductName ?? '').toLowerCase().contains(value.toLowerCase()) ||
+            (product.address?.toLowerCase().contains(value.toLowerCase()) ??
+                false)
+            ||
+            (product.brand ?? '').toLowerCase().contains(value.toLowerCase()) || (product.price ?? '').toLowerCase().contains(value.toLowerCase());
       }).toList();
     }
   }

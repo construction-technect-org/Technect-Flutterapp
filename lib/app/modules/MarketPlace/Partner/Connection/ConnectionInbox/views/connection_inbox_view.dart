@@ -134,6 +134,7 @@ class ConnectionInboxView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       CircleAvatar(
+                                        backgroundColor: MyColors.grey,
                                         radius: 22,
                                         child:
                                             connection

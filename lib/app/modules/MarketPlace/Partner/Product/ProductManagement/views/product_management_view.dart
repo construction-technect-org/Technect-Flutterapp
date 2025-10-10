@@ -319,8 +319,10 @@ class ProductManagementView extends StatelessWidget {
                                                 style: MyTexts.medium18
                                                     .copyWith(
                                                       color: MyColors.fontBlack,
+                                                  fontFamily: MyTexts.Roboto
                                                     ),
                                               ),
+                                              const Gap(16),
                                               Wrap(
                                                 spacing: 12,
                                                 runSpacing: 12,

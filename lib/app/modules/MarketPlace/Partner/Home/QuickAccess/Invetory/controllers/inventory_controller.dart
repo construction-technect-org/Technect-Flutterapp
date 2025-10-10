@@ -67,9 +67,17 @@ class InventoryController extends GetxController {
                   (product.subCategoryName?.toLowerCase().contains(
                         value.toLowerCase(),
                       ) ??
-                      false) ||
+                      false)
+                      ||
+                      (product.categoryProductName?.toLowerCase().contains(value.toLowerCase()) ??
+                          false)
+                      ||
+                      (product.address?.toLowerCase().contains(value.toLowerCase()) ??
+                          false)
+                      ||
                   (product.brand?.toLowerCase().contains(value.toLowerCase()) ??
                       false),
+
             )
             .toList(),
       );

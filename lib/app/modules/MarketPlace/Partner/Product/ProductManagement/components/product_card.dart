@@ -61,7 +61,6 @@ class ProductCard extends StatelessWidget {
                           ),
                         )
                       : ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
                           child: Image.asset(
                             Asset.Product,
                             height: 176,
@@ -124,7 +123,7 @@ class ProductCard extends StatelessWidget {
                       const Gap(4),
                       Expanded(
                         child: Text(
-                          product.location ?? "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
+                          product.address ?? "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
                           style: MyTexts.regular14.copyWith(
                             color: MyColors.fontBlack,
                             fontFamily: MyTexts.Roboto,
