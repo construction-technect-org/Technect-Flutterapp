@@ -94,4 +94,8 @@ class APIConstants {
   // Connector Demo Request API
   static const String connectorDemoRequest = "connector/demo-request/my-requests";
   static const String connectorDemoRequestCreate = "connector/demo-request/create";
+
+  static const String connectionConnectorInbox = "connector/connection-request/inbox";
+  static const String cancelConnection = "connector/connection-request/";
+
 }
