@@ -24,7 +24,8 @@ class APIConstants {
   static const String checkEmail = "auth/check-email";
   static const String marketplaceUpdate = "auth/marketplace";
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
-  static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
+  static const String forgotPasswordVerifyOtp =
+      "auth/forgot-password/verify-otp";
   static const String forgotPasswordReset = "auth/forgot-password/reset";
   static const String profile = "auth/profile";
   static const String address = "address";
@@ -41,7 +42,8 @@ class APIConstants {
   static const String teamStatsOverview = "merchant/team/stats/overview";
   static const String roleDetailById = "merchant/role";
   static const String getMainCategories = "merchant/category/main";
-  static const String getSubCategories = "merchant/category/sub?main_category_id=";
+  static const String getSubCategories =
+      "merchant/category/sub?main_category_id=";
   static const String getProducts = "merchant/category/products/sub/";
   static const String getFilter = "merchant/category/filters/sub/";
   static const String getProductList = "merchant/product/list";
@@ -87,15 +89,21 @@ class APIConstants {
       "connector/support-ticket/categories";
   static const String getConnectorSupportTicketPriorities =
       "connector/support-ticket/priorities";
-  static const String ConnectorSupportTicketCreate = "connector/support-ticket/create";
+  static const String ConnectorSupportTicketCreate =
+      "connector/support-ticket/create";
   static const String getConnectorSupportMyTickets =
       "connector/support-ticket/my-tickets";
 
   // Connector Demo Request API
-  static const String connectorDemoRequest = "connector/demo-request/my-requests";
-  static const String connectorDemoRequestCreate = "connector/demo-request/create";
+  static const String connectorDemoRequest =
+      "connector/demo-request/my-requests";
+  static const String connectorDemoRequestCreate =
+      "connector/demo-request/create";
 
-  static const String connectionConnectorInbox = "connector/connection-request/inbox";
+  static const String connectionConnectorInbox =
+      "connector/connection-request/inbox";
   static const String cancelConnection = "connector/connection-request/";
 
+  // Connector Site address
+  static const String connectorSiteAddress = "connector/site-location";
 }

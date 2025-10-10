@@ -1,6 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/models/site_location_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/services/site_location_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
@@ -15,6 +17,7 @@ class ConnectorSelectedProductController extends GetxController {
   RxBool isSearching = false.obs;
   RxBool isFilterApply = false.obs;
   final TextEditingController searchController = TextEditingController();
+  RxInt selectedRadius = 5.obs;
 
   /// Page Controller
   late PageController pageController;
@@ -27,11 +30,9 @@ class ConnectorSelectedProductController extends GetxController {
   Rx<MapType> mapType = MapType.normal.obs;
   final markers = <String, Marker>{}.obs;
 
-  final RxList<String> sites = [
-    "3VR7+34 Mumbai, Maharashtra,3VR7+34 Mumbai, 460017",
-    "3VR7+34 Mumbai, Maharashtra,3VR7+34 Mumbai, 460017",
-    "3VR7+34 Mumbai, Maharashtra,3VR7+34 Mumbai, 460017",
-  ].obs;
+  // Site address list
+  RxList<Datum> siteAddressList = <Datum>[].obs;
+  RxBool isLoadingAddresses = false.obs;
   RxInt selectedSiteIndex = 0.obs;
 
   /// Category & Product Selection
@@ -45,13 +46,13 @@ class ConnectorSelectedProductController extends GetxController {
   RxInt selectedProductIndex = (-1).obs;
 
   /// Services
-  final ConnectorSelectedProductServices services =
-      ConnectorSelectedProductServices();
+  final ConnectorSelectedProductServices services = ConnectorSelectedProductServices();
 
   @override
   void onInit() {
     super.onInit();
     fetchMainCategories();
+    getSiteAddresses();
   }
 
   /// MAP HANDLERS
@@ -97,6 +98,7 @@ class ConnectorSelectedProductController extends GetxController {
     selectedProductIndex.value = -1;
     subCategories.clear();
     productsList.clear();
+    selectedAddress.value = Datum();
   }
 
   //////////////
@@ -113,7 +115,7 @@ class ConnectorSelectedProductController extends GetxController {
   RxList<String> productNames = <String>[].obs;
   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
   RxList<SubCategory> subCategories = <SubCategory>[].obs;
-
+  Rx<Datum> selectedAddress = Datum().obs;
   RxList<Product> filteredProducts = <Product>[].obs;
 
   RxString searchQuery = ''.obs;
@@ -205,9 +207,7 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> fetchProducts(int subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().productsBySubCategory(
-        subCategoryId,
-      );
+      final result = await AddProductService().productsBySubCategory(subCategoryId);
 
       if ((result.success) == true) {
         productsList.value = result.data ?? [];
@@ -238,14 +238,10 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> getFilter(String subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().getFilter(
-        int.parse(subCategoryId),
-      );
+      final result = await AddProductService().getFilter(int.parse(subCategoryId));
 
       if (result.success == true) {
-        filters.value = (result.data as List<FilterData>)
-            .map((e) => e)
-            .toList();
+        filters.value = (result.data as List<FilterData>).map((e) => e).toList();
         // for (final FilterData filter in filters) {
         //   if (filter.filterType == 'dropdown') {
         //     dropdownValues[filter.filterName ?? ''] = Rxn<String>();
@@ -273,6 +269,37 @@ class ConnectorSelectedProductController extends GetxController {
       filters.clear();
     } finally {
       isLoading(false);
+    }
+  }
+
+  Future<void> getSiteAddresses() async {
+    try {
+      isLoadingAddresses.value = true;
+      final response = await SiteLocationService.getSiteLocations();
+      if (response.success == true && response.data != null) {
+        siteAddressList.value = response.data!;
+      }
+    } catch (e) {
+      // Handle error silently
+    } finally {
+      isLoadingAddresses.value = false;
+    }
+  }
+
+  Future<void> deleteSiteAddress(int siteId) async {
+    try {
+      isLoading.value = true;
+      final response = await SiteLocationService.deleteSiteLocation(siteId.toString());
+      if (response.success == true) {
+        await getSiteAddresses();
+        siteAddressList.removeWhere((address) => address.id == siteId);
+        selectedAddress.value = Datum();
+        SnackBars.successSnackBar(content: 'Site address deleted successfully');
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error deleting site address');
+    } finally {
+      isLoading.value = false;
     }
   }
 }

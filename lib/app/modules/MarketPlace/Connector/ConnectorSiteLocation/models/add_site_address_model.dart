@@ -1,0 +1,75 @@
+class AddSiteAddressModel {
+  bool? success;
+  String? message;
+  Data? data;
+
+  AddSiteAddressModel({this.success, this.message, this.data});
+
+  factory AddSiteAddressModel.fromJson(Map<String, dynamic> json) => AddSiteAddressModel(
+    success: json["success"],
+    message: json["message"],
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "success": success,
+    "message": message,
+    "data": data?.toJson(),
+  };
+}
+
+class Data {
+  int? id;
+  int? userId;
+  String? siteName;
+  String? fullAddress;
+  String? landmark;
+  String? latitude;
+  String? longitude;
+  bool? isDefault;
+  bool? isActive;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  Data({
+    this.id,
+    this.userId,
+    this.siteName,
+    this.fullAddress,
+    this.landmark,
+    this.latitude,
+    this.longitude,
+    this.isDefault,
+    this.isActive,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    id: json["id"],
+    userId: json["user_id"],
+    siteName: json["site_name"],
+    fullAddress: json["full_address"],
+    landmark: json["landmark"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
+    isDefault: json["is_default"],
+    isActive: json["is_active"],
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "user_id": userId,
+    "site_name": siteName,
+    "full_address": fullAddress,
+    "landmark": landmark,
+    "latitude": latitude,
+    "longitude": longitude,
+    "is_default": isDefault,
+    "is_active": isActive,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+  };
+}

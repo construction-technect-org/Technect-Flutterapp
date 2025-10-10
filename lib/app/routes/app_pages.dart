@@ -24,6 +24,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocation/views/connector_add_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocationManually/bindings/connector_add_location_manually_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocationManually/view/connector_add_location_manually_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/bindings/connector_site_location_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/views/connector_site_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/bindings/connector_main_tab_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/views/connector_main_tab.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/bindings/connector_connection_inbox_binding.dart';
@@ -113,7 +115,11 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -134,8 +140,16 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
-    GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
+    GetPage(
+      name: _Paths.MAIN,
+      page: () => BottomBarView(),
+      binding: BottomBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => ProfileView(),
+      binding: ProfileBinding(),
+    ),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
@@ -193,7 +207,11 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
+    GetPage(
+      name: _Paths.FAQ,
+      page: () => const FaqScreen(),
+      binding: FAQBindings(),
+    ),
     GetPage(
       name: _Paths.TEAM_DETAILS,
       page: () => const TeamDetailsView(),
@@ -204,7 +222,9 @@ class AppPages {
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<ServiceManagementController>(() => ServiceManagementController());
+        Get.lazyPut<ServiceManagementController>(
+          () => ServiceManagementController(),
+        );
       }),
     ),
 
@@ -281,6 +301,11 @@ class AppPages {
       name: Routes.CONNECTOR_ADD_LOCATION_MANUALLY,
       page: () => const ConnectorAddLocationManuallyView(),
       binding: ConnectorAddLocationManuallyBinding(),
+    ),
+    GetPage(
+      name: Routes.CONNECTOR_SITE_LOCATION,
+      page: () => const ConnectorSiteLocationView(),
+      binding: ConnectorSiteLocationBinding(),
     ),
     GetPage(
       name: Routes.CONNECTOR_PRODUCT_DETAILS,
