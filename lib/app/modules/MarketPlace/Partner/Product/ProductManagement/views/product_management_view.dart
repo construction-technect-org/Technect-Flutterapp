@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/product_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/controllers/product_management_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
 
 class ProductManagementView extends StatelessWidget {
@@ -257,9 +256,7 @@ class ProductManagementView extends StatelessWidget {
                               ),
                               Obx(
                                 () => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
+                                  padding: EdgeInsets.zero,
                                   child: controller.filteredProducts.isEmpty
                                       ? Padding(
                                           padding: const EdgeInsets.only(
@@ -308,37 +305,57 @@ class ProductManagementView extends StatelessWidget {
                                             ],
                                           ),
                                         )
-                                      : ListView.separated(
-                                          shrinkWrap: true,
+                                      : SingleChildScrollView(
                                           padding: const EdgeInsets.symmetric(
                                             vertical: 20,
+                                            horizontal: 18,
                                           ),
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: controller
-                                              .filteredProducts
-                                              .length,
-                                          separatorBuilder: (_, _) =>
-                                              const SizedBox(height: 12),
-                                          itemBuilder: (context, index) {
-                                            final Product product = controller
-                                                .filteredProducts[index];
-                                            return GestureDetector(
-                                              onTap: () {
-                                                Get.toNamed(
-                                                  Routes.PRODUCT_DETAILS,
-                                                  arguments: {
-                                                    "product": product,
-                                                    "isFromAdd": false,
-                                                    "isFromConnector": false,
-                                                  },
-                                                );
-                                              },
-                                              child: ProductCard(
-                                                product: product,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "All Products",
+                                                style: MyTexts.medium18
+                                                    .copyWith(
+                                                      color: MyColors.fontBlack,
+                                                    ),
                                               ),
-                                            );
-                                          },
+                                              Wrap(
+                                                spacing: 12,
+                                                runSpacing: 12,
+                                                children: controller
+                                                    .filteredProducts
+                                                    .map((product) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          Get.toNamed(
+                                                            Routes
+                                                                .PRODUCT_DETAILS,
+                                                            arguments: {
+                                                              "product":
+                                                                  product,
+                                                              "isFromAdd":
+                                                                  false,
+                                                              "isFromConnector":
+                                                                  false,
+                                                            },
+                                                          );
+                                                        },
+                                                        child: SizedBox(
+                                                          width:
+                                                              Get.width / 2 -
+                                                              24,
+                                                          child: ProductCard(
+                                                            product: product,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    })
+                                                    .toList(),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                 ),
                               ),

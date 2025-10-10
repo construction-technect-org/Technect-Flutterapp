@@ -182,6 +182,10 @@ class Asset {
   static const String morevertical = 'assets/images/morevertical.svg';
 
 
+  static const String brand = 'assets/images/brand.svg';
+
+
+
 
 }
 

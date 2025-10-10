@@ -104,6 +104,7 @@ class Product {
   final String? uoc;
   final String? totalAmount;
   final String? productNote;
+  final String? location;
   final bool? outOfStock;
   final bool? isActive;
   final String? approvalStatus;
@@ -126,6 +127,7 @@ class Product {
     this.brand,
     this.uom,
     this.packageType,
+    this.location,
     this.packageSize,
     this.shape,
     this.isActive,
@@ -175,6 +177,7 @@ class Product {
       colour: json["colour"],
       size: json["size"],
       price: json["price"],
+      location: json["location"],
       gstPercentage: json["gst_percentage"],
       gstAmount: json["gst_amount"],
       termsAndConditions: json["terms_and_conditions"],
@@ -221,6 +224,7 @@ class Product {
     "colour": colour,
     "size": size,
     "price": price,
+    "location": location,
     "gst_percentage": gstPercentage,
     "gst_amount": gstAmount,
     "terms_and_conditions": termsAndConditions,

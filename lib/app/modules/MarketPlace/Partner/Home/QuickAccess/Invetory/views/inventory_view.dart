@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/controllers/inventory_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/product_card.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 import 'package:gap/gap.dart';
 
@@ -79,28 +78,45 @@ class InventoryView extends GetView<InventoryController> {
                       ),
                     );
                   }
-
                   return Expanded(
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.filteredProducts.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final Product product = controller.filteredProducts[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.toNamed(
-                              Routes.PRODUCT_DETAILS,
-                              arguments: {"product": product, "isFromAdd": false,
-                                "isFromConnector": false,
+                    child:
+                    SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: controller
+                              .filteredProducts
+                              .map((product) {
+                            return GestureDetector(
+                              onTap: () {
+                                Get.toNamed(
+                                  Routes
+                                      .PRODUCT_DETAILS,
+                                  arguments: {
+                                    "product":
+                                    product,
+                                    "isFromAdd":
+                                    false,
+                                    "isFromConnector":
+                                    false,
+                                  },
+                                );
                               },
+                              child: SizedBox(
+                                width:
+                                Get.width / 2 -
+                                    24,
+                                child: ProductCard(
+                                  product: product,
+                                ),
+                              ),
                             );
-                          },
-                          child: ProductCard(product: product),
-                        );
-                      },
+                          })
+                              .toList(),
+                        ),
+                      ),
                     ),
                   );
                 }),
