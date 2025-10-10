@@ -5,7 +5,6 @@ import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:geocoding/geocoding.dart';
 

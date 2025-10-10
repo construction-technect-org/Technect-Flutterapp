@@ -42,7 +42,6 @@ class ConnectorSelectedProductController extends GetxController {
 
   RxInt selectedMainCategoryIndex = (-1).obs;
   RxInt selectedSubCategoryIndex = (-1).obs;
-  RxInt selectedProductCategoryIndex = (-1).obs;
   RxInt selectedProductIndex = (-1).obs;
 
   /// Services
@@ -95,12 +94,9 @@ class ConnectorSelectedProductController extends GetxController {
   void resetSelections() {
     selectedMainCategoryIndex.value = -1;
     selectedSubCategoryIndex.value = -1;
-    selectedProductCategoryIndex.value = -1;
     selectedProductIndex.value = -1;
-
     subCategories.clear();
-    categoryProducts.clear();
-    products.clear();
+    productsList.clear();
   }
 
   //////////////
