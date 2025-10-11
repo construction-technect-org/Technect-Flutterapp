@@ -5,7 +5,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/components/connector_home_components.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/views/setting_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
@@ -527,14 +526,14 @@ class ConnectorHomeView extends StatelessWidget {
                                                 arguments: {"isReport": false},
                                               );
                                             } else if (index == 3) {
-                                              Get.to(() => SettingView());
+                                              Get.toNamed(Routes.SETTING);
                                             } else if (index == 4) {
                                               Get.toNamed(
                                                 Routes.ROLE_MANAGEMENT,
                                                 arguments: {"isHome": true},
                                               );
                                             } else if (index == 5) {
-                                              Get.toNamed(Routes.INVENTORY);
+                                              Get.toNamed(Routes.WISH_LIST);
                                             } else if (index == 6) {
                                               Get.toNamed(Routes.NEWS);
                                             } else if (index == 7) {

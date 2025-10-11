@@ -28,7 +28,7 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
-              alignment: AlignmentGeometry.topRight,
+              alignment: AlignmentGeometry.topLeft,
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
@@ -92,16 +92,74 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                 if (isPartner == false)
-                  Container(
-                    margin: const EdgeInsets.only(right: 12, top: 12),
-                    height: 32,
-                    width: 32,
-                    padding: const EdgeInsets.all(3),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+                  SizedBox(
+                    height: 176,
+                    width: Get.width / 2 - 24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Align(
+                          alignment: AlignmentGeometry.topRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.find<ConnectorSelectedProductController>()
+                                  .wishListApi(
+                                    status: product.isInWishList == true
+                                        ? "remove"
+                                        : "add",
+                                    mID: product.id ?? 0,
+                                  );
+                            },
+                            behavior: HitTestBehavior.translucent,
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 12, top: 12),
+                              height: 32,
+                              width: 32,
+                              padding: const EdgeInsets.all(3),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  product.isInWishList == true
+                                      ? CupertinoIcons.heart_fill
+                                      : CupertinoIcons.heart,
+                                  color: product.isInWishList == true
+                                      ? MyColors.red
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        if (DateTime.parse(
+                          product.createdAt ?? DateTime.now().toString(),
+                        ).isAfter(
+                          DateTime.now().subtract(const Duration(days: 5)),
+                        ))
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7),
+                              color: MyColors.primary.withValues(alpha: 0.9),
+                            ),
+                            child: Text(
+                              "New Arrival",
+                              style: MyTexts.medium14.copyWith(
+                                color: Colors.white,
+                                fontFamily: MyTexts.Roboto,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                    child: const Center(child: Icon(CupertinoIcons.heart)),
                   ),
               ],
             ),
@@ -217,9 +275,9 @@ class ProductCard extends StatelessWidget {
                     else if (product.status != null)
                       RoundedButton(
                         fontSize: 10,
-                        buttonName:( product.status??"") == "pending"
+                        buttonName: (product.status ?? "") == "pending"
                             ? "Request Sent"
-                            : product.status??"",
+                            : product.status ?? "",
                         borderRadius: 9,
                         height: 40,
                         verticalPadding: 0,

@@ -46,6 +46,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/views/connector_request_demo_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/SuppoerRequestFilter/bindings/connector_support_request_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/SuppoerRequestFilter/views/connector_support_request_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/bindings/wish_list_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
@@ -372,6 +374,11 @@ class AppPages {
       name: Routes.CONNECTOR_REQUEST_DEMO,
       page: () => ConnectorRequestDemoView(),
       binding: ConnectorRequestDemoBinding(),
+    ),
+    GetPage(
+      name: Routes.WISH_LIST,
+      page: () => WishListView(),
+      binding: WishListBinding(),
     ),
   ];
 }

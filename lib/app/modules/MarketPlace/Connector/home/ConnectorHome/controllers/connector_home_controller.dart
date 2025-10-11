@@ -18,7 +18,7 @@ class ConnectorHomeController extends GetxController {
     {"icon": Asset.report, "title": "Analysis"},
     {"icon": Asset.setting, "title": "Setting"},
     {"icon": Asset.insights, "title": "Team"},
-    {"icon": Asset.cart, "title": "Inventory"},
+    {"icon": Asset.cart, "title": "Cart"},
     {"icon": Asset.warning, "title": "News"},
     {"icon": Asset.thumbup, "title": "Refer& Earn"},
   ];

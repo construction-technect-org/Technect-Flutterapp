@@ -418,6 +418,48 @@ class ApiManager {
       throw FetchDataException('Unexpected error: $e');
     }
   }
+  Future<dynamic> deleteObject({
+    required String url,
+    required Object body,
+  }) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${myPref.getToken()}',
+      };
+
+      Get.printInfo(info: '🌐 API POST Request:');
+      Get.printInfo(info: '   URL: ${baseUrl + url}');
+      Get.printInfo(info: '   Headers: $headers');
+      Get.printInfo(info: '   Body: $body');
+
+      final request = http.Request('DELETE', Uri.parse(baseUrl + url));
+      request.body = json.encode(body);
+      request.headers.addAll(headers);
+
+      final http.StreamedResponse response = await request.send();
+
+      Get.printInfo(info: '📡 API Response:');
+      Get.printInfo(info: '   Status: ${response.statusCode}');
+      Get.printInfo(info: '   Headers: ${response.headers}');
+
+      final map = _returnResponse(response);
+
+      // Check for invalid/expired token in response body
+      _checkTokenValidity(map);
+
+      Get.printInfo(info: '✅ Parsed Response: $map');
+      return map;
+    } on SocketException {
+      Get.printInfo(info: '❌ Network Error: No Internet Connection');
+      SnackBars.errorSnackBar(content: 'No Internet Connection');
+      throw FetchDataException('No Internet connection');
+    } catch (e) {
+      Get.printInfo(info: '❌ Unexpected Error: $e');
+      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      throw FetchDataException('Unexpected error: $e');
+    }
+  }
 
   /// Handle HTTP response and return parsed data
   dynamic _returnResponse(http.StreamedResponse response) async {

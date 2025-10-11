@@ -108,4 +108,5 @@ class APIConstants {
   static const String connectorSiteAddress = "connector/site-location";
   static const String notifyME = "connector/stock-notification/request";
   static const String addToConnect = "connector/connection-request/send";
+  static const String wishList = "connector/wishlist";
 }

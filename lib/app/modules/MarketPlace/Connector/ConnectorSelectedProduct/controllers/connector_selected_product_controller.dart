@@ -5,6 +5,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/models/site_location_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/services/site_location_service.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
@@ -20,7 +21,9 @@ class ConnectorSelectedProductController extends GetxController {
   RxBool isFilterApply = false.obs;
   final TextEditingController searchController = TextEditingController();
   RxInt selectedRadius = 5.obs;
-  final TextEditingController radiusController = TextEditingController(text: "5");
+  final TextEditingController radiusController = TextEditingController(
+    text: "5",
+  );
 
   /// Page Controller
   late PageController pageController;
@@ -38,7 +41,7 @@ class ConnectorSelectedProductController extends GetxController {
   RxBool isLoadingAddresses = false.obs;
   RxInt selectedSiteIndex = 0.obs;
 
-  RxList<Product> products = <Product>[].obs;
+  Rx<ConnectorSelectedProductModel> productListModel = ConnectorSelectedProductModel(success: false, message: '').obs;
 
   RxInt selectedMainCategoryIndex = (-1).obs;
   RxInt selectedSubCategoryIndex = (-1).obs;
@@ -80,22 +83,23 @@ class ConnectorSelectedProductController extends GetxController {
   }
 
   void searchProduct(String value) {
-    searchQuery.value = value;
-
-    if (value.isEmpty) {
-      filteredProducts.assignAll(dummyFilteredProducts);
-      filteredProducts.refresh();
-    } else {
-      final lower = value.toLowerCase();
-      final results = dummyFilteredProducts.where((product) {
-        return (product.categoryProductName ?? '').toLowerCase().contains(lower) ||
-            (product.address ?? '').toLowerCase().contains(lower) ||
-            (product.brand ?? '').toLowerCase().contains(lower) ||
-            (product.price ?? '').toLowerCase().contains(lower);
-      }).toList();
-
-      filteredProducts.assignAll(results);
+    searchQuery.value = value.trim();
+    if (searchQuery.value.isEmpty) {
+      filteredProducts.assignAll(productListModel.value.data?.products??[]);
+      return;
     }
+    final query = searchQuery.value.toLowerCase();
+    final results = (productListModel.value.data?.products??[]).where((product) {
+      final name = (product.categoryProductName ?? '').toLowerCase();
+      final address = (product.address ?? '').toLowerCase();
+      final brand = (product.brand ?? '').toLowerCase();
+      final price = (product.price ?? '').toLowerCase();
+      return name.contains(query) ||
+          address.contains(query) ||
+          brand.contains(query) ||
+          price.contains(query);
+    }).toList();
+    filteredProducts.assignAll(results);
   }
 
   /// PAGE NAVIGATION
@@ -136,7 +140,6 @@ class ConnectorSelectedProductController extends GetxController {
   RxList<SubCategory> subCategories = <SubCategory>[].obs;
   Rx<Datum> selectedAddress = Datum().obs;
   RxList<Product> filteredProducts = <Product>[].obs;
-  RxList<Product> dummyFilteredProducts = <Product>[].obs;
 
   RxString searchQuery = ''.obs;
 
@@ -149,7 +152,6 @@ class ConnectorSelectedProductController extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-
       final res = await services.connectorProduct(
         mainCategoryId: selectedMainCategoryId.value ?? '',
         subCategoryId: selectedSubCategoryId.value ?? '',
@@ -164,10 +166,9 @@ class ConnectorSelectedProductController extends GetxController {
       } else {
         isFilterApply.value = false;
       }
+      productListModel.value=res;
       filteredProducts.clear();
-      dummyFilteredProducts.clear();
       filteredProducts.value = res.data?.products ?? [];
-      dummyFilteredProducts.value = res.data?.products ?? [];
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -181,6 +182,27 @@ class ConnectorSelectedProductController extends GetxController {
     try {
       isLoading.value = true;
       final res = await services.notifyMe(mID: mID);
+      if (res.success == true) {
+        await getAllProducts(
+          radius: selectedRadius.value,
+          longitude: selectedAddress.value.longitude,
+          latitude: selectedAddress.value.latitude,
+        );
+        SnackBars.successSnackBar(content: res.message);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> wishListApi({required int mID, required String status}) async {
+    try {
+      isLoading.value = true;
+      final res = await WishListServices().wishList(mID: mID, status: status);
       if (res.success == true) {
         await getAllProducts(
           radius: selectedRadius.value,
@@ -325,24 +347,6 @@ class ConnectorSelectedProductController extends GetxController {
         filters.value = (result.data as List<FilterData>)
             .map((e) => e)
             .toList();
-        // for (final FilterData filter in filters) {
-        //   if (filter.filterType == 'dropdown') {
-        //     dropdownValues[filter.filterName ?? ''] = Rxn<String>();
-        //   }
-        //   else if (filter.filterType == 'dropdown_multiple') {
-        //     multiDropdownValues[filter.filterName ?? ''] = <String>[].obs;
-        //   }
-        //   else {
-        //     dynamicControllers[filter.filterName ?? ''] =
-        //         TextEditingController();
-        //   }
-        // }
-        //
-        // if (isEdit &&
-        //     _storedFilterValues != null &&
-        //     _storedFilterValues!.isNotEmpty) {
-        //   _populateFilterControllers();
-        // }
       } else {
         filters.clear();
       }

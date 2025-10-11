@@ -529,6 +529,9 @@ class SelectLocationBottomSheet extends StatelessWidget {
                       Get.to(() => const AllProduct());
                       return;
                     }
+                    else{
+                      SnackBars.errorSnackBar(content: "Please select site");
+                    }
                   },
                 ),
               ],

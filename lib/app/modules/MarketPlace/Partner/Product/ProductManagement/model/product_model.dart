@@ -33,17 +33,20 @@ class ProductImage {
 class ProductListModel {
   final bool? success;
   final Data? data;
+  final Data? data1;
   final String? message;
 
   ProductListModel({
     this.success,
     this.data,
+    this.data1,
     this.message,
   });
 
   factory ProductListModel.fromJson(Map<String, dynamic> json) => ProductListModel(
     success: json["success"],
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
+
     message: json["message"],
   );
 

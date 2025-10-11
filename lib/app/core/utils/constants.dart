@@ -183,6 +183,8 @@ class Asset {
 
 
   static const String brand = 'assets/images/brand.svg';
+  static const String filter = 'assets/images/filter.svg';
+  static const String sort = 'assets/images/sort.svg';
 
 
 

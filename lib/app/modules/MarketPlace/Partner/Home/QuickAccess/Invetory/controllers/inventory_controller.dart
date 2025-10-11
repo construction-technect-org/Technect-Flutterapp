@@ -84,8 +84,5 @@ class InventoryController extends GetxController {
     }
   }
 
-  void clearSearch() {
-    searchQuery.value = '';
-    filteredProducts.assignAll(productListModel.value.data?.products ?? []);
-  }
+
 }

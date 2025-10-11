@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/services/SettingService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 
@@ -102,18 +103,36 @@ class SettingController extends GetxController {
     }
   }
 
-
   Future<void> notificationToggle({required bool isNotification}) async {
     isLoading.value = true;
     try {
       final otpResponse = await settingService.notificationToggle(
-        isNotificationSend:isNotification,
+        isNotificationSend: isNotification,
       );
 
       if (otpResponse.success == true) {
-        Get.find<HomeController>().profileData.value.data?.user?.isNotificationSend=isNotification;
-        Get.find<HomeController>().profileData.refresh();
-        SnackBars.successSnackBar(content: otpResponse.message??"");
+        if (myPref.getRole() == "merchant_connector"){
+          Get.find<ConnectorHomeController>()
+              .profileData
+              .value
+              .data
+              ?.user
+              ?.isNotificationSend =
+              isNotification;
+          Get.find<ConnectorHomeController>().profileData.refresh();
+        }
+        else{
+          Get.find<HomeController>()
+              .profileData
+              .value
+              .data
+              ?.user
+              ?.isNotificationSend =
+              isNotification;
+          Get.find<HomeController>().profileData.refresh();
+        }
+
+        SnackBars.successSnackBar(content: otpResponse.message ?? "");
       } else {
         SnackBars.errorSnackBar(
           content: otpResponse.message ?? 'Failed to send OTP',
@@ -130,6 +149,24 @@ class SettingController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    isNotification.value= Get.find<HomeController>().profileData.value.data?.user?.isNotificationSend??false;
+    if (myPref.getRole() == "merchant_connector") {
+      isNotification.value =
+          Get.find<ConnectorHomeController>()
+              .profileData
+              .value
+              .data
+              ?.user
+              ?.isNotificationSend ??
+          false;
+    } else {
+      isNotification.value =
+          Get.find<HomeController>()
+              .profileData
+              .value
+              .data
+              ?.user
+              ?.isNotificationSend ??
+          false;
+    }
   }
 }
