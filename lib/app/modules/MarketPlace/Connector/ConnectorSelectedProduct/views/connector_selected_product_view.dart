@@ -407,8 +407,8 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        address.siteName ?? '',
-                                        style: MyTexts.medium14.copyWith(
+                                        address.siteName?.capitalizeFirst ?? '',
+                                        style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
                                           fontFamily: MyTexts.Roboto,
                                         ),
@@ -416,8 +416,8 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                       const Gap(4),
                                       Text(
                                         address.fullAddress ?? '',
-                                        style: MyTexts.regular12.copyWith(
-                                          color: MyColors.darkGray,
+                                        style: MyTexts.regular14.copyWith(
+                                          color: MyColors.gray5D,
                                           fontFamily: MyTexts.Roboto,
                                         ),
                                         maxLines: 2,
@@ -428,8 +428,8 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                         const Gap(2),
                                         Text(
                                           'Landmark: ${address.landmark}',
-                                          style: MyTexts.regular12.copyWith(
-                                            color: MyColors.shadeOfGray,
+                                          style: MyTexts.regular14.copyWith(
+                                            color: MyColors.gray5D,
                                             fontFamily: MyTexts.Roboto,
                                           ),
                                         ),
