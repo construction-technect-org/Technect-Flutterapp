@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/model/merchat_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
@@ -17,7 +18,7 @@ class ConnectorHomeController extends GetxController {
     {"icon": Asset.report, "title": "Report"},
     {"icon": Asset.report, "title": "Analysis"},
     {"icon": Asset.setting, "title": "Setting"},
-    {"icon": Asset.insights, "title": "Team"},
+    {"icon": Asset.insights, "title": "Merchants"},
     {"icon": Asset.cart, "title": "Cart"},
     {"icon": Asset.warning, "title": "News"},
     {"icon": Asset.thumbup, "title": "Refer& Earn"},
@@ -42,6 +43,7 @@ class ConnectorHomeController extends GetxController {
   AddressModel addressData = AddressModel();
   RxList<TeamListData> teamList = <TeamListData>[].obs;
   Rx<DashboardModel> dashboardData = DashboardModel().obs;
+  RxList<Stores>  merchantStoreList = <Stores>[].obs;
 
   bool _profileDialogShown = false;
 
@@ -50,6 +52,7 @@ class ConnectorHomeController extends GetxController {
     super.onInit();
     _initializeHomeData();
     refreshDashboardData();
+    fetchMerchantData();
     isDefaultOffice.value = myPref.getDefaultAdd();
   }
 
@@ -259,6 +262,16 @@ class ConnectorHomeController extends GetxController {
       final dashboardResponse = await homeService.getDashboard();
       if (dashboardResponse.success == true) {
         dashboardData.value = dashboardResponse;
+      }
+    } catch (e) {
+      Get.printError(info: 'Error fetching dashboard data: $e');
+    }
+  }
+  Future<void> fetchMerchantData() async {
+    try {
+      final dashboardResponse = await homeService.getMerchantStore();
+      if (dashboardResponse.success == true) {
+        merchantStoreList.value = dashboardResponse.data?.stores??[];
       }
     } catch (e) {
       Get.printError(info: 'Error fetching dashboard data: $e');

@@ -55,25 +55,29 @@ class WishListView extends GetView<WishListController> {
                   }
                   else if (controller.filteredProducts.isEmpty) {
                     return Expanded(
-                      child: Column(
-                        children: [
-                          const Gap(20),
-                          const Icon(
-                            Icons.inventory_2_outlined,
-                            size: 64,
-                            color: MyColors.grey,
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            'No products available',
-                            style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                          ),
-                          SizedBox(height: 0.5.h),
-                          Text(
-                            'Add your first product to get started',
-                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
-                          ),
-                        ],
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.inventory_2_outlined,
+                              size: 64,
+                              color: MyColors.grey,
+                            ),
+                            SizedBox(height: 2.h),
+                            Text(
+                              'No products available',
+                              style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                            ),
+                            SizedBox(height: 0.5.h),
+                            Text(
+                              'Add your first product to get started',
+                              style: MyTexts.regular14.copyWith(color: MyColors.grey),
+                            ),
+                            const Gap(20),
+
+                          ],
+                        ),
                       ),
                     );
                   }

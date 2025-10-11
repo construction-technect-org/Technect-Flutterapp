@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/components/all_merchant_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/components/connector_home_components.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/model/merchat_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
@@ -421,7 +423,7 @@ class ConnectorHomeView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 2.h),
-                              HearderText(text: "Statics"),
+                            HearderText(text: "Statics"),
                             const Gap(14),
                             Obx(
                               () => Row(
@@ -528,10 +530,7 @@ class ConnectorHomeView extends StatelessWidget {
                                             } else if (index == 3) {
                                               Get.toNamed(Routes.SETTING);
                                             } else if (index == 4) {
-                                              Get.toNamed(
-                                                Routes.ROLE_MANAGEMENT,
-                                                arguments: {"isHome": true},
-                                              );
+                                              Get.to(() => AllMerchantScreen());
                                             } else if (index == 5) {
                                               Get.toNamed(Routes.WISH_LIST);
                                             } else if (index == 6) {
@@ -581,7 +580,9 @@ class ConnectorHomeView extends StatelessWidget {
                                 HearderText(text: "Merchant Store"),
                                 const Spacer(),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Get.to(() => AllMerchantScreen());
+                                  },
                                   child: Text(
                                     "View All",
                                     style: MyTexts.medium14.copyWith(
@@ -592,18 +593,26 @@ class ConnectorHomeView extends StatelessWidget {
                               ],
                             ),
                             const Gap(14),
-                            ListView.builder(
-                              padding: EdgeInsets.zero,
-                              itemCount: 2,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return const Padding(
-                                  padding: EdgeInsets.only(bottom: 12),
-                                  child: MerchantCard(),
-                                );
-                              },
-                            ),
+                            Obx(() {
+                              return ListView.builder(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                itemCount: controller.merchantStoreList
+                                    .take(3)
+                                    .length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final Stores data =
+                                      controller.merchantStoreList[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: MerchantCard(data: data),
+                                  );
+                                },
+                              );
+                            }),
                             const Gap(14),
                           ],
                         ),
@@ -692,91 +701,6 @@ class ConnectorHomeView extends StatelessWidget {
               style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
             ),
             const Gap(20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoCard({
-    required Widget icon, // 👈 change to Widget
-    required String title,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 12, top: 12),
-      child: Container(
-        width: 180,
-        height: 89,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: MyColors.grayD4),
-        ),
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                icon,
-                SizedBox(width: 0.6.h),
-                Text(
-                  title,
-                  style: MyTexts.medium16.copyWith(
-                    color: MyColors.textFieldBackground,
-
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 0.8.h),
-            Text(
-              value,
-              style: MyTexts.extraBold18.copyWith(
-                color: MyColors.textFieldBackground,
-              ),
-            ),
-
-            SizedBox(height: 2.h),
-
-            // Team title row
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Team",
-                    style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
-                  ),
-                  Text(
-                    "View All",
-                    style: MyTexts.medium12.copyWith(
-                      color: MyColors.textFieldBackground,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Team List
-            ListView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: 3,
-              shrinkWrap: true,
-              // Important for nested scrollables
-              physics: const NeverScrollableScrollPhysics(),
-              // Disables inner scrolling
-              itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 12),
-                  child: MerchantCard(), // Use your card here
-                );
-              },
-            ),
           ],
         ),
       ),

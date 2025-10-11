@@ -1,8 +1,12 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/model/merchat_model.dart';
 import 'package:gap/gap.dart';
 
 class MerchantCard extends StatelessWidget {
-  const MerchantCard({super.key});
+  Stores data;
+
+  MerchantCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -10,17 +14,34 @@ class MerchantCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: MyColors.americanSilver),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Image.asset(Asset.profil, height: 46, width: 46),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: (data.ownerProfileImage ?? "").isEmpty
+                        ? Image.asset(
+                            Asset.aTeam,
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                          )
+                        : getImageView(
+                            finalUrl:
+                                APIConstants.bucketUrl +
+                                (data.ownerProfileImage ?? ""),
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
@@ -28,14 +49,14 @@ class MerchantCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Mohan Das',
+                          data.businessName ?? "",
                           style: MyTexts.bold18.copyWith(
                             color: MyColors.fontBlack,
                             fontFamily: MyTexts.Roboto,
                           ),
                         ),
                         Text(
-                          'Company: JK Manufacturers',
+                          'Owner: ${data.ownerName ?? ""}',
                           style: MyTexts.medium14.copyWith(
                             color: MyColors.sonicSilver,
                             fontFamily: MyTexts.Roboto,
@@ -66,7 +87,7 @@ class MerchantCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      'mike@constructiontechnet.com',
+                      data.businessEmail ?? "",
                       style: MyTexts.regular14.copyWith(
                         color: MyColors.gray32,
                         fontFamily: MyTexts.Roboto,
@@ -80,8 +101,7 @@ class MerchantCard extends StatelessWidget {
               const Gap(20),
               RoundedButton(
                 onTap: () {
-                  // Navigator.of(context).pop();
-                  // Get.toNamed(Routes.CONNECTOR_MAIN_TAB);
+                  makePhoneCall(phoneNumber: data.businessContactNumber ?? "");
                 },
                 height: 40,
                 borderRadius: 12,
@@ -93,11 +113,7 @@ class MerchantCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      Asset.call,
-                      height: 16,
-                      width: 16,
-                    ),
+                    Image.asset(Asset.call, height: 16, width: 16),
                     const SizedBox(width: 8),
                     Text(
                       'Contact Merchant',

@@ -111,4 +111,5 @@ class APIConstants {
   static const String wishList = "connector/wishlist";
   static const String connectorFeedback = "feedback/connector";
   static const String connectorGetProductReview = "connector/product/";
+  static const String connectorMerchantStore= "connector/merchant-store/merchant-stores";
 }
