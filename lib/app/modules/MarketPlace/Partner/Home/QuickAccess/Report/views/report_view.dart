@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/controllers/report_controller.dart';
@@ -11,8 +12,6 @@ import 'package:gap/gap.dart';
 class ReportView extends GetView<ReportController> {
   const ReportView({super.key});
 
-  @override
-  @override
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -499,6 +498,14 @@ class ReportGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final maxY = values
+        .expand((list) => list)
+        .fold<int>(0, (prev, val) => val > prev ? val : prev);
+
+    final double niceMax = _getNiceMax(maxY.toDouble());
+
+    final double interval = niceMax / 5;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
       padding: const EdgeInsets.all(16),
@@ -542,6 +549,7 @@ class ReportGraph extends StatelessWidget {
             height: 220,
             child: BarChart(
               BarChartData(
+                maxY: niceMax,
                 barGroups: List.generate(labels.length, (i) {
                   return BarChartGroupData(
                     x: i,
@@ -575,14 +583,14 @@ class ReportGraph extends StatelessWidget {
                       },
                     ),
                   ),
-
                   topTitles: const AxisTitles(),
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      interval: 1,
-                      getTitlesWidget: (value, meta) =>
-                          Text(value.toInt().toString()),
+                      interval: interval,
+                      getTitlesWidget: (value, meta) {
+                        return Text(value.toInt().toString());
+                      },
                     ),
                   ),
                   rightTitles: const AxisTitles(),
@@ -591,7 +599,7 @@ class ReportGraph extends StatelessWidget {
                   show: true,
                   border: Border.all(color: MyColors.grayD4),
                 ),
-                gridData: const FlGridData(show: false),
+                gridData: FlGridData(show: false),
               ),
             ),
           ),
@@ -599,4 +607,22 @@ class ReportGraph extends StatelessWidget {
       ),
     );
   }
+
+  double _getNiceMax(double maxY) {
+    if (maxY <= 5) return 5;
+    final double magnitude = pow(10, (log(maxY) / ln10).floor()).toDouble();
+    final double normalized = maxY / magnitude;
+    double niceNormalized;
+    if (normalized < 1.5) {
+      niceNormalized = 2;
+    } else if (normalized < 3) {
+      niceNormalized = 5;
+    } else if (normalized < 7) {
+      niceNormalized = 10;
+    } else {
+      niceNormalized = 20;
+    }
+    return (niceNormalized * magnitude).ceilToDouble();
+  }
 }
+
