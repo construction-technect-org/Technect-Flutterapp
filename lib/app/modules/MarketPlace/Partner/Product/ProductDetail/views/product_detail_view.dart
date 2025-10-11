@@ -57,8 +57,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ConnectionDialogs.showSendConnectionDialog(
                         context,
                         controller.product,
+                        isFromIn: true
                       );
-                      Get.back();
                     },
                   ),
                 )
@@ -330,7 +330,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       child: Column(
                         children: [
                           rowText(
-                            'Ex Factory Product Rate:',
+                            'Ex Factory Price:',
                             '${controller.product.price ?? 0}',
                           ),
                           rowText(
@@ -339,7 +339,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           ),
                           const Divider(),
                           rowText(
-                            'Ex Factory Price:',
+                            'Total Ex Factory Price:',
                             controller.product.totalAmount ?? "0",
                             isBold: true,
                           ),

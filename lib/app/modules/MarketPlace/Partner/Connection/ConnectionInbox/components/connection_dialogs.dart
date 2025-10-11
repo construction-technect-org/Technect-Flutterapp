@@ -284,7 +284,11 @@ class ConnectionDialogs {
     );
   }
 
-  static void showSendConnectionDialog(BuildContext context, Product product) {
+  static void showSendConnectionDialog(
+    BuildContext context,
+    Product product, {
+    bool? isFromIn = false,
+  }) {
     final TextEditingController messageController = TextEditingController();
     messageController.text =
         "Hi, I would like to connect with you for business opportunities.";
@@ -351,14 +355,18 @@ class ConnectionDialogs {
                     SizedBox(width: 2.w),
                     Expanded(
                       child: RoundedButton(
-                        onTap: () {
+                        onTap: () async {
                           Get.back();
-                          Get.find<ConnectorSelectedProductController>()
+                          if (isFromIn == true) {
+                            Get.back();
+                          }
+                          await Get.find<ConnectorSelectedProductController>()
                               .addToConnectApi(
                                 message: messageController.text.trim(),
                                 pID: product.id,
                                 mID: product.merchantProfileId,
                               );
+
                         },
                         buttonName: 'Connect',
                         borderRadius: 12,

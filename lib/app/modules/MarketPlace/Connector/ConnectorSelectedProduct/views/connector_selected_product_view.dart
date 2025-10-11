@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/controllers/connector_filter_controller.dart';
@@ -241,302 +242,298 @@ class SelectLocationBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[400],
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            const Gap(12),
-            Text(
-              "Select a Location",
-              style: MyTexts.medium16.copyWith(
-                color: MyColors.primary,
-                fontFamily: MyTexts.Roboto,
-              ),
-            ),
-            const Gap(16),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Obx(
-                      () => Expanded(
-                        child: CommonTextField(
-                          suffixIcon:    Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  controller.selectedRadius.value += 1;
-                                },
-                                child: const Icon(Icons.arrow_drop_up, size: 18),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  if (controller.selectedRadius.value > 1) {
-                                    controller.selectedRadius.value -= 1;
-                                  }
-                                },
-                                child: const Icon(Icons.arrow_drop_down, size: 18),
-                              ),
-                            ],
-                          ),
-                                            controller: TextEditingController(
-                        text: controller.selectedRadius.value
-                            .toInt()
-                            .toString(),
-                                            ),
-                                        
-                                            keyboardType: TextInputType.number,
-                                            onChange: (val) {
-                        final int? value = int.tryParse(val??"");
-                        if (value != null && value >= 0) {
-                          controller.selectedRadius.value = value;
-                        }
-                                            },
-                                          ),
-                      ),
-                ),
-                const SizedBox(width: 4),
-                const Text(" KM"),
-                const Gap(20),
-              ],
-            ),
-            const Gap(16),
-            const Divider(),
-            const Gap(16),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[300]!),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.add, color: Colors.blue),
-                    title: const Text("Add Location Manually"),
-                    onTap: () {
-                      Get.back();
-                      Get.toNamed(Routes.CONNECTOR_SITE_LOCATION)?.then((
-                        value,
-                      ) {
-                        controller.getSiteAddresses();
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            // Site address list
-            const Gap(24),
-            if (controller.siteAddressList.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  "Site Address List",
-                  style: MyTexts.medium16.copyWith(
-                    color: MyColors.fontBlack,
-                    fontFamily: MyTexts.Roboto,
+      child: GestureDetector(
+        onTap: hideKeyboard,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               const Gap(12),
-              Obx(
-                () => ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.siteAddressList.length,
-                  itemBuilder: (context, index) {
-                    final address = controller.siteAddressList[index];
-                    return GestureDetector(
-                      onTap: () {
-                        controller.selectedAddress.value = address;
+              Text(
+                "Select a Location",
+                style: MyTexts.medium16.copyWith(
+                  color: MyColors.primary,
+                  fontFamily: MyTexts.Roboto,
+                ),
+              ),
+              const Gap(16),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: CommonTextField(
+                      suffixIcon: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              controller.selectedRadius.value += 1;
+                            },
+                            child: const Icon(Icons.arrow_drop_up, size: 18),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              if (controller.selectedRadius.value > 1) {
+                                controller.selectedRadius.value -= 1;
+                              }
+                            },
+                            child: const Icon(Icons.arrow_drop_down, size: 18),
+                          ),
+                        ],
+                      ),
+                      controller:controller.radiusController,
+                      keyboardType: TextInputType.number,
+                      onChange: (val) {
+                        final int? value = int.tryParse(val ?? "");
+                        if (value != null && value >= 0) {
+                          controller.selectedRadius.value = value;
+                        }
                       },
-                      child: Obx(
-                        () => Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 4,
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: MyColors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color:
-                                  controller.selectedAddress.value.id ==
-                                      address.id
-                                  ? MyColors.primary
-                                  : MyColors.primary.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(" KM"),
+                  const Gap(20),
+                ],
+              ),
+              const Gap(16),
+              const Divider(),
+              const Gap(16),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.add, color: Colors.blue),
+                      title: const Text("Add Location Manually"),
+                      onTap: () {
+                        Get.back();
+                        Get.toNamed(Routes.CONNECTOR_SITE_LOCATION)?.then((
+                          value,
+                        ) {
+                          controller.getSiteAddresses();
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              // Site address list
+              const Gap(24),
+              if (controller.siteAddressList.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    "Site Address List",
+                    style: MyTexts.medium16.copyWith(
+                      color: MyColors.fontBlack,
+                      fontFamily: MyTexts.Roboto,
+                    ),
+                  ),
+                ),
+                const Gap(12),
+                Obx(
+                  () => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.siteAddressList.length,
+                    itemBuilder: (context, index) {
+                      final address = controller.siteAddressList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          controller.selectedAddress.value = address;
+                        },
+                        child: Obx(
+                          () => Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 4,
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: MyColors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color:
+                                    controller.selectedAddress.value.id ==
+                                        address.id
+                                    ? MyColors.primary
+                                    : MyColors.primary.withValues(alpha: 0.3),
                               ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              // Location Icon
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: MyColors.primary.withValues(
-                                    alpha: 0.1,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.05),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                // Location Icon
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: MyColors.primary.withValues(
+                                      alpha: 0.1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                  borderRadius: BorderRadius.circular(20),
+                                  child: const Icon(
+                                    Icons.location_on,
+                                    color: MyColors.primary,
+                                    size: 20,
+                                  ),
                                 ),
-                                child: const Icon(
-                                  Icons.location_on,
-                                  color: MyColors.primary,
-                                  size: 20,
-                                ),
-                              ),
-                              const Gap(12),
-                              // Address Details
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      address.siteName ?? '',
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.fontBlack,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                    ),
-                                    const Gap(4),
-                                    Text(
-                                      address.fullAddress ?? '',
-                                      style: MyTexts.regular12.copyWith(
-                                        color: MyColors.darkGray,
-                                        fontFamily: MyTexts.Roboto,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    if (address.landmark != null &&
-                                        address.landmark!.isNotEmpty) ...[
-                                      const Gap(2),
+                                const Gap(12),
+                                // Address Details
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
                                       Text(
-                                        'Landmark: ${address.landmark}',
-                                        style: MyTexts.regular12.copyWith(
-                                          color: MyColors.shadeOfGray,
+                                        address.siteName ?? '',
+                                        style: MyTexts.medium14.copyWith(
+                                          color: MyColors.fontBlack,
                                           fontFamily: MyTexts.Roboto,
                                         ),
                                       ),
-                                    ],
-                                    if (address.isDefault == true) ...[
                                       const Gap(4),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 2,
+                                      Text(
+                                        address.fullAddress ?? '',
+                                        style: MyTexts.regular12.copyWith(
+                                          color: MyColors.darkGray,
+                                          fontFamily: MyTexts.Roboto,
                                         ),
-                                        decoration: BoxDecoration(
-                                          color: MyColors.primary.withValues(
-                                            alpha: 0.1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          'Default',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      if (address.landmark != null &&
+                                          address.landmark!.isNotEmpty) ...[
+                                        const Gap(2),
+                                        Text(
+                                          'Landmark: ${address.landmark}',
                                           style: MyTexts.regular12.copyWith(
-                                            color: MyColors.primary,
+                                            color: MyColors.shadeOfGray,
                                             fontFamily: MyTexts.Roboto,
                                           ),
                                         ),
-                                      ),
+                                      ],
+                                      if (address.isDefault == true) ...[
+                                        const Gap(4),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 2,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: MyColors.primary.withValues(
+                                              alpha: 0.1,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Default',
+                                            style: MyTexts.regular12.copyWith(
+                                              color: MyColors.primary,
+                                              fontFamily: MyTexts.Roboto,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ],
+                                  ),
+                                ),
+                                // Action Buttons
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () => _navigateToEditSite(address),
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: const Icon(
+                                          Icons.edit,
+                                          color: Colors.blue,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    const Gap(8),
+                                    // Delete Button
+                                    InkWell(
+                                      onTap: () => _showDeleteDialog(address),
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                              // Action Buttons
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () => _navigateToEditSite(address),
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue.withValues(
-                                          alpha: 0.1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: const Icon(
-                                        Icons.edit,
-                                        color: Colors.blue,
-                                        size: 16,
-                                      ),
-                                    ),
-                                  ),
-                                  const Gap(8),
-                                  // Delete Button
-                                  InkWell(
-                                    onTap: () => _showDeleteDialog(address),
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red.withValues(
-                                          alpha: 0.1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                        size: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    },
+                  ),
+                ),
+                const Gap(24),
+                RoundedButton(
+                  buttonName: 'Continue',
+                  onTap: () async {
+                    if ((controller.selectedAddress.value.id ?? 0) != 0) {
+                      await controller.getAllProducts(
+                        radius: controller.selectedRadius.value,
+                        longitude: controller.selectedAddress.value.longitude,
+                        latitude: controller.selectedAddress.value.latitude,
+                      );
+                      Get.put<ConnectorFilterController>(
+                        ConnectorFilterController(),
+                      );
+                      Get.back();
+                      Get.to(() => const AllProduct());
+                      return;
+                    }
                   },
                 ),
-              ),
-              const Gap(24),
-              RoundedButton(
-                buttonName: 'Continue',
-                onTap: () async {
-                  if ((controller.selectedAddress.value.id ?? 0) != 0) {
-                    await controller.getAllProducts(
-                      radius: controller.selectedRadius.value,
-                      longitude: controller.selectedAddress.value.longitude,
-                      latitude: controller.selectedAddress.value.latitude,
-                    );
-                    Get.put<ConnectorFilterController>(
-                      ConnectorFilterController(),
-                    );
-                    Get.back();
-                    Get.to(() => const AllProduct());
-                    return;
-                  }
-                },
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
