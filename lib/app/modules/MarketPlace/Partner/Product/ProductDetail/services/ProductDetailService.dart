@@ -9,7 +9,21 @@ class ProductDetailService {
   Future<ProductRatingModel?> fetchAllReview({required String id}) async {
     try {
       final response = await _apiManager.get(
-        url: "${APIConstants.updateProduct}$id/ratings?page=1&limit=10",
+        url: "${APIConstants.updateProduct}$id/ratings",
+      );
+      if (response != null) {
+        return ProductRatingModel.fromJson(response);
+      }
+    } catch (e) {
+      log("Error fetching roles: $e");
+    }
+    return null;
+  }
+
+  Future<ProductRatingModel?> fetchConnectorReview({required String id}) async {
+    try {
+      final response = await _apiManager.get(
+        url: "${APIConstants.connectorGetProductReview}$id/ratings",
       );
       if (response != null) {
         return ProductRatingModel.fromJson(response);

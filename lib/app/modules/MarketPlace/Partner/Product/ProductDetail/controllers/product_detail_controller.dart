@@ -21,11 +21,12 @@ class ProductDetailsController extends GetxController {
     product = argument['product'] ?? Product();
     isFromAdd.value = argument["isFromAdd"];
     isFromConnector.value = argument["isFromConnector"];
-    if(!isFromConnector.value){
-      fetchReview(product.id??0);
+    if (isFromAdd.value == false) {
+      fetchReview(product.id ?? 0, isFromConnector.value);
     }
     super.onInit();
   }
+
 
   void onEditProduct() {
     Get.toNamed(
@@ -36,12 +37,14 @@ class ProductDetailsController extends GetxController {
 
   final RxList<Ratings> reviewList = <Ratings>[].obs;
 
-  Future<void> fetchReview(int id) async {
+  Future<void> fetchReview(int id, bool? isFromConnector) async {
     try {
       isLoading.value = true;
-      final result = await _service.fetchAllReview(id: id.toString());
+      final result = isFromConnector == false
+          ? await _service.fetchAllReview(id: id.toString())
+          : await _service.fetchConnectorReview(id: id.toString());
       if (result != null && result.success == true) {
-        reviewList.assignAll(result.data?.ratings?? []);
+        reviewList.assignAll(result.data?.ratings ?? []);
       }
     } catch (e) {
       if (kDebugMode) {
@@ -51,5 +54,4 @@ class ProductDetailsController extends GetxController {
       isLoading.value = false;
     }
   }
-
 }

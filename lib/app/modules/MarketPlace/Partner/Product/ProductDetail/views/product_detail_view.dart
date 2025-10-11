@@ -57,20 +57,20 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ConnectionDialogs.showSendConnectionDialog(
                         context,
                         controller.product,
-                        isFromIn: true
+                        isFromIn: true,
                       );
                     },
                   ),
                 )
               : Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: RoundedButton(
-                  color: MyColors.grey,
-                  buttonName: ( controller.product.status?? "") == "pending"
-                      ? "Request Sent"
-                      : controller.product.status??"",
+                  padding: const EdgeInsets.all(24.0),
+                  child: RoundedButton(
+                    color: MyColors.grey,
+                    buttonName: (controller.product.status ?? "") == "pending"
+                        ? "Request Sent"
+                        : controller.product.status ?? "",
+                  ),
                 ),
-              ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -213,54 +213,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             color: Colors.grey,
                           ),
                   ),
-                  Obx(() {
-                    return (controller.isFromAdd.value == false &&
-                            controller.isFromConnector.value == false)
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 8,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      controller.product.outOfStock == true
-                                          ? "Out Of Stock"
-                                          : "In Stock",
-                                      style: MyTexts.bold18.copyWith(
-                                        color:
-                                            controller.product.outOfStock ==
-                                                true
-                                            ? Colors.red
-                                            : Colors.green,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    const Gap(4),
-                                    Container(
-                                      height: 10,
-                                      width: 10,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color:
-                                            controller.product.outOfStock ==
-                                                true
-                                            ? Colors.red
-                                            : Colors.green,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                buildRatingRow(controller.product),
-                              ],
-                            ),
-                          )
-                        : const SizedBox();
-                  }),
                 ],
               ),
               Padding(
@@ -309,6 +261,53 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         }),
                       ],
                     ),
+                    Obx(() {
+                      return ((controller.isFromConnector.value == true &&
+                                  controller.isFromAdd.value == false) ||
+                              (controller.isFromConnector.value == false &&
+                                  controller.isFromAdd.value == false))
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Gap(10),
+                                Row(
+                                  children: [
+                                    Text(
+                                      controller.product.outOfStock == true
+                                          ? "Out Of Stock"
+                                          : "In Stock",
+                                      style: MyTexts.bold18.copyWith(
+                                        color:
+                                            controller.product.outOfStock ==
+                                                true
+                                            ? Colors.red
+                                            : Colors.green,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    const Gap(4),
+                                    Container(
+                                      height: 10,
+                                      width: 10,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color:
+                                            controller.product.outOfStock ==
+                                                true
+                                            ? Colors.red
+                                            : Colors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Gap(4),
+
+                                buildRatingRow(controller.product),
+                              ],
+                            )
+                          : const SizedBox();
+                    }),
                     Obx(() {
                       return Gap(
                         (controller.isFromAdd.value == false &&
@@ -454,7 +453,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     ),
                     SizedBox(height: 0.5.h),
                     Text(
-                      "GSTIN: ${controller.profileData.data?.merchantProfile?.gstinNumber ?? ''}",
+                      "GSTIN: ${ controller.product.merchantGstNumber ?? ''}",
                       style: MyTexts.medium14.copyWith(
                         color: MyColors.fontBlack,
                       ),
@@ -557,10 +556,12 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
                                         SizedBox(height: 2.h),
                                         Obx(() {
-                                          return !controller
-                                                  .isFromConnector
-                                                  .value
+                                          return controller
+                                                  .reviewList
+                                                  .isNotEmpty
                                               ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     HearderText(
                                                       text: "Product Ratings:",

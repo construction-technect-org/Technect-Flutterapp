@@ -37,4 +37,34 @@ class FeedbackService {
     }
   }
 
+  static Future<AddRolemodel?> addConnectorFeedback({
+    required int rating,
+    required String text,
+  }) async {
+    try {
+      final response = await _apiManager.postObject(
+        url: APIConstants.connectorFeedback,
+        body: {
+          "rating": rating,
+          "feedback_text": text,
+          "feedback_type": "general",
+          "is_anonymous": false,
+        },
+      );
+
+      if (response != null) {
+        return AddRolemodel.fromJson(response);
+      } else {
+        return AddRolemodel(
+          success: false,
+          data: null,
+          message: "Null response from server",
+        );
+      }
+    } catch (e) {
+      log("❌ Error: $e");
+      return AddRolemodel(success: false, data: null, message: e.toString());
+    }
+  }
+
 }

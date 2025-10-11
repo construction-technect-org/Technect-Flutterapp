@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
@@ -594,6 +595,7 @@ class AddProductController extends GetxController {
     final Product p = Product(
       images:productImages,
       gstAmount: gstPriceController.text,
+      merchantGstNumber: Get.find<HomeController>().profileData.value.data?.merchantProfile?.gstinNumber ?? '',
       mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
       productName: productNameController.text,

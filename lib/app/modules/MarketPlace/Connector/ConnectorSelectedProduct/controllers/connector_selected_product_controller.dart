@@ -1,17 +1,21 @@
 import 'dart:async';
 
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/models/site_location_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/services/site_location_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedBack/service/FeedBackService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
+import 'package:gap/gap.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorSelectedProductController extends GetxController {
@@ -41,7 +45,8 @@ class ConnectorSelectedProductController extends GetxController {
   RxBool isLoadingAddresses = false.obs;
   RxInt selectedSiteIndex = 0.obs;
 
-  Rx<ConnectorSelectedProductModel> productListModel = ConnectorSelectedProductModel(success: false, message: '').obs;
+  Rx<ConnectorSelectedProductModel> productListModel =
+      ConnectorSelectedProductModel(success: false, message: '').obs;
 
   RxInt selectedMainCategoryIndex = (-1).obs;
   RxInt selectedSubCategoryIndex = (-1).obs;
@@ -85,11 +90,13 @@ class ConnectorSelectedProductController extends GetxController {
   void searchProduct(String value) {
     searchQuery.value = value.trim();
     if (searchQuery.value.isEmpty) {
-      filteredProducts.assignAll(productListModel.value.data?.products??[]);
+      filteredProducts.assignAll(productListModel.value.data?.products ?? []);
       return;
     }
     final query = searchQuery.value.toLowerCase();
-    final results = (productListModel.value.data?.products??[]).where((product) {
+    final results = (productListModel.value.data?.products ?? []).where((
+      product,
+    ) {
       final name = (product.categoryProductName ?? '').toLowerCase();
       final address = (product.address ?? '').toLowerCase();
       final brand = (product.brand ?? '').toLowerCase();
@@ -166,7 +173,7 @@ class ConnectorSelectedProductController extends GetxController {
       } else {
         isFilterApply.value = false;
       }
-      productListModel.value=res;
+      productListModel.value = res;
       filteredProducts.clear();
       filteredProducts.value = res.data?.products ?? [];
     } catch (e) {
@@ -234,7 +241,16 @@ class ConnectorSelectedProductController extends GetxController {
           longitude: selectedAddress.value.longitude,
           latitude: selectedAddress.value.latitude,
         );
+
         SnackBars.successSnackBar(content: res.message);
+        Get.bottomSheet(
+          FeedbackBottomSheetView(),
+          isScrollControlled: true,
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+        );
       }
     } catch (e) {
       if (kDebugMode) {
@@ -390,5 +406,173 @@ class ConnectorSelectedProductController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+}
+
+class FeedbackBottomSheetView extends StatelessWidget {
+  FeedbackBottomSheetView({super.key});
+
+  final suggestionController = TextEditingController();
+  RxInt rating = 0.obs;
+  RxBool isLoading = false.obs;
+
+  Future<void> addFeedBack() async {
+    if (rating.value == 0) {
+      SnackBars.errorSnackBar(content: "Please give rate");
+      return;
+    } else if (suggestionController.text.isEmpty) {
+      SnackBars.errorSnackBar(content: "Please add feedback/suggection");
+      return;
+    }
+    isLoading.value = true;
+
+    try {
+      final result = await FeedbackService.addConnectorFeedback(
+        text: suggestionController.text,
+        rating: rating.value,
+      );
+
+      if (result != null && result.success) {
+        suggestionController.text = "";
+        rating.value = 0;
+        Get.back();
+        SnackBars.successSnackBar(content: result.message);
+      } else {
+        Get.snackbar("Failed", result?.message ?? "Something went wrong");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: hideKeyboard,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 18,
+          right: 18,
+          top: 20,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 50,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              const SizedBox(height: 16),
+              Text(
+                "REVIEW/FEEDBACK",
+                style: MyTexts.bold18.copyWith(color: MyColors.primary),
+              ),
+              const Gap(16),
+              Center(
+                child: Obx(() {
+                  return Text(
+                    rating.value.toString(),
+                    style: MyTexts.bold20.copyWith(
+                      color: MyColors.primary,
+                      fontSize: 24.sp,
+                    ),
+                  );
+                }),
+              ),
+
+              Obx(
+                () => Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          Icons.star,
+                          color: index < rating.value
+                              ? Colors.orangeAccent
+                              : Colors.grey,
+                          size: 32,
+                        ),
+                        onPressed: () {
+                          rating.value = index + 1;
+                        },
+                      );
+                    }),
+                  ),
+                ),
+              ),
+
+              const Gap(20),
+
+              CommonTextField(
+                controller: suggestionController,
+                hintText: "Write your feedback",
+                headerText: "Feedback",
+                maxLine: 5,
+              ),
+              const Gap(24),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () {
+                        suggestionController.text = "";
+                        rating.value = 0;
+                        Get.back();
+                      },
+                      child: const Text(
+                        "CANCEL",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MyColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () {
+                        addFeedBack();
+                        // SnackBars.successSnackBar(content: "Feedback sent successfully");
+                      },
+                      child: Text(
+                        "SUBMIT",
+                        style: TextStyle(color: MyColors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -4,19 +4,18 @@
 
 import 'dart:convert';
 
-ProductListModel getFilterModelFromJson(String str) => ProductListModel.fromJson(json.decode(str));
+ProductListModel getFilterModelFromJson(String str) =>
+    ProductListModel.fromJson(json.decode(str));
 
-String getFilterModelToJson(ProductListModel data) => json.encode(data.toJson());
+String getFilterModelToJson(ProductListModel data) =>
+    json.encode(data.toJson());
+
 class ProductImage {
   final String? s3Key;
   final String? s3Url;
   final int? sortOrder;
 
-  ProductImage({
-    this.s3Key,
-    this.s3Url,
-    this.sortOrder,
-  });
+  ProductImage({this.s3Key, this.s3Url, this.sortOrder});
 
   factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
     s3Key: json["s3_key"],
@@ -30,25 +29,21 @@ class ProductImage {
     "sort_order": sortOrder,
   };
 }
+
 class ProductListModel {
   final bool? success;
   final Data? data;
-  final Data? data1;
   final String? message;
 
-  ProductListModel({
-    this.success,
-    this.data,
-    this.data1,
-    this.message,
-  });
+  ProductListModel({this.success, this.data, this.message});
 
-  factory ProductListModel.fromJson(Map<String, dynamic> json) => ProductListModel(
-    success: json["success"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
+  factory ProductListModel.fromJson(Map<String, dynamic> json) =>
+      ProductListModel(
+        success: json["success"],
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
 
-    message: json["message"],
-  );
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
     "success": success,
@@ -61,22 +56,24 @@ class Data {
   final List<Product>? products;
   final Statistics? statistics;
 
-  Data({
-    this.products,
-    this.statistics,
-  });
+  Data({this.products, this.statistics});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    products: json["products"] == null ? [] : List<Product>.from(json["products"]!.map((x) => Product.fromJson(x))),
-    statistics: json["statistics"] == null ? null : Statistics.fromJson(json["statistics"]),
+    products: json["products"] == null
+        ? []
+        : List<Product>.from(json["products"]!.map((x) => Product.fromJson(x))),
+    statistics: json["statistics"] == null
+        ? null
+        : Statistics.fromJson(json["statistics"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "products": products == null ? [] : List<dynamic>.from(products!.map((x) => x.toJson())),
+    "products": products == null
+        ? []
+        : List<dynamic>.from(products!.map((x) => x.toJson())),
     "statistics": statistics?.toJson(),
   };
 }
-
 
 class Product {
   final int? id;
@@ -118,12 +115,12 @@ class Product {
   final String? subCategoryName;
   final String? categoryProductName;
   final String? distanceKm;
+  final String? merchantGstNumber;
   final int? stockQty;
   final Map<String, dynamic>? filterValues;
   final List<ProductImage>? images;
 
-
-  Product( {
+  Product({
     this.id,
     this.merchantProfileId,
     this.productName,
@@ -133,6 +130,7 @@ class Product {
     this.subCategoryId,
     this.categoryProductId,
     this.brand,
+    this.merchantGstNumber,
     this.uom,
     this.packageType,
     this.address,
@@ -166,7 +164,6 @@ class Product {
     this.stockQty,
     this.filterValues,
     this.images,
-
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -211,13 +208,15 @@ class Product {
       status: json["connection_request_status"],
       isNotify: json["has_stock_notification"],
       isInWishList: json["is_in_wishlist"],
+      merchantGstNumber: json["merchant_gst_number"],
       filterValues: json["filter_values"] != null
           ? Map<String, dynamic>.from(json["filter_values"])
           : null,
       images: json["images"] == null
           ? []
           : List<ProductImage>.from(
-          json["images"].map((x) => ProductImage.fromJson(x))),
+              json["images"].map((x) => ProductImage.fromJson(x)),
+            ),
     );
   }
 
@@ -245,6 +244,7 @@ class Product {
     "gst_amount": gstAmount,
     "terms_and_conditions": termsAndConditions,
     "created_at": createdAt,
+    "merchant_gst_number": merchantGstNumber,
     "updated_at": updatedAt,
     "average_rating": averageRating,
     "total_ratings": totalRatings,
@@ -296,4 +296,3 @@ class Statistics {
     "approved": featured,
   };
 }
-
