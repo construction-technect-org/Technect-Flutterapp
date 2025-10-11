@@ -138,7 +138,7 @@ class ProductCard extends StatelessWidget {
                         if (DateTime.parse(
                           product.createdAt ?? DateTime.now().toString(),
                         ).isAfter(
-                          DateTime.now().subtract(const Duration(days: 5)),
+                          DateTime.now().subtract(const Duration(days: 7)),
                         ))
                           Container(
                             margin: const EdgeInsets.all(8),

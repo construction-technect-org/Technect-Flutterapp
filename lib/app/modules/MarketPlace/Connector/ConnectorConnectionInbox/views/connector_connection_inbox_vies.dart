@@ -76,7 +76,7 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                             size: 22,
                             color: Colors.black,
                           ),
-                          style: MyTexts.medium14.copyWith(
+                          style: MyTexts.medium16.copyWith(
                             color: selectedColor,
                             fontFamily: MyTexts.Roboto,
                           ),
@@ -85,7 +85,7 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                               value: "pending",
                               child: Text(
                                 "Pending",
-                                style: MyTexts.medium14.copyWith(
+                                style: MyTexts.medium16.copyWith(
                                   color: Colors.orange,
                                   fontFamily: MyTexts.Roboto,
                                 ),
@@ -95,7 +95,7 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                               value: "accepted",
                               child: Text(
                                 "Accepted",
-                                style: MyTexts.medium14.copyWith(
+                                style: MyTexts.medium16.copyWith(
                                   color: Colors.green,
                                   fontFamily: MyTexts.Roboto,
                                 ),
@@ -105,7 +105,7 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                               value: "rejected",
                               child: Text(
                                 "Rejected",
-                                style: MyTexts.medium14.copyWith(
+                                style: MyTexts.medium16.copyWith(
                                   color: Colors.red,
                                   fontFamily: MyTexts.Roboto,
                                 ),
@@ -115,7 +115,7 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                               value: "cancelled",
                               child: Text(
                                 "Cancelled",
-                                style: MyTexts.medium14.copyWith(
+                                style: MyTexts.medium16.copyWith(
                                   color: Colors.red,
                                   fontFamily: MyTexts.Roboto,
                                 ),

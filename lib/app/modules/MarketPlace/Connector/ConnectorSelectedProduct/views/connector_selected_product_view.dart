@@ -273,27 +273,35 @@ class SelectLocationBottomSheet extends StatelessWidget {
                 children: [
                   Expanded(
                     child: CommonTextField(
-                      suffixIcon: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              controller.selectedRadius.value += 1;
-                            },
-                            child: const Icon(Icons.arrow_drop_up, size: 18),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              if (controller.selectedRadius.value > 1) {
-                                controller.selectedRadius.value -= 1;
-                              }
-                            },
-                            child: const Icon(Icons.arrow_drop_down, size: 18),
-                          ),
-                        ],
-                      ),
-                      controller:controller.radiusController,
+                      controller: controller.radiusController.value,
                       keyboardType: TextInputType.number,
+                      suffixIcon: SizedBox(
+                        width: 35,
+                        height: 48,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                controller.selectedRadius.value += 1;
+                                controller.radiusController.value.text =
+                                    controller.selectedRadius.value.toString();
+                              },
+                              child: const Icon(Icons.arrow_drop_up, size: 20),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                if (controller.selectedRadius.value > 1) {
+                                  controller.selectedRadius.value -= 1;
+                                  controller.radiusController.value.text =
+                                      controller.selectedRadius.value.toString();
+                                }
+                              },
+                              child: const Icon(Icons.arrow_drop_down, size: 20),
+                            ),
+                          ],
+                        ),
+                      ),
                       onChange: (val) {
                         final int? value = int.tryParse(val ?? "");
                         if (value != null && value >= 0) {
@@ -301,6 +309,7 @@ class SelectLocationBottomSheet extends StatelessWidget {
                         }
                       },
                     ),
+
                   ),
                   const SizedBox(width: 4),
                   const Text(" KM"),

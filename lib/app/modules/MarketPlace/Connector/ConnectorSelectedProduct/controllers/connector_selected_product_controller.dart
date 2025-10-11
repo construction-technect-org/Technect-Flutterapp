@@ -25,9 +25,9 @@ class ConnectorSelectedProductController extends GetxController {
   RxBool isFilterApply = false.obs;
   final TextEditingController searchController = TextEditingController();
   RxInt selectedRadius = 5.obs;
-  final TextEditingController radiusController = TextEditingController(
+  final Rx<TextEditingController> radiusController = TextEditingController(
     text: "5",
-  );
+  ).obs;
 
   /// Page Controller
   late PageController pageController;
