@@ -30,7 +30,9 @@ class NewsView extends GetView<NewsController> {
                     SizedBox(height: 2.h),
                     Text(
                       'No news available',
-                      style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                      style: MyTexts.medium18.copyWith(
+                        color: MyColors.fontBlack,
+                      ),
                     ),
                     SizedBox(height: 0.5.h),
                     Text(
@@ -68,9 +70,6 @@ class NewsView extends GetView<NewsController> {
         color: MyColors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: MyColors.grayD4),
-        // boxShadow: const [
-        //   BoxShadow(color: MyColors.americanSilver, blurRadius: 8, offset: Offset(0, 2)),
-        // ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -78,42 +77,25 @@ class NewsView extends GetView<NewsController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: MyColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                Expanded(
                   child: Text(
-                    'NEWS',
-                    style: MyTexts.regular12.copyWith(
-                      color: MyColors.primary,
-                      fontWeight: FontWeight.bold,
+                    news.title ?? '',
+                    style: MyTexts.bold16.copyWith(
+                      color: MyColors.fontBlack,
                       fontFamily: MyTexts.Roboto,
                     ),
                   ),
                 ),
-                const Spacer(),
                 Text(
                   _formatDate(news.createdAt),
-                  style: MyTexts.regular12.copyWith(
+                  style: MyTexts.regular14.copyWith(
                     color: MyColors.grey,
                     fontFamily: MyTexts.Roboto,
                   ),
                 ),
               ],
-            ),
-            const Gap(12),
-            Text(
-              news.title ?? '',
-              style: MyTexts.bold16.copyWith(
-                color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
-              ),
             ),
             const Gap(8),
             ReadMoreText(

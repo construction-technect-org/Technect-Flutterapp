@@ -6,12 +6,14 @@ class NewsController extends GetxController {
   final NewsService _newsService = NewsService();
 
   RxBool isLoading = false.obs;
+  RxBool isConnector = false.obs;
   Rx<NewsModel> newsModel = NewsModel().obs;
 
   @override
   void onInit() {
     super.onInit();
-    _loadNewsFromStorage();
+    // _loadNewsFromStorage();
+    isConnector.value = myPref.getRole() == "merchant_connector";
     fetchNews();
   }
 
@@ -27,7 +29,7 @@ class NewsController extends GetxController {
   Future<void> fetchNews() async {
     try {
       isLoading.value = true;
-      final result = await _newsService.getNews();
+      final result = await _newsService.getNews(isConnector: isConnector.value);
       if (result.success == true) {
         newsModel.value = result;
         myPref.setNewsModel(result);

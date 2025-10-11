@@ -38,43 +38,51 @@ class NotificationView extends GetView<NotificationController> {
               );
             }
 
-            return ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              itemCount: notifications.length,
-              itemBuilder: (context, index) {
-                final notification = notifications[index];
-                IconData statusIcon;
-                Color statusColor;
+            return RefreshIndicator(
+              color: Colors.white,
+              backgroundColor: MyColors.primary,
+              onRefresh: controller.refreshNotifications,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                itemCount: notifications.length,
+                itemBuilder: (context, index) {
+                  final notification = notifications[index];
+                  IconData statusIcon;
+                  Color statusColor;
 
-                switch (notification.notificationType?.toLowerCase()) {
-                  case "connection_accepted":
-                    statusIcon = Icons.check_circle_outline;
-                    statusColor = MyColors.green;
-                  case "product_approved":
-                    statusIcon = Icons.verified;
-                    statusColor = MyColors.green;
-                  case "product_verification":
-                    statusIcon = Icons.hourglass_empty;
-                    statusColor = MyColors.warning;
-                  case "product_rejected":
-                    statusIcon = Icons.cancel_outlined;
-                    statusColor = MyColors.red;
-                  default:
-                    statusIcon = Icons.notifications;
-                    statusColor = MyColors.primary;
-                }
+                  switch (notification.notificationType?.toLowerCase()) {
+                    case "connection_accepted":
+                      statusIcon = Icons.check_circle_outline;
+                      statusColor = MyColors.green;
+                      case "connection_rejected":
+                      statusIcon = Icons.cancel_outlined;
+                      statusColor = MyColors.red;
+                    case "product_approved":
+                      statusIcon = Icons.verified;
+                      statusColor = MyColors.green;
+                    case "product_verification":
+                      statusIcon = Icons.hourglass_empty;
+                      statusColor = MyColors.warning;
+                    case "product_rejected":
+                      statusIcon = Icons.cancel_outlined;
+                      statusColor = MyColors.red;
+                    default:
+                      statusIcon = Icons.notifications;
+                      statusColor = MyColors.primary;
+                  }
 
-                return buildNotificationCard(
-                  title: notification.title ?? "",
-                  icon: statusIcon,
-                  category: notification.entityType ?? "",
-                  dateTime: notification.createdAt ?? DateTime.now(),
-                  iconColor: statusColor,
-                  message: notification.message ?? "",
-                  product: notification.metadata?.productName ?? "",
-                  isRead: notification.isRead ?? false,
-                );
-              },
+                  return buildNotificationCard(
+                    title: notification.title ?? "",
+                    icon: statusIcon,
+                    category: notification.entityType ?? "",
+                    dateTime: notification.createdAt ?? DateTime.now(),
+                    iconColor: statusColor,
+                    message: notification.message ?? "",
+                    product: notification.metadata?.productName ?? "",
+                    isRead: notification.isRead ?? false,
+                  );
+                },
+              ),
             );
           }),
         ),

@@ -40,14 +40,14 @@ class FeedbackService {
   static Future<AddRolemodel?> addConnectorFeedback({
     required int rating,
     required String text,
+    required int id,
   }) async {
     try {
       final response = await _apiManager.postObject(
-        url: APIConstants.connectorFeedback,
+        url: "${APIConstants.connectorGetProductReview}$id/rating",
         body: {
           "rating": rating,
-          "feedback_text": text,
-          "feedback_type": "general",
+          "review_text": text,
           "is_anonymous": false,
         },
       );

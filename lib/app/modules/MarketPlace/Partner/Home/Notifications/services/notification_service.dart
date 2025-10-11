@@ -11,9 +11,14 @@ class NotificationService {
     int limit = 50,
     int offset = 0,
     bool unreadOnly = false,
+    bool isConnector = false,
   }) async {
     try {
-      final response = await _apiManager.get(url: APIConstants.notifications);
+      final response = await _apiManager.get(
+        url: isConnector
+            ? APIConstants.connectorNotifications
+            : APIConstants.notifications,
+      );
       return NotificationModel.fromJson(response);
     } catch (e) {
       log("Error fetching notifications: $e");

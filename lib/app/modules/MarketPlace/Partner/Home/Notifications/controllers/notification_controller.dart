@@ -2,17 +2,18 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/models/notification_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/services/notification_service.dart';
 
-
 class NotificationController extends GetxController {
   final NotificationService _notificationService = NotificationService();
 
   RxBool isLoading = false.obs;
+  RxBool isConnector = false.obs;
   Rx<NotificationModel> notificationModel = NotificationModel().obs;
 
   @override
   void onInit() {
     super.onInit();
-    _loadNotificationsFromStorage();
+    // _loadNotificationsFromStorage();
+    isConnector.value = myPref.getRole() == "merchant_connector";
     fetchNotifications();
   }
 
@@ -31,6 +32,7 @@ class NotificationController extends GetxController {
     try {
       isLoading.value = true;
       final result = await _notificationService.fetchNotifications(
+        isConnector: isConnector.value,
         limit: limit,
         offset: offset,
         unreadOnly: unreadOnly,

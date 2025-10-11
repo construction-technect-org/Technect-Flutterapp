@@ -109,7 +109,10 @@ class APIConstants {
   static const String notifyME = "connector/stock-notification/request";
   static const String addToConnect = "connector/connection-request/send";
   static const String wishList = "connector/wishlist";
-  static const String connectorFeedback = "feedback/connector";
   static const String connectorGetProductReview = "connector/product/";
   static const String connectorMerchantStore= "connector/merchant-store/merchant-stores";
+  static const String connectorNotifications = "connector/notifications";
+  static const String newsConnector = "news/connector";
+
+
 }

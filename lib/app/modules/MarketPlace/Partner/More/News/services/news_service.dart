@@ -4,9 +4,13 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/
 class NewsService {
   final ApiManager _apiManager = ApiManager();
 
-  Future<NewsModel> getNews() async {
+  Future<NewsModel> getNews({required bool isConnector}) async {
     try {
-      final response = await _apiManager.get(url: APIConstants.newsMerchant);
+      final response = await _apiManager.get(
+        url: !isConnector
+            ? APIConstants.newsMerchant
+            : APIConstants.newsConnector,
+      );
       return NewsModel.fromJson(response);
     } catch (e) {
       rethrow;

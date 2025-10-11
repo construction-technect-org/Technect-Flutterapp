@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
@@ -251,7 +250,6 @@ class ConnectorHomeView extends StatelessWidget {
                     ),
                   ),
                   const Gap(10),
-
                   GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.NOTIFICATIONS);

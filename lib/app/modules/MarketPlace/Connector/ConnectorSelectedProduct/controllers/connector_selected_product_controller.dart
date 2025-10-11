@@ -244,7 +244,7 @@ class ConnectorSelectedProductController extends GetxController {
 
         SnackBars.successSnackBar(content: res.message);
         Get.bottomSheet(
-          FeedbackBottomSheetView(),
+          FeedbackBottomSheetView(id: pID??0),
           isScrollControlled: true,
           backgroundColor: Colors.white,
           shape: const RoundedRectangleBorder(
@@ -410,7 +410,9 @@ class ConnectorSelectedProductController extends GetxController {
 }
 
 class FeedbackBottomSheetView extends StatelessWidget {
-  FeedbackBottomSheetView({super.key});
+  final int id;
+
+  FeedbackBottomSheetView({super.key, required this.id});
 
   final suggestionController = TextEditingController();
   RxInt rating = 0.obs;
@@ -430,6 +432,7 @@ class FeedbackBottomSheetView extends StatelessWidget {
       final result = await FeedbackService.addConnectorFeedback(
         text: suggestionController.text,
         rating: rating.value,
+        id: id,
       );
 
       if (result != null && result.success) {
