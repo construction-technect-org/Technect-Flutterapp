@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:gap/gap.dart';
 
@@ -30,7 +31,10 @@ class MenuView extends StatelessWidget {
                   children: [
                     SizedBox(height: 1.h),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24),
                         color: const Color(0xFFFFED29).withValues(alpha: 0.5),
@@ -73,7 +77,19 @@ class MenuView extends StatelessWidget {
                     icon: Asset.profile,
                     title: "Profile Details",
                     onTap: () {
-                      Get.toNamed(Routes.PROFILE);
+                      if ((Get.find<HomeController>()
+                                      .profileData
+                                      .value
+                                      .data
+                                      ?.user
+                                      ?.roleName ??
+                                  "")
+                              .toLowerCase() ==
+                          "House-Owner".toLowerCase()) {
+                        Get.toNamed(Routes.CONNECTOR_PROFILE);
+                      } else {
+                        Get.toNamed(Routes.PROFILE);
+                      }
                     },
                   ),
                   const Gap(20),
@@ -105,7 +121,9 @@ class MenuView extends StatelessWidget {
 
                     title: "Tutorials",
                     onTap: () {
-                      openUrl(url: "https://www.youtube.com/watch?v=hcvmq-hcDIE");
+                      openUrl(
+                        url: "https://www.youtube.com/watch?v=hcvmq-hcDIE",
+                      );
                     },
                   ),
                   const Gap(20),
@@ -375,8 +393,12 @@ class MenuView extends StatelessWidget {
             Text(
               title,
               style: MyTexts.medium16.copyWith(
-                color: isDestructive == true ? MyColors.red : MyColors.fontBlack,
-                fontWeight: highlight == true ? FontWeight.w600 : FontWeight.w800,
+                color: isDestructive == true
+                    ? MyColors.red
+                    : MyColors.fontBlack,
+                fontWeight: highlight == true
+                    ? FontWeight.w600
+                    : FontWeight.w800,
               ),
             ),
           ],
@@ -385,7 +407,6 @@ class MenuView extends StatelessWidget {
     );
   }
 }
-
 
 class CommonContainer extends StatelessWidget {
   final List<Widget> children;
@@ -429,15 +450,25 @@ class CommonRowItem extends StatelessWidget {
             width: 20,
             child: SvgPicture.asset(
               icon,
-              colorFilter: const ColorFilter.mode(MyColors.primary, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                MyColors.primary,
+                BlendMode.srcIn,
+              ),
               height: 20,
               width: 20,
             ),
           ),
           const Gap(20),
-          Text(title, style: MyTexts.regular16.copyWith(color: MyColors.primary)),
+          Text(
+            title,
+            style: MyTexts.regular16.copyWith(color: MyColors.primary),
+          ),
           const Spacer(),
-          const Icon(Icons.arrow_forward_ios, color: MyColors.primary, size: 16),
+          const Icon(
+            Icons.arrow_forward_ios,
+            color: MyColors.primary,
+            size: 16,
+          ),
         ],
       ),
     );

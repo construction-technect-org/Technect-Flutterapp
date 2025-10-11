@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:gap/gap.dart';
@@ -13,7 +14,7 @@ import 'package:image_picker/image_picker.dart';
 class EditProfile extends StatelessWidget {
   EditProfile({super.key});
 
-  final controller = Get.find<HomeController>();
+  // final controller = Get.find<HomeController>();
   final eController = Get.put<EditProfileController>(EditProfileController());
 
   @override
@@ -33,7 +34,6 @@ class EditProfile extends StatelessWidget {
             child: Column(
               children: [
                 Obx(() {
-                  print(controller.profileData.value.data?.user?.image);
                   if (eController.selectedImage.value != null) {
                     return ClipOval(
                       child: Image.file(
@@ -45,20 +45,18 @@ class EditProfile extends StatelessWidget {
                     );
                   }
 
-                  final imagePath = controller.profileData.value.data?.user?.image;
-                  final imageUrl = imagePath != null && imagePath.isNotEmpty
+                  final imagePath =
+                      eController.image.value;
+                  final imageUrl = imagePath.isNotEmpty
                       ? "${APIConstants.bucketUrl}$imagePath"
                       : null;
-
-                  if (imagePath == null) {
-                    return const Icon(
-                      Icons.account_circle,
-                      size: 100,
-                      color: Colors.grey,
-                    );
-                  }
                   return ClipOval(
-                    child: getImageView(finalUrl: imageUrl??"",height: 100,width: 100,fit: BoxFit.cover)
+                    child: getImageView(
+                      finalUrl: imageUrl ?? "",
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   );
                 }),
                 const Gap(8),
@@ -122,8 +120,7 @@ class EditProfileController extends GetxController {
   final fNameController = TextEditingController();
   final lNameController = TextEditingController();
   final emailController = TextEditingController();
-  final pController = Get.find<ProfileController>();
-  final hController = Get.find<HomeController>();
+  RxString image="".obs;
 
   Rx<File?> selectedImage = Rx<File?>(null);
 
@@ -132,9 +129,20 @@ class EditProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    lNameController.text = pController.userData?.lastName ?? "";
-    fNameController.text = pController.userData?.firstName ?? "";
-    emailController.text = pController.userData?.email ?? "";
+    if (myPref.getRole() == "merchant_partner") {
+      final pController = Get.find<ProfileController>();
+      lNameController.text = pController.userData?.lastName ?? "";
+      fNameController.text = pController.userData?.firstName ?? "";
+      emailController.text = pController.userData?.email ?? "";
+      image.value = pController.userData?.image ?? "";
+    }else{
+      final pController = Get.find<ConnectorHomeController>();
+      lNameController.text = pController.profileData.value.data?.user?.lastName ?? "";
+      fNameController.text = pController.profileData.value.data?.user?.firstName ?? "";
+      emailController.text = pController.profileData.value.data?.user?.email ?? "";
+      image.value = pController.profileData.value.data?.user?.image ?? "";
+    }
+
   }
 
   void pickImageBottomSheet(BuildContext context) {
@@ -172,7 +180,9 @@ class EditProfileController extends GetxController {
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile == null) return;
-    final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
+    final compressedFile = await CommonConstant().compressImage(
+      File(pickedFile.path),
+    );
     selectedImage.value = File(compressedFile.path);
   }
 
@@ -200,7 +210,11 @@ class EditProfileController extends GetxController {
       );
 
       // Handle success
-      await hController.fetchProfileData();
+      if (myPref.getRole() == "merchant_partner") {
+        await Get.find<HomeController>().fetchProfileData();
+      } else {
+        await Get.find<ConnectorHomeController>().fetchProfileData();
+      }
       Get.back();
       SnackBars.successSnackBar(content: "Profile updated successfully!");
     } catch (e, st) {

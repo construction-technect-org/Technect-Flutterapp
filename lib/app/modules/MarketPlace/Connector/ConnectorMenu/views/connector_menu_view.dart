@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/controllers/connector_main_tab_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
 import 'package:gap/gap.dart';
@@ -77,7 +78,19 @@ class ConnectorMenuView extends StatelessWidget {
                     icon: Asset.profile,
                     title: "Profile Details",
                     onTap: () {
-                      Get.toNamed(Routes.PROFILE);
+                      if ((Get.find<ConnectorHomeController>()
+                                      .profileData
+                                      .value
+                                      .data
+                                      ?.user
+                                      ?.roleName ??
+                                  "")
+                              .toLowerCase() ==
+                          "House-Owner".toLowerCase()) {
+                        Get.toNamed(Routes.CONNECTOR_PROFILE);
+                      } else {
+                        Get.toNamed(Routes.PROFILE);
+                      }
                     },
                   ),
                   // const Gap(20),

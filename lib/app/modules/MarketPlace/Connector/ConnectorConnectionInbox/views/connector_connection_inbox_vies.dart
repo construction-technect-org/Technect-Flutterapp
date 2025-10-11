@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/controllers/connector_connection_inbox_controller.dart';
@@ -13,16 +14,19 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.white,
-      appBar: CommonAppBar(
-        isCenter: false,
-        leading: const SizedBox(),
-        leadingWidth: 0,
-        title: const Text("CONNECTION INBOX"),
-      ),
-      body: SafeArea(
-        child: Column(
+    return GestureDetector(
+      onTap: () {
+        hideKeyboard();
+      },
+      child: Scaffold(
+        backgroundColor: MyColors.white,
+        appBar: CommonAppBar(
+          isCenter: false,
+          leading: const SizedBox(),
+          leadingWidth: 0,
+          title: const Text("CONNECTION INBOX"),
+        ),
+        body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
@@ -13,16 +14,19 @@ class ConnectionInboxView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.white,
-      appBar: CommonAppBar(
-        isCenter: false,
-        leading: const SizedBox(),
-        leadingWidth: 0,
-        title: const Text("CONNECTION INBOX"),
-      ),
-      body: SafeArea(
-        child: Column(
+    return GestureDetector(
+      onTap: () {
+        hideKeyboard();
+      },
+      child: Scaffold(
+        backgroundColor: MyColors.white,
+        appBar: CommonAppBar(
+          isCenter: false,
+          leading: const SizedBox(),
+          leadingWidth: 0,
+          title: const Text("CONNECTION INBOX"),
+        ),
+        body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -50,9 +54,10 @@ class ConnectionInboxView extends StatelessWidget {
                 },
                 child: Obx(() {
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator(color: MyColors.primary,));
-                  }
-                else  if (controller.filteredConnections.isEmpty) {
+                    return const Center(
+                      child: CircularProgressIndicator(color: MyColors.primary),
+                    );
+                  } else if (controller.filteredConnections.isEmpty) {
                     return SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: SizedBox(
@@ -149,27 +154,22 @@ class ConnectionInboxView extends StatelessWidget {
                                                   width: 44,
                                                   height: 44,
                                                   fit: BoxFit.cover,
-                                                  placeholder:
-                                                      (
-                                                        context,
-                                                        url,
-                                                      ) => const ColoredBox(
-                                                        color: MyColors
-                                                            .lightGray,
+                                                  placeholder: (context, url) =>
+                                                      const ColoredBox(
+                                                        color:
+                                                            MyColors.lightGray,
                                                         child: Center(
                                                           child:
                                                               CircularProgressIndicator(),
                                                         ),
                                                       ),
                                                   errorWidget:
-                                                      (
-                                                        context,
-                                                        url,
-                                                        error,
-                                                      ) => Icon(
-                                                        Icons.person,
-                                                        color: MyColors.white,
-                                                      ),
+                                                      (context, url, error) =>
+                                                          Icon(
+                                                            Icons.person,
+                                                            color:
+                                                                MyColors.white,
+                                                          ),
                                                 ),
                                               )
                                             : Icon(
@@ -185,22 +185,18 @@ class ConnectionInboxView extends StatelessWidget {
                                           children: [
                                             Text(
                                               "${connection.connectorName ?? 'Unknown'} wants to connect with you",
-                                              style: MyTexts.medium16
-                                                  .copyWith(
-                                                    color: MyColors.fontBlack,
-                                                    fontFamily:
-                                                        MyTexts.Roboto,
-                                                  ),
+                                              style: MyTexts.medium16.copyWith(
+                                                color: MyColors.fontBlack,
+                                                fontFamily: MyTexts.Roboto,
+                                              ),
                                             ),
                                             const Gap(4),
                                             Text(
                                               "User   •   ${connection.createdAt?.toLocal().toString().split(' ')[0] ?? 'Unknown date'}",
-                                              style: MyTexts.regular14
-                                                  .copyWith(
-                                                    color: MyColors.fontBlack,
-                                                    fontFamily:
-                                                        MyTexts.Roboto,
-                                                  ),
+                                              style: MyTexts.regular14.copyWith(
+                                                color: MyColors.fontBlack,
+                                                fontFamily: MyTexts.Roboto,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -259,8 +255,9 @@ class ConnectionInboxView extends StatelessWidget {
                                           backgroundColor: MyColors.primary,
                                           // Navy Blue
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            ),
                                           ),
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 20,
@@ -291,8 +288,9 @@ class ConnectionInboxView extends StatelessWidget {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: MyColors.red,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            ),
                                           ),
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 20,

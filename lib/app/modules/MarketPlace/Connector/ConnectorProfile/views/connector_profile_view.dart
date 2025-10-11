@@ -2,12 +2,9 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/connector_info_metrics_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 
 class ConnectorProfileView extends GetView<ConnectorProfileController> {
-  ConnectorProfileView({super.key});
-
-  final HomeController controller1 = Get.put(HomeController());
+  const ConnectorProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +115,12 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
 
   Widget _buildTabBar() {
     return SizedBox(
-      width: Get.width, // 👈 force full screen width
+      width: Get.width,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center, // 👈 center children
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [_buildTabItem(0, 'Info & Metrics')],
         ),
       ),
