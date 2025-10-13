@@ -200,20 +200,21 @@ class ProductCard extends StatelessWidget {
                           BlendMode.srcIn,
                         ),
                       ),
-                      const Gap(4),
-                      Expanded(
-                        child: Text(
-                          product.address ??
-                              "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.fontBlack,
-                            fontFamily: MyTexts.Roboto,
+                      if (isPartner == false) const Gap(4),
+                      if (isPartner == false)
+                        Expanded(
+                          child: Text(
+                            product.address ??
+                                "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
+                            style: MyTexts.regular14.copyWith(
+                              color: MyColors.fontBlack,
+                              fontFamily: MyTexts.Roboto,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            maxLines: 1,
                           ),
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          maxLines: 1,
                         ),
-                      ),
                       Gap(4),
                       Text(
                         "- ${double.parse(product.distanceKm ?? "0.0").toStringAsFixed(2)} KM",
