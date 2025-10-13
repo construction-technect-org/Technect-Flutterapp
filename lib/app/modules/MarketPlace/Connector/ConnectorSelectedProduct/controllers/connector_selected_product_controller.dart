@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
@@ -178,7 +177,7 @@ class ConnectorSelectedProductController extends GetxController {
       }
       productListModel.value = res;
       filteredProducts.clear();
-      filteredProducts.value = res.data?.products ?? [];
+      filteredProducts.assignAll(res.data?.products ?? []);
     } catch (e) {
       if (kDebugMode) {
         print(e);
