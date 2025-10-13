@@ -7,7 +7,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
 import 'package:gap/gap.dart';
 
 class CustomerSupportView extends StatelessWidget {
-  final CustomerSupportController controller = Get.put(CustomerSupportController());
+  final CustomerSupportController controller = Get.put(
+    CustomerSupportController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,11 @@ class CustomerSupportView extends StatelessWidget {
                 //   height: 20,
                 //   width: 20,
                 // ),
-                prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                prefixIcon: SvgPicture.asset(
+                  Asset.searchIcon,
+                  height: 16,
+                  width: 16,
+                ),
               ),
             ),
             SizedBox(height: 1.h),
@@ -81,7 +87,9 @@ class CustomerSupportView extends StatelessWidget {
                                         height: 20,
                                         width: 20,
                                       ),
-                                      iconBackground: MyColors.red.withValues(alpha: 0.2),
+                                      iconBackground: MyColors.red.withValues(
+                                        alpha: 0.2,
+                                      ),
                                     );
                                   }),
                                 ),
@@ -103,9 +111,8 @@ class CustomerSupportView extends StatelessWidget {
                                         size: 30,
                                         color: MyColors.warning,
                                       ),
-                                      iconBackground: MyColors.warning.withValues(
-                                        alpha: 0.2,
-                                      ),
+                                      iconBackground: MyColors.warning
+                                          .withValues(alpha: 0.2),
                                     );
                                   }),
                                 ),
@@ -144,20 +151,19 @@ class CustomerSupportView extends StatelessWidget {
                                       onTap: () {
                                         Get.toNamed(
                                           Routes.SUPPORT_REQUEST,
-                                          arguments: {"status": "resolved"},
+                                          arguments: {"status": "closed"},
                                         );
                                       },
-                                      title: 'Avg Response',
+                                      title: 'Closed',
                                       value:
-                                          "${controller.supportMyTickets.value.data?.statistics?.avgResponse ?? 0}",
+                                          "${controller.supportMyTickets.value.data?.statistics?.closedTickets ?? 0}",
                                       icon: const Icon(
                                         Icons.watch_later_outlined,
                                         size: 30,
                                         color: MyColors.primary,
                                       ),
-                                      iconBackground: MyColors.lightBlue.withValues(
-                                        alpha: 0.2,
-                                      ),
+                                      iconBackground: MyColors.lightBlue
+                                          .withValues(alpha: 0.2),
                                     );
                                   }),
                                 ),
@@ -172,7 +178,9 @@ class CustomerSupportView extends StatelessWidget {
                                       Get.toNamed(Routes.REQUEST_DEMO);
                                     },
                                     style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(color: MyColors.primary),
+                                      side: const BorderSide(
+                                        color: MyColors.primary,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                           12,
@@ -218,14 +226,21 @@ class CustomerSupportView extends StatelessWidget {
                         ),
                       ),
                       Obx(() {
-                        if (controller.supportMyTickets.value.data?.tickets?.isEmpty ??
+                        if (controller
+                                .supportMyTickets
+                                .value
+                                .data
+                                ?.tickets
+                                ?.isEmpty ??
                             true) {
                           return Padding(
                             padding: const EdgeInsets.only(top: 80),
                             child: Center(
                               child: Text(
                                 "No tickets found !!",
-                                style: MyTexts.regular16.copyWith(color: Colors.black),
+                                style: MyTexts.regular16.copyWith(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           );
@@ -266,7 +281,8 @@ class CustomerSupportView extends StatelessWidget {
                                 padding: const EdgeInsets.all(16),
                                 itemCount: controller.filteredTickets.length,
                                 itemBuilder: (context, index) {
-                                  final ticket = controller.filteredTickets[index];
+                                  final ticket =
+                                      controller.filteredTickets[index];
 
                                   return Card(
                                     color: MyColors.white,
@@ -280,7 +296,8 @@ class CustomerSupportView extends StatelessWidget {
                                     child: Padding(
                                       padding: const EdgeInsets.all(16),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
@@ -288,7 +305,8 @@ class CustomerSupportView extends StatelessWidget {
                                                 ticket.ticketNumber ?? "",
                                                 MyColors.white,
                                                 MyColors.black,
-                                                borderColor: MyColors.americanSilver,
+                                                borderColor:
+                                                    MyColors.americanSilver,
                                               ),
                                               SizedBox(width: 2.w),
                                               _buildChip(
@@ -319,7 +337,9 @@ class CustomerSupportView extends StatelessWidget {
                                           ),
                                           SizedBox(height: 1.h),
                                           Text(
-                                            (ticket.subject ?? "").capitalizeFirst ?? "-",
+                                            (ticket.subject ?? "")
+                                                    .capitalizeFirst ??
+                                                "-",
                                             style: MyTexts.medium16.copyWith(
                                               color: MyColors.fontBlack,
                                               fontFamily: MyTexts.Roboto,
@@ -336,10 +356,12 @@ class CustomerSupportView extends StatelessWidget {
                                               SizedBox(width: 0.4.w),
                                               Text(
                                                 ticket.userMobile ?? "",
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.Roboto,
-                                                ),
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.darkGray,
+                                                      fontFamily:
+                                                          MyTexts.Roboto,
+                                                    ),
                                               ),
                                               SizedBox(width: 3.w),
                                               const Icon(
@@ -350,10 +372,12 @@ class CustomerSupportView extends StatelessWidget {
                                               SizedBox(width: 1.w),
                                               Text(
                                                 ticket.categoryName ?? "",
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.Roboto,
-                                                ),
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.darkGray,
+                                                      fontFamily:
+                                                          MyTexts.Roboto,
+                                                    ),
                                               ),
                                             ],
                                           ),

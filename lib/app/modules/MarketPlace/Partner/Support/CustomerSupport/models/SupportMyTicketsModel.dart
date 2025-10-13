@@ -85,16 +85,18 @@ class Pagination {
 }
 
 class Statistics {
-  int? openTickets;
-  int? inProgressTickets;
-  int? resolvedTickets;
-  int? avgResponse;
-  int? totalTeamMember;
-  int? activeTeamMember;
-  int? totalRoles;
-  int? activeRoles;
+  String? openTickets;
+  String? closedTickets;
+  String? inProgressTickets;
+  String? resolvedTickets;
+  String? avgResponse;
+  String? totalTeamMember;
+  String? activeTeamMember;
+  String? totalRoles;
+  String? activeRoles;
   Statistics({
     this.openTickets,
+    this.closedTickets,
     this.inProgressTickets,
     this.resolvedTickets,
     this.totalTeamMember,
@@ -105,19 +107,21 @@ class Statistics {
   });
 
   Statistics.fromJson(Map<String, dynamic> json) {
-    openTickets = json['open_tickets'];
-    inProgressTickets = json['in_progress_tickets'];
-    resolvedTickets = json['resolved_tickets'];
-    avgResponse = json['avg_response'];
-    totalTeamMember = json['total_team_members'];
-    totalRoles = json['total_roles'];
-    activeRoles = json['active_roles'];
-    activeTeamMember = json['active_team_members'];
+    openTickets = json['open_tickets'].toString();
+    closedTickets = json['closed_tickets'].toString();
+    inProgressTickets = json['in_progress_tickets'].toString();
+    resolvedTickets = json['resolved_tickets'].toString();
+    avgResponse = json['avg_response'].toString();
+    totalTeamMember = json['total_team_members'].toString();
+    totalRoles = json['total_roles'].toString();
+    activeRoles = json['active_roles'].toString();
+    activeTeamMember = json['active_team_members'].toString();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['open_tickets'] = openTickets;
+    data['closed_tickets'] = closedTickets;
     data['in_progress_tickets'] = inProgressTickets;
     data['resolved_tickets'] = resolvedTickets;
     data['avg_response'] = avgResponse;

@@ -35,7 +35,7 @@ class SettingService {
   }) async {
     try {
       final response = await _apiManager.postObject(
-        url:isDeactivate? APIConstants.deactivateVerifyOtp: APIConstants.deactivateVerifyOtp,
+        url:isDeactivate? APIConstants.deactivateVerifyOtp: APIConstants.deleteVerifyOtp,
         body: {
           "countryCode": countryCode,
           "mobileNumber": mobileNumber,

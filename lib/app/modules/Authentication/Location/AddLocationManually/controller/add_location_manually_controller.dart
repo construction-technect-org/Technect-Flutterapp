@@ -10,6 +10,7 @@ class AddLocationController extends GetxController {
   final addressLine2Controller = TextEditingController();
   final landmarkController = TextEditingController();
   final cityController = TextEditingController();
+  final countryController = TextEditingController();
   final stateController = TextEditingController();
   final pinCodeController = TextEditingController();
 
@@ -50,6 +51,7 @@ class AddLocationController extends GetxController {
           landmarkController.text = place2.subAdministrativeArea ?? "";
           stateController.text = place2.administrativeArea ?? "";
           pinCodeController.text = place2.postalCode ?? "";
+          countryController.text = place2.country ?? "";
         }
       } else {
         if (Get.arguments["isCLocation"] != null) {
@@ -60,6 +62,7 @@ class AddLocationController extends GetxController {
           landmarkController.text = place2.subAdministrativeArea ?? "";
           stateController.text = place2.administrativeArea ?? "";
           pinCodeController.text = place2.postalCode ?? "";
+          countryController.text = place2.country ?? "";
         }
       }
     }
@@ -144,15 +147,6 @@ class AddLocationController extends GetxController {
   }
 
   Future<void> submitLocation() async {
-    if (addressLine1Controller.text.trim().isEmpty ||
-        landmarkController.text.trim().isEmpty ||
-        cityController.text.trim().isEmpty ||
-        stateController.text.trim().isEmpty ||
-        pinCodeController.text.trim().isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please fill all required fields');
-      return;
-    }
-
     if (pinCodeController.text.trim().length != 6) {
       SnackBars.errorSnackBar(content: 'Please enter a valid 6-digit pin code');
       return;
@@ -183,7 +177,7 @@ class AddLocationController extends GetxController {
           city: cityController.text.trim(),
           state: stateController.text.trim(),
           pinCode: pinCodeController.text.trim(),
-          country: cityController.text.trim(),
+          country: countryController.text.trim(),
           latitude: latitude,
           longitude: longitude,
           addressType: addressType,
@@ -194,7 +188,7 @@ class AddLocationController extends GetxController {
           addressLine1: addressLine1Controller.text.trim(),
           addressLine2: addressLine2Controller.text.trim(),
           landmark: landmarkController.text.trim(),
-          city: cityController.text.trim(),
+          city: countryController.text.trim(),
           state: stateController.text.trim(),
           pinCode: pinCodeController.text.trim(),
           latitude: latitude,
@@ -203,7 +197,7 @@ class AddLocationController extends GetxController {
         );
         if (response['success'] == true) {
           await _addressService.addAddressManually(
-            country: cityController.text.trim(),
+            country: countryController.text.trim(),
             addressLine1: addressLine1Controller.text.trim(),
             addressLine2: addressLine2Controller.text.trim(),
             landmark: landmarkController.text.trim(),

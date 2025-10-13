@@ -133,23 +133,6 @@ class CreateNewTicketController extends GetxController {
 
   /// Submit Ticket
   Future<void> submitTicket() async {
-    if (selectedCategory.value == null) {
-      SnackBars.errorSnackBar(content: 'Please select a category');
-      return;
-    }
-    if (selectedPriority.value == null) {
-      SnackBars.errorSnackBar(content: 'Please select a priority');
-      return;
-    }
-    if (subjectController.text.trim().isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please enter a subject');
-      return;
-    }
-    if (descriptionController.text.trim().isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please enter a description');
-      return;
-    }
-
     try {
       isSubmitting.value = true;
       isLoading.value = true;
@@ -162,11 +145,6 @@ class CreateNewTicketController extends GetxController {
       );
 
       if (response.success) {
-        subjectController.clear();
-        descriptionController.clear();
-        selectedCategory.value = null;
-        selectedPriority.value = null;
-        isSubmitting.value = false;
         await controller.fetchMyTickets();
         Get.back();
       }

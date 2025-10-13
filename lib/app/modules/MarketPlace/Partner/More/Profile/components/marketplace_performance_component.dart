@@ -212,7 +212,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                 Obx(() {
                   return Text(
                     controller.merchantProfile?.memberSince != null
-                        ? DateFormat('dd MM yyyy').format(
+                        ? DateFormat('dd/MM/yyyy').format(
                             DateTime.parse(controller.merchantProfile!.memberSince!),
                           )
                         : 'Unknown',

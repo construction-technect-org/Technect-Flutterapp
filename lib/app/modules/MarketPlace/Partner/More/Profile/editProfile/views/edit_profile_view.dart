@@ -36,14 +36,12 @@ class EditProfileView extends GetView<EditProfileController> {
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Obx(
-                () => RoundedButton(
-                  buttonName: 'UPDATE',
-                  onTap: () {
-                    controller.updateProfile();
-                  },
-                ).paddingOnly(bottom: 30, right: 20, left: 20),
-              ),
+              RoundedButton(
+                buttonName: 'UPDATE',
+                onTap: () {
+                  controller.updateProfile();
+                },
+              ).paddingOnly(bottom: 30, right: 20, left: 20),
             ],
           ),
           body: SingleChildScrollView(
@@ -62,7 +60,7 @@ class EditProfileView extends GetView<EditProfileController> {
                   ),
                 ),
                 const Gap(20),
-                Obx(() => _buildBusinessDetailsStep()),
+                _buildBusinessDetailsStep(),
                 SizedBox(height: 4.h),
               ],
             ),

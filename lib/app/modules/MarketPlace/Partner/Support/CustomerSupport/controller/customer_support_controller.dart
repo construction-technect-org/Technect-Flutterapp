@@ -41,6 +41,7 @@ class CustomerSupportController extends GetxController {
         await _loadTicketsFromStorage();
       }
     } catch (e) {
+      print(e);
       // No Error Show
     } finally {
       isLoading.value = false;

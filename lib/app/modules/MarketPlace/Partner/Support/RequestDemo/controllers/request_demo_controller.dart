@@ -12,6 +12,8 @@ class RequestDemoController extends GetxController {
     "Interior",
     "Painting",
   ];
+  RxInt isValid = (-1).obs;
+  RxString countryCode = "".obs;
 
   RxString selectedMainCategory = "".obs;
   bool isEdit = false;
@@ -26,24 +28,6 @@ class RequestDemoController extends GetxController {
   final String videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 
   Future<void> addRequestDemo() async {
-    if (selectedMainCategory.value.isEmpty) {
-      SnackBars.errorSnackBar(content: "Select demo category");
-      return;
-    }
-    if (phoneNumberController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: "Please fill phone number ");
-      return;
-    } else if (int.parse(phoneNumberController.text) == 10) {
-      SnackBars.errorSnackBar(content: "Please fill valid phone number ");
-      return;
-    }
-    if (emilaController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: "Please fill email address");
-      return;
-    } else if (!GetUtils.isEmail(emilaController.text)) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid email');
-      return;
-    }
     try {
       final result = await RequestDemoService.addRequestDemo(
         demoFor: selectedMainCategory.value,

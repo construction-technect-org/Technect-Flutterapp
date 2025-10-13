@@ -744,6 +744,7 @@ class HomeView extends StatelessWidget {
                       administrativeArea: address?.state,
                       locality: address?.city,
                       street: address?.addressLine2,
+                      country:  address?.country,
                     );
                     Get.back();
                     Get.toNamed(

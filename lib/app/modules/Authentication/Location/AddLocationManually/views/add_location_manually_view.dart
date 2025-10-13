@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validators.dart';
-import 'package:construction_technect/app/core/widgets/custom_text_field.dart';
 import 'package:construction_technect/app/modules/Authentication/Location/AddLocationManually/controller/add_location_manually_controller.dart';
 
 class AddLocationManuallyView extends GetView<AddLocationController> {
@@ -80,24 +80,8 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'Address Line 1',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.lightBlue,
-                                  ),
-                                ),
-                                Text(
-                                  '*',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 1.h),
-                            CustomTextField(
+                            CommonTextField(
+                              headerText: 'Address Line 1',
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return "Please enter Address 1";
@@ -108,45 +92,14 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                             ),
 
                             SizedBox(height: 2.h),
-                            Row(
-                              children: [
-                                Text(
-                                  'Address Line 2',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.lightBlue,
-                                  ),
-                                ),
-                                Text(
-                                  '*',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 1.h),
-                            CustomTextField(
+                            CommonTextField(
+                              headerText: 'Address Line 2',
+                              isRed: false,
                               controller: controller.addressLine2Controller,
                             ),
                             SizedBox(height: 2.h),
-                            Row(
-                              children: [
-                                Text(
-                                  'Landmark',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.lightBlue,
-                                  ),
-                                ),
-                                Text(
-                                  '*',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 1.h),
-                            CustomTextField(
+                            CommonTextField(
+                              headerText: 'Landmark',
                               controller: controller.landmarkController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -156,70 +109,29 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                               },
                             ),
                             SizedBox(height: 2.h),
-                            Row(
-                              children: [
-                                Text(
-                                  'City',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.lightBlue,
-                                  ),
-                                ),
-                                Text(
-                                  '*',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 1.h),
-                            CustomTextField(
+                            CommonTextField(
+                              headerText: 'City',
                               controller: controller.cityController,
                               validator: (value) =>
                                   validateFields(value, "City"),
                             ),
                             SizedBox(height: 2.h),
-                            Row(
-                              children: [
-                                Text(
-                                  'State',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.lightBlue,
-                                  ),
-                                ),
-                                Text(
-                                  '*',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 1.h),
-                            CustomTextField(
+                            CommonTextField(
+                              headerText: 'State',
                               controller: controller.stateController,
                               validator: (value) =>
                                   validateFields(value, "State"),
                             ),
                             SizedBox(height: 2.h),
-                            Row(
-                              children: [
-                                Text(
-                                  'Pin Code',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.lightBlue,
-                                  ),
-                                ),
-                                Text(
-                                  '*',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.red,
-                                  ),
-                                ),
-                              ],
+                            CommonTextField(
+                              headerText: 'Country',
+                              controller: controller.countryController,
+                              validator: (value) =>
+                                  validateFields(value, "Country"),
                             ),
-                            SizedBox(height: 1.h),
-                            CustomTextField(
+                            SizedBox(height: 2.h),
+                            CommonTextField(
+                              headerText: 'Pin Code',
                               controller: controller.pinCodeController,
                               keyboardType: TextInputType.number,
                               validator: validatePinCode,
@@ -229,7 +141,7 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                                 LengthLimitingTextInputFormatter(6),
                               ],
                             ),
-                            SizedBox(height: 2.h), // ✅ space before button
+                            SizedBox(height: 2.h),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

@@ -41,6 +41,7 @@ class Address {
   String? landmark;
   String? city;
   String? state;
+  String? country;
   String? pinCode;
   String? latitude;
   String? longitude;
@@ -62,6 +63,7 @@ class Address {
     this.longitude,
     this.isDefault,
     this.addressType,
+    this.country,
     this.createdAt,
     this.updatedAt,
   });
@@ -77,6 +79,7 @@ class Address {
     pinCode: json["pin_code"],
     latitude: json["latitude"],
     longitude: json["longitude"],
+    country: json["country"],
     isDefault: json["is_default"],
     addressType: json["address_type"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
@@ -93,6 +96,7 @@ class Address {
     "state": state,
     "pin_code": pinCode,
     "latitude": latitude,
+    "country": country,
     "longitude": longitude,
     "is_default": isDefault,
     "address_type": addressType,

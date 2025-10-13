@@ -224,6 +224,7 @@ class CommonTextField extends StatelessWidget {
             color: MyColors.primary,
             fontFamily: MyTexts.Roboto,
           ),
+
           autofillHints: autofillHints,
           onFieldSubmitted: onFieldSubmitted,
           readOnly: readOnly,

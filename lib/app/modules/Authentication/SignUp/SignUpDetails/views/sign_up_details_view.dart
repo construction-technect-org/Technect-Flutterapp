@@ -54,7 +54,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                             NameInputFormatter(),
                           ],
                           validator: (value) =>
-                              validateName(value, fieldName: "First name"),
+                              validateName(value, fieldName: "first name"),
                         ),
 
                         SizedBox(height: 1.8.h),
@@ -69,7 +69,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                             NameInputFormatter(),
                           ],
                           validator: (value) =>
-                              validateName(value, fieldName: "Last name"),
+                              validateName(value, fieldName: "last name"),
                         ),
                         SizedBox(height: 1.8.h),
                         Focus(
