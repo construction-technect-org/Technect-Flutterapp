@@ -214,6 +214,17 @@ class ProductCard extends StatelessWidget {
                           maxLines: 1,
                         ),
                       ),
+                      Gap(4),
+                      Text(
+                        "- ${double.parse(product.distanceKm ?? "0.0").toStringAsFixed(2)} KM",
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.black,
+                          fontFamily: MyTexts.Roboto,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        maxLines: 1,
+                      ),
                     ],
                   ),
                   SizedBox(height: 0.8.h),
