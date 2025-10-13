@@ -164,9 +164,12 @@ class ConnectorSelectedProductController extends GetxController {
         subCategoryId: selectedSubCategoryId.value ?? '',
         categoryProductId: selectedProductId.value ?? '',
         filters: filtersData ?? {},
-        latitude: latitude,
-        longitude: longitude,
-        radius: radius,
+        // latitude: latitude,
+        // longitude: longitude,
+        // radius: radius,
+        radius: selectedRadius.value,
+        longitude: selectedAddress.value.longitude,
+        latitude: selectedAddress.value.latitude,
       );
       if (filter == true) {
         isFilterApply.value = true;
@@ -190,11 +193,7 @@ class ConnectorSelectedProductController extends GetxController {
       isLoading.value = true;
       final res = await services.notifyMe(mID: mID);
       if (res.success == true) {
-        await getAllProducts(
-          radius: selectedRadius.value,
-          longitude: selectedAddress.value.longitude,
-          latitude: selectedAddress.value.latitude,
-        );
+        await getAllProducts();
         SnackBars.successSnackBar(content: res.message);
       }
     } catch (e) {
@@ -211,11 +210,7 @@ class ConnectorSelectedProductController extends GetxController {
       isLoading.value = true;
       final res = await WishListServices().wishList(mID: mID, status: status);
       if (res.success == true) {
-        await getAllProducts(
-          radius: selectedRadius.value,
-          longitude: selectedAddress.value.longitude,
-          latitude: selectedAddress.value.latitude,
-        );
+        await getAllProducts();
         SnackBars.successSnackBar(content: res.message);
       }
     } catch (e) {
@@ -236,15 +231,11 @@ class ConnectorSelectedProductController extends GetxController {
         pID: pID,
       );
       if (res.success == true) {
-        await getAllProducts(
-          radius: selectedRadius.value,
-          longitude: selectedAddress.value.longitude,
-          latitude: selectedAddress.value.latitude,
-        );
+        await getAllProducts();
 
         SnackBars.successSnackBar(content: res.message);
         Get.bottomSheet(
-          FeedbackBottomSheetView(id: pID??0),
+          FeedbackBottomSheetView(id: pID ?? 0),
           isScrollControlled: true,
           backgroundColor: Colors.white,
           shape: const RoundedRectangleBorder(

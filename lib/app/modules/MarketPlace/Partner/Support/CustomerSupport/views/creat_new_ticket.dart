@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/utils/validators.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/controller/create_new_ticket_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';

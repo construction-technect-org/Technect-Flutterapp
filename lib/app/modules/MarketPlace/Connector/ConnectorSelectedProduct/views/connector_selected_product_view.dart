@@ -294,10 +294,14 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                 if (controller.selectedRadius.value > 1) {
                                   controller.selectedRadius.value -= 1;
                                   controller.radiusController.value.text =
-                                      controller.selectedRadius.value.toString();
+                                      controller.selectedRadius.value
+                                          .toString();
                                 }
                               },
-                              child: const Icon(Icons.arrow_drop_down, size: 20),
+                              child: const Icon(
+                                Icons.arrow_drop_down,
+                                size: 20,
+                              ),
                             ),
                           ],
                         ),
@@ -309,7 +313,6 @@ class SelectLocationBottomSheet extends StatelessWidget {
                         }
                       },
                     ),
-
                   ),
                   const SizedBox(width: 4),
                   const Text(" KM"),
@@ -413,7 +416,8 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                 // Address Details
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         address.siteName?.capitalizeFirst ?? '',
@@ -482,7 +486,9 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                           color: Colors.blue.withValues(
                                             alpha: 0.1,
                                           ),
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
                                         ),
                                         child: const Icon(
                                           Icons.edit,
@@ -502,7 +508,9 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                           color: Colors.red.withValues(
                                             alpha: 0.1,
                                           ),
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
                                         ),
                                         child: const Icon(
                                           Icons.delete,
@@ -526,19 +534,14 @@ class SelectLocationBottomSheet extends StatelessWidget {
                   buttonName: 'Continue',
                   onTap: () async {
                     if ((controller.selectedAddress.value.id ?? 0) != 0) {
-                      await controller.getAllProducts(
-                        radius: controller.selectedRadius.value,
-                        longitude: controller.selectedAddress.value.longitude,
-                        latitude: controller.selectedAddress.value.latitude,
-                      );
+                      await controller.getAllProducts();
                       Get.put<ConnectorFilterController>(
                         ConnectorFilterController(),
                       );
                       Get.back();
                       Get.to(() => const AllProduct());
                       return;
-                    }
-                    else{
+                    } else {
                       SnackBars.errorSnackBar(content: "Please select site");
                     }
                   },
