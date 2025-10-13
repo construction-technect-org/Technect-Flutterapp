@@ -200,32 +200,33 @@ class ProductCard extends StatelessWidget {
                           BlendMode.srcIn,
                         ),
                       ),
-                      if (isPartner == false) const Gap(4),
-                      if (isPartner == false)
-                        Expanded(
-                          child: Text(
-                            product.address ??
-                                "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
-                            style: MyTexts.regular14.copyWith(
-                              color: MyColors.fontBlack,
-                              fontFamily: MyTexts.Roboto,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            maxLines: 1,
+                      const Gap(4),
+
+                      Expanded(
+                        child: Text(
+                          product.address ??
+                              "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
+                          style: MyTexts.regular14.copyWith(
+                            color: MyColors.fontBlack,
+                            fontFamily: MyTexts.Roboto,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 1,
                         ),
-                      Gap(4),
-                      Text(
-                        "- ${double.parse(product.distanceKm ?? "0.0").toStringAsFixed(2)} KM",
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.black,
-                          fontFamily: MyTexts.Roboto,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                        maxLines: 1,
                       ),
+                      if (isPartner == false) Gap(4),
+                      if (isPartner == false)
+                        Text(
+                          "- ${double.parse(product.distanceKm ?? "0.0").toStringAsFixed(2)} KM",
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.black,
+                            fontFamily: MyTexts.Roboto,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 1,
+                        ),
                     ],
                   ),
                   SizedBox(height: 0.8.h),
@@ -311,7 +312,6 @@ class ProductCard extends StatelessWidget {
                         width: Get.width / 2 - 24,
                       )
                     else if (product.isNotify == true)
-                      // 🚫 Already Notified (disabled)
                       RoundedButton(
                         onTap: null,
                         fontSize: 10,
@@ -333,3 +333,5 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
+// 12.99661349, longitude: 77.59205818,
