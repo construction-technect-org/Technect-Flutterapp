@@ -84,7 +84,7 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                               headerText: 'Address Line 1',
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Please enter Address 1";
+                                  return "Please enter address 1";
                                 }
                                 return null;
                               },
@@ -103,7 +103,7 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                               controller: controller.landmarkController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Please enter Landmark";
+                                  return "Please enter landmark";
                                 }
                                 return null;
                               },
@@ -113,21 +113,21 @@ class AddLocationManuallyView extends GetView<AddLocationController> {
                               headerText: 'City',
                               controller: controller.cityController,
                               validator: (value) =>
-                                  validateFields(value, "City"),
+                                  validateFields(value, "city"),
                             ),
                             SizedBox(height: 2.h),
                             CommonTextField(
                               headerText: 'State',
                               controller: controller.stateController,
                               validator: (value) =>
-                                  validateFields(value, "State"),
+                                  validateFields(value, "state"),
                             ),
                             SizedBox(height: 2.h),
                             CommonTextField(
                               headerText: 'Country',
                               controller: controller.countryController,
                               validator: (value) =>
-                                  validateFields(value, "Country"),
+                                  validateFields(value, "country"),
                             ),
                             SizedBox(height: 2.h),
                             CommonTextField(
