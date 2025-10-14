@@ -7,6 +7,7 @@ bool isValidEmail(String? email) {
     r'^[A-Za-z0-9._%+-]*[A-Za-z]+[A-Za-z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
   ).hasMatch(email);
 }
+
 String? validateEmail(String? value) {
   if (value == null || value.trim().isEmpty) {
     return "Please enter email";
@@ -16,7 +17,6 @@ String? validateEmail(String? value) {
   }
   return null;
 }
-
 
 String? validateName(String? value, {String fieldName = "Name"}) {
   if (value == null || value.trim().isEmpty) {
@@ -34,10 +34,13 @@ String? validateName(String? value, {String fieldName = "Name"}) {
 class NameInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     String newText = newValue.text.replaceAll(RegExp(r'[^a-zA-Z]'), '');
     if (newText.isNotEmpty) {
-      newText = newText[0].toUpperCase() +
+      newText =
+          newText[0].toUpperCase() +
           (newText.length > 1 ? newText.substring(1).toLowerCase() : '');
     }
     final int diff = newValue.text.length - newText.length;
@@ -55,9 +58,9 @@ class NameInputFormatter extends TextInputFormatter {
 class EmailInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final String newText = newValue.text.replaceAll(' ', '').toLowerCase();
     final int diff = newValue.text.length - newText.length;
     int newOffset = newValue.selection.baseOffset - diff;
@@ -69,8 +72,6 @@ class EmailInputFormatter extends TextInputFormatter {
     );
   }
 }
-
-
 
 String capitalize(String value) {
   if (value.trim().isEmpty) return "";
@@ -107,7 +108,6 @@ String? validatePassword(String? value) {
   return null; // ✅ valid password
 }
 
-
 bool isValidPassword(String? password) {
   if (password == null || password.isEmpty) return false;
   return RegExp(
@@ -121,16 +121,20 @@ bool isValidUsername(String? username) {
     r'^(?!.*[_.]{2})[a-zA-Z0-9](?:[a-zA-Z0-9._]{1,}[a-zA-Z0-9])?$',
   ).hasMatch(username);
 }
+
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     return newValue.copyWith(
       text: newValue.text.toUpperCase(),
       selection: newValue.selection,
     );
   }
 }
+
 class CommonTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final bool showDivider; // <-- new
@@ -203,15 +207,15 @@ class CommonTextField extends StatelessWidget {
                 children: [
                   Text(
                     headerText ?? "",
-                    style: MyTexts.regular16.copyWith(
-                      color: MyColors.lightBlue,
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.gra54,
                       fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   if (isRed == true)
                     Text(
                       '*',
-                      style: MyTexts.regular16.copyWith(color: Colors.red),
+                      style: MyTexts.medium14.copyWith(color: MyColors.red33),
                     ),
                 ],
               ),
@@ -269,7 +273,7 @@ class CommonTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: const BorderSide(color: MyColors.red33),
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             isDense: true,
@@ -280,13 +284,13 @@ class CommonTextField extends StatelessWidget {
               horizontal: 12,
               vertical: 12,
             ),
-            errorStyle: MyTexts.regular13.copyWith(
-              color: Colors.red,
+            errorStyle: MyTexts.medium13.copyWith(
+              color:MyColors.red33,
               fontFamily: MyTexts.SpaceGrotesk,
             ),
             errorMaxLines: 2,
             hintText: hintText,
-            hintStyle: MyTexts.regular16.copyWith(
+            hintStyle: MyTexts.medium13.copyWith(
               color: MyColors.primary.withValues(alpha: 0.5),
               fontFamily: MyTexts.SpaceGrotesk,
             ),

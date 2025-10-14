@@ -88,6 +88,8 @@ class MyColors {
   static const Color veryDarkGray = Color(0xFF6F6F6F);
   static const Color dustyGray = Color(0xFF979595);
   static const Color gray2E = Color(0xFF2E2E2E);
+  static const Color gra54 = Color(0xFF545454);
+  static const Color red33 = Color(0xFFC33420);
 
 
 

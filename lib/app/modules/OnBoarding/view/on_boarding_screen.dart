@@ -90,7 +90,7 @@ class OnBoardingScreen extends GetView<OnBoardingController> {
                         Text(
                           page["desc"]!,
                           textAlign: TextAlign.center,
-                          style: MyTexts.medium13.copyWith(
+                          style: MyTexts.medium14.copyWith(
                             color: MyColors.gray2E,
                           ),
                         ),

@@ -46,12 +46,15 @@ class CommonPhoneField extends StatelessWidget {
                   children: [
                     Text(
                       headerText ?? "",
-                      style: MyTexts.regular16.copyWith(
-                        color: MyColors.lightBlue,
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.gra54,
                         fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
-                    Text('*', style: MyTexts.regular16.copyWith(color: Colors.red)),
+                    Text(
+                      '*',
+                      style: MyTexts.medium14.copyWith(color: MyColors.red33),
+                    ),
                   ],
                 ),
                 const Gap(5),
@@ -67,7 +70,10 @@ class CommonPhoneField extends StatelessWidget {
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             cursorColor: MyColors.lightBlue,
             textInputAction: TextInputAction.next,
-            dropdownIcon: const Icon(Icons.arrow_drop_down, color: MyColors.primary),
+            dropdownIcon: const Icon(
+              Icons.arrow_drop_down,
+              color: MyColors.primary,
+            ),
             dropdownIconPosition: IconPosition.trailing,
             style: MyTexts.medium16.copyWith(
               color: MyColors.primary,
@@ -78,7 +84,9 @@ class CommonPhoneField extends StatelessWidget {
               suffixIcon: suffix,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: isValid.value == 0 ? Colors.red : MyColors.textFieldBorder,
+                  color: isValid.value == 0
+                      ? Colors.red
+                      : MyColors.textFieldBorder,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -87,16 +95,19 @@ class CommonPhoneField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.red),
-                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: MyColors.red33),
+                borderRadius: BorderRadius.circular(10),
               ),
               errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.red),
+                borderSide: const BorderSide(color: MyColors.red33),
                 borderRadius: BorderRadius.circular(10),
               ),
               isDense: true,
               counterText: "",
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
+              ),
               hintText: "Enter your phone number",
               hintStyle: MyTexts.medium16.copyWith(
                 color: MyColors.primary.withValues(alpha: 0.5),
@@ -124,7 +135,10 @@ class CommonPhoneField extends StatelessWidget {
                 filled: true,
                 fillColor: MyColors.textFieldDivider.withOpacity(0.1),
                 hintText: "Search Country",
-                prefixIcon: const Icon(CupertinoIcons.search, color: MyColors.primary),
+                prefixIcon: const Icon(
+                  CupertinoIcons.search,
+                  color: MyColors.primary,
+                ),
                 hintStyle: MyTexts.medium14.copyWith(
                   color: MyColors.textFieldDivider,
                   fontFamily: MyTexts.SpaceGrotesk,
@@ -162,7 +176,7 @@ class CommonPhoneField extends StatelessWidget {
                     ? "Please enter your phone number"
                     : "Invalid mobile number",
                 style: MyTexts.medium13.copyWith(
-                  color: Colors.red,
+                  color:MyColors.red33,
                   fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),

@@ -21,21 +21,22 @@ class SplashController extends GetxController {
   }
 
   void _checkTokenAndNavigate() {
-    Get.toNamed(Routes.ON_BINDING);
-    // final savedToken = myPref.getToken();
-    //
-    // if (savedToken.isNotEmpty) {
-    //   _navigateToHome();
-    // } else {
-    //   _startSplashTimer();
-    // }
+    final savedToken = myPref.getToken();
+
+    if (savedToken.isNotEmpty) {
+      _navigateToHome();
+    } else {
+      _startSplashTimer();
+    }
   }
 
   void _showNoInternetDialog() {
     Get.dialog(
       AlertDialog(
         title: const Text('No Internet Connection'),
-        content: const Text('Please check your internet connection and try again.'),
+        content: const Text(
+          'Please check your internet connection and try again.',
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -71,7 +72,9 @@ class SplashController extends GetxController {
   void _startSplashTimer() {
     if (Device.screenType == ScreenType.mobile) {
       Future.delayed(const Duration(seconds: 3), () {
-        Get.offAllNamed(Routes.LOGIN);
+        Get.toNamed(Routes.ON_BINDING);
+
+        // Get.offAllNamed(Routes.LOGIN);
       });
     } else {
       Get.offAllNamed(Routes.LOGIN);

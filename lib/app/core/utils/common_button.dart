@@ -19,8 +19,7 @@ class RoundedButton extends StatelessWidget {
     this.gradientColor,
     this.style,
     this.horizontalPadding,
-     this.assetImage,
-
+    this.assetImage,
   });
 
   final Color? color;
@@ -48,39 +47,34 @@ class RoundedButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: width,
-        height: height ?? 57,
+        height: height ?? 50,
         decoration: BoxDecoration(
           color: color ?? MyColors.primary,
-          border:
-              borderColor != null
-                  ? Border.all(color: borderColor ?? MyColors.white)
-                  : null,
+          border: borderColor != null
+              ? Border.all(color: borderColor ?? MyColors.white)
+              : null,
           borderRadius: BorderRadius.circular(borderRadius ?? 16),
         ),
         alignment: alignment ?? Alignment.center,
         padding: EdgeInsets.symmetric(
-          vertical: verticalPadding ?? 14,
+          vertical: verticalPadding ?? 0,
           horizontal: horizontalPadding ?? 0,
         ),
-        child:
-            (child == null)
-                ? isLoading == true
-                    ? const CircularProgressIndicator()
-                    : Text(
+        child: (child == null)
+            ? isLoading == true
+                  ? const CircularProgressIndicator()
+                  : Text(
                       buttonName,
                       textAlign: textAlign,
                       style:
                           style ??
                           MyTexts.medium16.copyWith(
                             color: fontColor ?? MyColors.white,
-                              fontFamily: MyTexts.SpaceGrotesk
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                     )
-                : child,
+            : child,
       ),
     );
   }
 }
-
-
-

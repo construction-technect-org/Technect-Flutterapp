@@ -7,10 +7,12 @@ class Asset {
   static const png = "${images}png/";
 
   static const String splashBg = '${bg}splashBg.png';
+  static const String loginBg = '${bg}loginBg.png';
 
 
   static const String appLogo = '${png}appLogo.png';
   static const String ob1 = '${png}ob1.png';
+  static const String auth = '${png}auth.png';
 
 
 
