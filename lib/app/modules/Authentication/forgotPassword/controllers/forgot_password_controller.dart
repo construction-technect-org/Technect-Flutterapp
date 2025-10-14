@@ -10,13 +10,7 @@ class ForgotPasswordController extends GetxController {
   final otpController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
-  // Observable variables
-  final phoneEmail = ''.obs;
-  final otp = ''.obs;
-  final newPassword = ''.obs;
-  final confirmPassword = ''.obs;
-
+  
   RxInt isValid = (-1).obs;
   RxString countryCode = "".obs;
 
@@ -42,31 +36,6 @@ class ForgotPasswordController extends GetxController {
   // Services
   ForgotPasswordService forgotPasswordService = ForgotPasswordService();
 
-  @override
-  void onInit() {
-    super.onInit();
-    _initializeListeners();
-  }
-
-  void _initializeListeners() {
-    phoneEmailController.addListener(() {
-      phoneEmail.value = phoneEmailController.text;
-    });
-
-    otpController.addListener(() {
-      otp.value = otpController.text;
-    });
-
-    newPasswordController.addListener(() {
-      newPassword.value = newPasswordController.text;
-    });
-
-    confirmPasswordController.addListener(() {
-      confirmPassword.value = confirmPasswordController.text;
-    });
-  }
-
-
   void toggleNewPasswordVisibility() {
     isNewPasswordVisible.value = !isNewPasswordVisible.value;
   }
@@ -85,7 +54,7 @@ class ForgotPasswordController extends GetxController {
     try {
       final otpResponse = await forgotPasswordService.sendOtp(
         countryCode: countryCode.value,
-        mobileNumber: phoneEmail.value,
+        mobileNumber: phoneEmailController.text,
       );
 
       if (otpResponse.success == true) {
@@ -104,12 +73,12 @@ class ForgotPasswordController extends GetxController {
   }
 
   bool _validateMobileNumber() {
-    if (phoneEmail.value.isEmpty) {
+    if (phoneEmailController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Please enter mobile number');
       return false;
     }
 
-    if (phoneEmail.value.length < 10) {
+    if (phoneEmailController.text.length < 10) {
       SnackBars.errorSnackBar(content: 'Please enter a valid mobile number');
       return false;
     }
@@ -126,8 +95,8 @@ class ForgotPasswordController extends GetxController {
     try {
       final otpResponse = await forgotPasswordService.verifyOtp(
         countryCode: countryCode.value,
-        mobileNumber: phoneEmail.value,
-        otp: otp.value,
+        mobileNumber: phoneEmailController.text,
+        otp: otpController.text,
       );
 
       if (otpResponse.success == true && otpResponse.data?.verified == true) {
@@ -147,12 +116,12 @@ class ForgotPasswordController extends GetxController {
   }
 
   bool _validateOtp() {
-    if (otp.value.isEmpty) {
+    if (otpController.text.isEmpty) {
       SnackBars.errorSnackBar(content: 'Please enter OTP');
       return false;
     }
 
-    if (otp.value.length < 4) {
+    if (otpController.text.length < 4) {
       SnackBars.errorSnackBar(content: 'Please enter 4 valid OTP');
       return false;
     }
@@ -171,9 +140,9 @@ class ForgotPasswordController extends GetxController {
     try {
       final resetResponse = await forgotPasswordService.resetPassword(
         countryCode: countryCode.value,
-        mobileNumber: phoneEmail.value,
-        password: newPassword.value,
-        confirmPassword: confirmPassword.value,
+        mobileNumber: phoneEmailController.text,
+        password: newPasswordController.text,
+        confirmPassword: confirmPasswordController.text,
       );
 
       if (resetResponse.success == true) {

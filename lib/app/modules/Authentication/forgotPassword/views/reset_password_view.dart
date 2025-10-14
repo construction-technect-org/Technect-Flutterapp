@@ -68,7 +68,7 @@ class ResetPasswordView extends StatelessWidget {
                     return CommonTextField(
                       validator: (val) => validateConfirmPassword(
                         val,
-                        controller.newPassword.string,
+                        controller.newPasswordController.text,
                       ),
                       textInputAction: TextInputAction.done,
                       headerText: "Confirm Password",

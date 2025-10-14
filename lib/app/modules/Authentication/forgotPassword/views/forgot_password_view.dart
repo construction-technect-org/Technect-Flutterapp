@@ -119,7 +119,6 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                         isResendVisible: controller.isResendVisible,
                         otpController: controller.otpController,
                         onCompleted: (value) {
-                          controller.otp.value = value;
                           controller.verifyOtp();
 
                         },
