@@ -1,19 +1,34 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/Authentication/forgotPassword/controllers/forgot_password_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
 class OtpVerificationView extends StatelessWidget {
-  OtpVerificationView({super.key});
+  RxBool isLoading;
+  RxBool isResendVisible;
+  TextEditingController otpController;
+  Function(String)? onCompleted;
+  Function()? onTap;
+  Function? onFinished;
+  CountdownController countdownController;
 
-  final controller = Get.find<ForgotPasswordController>();
+  OtpVerificationView({
+    super.key,
+    required this.isLoading,
+    required this.isResendVisible,
+    required this.otpController,
+    required this.onCompleted,
+    required this.onFinished,
+    required this.onTap,
+    required this.countdownController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading: controller.isLoading,
+      isLoading: isLoading,
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: CommonAppBar(
@@ -34,15 +49,8 @@ class OtpVerificationView extends StatelessWidget {
                       length: 4,
                       useHapticFeedback: true,
                       useExternalAutoFillGroup: true,
-                      controller: controller.otpController,
-                      onChanged: (value) {
-                        controller.otp.value = value;
-                      },
-                      onCompleted: (value) {
-                        controller.otp.value = value;
-                        controller.verifyOtp();
-
-                      },
+                      controller: otpController,
+                      onCompleted:onCompleted,
                       keyboardType: TextInputType.number,
                       textStyle: MyTexts.extraBold16.copyWith(
                         color: MyColors.primary,
@@ -67,7 +75,10 @@ class OtpVerificationView extends StatelessWidget {
                 ),
                 const Gap(20),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
@@ -83,13 +94,9 @@ class OtpVerificationView extends StatelessWidget {
                 ),
                 const Gap(20),
                 Obx(() {
-                  return controller.isResendVisible.value
+                  return isResendVisible.value
                       ? GestureDetector(
-                          onTap: () async {
-                            await controller.sendOtp().then((val) {
-                              controller.startTimer();
-                            });
-                          },
+                          onTap:onTap,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -110,23 +117,21 @@ class OtpVerificationView extends StatelessWidget {
                           ),
                         )
                       : Countdown(
-                        controller: controller.countdownController,
-                        seconds: 30,
-                        interval: const Duration(milliseconds: 100),
-                        build: (_, double time) {
-                          return Text(
-                            "Resend in 00:${time.ceil().toString().padLeft(2, '0')}",
-                            style: MyTexts.bold16.copyWith(
-                              color: MyColors.green,
-                            ),
-                          );
-                        },
-                        onFinished: () {
-                          controller.onCountdownFinish();
-                        },
-                      );
+                          controller: countdownController,
+                          seconds: 30,
+                          interval: const Duration(milliseconds: 100),
+                          build: (_, double time) {
+                            return Text(
+                              "Resend in 00:${time.ceil().toString().padLeft(2, '0')}",
+                              style: MyTexts.bold16.copyWith(
+                                color: MyColors.green,
+                              ),
+                            );
+                          },
+                          onFinished:onFinished,
+                        );
                 }),
-                Gap(MediaQuery.of(context).size.height/3),
+                Gap(MediaQuery.of(context).size.height / 3),
                 TextButton(
                   onPressed: () {
                     Get.offAllNamed(Routes.LOGIN);

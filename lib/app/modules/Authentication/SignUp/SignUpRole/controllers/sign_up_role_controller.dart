@@ -8,22 +8,22 @@ class SignUpRoleController extends GetxController {
 
   List roleName = [
     'Manufacturer',
-    'Civil Engineer',
-    'Architect',
-    'Designer',
     'House-Owner',
+    'Architect',
+    'Designer/ Engineer',
+    'Contractor',
     'Other',
   ];
 
   List roleId = [1, 2, 3, 4, 5, 6];
 
   final roleImages = [
-    Asset.merchantIcon,
-    Asset.civilIcon,
-    Asset.architectIcon,
-    Asset.designerIcon,
-    Asset.houseIcon,
-    Asset.otherIcon,
+    Asset.role1,
+    Asset.role1,
+    Asset.role1,
+    Asset.role1,
+    Asset.role1,
+    Asset.role1,
   ];
 
   void selectRole(int index) {

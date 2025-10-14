@@ -108,7 +108,25 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                     controller.isValid.value = 0;
                   } else {
                     await controller.sendOtp().then((val) {
-                      Get.to(()=> OtpVerificationView());
+                      Get.to(()=> OtpVerificationView(
+                        isLoading: controller.isLoading,
+                        onTap:  () async {
+                          await controller.sendOtp().then((val) {
+                            controller.startTimer();
+                          });
+                        },
+                        countdownController: controller.countdownController,
+                        isResendVisible: controller.isResendVisible,
+                        otpController: controller.otpController,
+                        onCompleted: (value) {
+                          controller.otp.value = value;
+                          controller.verifyOtp();
+
+                        },
+                        onFinished: () {
+                          controller.onCountdownFinish();
+                        },
+                      ));
                       controller.startTimer();
                     });
                   }

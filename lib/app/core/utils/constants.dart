@@ -14,6 +14,7 @@ class Asset {
   static const String appLogo = '${png}appLogo.png';
   static const String ob1 = '${png}ob1.png';
   static const String auth = '${png}auth.png';
+  static const String role1 = '${png}role1.png';
 
   static const String back = '${svg}back.svg';
 
