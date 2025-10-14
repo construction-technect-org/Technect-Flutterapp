@@ -33,7 +33,7 @@ class CertificationsComponent extends StatelessWidget {
                       '${cert.title}${cert.isDefault ? "*" : ''}',
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     const Spacer(),
@@ -186,7 +186,7 @@ class CertificationsComponent extends StatelessWidget {
                                 "Select File you want to upload",
                                 style: MyTexts.medium14.copyWith(
                                   color: MyColors.grey,
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                               const Gap(10),
@@ -194,7 +194,7 @@ class CertificationsComponent extends StatelessWidget {
                                 "Upload Certification",
                                 style: MyTexts.bold16.copyWith(
                                   color: MyColors.black,
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                             ],
@@ -355,14 +355,14 @@ class CertificationsComponent extends StatelessWidget {
                       title,
                       style: MyTexts.medium22.copyWith(
                         color: MyColors.black,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     Text(
                       organization,
                       style: MyTexts.medium14.copyWith(
                         color: const Color(0xFF717171),
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     SizedBox(height: 0.3.h),
@@ -370,7 +370,7 @@ class CertificationsComponent extends StatelessWidget {
                       expiryDate,
                       style: MyTexts.medium14.copyWith(
                         color: const Color(0xFF717171),
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ],

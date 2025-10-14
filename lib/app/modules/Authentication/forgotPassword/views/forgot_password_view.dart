@@ -65,7 +65,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                             'FORGOT PASSWORD',
                             style: MyTexts.medium20.copyWith(
                               color: Colors.black,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                           SizedBox(height: 4.h),

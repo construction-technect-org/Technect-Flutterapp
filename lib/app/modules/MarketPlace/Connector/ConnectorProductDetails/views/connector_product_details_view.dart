@@ -72,7 +72,7 @@ class ConnectorProductDetailsView extends GetView<ConnectorProductDetailsControl
                                     "In Stock",
                                     style: MyTexts.extraBold14.copyWith(
                                       color: MyColors.green,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
                                   SizedBox(width: 0.4.w),
@@ -102,7 +102,7 @@ class ConnectorProductDetailsView extends GetView<ConnectorProductDetailsControl
                                     "(4.9/5)",
                                     style: MyTexts.extraBold14.copyWith(
                                       color: MyColors.fontBlack,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
                                 ],
@@ -139,14 +139,14 @@ class ConnectorProductDetailsView extends GetView<ConnectorProductDetailsControl
                     'Premium Manufacturing Sand',
                     style: MyTexts.medium18.copyWith(
                       color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   Text(
                     'Premium Manufacturing Sand isd lorem ipsum, lorem ipsum, lorem ipsum, lorem ipsum, lorem ipsum, lorem ipsum',
                     style: MyTexts.regular14.copyWith(
                       color: MyColors.darkCharcoal,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
 
@@ -157,7 +157,7 @@ class ConnectorProductDetailsView extends GetView<ConnectorProductDetailsControl
                     'Company Details:',
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.darkCharcoal,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   SizedBox(height: 0.6.h),
@@ -169,7 +169,7 @@ class ConnectorProductDetailsView extends GetView<ConnectorProductDetailsControl
                         'M N Manufacturers',
                         style: MyTexts.extraBold16.copyWith(
                           color: MyColors.darkCharcoal,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                     ],

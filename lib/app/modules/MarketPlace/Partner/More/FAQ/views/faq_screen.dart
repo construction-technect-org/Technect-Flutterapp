@@ -60,7 +60,7 @@ class FaqScreen extends GetView<FAQController> {
                                           faq.question??"",
                                           style: MyTexts.medium16.copyWith(
                                             color: Colors.black,
-                                            fontFamily: MyTexts.Roboto,
+                                            fontFamily: MyTexts.SpaceGrotesk,
                                           ),
                                         ),
                                       ),
@@ -86,7 +86,7 @@ class FaqScreen extends GetView<FAQController> {
                                                 faq.answer??"",
                                                 style: MyTexts.regular16.copyWith(
                                                   color: MyColors.dopelyColors,
-                                                  fontFamily: MyTexts.Roboto,
+                                                  fontFamily: MyTexts.SpaceGrotesk,
                                                 ),
                                               ),
                                             ],

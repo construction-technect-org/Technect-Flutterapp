@@ -45,7 +45,7 @@ class CommonDropdown<T> extends StatelessWidget {
                     headerText ?? "",
                     style: MyTexts.regular16.copyWith(
                       color: MyColors.lightBlue,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   if (isRed == true)
@@ -112,14 +112,14 @@ class CommonDropdown<T> extends StatelessWidget {
                   ),
                   errorStyle: MyTexts.regular13.copyWith(
                     color: Colors.red,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
                 hint: Text(
                   hintText,
                   style: MyTexts.regular16.copyWith(
                     color: MyColors.primary.withValues(alpha: 0.5),
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
                 // ✅ This ensures same hint style as TextField
@@ -129,7 +129,7 @@ class CommonDropdown<T> extends StatelessWidget {
                       itemLabel(item),
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.primary,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     );
                   }).toList();
@@ -143,7 +143,7 @@ class CommonDropdown<T> extends StatelessWidget {
                         color: enabled
                             ? MyColors.primary
                             : Colors.grey.shade400,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   );

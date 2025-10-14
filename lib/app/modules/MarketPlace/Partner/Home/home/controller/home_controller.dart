@@ -130,7 +130,7 @@ class HomeController extends GetxController {
                       'Complete your Profile',
                       style: MyTexts.medium18.copyWith(
                         color: MyColors.textFieldBackground,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -138,7 +138,7 @@ class HomeController extends GetxController {
                       'Profile Pending',
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.warning,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ],

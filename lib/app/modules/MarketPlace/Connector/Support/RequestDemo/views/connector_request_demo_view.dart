@@ -97,7 +97,7 @@ class ConnectorRequestDemoView extends StatelessWidget {
                               keyboardType: TextInputType.phone,
                               style: MyTexts.medium16.copyWith(
                                 color: MyColors.primary,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                               maxLength: 10,
                               decoration: const InputDecoration(

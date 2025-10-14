@@ -19,7 +19,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
           'Trust & Safety',
           style: MyTexts.bold16.copyWith(
             color: MyColors.primary,
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
         ),
         Column(
@@ -33,7 +33,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                     'Identity Verified',
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.black,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -58,7 +58,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                     'Business License',
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.black,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -80,7 +80,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                     'Quality Assurance',
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.black,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -122,7 +122,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
               'Marketplace Performance',
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             SizedBox(height: 1.5.h),
@@ -139,14 +139,14 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                         'Profile Completeness',
                         style: MyTexts.regular16.copyWith(
                           color: MyColors.textGrey,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                       Text(
                         '$completionPercentage%',
                         style: MyTexts.medium14.copyWith(
                           color: MyColors.black,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                     ],
@@ -205,7 +205,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                   'Member Since:',
                   style: MyTexts.regular14.copyWith(
                     color: MyColors.grey,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
                 const Gap(5),
@@ -218,7 +218,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                         : 'Unknown',
                     style: MyTexts.bold14.copyWith(
                       color: MyColors.black,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   );
                 }),
@@ -238,7 +238,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             title,
             style: MyTexts.regular14.copyWith(
               color: MyColors.textGrey,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
         ),
@@ -274,7 +274,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             style: MyTexts.regular14.copyWith(
               color: MyColors.textGrey,
               fontSize: 14.sp,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
             textAlign: TextAlign.center,
           ),
@@ -284,7 +284,7 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             style: MyTexts.medium14.copyWith(
               color: valueColor,
               fontSize: 16.sp,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
             textAlign: TextAlign.center,
           ),

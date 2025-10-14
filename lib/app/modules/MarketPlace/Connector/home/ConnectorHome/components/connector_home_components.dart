@@ -52,14 +52,14 @@ class MerchantCard extends StatelessWidget {
                           data.businessName ?? "",
                           style: MyTexts.bold18.copyWith(
                             color: MyColors.fontBlack,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                         ),
                         Text(
                           'Owner: ${data.ownerName ?? ""}',
                           style: MyTexts.medium14.copyWith(
                             color: MyColors.sonicSilver,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -90,7 +90,7 @@ class MerchantCard extends StatelessWidget {
                       data.businessEmail ?? "",
                       style: MyTexts.regular14.copyWith(
                         color: MyColors.gray32,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
@@ -119,7 +119,7 @@ class MerchantCard extends StatelessWidget {
                       'Contact Merchant',
                       style: MyTexts.extraBold14.copyWith(
                         color: MyColors.white,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ],

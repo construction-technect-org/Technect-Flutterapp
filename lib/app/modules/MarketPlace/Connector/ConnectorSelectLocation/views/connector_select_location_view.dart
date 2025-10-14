@@ -26,7 +26,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                         'Welcome Kirti',
                         style: MyTexts.medium16.copyWith(
                           color: MyColors.fontBlack,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                       Row(
@@ -37,7 +37,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                             "Sadashiv Peth, Pune",
                             style: MyTexts.medium14.copyWith(
                               color: MyColors.textFieldBackground,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                           const SizedBox(width: 4),
@@ -74,7 +74,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                       "Features",
                       style: MyTexts.extraBold18.copyWith(
                         color: MyColors.black,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),
@@ -141,7 +141,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                       "Select your location ",
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),
@@ -151,7 +151,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                       "Select a location to see connectors ",
                       style: MyTexts.regular14.copyWith(
                         color: MyColors.darkSilver,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),
@@ -189,7 +189,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                               "Delivery Radius",
                               style: MyTexts.regular16.copyWith(
                                 color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                             Container(
@@ -205,7 +205,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                                     "5 KM",
                                     style: MyTexts.medium14.copyWith(
                                       color: MyColors.fontBlack,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -336,7 +336,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                   text,
                   style: MyTexts.regular14.copyWith(
                     color: MyColors.fontBlack,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
               ),
@@ -352,7 +352,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
                     label,
                     style: MyTexts.regular14.copyWith(
                       color: highlight ? MyColors.fontBlack : MyColors.white,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -380,7 +380,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
               "Add Location Manually",
               style: MyTexts.regular16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -397,7 +397,7 @@ class ConnectorSelectLocationView extends GetView<ConnectorSelectLocationControl
               "Use your Current Location",
               style: MyTexts.regular16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
           ),

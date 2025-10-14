@@ -147,7 +147,7 @@ class StepperWidget extends StatelessWidget {
               child: Text(
                 'Role',
                 style: MyTexts.medium14.copyWith(
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                   color: currentStep > 0
                       ? const Color(0xFF3DA741)
                       : currentStep == 0
@@ -166,7 +166,7 @@ class StepperWidget extends StatelessWidget {
                 child: Text(
                   'Basic Details',
                   style: MyTexts.medium14.copyWith(
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                     color: currentStep > 1
                         ? const Color(0xFF3DA741)
                         : currentStep == 1
@@ -185,7 +185,7 @@ class StepperWidget extends StatelessWidget {
               child: Text(
                 'Password',
                 style: MyTexts.medium14.copyWith(
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                   color: currentStep > 2
                       ? const Color(0xFF3DA741)
                       : currentStep == 2

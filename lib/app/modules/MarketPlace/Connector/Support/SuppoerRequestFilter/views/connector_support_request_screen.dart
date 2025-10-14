@@ -69,7 +69,7 @@ class ConnectorSupportRequestScreen extends GetView<ConnectorSupportRequestContr
                             (ticket.subject ?? "").capitalizeFirst ?? "-",
                             style: MyTexts.medium18.copyWith(
                               color: MyColors.fontBlack,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -103,7 +103,7 @@ class ConnectorSupportRequestScreen extends GetView<ConnectorSupportRequestContr
                             ticket.description ?? "",
                             style: MyTexts.regular14.copyWith(
                               color: MyColors.darkGray,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -113,7 +113,7 @@ class ConnectorSupportRequestScreen extends GetView<ConnectorSupportRequestContr
                                 "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
                                 style: MyTexts.bold15.copyWith(
                                   color: MyColors.darkGray,
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                               const Spacer(),
@@ -121,7 +121,7 @@ class ConnectorSupportRequestScreen extends GetView<ConnectorSupportRequestContr
                                 "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
                                 style: MyTexts.bold15.copyWith(
                                   color: MyColors.darkGray,
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                             ],
@@ -131,7 +131,7 @@ class ConnectorSupportRequestScreen extends GetView<ConnectorSupportRequestContr
                             "● Assigned to: ${ticket.assignedTo?.toString() ?? "Unassigned"}",
                             style: MyTexts.bold15.copyWith(
                               color: MyColors.darkGray,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                         ],

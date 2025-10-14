@@ -27,7 +27,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
             const Gap(40),
             Text(
               widget.title ??  "Success!",
-              style: MyTexts.bold20.copyWith(color: MyColors.primary,fontFamily: MyTexts.Roboto),
+              style: MyTexts.bold20.copyWith(color: MyColors.primary,fontFamily: MyTexts.SpaceGrotesk),
             ),
             const Gap(5),
             Text(

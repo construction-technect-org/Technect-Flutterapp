@@ -56,7 +56,7 @@ class ConnectorAddLocationManuallyView
                             onChanged: controller.onSearchChanged,
                             style: MyTexts.regular14.copyWith(
                               color: MyColors.darkGray,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                             decoration: InputDecoration(
                               prefixIcon: Padding(
@@ -74,7 +74,7 @@ class ConnectorAddLocationManuallyView
                               hintText: 'Search for area, street name..',
                               hintStyle: MyTexts.regular14.copyWith(
                                 color: MyColors.darkGray,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22.5),

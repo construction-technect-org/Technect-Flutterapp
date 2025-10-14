@@ -185,7 +185,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                       "Request a Demo",
                                       style: MyTexts.medium16.copyWith(
                                         color: MyColors.primary,
-                                        fontFamily: MyTexts.Roboto,
+                                        fontFamily: MyTexts.SpaceGrotesk,
                                       ),
                                     ),
                                   ),
@@ -207,7 +207,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                           '+ Create New Ticket',
                                           style: MyTexts.medium16.copyWith(
                                             color: MyColors.white,
-                                            fontFamily: MyTexts.Roboto,
+                                            fontFamily: MyTexts.SpaceGrotesk,
                                           ),
                                         ),
                                       ),
@@ -324,7 +324,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                             (ticket.subject ?? "").capitalizeFirst ?? "-",
                                             style: MyTexts.medium16.copyWith(
                                               color: MyColors.fontBlack,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
                                           ),
                                           SizedBox(height: 1.h),
@@ -340,7 +340,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                                 ticket.userMobile ?? "",
                                                 style: MyTexts.regular14.copyWith(
                                                   color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.Roboto,
+                                                  fontFamily: MyTexts.SpaceGrotesk,
                                                 ),
                                               ),
                                               SizedBox(width: 3.w),
@@ -354,7 +354,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                                 ticket.categoryName ?? "",
                                                 style: MyTexts.regular14.copyWith(
                                                   color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.Roboto,
+                                                  fontFamily: MyTexts.SpaceGrotesk,
                                                 ),
                                               ),
                                             ],
@@ -364,7 +364,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                             ticket.description ?? "",
                                             style: MyTexts.regular14.copyWith(
                                               color: MyColors.darkGray,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
                                           ),
                                           SizedBox(height: 1.h),
@@ -374,7 +374,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                                 "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
                                                 style: MyTexts.bold14.copyWith(
                                                   color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.Roboto,
+                                                  fontFamily: MyTexts.SpaceGrotesk,
                                                 ),
                                               ),
                                               const Spacer(),
@@ -382,7 +382,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                                 "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
                                                 style: MyTexts.bold14.copyWith(
                                                   color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.Roboto,
+                                                  fontFamily: MyTexts.SpaceGrotesk,
                                                 ),
                                               ),
                                             ],
@@ -392,7 +392,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                             "● Assigned to: ${ticket.assignedTo?.toString() ?? "Unassigned"}",
                                             style: MyTexts.bold14.copyWith(
                                               color: MyColors.darkGray,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
                                           ),
                                         ],

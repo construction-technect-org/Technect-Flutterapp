@@ -1,6 +1,18 @@
 import 'dart:core';
 
 class Asset {
+
+  static const images = "assets/images/";
+  static const bg = "${images}bg/";
+  static const png = "${images}png/";
+
+  static const String splashBg = '${bg}splashBg.png';
+
+
+  static const String appLogo = '${png}appLogo.png';
+
+
+
   static const String bricksBackground = 'assets/images/bricks_background.png';
   static const String splashLogo = 'assets/images/splash_logo.png';
   static const String googleIcon = 'assets/images/google.png';

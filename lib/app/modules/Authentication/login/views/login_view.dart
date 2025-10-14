@@ -48,7 +48,7 @@ class LoginView extends GetView<LoginController> {
                               'LOGIN',
                               style: MyTexts.medium20.copyWith(
                                 color: Colors.black,
-                                fontFamily: MyTexts.Roboto
+                                fontFamily: MyTexts.SpaceGrotesk
                               ),
                             ),
                             const Gap(30),
@@ -147,7 +147,7 @@ class LoginView extends GetView<LoginController> {
                                       'Remember Me',
                                       style: MyTexts.medium13.copyWith(
                                         color: MyColors.grey,
-                                        fontFamily: MyTexts.Roboto
+                                        fontFamily: MyTexts.SpaceGrotesk
                                       ),
                                     ),
                                   ],
@@ -160,7 +160,7 @@ class LoginView extends GetView<LoginController> {
                                     'Forgot Password?',
                                     style: MyTexts.medium14.copyWith(
                                       color: MyColors.red,
-                                        fontFamily: MyTexts.Roboto
+                                        fontFamily: MyTexts.SpaceGrotesk
                                     ),
                                   ),
                                 ),
@@ -214,7 +214,7 @@ class LoginView extends GetView<LoginController> {
                                     'Or Continue with',
                                     style: MyTexts.medium13.copyWith(
                                       color: MyColors.greySecond,
-                                        fontFamily: MyTexts.Roboto
+                                        fontFamily: MyTexts.SpaceGrotesk
 
                                     ),
                                   ),
@@ -278,7 +278,7 @@ class LoginView extends GetView<LoginController> {
                                   Text(
                                     "Don't have an account? ",
                                     style: MyTexts.regular16.copyWith(
-                                        fontFamily: MyTexts.Roboto
+                                        fontFamily: MyTexts.SpaceGrotesk
 
                                     ),
                                   ),
@@ -286,7 +286,7 @@ class LoginView extends GetView<LoginController> {
                                     "Sign-up",
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.lightBlueSecond,
-                                        fontFamily: MyTexts.Roboto
+                                        fontFamily: MyTexts.SpaceGrotesk
                                     ),
                                   ),
                                 ],

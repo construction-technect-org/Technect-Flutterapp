@@ -44,7 +44,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                   "Update your Working Hours",
                   style: MyTexts.medium16.copyWith(
                     color: MyColors.greyDetails,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
 

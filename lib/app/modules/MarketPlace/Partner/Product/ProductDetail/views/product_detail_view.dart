@@ -231,7 +231,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               '-',
                           style: MyTexts.medium18.copyWith(
                             color: MyColors.fontBlack,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                         ),
 
@@ -253,7 +253,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                     "Edit",
                                     style: MyTexts.regular16.copyWith(
                                       color: MyColors.primary,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
                                 )
@@ -383,7 +383,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 "Category: ",
                                 style: MyTexts.regular16.copyWith(
                                   color: MyColors.fontBlack,
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                               Expanded(
@@ -396,7 +396,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                         '',
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.green,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
                                 ),
@@ -420,7 +420,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 "Sub-Category: ",
                                 style: MyTexts.regular16.copyWith(
                                   color: MyColors.fontBlack,
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                               Expanded(
@@ -433,7 +433,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                         '',
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.green,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
                                 ),
@@ -448,7 +448,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       "Company Details:",
                       style: MyTexts.medium16.copyWith(
                         color: MyColors.black,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     SizedBox(height: 0.5.h),
@@ -502,7 +502,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           text: "Product Specifications:",
                                           textStyle: MyTexts.bold16.copyWith(
                                             color: MyColors.black,
-                                            fontFamily: MyTexts.Roboto,
+                                            fontFamily: MyTexts.SpaceGrotesk,
                                           ),
                                         ),
                                         const SizedBox(height: 10),
@@ -519,7 +519,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                             text: "Terms & Condition:",
                                             textStyle: MyTexts.bold16.copyWith(
                                               color: MyColors.black,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
                                           ),
                                           Text(
@@ -529,7 +529,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                 '',
                                             style: MyTexts.medium16.copyWith(
                                               color: MyColors.green,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
                                           ),
                                         ],
@@ -541,7 +541,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                             text: "Notes:",
                                             textStyle: MyTexts.bold16.copyWith(
                                               color: MyColors.black,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
                                           ),
                                           Text(
@@ -549,7 +549,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                 '',
                                             style: MyTexts.medium16.copyWith(
                                               color: MyColors.black,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
                                           ).paddingOnly(bottom: 1.h),
                                         ],
@@ -570,7 +570,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                             color:
                                                                 MyColors.black,
                                                             fontFamily:
-                                                                MyTexts.Roboto,
+                                                                MyTexts.SpaceGrotesk,
                                                           ),
                                                     ),
                                                     SizedBox(height: 1.h),
@@ -665,7 +665,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                                             ),
                                                                             style: MyTexts.regular14.copyWith(
                                                                               color: MyColors.black,
-                                                                              fontFamily: MyTexts.Roboto,
+                                                                              fontFamily: MyTexts.SpaceGrotesk,
                                                                             ),
                                                                           ),
                                                                         ],
@@ -683,7 +683,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                                           color:
                                                                               MyColors.black,
                                                                           fontFamily:
-                                                                              MyTexts.Roboto,
+                                                                              MyTexts.SpaceGrotesk,
                                                                         ),
                                                                       ),
                                                                       const SizedBox(
@@ -712,7 +712,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                                               style: MyTexts.medium16.copyWith(
                                                                                 color: MyColors.primary,
                                                                                 fontWeight: FontWeight.bold,
-                                                                                fontFamily: MyTexts.Roboto,
+                                                                                fontFamily: MyTexts.SpaceGrotesk,
                                                                               ),
                                                                             ),
                                                                           ),
@@ -730,7 +730,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                                               style: MyTexts.regular14.copyWith(
                                                                                 fontWeight: FontWeight.w600,
                                                                                 color: MyColors.dustyGray,
-                                                                                fontFamily: MyTexts.Roboto,
+                                                                                fontFamily: MyTexts.SpaceGrotesk,
                                                                               ),
                                                                             ),
                                                                           ),
@@ -756,7 +756,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                                         color: MyColors
                                                                             .dustyGray,
                                                                         fontFamily:
-                                                                            MyTexts.Roboto,
+                                                                            MyTexts.SpaceGrotesk,
                                                                       ),
                                                                 ),
                                                               ),
@@ -810,7 +810,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               : "(${averageRating.toStringAsFixed(1)}/5)",
           style: MyTexts.regular14.copyWith(
             color: Colors.black,
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
         ),
       ],
@@ -961,7 +961,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           text: "Technical Specifications:",
           textStyle: MyTexts.bold16.copyWith(
             color: MyColors.black,
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
         ),
         const SizedBox(height: 10),
@@ -996,7 +996,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     "Specification",
                     style: MyTexts.medium16.copyWith(
                       color: Colors.white,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -1006,7 +1006,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     "Details",
                     style: MyTexts.medium16.copyWith(
                       color: Colors.white,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -1021,7 +1021,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       spec['label']!,
                       style: MyTexts.regular14.copyWith(
                         color: MyColors.primary,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),
@@ -1031,7 +1031,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       spec['value']!,
                       style: MyTexts.medium16.copyWith(
                         color: Colors.black,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),
@@ -1055,7 +1055,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
             style: TextStyle(
               fontWeight: isBold ? FontWeight.w700 : FontWeight.normal,
               fontSize: isBold ? 18 : 14,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
           Text(
@@ -1063,7 +1063,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
             style: TextStyle(
               fontWeight: isBold ? FontWeight.w700 : FontWeight.normal,
               fontSize: isBold ? 18 : 14,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
         ],

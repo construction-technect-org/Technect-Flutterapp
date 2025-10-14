@@ -80,7 +80,7 @@ class ConnectionInboxView extends StatelessWidget {
                                   : 'No connection requests',
                               style: MyTexts.medium18.copyWith(
                                 color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                             SizedBox(height: 0.5.h),
@@ -90,7 +90,7 @@ class ConnectionInboxView extends StatelessWidget {
                                   : 'Connection requests will appear here',
                               style: MyTexts.regular14.copyWith(
                                 color: MyColors.grey,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                           ],
@@ -187,7 +187,7 @@ class ConnectionInboxView extends StatelessWidget {
                                               "${connection.connectorName ?? 'Unknown'} wants to connect with you",
                                               style: MyTexts.medium16.copyWith(
                                                 color: MyColors.fontBlack,
-                                                fontFamily: MyTexts.Roboto,
+                                                fontFamily: MyTexts.SpaceGrotesk,
                                               ),
                                             ),
                                             const Gap(4),
@@ -195,7 +195,7 @@ class ConnectionInboxView extends StatelessWidget {
                                               "User   •   ${connection.createdAt?.toLocal().toString().split(' ')[0] ?? 'Unknown date'}",
                                               style: MyTexts.regular14.copyWith(
                                                 color: MyColors.fontBlack,
-                                                fontFamily: MyTexts.Roboto,
+                                                fontFamily: MyTexts.SpaceGrotesk,
                                               ),
                                             ),
                                           ],
@@ -211,7 +211,7 @@ class ConnectionInboxView extends StatelessWidget {
                                     "Product: ${connection.productName ?? 'Unknown Product'}",
                                     style: MyTexts.medium14.copyWith(
                                       color: MyColors.fontBlack,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
 
@@ -222,7 +222,7 @@ class ConnectionInboxView extends StatelessWidget {
                                     "Message: ${connection.requestMessage ?? 'No message'}",
                                     style: MyTexts.regular14.copyWith(
                                       color: MyColors.darkGray,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
 
@@ -248,7 +248,7 @@ class ConnectionInboxView extends StatelessWidget {
                                           "Connect",
                                           style: MyTexts.medium14.copyWith(
                                             color: MyColors.white,
-                                            fontFamily: MyTexts.Roboto,
+                                            fontFamily: MyTexts.SpaceGrotesk,
                                           ),
                                         ),
                                         style: ElevatedButton.styleFrom(
@@ -282,7 +282,7 @@ class ConnectionInboxView extends StatelessWidget {
                                           "Disconnect",
                                           style: MyTexts.medium14.copyWith(
                                             color: MyColors.white,
-                                            fontFamily: MyTexts.Roboto,
+                                            fontFamily: MyTexts.SpaceGrotesk,
                                           ),
                                         ),
                                         style: ElevatedButton.styleFrom(

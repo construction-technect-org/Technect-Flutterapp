@@ -49,14 +49,14 @@ class MenuView extends StatelessWidget {
                               Text(
                                 "Get Couples for Every Referral",
                                 style: MyTexts.medium16.copyWith(
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                   color: MyColors.primary,
                                 ),
                               ),
                               Text(
                                 "Refer your business friends now!",
                                 style: MyTexts.regular14.copyWith(
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                   color: MyColors.gray5D,
                                 ),
                               ),

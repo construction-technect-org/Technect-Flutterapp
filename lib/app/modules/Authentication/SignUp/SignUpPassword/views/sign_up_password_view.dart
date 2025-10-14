@@ -40,7 +40,7 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                             'Create Password',
                             style: MyTexts.medium16.copyWith(
                               color: MyColors.lightBlue,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                           SizedBox(height: 2.h),

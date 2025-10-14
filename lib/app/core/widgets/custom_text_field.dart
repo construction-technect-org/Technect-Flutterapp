@@ -47,7 +47,7 @@ class CustomTextField extends StatelessWidget {
                     headerText ?? "",
                     style: MyTexts.regular16.copyWith(
                       color: MyColors.lightBlue,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   Text(

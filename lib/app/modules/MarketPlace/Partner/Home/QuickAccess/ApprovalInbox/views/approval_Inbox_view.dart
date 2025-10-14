@@ -49,7 +49,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                   //   title,
                   //   style: MyTexts.bold15.copyWith(
                   //     color: MyColors.fontBlack,
-                  //     fontFamily: MyTexts.Roboto,
+                  //     fontFamily: MyTexts.SpaceGrotesk,
                   //   ),
                   // ),
                   // Gap(4),
@@ -57,7 +57,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                     message,
                     style: MyTexts.bold15.copyWith(
                       color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -67,14 +67,14 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                         "Product: ",
                         style: MyTexts.medium13.copyWith(
                           color: MyColors.dopelyColors,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                       Text(
                         product,
                         style: MyTexts.medium14.copyWith(
                           color: MyColors.primary,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -82,14 +82,14 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                         "Category: ",
                         style: MyTexts.medium13.copyWith(
                           color: MyColors.dopelyColors,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                       Text(
                         category.capitalizeFirst ?? "",
                         style: MyTexts.medium14.copyWith(
                           color: MyColors.primary,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                     ],
@@ -101,7 +101,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                     ).format(DateTime.parse("2025-09-27T05:26:33.061Z").toLocal()),
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.darkGray,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ],

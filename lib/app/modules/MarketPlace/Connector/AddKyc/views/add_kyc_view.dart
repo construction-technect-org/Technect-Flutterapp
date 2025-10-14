@@ -50,7 +50,7 @@ class _AddKycViewState extends State<AddKycView> {
                   "Update your KYC Documents",
                   style: MyTexts.medium16.copyWith(
                     color: MyColors.greyDetails,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
                 const Gap(20),
@@ -112,7 +112,7 @@ class _AddKycViewState extends State<AddKycView> {
                 title,
                 style: MyTexts.regular16.copyWith(
                   color: MyColors.lightBlue,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
               const Text("*", style: TextStyle(color: Colors.red)),
@@ -135,7 +135,7 @@ class _AddKycViewState extends State<AddKycView> {
                     file?.name ?? "Upload Image or drag here",
                     style: MyTexts.regular16.copyWith(
                       color: MyColors.primary.withOpacity(0.5),
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -158,7 +158,7 @@ class _AddKycViewState extends State<AddKycView> {
                       "Choose File",
                       style: MyTexts.regular12.copyWith(
                         color: MyColors.white,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),

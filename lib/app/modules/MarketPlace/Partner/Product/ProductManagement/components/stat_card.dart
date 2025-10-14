@@ -67,7 +67,7 @@ class StatCard extends StatelessWidget {
                     title,
                     style: MyTexts.regular14.copyWith(
                       color: MyColors.davysGrey,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -77,7 +77,7 @@ class StatCard extends StatelessWidget {
                     value,
                     style: MyTexts.bold18.copyWith(
                       color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ],

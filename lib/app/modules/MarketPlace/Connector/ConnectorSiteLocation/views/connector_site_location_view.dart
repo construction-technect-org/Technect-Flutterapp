@@ -66,7 +66,7 @@ class ConnectorSiteLocationView extends GetView<ConnectorSiteLocationController>
                     hintText: 'Search for area, street name..',
                     hintStyle: MyTexts.regular14.copyWith(
                       color: MyColors.darkGray,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(22.5),
@@ -116,7 +116,7 @@ class ConnectorSiteLocationView extends GetView<ConnectorSiteLocationController>
                               prediction.description ?? '',
                               style: MyTexts.regular14.copyWith(
                                 color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                           ),
@@ -140,7 +140,7 @@ class ConnectorSiteLocationView extends GetView<ConnectorSiteLocationController>
                       "Drag the pin for your location",
                       style: MyTexts.regular14.copyWith(
                         color: MyColors.redgray,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ],
@@ -184,7 +184,7 @@ class ConnectorSiteLocationView extends GetView<ConnectorSiteLocationController>
                       "Site Name",
                       style: MyTexts.medium14.copyWith(
                         color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     SizedBox(height: 0.5.h),
@@ -201,13 +201,13 @@ class ConnectorSiteLocationView extends GetView<ConnectorSiteLocationController>
                         controller: controller.siteNameController,
                         style: MyTexts.regular14.copyWith(
                           color: MyColors.darkGray,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Enter site name',
                           hintStyle: MyTexts.regular14.copyWith(
                             color: MyColors.darkGray.withValues(alpha: 0.6),
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -233,7 +233,7 @@ class ConnectorSiteLocationView extends GetView<ConnectorSiteLocationController>
                       "Landmark",
                       style: MyTexts.medium14.copyWith(
                         color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     SizedBox(height: 0.5.h),
@@ -250,13 +250,13 @@ class ConnectorSiteLocationView extends GetView<ConnectorSiteLocationController>
                         controller: controller.landmarkController,
                         style: MyTexts.regular14.copyWith(
                           color: MyColors.darkGray,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                         decoration: InputDecoration(
                           hintText: 'Enter landmark',
                           hintStyle: MyTexts.regular14.copyWith(
                             color: MyColors.darkGray.withValues(alpha: 0.6),
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -300,7 +300,7 @@ class ConnectorSiteLocationView extends GetView<ConnectorSiteLocationController>
                                   controller.selectedAddress.value,
                                   style: MyTexts.regular12.copyWith(
                                     color: MyColors.primary,
-                                    fontFamily: MyTexts.Roboto,
+                                    fontFamily: MyTexts.SpaceGrotesk,
                                   ),
                                 ),
                               ),

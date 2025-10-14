@@ -41,7 +41,7 @@ class HomeView extends StatelessWidget {
         //             "Join As Connector",
         //             style: MyTexts.regular14.copyWith(
         //               color: Colors.black,
-        //               fontFamily: MyTexts.Roboto,
+        //               fontFamily: MyTexts.SpaceGrotesk,
         //             ),
         //           ),
         //         ],
@@ -85,7 +85,7 @@ class HomeView extends StatelessWidget {
                             'Welcome ${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
                             style: MyTexts.medium16.copyWith(
                               color: MyColors.fontBlack,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -553,7 +553,7 @@ class HomeView extends StatelessWidget {
                                               style: MyTexts.regular14.copyWith(
                                                 color: MyColors
                                                     .textFieldBackground,
-                                                fontFamily: MyTexts.Roboto,
+                                                fontFamily: MyTexts.SpaceGrotesk,
                                               ),
                                             ),
                                           ],
@@ -883,14 +883,14 @@ class HomeView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: MyTexts.regular14.copyWith(
                       color: MyColors.gray5D,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   Text(
                     value ?? "",
                     style: MyTexts.bold20.copyWith(
                       color: MyColors.black,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ],
@@ -953,14 +953,14 @@ class _StaticsCardState extends State<StaticsCard> {
             overflow: TextOverflow.ellipsis,
             style: MyTexts.regular14.copyWith(
               color: MyColors.fontBlack,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
           Text(
             widget.value ?? "",
             style: MyTexts.bold16.copyWith(
               color: MyColors.black,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
         ],
@@ -985,7 +985,7 @@ class _HeaderTextState extends State<HeaderText> {
       widget.text,
       style: MyTexts.medium18.copyWith(
         color: MyColors.black,
-        fontFamily: MyTexts.Roboto,
+        fontFamily: MyTexts.SpaceGrotesk,
       ),
     );
   }

@@ -22,7 +22,7 @@ class ReferAndEarnScreen extends StatelessWidget {
               "Share App With Coupon Code",
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             const Gap(20),
@@ -39,7 +39,7 @@ class ReferAndEarnScreen extends StatelessWidget {
                       APIConstants.appUrl,
                       style: MyTexts.regular16.copyWith(
                         color: MyColors.warning,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -68,7 +68,7 @@ class ReferAndEarnScreen extends StatelessWidget {
               "How this works:",
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             const Gap(12),
@@ -104,7 +104,7 @@ class ReferAndEarnScreen extends StatelessWidget {
               "Statistics",
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             const Gap(12),
@@ -124,7 +124,7 @@ class ReferAndEarnScreen extends StatelessWidget {
                       style: MyTexts.medium14.copyWith(
                         fontSize: 15.sp,
                         color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),
@@ -160,7 +160,7 @@ class ReferAndEarnScreen extends StatelessWidget {
               "Rewards",
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             const Gap(12),
@@ -178,7 +178,7 @@ class ReferAndEarnScreen extends StatelessWidget {
                       "Earned discount of 25% on your subscription",
                       style: MyTexts.regular16.copyWith(
                         color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),
@@ -218,7 +218,7 @@ class _StepItem extends StatelessWidget {
             style: MyTexts.regular14.copyWith(
               fontSize: 15.sp,
               color: MyColors.fontBlack,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
         ),

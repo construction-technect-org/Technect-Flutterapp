@@ -62,7 +62,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                 'Information',
                 style: MyTexts.medium16.copyWith(
                   color: MyColors.fontBlack,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
               const Spacer(),
@@ -90,7 +90,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                 'VERIFY KYC',
                 style: MyTexts.medium16.copyWith(
                   color: MyColors.fontBlack,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
               const Spacer(),
@@ -192,7 +192,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           title,
           style: MyTexts.medium16.copyWith(
             color: MyColors.primary.withValues(alpha: 0.5),
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
         ),
         const Spacer(),
@@ -200,7 +200,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           data ?? "",
           style: MyTexts.medium16.copyWith(
             color: MyColors.black,
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
         ),
       ],

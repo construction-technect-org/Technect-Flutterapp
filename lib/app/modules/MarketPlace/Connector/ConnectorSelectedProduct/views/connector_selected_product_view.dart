@@ -41,7 +41,7 @@ class ConnectorSelectedProductView extends StatelessWidget {
                         verticalPadding: 0,
                         style: MyTexts.medium14.copyWith(
                           color: Colors.white,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                         buttonName: "Remove Filter",
                       ),
@@ -264,7 +264,7 @@ class SelectLocationBottomSheet extends StatelessWidget {
                 "Select a Location",
                 style: MyTexts.medium16.copyWith(
                   color: MyColors.primary,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
               const Gap(16),
@@ -353,7 +353,7 @@ class SelectLocationBottomSheet extends StatelessWidget {
                     "Site Address List",
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -423,7 +423,7 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                         address.siteName?.capitalizeFirst ?? '',
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
-                                          fontFamily: MyTexts.Roboto,
+                                          fontFamily: MyTexts.SpaceGrotesk,
                                         ),
                                       ),
                                       const Gap(4),
@@ -431,7 +431,7 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                         address.fullAddress ?? '',
                                         style: MyTexts.regular14.copyWith(
                                           color: MyColors.gray5D,
-                                          fontFamily: MyTexts.Roboto,
+                                          fontFamily: MyTexts.SpaceGrotesk,
                                         ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -443,7 +443,7 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                           'Landmark: ${address.landmark}',
                                           style: MyTexts.regular14.copyWith(
                                             color: MyColors.gray5D,
-                                            fontFamily: MyTexts.Roboto,
+                                            fontFamily: MyTexts.SpaceGrotesk,
                                           ),
                                         ),
                                       ],
@@ -466,7 +466,7 @@ class SelectLocationBottomSheet extends StatelessWidget {
                                             'Default',
                                             style: MyTexts.regular12.copyWith(
                                               color: MyColors.primary,
-                                              fontFamily: MyTexts.Roboto,
+                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
                                           ),
                                         ),

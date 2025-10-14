@@ -61,11 +61,11 @@
 //   }
 // }
 
-
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/splash/controllers/splash_controller.dart';
+import 'package:gap/gap.dart';
 
 class SplashView extends GetView<SplashController> {
   const SplashView({super.key});
@@ -81,7 +81,7 @@ class SplashView extends GetView<SplashController> {
             // Full background image
             Positioned.fill(
               child: Image.asset(
-                Asset.logoWithoutBack, // 🔹 add your background image in assets
+                Asset.splashBg, // 🔹 add your background image in assets
                 fit: BoxFit.cover,
               ),
             ),
@@ -89,35 +89,50 @@ class SplashView extends GetView<SplashController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(Asset.logoWithoutBack, fit: BoxFit.contain, width: 250),
+                  Image.asset(
+                    Asset.logoWithoutBack,
+                    fit: BoxFit.contain,
+                    width: 250,
+                  ),
                   const SizedBox(height: 20),
-                  Text('Welcome to Construction Technect (Web)', style: MyTexts.light22),
+                  Text(
+                    'Welcome to Construction Technect (Web)',
+                    style: MyTexts.light22,
+                  ),
                 ],
               ),
             ),
           ],
         ),
       );
-    }
-
-    else {
+    } else {
       return Scaffold(
         body: Stack(
           children: [
             // Full background image
             Positioned.fill(
-              child: Image.asset(
-                Asset.bricksBackground, // 🔹 same bg image for mobile
-                fit: BoxFit.cover,
-              ),
+              child: Image.asset(Asset.splashBg, fit: BoxFit.cover),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(Asset.logoWithoutBack, fit: BoxFit.contain, width: 230),
-                 
-                ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      Asset.appLogo,
+                      fit: BoxFit.contain,
+                      width: 192,
+                      height: 206,
+                    ),
+                    const Gap(20),
+                    Text(
+                      "Connecting Construction Worldwide",
+                      style: MyTexts.medium18.copyWith(color: MyColors.gray2E),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

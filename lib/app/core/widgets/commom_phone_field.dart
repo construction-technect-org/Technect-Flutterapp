@@ -48,7 +48,7 @@ class CommonPhoneField extends StatelessWidget {
                       headerText ?? "",
                       style: MyTexts.regular16.copyWith(
                         color: MyColors.lightBlue,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     Text('*', style: MyTexts.regular16.copyWith(color: Colors.red)),
@@ -71,7 +71,7 @@ class CommonPhoneField extends StatelessWidget {
             dropdownIconPosition: IconPosition.trailing,
             style: MyTexts.medium16.copyWith(
               color: MyColors.primary,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
 
             decoration: InputDecoration(
@@ -100,7 +100,7 @@ class CommonPhoneField extends StatelessWidget {
               hintText: "Enter your phone number",
               hintStyle: MyTexts.medium16.copyWith(
                 color: MyColors.primary.withValues(alpha: 0.5),
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             onSubmitted: onSubmitted,
@@ -109,12 +109,12 @@ class CommonPhoneField extends StatelessWidget {
               backgroundColor: Colors.white,
               countryNameStyle: MyTexts.medium14.copyWith(
                 color: Colors.black,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
               countryCodeStyle: MyTexts.medium14.copyWith(
                 color: Colors.black,
 
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
               listTilePadding: const EdgeInsets.symmetric(horizontal: 10),
               searchFieldPadding: const EdgeInsets.all(10),
@@ -127,7 +127,7 @@ class CommonPhoneField extends StatelessWidget {
                 prefixIcon: const Icon(CupertinoIcons.search, color: MyColors.primary),
                 hintStyle: MyTexts.medium14.copyWith(
                   color: MyColors.textFieldDivider,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: MyColors.textFieldBorder),
@@ -163,7 +163,7 @@ class CommonPhoneField extends StatelessWidget {
                     : "Invalid mobile number",
                 style: MyTexts.medium13.copyWith(
                   color: Colors.red,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
             ),

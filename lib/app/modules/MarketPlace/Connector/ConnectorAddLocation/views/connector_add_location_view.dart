@@ -64,7 +64,7 @@ class ConnectorAddLocationView extends GetView<ConnectorAddLocationController> {
                     onChanged: controller.onSearchChanged,
                     style: MyTexts.regular14.copyWith(
                       color: MyColors.darkGray,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                     decoration: InputDecoration(
                       prefixIcon: Padding(
@@ -78,7 +78,7 @@ class ConnectorAddLocationView extends GetView<ConnectorAddLocationController> {
                       hintText: 'Search for area, street name..',
                       hintStyle: MyTexts.regular14.copyWith(
                         color: MyColors.darkGray,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(22.5),
@@ -103,7 +103,7 @@ class ConnectorAddLocationView extends GetView<ConnectorAddLocationController> {
                       "Drag the pin for your location",
                       style: MyTexts.regular14.copyWith(
                         color: MyColors.redgray,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ],

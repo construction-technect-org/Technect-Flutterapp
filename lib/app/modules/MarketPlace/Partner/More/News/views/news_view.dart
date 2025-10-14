@@ -84,7 +84,7 @@ class NewsView extends GetView<NewsController> {
                     news.title ?? '',
                     style: MyTexts.bold16.copyWith(
                       color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ),
@@ -92,7 +92,7 @@ class NewsView extends GetView<NewsController> {
                   _formatDate(news.createdAt),
                   style: MyTexts.regular14.copyWith(
                     color: MyColors.grey,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
               ],
@@ -104,7 +104,7 @@ class NewsView extends GetView<NewsController> {
               style: MyTexts.regular14.copyWith(
                 color: MyColors.fontBlack,
                 height: 1.4,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
               trimLines: 2,
               colorClickableText: Colors.pink,
@@ -113,13 +113,13 @@ class NewsView extends GetView<NewsController> {
               moreStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
                 color: MyColors.primary,
               ),
               lessStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
                 color: MyColors.primary,
               ),
             ),
@@ -132,7 +132,7 @@ class NewsView extends GetView<NewsController> {
                   'Published',
                   style: MyTexts.regular12.copyWith(
                     color: MyColors.grey,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
               ],

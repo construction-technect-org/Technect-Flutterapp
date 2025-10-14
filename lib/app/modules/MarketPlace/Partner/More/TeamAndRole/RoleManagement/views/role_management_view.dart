@@ -39,7 +39,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
             "Teams & Roles",
             style: MyTexts.medium18.copyWith(
               color: Colors.black,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
           bottom: const TabBar(
@@ -452,7 +452,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                   user.roleTitle ?? '',
                                                   style: MyTexts.regular16.copyWith(
                                                     color: MyColors.fontBlack,
-                                                    fontFamily: MyTexts.Roboto,
+                                                    fontFamily: MyTexts.SpaceGrotesk,
                                                   ),
                                                 ),
                                                 const Gap(4),
@@ -461,7 +461,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                   "Email: ${user.emailId ?? ''}",
                                                   style: MyTexts.regular14.copyWith(
                                                     color: MyColors.lightGray,
-                                                    fontFamily: MyTexts.Roboto,
+                                                    fontFamily: MyTexts.SpaceGrotesk,
                                                   ),
                                                 ),
                                                 const Gap(4),
@@ -479,7 +479,7 @@ class RoleManagementView extends GetView<RoleManagementController> {
                                                           ? 'Active'
                                                           : 'DeActive',
                                                       style: MyTexts.regular14.copyWith(
-                                                        fontFamily: MyTexts.Roboto,
+                                                        fontFamily: MyTexts.SpaceGrotesk,
                                                         color: MyColors.mutedGreen,
                                                       ),
                                                     ),
@@ -557,7 +557,7 @@ class RoleCard extends StatelessWidget {
                         role.roleTitle ?? '',
                         style: MyTexts.medium18.copyWith(
                           color: MyColors.fontBlack,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -584,7 +584,7 @@ class RoleCard extends StatelessWidget {
                         role.roleDescription ?? '',
                         style: MyTexts.regular14.copyWith(
                           color: MyColors.gray32,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -605,7 +605,7 @@ class RoleCard extends StatelessWidget {
                       "Users: ${role.teamMemberCount ?? '0'} ",
                       style: MyTexts.medium14.copyWith(
                         color: MyColors.fontBlack,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                   ),

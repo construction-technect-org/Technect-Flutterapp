@@ -58,35 +58,16 @@ flutter:
   assets:
     - assets/fonts/
     - assets/images/
+    - assets/images/bg/
+    - assets/images/png/
     - assets/animation/
 
   fonts:
-    - family: Lato
+    - family: SpaceGrotesk
       fonts:
-        - asset: assets/fonts/Lato-Regular.ttf
-        - asset: assets/fonts/Lato-Bold.ttf
-        - asset: assets/fonts/Lato-Italic.ttf
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto/Roboto-Thin.ttf
-        - asset: assets/fonts/Roboto/Roboto-ThinItalic.ttf
-        - asset: assets/fonts/Roboto/Roboto-ExtraLight.ttf
-        - asset: assets/fonts/Roboto/Roboto-ExtraLightItalic.ttf
-        - asset: assets/fonts/Roboto/Roboto-Light.ttf
-        - asset: assets/fonts/Roboto/Roboto-LightItalic.ttf
-        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto/Roboto-Italic.ttf
-        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
-        - asset: assets/fonts/Roboto/Roboto-MediumItalic.ttf
-        - asset: assets/fonts/Roboto/Roboto-SemiBold.ttf
-        - asset: assets/fonts/Roboto/Roboto-SemiBoldItalic.ttf
-        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
-        - asset: assets/fonts/Roboto/Roboto-BoldItalic.ttf
-        - asset: assets/fonts/Roboto/Roboto-ExtraBold.ttf
-        - asset: assets/fonts/Roboto/Roboto-ExtraBoldItalic.ttf
-        - asset: assets/fonts/Roboto/Roboto-Black.ttf
-        - asset: assets/fonts/Roboto/Roboto-BlackItalic.ttf
-    - family: Geometric
-      fonts:
-        - asset: assets/fonts/Geometric/Geometric 706 Medium.otf
-       
+        - asset: assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf
+        - asset: assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.ttf
+        - asset: assets/fonts/SpaceGrotesk/SpaceGrotesk-Light.ttf
+        - asset: assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.ttf
+        - asset: assets/fonts/SpaceGrotesk/SpaceGrotesk-SemiBold.ttf
+

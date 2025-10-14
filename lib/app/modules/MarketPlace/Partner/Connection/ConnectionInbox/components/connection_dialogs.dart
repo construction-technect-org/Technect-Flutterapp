@@ -46,7 +46,7 @@ class ConnectionDialogs {
                   "Send a response message to ${connection.connectorName ?? 'the user'}",
                   style: MyTexts.regular16.copyWith(
                     color: MyColors.dopelyColors,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -140,7 +140,7 @@ class ConnectionDialogs {
                   "Send a rejection message to ${connection.connectorName ?? 'the user'}",
                   style: MyTexts.regular16.copyWith(
                     color: MyColors.dopelyColors,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -229,7 +229,7 @@ class ConnectionDialogs {
                   "Cancel Connection",
                   style: MyTexts.extraBold20.copyWith(
                     color: MyColors.primary,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -238,7 +238,7 @@ class ConnectionDialogs {
                   "Are you sure you want to cancel this request?",
                   style: MyTexts.regular16.copyWith(
                     color: MyColors.dopelyColors,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -325,7 +325,7 @@ class ConnectionDialogs {
                   "To Proceed with your request, please connect to CRM.",
                   style: MyTexts.regular16.copyWith(
                     color: MyColors.dopelyColors,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),

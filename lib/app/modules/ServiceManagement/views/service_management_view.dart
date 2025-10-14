@@ -233,7 +233,7 @@ class ServiceManagementView extends StatelessWidget {
                         '+ Add New Service',
                         style: MyTexts.medium16.copyWith(
                           color: MyColors.white,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                     ),

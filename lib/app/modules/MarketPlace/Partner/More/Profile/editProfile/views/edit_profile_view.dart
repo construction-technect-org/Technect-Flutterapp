@@ -56,7 +56,7 @@ class EditProfileView extends GetView<EditProfileController> {
                   "Update your Business Details",
                   style: MyTexts.medium16.copyWith(
                     color: MyColors.greyDetails,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
                 const Gap(20),

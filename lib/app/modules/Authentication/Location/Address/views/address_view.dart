@@ -76,7 +76,7 @@ class AddressView extends GetView<AddressController> {
                               "Add Location Manually",
                               style: MyTexts.regular16.copyWith(
                                 color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                             trailing: const Icon(
@@ -118,7 +118,7 @@ class AddressView extends GetView<AddressController> {
                               "Use your Current Location",
                               style: MyTexts.regular16.copyWith(
                                 color: MyColors.fontBlack,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                           ),

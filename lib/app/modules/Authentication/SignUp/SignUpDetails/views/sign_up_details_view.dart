@@ -40,7 +40,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                           'Enter your Basic Details',
                           style: MyTexts.medium18.copyWith(
                             color: MyColors.lightBlue,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                         ),
                         SizedBox(height: 2.5.h),
@@ -225,7 +225,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     'Enter OTP',
                                     style: MyTexts.regular16.copyWith(
                                       color: MyColors.lightBlue,
-                                      fontFamily: MyTexts.Roboto,
+                                      fontFamily: MyTexts.SpaceGrotesk,
                                     ),
                                   ),
                                   Text(

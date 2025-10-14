@@ -132,7 +132,7 @@ class NotificationView extends GetView<NotificationController> {
                     title,
                     style: MyTexts.bold15.copyWith(
                       color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -140,7 +140,7 @@ class NotificationView extends GetView<NotificationController> {
                     message,
                     style: MyTexts.regular14.copyWith(
                       color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -151,14 +151,14 @@ class NotificationView extends GetView<NotificationController> {
                           "Product: ",
                           style: MyTexts.medium13.copyWith(
                             color: MyColors.dopelyColors,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                         ),
                         Text(
                           product,
                           style: MyTexts.medium14.copyWith(
                             color: MyColors.primary,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -166,14 +166,14 @@ class NotificationView extends GetView<NotificationController> {
                           "Type: ",
                           style: MyTexts.medium13.copyWith(
                             color: MyColors.dopelyColors,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                         ),
                         Text(
                           category.capitalizeFirst ?? "",
                           style: MyTexts.medium14.copyWith(
                             color: MyColors.primary,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                         ),
                       ],
@@ -184,7 +184,7 @@ class NotificationView extends GetView<NotificationController> {
                     DateFormat("dd MMM yyyy, hh:mma").format(dateTime.toLocal()),
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.darkGray,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ],

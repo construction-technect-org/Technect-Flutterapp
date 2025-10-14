@@ -90,7 +90,7 @@ class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
                         filter.label ?? '',
                         style: MyTexts.medium16.copyWith(
                           color: MyColors.fontBlack,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                       trailing: Icon(

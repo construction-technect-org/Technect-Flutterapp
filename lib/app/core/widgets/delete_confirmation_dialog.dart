@@ -30,7 +30,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
             title,
             style: MyTexts.medium20.copyWith(
               color: MyColors.black,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
           const SizedBox(height: 5),
@@ -38,7 +38,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
             subtitle,
             style: MyTexts.regular16.copyWith(
               color: MyColors.black,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
           const SizedBox(height: 20),

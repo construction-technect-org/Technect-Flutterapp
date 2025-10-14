@@ -724,7 +724,7 @@ class AddProductView extends GetView<AddProductController> {
                                               filter.filterLabel ?? '',
                                               style: MyTexts.regular16.copyWith(
                                                 color: MyColors.lightBlue,
-                                                fontFamily: MyTexts.Roboto,
+                                                fontFamily: MyTexts.SpaceGrotesk,
                                               ),
                                             ),
                                             const Text(
@@ -764,7 +764,7 @@ class AddProductView extends GetView<AddProductController> {
                                                       .copyWith(
                                                         color: MyColors.primary,
                                                         fontFamily:
-                                                            MyTexts.Roboto,
+                                                            MyTexts.SpaceGrotesk,
                                                       ),
                                                   content: Obx(
                                                     () => SingleChildScrollView(
@@ -864,7 +864,7 @@ class AddProductView extends GetView<AddProductController> {
                                                                     ),
                                                                 fontFamily:
                                                                     MyTexts
-                                                                        .Roboto,
+                                                                        .SpaceGrotesk,
                                                               )
                                                         : MyTexts.medium16
                                                               .copyWith(
@@ -872,7 +872,7 @@ class AddProductView extends GetView<AddProductController> {
                                                                     .primary,
                                                                 fontFamily:
                                                                     MyTexts
-                                                                        .Roboto,
+                                                                        .SpaceGrotesk,
                                                               ),
                                                     overflow:
                                                         TextOverflow.ellipsis,

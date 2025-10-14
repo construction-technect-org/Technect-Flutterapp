@@ -78,7 +78,7 @@ class SupportRequestScreen extends GetView<SupportRequestController> {
                             (ticket.subject ?? "").capitalizeFirst ?? "-",
                             style: MyTexts.medium18.copyWith(
                               color: MyColors.fontBlack,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -116,7 +116,7 @@ class SupportRequestScreen extends GetView<SupportRequestController> {
                             ticket.description ?? "",
                             style: MyTexts.regular14.copyWith(
                               color: MyColors.darkGray,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                           SizedBox(height: 1.h),
@@ -126,7 +126,7 @@ class SupportRequestScreen extends GetView<SupportRequestController> {
                                 "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
                                 style: MyTexts.bold15.copyWith(
                                   color: MyColors.darkGray,
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                               const Spacer(),
@@ -134,7 +134,7 @@ class SupportRequestScreen extends GetView<SupportRequestController> {
                                 "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
                                 style: MyTexts.bold15.copyWith(
                                   color: MyColors.darkGray,
-                                  fontFamily: MyTexts.Roboto,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                             ],
@@ -144,7 +144,7 @@ class SupportRequestScreen extends GetView<SupportRequestController> {
                             "● Assigned to: ${ticket.assignedTo?.toString() ?? "Unassigned"}",
                             style: MyTexts.bold15.copyWith(
                               color: MyColors.darkGray,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                           ),
                         ],

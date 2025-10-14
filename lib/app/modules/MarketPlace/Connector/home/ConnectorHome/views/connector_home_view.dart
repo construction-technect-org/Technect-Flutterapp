@@ -45,7 +45,7 @@ class ConnectorHomeView extends StatelessWidget {
         //             "Join As Partner",
         //             style: MyTexts.regular14.copyWith(
         //               color: Colors.black,
-        //               fontFamily: MyTexts.Roboto,
+        //               fontFamily: MyTexts.SpaceGrotesk,
         //             ),
         //           ),
         //         ],
@@ -90,7 +90,7 @@ class ConnectorHomeView extends StatelessWidget {
                             'Welcome ${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
                             style: MyTexts.medium16.copyWith(
                               color: MyColors.fontBlack,
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -560,7 +560,7 @@ class ConnectorHomeView extends StatelessWidget {
                                                       color: MyColors
                                                           .textFieldBackground,
                                                       fontFamily:
-                                                          MyTexts.Roboto,
+                                                          MyTexts.SpaceGrotesk,
                                                     ),
                                               ),
                                             ],
@@ -723,7 +723,7 @@ class ConnectorHomeView extends StatelessWidget {
               title,
               style: MyTexts.regular13.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
               overflow: TextOverflow.ellipsis, // prevent overflow
             ),
@@ -733,7 +733,7 @@ class ConnectorHomeView extends StatelessWidget {
               value,
               style: MyTexts.bold16.copyWith(
                 color: MyColors.black,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -804,7 +804,7 @@ class ConnectorHomeView extends StatelessWidget {
                     title ?? "",
                     style: MyTexts.regular13.copyWith(
                       color: MyColors.gray5D,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                     overflow: TextOverflow.ellipsis, // optional
                   ),
@@ -812,7 +812,7 @@ class ConnectorHomeView extends StatelessWidget {
                     value ?? "",
                     style: MyTexts.bold20.copyWith(
                       color: MyColors.black,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                     overflow: TextOverflow.ellipsis, // optional
                   ),
@@ -840,7 +840,7 @@ class HearderText extends StatelessWidget {
           textStyle ??
           MyTexts.medium18.copyWith(
             color: MyColors.black,
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
     );
   }

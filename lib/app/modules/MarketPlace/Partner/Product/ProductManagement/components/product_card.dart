@@ -86,7 +86,7 @@ class ProductCard extends StatelessWidget {
                         "Out of stock",
                         style: MyTexts.medium16.copyWith(
                           color: Colors.white,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                     ),
@@ -154,7 +154,7 @@ class ProductCard extends StatelessWidget {
                               "New Arrival",
                               style: MyTexts.medium14.copyWith(
                                 color: Colors.white,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                           ),
@@ -172,7 +172,7 @@ class ProductCard extends StatelessWidget {
                     product.categoryProductName ?? "",
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.fontBlack,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   const Gap(2),
@@ -184,7 +184,7 @@ class ProductCard extends StatelessWidget {
                         product.brand ?? "",
                         style: MyTexts.regular14.copyWith(
                           color: MyColors.fontBlack,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                     ],
@@ -208,7 +208,7 @@ class ProductCard extends StatelessWidget {
                               "Vasai Virar, Mahab Chowpatty, Surat, Gujarat",
                           style: MyTexts.regular14.copyWith(
                             color: MyColors.fontBlack,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
@@ -221,7 +221,7 @@ class ProductCard extends StatelessWidget {
                           "- ${double.parse(product.distanceKm ?? "0.0").toStringAsFixed(2)} KM",
                           style: MyTexts.medium16.copyWith(
                             color: MyColors.black,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
@@ -238,7 +238,7 @@ class ProductCard extends StatelessWidget {
                           '₹ ${double.tryParse(product.price ?? "0")?.toStringAsFixed(2) ?? "0.00"}/${product.filterValues?["uom"]["value"] ?? ""}',
                           style: MyTexts.bold16.copyWith(
                             color: MyColors.primary,
-                            fontFamily: MyTexts.Roboto,
+                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
@@ -261,7 +261,7 @@ class ProductCard extends StatelessWidget {
                           child: Text(
                             isActive ? "Active" : "Inactive",
                             style: MyTexts.regular14.copyWith(
-                              fontFamily: MyTexts.Roboto,
+                              fontFamily: MyTexts.SpaceGrotesk,
                               color: isActive ? MyColors.green : MyColors.red,
                             ),
                           ),

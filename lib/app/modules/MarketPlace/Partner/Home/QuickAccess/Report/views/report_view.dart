@@ -92,7 +92,7 @@ class ReportView extends GetView<ReportController> {
                       ? RoundedButton(
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.white,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                     verticalPadding: 0,
 
@@ -161,7 +161,7 @@ class ReportView extends GetView<ReportController> {
                     ""}!",
                 style: MyTexts.bold18.copyWith(
                   color: MyColors.primary,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
               const Gap(5),
@@ -169,7 +169,7 @@ class ReportView extends GetView<ReportController> {
                 "Use this platform to manage your team, merchants, services and get analytic reports.",
                 style: MyTexts.regular13.copyWith(
                   color: MyColors.black,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
             ],
@@ -280,7 +280,7 @@ class ReportView extends GetView<ReportController> {
         RoundedButton(
           style: MyTexts.medium14.copyWith(
             color: MyColors.white,
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
           verticalPadding: 0,
 

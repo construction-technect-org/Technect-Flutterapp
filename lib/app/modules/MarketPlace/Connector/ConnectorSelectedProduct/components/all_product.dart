@@ -56,7 +56,7 @@ class AllProduct extends GetView<ConnectorSelectedProductController> {
                         verticalPadding: 0,
                         style: MyTexts.medium14.copyWith(
                           color: Colors.white,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                         buttonName: "Remove Filter",
                       ),
@@ -270,7 +270,7 @@ class AllProduct extends GetView<ConnectorSelectedProductController> {
               label,
               style: MyTexts.medium14.copyWith(
                 color: MyColors.black,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
           ],

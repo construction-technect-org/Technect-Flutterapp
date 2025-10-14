@@ -34,7 +34,7 @@ class DeleteTeamDialog {
                   "Are you sure you want to delete ${teamMember.firstName ?? ''} ${teamMember.lastName ?? ''}?",
                   style: MyTexts.regular16.copyWith(
                     color: MyColors.darkGray,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -43,7 +43,7 @@ class DeleteTeamDialog {
                   "This action cannot be undone.",
                   style: MyTexts.regular14.copyWith(
                     color: MyColors.grey,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -116,7 +116,7 @@ class DeleteRoleDialog {
                   "Are you sure you want to delete role?",
                   style: MyTexts.regular16.copyWith(
                     color: MyColors.darkGray,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -125,7 +125,7 @@ class DeleteRoleDialog {
                   "This action cannot be undone.",
                   style: MyTexts.regular14.copyWith(
                     color: MyColors.grey,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                   textAlign: TextAlign.center,
                 ),

@@ -205,7 +205,7 @@ class CommonTextField extends StatelessWidget {
                     headerText ?? "",
                     style: MyTexts.regular16.copyWith(
                       color: MyColors.lightBlue,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   if (isRed == true)
@@ -222,7 +222,7 @@ class CommonTextField extends StatelessWidget {
           textCapitalization: textCapitalization ?? TextCapitalization.none,
           style: MyTexts.medium16.copyWith(
             color: MyColors.primary,
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
 
           autofillHints: autofillHints,
@@ -282,13 +282,13 @@ class CommonTextField extends StatelessWidget {
             ),
             errorStyle: MyTexts.regular13.copyWith(
               color: Colors.red,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
             errorMaxLines: 2,
             hintText: hintText,
             hintStyle: MyTexts.regular16.copyWith(
               color: MyColors.primary.withValues(alpha: 0.5),
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
         ),

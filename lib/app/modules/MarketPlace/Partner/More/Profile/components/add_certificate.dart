@@ -54,7 +54,7 @@ class _AddCertificateState extends State<AddCertificate> {
                 "ADD FILE",
                 style: MyTexts.bold16.copyWith(
                   color: Colors.black,
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
               const Gap(10),

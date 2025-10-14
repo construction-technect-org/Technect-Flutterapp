@@ -286,7 +286,7 @@ Widget _buildCertificationItem(
             title,
             style: MyTexts.medium22.copyWith(
               color: MyColors.black,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
 
@@ -294,7 +294,7 @@ Widget _buildCertificationItem(
             organization,
             style: MyTexts.medium14.copyWith(
               color: const Color(0xFF717171),
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
           SizedBox(height: 0.5.h),
@@ -302,7 +302,7 @@ Widget _buildCertificationItem(
             expiryDate,
             style: MyTexts.medium14.copyWith(
               color: const Color(0xFF717171),
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
         ],

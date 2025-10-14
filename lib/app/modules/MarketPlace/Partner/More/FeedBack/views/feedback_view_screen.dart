@@ -27,7 +27,7 @@ class FeedbackViewScreen extends GetView<FeedBackController> {
                     "Give Rating",
                     style: MyTexts.regular16.copyWith(
                       color: MyColors.lightBlue,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   const Gap(8),
@@ -38,7 +38,7 @@ class FeedbackViewScreen extends GetView<FeedBackController> {
                         double.parse(controller.rating.value.toString()).toString(),
                         style: MyTexts.bold20.copyWith(
                           color: MyColors.primary,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                           fontSize: 24.sp,
                         ),
                       );

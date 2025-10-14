@@ -67,7 +67,7 @@ class ConnectorCategoryCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: MyTexts.medium12.copyWith(
               color: isSelected ? MyColors.primary : MyColors.fontBlack,
-              fontFamily: MyTexts.Roboto,
+              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
         ),

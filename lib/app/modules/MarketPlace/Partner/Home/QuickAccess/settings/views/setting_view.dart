@@ -37,7 +37,7 @@ class SettingView extends GetView<SettingController> {
                         "Notifications",
                         style: MyTexts.regular16.copyWith(
                           color: Colors.black,
-                          fontFamily: MyTexts.Roboto,
+                          fontFamily: MyTexts.SpaceGrotesk,
                         ),
                       ),
                       const Spacer(),
@@ -70,7 +70,7 @@ class SettingView extends GetView<SettingController> {
                               "Dark Mode",
                               style: MyTexts.regular16.copyWith(
                                 color: Colors.black,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                             const Spacer(),
@@ -93,7 +93,7 @@ class SettingView extends GetView<SettingController> {
                               "Light Mode",
                               style: MyTexts.regular16.copyWith(
                                 color: Colors.black,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                             const Spacer(),
@@ -217,7 +217,7 @@ class SettingView extends GetView<SettingController> {
               Expanded(
                 child: Text(
                   text,
-                  style: MyTexts.medium14.copyWith(color: color ?? Colors.black,fontFamily: MyTexts.Roboto),
+                  style: MyTexts.medium14.copyWith(color: color ?? Colors.black,fontFamily: MyTexts.SpaceGrotesk),
                 ),
               ),
               const Icon(Icons.chevron_right, color: MyColors.red),
@@ -353,7 +353,7 @@ class AccountActionScreen extends StatelessWidget {
                       "Enter the verification code sent to your mobile/email",
                       style: MyTexts.regular16.copyWith(
                         color: MyColors.primary,
-                        fontFamily: MyTexts.Roboto,
+                        fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
                     const SizedBox(height: 16),

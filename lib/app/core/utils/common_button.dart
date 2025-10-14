@@ -73,7 +73,7 @@ class RoundedButton extends StatelessWidget {
                           style ??
                           MyTexts.bold16.copyWith(
                             color: fontColor ?? MyColors.white,
-                              fontFamily: MyTexts.Roboto
+                              fontFamily: MyTexts.SpaceGrotesk
                           ),
                     )
                 : child,

@@ -59,7 +59,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       iconTheme: IconThemeData(color: MyColors.black, size: 24),
       centerTitle: isCenter??true,
-      titleTextStyle: textStyle ??  MyTexts.medium18.copyWith(color: Colors.black,fontFamily: MyTexts.Roboto),
+      titleTextStyle: textStyle ??  MyTexts.medium18.copyWith(color: Colors.black,fontFamily: MyTexts.SpaceGrotesk),
       title: title,
     );
   }

@@ -53,7 +53,7 @@ class InfoMetricsComponent extends StatelessWidget {
               'Information',
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             IconButton(
@@ -74,7 +74,7 @@ class InfoMetricsComponent extends StatelessWidget {
               'Business Metrics',
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             const Spacer(),
@@ -96,7 +96,7 @@ class InfoMetricsComponent extends StatelessWidget {
               'Business Hours',
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             const Spacer(),
@@ -314,7 +314,7 @@ class InfoMetricsComponent extends StatelessWidget {
                 "Working Hours",
                 style: MyTexts.medium16.copyWith(
                   color: MyColors.primary.withValues(alpha: 0.5),
-                  fontFamily: MyTexts.Roboto,
+                  fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),
               const Gap(20),
@@ -382,7 +382,7 @@ class InfoMetricsComponent extends StatelessWidget {
           title,
           style: MyTexts.medium16.copyWith(
             color: MyColors.primary.withValues(alpha: 0.5),
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
         ),
         const Spacer(),
@@ -390,7 +390,7 @@ class InfoMetricsComponent extends StatelessWidget {
           data ?? "",
           style: MyTexts.medium16.copyWith(
             color: MyColors.black,
-            fontFamily: MyTexts.Roboto,
+            fontFamily: MyTexts.SpaceGrotesk,
           ),
         ),
       ],

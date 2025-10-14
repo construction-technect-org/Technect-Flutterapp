@@ -72,7 +72,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
                   '$completionPercentage%',
                   style: MyTexts.medium16.copyWith(
                     color: MyColors.black,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
               ],
@@ -89,7 +89,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
                         : 'Complete your Profile',
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.primary,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   SizedBox(height: 0.5.h),
@@ -99,7 +99,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
                         : 'Profile Pending',
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.warning,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ],
@@ -139,7 +139,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
               title,
               style: MyTexts.medium16.copyWith(
                 color: MyColors.primary,
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             SizedBox(height: 0.5.h),

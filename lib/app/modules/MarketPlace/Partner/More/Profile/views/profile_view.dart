@@ -102,7 +102,7 @@ class ProfileView extends GetView<ProfileController> {
                   '$completionPercentage%',
                   style: MyTexts.medium16.copyWith(
                     color: MyColors.black,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
               ],
@@ -119,7 +119,7 @@ class ProfileView extends GetView<ProfileController> {
                         : 'Complete your Profile',
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.primary,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                   SizedBox(height: 0.5.h),
@@ -127,7 +127,7 @@ class ProfileView extends GetView<ProfileController> {
                     completionPercentage > 90 ? "Profile Verified" : 'Profile Pending',
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.warning,
-                      fontFamily: MyTexts.Roboto,
+                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
                 ],
@@ -172,7 +172,7 @@ class ProfileView extends GetView<ProfileController> {
               title,
               style: MyTexts.medium16.copyWith(
                 color: isSelected ? MyColors.primary : const Color(0xFF737373),
-                fontFamily: MyTexts.Roboto,
+                fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
             SizedBox(height: 0.5.h),

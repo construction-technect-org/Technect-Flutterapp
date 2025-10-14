@@ -22,7 +22,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                   "Select Your Marketplace",
                   style: MyTexts.medium16.copyWith(
                     color: MyColors.primary,
-                    fontFamily: MyTexts.Roboto,
+                    fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
                 SizedBox(height: 1.h),
@@ -81,7 +81,7 @@ class DashboardMarketPlaceView extends GetView<DashboardMarketPlaceController> {
                               "Select Your Role",
                               style: MyTexts.medium16.copyWith(
                                 color: MyColors.primary,
-                                fontFamily: MyTexts.Roboto,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
                             SizedBox(height: 1.h),
