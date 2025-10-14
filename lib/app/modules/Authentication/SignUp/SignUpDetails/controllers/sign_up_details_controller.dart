@@ -1,7 +1,11 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
+import 'package:gap/gap.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
@@ -11,21 +15,18 @@ class SignUpDetailsController extends GetxController {
   final emailController = TextEditingController();
   final otpController = TextEditingController();
   final gstController = TextEditingController();
+  final aadhaarController = TextEditingController();
   SignUpService signUpService = SignUpService();
-  final firstName = ''.obs;
-  final lastName = ''.obs;
-  final mobileNumber = ''.obs;
-  final email = ''.obs;
-  final gst = ''.obs;
-  final otp = ''.obs;
   final otpSend = false.obs;
   final otpVerify = false.obs;
+  RxBool isVerified = false.obs;
 
   RxInt isValid = (-1).obs;
   RxString countryCode = "".obs;
 
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
+  RxBool isLoading = false.obs;
 
   void startTimer() {
     isResendVisible.value = false;
@@ -36,72 +37,21 @@ class SignUpDetailsController extends GetxController {
     isResendVisible.value = true;
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    firstNameController.addListener(() {
-      firstName.value = firstNameController.text;
-    });
-    lastNameController.addListener(() {
-      lastName.value = lastNameController.text;
-    });
-    mobileNumberController.addListener(() {
-      mobileNumber.value = mobileNumberController.text;
-    });
-    emailController.addListener(() {
-      email.value = emailController.text;
-    });
-    otpController.addListener(() {
-      otp.value = otpController.text;
-    });
-    gstController.addListener(() {
-      gst.value = gstController.text;
-    });
-  }
-
-  @override
-  void onClose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    mobileNumberController.dispose();
-    emailController.dispose();
-    gstController.dispose();
-    super.onClose();
-  }
-
-  Future<bool> isFormValid() async {
-    final bool isGstValid = await verifyGStNumber();
-    return firstName.value.isNotEmpty &&
-        lastName.value.isNotEmpty &&
-        mobileNumber.value.isNotEmpty &&
-        email.value.isNotEmpty &&
-        true == isGstValid &&
-        isValidEmail(email.value);
-  }
-
   bool isValidEmail(String email) {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 
+
+
   Future<void> verifyMobileNumber() async {
-    if (mobileNumber.value.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please enter mobile number first');
-      return;
-    }
-
-    if (mobileNumber.value.length < 10) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid mobile number');
-      return;
-    }
-
     if (!otpSend.value) {
       final otpResponse = await signUpService.sendOtp(
-        mobileNumber: mobileNumber.value,
+        mobileNumber: mobileNumberController.text,
       );
 
       if (otpResponse.success == true) {
         SnackBars.successSnackBar(
-          content: 'OTP sent successfully to ${mobileNumber.value}',
+          content: 'OTP sent successfully to ${mobileNumberController.text}',
         );
         otpSend.value = true;
       } else {
@@ -110,117 +60,43 @@ class SignUpDetailsController extends GetxController {
         );
       }
     } else {
-      // Resend OTP if already sent
-      await resendOtp();
+      await sendOtp();
     }
   }
 
-  Future<bool> verifyGStNumber() async {
-    if (gstController.text.trim().isEmpty) {
-      return true;
-    } else {
-      if (gstController.text.trim().length != 15) {
-        SnackBars.errorSnackBar(
-          content: "GST number must be exactly 15 characters",
-        );
-        return false;
-      }
-      if (!_isValidGSTNumber(gstController.text.trim())) {
-        SnackBars.errorSnackBar(content: "Please enter a valid GST number");
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  bool _isValidGSTNumber(String gst) {
-    // GST format: 2 digits + 2 letters + 5 digits + 1 letter + 1 digit + 1 letter + 1 digit
-    return RegExp(
-      r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
-    ).hasMatch(gst);
-  }
 
   // Resend OTP method
-  Future<void> resendOtp() async {
-    if (mobileNumber.value.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please enter mobile number first');
-      return;
-    }
-
-    if (mobileNumber.value.length < 10) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid mobile number');
-      return;
-    }
-
+  Future<void> sendOtp() async {
     try {
       final otpResponse = await signUpService.resendOtp(
-        mobileNumber: mobileNumber.value,
+        mobileNumber: mobileNumberController.text,
         code: countryCode.value,
       );
 
       if (otpResponse.success == true) {
         SnackBars.successSnackBar(
-          content: 'OTP resent successfully to ${mobileNumber.value}',
+          content: 'OTP resent successfully to ${mobileNumberController.text}',
         );
       } else {
         SnackBars.errorSnackBar(
           content: otpResponse.message ?? 'Failed to resend OTP',
         );
-        // Reset OTP sent flag if resend fails
         otpSend.value = false;
       }
     } catch (e) {
-      // Error snackbar is already shown by ApiManager
-      // Reset OTP sent flag if error occurs
       otpSend.value = false;
     }
   }
 
   Future<void> proceedToPassword() async {
-    if (!otpVerify.value) {
-      // Verify OTP API first
-      if (otp.value.isEmpty || otp.value.length < 4) {
-        SnackBars.errorSnackBar(content: 'Please enter a valid 4-digit OTP');
-        return;
-      }
-
-      await verifyOtp();
-    } else {
-      if (await isFormValid()) {
-        // Pass user data to password screen
-        final userData = UserDataModel(
-          roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
-          // Default role ID
-          firstName: firstName.value,
-          lastName: lastName.value,
-          countryCode: countryCode.value,
-          mobileNumber: mobileNumber.value,
-          email: email.value,
-          gst: gstController.text,
-        );
-        Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
-      } else {
-        SnackBars.errorSnackBar(
-          content: 'Please fill all required fields correctly',
-        );
-      }
-    }
+    await verifyOtp();
   }
 
   Future<bool> checkEmail() async {
-    if (email.value.isEmpty) {
-      SnackBars.errorSnackBar(content: "Please enter email first");
-      return false;
-    }
-
-    if (!isValidEmail(email.value)) {
-      SnackBars.errorSnackBar(content: "Please enter a valid email address");
-      return false;
-    }
-
     try {
-      final isAvailable = await signUpService.checkEmail(email: email.value);
+      final isAvailable = await signUpService.checkEmail(
+        email: emailController.text,
+      );
 
       if (!isAvailable) {
         SnackBars.errorSnackBar(content: "This email is already registered");
@@ -229,47 +105,36 @@ class SignUpDetailsController extends GetxController {
 
       return true;
     } catch (e) {
-      SnackBars.errorSnackBar(content: "Error verifying email. Please try again");
+      SnackBars.errorSnackBar(
+        content: "Error verifying email. Please try again",
+      );
       return false;
     }
   }
 
-
   // Verify OTP method
   Future<void> verifyOtp() async {
-    if (otp.value.isEmpty || otp.value.length < 4) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid 4-digit OTP');
-      return;
-    }
-
     try {
       final otpResponse = await signUpService.verifyOtp(
-        mobileNumber: mobileNumber.value,
-        otp: otp.value,
+        mobileNumber: mobileNumberController.text,
+        otp: otpController.text,
       );
 
       if (otpResponse.success == true) {
         if (otpResponse.data?.verified == true) {
           otpVerify.value = true;
           SnackBars.successSnackBar(content: 'OTP verified successfully!');
-          if (await isFormValid()) {
-            // Pass user data to password screen
-            final userData = UserDataModel(
-              roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
-              // Default role ID
-              firstName: firstName.value,
-              lastName: lastName.value,
-              countryCode: countryCode.value,
-              mobileNumber: mobileNumber.value,
-              email: email.value,
-              gst: gstController.text,
-            );
-            Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
-          } else {
-            SnackBars.errorSnackBar(
-              content: 'Please fill all required fields correctly',
-            );
-          }
+          final userData = UserDataModel(
+            roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
+            // Default role ID
+            firstName: firstNameController.text,
+            lastName: lastNameController.text,
+            countryCode: countryCode.value,
+            mobileNumber: mobileNumberController.text,
+            email: emailController.text,
+            gst: gstController.text,
+          );
+          Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
         } else {
           SnackBars.errorSnackBar(
             content: 'OTP verification failed. Please try again.',
@@ -281,8 +146,95 @@ class SignUpDetailsController extends GetxController {
         );
       }
     } catch (e) {
-      // Error snackbar is already shown by ApiManager
-      // No need to show another one here
+      print(e);
     }
+  }
+
+  void openPhoneNumberBottomSheet(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+    isValid.value = -1;
+
+    Get.bottomSheet(
+      Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(12),
+              Center(
+                child: Container(
+                  height: 5,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const Gap(24),
+              Text(
+                "Mobile Number",
+                style: MyTexts.medium20.copyWith(color: Colors.black),
+              ),
+              const Gap(24),
+              CommonPhoneField(
+                controller: mobileNumberController,
+                focusNode: FocusNode(),
+                isValid: isValid,
+                onCountryCodeChanged: (code) {
+                  countryCode.value = code;
+                },
+              ),
+              const Gap(30),
+              RoundedButton(
+                buttonName: "Continue",
+                onTap: () async {
+                  isValid.value = -1;
+                  if (mobileNumberController.text.isEmpty) {
+                    isValid.value = 0;
+                    return;
+                  }
+                  if (formKey.currentState!.validate()) {
+                    hideKeyboard();
+                    await verifyMobileNumber().then((val) {
+                      Get.back();
+                      Get.to(
+                        () => OtpVerificationView(
+                          isLoading: isLoading,
+                          onTap: () async {
+                            await sendOtp().then((val) {
+                              startTimer();
+                            });
+                          },
+                          countdownController: countdownController,
+                          isResendVisible: isResendVisible,
+                          otpController: otpController,
+                          onCompleted: (value) {
+                            verifyOtp();
+                          },
+                          onFinished: () {
+                            onCountdownFinish();
+                          },
+                        ),
+                      );
+                      startTimer();
+                    });
+                  }
+                },
+              ),
+              const Gap(16),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+    );
   }
 }

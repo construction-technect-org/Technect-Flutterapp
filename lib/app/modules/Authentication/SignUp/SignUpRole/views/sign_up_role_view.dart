@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/widgets/stepper_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
 
 class SignUpRoleView extends GetView<SignUpRoleController> {
@@ -97,24 +96,6 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                                   )
                                 : const SizedBox();
                           }),
-
-                          // SizedBox(height: 2.5.sh),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: [
-                          //     Text("Already have an account? ", style: MyTexts.light16),
-                          //     GestureDetector(
-                          //       onTap: () => Get.back(),
-                          //       child: Text(
-                          //         "Login",
-                          //         style: MyTexts.light16.copyWith(
-                          //           color: MyColors.lightBlueSecond,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // SizedBox(height: 4.sh),
                         ],
                       ),
                     ),

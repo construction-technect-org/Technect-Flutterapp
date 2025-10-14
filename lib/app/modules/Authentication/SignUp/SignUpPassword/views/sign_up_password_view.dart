@@ -3,11 +3,11 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validators.dart';
-import 'package:construction_technect/app/core/widgets/stepper_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPassword/controllers/sign_up_password_controller.dart';
 
 class SignUpPasswordView extends GetView<SignUpPasswordController> {
   SignUpPasswordView({super.key});
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -21,38 +21,47 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
           child: Scaffold(
             appBar: CommonAppBar(title: const Text("SIGN UP"), isCenter: false),
             backgroundColor: Colors.white,
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: RoundedButton(
+                buttonName: 'SUBMIT',
+                onTap: controller.isLoading.value
+                    ? null
+                    : () {
+                        if (formKey.currentState!.validate()) {
+                          controller.completeSignUp();
+                        }
+                      },
+              ),
+            ),
             body: Padding(
               padding: EdgeInsets.symmetric(horizontal: 6.sw),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 2.h),
-                  // Stepper
-                  const StepperWidget(currentStep: 2),
-                  SizedBox(height: 2.h),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(height: 2.h),
                           Text(
-                            'Create Password',
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.lightBlue,
-                              fontFamily: MyTexts.SpaceGrotesk,
+                            'Set Password',
+                            style: MyTexts.medium20.copyWith(
+                              color: MyColors.primary,
                             ),
                           ),
-                          SizedBox(height: 2.h),
-                          // Password
+                          SizedBox(height: 3.h),
                           Obx(() {
                             return CommonTextField(
-                              textInputAction: TextInputAction.done,
-                              headerText: "Password",
+                              validator: validatePassword,
+                              textInputAction: TextInputAction.next,
+                              headerText: "New Password",
                               controller: controller.passwordController,
                               obscureText: !controller.isPasswordVisible.value,
-                              validator: validatePassword,
-                              hintText: "Enter the password",
+                              hintText:
+                                  "Eg: one uppercase, one number and lowercase",
                               showDivider: true,
                               suffixIcon: GestureDetector(
                                 onTap: () =>
@@ -66,43 +75,24 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                               ),
                             );
                           }),
-                          SizedBox(height: 1.h),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.warning_amber_rounded,
-                                size: 16,
-                                color: MyColors.warning,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  'Eg: one uppercase, one number and lowercase',
-                                  style: MyTexts.light14.copyWith(
-                                    color: MyColors.warning,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 1.8.h),
+                          SizedBox(height: 2.h),
                           Obx(() {
                             return CommonTextField(
+                              validator: (val) => validateConfirmPassword(
+                                val,
+                                controller.passwordController.text,
+                              ),
                               textInputAction: TextInputAction.done,
                               headerText: "Confirm Password",
                               controller: controller.confirmPasswordController,
-                              validator: (value) => validateConfirmPassword(
-                                value,
-                                controller.passwordController.text,
-                              ),
-
                               obscureText:
                                   !controller.isConfirmPasswordVisible.value,
-                              hintText: "Re-enter the password",
+                              hintText:
+                                  "Eg: one uppercase, one number and lowercase",
                               showDivider: true,
                               suffixIcon: GestureDetector(
-                                onTap: () =>
-                                    controller.toggleConfirmPasswordVisibility(),
+                                onTap: () => controller
+                                    .toggleConfirmPasswordVisibility(),
                                 child: Icon(
                                   controller.isConfirmPasswordVisible.value
                                       ? Icons.visibility
@@ -113,19 +103,6 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                             );
                           }),
                           SizedBox(height: 5.h),
-                          Obx(
-                            () => RoundedButton(
-                              buttonName:  'SUBMIT',
-                              onTap: controller.isLoading.value
-                                  ? null
-                                  : () {
-                                      if (formKey.currentState!.validate()) {
-                                        controller.completeSignUp();
-                                      }
-                                    },
-                            ),
-                          ),
-                          SizedBox(height: 5.sh),
                         ],
                       ),
                     ),

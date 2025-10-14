@@ -147,6 +147,7 @@ class CommonTextField extends StatelessWidget {
   final bool? obscureText;
   final String? Function(String?)? validator;
   final double? borderRadius;
+  final double? suffixPadding;
   final Function(String?)? onChange;
   final Function(String?)? onFieldSubmitted;
   final Function()? onEditingComplete;
@@ -173,6 +174,7 @@ class CommonTextField extends StatelessWidget {
     this.prefixIcon,
     this.textCapitalization,
     this.suffixIcon,
+    this.suffixPadding,
     this.bgColor,
     this.isBorder = true,
     this.isRed = true,
@@ -256,7 +258,7 @@ class CommonTextField extends StatelessWidget {
                 : null,
             suffixIcon: suffixIcon != null
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding:  EdgeInsets.symmetric(horizontal:suffixPadding?? 16),
                     child: suffixIcon,
                   )
                 : null,

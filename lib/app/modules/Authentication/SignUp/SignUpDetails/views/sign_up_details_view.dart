@@ -2,11 +2,9 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
-import 'package:construction_technect/app/core/widgets/stepper_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:timer_count_down/timer_count_down.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
+import 'package:gap/gap.dart';
 
 class SignUpDetailsView extends GetView<SignUpDetailsController> {
   SignUpDetailsView({super.key});
@@ -21,26 +19,29 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
         appBar: CommonAppBar(title: const Text("SIGN UP"), isCenter: false),
         backgroundColor: Colors.white,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 6.sw),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
             key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 2.h),
-                const StepperWidget(currentStep: 1),
-                SizedBox(height: 3.h),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Enter your Basic Details',
-                          style: MyTexts.medium18.copyWith(
-                            color: MyColors.lightBlue,
-                            fontFamily: MyTexts.SpaceGrotesk,
+                          'Enter your Details',
+                          style: MyTexts.medium20.copyWith(
+                            color: MyColors.primary,
+                          ),
+                        ),
+                        SizedBox(height: 1.h),
+                        Text(
+                          'Lets start with the basics first',
+                          style: MyTexts.medium13.copyWith(
+                            color: MyColors.primary,
                           ),
                         ),
                         SizedBox(height: 2.5.h),
@@ -75,19 +76,24 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                         Focus(
                           onFocusChange: (hasFocus) async {
                             if (!hasFocus) {
-                              final email = controller.emailController.text.trim();
-
-                              // Only check if email has value and valid format
-                              if (email.isNotEmpty && controller.isValidEmail(email)) {
-                                final isAvailable =
-                                await controller.signUpService.checkEmail(email: email);
+                              final email = controller.emailController.text
+                                  .trim();
+                              if (email.isNotEmpty &&
+                                  controller.isValidEmail(email)) {
+                                final isAvailable = await controller
+                                    .signUpService
+                                    .checkEmail(email: email);
 
                                 if (!isAvailable) {
                                   SnackBars.errorSnackBar(
-                                      content: "This email is already registered");
+                                    content: "This email is already registered",
+                                  );
                                 }
-                              } else if (email.isNotEmpty && !controller.isValidEmail(email)) {
-                                SnackBars.errorSnackBar(content: "Please enter a valid email address");
+                              } else if (email.isNotEmpty &&
+                                  !controller.isValidEmail(email)) {
+                                SnackBars.errorSnackBar(
+                                  content: "Please enter a valid email address",
+                                );
                               }
                             }
                           },
@@ -105,195 +111,249 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                           ),
                         ),
 
-
                         SizedBox(height: 1.8.h),
-                        CommonTextField(
-                          isRed: false,
-                          headerText: "GSTIN (optional)",
-                          hintText: "xxxxxxxxxxxxxx",
-                          controller: controller.gstController,
-                        ),
-                        SizedBox(height: 1.8.h),
-                        CommonPhoneField(
-                          suffix: Obx(() {
-                            if (!controller.otpSend.value) {
-                              return Container(
-                                margin: const EdgeInsets.only(right: 8),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    if (controller.otpSend.value) {
-                                      await controller.resendOtp().then((val) {
-                                        controller.startTimer();
-                                      });
-                                    } else {
-                                      controller.verifyMobileNumber();
-                                      controller.startTimer();
-                                    }
-                                  },
-                                  child: Container(
-                                    width: 90,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: MyColors.primary,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Center(
-                                      child: Obx(
-                                        () => Text(
-                                          controller.otpSend.value
-                                              ? "Resend"
-                                              : 'Verify',
-                                          style: MyTexts.medium16.copyWith(
-                                            color: MyColors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                            if (!controller.isResendVisible.value) {
-                              return const SizedBox.shrink();
-                            } else {
-                              return Container(
-                                margin: const EdgeInsets.only(right: 8),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    if (controller.otpSend.value) {
-                                      await controller.resendOtp().then((val) {
-                                        controller.startTimer();
-                                      });
-                                    } else {
-                                      controller.verifyMobileNumber();
-                                      controller.startTimer();
-                                    }
-                                  },
-                                  child: Container(
-                                    width: 90,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: MyColors.primary,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Center(
-                                      child: Obx(
-                                        () => Text(
-                                          controller.otpSend.value
-                                              ? "Resend"
-                                              : 'Verify',
-                                          style: MyTexts.medium16.copyWith(
-                                            color: MyColors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          }),
-                          headerText: "Mobile Number",
-                          controller: controller.mobileNumberController,
-                          focusNode: FocusNode(),
-                          isValid: controller.isValid,
-                          onCountryCodeChanged: (code) {
-                            controller.countryCode.value = code;
-                          },
-                        ),
-                        SizedBox(height: 1.8.h),
-                        // OTP Field
                         Obx(() {
-                          if (controller.otpSend.value == false) {
+                          final role = Get.find<SignUpRoleController>()
+                              .selectedRoleName
+                              .value;
+                          if (role == "House-Owner") {
+                            return CommonTextField(
+                              headerText: "KYC",
+                              hintText: "Enter your Aadhaar card",
+                              controller: controller.aadhaarController,
+                              suffixPadding: 0,
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  final value = controller
+                                      .aadhaarController
+                                      .text
+                                      .trim();
+                                  if (value.isEmpty) {
+                                    SnackBars.errorSnackBar(
+                                      content: "Please enter Aadhaar number",
+                                    );
+                                    controller.isVerified.value = false;
+                                    return;
+                                  } else if (value.length != 12) {
+                                    SnackBars.errorSnackBar(
+                                      content:
+                                          "Aadhaar number must be exactly 12 digits",
+                                    );
+                                    controller.isVerified.value = false;
+                                    return;
+                                  }
+                                  controller.isVerified.value = true;
+                                  SnackBars.successSnackBar(
+                                    content: "Aadhaar verified successfully!",
+                                  );
+                                },
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: MyColors.primary,
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(12),
+                                      bottomRight: Radius.circular(12),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Verify",
+                                      style: MyTexts.medium16.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "Please enter Aadhaar number";
+                                }
+                                if (value.trim().length != 12) {
+                                  return "Aadhaar number must be exactly 12 digits";
+                                }
+                                return null;
+                              },
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(12),
+                              ],
+                            );
+                          }
+                          return CommonTextField(
+                            headerText: "GSTIN",
+                            hintText: "Enter your GSTIN number",
+                            controller: controller.gstController,
+                            suffixPadding: 0,
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                final value = controller.gstController.text
+                                    .trim();
+                                if (value.isEmpty) {
+                                  SnackBars.errorSnackBar(
+                                    content: "Please enter GSTIN number",
+                                  );
+                                  controller.isVerified.value = false;
+                                  return;
+                                } else if (value.length != 15) {
+                                  SnackBars.errorSnackBar(
+                                    content:
+                                        "GSTIN must be exactly 15 characters",
+                                  );
+                                  controller.isVerified.value = false;
+                                  return;
+                                } else if (!RegExp(
+                                  r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
+                                ).hasMatch(value)) {
+                                  SnackBars.errorSnackBar(
+                                    content: "Invalid GSTIN format",
+                                  );
+                                  controller.isVerified.value = false;
+                                  return;
+                                }
+                                controller.isVerified.value = true;
+                                SnackBars.successSnackBar(
+                                  content: "GSTIN verified successfully!",
+                                );
+                              },
+                              child: Container(
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: MyColors.primary,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Verify",
+                                    style: MyTexts.medium16.copyWith(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "Please enter GSTIN number";
+                              }
+                              if (value.trim().length != 15) {
+                                return "GSTIN number must be exactly 15 characters";
+                              }
+                              if (!RegExp(
+                                r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
+                              ).hasMatch(value.trim())) {
+                                return "Please enter a valid GSTIN number";
+                              }
+                              return null;
+                            },
+                            inputFormatters: [
+                              UpperCaseTextFormatter(),
+                              LengthLimitingTextInputFormatter(15),
+                            ],
+                          );
+                        }),
+                        SizedBox(height: 2.h),
+                        Obx(() {
+                          if (!controller.isVerified.value) {
                             return const SizedBox.shrink();
                           }
-                          return Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Enter OTP',
-                                    style: MyTexts.regular16.copyWith(
-                                      color: MyColors.lightBlue,
-                                      fontFamily: MyTexts.SpaceGrotesk,
+                          return Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: MyColors.grayE6),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  decoration: const BoxDecoration(
+                                    color: MyColors.grayE6,
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(12),
+                                      topLeft: Radius.circular(12),
                                     ),
                                   ),
-                                  Text(
-                                    '*',
-                                    style: MyTexts.regular16.copyWith(
-                                      color: Colors.red,
+                                  child: Align(
+                                    alignment: AlignmentGeometry.topLeft,
+                                    child: Text(
+                                      Get.find<SignUpRoleController>()
+                                                  .selectedRoleName
+                                                  .value ==
+                                              "House-Owner"
+                                          ? "Aadhaar card details"
+                                          : "Company details",
+                                      style: MyTexts.medium13.copyWith(
+                                        color: MyColors.gray2E,
+                                      ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 0.5.h),
-                              PinCodeTextField(
-                                appContext: context,
-                                length: 4,
-                                controller: controller.otpController,
-                                onChanged: (value) {
-                                  controller.otp.value = value;
-                                },
-                                onCompleted: (value) {
-                                  controller.otp.value = value;
-                                },
-                                keyboardType: TextInputType.number,
-                                textStyle: MyTexts.extraBold16.copyWith(
-                                  color: MyColors.primary,
                                 ),
-                                pinTheme: PinTheme(
-                                  shape: PinCodeFieldShape.box,
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderWidth: 0.5,
-                                  fieldHeight: 57,
-                                  fieldWidth: 57,
-                                  activeFillColor: MyColors.white,
-                                  inactiveFillColor: MyColors.white,
-                                  selectedFillColor: MyColors.white,
-                                  activeColor: MyColors.primary,
-                                  inactiveColor: MyColors.textFieldBorder,
-                                  selectedColor: MyColors.primary,
-                                ),
-                                enableActiveFill: true,
-                                animationType: AnimationType.fade,
-                              ),
-                              Obx(() {
-                                return !controller.otpSend.value
-                                    ? const SizedBox()
-                                    : Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Countdown(
-                                          controller:
-                                              controller.countdownController,
-                                          seconds: 30,
-                                          interval: const Duration(
-                                            milliseconds: 100,
+                                Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (Get.find<SignUpRoleController>()
+                                              .selectedRoleName
+                                              .value ==
+                                          "House-Owner") ...[
+                                        Text(
+                                          "Aadhaar number ",
+                                          style: MyTexts.medium13.copyWith(
+                                            color: MyColors.dustyGray,
                                           ),
-                                          build: (_, double time) {
-                                            return Text(
-                                              "Resend in 00:${time.ceil().toString().padLeft(2, '0')}",
-                                              style: MyTexts.bold16.copyWith(
-                                                color: MyColors.green,
-                                              ),
-                                            );
-                                          },
-                                          onFinished: () {
-                                            controller.onCountdownFinish();
-                                          },
                                         ),
-                                      );
-                              }),
-                            ],
+                                        const Gap(4),
+                                        Text(
+                                          controller.aadhaarController.text,
+                                          style: MyTexts.medium16.copyWith(
+                                            color: MyColors.black,
+                                          ),
+                                        ),
+                                      ] else ...[
+                                        Text(
+                                          "Company name ",
+                                          style: MyTexts.medium13.copyWith(
+                                            color: MyColors.dustyGray,
+                                          ),
+                                        ),
+                                        const Gap(4),
+                                        Text(
+                                          "XYZ Company",
+                                          style: MyTexts.medium16.copyWith(
+                                            color: MyColors.black,
+                                          ),
+                                        ),
+                                      ],
+                                      const Gap(12),
+                                      Text(
+                                        "Address",
+                                        style: MyTexts.medium13.copyWith(
+                                          color: MyColors.dustyGray,
+                                        ),
+                                      ),
+                                      const Gap(4),
+                                      Text(
+                                        "Flat No. 305, Block B, Prestige Lakeview Apartments",
+                                        style: MyTexts.medium16.copyWith(
+                                          color: MyColors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         }),
                         SizedBox(height: 2.h),
@@ -311,19 +371,16 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
             buttonName: 'PROCEED',
             onTap: () {
               hideKeyboard();
-              controller.isValid.value = -1;
-              if (controller.mobileNumberController.text.isEmpty) {
-                controller.isValid.value = 0;
-              }
               if (formKey.currentState!.validate()) {
-                if (controller.otpController.text.isEmpty) {
-                  SnackBars.errorSnackBar(content: "Please enter OTP");
-                  return;
-                }
-                if (controller.mobileNumberController.text.isEmpty) {
-                  controller.isValid.value = 0;
+                if (controller.isVerified.value) {
+                  controller.openPhoneNumberBottomSheet(context);
                 } else {
-                  controller.proceedToPassword();
+                  final String text =
+                      Get.find<SignUpRoleController>().selectedRoleName.value ==
+                          "House-Owner"
+                      ? "aadhaar number first"
+                      : "GSTIN number";
+                  SnackBars.errorSnackBar(content: "Please verify $text");
                 }
               }
             },

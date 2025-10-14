@@ -123,9 +123,6 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDe
 class SignUpPasswordController extends GetxController {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
-  final password = ''.obs;
-  final confirmPassword = ''.obs;
   final isPasswordVisible = false.obs;
   final isConfirmPasswordVisible = false.obs;
 
@@ -137,19 +134,10 @@ class SignUpPasswordController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    // Get user data passed from previous screen
     final arguments = Get.arguments;
     if (arguments != null && arguments is UserDataModel) {
       userData = arguments;
     }
-
-    passwordController.addListener(() {
-      password.value = passwordController.text;
-    });
-    confirmPasswordController.addListener(() {
-      confirmPassword.value = confirmPasswordController.text;
-    });
   }
 
   void togglePasswordVisibility() {
@@ -167,27 +155,7 @@ class SignUpPasswordController extends GetxController {
     super.onClose();
   }
 
-  bool isFormValid() {
-    return password.value.isNotEmpty &&
-        confirmPassword.value.isNotEmpty &&
-        password.value == confirmPassword.value &&
-        password.value.length >= 8;
-  }
-
   Future<void> completeSignUp() async {
-    if (!isFormValid()) {
-      if (password.value.isEmpty || confirmPassword.value.isEmpty) {
-        SnackBars.errorSnackBar(content: 'Please fill all required fields');
-      } else if (password.value != confirmPassword.value) {
-        SnackBars.errorSnackBar(content: 'Passwords do not match');
-      } else if (password.value.length < 8) {
-        SnackBars.errorSnackBar(
-          content: 'Password must be at least 8 characters long',
-        );
-      }
-      return;
-    }
-
     isLoading.value = true;
 
     try {
@@ -205,13 +173,12 @@ class SignUpPasswordController extends GetxController {
         countryCode: userData!.countryCode,
         mobileNumber: userData!.mobileNumber,
         email: userData!.email,
-        password: password.value,
+        password: passwordController.text,
         gst: userData!.gst,
-        confirmPassword: confirmPassword.value,
+        confirmPassword: confirmPasswordController.text,
       );
 
       if (signUpResponse.success == true) {
-        // ✅ Save token and user data
         if (signUpResponse.data?.token != null) {
           myPref.setToken(signUpResponse.data!.token!);
         }
@@ -224,7 +191,7 @@ class SignUpPasswordController extends GetxController {
             header: "Account created successfully !",
             image: Asset.forgetSImage,
             onTap: () {
-              Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register",});
+              Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register"});
             },
           ),
         );

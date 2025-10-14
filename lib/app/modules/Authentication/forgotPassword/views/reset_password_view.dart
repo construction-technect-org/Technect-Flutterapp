@@ -63,7 +63,7 @@ class ResetPasswordView extends StatelessWidget {
                       ),
                     );
                   }),
-                  SizedBox(height: 1.8.h),
+                  SizedBox(height: 2.h),
                   Obx(() {
                     return CommonTextField(
                       validator: (val) => validateConfirmPassword(
