@@ -21,13 +21,14 @@ class SplashController extends GetxController {
   }
 
   void _checkTokenAndNavigate() {
-    final savedToken = myPref.getToken();
-
-    if (savedToken.isNotEmpty) {
-      _navigateToHome();
-    } else {
-      _startSplashTimer();
-    }
+    Get.toNamed(Routes.ON_BINDING);
+    // final savedToken = myPref.getToken();
+    //
+    // if (savedToken.isNotEmpty) {
+    //   _navigateToHome();
+    // } else {
+    //   _startSplashTimer();
+    // }
   }
 
   void _showNoInternetDialog() {

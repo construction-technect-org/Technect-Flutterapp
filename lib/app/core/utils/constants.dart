@@ -10,6 +10,7 @@ class Asset {
 
 
   static const String appLogo = '${png}appLogo.png';
+  static const String ob1 = '${png}ob1.png';
 
 
 

@@ -55,11 +55,11 @@ class RoundedButton extends StatelessWidget {
               borderColor != null
                   ? Border.all(color: borderColor ?? MyColors.white)
                   : null,
-          borderRadius: BorderRadius.circular(borderRadius ?? 20),
+          borderRadius: BorderRadius.circular(borderRadius ?? 16),
         ),
         alignment: alignment ?? Alignment.center,
         padding: EdgeInsets.symmetric(
-          vertical: verticalPadding ?? 16,
+          vertical: verticalPadding ?? 14,
           horizontal: horizontalPadding ?? 0,
         ),
         child:
@@ -71,7 +71,7 @@ class RoundedButton extends StatelessWidget {
                       textAlign: textAlign,
                       style:
                           style ??
-                          MyTexts.bold16.copyWith(
+                          MyTexts.medium16.copyWith(
                             color: fontColor ?? MyColors.white,
                               fontFamily: MyTexts.SpaceGrotesk
                           ),
