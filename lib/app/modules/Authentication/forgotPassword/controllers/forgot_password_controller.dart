@@ -101,6 +101,7 @@ class ForgotPasswordController extends GetxController {
 
       if (otpResponse.success == true && otpResponse.data?.verified == true) {
         otpVerify.value = true;
+        Get.back();
         Get.to(()=> ResetPasswordView());
         SnackBars.successSnackBar(content: 'OTP verified successfully');
       } else {
