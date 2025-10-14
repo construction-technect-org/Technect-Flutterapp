@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/services/ForgotPasswordService.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/reset_password_view.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class ForgotPasswordController extends GetxController {
@@ -65,11 +66,6 @@ class ForgotPasswordController extends GetxController {
     });
   }
 
-  @override
-  void onClose() {
-    _disposeControllers();
-    super.onClose();
-  }
 
   void toggleNewPasswordVisibility() {
     isNewPasswordVisible.value = !isNewPasswordVisible.value;
@@ -79,11 +75,6 @@ class ForgotPasswordController extends GetxController {
     isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
   }
 
-  void _disposeControllers() {
-    phoneEmailController.dispose();
-    newPasswordController.dispose();
-    confirmPasswordController.dispose();
-  }
 
   // Send OTP for mobile number verification
   Future<void> sendOtp() async {
@@ -141,7 +132,8 @@ class ForgotPasswordController extends GetxController {
 
       if (otpResponse.success == true && otpResponse.data?.verified == true) {
         otpVerify.value = true;
-        // SnackBars.successSnackBar(content: 'Mobile number verified successfully');
+        Get.to(()=> ResetPasswordView());
+        SnackBars.successSnackBar(content: 'OTP verified successfully');
       } else {
         SnackBars.errorSnackBar(
           content: otpResponse.message ?? 'OTP verification failed',
@@ -170,43 +162,7 @@ class ForgotPasswordController extends GetxController {
 
   // Reset password
   Future<void> resetPassword() async {
-    // if (!_validatePasswords()) return;
-
-    if (!otpVerify.value) {
-      if (otpSend.value) {
-        await verifyOtp();
-      } else {
-        SnackBars.errorSnackBar(
-          content: 'Please verify your mobile number first',
-        );
-        return;
-      }
-    }
-
-    if (otpVerify.value) {
       await _performPasswordReset();
-    }
-  }
-
-  bool _validatePasswords() {
-    if (newPassword.value.isEmpty || confirmPassword.value.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please fill all password fields');
-      return false;
-    }
-
-    if (newPassword.value != confirmPassword.value) {
-      SnackBars.errorSnackBar(content: 'Passwords do not match');
-      return false;
-    }
-
-    if (newPassword.value.length < 8) {
-      SnackBars.errorSnackBar(
-        content: 'Password must be at least 8 characters long',
-      );
-      return false;
-    }
-
-    return true;
   }
 
   Future<void> _performPasswordReset() async {
@@ -238,6 +194,9 @@ class ForgotPasswordController extends GetxController {
         );
       }
     } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     } finally {
       isLoading.value = false;
     }

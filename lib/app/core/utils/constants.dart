@@ -5,6 +5,7 @@ class Asset {
   static const images = "assets/images/";
   static const bg = "${images}bg/";
   static const png = "${images}png/";
+  static const svg = "${images}svg/";
 
   static const String splashBg = '${bg}splashBg.png';
   static const String loginBg = '${bg}loginBg.png';
@@ -14,6 +15,7 @@ class Asset {
   static const String ob1 = '${png}ob1.png';
   static const String auth = '${png}auth.png';
 
+  static const String back = '${svg}back.svg';
 
 
   static const String bricksBackground = 'assets/images/bricks_background.png';

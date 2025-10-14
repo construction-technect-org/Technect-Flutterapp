@@ -109,8 +109,12 @@ class CommonPhoneField extends StatelessWidget {
                 vertical: 12,
               ),
               hintText: "Enter your phone number",
-              hintStyle: MyTexts.medium16.copyWith(
+              hintStyle: MyTexts.medium13.copyWith(
                 color: MyColors.primary.withValues(alpha: 0.5),
+                fontFamily: MyTexts.SpaceGrotesk,
+              ),
+              errorStyle:  MyTexts.medium13.copyWith(
+                color:MyColors.red33,
                 fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
