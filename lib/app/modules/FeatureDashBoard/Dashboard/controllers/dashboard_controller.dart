@@ -7,14 +7,14 @@ class DashboardController extends GetxController {
   RxBool isLoading = false.obs;
 
   final features = [
-    {"title": "Marketplace", "icon": Asset.marketplaceIcon},
-    {"title": "CRM", "icon": Asset.crmIcon},
-    {"title": "ERP", "icon": Asset.erpIcon},
-    {"title": "Projects", "icon": Asset.projectManagementIcon},
-    {"title": "HRMS", "icon": Asset.hrmsIcon},
-    {"title": "Portfolio", "icon": Asset.portfolioManagementIcon},
-    {"title": "OVP", "icon": Asset.ovpIcon},
-    {"title": "Construction", "icon": Asset.constructionTaxi},
+    {"title": "Marketplace", "icon": Asset.role1},
+    {"title": "CRM", "icon": Asset.role1},
+    {"title": "ERP", "icon": Asset.role1},
+    {"title": "Project Management", "icon": Asset.role1},
+    {"title": "HRMS", "icon": Asset.role1},
+    {"title": "Portfolio Management", "icon": Asset.role1},
+    {"title": "OVP", "icon": Asset.role1},
+    {"title": "Construction Taxi", "icon": Asset.role1},
   ];
 
   void onFeatureTap(String featureName) {

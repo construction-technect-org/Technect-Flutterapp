@@ -186,8 +186,7 @@ class SignUpPasswordController extends GetxController {
           myPref.setUserModel(signUpResponse.data!.user!);
         }
 
-        if (userData!.roleName !=
-            "House-Owner") {
+        if (userData!.roleName != "House-Owner") {
           myPref.setRole("partner");
         } else {
           myPref.setRole("connector");
@@ -198,7 +197,7 @@ class SignUpPasswordController extends GetxController {
             header: "Account created successfully !",
             image: Asset.forgetSImage,
             onTap: () {
-              Get.offAllNamed(Routes.MAIN,);
+              Get.offAllNamed(Routes.DASHBOARD);
             },
           ),
         );
