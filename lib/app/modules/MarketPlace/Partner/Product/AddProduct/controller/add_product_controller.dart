@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -10,14 +9,13 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/controllers/product_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AddProductController extends GetxController {
   final pageController = PageController();
   Product product = Product();
-  ProductManagementController controller = Get.find();
+  // ProductManagementController controller = Get.find();
 
   // ---------------- Form Controllers ----------------
 
@@ -677,7 +675,7 @@ class AddProductController extends GetxController {
       );
 
       if (addTeamResponse.success == true) {
-        await controller.fetchProducts();
+        // await controller.fetchProducts();
         isLoading.value = false;
         Get.back();
         Get.back();
@@ -753,7 +751,7 @@ class AddProductController extends GetxController {
       );
 
       if (res.success == true) {
-        await controller.fetchProducts();
+        // await controller.fetchProducts();
         Get.back();
         Get.back();
       } else {

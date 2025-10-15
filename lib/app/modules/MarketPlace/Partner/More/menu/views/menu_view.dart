@@ -225,13 +225,22 @@ class MenuView extends StatelessWidget {
               ),
               const Gap(20),
 
-              // _buildMenuItem(
-              //   'Service Management',
-              //   false,
-              //   onTap: () {
-              //     Get.toNamed(Routes.SERVICE_MANAGEMENT);
-              //   },
-              // ),
+              _buildMenuItem(
+                'Log Out',
+                false,
+                onTap: () {
+                  _showConfirmDialog(
+                    context,
+                    title: "Log Out",
+                    message: "Are you sure you want to log out?",
+                    confirmText: "Log Out",
+                    onConfirm: () {
+                      myPref.logout();
+                      Get.offAllNamed(Routes.LOGIN);
+                    },
+                  );
+                },
+              ),
               // SizedBox(height: 1.h),
               // _buildMenuItem(
               //   'Product Management',
@@ -406,7 +415,70 @@ class MenuView extends StatelessWidget {
       ),
     );
   }
-}
+
+  void _showConfirmDialog(
+      BuildContext context, {
+        required String title,
+        required String message,
+        required String confirmText,
+        required VoidCallback onConfirm,
+      }) {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: Colors.white,
+        titlePadding: const EdgeInsets.all(20),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        title: Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                style: MyTexts.medium16.copyWith(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          message,
+          style: MyTexts.regular16.copyWith(color: Colors.black87, height: 1.4),
+        ),
+        actions: [
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: Colors.grey.shade400),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            ),
+            onPressed: () => Get.back(),
+            child: const Text("Cancel", style: TextStyle(color: Colors.black87)),
+          ),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.logout, size: 18, color: Colors.white),
+            label: Text(confirmText, style: const TextStyle(color: Colors.white)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            ),
+            onPressed: onConfirm,
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }}
 
 class CommonContainer extends StatelessWidget {
   final List<Widget> children;
