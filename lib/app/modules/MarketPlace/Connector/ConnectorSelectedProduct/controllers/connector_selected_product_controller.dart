@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
@@ -24,9 +25,7 @@ class ConnectorSelectedProductController extends GetxController {
   RxBool isFilterApply = false.obs;
   final TextEditingController searchController = TextEditingController();
   RxInt selectedRadius = 5.obs;
-  final Rx<TextEditingController> radiusController = TextEditingController(
-    text: "5",
-  ).obs;
+  final Rx<TextEditingController> radiusController = TextEditingController(text: "5").obs;
 
   /// Page Controller
   late PageController pageController;
@@ -44,20 +43,22 @@ class ConnectorSelectedProductController extends GetxController {
   RxBool isLoadingAddresses = false.obs;
   RxInt selectedSiteIndex = 0.obs;
 
-  Rx<ConnectorSelectedProductModel> productListModel =
-      ConnectorSelectedProductModel(success: false, message: '').obs;
+  Rx<ConnectorSelectedProductModel> productListModel = ConnectorSelectedProductModel(
+    success: false,
+    message: '',
+  ).obs;
 
   RxInt selectedMainCategoryIndex = (-1).obs;
   RxInt selectedSubCategoryIndex = (-1).obs;
   RxInt selectedProductIndex = (-1).obs;
 
   /// Services
-  final ConnectorSelectedProductServices services =
-      ConnectorSelectedProductServices();
+  final ConnectorSelectedProductServices services = ConnectorSelectedProductServices();
 
   @override
   void onInit() {
     super.onInit();
+
     fetchMainCategories();
     getSiteAddresses();
   }
@@ -93,9 +94,7 @@ class ConnectorSelectedProductController extends GetxController {
       return;
     }
     final query = searchQuery.value.toLowerCase();
-    final results = (productListModel.value.data?.products ?? []).where((
-      product,
-    ) {
+    final results = (productListModel.value.data?.products ?? []).where((product) {
       final name = (product.categoryProductName ?? '').toLowerCase();
       final address = (product.address ?? '').toLowerCase();
       final brand = (product.brand ?? '').toLowerCase();
@@ -224,11 +223,7 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> addToConnectApi({int? mID, int? pID, String? message}) async {
     try {
       isLoading.value = true;
-      final res = await services.addToConnect(
-        mID: mID,
-        message: message,
-        pID: pID,
-      );
+      final res = await services.addToConnect(mID: mID, message: message, pID: pID);
       if (res.success == true) {
         await getAllProducts();
 
@@ -312,9 +307,7 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> fetchProducts(int subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().productsBySubCategory(
-        subCategoryId,
-      );
+      final result = await AddProductService().productsBySubCategory(subCategoryId);
 
       if ((result.success) == true) {
         productsList.value = result.data ?? [];
@@ -345,14 +338,10 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> getFilter(String subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().getFilter(
-        int.parse(subCategoryId),
-      );
+      final result = await AddProductService().getFilter(int.parse(subCategoryId));
 
       if (result.success == true) {
-        filters.value = (result.data as List<FilterData>)
-            .map((e) => e)
-            .toList();
+        filters.value = (result.data as List<FilterData>).map((e) => e).toList();
       } else {
         filters.clear();
       }
@@ -382,9 +371,7 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> deleteSiteAddress(int siteId) async {
     try {
       isLoading.value = true;
-      final response = await SiteLocationService.deleteSiteLocation(
-        siteId.toString(),
-      );
+      final response = await SiteLocationService.deleteSiteLocation(siteId.toString());
       if (response.success == true) {
         await getSiteAddresses();
         siteAddressList.removeWhere((address) => address.id == siteId);
@@ -495,9 +482,7 @@ class FeedbackBottomSheetView extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         icon: Icon(
                           Icons.star,
-                          color: index < rating.value
-                              ? Colors.orangeAccent
-                              : Colors.grey,
+                          color: index < rating.value ? Colors.orangeAccent : Colors.grey,
                           size: 32,
                         ),
                         onPressed: () {
@@ -534,10 +519,7 @@ class FeedbackBottomSheetView extends StatelessWidget {
                         rating.value = 0;
                         Get.back();
                       },
-                      child: const Text(
-                        "CANCEL",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: const Text("CANCEL", style: TextStyle(color: Colors.white)),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -554,10 +536,7 @@ class FeedbackBottomSheetView extends StatelessWidget {
                         addFeedBack();
                         // SnackBars.successSnackBar(content: "Feedback sent successfully");
                       },
-                      child: Text(
-                        "SUBMIT",
-                        style: TextStyle(color: MyColors.white),
-                      ),
+                      child: Text("SUBMIT", style: TextStyle(color: MyColors.white)),
                     ),
                   ),
                 ],

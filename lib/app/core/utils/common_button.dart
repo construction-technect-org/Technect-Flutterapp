@@ -37,7 +37,7 @@ class RoundedButton extends StatelessWidget {
   final double? borderRadius;
   final double? verticalPadding;
   final double? horizontalPadding;
-  final List<Color>? gradientColor;
+  final Gradient? gradientColor;
   final TextStyle? style;
   final String? assetImage;
 
@@ -49,6 +49,7 @@ class RoundedButton extends StatelessWidget {
         width: width,
         height: height ?? 50,
         decoration: BoxDecoration(
+          gradient: gradientColor,
           color: color ?? MyColors.primary,
           border: borderColor != null
               ? Border.all(color: borderColor ?? MyColors.white)

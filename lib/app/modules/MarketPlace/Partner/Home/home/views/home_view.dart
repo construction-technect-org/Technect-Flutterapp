@@ -1,8 +1,7 @@
-import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/coming_soon_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:gap/gap.dart';
@@ -18,688 +17,885 @@ class HomeView extends StatelessWidget {
       isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        // appBar: CommonAppBar(
-        //   leadingWidth: 190,
-        //   leading: Container(
-        //     padding: const EdgeInsets.all(7),
-        //     height: 49,
-        //     margin: const EdgeInsets.only(left: 13, top: 10),
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(12),
-        //       color: MyColors.yellow,
-        //       border: Border.all(color: MyColors.black),
-        //     ),
-        //     child: GestureDetector(
-        //       onTap: () {
-        //         Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
-        //       },
-        //       child: Row(
-        //         children: [
-        //           SvgPicture.asset(Asset.connectorSvg, width: 24, height: 24),
-        //           const Gap(8),
-        //           Text(
-        //             "Join As Connector",
-        //             style: MyTexts.regular14.copyWith(
-        //               color: Colors.black,
-        //               fontFamily: MyTexts.SpaceGrotesk,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 5.h),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18.0,
-                vertical: 0,
-              ),
-              child: Row(
-                children: [
-                  Obx(() {
-                    return (controller.profileData.value.data?.user?.image ??
-                                "")
-                            .isEmpty
-                        ? Image.asset(Asset.profil, height: 50, width: 50)
-                        : ClipOval(
-                            child: getImageView(
-                              finalUrl:
-                                  "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
-                              fit: BoxFit.cover,
-                              height: 50,
-                              width: 50,
-                            ),
-                          );
-                  }),
-                  SizedBox(width: 1.h),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Obx(
-                          () => Text(
-                            'Welcome ${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.fontBlack,
-                              fontFamily: MyTexts.SpaceGrotesk,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(100),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x19000000),
+                            blurRadius: 20,
+                            offset: Offset(0, 5),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            final addresses =
-                                controller.addressData.data?.addresses ?? [];
-
-                            if (addresses.isEmpty) {
-                              Get.snackbar(
-                                "No Address",
-                                "Please add an address first",
-                                snackPosition: SnackPosition.BOTTOM,
-                              );
-                              return;
-                            }
-
-                            final officeAddress = addresses.firstWhere(
-                              (a) => a.addressType?.toLowerCase() == 'office',
-                              orElse: () => Address(),
-                            );
-
-                            final factoryAddress = addresses.firstWhere(
-                              (a) => a.addressType?.toLowerCase() == 'factory',
-                              orElse: () => Address(),
-                            );
-
-                            showModalBottomSheet(
-                              context: Get.context!,
-                              isScrollControlled: true,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Obx(
+                          () => Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  decoration: controller.isMarketPlace.value
+                                      ? const BoxDecoration()
+                                      : const BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Color(0x19000000),
+                                              blurRadius: 30,
+                                              offset: Offset(5, 0),
+                                            ),
+                                          ],
+                                        ),
+                                  child: RoundedButton(
+                                    onTap: () {
+                                      controller.isMarketPlace.value =
+                                          !controller.isMarketPlace.value;
+                                    },
+                                    height: 46,
+                                    verticalPadding: 0,
+                                    buttonName: 'Market place',
+                                    borderRadius: 100,
+                                    fontColor: controller.isMarketPlace.value
+                                        ? Colors.white
+                                        : Colors.black,
+                                    gradientColor: controller.isMarketPlace.value
+                                        ? LinearGradient(
+                                            colors: [
+                                              MyColors.custom('0F1A36'),
+                                              MyColors.custom('1B2F62'),
+                                            ],
+                                          )
+                                        : LinearGradient(
+                                            colors: [MyColors.white, MyColors.white],
+                                          ),
+                                  ),
                                 ),
                               ),
-                              backgroundColor: Colors.white,
-                              builder: (context) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(
-                                      context,
-                                    ).viewInsets.bottom,
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(16),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Select Address",
-                                          style: MyTexts.extraBold18.copyWith(
-                                            color: MyColors.black,
-                                          ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Container(
+                                  decoration: !controller.isMarketPlace.value
+                                      ? const BoxDecoration()
+                                      : BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Color(0x19000000),
+                                              blurRadius: 20,
+                                              offset: Offset(0, 5),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(height: 16),
-                                        IntrinsicHeight(
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
+                                  child: RoundedButton(
+                                    buttonName: 'CRM',
+                                    verticalPadding: 0,
+                                    height: 46,
+                                    borderRadius: 100,
+                                    onTap: () {
+                                      controller.isMarketPlace.value =
+                                          !controller.isMarketPlace.value;
+                                    },
+                                    fontColor: !controller.isMarketPlace.value
+                                        ? Colors.white
+                                        : Colors.black,
+                                    gradientColor: !controller.isMarketPlace.value
+                                        ? LinearGradient(
+                                            colors: [
+                                              MyColors.custom('0F1A36'),
+                                              MyColors.custom('1B2F62'),
+                                            ],
+                                          )
+                                        : LinearGradient(
+                                            colors: [MyColors.white, MyColors.white],
+                                          ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    Row(
+                      children: [
+                        Obx(() {
+                          return (controller.profileData.value.data?.user?.image ?? "")
+                                  .isEmpty
+                              ? Image.asset(Asset.profil, height: 48, width: 48)
+                              : ClipOval(
+                                  child: getImageView(
+                                    finalUrl:
+                                        "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                                    fit: BoxFit.cover,
+                                    height: 48,
+                                    width: 48,
+                                  ),
+                                );
+                        }),
+                        SizedBox(width: 1.h),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Obx(
+                                () => Text(
+                                  '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                  style: MyTexts.medium16.copyWith(
+                                    color: MyColors.fontBlack,
+                                    fontFamily: MyTexts.SpaceGrotesk,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  final addresses =
+                                      controller.addressData.data?.addresses ?? [];
+
+                                  if (addresses.isEmpty) {
+                                    Get.snackbar(
+                                      "No Address",
+                                      "Please add an address first",
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                    return;
+                                  }
+
+                                  final officeAddress = addresses.firstWhere(
+                                    (a) => a.addressType?.toLowerCase() == 'office',
+                                    orElse: () => Address(),
+                                  );
+
+                                  final factoryAddress = addresses.firstWhere(
+                                    (a) => a.addressType?.toLowerCase() == 'factory',
+                                    orElse: () => Address(),
+                                  );
+
+                                  showModalBottomSheet(
+                                    context: Get.context!,
+                                    isScrollControlled: true,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20),
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.white,
+                                    builder: (context) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(
+                                            context,
+                                          ).viewInsets.bottom,
+                                        ),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Expanded(
-                                                child:
-                                                    officeAddress.addressType !=
-                                                        null
-                                                    ? _addressCard(
-                                                        address: officeAddress,
-                                                        addressType:
-                                                            officeAddress
-                                                                .addressType,
-                                                        isSelected:
-                                                            controller
-                                                                .isDefaultOffice
-                                                                .value ==
-                                                            true,
-                                                      )
-                                                    : Container(),
+                                              Text(
+                                                "Select Address",
+                                                style: MyTexts.extraBold18.copyWith(
+                                                  color: MyColors.black,
+                                                ),
                                               ),
-                                              const SizedBox(width: 16),
-                                              Expanded(
-                                                child:
-                                                    factoryAddress
-                                                            .addressType !=
-                                                        null
-                                                    ? _addressCard(
-                                                        address: factoryAddress,
-                                                        addressType:
-                                                            factoryAddress
-                                                                .addressType,
-                                                        isSelected:
-                                                            controller
-                                                                .isDefaultOffice
-                                                                .value ==
-                                                            false,
-                                                      )
-                                                    : Container(),
+                                              const SizedBox(height: 16),
+                                              IntrinsicHeight(
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.stretch,
+                                                  children: [
+                                                    Expanded(
+                                                      child:
+                                                          officeAddress.addressType !=
+                                                              null
+                                                          ? _addressCard(
+                                                              address: officeAddress,
+                                                              addressType: officeAddress
+                                                                  .addressType,
+                                                              isSelected:
+                                                                  controller
+                                                                      .isDefaultOffice
+                                                                      .value ==
+                                                                  true,
+                                                            )
+                                                          : Container(),
+                                                    ),
+                                                    const SizedBox(width: 16),
+                                                    Expanded(
+                                                      child:
+                                                          factoryAddress.addressType !=
+                                                              null
+                                                          ? _addressCard(
+                                                              address: factoryAddress,
+                                                              addressType: factoryAddress
+                                                                  .addressType,
+                                                              isSelected:
+                                                                  controller
+                                                                      .isDefaultOffice
+                                                                      .value ==
+                                                                  false,
+                                                            )
+                                                          : Container(),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
+                                              const SizedBox(height: 16),
                                             ],
                                           ),
                                         ),
-                                        const SizedBox(height: 16),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                Asset.location,
-                                width: 9,
-                                height: 12.22,
-                              ),
-                              SizedBox(width: 0.4.h),
-                              Expanded(
-                                child: Obx(() {
-                                  return RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    text: TextSpan(
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.textFieldBackground,
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: controller
-                                              .getCurrentAddress()
-                                              .value,
-                                        ),
-                                        const WidgetSpan(
-                                          alignment:
-                                              PlaceholderAlignment.middle,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(left: 4),
-                                            child: Icon(
-                                              Icons.keyboard_arrow_down,
-                                              size: 16,
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      );
+                                    },
                                   );
-                                }),
+                                },
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      Asset.location,
+                                      width: 9,
+                                      height: 12.22,
+                                      color: MyColors.custom('545454'),
+                                    ),
+                                    SizedBox(width: 0.4.h),
+                                    Expanded(
+                                      child: Obx(() {
+                                        return RichText(
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          text: TextSpan(
+                                            style: MyTexts.medium14.copyWith(
+                                              color: MyColors.custom('545454'),
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: controller
+                                                    .getCurrentAddress()
+                                                    .value,
+                                              ),
+                                              const WidgetSpan(
+                                                alignment: PlaceholderAlignment.middle,
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(left: 4),
+                                                  child: Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    size: 16,
+                                                    color: Colors.black54,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
+                          ),
+                        ),
+                        const Gap(10),
+                        Image.asset(Asset.explore, width: 18.w),
+                        const Gap(10),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.NOTIFICATIONS);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              Asset.notification,
+                              width: 24,
+                              height: 24,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-
-                  const Gap(10),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.NOTIFICATIONS);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: MyColors.grayD4),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Stack(
-                        clipBehavior: Clip.none,
+                    SizedBox(height: 3.5.h),
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SvgPicture.asset(
-                            Asset.notifications,
-                            width: 18,
-                            height: 18,
+                          tabBar(
+                            onTap: () {
+                              controller.marketPlace.value = 0;
+                            },
+                            icon: Asset.MM,
+                            name: 'Material\nMarketplace',
+                            isMarketPlace: controller.marketPlace.value == 0,
                           ),
-                          Positioned(
-                            right: 0,
-                            top: 3,
-                            child: Container(
-                              width: 6.19,
-                              height: 6.19,
-                              decoration: const BoxDecoration(
-                                color: MyColors.red,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
+                          tabBar(
+                            onTap: () {
+                              controller.marketPlace.value = 1;
+                            },
+                            icon: Asset.CM,
+                            name: 'Construction line\nMarketplace',
+                            isMarketPlace: controller.marketPlace.value == 1,
+                          ),
+                          tabBar(
+                            onTap: () {
+                              controller.marketPlace.value = 2;
+                            },
+                            icon: Asset.TEM,
+                            name: 'Tools & equipment\nMarketplace',
+                            isMarketPlace: controller.marketPlace.value == 2,
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(width: 0.8.h),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.NEWS);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: MyColors.grayD4),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          SvgPicture.asset(
-                            Asset.warning,
-                            width: 18,
-                            height: 18,
-                            colorFilter: const ColorFilter.mode(
-                              Colors.black,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 3,
-                            child: Container(
-                              width: 6.19,
-                              height: 6.19,
-                              decoration: const BoxDecoration(
-                                color: MyColors.red,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 1.h),
-
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 1.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: HeaderText(text: "Features"),
-                    ),
-                    SizedBox(height: 1.h),
-                    SizedBox(
-                      height: 100,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        shrinkWrap: true,
-                        itemCount: controller.features.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          final item = controller.features[index];
-                          return Obx(() {
-                            final isSelected =
-                                controller.selectedIndex.value == index;
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                left: index == 0 ? 0 : 16.0,
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  // if(isSelected){
-                                  if (index == 0) {
-                                    controller.selectedIndex.value = index;
-                                  } else {
-                                    SnackBars.successSnackBar(
-                                      content: 'This feature will come soon',
-                                    );
-                                  }
-                                },
-                                child: Container(
-                                  width: 120,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: isSelected
-                                          ? MyColors.primary
-                                          : MyColors.grayD4,
-                                    ),
-                                    color: isSelected
-                                        ? MyColors.yellow
-                                        : MyColors.greyE5,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        color: isSelected
-                                            ? MyColors.primary
-                                            : MyColors.grey,
-
-                                        item['icon']!,
-                                        width: 40,
-                                        fit: BoxFit.cover,
-                                        height: 40,
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Text(
-                                        item["title"]!,
-                                        textAlign: TextAlign.center,
-                                        style: MyTexts.medium13.copyWith(
-                                          color: MyColors.fontBlack,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 2.h),
-                          HeaderText(text: "Statics"),
-                          const Gap(14),
-                          Obx(
-                            () => Row(
-                              children: [
-                                Expanded(
-                                  child: StaticsCard(
-                                    title: "Total Partners",
-                                    value:
-                                        (controller
-                                                    .dashboardData
-                                                    .value
-                                                    .data
-                                                    ?.totalPartnerProfiles ??
-                                                0)
-                                            .toString(),
-                                    icon: Asset.noOfPartner,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: StaticsCard(
-                                    title: "Total Products",
-                                    value:
-                                        (controller
-                                                    .dashboardData
-                                                    .value
-                                                    .data
-                                                    ?.totalProducts ??
-                                                0)
-                                            .toString(),
-
-                                    icon: Asset.noOfConectors,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-
-                                Expanded(
-                                  child: StaticsCard(
-                                    title: "Total Connectors",
-                                    value:
-                                        (controller
-                                                    .dashboardData
-                                                    .value
-                                                    .data
-                                                    ?.totalConnectorProfiles ??
-                                                0)
-                                            .toString(),
-
-                                    icon: Asset.noOfUsers,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Gap(14),
-                          HeaderText(text: "Quick Access"),
-                          const Gap(14),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: MyColors.gray5D,
-                                width: 0.5,
-                              ),
-                            ),
-                            child: SizedBox(
-                              height: 200,
-                              child: Center(
-                                child: GridView.builder(
-                                  padding: const EdgeInsets.all(16),
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: controller.items.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 4,
-                                        mainAxisSpacing: 20,
-                                        crossAxisSpacing: 12,
-                                        mainAxisExtent: 70,
-                                      ),
-                                  itemBuilder: (context, index) {
-                                    final item = controller.items[index];
-                                    return Center(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          if (index == 0) {
-                                            Get.toNamed(
-                                              Routes.APPROVAL_INBOX,
-                                              arguments: {"isInbox": true},
-                                            );
-                                          } else if (index == 1) {
-                                            Get.toNamed(
-                                              Routes.REPORT,
-                                              arguments: {"isReport": true},
-                                            );
-                                          } else if (index == 2) {
-                                            Get.toNamed(
-                                              Routes.REPORT,
-                                              arguments: {"isReport": false},
-                                            );
-                                          } else if (index == 3) {
-
-                                            Get.toNamed(
-                                                Routes.SETTING);
-                                          } else if (index == 4) {
-                                            Get.toNamed(
-                                              Routes.ROLE_MANAGEMENT,
-                                              arguments: {"isHome": true},
-                                            );
-                                          } else if (index == 5) {
-                                            Get.toNamed(Routes.INVENTORY);
-                                          } else if (index == 6) {
-                                            Get.toNamed(Routes.NEWS);
-                                          } else if (index == 7) {
-                                            if (Platform.isAndroid) {
-                                              Get.toNamed(Routes.REFER_EARN);
-                                            } else {
-                                              ComingSoonDialog.showComingSoonDialog(
-                                                featureName: 'Refer & Earn',
-                                              );
-                                            }
-                                          }
-                                        },
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            SvgPicture.asset(
-                                              item['icon'],
-                                              height: 28,
-                                              width: 28,
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              item['title'],
-                                              textAlign: TextAlign.center,
-                                              style: MyTexts.regular14.copyWith(
-                                                color: MyColors
-                                                    .textFieldBackground,
-                                                fontFamily: MyTexts.SpaceGrotesk,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Gap(14),
-                          Row(
-                            children: [
-                              HeaderText(text: "Active Team"),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.toNamed(
-                                    Routes.ROLE_MANAGEMENT,
-                                    arguments: {"isHome": true},
-                                  );
-                                },
-                                child: Text(
-                                  "View All",
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.gray5D,
-                                  ),
-                                ),
-                              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 2.h,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: AlignmentGeometry.topCenter,
+                            end: AlignmentGeometry.bottomCenter,
+                            colors: [
+                              MyColors.custom('FFF9BD').withOpacity(0.1),
+                              MyColors.white,
                             ],
                           ),
-                          const Gap(14),
-                        ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 120,
-                      child: Obx(() {
-                        final teamMembers = controller.teamList
-                            .take(5)
-                            .toList();
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                  color: MyColors.custom('EAEAEA'),
+                                  width: 2,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Waiting for banner content',
+                                  style: MyTexts.medium16,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 2.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Construction Materials  ', style: MyTexts.bold18),
+                                const Icon(Icons.arrow_forward_ios),
+                              ],
+                            ),
+                            SizedBox(height: 1.h),
+                            Obx(() {
+                              if (controller.subCategoryModel.value.data == null ||
+                                  controller.subCategoryModel.value.data!.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
 
-                        if (teamMembers.isEmpty) {
-                          return Container(
-                            height: 100,
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.people_outline,
-                                    size: 32,
-                                    color: MyColors.grey,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'No team members',
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.grey,
+                              return GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 8,
+                                      mainAxisSpacing: 8,
+                                      childAspectRatio: 0.8,
+                                    ),
+                                itemCount: controller.subCategoryModel.value.data!.length,
+                                itemBuilder: (context, index) {
+                                  final subCategory =
+                                      controller.subCategoryModel.value.data![index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        Routes.SELECT_PRODUCT,
+                                        arguments: {
+                                          "subCategoryId": subCategory.id ?? 0,
+                                          "subCategoryId": subCategory.id ?? 0,
+                                          "mainCategoryName":
+                                              subCategory.mainCategoryName ?? 0,
+                                        },
+                                      );
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(24),
+                                              gradient: LinearGradient(
+                                                end: Alignment.bottomCenter,
+                                                begin: Alignment.topCenter,
+                                                colors: [
+                                                  MyColors.custom(
+                                                    'EAEAEA',
+                                                  ).withOpacity(0),
+                                                  MyColors.custom('EAEAEA'),
+                                                ],
+                                              ),
+                                            ),
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal: 10.0,
+                                                  ),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        APIConstants.bucketUrl +
+                                                        subCategory.image!,
+                                                    fit: BoxFit.fill,
+                                                    placeholder: (context, url) =>
+                                                        const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        ),
+                                                    errorWidget: (context, url, error) =>
+                                                        const Icon(
+                                                          Icons.category,
+                                                          color: MyColors.primary,
+                                                          size: 24,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        SizedBox(
+                                          height: 50,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 4,
+                                            ),
+                                            child: Text(
+                                              subCategory.name ?? '',
+                                              style: MyTexts.medium16,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                      /*  SizedBox(height: 1.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: HeaderText(text: "Features"),
+                      ),
+                      SizedBox(height: 1.h),
+                      SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          shrinkWrap: true,
+                          itemCount: controller.features.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final item = controller.features[index];
+                            return Obx(() {
+                              final isSelected = controller.selectedIndex.value == index;
+                              return Padding(
+                                padding: EdgeInsets.only(left: index == 0 ? 0 : 16.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // if(isSelected){
+                                    if (index == 0) {
+                                      controller.selectedIndex.value = index;
+                                    } else {
+                                      SnackBars.successSnackBar(
+                                        content: 'This feature will come soon',
+                                      );
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 120,
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? MyColors.primary
+                                            : MyColors.grayD4,
+                                      ),
+                                      color: isSelected
+                                          ? MyColors.yellow
+                                          : MyColors.greyE5,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          color: isSelected
+                                              ? MyColors.primary
+                                              : MyColors.grey,
+
+                                          item['icon']!,
+                                          width: 40,
+                                          fit: BoxFit.cover,
+                                          height: 40,
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          item["title"]!,
+                                          textAlign: TextAlign.center,
+                                          style: MyTexts.medium13.copyWith(
+                                            color: MyColors.fontBlack,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Add team members to get started',
-                                    style: MyTexts.regular12.copyWith(
-                                      color: MyColors.grey,
+                                ),
+                              );
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 2.h),
+                            HeaderText(text: "Statics"),
+                            const Gap(14),
+                            Obx(
+                              () => Row(
+                                children: [
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Total Partners",
+                                      value:
+                                          (controller
+                                                      .dashboardData
+                                                      .value
+                                                      .data
+                                                      ?.totalPartnerProfiles ??
+                                                  0)
+                                              .toString(),
+                                      icon: Asset.noOfPartner,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Total Products",
+                                      value:
+                                          (controller
+                                                      .dashboardData
+                                                      .value
+                                                      .data
+                                                      ?.totalProducts ??
+                                                  0)
+                                              .toString(),
+
+                                      icon: Asset.noOfConectors,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+
+                                  Expanded(
+                                    child: StaticsCard(
+                                      title: "Total Connectors",
+                                      value:
+                                          (controller
+                                                      .dashboardData
+                                                      .value
+                                                      .data
+                                                      ?.totalConnectorProfiles ??
+                                                  0)
+                                              .toString(),
+
+                                      icon: Asset.noOfUsers,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          );
-                        }
-
-                        return Align(
-                          alignment: Alignment.topLeft,
-                          child: ListView.builder(
-                            itemCount: teamMembers.length,
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return SizedBox(
-                                width: 100,
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child:
-                                          (controller
-                                                      .teamList[index]
-                                                      .profilePhotoUrl ??
-                                                  "")
-                                              .isEmpty
-                                          ? Image.asset(
-                                              Asset.aTeam,
-                                              height: 67,
-                                              width: 67,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : getImageView(
-                                              finalUrl:
-                                                  controller
-                                                      .teamList[index]
-                                                      .profilePhotoUrl ??
-                                                  "",
-                                              height: 67,
-                                              width: 67,
-                                              fit: BoxFit.cover,
-                                            ),
+                            const Gap(14),
+                            HeaderText(text: "Quick Access"),
+                            const Gap(14),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: MyColors.gray5D, width: 0.5),
+                              ),
+                              child: SizedBox(
+                                height: 200,
+                                child: Center(
+                                  child: GridView.builder(
+                                    padding: const EdgeInsets.all(16),
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: controller.items.length,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 4,
+                                          mainAxisSpacing: 20,
+                                          crossAxisSpacing: 12,
+                                          mainAxisExtent: 70,
+                                        ),
+                                    itemBuilder: (context, index) {
+                                      final item = controller.items[index];
+                                      return Center(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            if (index == 0) {
+                                              Get.toNamed(
+                                                Routes.APPROVAL_INBOX,
+                                                arguments: {"isInbox": true},
+                                              );
+                                            } else if (index == 1) {
+                                              Get.toNamed(
+                                                Routes.REPORT,
+                                                arguments: {"isReport": true},
+                                              );
+                                            } else if (index == 2) {
+                                              Get.toNamed(
+                                                Routes.REPORT,
+                                                arguments: {"isReport": false},
+                                              );
+                                            } else if (index == 3) {
+                                              Get.toNamed(Routes.SETTING);
+                                            } else if (index == 4) {
+                                              Get.toNamed(
+                                                Routes.ROLE_MANAGEMENT,
+                                                arguments: {"isHome": true},
+                                              );
+                                            } else if (index == 5) {
+                                              Get.toNamed(Routes.INVENTORY);
+                                            } else if (index == 6) {
+                                              Get.toNamed(Routes.NEWS);
+                                            } else if (index == 7) {
+                                              if (Platform.isAndroid) {
+                                                Get.toNamed(Routes.REFER_EARN);
+                                              } else {
+                                                ComingSoonDialog.showComingSoonDialog(
+                                                  featureName: 'Refer & Earn',
+                                                );
+                                              }
+                                            }
+                                          },
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              SvgPicture.asset(
+                                                item['icon'],
+                                                height: 28,
+                                                width: 28,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                item['title'],
+                                                textAlign: TextAlign.center,
+                                                style: MyTexts.regular14.copyWith(
+                                                  color: MyColors.textFieldBackground,
+                                                  fontFamily: MyTexts.SpaceGrotesk,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Gap(14),
+                            Row(
+                              children: [
+                                HeaderText(text: "Active Team"),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(
+                                      Routes.ROLE_MANAGEMENT,
+                                      arguments: {"isHome": true},
+                                    );
+                                  },
+                                  child: Text(
+                                    "View All",
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.gray5D,
                                     ),
-                                    const Gap(12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(14),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 120,
+                        child: Obx(() {
+                          final teamMembers = controller.teamList.take(5).toList();
+
+                          if (teamMembers.isEmpty) {
+                            return Container(
+                              height: 100,
+                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.people_outline,
+                                      size: 32,
+                                      color: MyColors.grey,
+                                    ),
+                                    const SizedBox(height: 8),
                                     Text(
-                                      "${controller.teamList[index].firstName} ${controller.teamList[index].lastName}",
+                                      'No team members',
                                       style: MyTexts.medium14.copyWith(
-                                        color: MyColors.black,
+                                        color: MyColors.grey,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Add team members to get started',
+                                      style: MyTexts.regular12.copyWith(
+                                        color: MyColors.grey,
+                                      ),
                                     ),
                                   ],
                                 ),
-                              );
-                            },
-                          ),
-                        );
-                      }),
-                    ),
-                    const Gap(14),
-                  ],
+                              ),
+                            );
+                          }
+
+                          return Align(
+                            alignment: Alignment.topLeft,
+                            child: ListView.builder(
+                              itemCount: teamMembers.length,
+                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return SizedBox(
+                                  width: 100,
+                                  child: Column(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(100),
+                                        child:
+                                            (controller.teamList[index].profilePhotoUrl ??
+                                                    "")
+                                                .isEmpty
+                                            ? Image.asset(
+                                                Asset.aTeam,
+                                                height: 67,
+                                                width: 67,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : getImageView(
+                                                finalUrl:
+                                                    controller
+                                                        .teamList[index]
+                                                        .profilePhotoUrl ??
+                                                    "",
+                                                height: 67,
+                                                width: 67,
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
+                                      const Gap(12),
+                                      Text(
+                                        "${controller.teamList[index].firstName} ${controller.teamList[index].lastName}",
+                                        style: MyTexts.medium14.copyWith(
+                                          color: MyColors.black,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }),
+                      ),
+                      const Gap(14),*/
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _addressCard({
-    Address? address,
-    String? addressType,
-    bool isSelected = false,
+  Widget tabBar({
+    required String icon,
+    required String name,
+    required bool isMarketPlace,
+    required void Function()? onTap,
   }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          SvgPicture.asset(icon, height: 24, width: 24),
+          Text(name, style: MyTexts.medium14, textAlign: TextAlign.center),
+          const Gap(10),
+          if (isMarketPlace)
+            Container(
+              height: 3,
+              width: 73,
+              decoration: const BoxDecoration(
+                color: MyColors.primary,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+              ),
+            )
+          else
+            const SizedBox(height: 3),
+        ],
+      ),
+    );
+  }
+
+  Widget _addressCard({Address? address, String? addressType, bool isSelected = false}) {
     final displayText =
         "${address?.addressLine1}, ${address?.addressLine2}, ${address?.landmark}, ${address?.city}, ${address?.state} , ${address?.pinCode}";
     return GestureDetector(
@@ -719,9 +915,7 @@ class HomeView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: MyColors.white,
-          border: Border.all(
-            color: isSelected ? MyColors.primary : MyColors.grayD4,
-          ),
+          border: Border.all(color: isSelected ? MyColors.primary : MyColors.grayD4),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -744,7 +938,7 @@ class HomeView extends StatelessWidget {
                       administrativeArea: address?.state,
                       locality: address?.city,
                       street: address?.addressLine2,
-                      country:  address?.country,
+                      country: address?.country,
                     );
                     Get.back();
                     Get.toNamed(
@@ -812,9 +1006,7 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(
-                color: MyColors.textFieldBackground,
-              ),
+              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
             ),
           ],
         ),
@@ -854,10 +1046,7 @@ class HomeView extends StatelessWidget {
                     icon ?? "",
                     height: 30,
                     width: 30,
-                    colorFilter: ColorFilter.mode(
-                      color ?? Colors.black,
-                      BlendMode.srcIn,
-                    ),
+                    colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
                   ),
                 ),
                 Container(
@@ -910,14 +1099,7 @@ class StaticsCard extends StatefulWidget {
   Color? color;
   Color? bColor;
 
-  StaticsCard({
-    super.key,
-    this.icon,
-    this.title,
-    this.value,
-    this.color,
-    this.bColor,
-  });
+  StaticsCard({super.key, this.icon, this.title, this.value, this.color, this.bColor});
 
   @override
   State<StaticsCard> createState() => _StaticsCardState();
@@ -942,10 +1124,7 @@ class _StaticsCardState extends State<StaticsCard> {
             width: 20,
             colorFilter: widget.color == null
                 ? null
-                : ColorFilter.mode(
-                    widget.color ?? Colors.black,
-                    BlendMode.srcIn,
-                  ),
+                : ColorFilter.mode(widget.color ?? Colors.black, BlendMode.srcIn),
           ),
           const Gap(6),
           Text(

@@ -8,6 +8,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/m
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/models/news_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart'
     as ProductModel;
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart'
@@ -51,6 +52,7 @@ class AppSharedPreference {
   );
   final newsData = <String, dynamic>{}.val('newsData');
   final notificationData = <String, dynamic>{}.val('notificationData');
+  final subCategoryData = <String, dynamic>{}.val('subCategoryData');
 
   void setToken(String authToken) {
     token.val = authToken;
@@ -227,7 +229,10 @@ class AppSharedPreference {
   Future<void> saveTeam(List<TeamListData> team) async {
     try {
       final teamJson = team.map((member) => member.toJson()).toList();
-      setTeamData({'data': teamJson, 'timestamp': DateTime.now().millisecondsSinceEpoch});
+      setTeamData({
+        'data': teamJson,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
     } catch (e) {
       log('Error saving team: $e');
     }
@@ -365,7 +370,9 @@ class AppSharedPreference {
 
   void setCategoriesData(List<SupportCategory> categories) {
     try {
-      final categoriesJson = categories.map((category) => category.toJson()).toList();
+      final categoriesJson = categories
+          .map((category) => category.toJson())
+          .toList();
       cachedCategories.val = jsonEncode(categoriesJson);
     } catch (e) {
       log('Error saving categories: $e');
@@ -377,7 +384,9 @@ class AppSharedPreference {
       final cachedData = cachedCategories.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> categoriesJson = jsonDecode(cachedData);
-        return categoriesJson.map((json) => SupportCategory.fromJson(json)).toList();
+        return categoriesJson
+            .map((json) => SupportCategory.fromJson(json))
+            .toList();
       }
     } catch (e) {
       log('Error getting categories: $e');
@@ -387,7 +396,9 @@ class AppSharedPreference {
 
   void setPrioritiesData(List<SupportPriority> priorities) {
     try {
-      final prioritiesJson = priorities.map((priority) => priority.toJson()).toList();
+      final prioritiesJson = priorities
+          .map((priority) => priority.toJson())
+          .toList();
       cachedPriorities.val = jsonEncode(prioritiesJson);
     } catch (e) {
       log('Error saving priorities: $e');
@@ -399,7 +410,9 @@ class AppSharedPreference {
       final cachedData = cachedPriorities.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> prioritiesJson = jsonDecode(cachedData);
-        return prioritiesJson.map((json) => SupportPriority.fromJson(json)).toList();
+        return prioritiesJson
+            .map((json) => SupportPriority.fromJson(json))
+            .toList();
       }
     } catch (e) {
       log('Error getting priorities: $e');
@@ -490,7 +503,9 @@ class AppSharedPreference {
   // Connector Support Methods
   void setConnectorCategoriesData(List<SupportCategory> categories) {
     try {
-      final categoriesJson = categories.map((category) => category.toJson()).toList();
+      final categoriesJson = categories
+          .map((category) => category.toJson())
+          .toList();
       cachedConnectorCategories.val = jsonEncode(categoriesJson);
     } catch (e) {
       log('Error saving connector categories: $e');
@@ -502,7 +517,9 @@ class AppSharedPreference {
       final cachedData = cachedConnectorCategories.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> categoriesJson = jsonDecode(cachedData);
-        return categoriesJson.map((json) => SupportCategory.fromJson(json)).toList();
+        return categoriesJson
+            .map((json) => SupportCategory.fromJson(json))
+            .toList();
       }
     } catch (e) {
       log('Error getting connector categories: $e');
@@ -512,7 +529,9 @@ class AppSharedPreference {
 
   void setConnectorPrioritiesData(List<SupportPriority> priorities) {
     try {
-      final prioritiesJson = priorities.map((priority) => priority.toJson()).toList();
+      final prioritiesJson = priorities
+          .map((priority) => priority.toJson())
+          .toList();
       cachedConnectorPriorities.val = jsonEncode(prioritiesJson);
     } catch (e) {
       log('Error saving connector priorities: $e');
@@ -524,7 +543,9 @@ class AppSharedPreference {
       final cachedData = cachedConnectorPriorities.val;
       if (cachedData.isNotEmpty) {
         final List<dynamic> prioritiesJson = jsonDecode(cachedData);
-        return prioritiesJson.map((json) => SupportPriority.fromJson(json)).toList();
+        return prioritiesJson
+            .map((json) => SupportPriority.fromJson(json))
+            .toList();
       }
     } catch (e) {
       log('Error getting connector priorities: $e');
@@ -532,7 +553,9 @@ class AppSharedPreference {
     return null;
   }
 
-  void setConnectorSupportTicketsModel(SupportMyTicketsModel supportTicketsModel) {
+  void setConnectorSupportTicketsModel(
+    SupportMyTicketsModel supportTicketsModel,
+  ) {
     try {
       connectorSupportTicketsData.val = supportTicketsModel.toJson();
     } catch (e) {
@@ -586,5 +609,30 @@ class AppSharedPreference {
       log('Error getting notification model: $e');
     }
     return null;
+  }
+
+  // Sub Category Storage Methods
+  void setSubCategoryModel(SubCategoryModel subCategoryModel) {
+    try {
+      subCategoryData.val = subCategoryModel.toJson();
+    } catch (e) {
+      log('Error saving sub category model: $e');
+    }
+  }
+
+  SubCategoryModel? getSubCategoryModel() {
+    try {
+      final data = subCategoryData.val;
+      if (data.isNotEmpty) {
+        return SubCategoryModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting sub category model: $e');
+    }
+    return null;
+  }
+
+  void clearSubCategoryData() {
+    subCategoryData.val = {};
   }
 }

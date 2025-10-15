@@ -25,7 +25,11 @@ A comprehensive Flutter application for construction management that works seaml
 - **Architecture**: Clean Architecture with GetX Pattern
 
 ## 📁 Project Structure
-
+flutter clean
+flutter pub get
+cd ios
+pod install
+cd ..
 ```
 lib/
 ├── app/

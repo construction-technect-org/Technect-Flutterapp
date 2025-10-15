@@ -46,8 +46,7 @@ abstract class Routes {
   static const CONNECTOR_PRODUCT_DETAILS = _Paths.CONNECTOR_PRODUCT_DETAILS;
   static const CONNECTOR_SELECT_LOCATION = _Paths.CONNECTOR_SELECT_LOCATION;
   static const CONNECTOR_ADD_LOCATION = _Paths.CONNECTOR_ADD_LOCATION;
-  static const CONNECTOR_ADD_LOCATION_MANUALLY =
-      _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
+  static const CONNECTOR_ADD_LOCATION_MANUALLY = _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
   static const CONNECTOR_SITE_LOCATION = _Paths.CONNECTOR_SITE_LOCATION;
   static const CONNECTOR_FILTER = _Paths.CONNECTOR_FILTER;
   static const CONNECTOR_CONNECTION_INBOX = _Paths.CONNECTOR_CONNECTION_INBOX;
@@ -56,6 +55,7 @@ abstract class Routes {
   static const CONNECTOR_REQUEST_DEMO = _Paths.CONNECTOR_REQUEST_DEMO;
   static const WISH_LIST = _Paths.WISH_LIST;
   static const ON_BINDING = _Paths.ON_BINDING;
+  static const SELECT_PRODUCT = _Paths.SELECT_PRODUCT;
   static const REQUEST_DEMO = _Paths.REQUEST_DEMO;
   static const CONNECTOR_SUPPORT_REQUEST = _Paths.CONNECTOR_SUPPORT_REQUEST;
   static const CONNECTOR_CREATE_NEW_TICKET = _Paths.CONNECTOR_CREATE_NEW_TICKET;
@@ -112,6 +112,7 @@ abstract class _Paths {
   static const NEWS = '/news';
   static const NOTIFICATIONS = '/notifications';
   static const REQUEST_DEMO = '/request-demo';
+  static const SELECT_PRODUCT = '/select-product';
 
   // Connector
   static const CONNECTOR_MAIN_TAB = '/connector-bottom-tab';
@@ -121,13 +122,11 @@ abstract class _Paths {
   static const CONNECTOR_PRODUCT_DETAILS = '/connector-product-details';
   static const CONNECTOR_SELECT_LOCATION = '/connector-select-location';
   static const CONNECTOR_ADD_LOCATION = '/connector-add-location';
-  static const CONNECTOR_ADD_LOCATION_MANUALLY =
-      '/connector-add-location-manually';
+  static const CONNECTOR_ADD_LOCATION_MANUALLY = '/connector-add-location-manually';
   static const CONNECTOR_SITE_LOCATION = '/connector-site-location';
   static const CONNECTOR_FILTER = '/connector-filter';
   static const CONNECTOR_CONNECTION_INBOX = '/connector-connection-inbox';
-  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET =
-      '/connector-customer-support-ticket';
+  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET = '/connector-customer-support-ticket';
   static const CONNECTOR_REQUEST_DEMO = '/connector-request-demo';
   static const CONNECTOR_SUPPORT_REQUEST = '/connector-support-request';
   static const CONNECTOR_CREATE_NEW_TICKET = '/connector-create-new-ticket';

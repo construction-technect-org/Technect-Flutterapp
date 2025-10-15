@@ -1,10 +1,10 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/controllers/connector_main_tab_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/views/connector_connection_inbox_vies.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMenu/views/connector_menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/views/connector_selected_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/CustomerSupport/views/connector_customer_support_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
 
 class ConnectorBottom extends GetView<ConnectorBottomController> {
   const ConnectorBottom({super.key});
@@ -17,7 +17,7 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
           case 0:
             return ConnectorHomeView();
           case 1:
-            return ConnectorSelectedProductView();
+            return SelectedProductView();
           case 2:
             return ConnectorCustomerSupportView();
           case 3:
@@ -46,9 +46,7 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
                   onTap: controller.changeTab,
                   selectedItemColor: MyColors.white,
                   unselectedItemColor: MyColors.white.withOpacity(0.25),
-                  selectedLabelStyle: MyTexts.medium13.copyWith(
-                    color: MyColors.white,
-                  ),
+                  selectedLabelStyle: MyTexts.medium13.copyWith(color: MyColors.white),
                   unselectedLabelStyle: MyTexts.medium13.copyWith(
                     color: MyColors.white.withOpacity(0.25),
                   ),

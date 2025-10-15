@@ -29,6 +29,7 @@ class SubCategory {
   DateTime? createdAt;
   DateTime? updatedAt;
   String? mainCategoryName;
+  String? image;
 
   SubCategory({
     this.id,
@@ -39,6 +40,7 @@ class SubCategory {
     this.createdAt,
     this.updatedAt,
     this.mainCategoryName,
+    this.image,
   });
 
   factory SubCategory.fromJson(Map<String, dynamic> json) => SubCategory(
@@ -50,6 +52,7 @@ class SubCategory {
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     mainCategoryName: json["main_category_name"],
+    image: json["image"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -61,5 +64,6 @@ class SubCategory {
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
     "main_category_name": mainCategoryName,
+    "image": image,
   };
 }

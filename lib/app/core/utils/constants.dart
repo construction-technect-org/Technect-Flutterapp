@@ -1,24 +1,22 @@
 import 'dart:core';
 
 class Asset {
-
   static const images = "assets/images/";
+  static const newIcons = "assets/images/icons/";
   static const bg = "${images}bg/";
   static const png = "${images}png/";
   static const svg = "${images}svg/";
+  static const newPng = "${images}png/";
 
   static const String splashBg = '${bg}splashBg.png';
   static const String loginBg = '${bg}loginBg.png';
-
 
   static const String appLogo = '${png}appLogo.png';
   static const String ob1 = '${png}ob1.png';
   static const String auth = '${png}auth.png';
   static const String role1 = '${png}role1.png';
-
   static const String back = '${svg}back.svg';
-
-
+  static const String explore = '${newPng}explore.png';
   static const String bricksBackground = 'assets/images/bricks_background.png';
   static const String splashLogo = 'assets/images/splash_logo.png';
   static const String googleIcon = 'assets/images/google.png';
@@ -81,7 +79,6 @@ class Asset {
   static const String searchIcon = 'assets/images/search.svg';
   static const String filterIcon = 'assets/images/filter.svg';
   static const String profileIcon = 'assets/images/profil.svg';
-  static const String location = 'assets/images/location.svg';
   static const String pendingIcon = 'assets/images/pending.png';
   static const String notifications = 'assets/images/notification.svg';
   static const String worldMap = 'assets/images/worldMap.png';
@@ -191,28 +188,36 @@ class Asset {
   static const String interiorMateria = 'assets/images/interior_material.png';
   static const String con = 'assets/images/constructionn.png';
 
- // connector location
+  // connector location
   static const String connectorLocation = 'assets/images/connector_location.svg';
 
- // connector details icon
+  // connector details icon
   static const String userx = 'assets/images/userx.svg';
   static const String externallink = 'assets/images/externallink.svg';
   static const String morevertical = 'assets/images/morevertical.svg';
-
 
   static const String brand = 'assets/images/brand.svg';
   static const String filter = 'assets/images/filter.svg';
   static const String sort = 'assets/images/sort.svg';
 
-
-
-
+  // New Icons
+  static const String category = '${newIcons}category.svg';
+  static const String connection = '${newIcons}connection.svg';
+  static const String home = '${newIcons}home.svg';
+  static const String more = '${newIcons}more.svg';
+  static const String center = '${newIcons}center.svg';
+  static const String location = '${newIcons}location.svg';
+  static const String notification = '${newIcons}notification.svg';
+  static const String MM = '${newIcons}MM.svg';
+  static const String TEM = '${newIcons}TEM.svg';
+  static const String CM = '${newIcons}CM.svg';
 }
 
 class Constants {
   static const String constructionTechnect = 'Construction Technect';
   static const String privacyPolicy = 'http://43.205.117.97/merchant-privacy-policy.html';
-  static const String termsCondition = 'http://43.205.117.97/merchant-terms-conditions.html';
+  static const String termsCondition =
+      'http://43.205.117.97/merchant-terms-conditions.html';
   static const String aboutUS = 'http://43.205.117.97/merchant-about-us.html';
   static const String connectingConstructionWorldwide =
       'Connecting Construction Worldwide';

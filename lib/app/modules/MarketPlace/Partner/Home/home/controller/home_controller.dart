@@ -2,14 +2,19 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart'
-    hide Statisctics;
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
 
 class HomeController extends GetxController {
+  // New
+  RxBool isMarketPlace = true.obs;
+  RxInt marketPlace = 0.obs;
+
   CommonController commonController = Get.find();
 
   final List<Map<String, dynamic>> items = [
@@ -52,6 +57,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    fetchSubCategories();
     _initializeHomeData();
     refreshDashboardData();
     isDefaultOffice.value = myPref.getDefaultAdd();
@@ -63,6 +69,29 @@ class HomeController extends GetxController {
     Future.delayed(const Duration(milliseconds: 500), () {
       _checkAddressAndProfileCompletion();
     });
+  }
+
+  final AddProductService _service = AddProductService();
+  Rx<SubCategoryModel> subCategoryModel = SubCategoryModel().obs;
+
+  Future<void> fetchSubCategories() async {
+    try {
+      isLoading(true);
+      final cachedSubCategory = myPref.getSubCategoryModel();
+      if (cachedSubCategory != null) {
+        subCategoryModel.value = cachedSubCategory;
+      }
+      final apiSubCategory = await _service.subCategory(1);
+      subCategoryModel.value = apiSubCategory;
+      myPref.setSubCategoryModel(apiSubCategory);
+    } catch (e) {
+      final cachedSubCategory = myPref.getSubCategoryModel();
+      if (cachedSubCategory != null) {
+        subCategoryModel.value = cachedSubCategory;
+      }
+    } finally {
+      isLoading(false);
+    }
   }
 
   Future<void> _initializeHomeData() async {

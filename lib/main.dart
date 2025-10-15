@@ -24,15 +24,14 @@ Future<void> main() async {
             title: "CONSTRUCTION TECHNECT",
             initialRoute: AppPages.INITIAL,
             getPages: AppPages.routes,
+            theme: ThemeData(useMaterial3: false),
             debugShowCheckedModeBanner: false,
             defaultTransition: Transition.fadeIn,
             initialBinding: InitialBinding(),
             // Web-specific configurations
             builder: (context, child) {
               return MediaQuery(
-                data: MediaQuery.of(
-                  context,
-                ).copyWith(textScaler: TextScaler.noScaling),
+                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
                 child: child!,
               );
             },
