@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/views/category_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/views/product_management_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 
 class BottomBarView extends GetView<BottomController> {
@@ -20,7 +20,7 @@ class BottomBarView extends GetView<BottomController> {
           case 0:
             return HomeView();
           case 1:
-            return ProductManagementView();
+            return CategoryView();
           case 2:
             return ConnectionInboxView();
           case 3:
