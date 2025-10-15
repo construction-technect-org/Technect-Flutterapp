@@ -54,7 +54,7 @@ abstract class Routes {
       _Paths.CONNECTOR_CUSTOMER_SUPPORT_TICKET;
   static const CONNECTOR_REQUEST_DEMO = _Paths.CONNECTOR_REQUEST_DEMO;
   static const WISH_LIST = _Paths.WISH_LIST;
-  static const ON_BINDING = _Paths.ON_BINDING;
+  static const ON_BOARDING = _Paths.ON_BOARDING;
   static const SELECT_PRODUCT = _Paths.SELECT_PRODUCT;
   static const REQUEST_DEMO = _Paths.REQUEST_DEMO;
   static const CONNECTOR_SUPPORT_REQUEST = _Paths.CONNECTOR_SUPPORT_REQUEST;
@@ -131,5 +131,5 @@ abstract class _Paths {
   static const CONNECTOR_SUPPORT_REQUEST = '/connector-support-request';
   static const CONNECTOR_CREATE_NEW_TICKET = '/connector-create-new-ticket';
   static const WISH_LIST = '/wish-list';
-  static const ON_BINDING = '/on-binding';
+  static const ON_BOARDING = '/on-boarding';
 }

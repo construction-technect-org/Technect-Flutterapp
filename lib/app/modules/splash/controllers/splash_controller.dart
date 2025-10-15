@@ -72,8 +72,7 @@ class SplashController extends GetxController {
   void _startSplashTimer() {
     if (Device.screenType == ScreenType.mobile) {
       Future.delayed(const Duration(seconds: 3), () {
-        Get.toNamed(Routes.ON_BINDING);
-
+        Get.toNamed(Routes.ON_BOARDING);
         // Get.offAllNamed(Routes.LOGIN);
       });
     } else {

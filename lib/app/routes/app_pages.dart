@@ -96,6 +96,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Su
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/SuppoerRequestFilter/views/support_request_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/bindings/bottom_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/views/bottom_view.dart';
+import 'package:construction_technect/app/modules/OnBoarding/bindings/on_boarding_binding.dart';
+import 'package:construction_technect/app/modules/OnBoarding/view/on_boarding_screen.dart';
 import 'package:construction_technect/app/modules/ServiceDetail/bindings/service_detail_binding.dart';
 import 'package:construction_technect/app/modules/ServiceDetail/views/service_detail_view.dart';
 import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
@@ -361,6 +363,10 @@ class AppPages {
       name: Routes.WISH_LIST,
       page: () => WishListView(),
       binding: WishListBinding(),
+    ),    GetPage(
+      name: Routes.ON_BOARDING,
+      page: () => const OnBoardingScreen(),
+      binding: OnBoardingBinding(),
     ),
   ];
 }

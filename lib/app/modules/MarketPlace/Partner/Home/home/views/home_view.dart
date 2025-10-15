@@ -437,7 +437,7 @@ class HomeView extends StatelessWidget {
                                         Routes.SELECT_PRODUCT,
                                         arguments: {
                                           "subCategoryId": subCategory.id ?? 0,
-                                          "subCategoryId": subCategory.id ?? 0,
+                                          // "subCategoryId": subCategory.id ?? 0,
                                           "mainCategoryName":
                                               subCategory.mainCategoryName ?? 0,
                                         },
