@@ -198,8 +198,8 @@ class Asset {
   static const String morevertical = 'assets/images/morevertical.svg';
 
   static const String brand = 'assets/images/brand.svg';
-  static const String filter = 'assets/images/filter.svg';
-  static const String sort = 'assets/images/sort.svg';
+  static const String filter = 'assets/images/icons/filter.svg';
+  static const String sort = 'assets/images/icons/sort.svg';
 
   // New Icons
   static const String category = '${newIcons}category.svg';

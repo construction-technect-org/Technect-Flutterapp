@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/model/merchat_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
@@ -45,6 +46,15 @@ class HomeService {
         url: APIConstants.connectorMerchantStore,
       );
       return AllMerchantStoreModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<CategoryModel> getCategoryHierarchy() async {
+    try {
+      final response = await _apiManager.get(url: 'merchant/hierarchy');
+      return CategoryModel.fromJson(response);
     } catch (e) {
       rethrow;
     }

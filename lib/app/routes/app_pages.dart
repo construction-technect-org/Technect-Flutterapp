@@ -38,6 +38,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/views/connector_profile_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/views/connector_selected_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/bindings/connector_site_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/views/connector_site_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/AddSupportTickets/views/connector_create_new_ticket.dart';
@@ -363,10 +364,16 @@ class AppPages {
       name: Routes.WISH_LIST,
       page: () => WishListView(),
       binding: WishListBinding(),
-    ),    GetPage(
+    ),
+    GetPage(
       name: Routes.ON_BOARDING,
       page: () => const OnBoardingScreen(),
       binding: OnBoardingBinding(),
+    ),
+    GetPage(
+      name: Routes.SELECT_PRODUCT,
+      page: () => SelectedProductView(),
+      // binding: OnBoardingBinding(),
     ),
   ];
 }

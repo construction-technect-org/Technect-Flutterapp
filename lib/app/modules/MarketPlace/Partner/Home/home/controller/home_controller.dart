@@ -1,13 +1,11 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
 
 class HomeController extends GetxController {
@@ -16,7 +14,6 @@ class HomeController extends GetxController {
   RxInt marketPlace = 0.obs;
 
   CommonController commonController = Get.find();
-
 
   RxInt selectedIndex = 0.obs;
 
@@ -30,39 +27,14 @@ class HomeController extends GetxController {
   Rx<ProfileModel> profileData = ProfileModel().obs;
   AddressModel addressData = AddressModel();
   RxList<TeamListData> teamList = <TeamListData>[].obs;
-  Rx<DashboardModel> dashboardData = DashboardModel().obs;
+  Rx<CategoryModel> categoryHierarchyData = CategoryModel().obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchSubCategories();
+    fetchCategoryHierarchy();
     _initializeHomeData();
-    // refreshDashboardData();
     isDefaultOffice.value = myPref.getDefaultAdd();
-  }
-
-
-  final AddProductService _service = AddProductService();
-  Rx<SubCategoryModel> subCategoryModel = SubCategoryModel().obs;
-
-  Future<void> fetchSubCategories() async {
-    try {
-      isLoading(true);
-      final cachedSubCategory = myPref.getSubCategoryModel();
-      if (cachedSubCategory != null) {
-        subCategoryModel.value = cachedSubCategory;
-      }
-      final apiSubCategory = await _service.subCategory(1);
-      subCategoryModel.value = apiSubCategory;
-      myPref.setSubCategoryModel(apiSubCategory);
-    } catch (e) {
-      final cachedSubCategory = myPref.getSubCategoryModel();
-      if (cachedSubCategory != null) {
-        subCategoryModel.value = cachedSubCategory;
-      }
-    } finally {
-      isLoading(false);
-    }
   }
 
   Future<void> _initializeHomeData() async {
@@ -70,7 +42,6 @@ class HomeController extends GetxController {
 
     await fetchProfileData();
   }
-
 
   void _showProfileCompletionDialog() {
     if (Get.isDialogOpen == true) {
@@ -141,7 +112,6 @@ class HomeController extends GetxController {
     }
   }
 
-
   void _loadCachedData() {
     final cachedAddressData = myPref.getAddressData();
     if (cachedAddressData != null) {
@@ -199,21 +169,6 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
-  //
-  // Future<void> fetchDashboardData() async {
-  //   try {
-  //     final dashboardResponse = await homeService.getDashboard();
-  //     if (dashboardResponse.success == true) {
-  //       dashboardData.value = dashboardResponse;
-  //     }
-  //   } catch (e) {
-  //     Get.printError(info: 'Error fetching dashboard data: $e');
-  //   }
-  // }
-  //
-  // Future<void> refreshDashboardData() async {
-  //   await fetchDashboardData();
-  // }
 
   Future<void> _loadTeamFromStorage() async {
     final cachedTeamModel = myPref.getTeamModelData();
@@ -262,5 +217,32 @@ class HomeController extends GetxController {
 
   Future<void> refreshTeamList() async {
     await fetchTeamList();
+  }
+
+  Future<void> fetchCategoryHierarchy() async {
+    try {
+      isLoading(true);
+      // Load cached data first
+      final cachedCategoryHierarchy = myPref.getCategoryHierarchyModel();
+      if (cachedCategoryHierarchy != null) {
+        categoryHierarchyData.value = cachedCategoryHierarchy;
+      }
+
+      // Fetch fresh data from API
+      final apiCategoryHierarchy = await homeService.getCategoryHierarchy();
+      categoryHierarchyData.value = apiCategoryHierarchy;
+
+      // Store in local storage
+      myPref.setCategoryHierarchyModel(apiCategoryHierarchy);
+    } catch (e) {
+      // Fallback to cached data if API fails
+      final cachedCategoryHierarchy = myPref.getCategoryHierarchyModel();
+      if (cachedCategoryHierarchy != null) {
+        categoryHierarchyData.value = cachedCategoryHierarchy;
+      }
+      Get.printError(info: 'Error fetching category hierarchy: $e');
+    } finally {
+      isLoading(false);
+    }
   }
 }

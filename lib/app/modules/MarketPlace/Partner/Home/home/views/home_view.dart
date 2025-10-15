@@ -403,109 +403,159 @@ class HomeView extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 2.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Construction Materials  ', style: MyTexts.bold18),
-                                const Icon(Icons.arrow_forward_ios),
-                              ],
-                            ),
-                            SizedBox(height: 1.h),
+                            // Main Categories ListView
                             Obx(() {
-                              if (controller.subCategoryModel.value.data == null ||
-                                  controller.subCategoryModel.value.data!.isEmpty) {
+                              if (controller.categoryHierarchyData.value.data == null ||
+                                  controller.categoryHierarchyData.value.data!.isEmpty) {
                                 return const SizedBox.shrink();
                               }
 
-                              return GridView.builder(
+                              return ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 8,
-                                      mainAxisSpacing: 8,
-                                      childAspectRatio: 0.8,
-                                    ),
-                                itemCount: controller.subCategoryModel.value.data!.length,
-                                itemBuilder: (context, index) {
-                                  final subCategory =
-                                      controller.subCategoryModel.value.data![index];
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed(
-                                        Routes.SELECT_PRODUCT,
-                                        arguments: {
-                                          "subCategoryId": subCategory.id ?? 0,
-                                          // "subCategoryId": subCategory.id ?? 0,
-                                          "mainCategoryName":
-                                              subCategory.mainCategoryName ?? 0,
+                                itemCount:
+                                    controller.categoryHierarchyData.value.data!.length,
+                                itemBuilder: (context, mainIndex) {
+                                  final mainCategory = controller
+                                      .categoryHierarchyData
+                                      .value
+                                      .data![mainIndex];
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(
+                                            Routes.SELECT_PRODUCT,
+                                            arguments: {
+                                              "mainCategoryId": mainCategory.id ?? 0,
+                                              "mainCategoryName": mainCategory.name ?? '',
+                                            },
+                                          );
                                         },
-                                      );
-                                    },
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(24),
-                                              gradient: LinearGradient(
-                                                end: Alignment.bottomCenter,
-                                                begin: Alignment.topCenter,
-                                                colors: [
-                                                  MyColors.custom(
-                                                    'EAEAEA',
-                                                  ).withOpacity(0),
-                                                  MyColors.custom('EAEAEA'),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '${mainCategory.name ?? ''}  ',
+                                              style: MyTexts.bold18,
+                                            ),
+                                            const Icon(Icons.arrow_forward_ios),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 1.h),
+                                      // Subcategories GridView
+                                      if (mainCategory.subCategories != null &&
+                                          mainCategory.subCategories!.isNotEmpty)
+                                        GridView.builder(
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 3,
+                                                crossAxisSpacing: 8,
+                                                mainAxisSpacing: 8,
+                                                childAspectRatio: 0.8,
+                                              ),
+                                          itemCount: mainCategory.subCategories!.length,
+                                          itemBuilder: (context, subIndex) {
+                                            final subCategory =
+                                                mainCategory.subCategories![subIndex];
+                                            return GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(
+                                                  Routes.SELECT_PRODUCT,
+                                                  arguments: {
+                                                    "selectedSubCategoryId":
+                                                        subCategory.id ?? 0,
+                                                    "mainCategoryId":
+                                                        mainCategory.id ?? 0,
+                                                    "mainCategoryName":
+                                                        mainCategory.name ?? '',
+                                                  },
+                                                );
+                                              },
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(24),
+                                                        gradient: LinearGradient(
+                                                          end: Alignment.bottomCenter,
+                                                          begin: Alignment.topCenter,
+                                                          colors: [
+                                                            MyColors.custom(
+                                                              'EAEAEA',
+                                                            ).withOpacity(0),
+                                                            MyColors.custom('EAEAEA'),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      child: Stack(
+                                                        alignment: Alignment.center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal: 10.0,
+                                                                ),
+                                                            child: CachedNetworkImage(
+                                                              imageUrl:
+                                                                  APIConstants.bucketUrl +
+                                                                  (subCategory.image ??
+                                                                      ''),
+                                                              fit: BoxFit.fill,
+                                                              placeholder:
+                                                                  (
+                                                                    context,
+                                                                    url,
+                                                                  ) => const Center(
+                                                                    child:
+                                                                        CircularProgressIndicator(),
+                                                                  ),
+                                                              errorWidget:
+                                                                  (context, url, error) =>
+                                                                      const Icon(
+                                                                        Icons.category,
+                                                                        color: MyColors
+                                                                            .primary,
+                                                                        size: 24,
+                                                                      ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  SizedBox(
+                                                    height: 50,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(
+                                                        horizontal: 4,
+                                                      ),
+                                                      child: Text(
+                                                        subCategory.name ?? '',
+                                                        style: MyTexts.medium16,
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
-                                            ),
-                                            child: Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                    horizontal: 10.0,
-                                                  ),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        APIConstants.bucketUrl +
-                                                        subCategory.image!,
-                                                    fit: BoxFit.fill,
-                                                    placeholder: (context, url) =>
-                                                        const Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        ),
-                                                    errorWidget: (context, url, error) =>
-                                                        const Icon(
-                                                          Icons.category,
-                                                          color: MyColors.primary,
-                                                          size: 24,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                            );
+                                          },
                                         ),
-                                        const SizedBox(height: 8),
-                                        SizedBox(
-                                          height: 50,
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 4,
-                                            ),
-                                            child: Text(
-                                              subCategory.name ?? '',
-                                              style: MyTexts.medium16,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      SizedBox(
+                                        height: 2.h,
+                                      ), // Spacing between main categories
+                                    ],
                                   );
                                 },
                               );
@@ -513,348 +563,6 @@ class HomeView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      /*  SizedBox(height: 1.h),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: HeaderText(text: "Features"),
-                      ),
-                      SizedBox(height: 1.h),
-                      SizedBox(
-                        height: 100,
-                        child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          shrinkWrap: true,
-                          itemCount: controller.features.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            final item = controller.features[index];
-                            return Obx(() {
-                              final isSelected = controller.selectedIndex.value == index;
-                              return Padding(
-                                padding: EdgeInsets.only(left: index == 0 ? 0 : 16.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    // if(isSelected){
-                                    if (index == 0) {
-                                      controller.selectedIndex.value = index;
-                                    } else {
-                                      SnackBars.successSnackBar(
-                                        content: 'This feature will come soon',
-                                      );
-                                    }
-                                  },
-                                  child: Container(
-                                    width: 120,
-                                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? MyColors.primary
-                                            : MyColors.grayD4,
-                                      ),
-                                      color: isSelected
-                                          ? MyColors.yellow
-                                          : MyColors.greyE5,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          color: isSelected
-                                              ? MyColors.primary
-                                              : MyColors.grey,
-
-                                          item['icon']!,
-                                          width: 40,
-                                          fit: BoxFit.cover,
-                                          height: 40,
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Text(
-                                          item["title"]!,
-                                          textAlign: TextAlign.center,
-                                          style: MyTexts.medium13.copyWith(
-                                            color: MyColors.fontBlack,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            });
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 2.h),
-                            HeaderText(text: "Statics"),
-                            const Gap(14),
-                            Obx(
-                              () => Row(
-                                children: [
-                                  Expanded(
-                                    child: StaticsCard(
-                                      title: "Total Partners",
-                                      value:
-                                          (controller
-                                                      .dashboardData
-                                                      .value
-                                                      .data
-                                                      ?.totalPartnerProfiles ??
-                                                  0)
-                                              .toString(),
-                                      icon: Asset.noOfPartner,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: StaticsCard(
-                                      title: "Total Products",
-                                      value:
-                                          (controller
-                                                      .dashboardData
-                                                      .value
-                                                      .data
-                                                      ?.totalProducts ??
-                                                  0)
-                                              .toString(),
-
-                                      icon: Asset.noOfConectors,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-
-                                  Expanded(
-                                    child: StaticsCard(
-                                      title: "Total Connectors",
-                                      value:
-                                          (controller
-                                                      .dashboardData
-                                                      .value
-                                                      .data
-                                                      ?.totalConnectorProfiles ??
-                                                  0)
-                                              .toString(),
-
-                                      icon: Asset.noOfUsers,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Gap(14),
-                            HeaderText(text: "Quick Access"),
-                            const Gap(14),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 18),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: MyColors.gray5D, width: 0.5),
-                              ),
-                              child: SizedBox(
-                                height: 200,
-                                child: Center(
-                                  child: GridView.builder(
-                                    padding: const EdgeInsets.all(16),
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: controller.items.length,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 4,
-                                          mainAxisSpacing: 20,
-                                          crossAxisSpacing: 12,
-                                          mainAxisExtent: 70,
-                                        ),
-                                    itemBuilder: (context, index) {
-                                      final item = controller.items[index];
-                                      return Center(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (index == 0) {
-                                              Get.toNamed(
-                                                Routes.APPROVAL_INBOX,
-                                                arguments: {"isInbox": true},
-                                              );
-                                            } else if (index == 1) {
-                                              Get.toNamed(
-                                                Routes.REPORT,
-                                                arguments: {"isReport": true},
-                                              );
-                                            } else if (index == 2) {
-                                              Get.toNamed(
-                                                Routes.REPORT,
-                                                arguments: {"isReport": false},
-                                              );
-                                            } else if (index == 3) {
-                                              Get.toNamed(Routes.SETTING);
-                                            } else if (index == 4) {
-                                              Get.toNamed(
-                                                Routes.ROLE_MANAGEMENT,
-                                                arguments: {"isHome": true},
-                                              );
-                                            } else if (index == 5) {
-                                              Get.toNamed(Routes.INVENTORY);
-                                            } else if (index == 6) {
-                                              Get.toNamed(Routes.NEWS);
-                                            } else if (index == 7) {
-                                              if (Platform.isAndroid) {
-                                                Get.toNamed(Routes.REFER_EARN);
-                                              } else {
-                                                ComingSoonDialog.showComingSoonDialog(
-                                                  featureName: 'Refer & Earn',
-                                                );
-                                              }
-                                            }
-                                          },
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              SvgPicture.asset(
-                                                item['icon'],
-                                                height: 28,
-                                                width: 28,
-                                              ),
-                                              const SizedBox(height: 8),
-                                              Text(
-                                                item['title'],
-                                                textAlign: TextAlign.center,
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.textFieldBackground,
-                                                  fontFamily: MyTexts.SpaceGrotesk,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Gap(14),
-                            Row(
-                              children: [
-                                HeaderText(text: "Active Team"),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(
-                                      Routes.ROLE_MANAGEMENT,
-                                      arguments: {"isHome": true},
-                                    );
-                                  },
-                                  child: Text(
-                                    "View All",
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.gray5D,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Gap(14),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 120,
-                        child: Obx(() {
-                          final teamMembers = controller.teamList.take(5).toList();
-
-                          if (teamMembers.isEmpty) {
-                            return Container(
-                              height: 100,
-                              padding: const EdgeInsets.symmetric(horizontal: 18),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.people_outline,
-                                      size: 32,
-                                      color: MyColors.grey,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'No team members',
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.grey,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Add team members to get started',
-                                      style: MyTexts.regular12.copyWith(
-                                        color: MyColors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }
-
-                          return Align(
-                            alignment: Alignment.topLeft,
-                            child: ListView.builder(
-                              itemCount: teamMembers.length,
-                              padding: const EdgeInsets.symmetric(horizontal: 18),
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return SizedBox(
-                                  width: 100,
-                                  child: Column(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
-                                        child:
-                                            (controller.teamList[index].profilePhotoUrl ??
-                                                    "")
-                                                .isEmpty
-                                            ? Image.asset(
-                                                Asset.aTeam,
-                                                height: 67,
-                                                width: 67,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : getImageView(
-                                                finalUrl:
-                                                    controller
-                                                        .teamList[index]
-                                                        .profilePhotoUrl ??
-                                                    "",
-                                                height: 67,
-                                                width: 67,
-                                                fit: BoxFit.cover,
-                                              ),
-                                      ),
-                                      const Gap(12),
-                                      Text(
-                                        "${controller.teamList[index].firstName} ${controller.teamList[index].lastName}",
-                                        style: MyTexts.medium14.copyWith(
-                                          color: MyColors.black,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                      ),
-                      const Gap(14),*/
                     ],
                   ),
                 ),

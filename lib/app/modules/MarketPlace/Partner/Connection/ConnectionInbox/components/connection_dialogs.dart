@@ -1,16 +1,11 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/controllers/connector_connection_inbox_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/controllers/connection_inbox_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/model/connectionModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class ConnectionDialogs {
-  static void showAcceptConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+  static void showAcceptConnectionDialog(BuildContext context, Connection connection) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Welcome! Let's connect";
 
@@ -19,9 +14,7 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -55,9 +48,7 @@ class ConnectionDialogs {
                   controller: messageController,
                   decoration: InputDecoration(
                     hintText: "Enter your response message",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   maxLines: 3,
                 ),
@@ -81,11 +72,10 @@ class ConnectionDialogs {
                       child: RoundedButton(
                         onTap: () {
                           Navigator.of(context).pop();
-                          Get.find<ConnectionInboxController>()
-                              .acceptConnection(
-                                connection.id ?? 0,
-                                messageController.text.trim(),
-                              );
+                          Get.find<ConnectionInboxController>().acceptConnection(
+                            connection.id ?? 0,
+                            messageController.text.trim(),
+                          );
                         },
                         buttonName: 'Accept',
                         borderRadius: 12,
@@ -104,10 +94,7 @@ class ConnectionDialogs {
     );
   }
 
-  static void showRejectConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+  static void showRejectConnectionDialog(BuildContext context, Connection connection) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Not interested at this time";
 
@@ -116,9 +103,7 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -149,9 +134,7 @@ class ConnectionDialogs {
                   controller: messageController,
                   decoration: InputDecoration(
                     hintText: "Enter your rejection message",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   maxLines: 3,
                 ),
@@ -175,11 +158,10 @@ class ConnectionDialogs {
                       child: RoundedButton(
                         onTap: () {
                           Navigator.of(context).pop();
-                          Get.find<ConnectionInboxController>()
-                              .rejectConnection(
-                                connection.id ?? 0,
-                                messageController.text.trim(),
-                              );
+                          Get.find<ConnectionInboxController>().rejectConnection(
+                            connection.id ?? 0,
+                            messageController.text.trim(),
+                          );
                         },
                         buttonName: 'Reject',
                         borderRadius: 12,
@@ -198,18 +180,16 @@ class ConnectionDialogs {
     );
   }
 
-  static void showCancelConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+  static void showCancelConnectionDialog({
+    required BuildContext context,
+    void Function()? onTap,
+  }) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -219,11 +199,7 @@ class ConnectionDialogs {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.cancel_outlined,
-                  size: 60,
-                  color: MyColors.red,
-                ),
+                const Icon(Icons.cancel_outlined, size: 60, color: MyColors.red),
                 SizedBox(height: 2.h),
                 Text(
                   "Cancel Connection",
@@ -262,11 +238,7 @@ class ConnectionDialogs {
                     SizedBox(width: 2.w),
                     Expanded(
                       child: RoundedButton(
-                        onTap: () {
-                          Get.back();
-                          Get.find<ConnectorConnectionInboxController>()
-                              .cancelConnection(connection.id ?? 0);
-                        },
+                        onTap: onTap,
                         buttonName: 'Yes',
                         borderRadius: 12,
                         verticalPadding: 0,
@@ -288,6 +260,7 @@ class ConnectionDialogs {
     BuildContext context,
     Product product, {
     bool? isFromIn = false,
+    void Function()? onTap,
   }) {
     final TextEditingController messageController = TextEditingController();
     messageController.text =
@@ -298,9 +271,7 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -355,19 +326,7 @@ class ConnectionDialogs {
                     SizedBox(width: 2.w),
                     Expanded(
                       child: RoundedButton(
-                        onTap: () async {
-                          Get.back();
-                          if (isFromIn == true) {
-                            Get.back();
-                          }
-                          await Get.find<ConnectorSelectedProductController>()
-                              .addToConnectApi(
-                                message: messageController.text.trim(),
-                                pID: product.id,
-                                mID: product.merchantProfileId,
-                              );
-
-                        },
+                        onTap: onTap,
                         buttonName: 'Connect',
                         borderRadius: 12,
                         verticalPadding: 0,
