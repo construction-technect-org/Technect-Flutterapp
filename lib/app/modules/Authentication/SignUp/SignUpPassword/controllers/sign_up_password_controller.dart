@@ -185,13 +185,20 @@ class SignUpPasswordController extends GetxController {
         if (signUpResponse.data?.user != null) {
           myPref.setUserModel(signUpResponse.data!.user!);
         }
+
+        if (userData!.roleName !=
+            "House-Owner") {
+          myPref.setRole("partner");
+        } else {
+          myPref.setRole("connector");
+        }
         Get.to(
           () => SuccessScreen(
             title: "Success!",
             header: "Account created successfully !",
             image: Asset.forgetSImage,
             onTap: () {
-              Get.offAllNamed(Routes.ADDRESS, arguments: {"from": "register"});
+              Get.offAllNamed(Routes.MAIN,);
             },
           ),
         );

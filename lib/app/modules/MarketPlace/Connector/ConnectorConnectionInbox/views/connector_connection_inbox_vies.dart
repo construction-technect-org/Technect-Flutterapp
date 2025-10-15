@@ -281,7 +281,7 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                                             ),
                                             const Gap(4),
                                             Text(
-                                              "User   •   ${connection.createdAt?.toLocal().toString().split(' ')[0] ?? 'Unknown date'}",
+                                              "User   •   ${connection.createdAt.toString().split(' ')[0] ?? 'Unknown date'}",
                                               style: MyTexts.regular14.copyWith(
                                                 color: MyColors.fontBlack,
                                                 fontFamily: MyTexts.SpaceGrotesk,

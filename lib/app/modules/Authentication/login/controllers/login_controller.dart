@@ -14,7 +14,7 @@ class LoginController extends GetxController {
   FocusNode passwordFocusNode = FocusNode();
   final rememberMe = false.obs;
   RxInt isValid = (-1).obs;
-  RxString countryCode = "".obs;
+  RxString countryCode = "+91".obs;
   HomeService homeService = HomeService();
 
   LoginService loginService = LoginService();
@@ -28,8 +28,6 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    // Check if credentials are saved and auto-fill them
     if (myPref.isRememberMeEnabled()) {
       final savedMobile = myPref.getSavedMobileNumber();
       final savedPassword = myPref.getSavedPassword();
@@ -43,21 +41,11 @@ class LoginController extends GetxController {
   }
 
   Future<void> login() async {
-    if (mobileController.text.isEmpty || passwordController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Please fill all fields');
-      return;
-    }
-
-    if (mobileController.text.length < 10) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid mobile number');
-      return;
-    }
-
     isLoading.value = true;
 
     try {
       final loginResponse = await loginService.login(
-        countryCode: "+91",
+        countryCode: countryCode.value,
         mobileNumber: mobileController.text,
         password: passwordController.text,
       );
@@ -71,11 +59,11 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
-        if (loginResponse.data?.user?.marketPlaceRole?.toLowerCase() ==
-            "partner") {
-          myPref.setRole("merchant_partner");
+        if (loginResponse.data?.user?.roleName !=
+            "House-Owner") {
+          myPref.setRole("partner");
         } else {
-          myPref.setRole("merchant_connector");
+          myPref.setRole("connector");
         }
         if (rememberMe.value) {
           myPref.saveCredentials(
@@ -85,45 +73,15 @@ class LoginController extends GetxController {
         } else {
           myPref.clearCredentials();
         }
-        final addressResponse = await homeService.getAddress();
-        if (addressResponse.success == true &&
-            (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
-          myPref.setAddressData(addressResponse.toJson());
-          // Get.offAllNamed(Routes.MAIN);
-          Get.offAll(
-            () => SuccessScreen(
-              title: "Success!",
-              header: "Thanks for Connecting !",
-              onTap: () {
-
-                if ((loginResponse.data?.user?.marketPlace ?? "").isEmpty) {
-                  Get.offAllNamed(Routes.DASHBOARD);
-                } else {
-                  if (loginResponse.data?.user?.marketPlaceRole?.toLowerCase() ==
-                      "partner") {
-                    Get.offAllNamed(Routes.MAIN);
-                  } else {
-                    Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
-                  }
-                }
-              },
-            ),
-          );
-        } else {
-          myPref.clearAddressData();
-          Get.offAll(
-            () => SuccessScreen(
-              title: "Success!",
-              header: "Thanks for Connecting !",
-              onTap: () {
-                Get.offAllNamed(
-                  Routes.ADDRESS,
-                  arguments: {"from": "register"},
-                );
-              },
-            ),
-          );
-        }
+        Get.offAll(
+          () => SuccessScreen(
+            title: "Success!",
+            header: "Thanks for Connecting !",
+            onTap: () {
+              Get.offAllNamed(Routes.MAIN);
+            },
+          ),
+        );
       } else {
         SnackBars.errorSnackBar(
           content: loginResponse.message ?? 'Login failed',

@@ -33,7 +33,7 @@ class Connection {
   String? status;
   String? requestMessage;
   dynamic responseMessage;
-  dynamic connectedAt;
+  DateTime? connectedAt;
   String? connectorName;
   String? connectorProfileImageUrl;
   String? merchantName;
@@ -41,6 +41,7 @@ class Connection {
   String? productName;
   DateTime? createdAt;
   DateTime? updatedAt;
+  ConnectionStatistics? statistics;
 
   Connection({
     this.id,
@@ -58,6 +59,7 @@ class Connection {
     this.productName,
     this.createdAt,
     this.updatedAt,
+    this.statistics,
   });
 
   factory Connection.fromJson(Map<String, dynamic> json) => Connection(
@@ -68,14 +70,23 @@ class Connection {
     status: json["status"],
     requestMessage: json["request_message"],
     responseMessage: json["response_message"],
-    connectedAt: json["connected_at"],
+    connectedAt: json["connected_at"] == null
+        ? null
+        : DateTime.tryParse(json["connected_at"]), // ✅ safer parsing
     connectorName: json["connector_name"],
     connectorProfileImageUrl: json["connector_profile_image_url"],
     merchantName: json["merchant_name"],
     merchantProfileImageUrl: json["merchant_profile_image_url"],
     productName: json["product_name"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.tryParse(json["created_at"]),
+    updatedAt: json["updated_at"] == null
+        ? null
+        : DateTime.tryParse(json["updated_at"]),
+    statistics: json["statistics"] == null
+        ? null
+        : ConnectionStatistics.fromJson(json["statistics"]), // ✅ optional
   );
 
   Map<String, dynamic> toJson() => {
@@ -86,7 +97,7 @@ class Connection {
     "status": status,
     "request_message": requestMessage,
     "response_message": responseMessage,
-    "connected_at": connectedAt,
+    "connected_at": connectedAt?.toIso8601String(),
     "connector_name": connectorName,
     "connector_profile_image_url": connectorProfileImageUrl,
     "merchant_name": merchantName,
@@ -94,6 +105,41 @@ class Connection {
     "product_name": productName,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
+    if (statistics != null) "statistics": statistics!.toJson(), // ✅ optional
+  };
+}
+
+// ✅ Extra model for statistics (since your API response includes it)
+class ConnectionStatistics {
+  int? totalRequests;
+  int? pendingRequests;
+  int? acceptedRequests;
+  int? rejectedRequests;
+  int? cancelledRequests;
+
+  ConnectionStatistics({
+    this.totalRequests,
+    this.pendingRequests,
+    this.acceptedRequests,
+    this.rejectedRequests,
+    this.cancelledRequests,
+  });
+
+  factory ConnectionStatistics.fromJson(Map<String, dynamic> json) =>
+      ConnectionStatistics(
+        totalRequests: json["total_requests"],
+        pendingRequests: json["pending_requests"],
+        acceptedRequests: json["accepted_requests"],
+        rejectedRequests: json["rejected_requests"],
+        cancelledRequests: json["cancelled_requests"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "total_requests": totalRequests,
+    "pending_requests": pendingRequests,
+    "accepted_requests": acceptedRequests,
+    "rejected_requests": rejectedRequests,
+    "cancelled_requests": cancelledRequests,
   };
 }
 

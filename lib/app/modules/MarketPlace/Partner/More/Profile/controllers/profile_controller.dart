@@ -558,7 +558,6 @@ class ProfileController extends GetxController {
                 ),
               );
             } else {
-              homeController.onReturnFromEditProfile();
               Get.back();
             }
           }

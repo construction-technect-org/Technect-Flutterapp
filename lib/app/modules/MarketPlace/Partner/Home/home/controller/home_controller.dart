@@ -17,26 +17,6 @@ class HomeController extends GetxController {
 
   CommonController commonController = Get.find();
 
-  final List<Map<String, dynamic>> items = [
-    {"icon": Asset.inbox, "title": "Inbox"},
-    {"icon": Asset.report, "title": "Report"},
-    {"icon": Asset.report, "title": "Analysis"},
-    {"icon": Asset.setting, "title": "Setting"},
-    {"icon": Asset.insights, "title": "Team"},
-    {"icon": Asset.cart, "title": "Inventory"},
-    {"icon": Asset.warning, "title": "News"},
-    {"icon": Asset.thumbup, "title": "Refer& Earn"},
-  ];
-  final features = [
-    {"title": "Marketplacee", "icon": Asset.marketplaceIcon},
-    {"title": "CRM", "icon": Asset.crmIcon},
-    {"title": "ERP", "icon": Asset.erpIcon},
-    {"title": "Projects", "icon": Asset.projectManagementIcon},
-    {"title": "HRMS", "icon": Asset.hrmsIcon},
-    {"title": "Portfolio", "icon": Asset.portfolioManagementIcon},
-    {"title": "OVP", "icon": Asset.ovpIcon},
-    {"title": "Construction", "icon": Asset.constructionTaxi},
-  ];
 
   RxInt selectedIndex = 0.obs;
 
@@ -52,24 +32,15 @@ class HomeController extends GetxController {
   RxList<TeamListData> teamList = <TeamListData>[].obs;
   Rx<DashboardModel> dashboardData = DashboardModel().obs;
 
-  bool _profileDialogShown = false;
-
   @override
   void onInit() {
     super.onInit();
     fetchSubCategories();
     _initializeHomeData();
-    refreshDashboardData();
+    // refreshDashboardData();
     isDefaultOffice.value = myPref.getDefaultAdd();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _checkAddressAndProfileCompletion();
-    });
-  }
 
   final AddProductService _service = AddProductService();
   Rx<SubCategoryModel> subCategoryModel = SubCategoryModel().obs;
@@ -100,26 +71,6 @@ class HomeController extends GetxController {
     await fetchProfileData();
   }
 
-  void _checkAddressAndProfileCompletion() {
-    _checkProfileCompletion();
-  }
-
-  void _checkProfileCompletion() {
-    final merchantProfile = profileData.value.data?.merchantProfile;
-
-    final completionPercentage = merchantProfile?.profileCompletionPercentage ?? 0;
-
-    if (merchantProfile != null) {
-      commonController.hasProfileComplete.value = completionPercentage >= 90;
-    }
-
-    if (!commonController.hasProfileComplete.value &&
-        Get.isDialogOpen != true &&
-        !_profileDialogShown) {
-      _profileDialogShown = true;
-      _showProfileCompletionDialog();
-    }
-  }
 
   void _showProfileCompletionDialog() {
     if (Get.isDialogOpen == true) {
@@ -190,37 +141,6 @@ class HomeController extends GetxController {
     }
   }
 
-  void resetProfileDialogFlag() {
-    _profileDialogShown = false;
-  }
-
-  void onReturnFromEditProfile() {
-    if (!commonController.hasProfileComplete.value) {
-      _profileDialogShown = false;
-    }
-
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      _checkProfileCompletionAfterEdit();
-    });
-  }
-
-  void _checkProfileCompletionAfterEdit() {
-    final completionPercentage =
-        profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0;
-
-    if (profileData.value.data?.merchantProfile != null) {
-      commonController.hasProfileComplete.value = completionPercentage >= 90;
-    }
-
-    if (commonController.hasProfileComplete.value) {
-      if (Get.isDialogOpen == true) {
-        Get.back();
-      }
-      resetProfileDialogFlag();
-    } else {
-      _profileDialogShown = false;
-    }
-  }
 
   void _loadCachedData() {
     final cachedAddressData = myPref.getAddressData();
@@ -279,21 +199,21 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  Future<void> fetchDashboardData() async {
-    try {
-      final dashboardResponse = await homeService.getDashboard();
-      if (dashboardResponse.success == true) {
-        dashboardData.value = dashboardResponse;
-      }
-    } catch (e) {
-      Get.printError(info: 'Error fetching dashboard data: $e');
-    }
-  }
-
-  Future<void> refreshDashboardData() async {
-    await fetchDashboardData();
-  }
+  //
+  // Future<void> fetchDashboardData() async {
+  //   try {
+  //     final dashboardResponse = await homeService.getDashboard();
+  //     if (dashboardResponse.success == true) {
+  //       dashboardData.value = dashboardResponse;
+  //     }
+  //   } catch (e) {
+  //     Get.printError(info: 'Error fetching dashboard data: $e');
+  //   }
+  // }
+  //
+  // Future<void> refreshDashboardData() async {
+  //   await fetchDashboardData();
+  // }
 
   Future<void> _loadTeamFromStorage() async {
     final cachedTeamModel = myPref.getTeamModelData();

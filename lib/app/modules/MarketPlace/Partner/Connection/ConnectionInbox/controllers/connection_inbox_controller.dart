@@ -2,7 +2,8 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/model/connectionModel.dart';
 
 class ConnectionInboxController extends GetxController {
-  RxBool isLoading = false.obs;
+  RxBool isLoading = true.obs;
+  RxBool isLoader = false.obs;
   RxList<Connection> connections = <Connection>[].obs;
   RxList<Connection> filteredConnections = <Connection>[].obs;
   RxString searchQuery = ''.obs;
@@ -12,14 +13,22 @@ class ConnectionInboxController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchConnections();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.microtask(() async {
+        await fetchConnections(isLoad: false);
+        isLoading.value = false;
+      });
+    });
   }
 
-  Future<void> fetchConnections({String? status}) async {
+  Future<void> fetchConnections({String? status, bool? isLoad}) async {
     try {
-      isLoading.value = true;
+      print(myPref.role.val);
+      isLoader.value = isLoad ?? true;
       final response = await apiManager.get(
-        url: "${APIConstants.connectionInbox}?status=pending",
+        url: myPref.role.val == "connector"
+            ? APIConstants.connectionConnectorInbox
+            : APIConstants.connectionInbox,
         params: status != null ? {"status": status} : null,
       );
       final connectionModel = ConnectionModel.fromJson(response);
@@ -27,10 +36,14 @@ class ConnectionInboxController extends GetxController {
       filteredConnections.clear();
       filteredConnections.addAll(connectionModel.data ?? []);
       statistics.value = connectionModel.statistics ?? Statistics();
+      isLoader.value = false;
     } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
       // No need to show error
     } finally {
-      isLoading.value = false;
+      isLoader.value = false;
     }
   }
 

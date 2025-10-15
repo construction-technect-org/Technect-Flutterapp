@@ -16,6 +16,7 @@ class Asset {
   static const String auth = '${png}auth.png';
   static const String role1 = '${png}role1.png';
   static const String back = '${svg}back.svg';
+  static const String chat = '${svg}chat.svg';
   static const String explore = '${newPng}explore.png';
   static const String bricksBackground = 'assets/images/bricks_background.png';
   static const String splashLogo = 'assets/images/splash_logo.png';
