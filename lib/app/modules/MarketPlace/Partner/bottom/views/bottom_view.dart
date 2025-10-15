@@ -20,7 +20,7 @@ class BottomBarView extends GetView<BottomController> {
           case 0:
             return HomeView();
           case 1:
-            return CategoryView();
+            return const CategoryView();
           case 2:
             return ConnectionInboxView();
           case 3:
@@ -29,135 +29,6 @@ class BottomBarView extends GetView<BottomController> {
             return const MenuView();
         }
       }),
-      // bottomNavigationBar: Obx(() {
-      //   return !commonController.hasProfileComplete.value
-      //       ? Padding(
-      //           padding: EdgeInsets.only(left: 4.h, right: 4.h, bottom: 2.h),
-      //           child: RoundedButton(
-      //             borderRadius: 0,
-      //             buttonName: 'PROCEED',
-      //             onTap: () {},
-      //           ),
-      //         )
-      //       : ColoredBox(
-      //           color: MyColors.primary,
-      //           child: Padding(
-      //             padding: const EdgeInsets.only(top: 6.0),
-      //             child: Theme(
-      //               data: Theme.of(context).copyWith(
-      //                 splashColor: Colors.transparent,
-      //                 highlightColor: Colors.transparent,
-      //               ),
-      //               child: BottomNavigationBar(
-      //                 elevation: 0,
-      //                 // selectedFontSize: 0,
-      //                 // unselectedFontSize: 0,
-      //                 // showSelectedLabels: false,
-      //                 // showUnselectedLabels: false,
-      //                 type: BottomNavigationBarType.fixed,
-      //                 backgroundColor: MyColors.primary,
-      //                 currentIndex: controller.currentIndex.value,
-      //                 onTap: controller.changeTab,
-      //                 selectedItemColor: MyColors.white,
-      //                 unselectedItemColor: MyColors.white.withValues(alpha: 0.25),
-      //                 selectedLabelStyle: MyTexts.medium13.copyWith(
-      //                   color: MyColors.white,
-      //                 ),
-      //                 unselectedLabelStyle: MyTexts.medium13.copyWith(
-      //                   color: MyColors.white.withValues(alpha: 0.25),
-      //                 ),
-      //                 items: [
-      //                   BottomNavigationBarItem(
-      //                     icon: Padding(
-      //                       padding: const EdgeInsets.only(bottom: 4.0),
-      //                       child: SvgPicture.asset(
-      //                         Asset.homeIcon,
-      //                         width: 24,
-      //                         height: 24,
-      //                         colorFilter: ColorFilter.mode(
-      //                           controller.currentIndex.value == 0
-      //                               ? MyColors.white
-      //                               : MyColors.white.withValues(alpha: 0.25),
-      //                           BlendMode.srcIn,
-      //                         ),
-      //                       ),
-      //                     ),
-      //                     label: 'Home',
-      //                   ),
-      //                   BottomNavigationBarItem(
-      //                     icon: Padding(
-      //                       padding: const EdgeInsets.only(bottom: 4.0),
-      //                       child: SvgPicture.asset(
-      //                         Asset.productIcon,
-      //                         width: 24,
-      //                         height: 24,
-      //                         colorFilter: ColorFilter.mode(
-      //                           controller.currentIndex.value == 1
-      //                               ? MyColors.white
-      //                               : MyColors.white.withValues(alpha: 0.25),
-      //                           BlendMode.srcIn,
-      //                         ),
-      //                       ),
-      //                     ),
-      //                     label: 'Product',
-      //                   ),
-      //                   BottomNavigationBarItem(
-      //                     icon: Padding(
-      //                       padding: const EdgeInsets.only(bottom: 4.0),
-      //                       child: SvgPicture.asset(
-      //                         Asset.supportIcon,
-      //                         width: 24,
-      //                         height: 24,
-      //                         colorFilter: ColorFilter.mode(
-      //                           controller.currentIndex.value == 2
-      //                               ? MyColors.white
-      //                               : MyColors.white.withValues(alpha: 0.25),
-      //                           BlendMode.srcIn,
-      //                         ),
-      //                       ),
-      //                     ),
-      //                     label: 'Support',
-      //                   ),
-      //                   BottomNavigationBarItem(
-      //                     icon: Padding(
-      //                       padding: const EdgeInsets.only(bottom: 4.0),
-      //                       child: SvgPicture.asset(
-      //                         Asset.connectionIcon,
-      //                         width: 24,
-      //                         height: 24,
-      //                         colorFilter: ColorFilter.mode(
-      //                           controller.currentIndex.value == 3
-      //                               ? MyColors.white
-      //                               : MyColors.white.withValues(alpha: 0.25),
-      //                           BlendMode.srcIn,
-      //                         ),
-      //                       ),
-      //                     ),
-      //                     label: 'Connection',
-      //                   ),
-      //                   BottomNavigationBarItem(
-      //                     icon: Padding(
-      //                       padding: const EdgeInsets.only(bottom: 4.0),
-      //                       child: SvgPicture.asset(
-      //                         Asset.moreIcon,
-      //                         width: 24,
-      //                         height: 24,
-      //                         colorFilter: ColorFilter.mode(
-      //                           controller.currentIndex.value == 4
-      //                               ? MyColors.white
-      //                               : MyColors.white.withValues(alpha: 0.25),
-      //                           BlendMode.srcIn,
-      //                         ),
-      //                       ),
-      //                     ),
-      //                     label: 'More',
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //           ),
-      //         );
-      // }),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -186,44 +57,53 @@ class BottomBarView extends GetView<BottomController> {
                 children: [
                   bottomBar(
                     Asset.home,
+                    Asset.home1,
                     'Home',
                     onTap: () {
                       controller.currentIndex.value = 0;
                     },
+                    index: 0,
                   ),
                   bottomBar(
                     Asset.category,
+                    Asset.category1,
                     'Category',
                     onTap: () {
                       controller.currentIndex.value = 1;
                     },
+                    index: 1,
                   ),
-                  GestureDetector(
-                    onTap: (){
-                      Get.toNamed(Routes.ADD_PRODUCT);
-                    },
-                    behavior: HitTestBehavior.translucent,
-                    child: Center(
-                      child: SvgPicture.asset(
-                        Asset.center,
-                        height: 34,
-                        width: 34,
+                  if (myPref.role.val != "connector")
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.ADD_PRODUCT);
+                      },
+                      behavior: HitTestBehavior.translucent,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          Asset.center,
+                          height: 34,
+                          width: 34,
+                        ),
                       ),
                     ),
-                  ),
                   bottomBar(
                     Asset.connection,
+                    Asset.connection1,
                     'Connection',
                     onTap: () {
                       controller.currentIndex.value = 2;
                     },
+                    index: 2,
                   ),
                   bottomBar(
+                    Asset.more,
                     Asset.more,
                     'Mote',
                     onTap: () {
                       controller.currentIndex.value = 3;
                     },
+                    index: 3,
                   ),
                 ],
               ),
@@ -234,13 +114,26 @@ class BottomBarView extends GetView<BottomController> {
     );
   }
 
-  Widget bottomBar(String icon, String name, {void Function()? onTap}) {
+  Widget bottomBar(
+    String icon,
+    String icon2,
+    String name, {
+    void Function()? onTap,
+    int? index,
+  }) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.translucent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(icon, height: 24, width: 24),
+          Obx(() {
+            return SvgPicture.asset(
+              controller.currentIndex.value == index ? icon2 : icon,
+              height: 24,
+              width: 24,
+            );
+          }),
           Text(name, style: MyTexts.medium14),
         ],
       ),

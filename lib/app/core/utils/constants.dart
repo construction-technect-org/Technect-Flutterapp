@@ -42,7 +42,7 @@ class Asset {
   static const String otherIcon = 'assets/images/other.png';
 
   // Tab bar icons
-  static const String homeIcon = 'assets/images/home.svg';
+  static const String homeIcon = 'assets/images/home1.svg';
   static const String wishlistIcon = 'assets/images/wishlist.svg';
   static const String supportIcon = 'assets/images/support.svg';
   static const String settingsIcon = 'assets/images/settings.svg';
@@ -207,7 +207,10 @@ class Asset {
 
   // New Icons
   static const String category = '${newIcons}category.svg';
+  static const String category1 = '${newIcons}category1.svg';
   static const String connection = '${newIcons}connection.svg';
+  static const String connection1 = '${newIcons}connection1.svg';
+  static const String home1 = '${newIcons}home1.svg';
   static const String home = '${newIcons}home.svg';
   static const String more = '${newIcons}more.svg';
   static const String center = '${newIcons}center.svg';
