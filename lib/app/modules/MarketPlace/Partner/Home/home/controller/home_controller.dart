@@ -7,6 +7,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeController extends GetxController {
   // New
@@ -52,7 +53,9 @@ class HomeController extends GetxController {
       PopScope(
         canPop: false,
         child: Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(13),
+          ),
           child: GestureDetector(
             onTap: () {
               _handleProfileDialogTap();
@@ -136,9 +139,15 @@ class HomeController extends GetxController {
   RxString getCurrentAddress() {
     if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
       final int index =
-          addressData.data?.addresses?.indexWhere((e) => e.addressType == "office") ?? 0;
+          addressData.data?.addresses?.indexWhere(
+            (e) => e.addressType == "office",
+          ) ??
+          0;
       final int factoryIndex =
-          addressData.data?.addresses?.indexWhere((e) => e.addressType == "factory") ?? 0;
+          addressData.data?.addresses?.indexWhere(
+            (e) => e.addressType == "factory",
+          ) ??
+          0;
       final address = addressData
           .data!
           .addresses?[isDefaultOffice.value == true ? index : factoryIndex];
@@ -154,11 +163,17 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true && profileResponse.data?.user != null) {
+      if (profileResponse.success == true &&
+          profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
-        if ((profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0) >=
+        if ((profileData
+                    .value
+                    .data
+                    ?.merchantProfile
+                    ?.profileCompletionPercentage ??
+                0) >=
             90) {
           _loadTeamFromStorage();
         }
@@ -244,5 +259,49 @@ class HomeController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  RxDouble currentLatitude = 0.0.obs;
+  RxDouble currentLongitude = 0.0.obs;
+
+  /// Fetch only current latitude & longitude
+  Future<void> fetchCurrentLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          Get.snackbar('Permission Denied', 'Please enable location access');
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        Get.snackbar(
+          'Location Blocked',
+          'Please enable location access from app settings',
+        );
+        return;
+      }
+
+      // Get current position
+      final Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      currentLatitude.value = position.latitude;
+      currentLongitude.value = position.longitude;
+    } catch (e) {
+      Get.printError(info: 'Error fetching location: $e');
+    }
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    WidgetsBinding.instance.addPostFrameCallback((val) async {
+      await fetchCurrentLocation();
+    });
   }
 }

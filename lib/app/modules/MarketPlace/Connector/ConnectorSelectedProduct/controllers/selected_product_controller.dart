@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
@@ -34,10 +35,7 @@ class SelectedProductController extends GetxController {
   String? mainCategoryName;
   RxInt selectedSubCategoryId = 0.obs;
 
-  // Location data (you can get this from device location or user input)
-  double latitude = 28.6139;
-  double longitude = 77.2090;
-  double radiusKm = 50;
+  double radiusKm = 50000000;
 
   // Service instance
   final ConnectorSelectedProductServices services =
@@ -108,8 +106,8 @@ class SelectedProductController extends GetxController {
         subCategoryId: selectedSubCategory.value!.id.toString(),
         categoryProductId: selectedProduct.value!.id.toString(),
         radius: radiusKm.toInt(),
-        latitude: latitude.toString(),
-        longitude: longitude.toString(),
+        latitude: Get.find<HomeController>().currentLatitude.toString(),
+        longitude: Get.find<HomeController>().currentLongitude.toString(),
         filters: filtersData,
       );
       isProductView.value = true;
@@ -270,7 +268,7 @@ class SelectedProductController extends GetxController {
 
                   fillColor: MaterialStateProperty.resolveWith<Color>((states) {
                     if (states.contains(MaterialState.selected)) {
-                      return  MyColors.primary;
+                      return MyColors.primary;
                     }
                     return Colors.grey;
                   }),

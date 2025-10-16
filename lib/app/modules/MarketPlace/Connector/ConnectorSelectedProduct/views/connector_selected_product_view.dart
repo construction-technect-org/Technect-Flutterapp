@@ -28,8 +28,7 @@ class SelectedProductView extends StatelessWidget {
           elevation: 0,
           leading: IconButton(
             icon: const Icon(
-              Icons.arrow_back_ios,
-              color: MyColors.fontBlack,
+              Icons.arrow_back_ios, color: MyColors.fontBlack,
               size: 20,
             ),
             onPressed: () {
@@ -550,224 +549,240 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildProductCard(Product product, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 3,
-          child: SizedBox(
-            width: double.infinity,
-            child: Stack(
-              children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(4),
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(
+          Routes.PRODUCT_DETAILS,
+          arguments: {
+            "product": product,
+            "isFromAdd": false,
+            "isFromConnector": true,
+          },
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: SizedBox(
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(4),
+                        ),
+                        child: Center(
+                          child: _getFirstImageUrl(product) != null
+                              ? CachedNetworkImage(
+                                  imageUrl: _getFirstImageUrl(product)!,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => Container(
+                                    color: Colors.grey[200],
+                                    child: const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Container(
+                                    color: Colors.grey[200],
+                                    child: const Icon(
+                                      Icons.inventory_2,
+                                      size: 40,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(
+                                    Icons.inventory_2,
+                                    size: 40,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                        ),
                       ),
-                      child: _getFirstImageUrl(product) != null
-                          ? CachedNetworkImage(
-                              imageUrl: _getFirstImageUrl(product)!,
-                              width: double.infinity,
-                              height: double.infinity,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Container(
-                                color: Colors.grey[200],
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                color: Colors.grey[200],
-                                child: const Icon(
-                                  Icons.inventory_2,
-                                  size: 40,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            )
-                          : Container(
-                              color: Colors.grey[200],
-                              child: const Icon(
-                                Icons.inventory_2,
-                                size: 40,
-                                color: Colors.grey,
+                      if (product.outOfStock == true ||
+                          (product.stockQty ?? 0) <= 0)
+                        Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          decoration: const BoxDecoration(
+                            color: Colors.black38,
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Out of stock",
+                              style: MyTexts.medium13.copyWith(
+                                color: Colors.white,
+                                fontFamily: MyTexts.SpaceGrotesk,
                               ),
                             ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: Colors.black38,
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Out of stock",
-                          style: MyTexts.medium13.copyWith(
-                            color: Colors.black,
-                            fontFamily: MyTexts.SpaceGrotesk,
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(4),
-                        ),
-                      ),
-                      child: Text(
-                        "${double.parse(product.distanceKm ?? '0').toStringAsFixed(1)} km",
-                        style: MyTexts.light14,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          controller.wishListApi(
-                            status: product.isInWishList == true
-                                ? "remove"
-                                : "add",
-                            mID: product.id ?? 0,
-                          );
-                        },
-                        child: Icon(
-                          (product.isInWishList ?? false)
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          size: 24,
-                          color: (product.isInWishList ?? false)
-                              ? MyColors.custom('E53D26')
-                              : MyColors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            Text(
-              product.categoryProductName ?? 'Unknown Product',
-              style: MyTexts.medium14.copyWith(
-                color: MyColors.custom('2E2E2E'),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 6),
-            Text(
-              product.brand ?? 'Unknown Product',
-              style: MyTexts.medium12.copyWith(
-                color: MyColors.custom('545454'),
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                Icon(Icons.location_on, size: 12, color: Colors.grey[600]),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    product.address ?? 'Unknown Product',
-                    style: MyTexts.regular12.copyWith(
-                      color: MyColors.custom('545454'),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    ],
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    MyColors.custom('FFF9BD'),
-                    MyColors.custom('FFF9BD').withOpacity(0.1),
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 6),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(width: 6),
-                      Text(
-                        '₹ ',
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.custom('0B1429'),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(4),
+                          ),
+                        ),
+                        child: Text(
+                          "${double.parse(product.distanceKm ?? '0').toStringAsFixed(1)} km",
+                          style: MyTexts.light14,
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                product.price ?? 'N/A',
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.custom('0B1429'),
-                                ),
-                              ),
-                              Text(
-                                '/ unit',
-                                style: MyTexts.medium12.copyWith(
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ],
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.wishListApi(
+                              status: product.isInWishList == true
+                                  ? "remove"
+                                  : "add",
+                              mID: product.id ?? 0,
+                            );
+                          },
+                          child: Icon(
+                            (product.isInWishList ?? false)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            size: 24,
+                            color: (product.isInWishList ?? false)
+                                ? MyColors.custom('E53D26')
+                                : MyColors.white,
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Ex factory price',
-                            style: MyTexts.medium12.copyWith(
-                              color: MyColors.custom('545454'),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: _buildActionButton(product, context),
-            ),
-          ],
-        ),
-      ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              Text(
+                product.categoryProductName ?? 'Unknown Product',
+                style: MyTexts.medium14.copyWith(
+                  color: MyColors.custom('2E2E2E'),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                product.brand ?? 'Unknown Product',
+                style: MyTexts.medium12.copyWith(
+                  color: MyColors.custom('545454'),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Icon(Icons.location_on, size: 12, color: Colors.grey[600]),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      product.address ?? 'Unknown Product',
+                      style: MyTexts.regular12.copyWith(
+                        color: MyColors.custom('545454'),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      MyColors.custom('FFF9BD'),
+                      MyColors.custom('FFF9BD').withOpacity(0.1),
+                    ],
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 6),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 6),
+                        Text(
+                          '₹ ',
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.custom('0B1429'),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  product.price ?? 'N/A',
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.custom('0B1429'),
+                                  ),
+                                ),
+                                Text(
+                                  '/ unit',
+                                  style: MyTexts.medium12.copyWith(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Ex factory price',
+                              style: MyTexts.medium12.copyWith(
+                                color: MyColors.custom('545454'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: _buildActionButton(product, context),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

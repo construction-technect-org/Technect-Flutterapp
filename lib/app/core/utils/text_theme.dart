@@ -25,6 +25,12 @@ class MyTexts {
     fontFamily: SpaceGrotesk,
   );
 
+  static TextStyle get medium15 => TextStyle(
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w500,
+    color: MyColors.black,
+    fontFamily: SpaceGrotesk,
+  );
   static TextStyle get medium12 => TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,

@@ -13,6 +13,7 @@ class ProductDetailsController extends GetxController {
   final RxBool isFromAdd = false.obs;
   final RxBool isFromConnector = false.obs;
   final RxBool isLoading = false.obs;
+  final RxInt currentIndex = 0.obs;
   final ProductDetailService _service = ProductDetailService();
 
   @override
