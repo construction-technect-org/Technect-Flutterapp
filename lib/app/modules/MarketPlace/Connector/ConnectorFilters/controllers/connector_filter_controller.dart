@@ -15,18 +15,6 @@ class ConnectorFilterController extends GetxController {
     super.onInit();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      isLoad.value = true;
-
-      final selectedProductId =
-          Get.find<ConnectorSelectedProductController>()
-              .selectedProductId
-              .value ??
-          "";
-
-      await Get.find<ConnectorSelectedProductController>().getFilter(
-        selectedProductId,
-      );
-
       final otherFilters =
           Get.find<ConnectorSelectedProductController>().filters;
 

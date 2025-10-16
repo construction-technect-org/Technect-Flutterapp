@@ -13,7 +13,7 @@ class ConnectorFiltersView extends StatefulWidget {
 }
 
 class _ConnectorFiltersViewState extends State<ConnectorFiltersView> {
-  final controller = Get.find<ConnectorFilterController>();
+  final controller = Get.put<ConnectorFilterController>(ConnectorFilterController());
 
   @override
   Widget build(BuildContext context) {
