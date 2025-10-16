@@ -112,9 +112,11 @@ class SelectedProductController extends GetxController {
         longitude: longitude.toString(),
         filters: filtersData,
       );
-
       isProductView.value = true;
-      getFilter(selectedProduct.value!.id.toString());
+
+      if (allFilters.isEmpty) {
+        getFilter(selectedProduct.value!.id.toString());
+      }
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch products: $e');
     } finally {
@@ -232,7 +234,6 @@ class SelectedProductController extends GetxController {
   }
 
   void showSortBottomSheet(BuildContext context) {
-    final controller = Get.find<SelectedProductController>();
     Get.bottomSheet(
       Container(
         decoration: const BoxDecoration(
@@ -272,9 +273,9 @@ class SelectedProductController extends GetxController {
                     style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                   ),
                   value: sortType,
-                  groupValue: controller.selectedSort.value,
+                  groupValue: selectedSort.value,
                   onChanged: (value) {
-                    controller.applySorting(value!);
+                    applySorting(value!);
                     Get.back();
                   },
                 );
@@ -289,7 +290,6 @@ class SelectedProductController extends GetxController {
   }
 
   void showLocationBottomSheet(BuildContext context) {
-    final controller = Get.find<SelectedProductController>();
     Get.bottomSheet(
       Container(
         decoration: const BoxDecoration(
@@ -320,20 +320,26 @@ class SelectedProductController extends GetxController {
               const SizedBox(height: 10),
               Row(
                 children: [
-                   Text('0 km',style: MyTexts.medium14.copyWith(color: Colors.black),),
+                  Text(
+                    '0 km',
+                    style: MyTexts.medium14.copyWith(color: Colors.black),
+                  ),
                   Expanded(
                     child: Slider(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       max: 100,
                       divisions: 10,
-                      value: controller.selectedRadius.value,
+                      value: selectedRadius.value,
                       label:
-                          '${controller.selectedRadius.value.toStringAsFixed(0)} km',
-                      onChanged: (value) => controller.updateRadius(value),
+                          '${selectedRadius.value.toStringAsFixed(0)} km',
+                      onChanged: (value) => updateRadius(value),
                       activeColor: MyColors.primary,
                     ),
                   ),
-                  Text('100 km',style: MyTexts.medium14.copyWith(color: Colors.black),),
+                  Text(
+                    '100 km',
+                    style: MyTexts.medium14.copyWith(color: Colors.black),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -341,7 +347,7 @@ class SelectedProductController extends GetxController {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await controller.applyRadius();
+                    await applyRadius();
                     Get.back();
                   },
                   style: ElevatedButton.styleFrom(
@@ -368,24 +374,24 @@ class SelectedProductController extends GetxController {
   }
 
   void showFilterBottomSheet(BuildContext context) {
-    final controller = Get.find<SelectedProductController>();
     final otherFilters = allFilters;
-
-    filters.assignAll(
-      otherFilters.map(
-        (f) => ConnectorFilterModel(
-          filterName: f.filterName,
-          filterType: f.filterType,
-          min: double.tryParse(f.minValue ?? '0'),
-          max: double.tryParse(f.maxValue ?? '100'),
-          options: f.dropdownList,
-          label: f.filterLabel,
+    if (filters.isEmpty) {
+      filters.assignAll(
+        otherFilters.map(
+          (f) => ConnectorFilterModel(
+            filterName: f.filterName,
+            filterType: f.filterType,
+            min: double.tryParse(f.minValue ?? '0'),
+            max: double.tryParse(f.maxValue ?? '100'),
+            options: f.dropdownList,
+            label: f.filterLabel,
+          ),
         ),
-      ),
-    );
-
-    initFilterControllers();
-
+      );
+     initFilterControllers();
+    }
+    
+    
     Get.bottomSheet(
       StatefulBuilder(
         builder: (context, setState) {
@@ -422,10 +428,10 @@ class SelectedProductController extends GetxController {
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: controller.filters.length,
+                    itemCount:filters.length,
                     itemBuilder: (context, index) {
-                      final filter = controller.filters[index];
-                      final isExpanded = controller.expandedSection.contains(
+                      final filter = filters[index];
+                      final isExpanded = expandedSection.contains(
                         filter.filterName,
                       );
                       return AnimatedContainer(
@@ -461,11 +467,11 @@ class SelectedProductController extends GetxController {
                               onTap: () {
                                 setState(() {
                                   if (isExpanded) {
-                                    controller.expandedSection.remove(
+                                    expandedSection.remove(
                                       filter.filterName ?? '',
                                     );
                                   } else {
-                                    controller.expandedSection.add(
+                                    expandedSection.add(
                                       filter.filterName ?? '',
                                     );
                                   }
@@ -657,10 +663,10 @@ class SelectedProductController extends GetxController {
                           buttonName: "Clear All",
                           onTap: () {
                             setState(() async {
-                              controller.selectedFilters.clear();
-                              controller.multiSelectValues.clear();
-                              controller.initFilterControllers();
-                              controller.expandedSection.clear();
+                              selectedFilters.clear();
+                              multiSelectValues.clear();
+                              initFilterControllers();
+                              expandedSection.clear();
                               await fetchProductsFromApi();
                               Get.back();
                             });
@@ -672,7 +678,7 @@ class SelectedProductController extends GetxController {
                         child: RoundedButton(
                           buttonName: "Apply",
                           onTap: () async {
-                            final filtersData = controller.getFinalFilterData();
+                            final filtersData = getFinalFilterData();
                             await fetchProductsFromApi(
                               filtersData: filtersData,
                             );
