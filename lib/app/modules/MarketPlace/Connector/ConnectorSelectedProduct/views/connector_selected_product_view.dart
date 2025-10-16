@@ -878,7 +878,7 @@ class SelectedProductView extends StatelessWidget {
         height: 32,
         style: MyTexts.medium14.copyWith(color: Colors.white),
       );
-    } else if (connectionStatus == 'connected') {
+    } else if (connectionStatus == 'accepted') {
       return RoundedButton(
         buttonName: 'Connected',
         color: Colors.green,
@@ -888,7 +888,19 @@ class SelectedProductView extends StatelessWidget {
         height: 32,
         style: MyTexts.medium14.copyWith(color: Colors.white),
       );
-    } else {
+    }
+    else if (connectionStatus == 'rejected') {
+      return RoundedButton(
+        buttonName: 'Rejected',
+        color: Colors.red,
+        fontColor: Colors.white,
+        borderRadius: 8,
+        fontSize: 16.sp,
+        height: 32,
+        style: MyTexts.medium14.copyWith(color: Colors.white),
+      );
+    }
+    else {
       return RoundedButton(
         buttonName: 'Connect',
         color: MyColors.primary,

@@ -121,6 +121,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       // CASE 3: Handle Connection Status Logic
                       final String? connectionStatus = product.status;
 
+                      print(connectionStatus);
                       if ((connectionStatus ?? "").isEmpty) {
                         return Padding(
                           padding: const EdgeInsets.all(24.0),
@@ -145,29 +146,24 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           ),
                         );
                       } else if (connectionStatus == 'pending') {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
+                        return const Padding(
+                          padding: EdgeInsets.all(24.0),
                           child: RoundedButton(
                             horizontalPadding: 20,
                             color: Colors.orange,
-                            buttonName: 'Request Sent',
+                            buttonName: 'Pending',
                             fontColor: Colors.white,
-                            borderRadius: 8,
-                            fontSize: 16.sp,
-                            style: MyTexts.medium14.copyWith(color: Colors.white),
                           ),
                         );
-                      } else if (connectionStatus == 'connected') {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
+                      } else if (connectionStatus == 'accepted') {
+                        return const Padding(
+                          padding: EdgeInsets.all(24.0),
                           child: RoundedButton(
                             horizontalPadding: 20,
                             color: Colors.green,
                             buttonName: 'Connected',
                             fontColor: Colors.white,
                             borderRadius: 8,
-                            fontSize: 16.sp,
-                            style: MyTexts.medium14.copyWith(color: Colors.white),
                           ),
                         );
                       } else {
@@ -439,7 +435,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 controller.isFromAdd.value == false))
                           Container(
                             decoration: BoxDecoration(
-                              color: MyColors.green,
+                              color:controller.product.totalRatings == 0?MyColors.grayD4: MyColors.green,
                               borderRadius: BorderRadius.circular(4),
                             ),
                             padding: const EdgeInsets.symmetric(
