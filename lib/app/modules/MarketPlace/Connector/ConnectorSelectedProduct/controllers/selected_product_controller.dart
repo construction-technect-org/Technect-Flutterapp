@@ -265,6 +265,15 @@ class SelectedProductController extends GetxController {
               ].map((sortType) {
                 return RadioListTile<String>(
                   dense: true,
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  selectedTileColor: MyColors.primary,
+
+                  fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return  MyColors.primary;
+                    }
+                    return Colors.grey;
+                  }),
                   visualDensity: VisualDensity.compact,
                   contentPadding: EdgeInsets.zero,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -330,8 +339,7 @@ class SelectedProductController extends GetxController {
                       max: 100,
                       divisions: 10,
                       value: selectedRadius.value,
-                      label:
-                          '${selectedRadius.value.toStringAsFixed(0)} km',
+                      label: '${selectedRadius.value.toStringAsFixed(0)} km',
                       onChanged: (value) => updateRadius(value),
                       activeColor: MyColors.primary,
                     ),
@@ -388,10 +396,9 @@ class SelectedProductController extends GetxController {
           ),
         ),
       );
-     initFilterControllers();
+      initFilterControllers();
     }
-    
-    
+
     Get.bottomSheet(
       StatefulBuilder(
         builder: (context, setState) {
@@ -428,7 +435,7 @@ class SelectedProductController extends GetxController {
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount:filters.length,
+                    itemCount: filters.length,
                     itemBuilder: (context, index) {
                       final filter = filters[index];
                       final isExpanded = expandedSection.contains(
