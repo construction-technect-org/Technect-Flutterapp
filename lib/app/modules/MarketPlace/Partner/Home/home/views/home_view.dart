@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/dashboard_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:gap/gap.dart';
@@ -17,558 +18,573 @@ class HomeView extends StatelessWidget {
       isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x19000000),
-                            blurRadius: 20,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Obx(
-                          () => Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  decoration: controller.isMarketPlace.value
-                                      ? const BoxDecoration()
-                                      : const BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color(0x19000000),
-                                              blurRadius: 30,
-                                              offset: Offset(5, 0),
-                                            ),
-                                          ],
-                                        ),
-                                  child: RoundedButton(
-                                    onTap: () {
-                                      controller.isMarketPlace.value =
-                                          !controller.isMarketPlace.value;
-                                    },
-                                    height: 46,
-                                    verticalPadding: 0,
-                                    buttonName: 'Market place',
-                                    borderRadius: 100,
-                                    fontColor: controller.isMarketPlace.value
-                                        ? Colors.white
-                                        : Colors.black,
-                                    gradientColor: controller.isMarketPlace.value
-                                        ? LinearGradient(
-                                            colors: [
-                                              MyColors.custom('0F1A36'),
-                                              MyColors.custom('1B2F62'),
-                                            ],
-                                          )
-                                        : LinearGradient(
-                                            colors: [MyColors.white, MyColors.white],
-                                          ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Container(
-                                  decoration: !controller.isMarketPlace.value
-                                      ? const BoxDecoration()
-                                      : BoxDecoration(
-                                          borderRadius: BorderRadius.circular(100),
-                                          boxShadow: const [
-                                            BoxShadow(
-                                              color: Color(0x19000000),
-                                              blurRadius: 20,
-                                              offset: Offset(0, 5),
-                                            ),
-                                          ],
-                                        ),
-                                  child: RoundedButton(
-                                    buttonName: 'CRM',
-                                    verticalPadding: 0,
-                                    height: 46,
-                                    borderRadius: 100,
-                                    onTap: () {
-                                      controller.isMarketPlace.value =
-                                          !controller.isMarketPlace.value;
-                                    },
-                                    fontColor: !controller.isMarketPlace.value
-                                        ? Colors.white
-                                        : Colors.black,
-                                    gradientColor: !controller.isMarketPlace.value
-                                        ? LinearGradient(
-                                            colors: [
-                                              MyColors.custom('0F1A36'),
-                                              MyColors.custom('1B2F62'),
-                                            ],
-                                          )
-                                        : LinearGradient(
-                                            colors: [MyColors.white, MyColors.white],
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 2.h),
-                    Row(
-                      children: [
-                        Obx(() {
-                          return (controller.profileData.value.data?.user?.image ?? "")
-                                  .isEmpty
-                              ? Image.asset(Asset.profil, height: 48, width: 48)
-                              : ClipOval(
-                                  child: getImageView(
-                                    finalUrl:
-                                        "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
-                                    fit: BoxFit.cover,
-                                    height: 48,
-                                    width: 48,
-                                  ),
-                                );
-                        }),
-                        SizedBox(width: 1.h),
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Obx(
-                                () => Text(
-                                  '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
-                                  style: MyTexts.medium16.copyWith(
-                                    color: MyColors.fontBlack,
-                                    fontFamily: MyTexts.SpaceGrotesk,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  final addresses =
-                                      controller.addressData.data?.addresses ?? [];
-
-                                  if (addresses.isEmpty) {
-                                    Get.snackbar(
-                                      "No Address",
-                                      "Please add an address first",
-                                      snackPosition: SnackPosition.BOTTOM,
-                                    );
-                                    return;
-                                  }
-
-                                  final officeAddress = addresses.firstWhere(
-                                    (a) => a.addressType?.toLowerCase() == 'office',
-                                    orElse: () => Address(),
-                                  );
-
-                                  final factoryAddress = addresses.firstWhere(
-                                    (a) => a.addressType?.toLowerCase() == 'factory',
-                                    orElse: () => Address(),
-                                  );
-
-                                  showModalBottomSheet(
-                                    context: Get.context!,
-                                    isScrollControlled: true,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(20),
-                                      ),
-                                    ),
-                                    backgroundColor: Colors.white,
-                                    builder: (context) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(
-                                            context,
-                                          ).viewInsets.bottom,
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(16),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Select Address",
-                                                style: MyTexts.extraBold18.copyWith(
-                                                  color: MyColors.black,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 16),
-                                              IntrinsicHeight(
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.stretch,
-                                                  children: [
-                                                    Expanded(
-                                                      child:
-                                                          officeAddress.addressType !=
-                                                              null
-                                                          ? _addressCard(
-                                                              address: officeAddress,
-                                                              addressType: officeAddress
-                                                                  .addressType,
-                                                              isSelected:
-                                                                  controller
-                                                                      .isDefaultOffice
-                                                                      .value ==
-                                                                  true,
-                                                            )
-                                                          : Container(),
-                                                    ),
-                                                    const SizedBox(width: 16),
-                                                    Expanded(
-                                                      child:
-                                                          factoryAddress.addressType !=
-                                                              null
-                                                          ? _addressCard(
-                                                              address: factoryAddress,
-                                                              addressType: factoryAddress
-                                                                  .addressType,
-                                                              isSelected:
-                                                                  controller
-                                                                      .isDefaultOffice
-                                                                      .value ==
-                                                                  false,
-                                                            )
-                                                          : Container(),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              const SizedBox(height: 16),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      Asset.location,
-                                      width: 9,
-                                      height: 12.22,
-                                      color: MyColors.custom('545454'),
-                                    ),
-                                    SizedBox(width: 0.4.h),
-                                    Expanded(
-                                      child: Obx(() {
-                                        return RichText(
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          text: TextSpan(
-                                            style: MyTexts.medium14.copyWith(
-                                              color: MyColors.custom('545454'),
-                                            ),
-                                            children: [
-                                              TextSpan(
-                                                text: controller
-                                                    .getCurrentAddress()
-                                                    .value,
-                                              ),
-                                              const WidgetSpan(
-                                                alignment: PlaceholderAlignment.middle,
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(left: 4),
-                                                  child: Icon(
-                                                    Icons.keyboard_arrow_down,
-                                                    size: 16,
-                                                    color: Colors.black54,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Gap(10),
-                        Image.asset(Asset.explore, width: 18.w),
-                        const Gap(10),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.NOTIFICATIONS);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: MyColors.custom('EAEAEA')),
-                              shape: BoxShape.circle,
-                            ),
-                            child: SvgPicture.asset(
-                              Asset.notification,
-                              width: 24,
-                              height: 24,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 3.5.h),
-                    Obx(
-                      () => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          tabBar(
-                            onTap: () {
-                              controller.marketPlace.value = 0;
-                            },
-                            icon: Asset.MM,
-                            name: 'Material\nMarketplace',
-                            isMarketPlace: controller.marketPlace.value == 0,
-                          ),
-                          tabBar(
-                            onTap: () {
-                              controller.marketPlace.value = 1;
-                            },
-                            icon: Asset.CM,
-                            name: 'Construction line\nMarketplace',
-                            isMarketPlace: controller.marketPlace.value == 1,
-                          ),
-                          tabBar(
-                            onTap: () {
-                              controller.marketPlace.value = 2;
-                            },
-                            icon: Asset.TEM,
-                            name: 'Tools & equipment\nMarketplace',
-                            isMarketPlace: controller.marketPlace.value == 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+        body: Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 25),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Asset.categoryBg),
+                  fit: BoxFit.cover,
                 ),
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
                     children: [
-                      Container(
-                        height: 2.h,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: AlignmentGeometry.topCenter,
-                            end: AlignmentGeometry.bottomCenter,
-                            colors: [
-                              MyColors.custom('FFF9BD').withOpacity(0.1),
-                              MyColors.white,
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                      Obx(() {
+                        return (controller.profileData.value.data?.user?.image ??
+                                    "")
+                                .isEmpty
+                            ? Image.asset(Asset.profil, height: 48, width: 48)
+                            : ClipOval(
+                                child: getImageView(
+                                  finalUrl:
+                                      "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                                  fit: BoxFit.cover,
+                                  height: 48,
+                                  width: 48,
+                                ),
+                              );
+                      }),
+                      SizedBox(width: 1.h),
+                      Flexible(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: double.infinity,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(24),
-                                border: Border.all(
-                                  color: MyColors.custom('EAEAEA'),
-                                  width: 2,
+                            Obx(
+                              () => Text(
+                                '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.fontBlack,
+                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Waiting for banner content',
-                                  style: MyTexts.medium16,
-                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            SizedBox(height: 2.h),
-                            // Main Categories ListView
-                            Obx(() {
-                              if (controller.categoryHierarchyData.value.data == null ||
-                                  controller.categoryHierarchyData.value.data!.isEmpty) {
-                                return const SizedBox.shrink();
-                              }
+                            GestureDetector(
+                              onTap: () {
+                                final addresses =
+                                    controller.addressData.data?.addresses ?? [];
 
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount:
-                                    controller.categoryHierarchyData.value.data!.length,
-                                itemBuilder: (context, mainIndex) {
-                                  final mainCategory = controller
-                                      .categoryHierarchyData
-                                      .value
-                                      .data![mainIndex];
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(
-                                            Routes.SELECT_PRODUCT,
-                                            arguments: {
-                                              "mainCategoryId": mainCategory.id ?? 0,
-                                              "mainCategoryName": mainCategory.name ?? '',
-                                            },
-                                          );
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                if (addresses.isEmpty) {
+                                  Get.snackbar(
+                                    "No Address",
+                                    "Please add an address first",
+                                    snackPosition: SnackPosition.BOTTOM,
+                                  );
+                                  return;
+                                }
+
+                                final officeAddress = addresses.firstWhere(
+                                  (a) => a.addressType?.toLowerCase() == 'office',
+                                  orElse: () => Address(),
+                                );
+
+                                final factoryAddress = addresses.firstWhere(
+                                  (a) =>
+                                      a.addressType?.toLowerCase() == 'factory',
+                                  orElse: () => Address(),
+                                );
+
+                                showModalBottomSheet(
+                                  context: Get.context!,
+                                  isScrollControlled: true,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  builder: (context) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(
+                                          context,
+                                        ).viewInsets.bottom,
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              '${mainCategory.name ?? ''}  ',
-                                              style: MyTexts.bold18,
-                                            ),
-                                            const Icon(Icons.arrow_forward_ios),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(height: 1.h),
-                                      // Subcategories GridView
-                                      if (mainCategory.subCategories != null &&
-                                          mainCategory.subCategories!.isNotEmpty)
-                                        GridView.builder(
-                                          shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 3,
-                                                crossAxisSpacing: 8,
-                                                mainAxisSpacing: 8,
-                                                childAspectRatio: 0.8,
+                                              "Select Address",
+                                              style: MyTexts.extraBold18.copyWith(
+                                                color: MyColors.black,
                                               ),
-                                          itemCount: mainCategory.subCategories!.length,
-                                          itemBuilder: (context, subIndex) {
-                                            final subCategory =
-                                                mainCategory.subCategories![subIndex];
-                                            return GestureDetector(
-                                              onTap: () {
-                                                Get.toNamed(
-                                                  Routes.SELECT_PRODUCT,
-                                                  arguments: {
-                                                    "selectedSubCategoryId":
-                                                        subCategory.id ?? 0,
-                                                    "mainCategoryId":
-                                                        mainCategory.id ?? 0,
-                                                    "mainCategoryName":
-                                                        mainCategory.name ?? '',
-                                                  },
-                                                );
-                                              },
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                            ),
+                                            const SizedBox(height: 16),
+                                            IntrinsicHeight(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
                                                 children: [
                                                   Expanded(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(24),
-                                                        gradient: LinearGradient(
-                                                          end: Alignment.bottomCenter,
-                                                          begin: Alignment.topCenter,
-                                                          colors: [
-                                                            MyColors.custom(
-                                                              'EAEAEA',
-                                                            ).withOpacity(0),
-                                                            MyColors.custom('EAEAEA'),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      child: Stack(
-                                                        alignment: Alignment.center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets.symmetric(
-                                                                  horizontal: 10.0,
-                                                                ),
-                                                            child: CachedNetworkImage(
-                                                              imageUrl:
-                                                                  APIConstants.bucketUrl +
-                                                                  (subCategory.image ??
-                                                                      ''),
-                                                              fit: BoxFit.fill,
-                                                              placeholder:
-                                                                  (
-                                                                    context,
-                                                                    url,
-                                                                  ) => const Center(
-                                                                    child:
-                                                                        CircularProgressIndicator(),
-                                                                  ),
-                                                              errorWidget:
-                                                                  (context, url, error) =>
-                                                                      const Icon(
-                                                                        Icons.category,
-                                                                        color: MyColors
-                                                                            .primary,
-                                                                        size: 24,
-                                                                      ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
+                                                    child:
+                                                        officeAddress
+                                                                .addressType !=
+                                                            null
+                                                        ? _addressCard(
+                                                            address:
+                                                                officeAddress,
+                                                            addressType:
+                                                                officeAddress
+                                                                    .addressType,
+                                                            isSelected:
+                                                                controller
+                                                                    .isDefaultOffice
+                                                                    .value ==
+                                                                true,
+                                                          )
+                                                        : Container(),
                                                   ),
-                                                  const SizedBox(height: 8),
-                                                  SizedBox(
-                                                    height: 50,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.symmetric(
-                                                        horizontal: 4,
-                                                      ),
-                                                      child: Text(
-                                                        subCategory.name ?? '',
-                                                        style: MyTexts.medium16,
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    ),
+                                                  const SizedBox(width: 16),
+                                                  Expanded(
+                                                    child:
+                                                        factoryAddress
+                                                                .addressType !=
+                                                            null
+                                                        ? _addressCard(
+                                                            address:
+                                                                factoryAddress,
+                                                            addressType:
+                                                                factoryAddress
+                                                                    .addressType,
+                                                            isSelected:
+                                                                controller
+                                                                    .isDefaultOffice
+                                                                    .value ==
+                                                                false,
+                                                          )
+                                                        : Container(),
                                                   ),
                                                 ],
                                               ),
-                                            );
-                                          },
+                                            ),
+                                            const SizedBox(height: 16),
+                                          ],
                                         ),
-                                      SizedBox(
-                                        height: 2.h,
-                                      ), // Spacing between main categories
-                                    ],
-                                  );
-                                },
-                              );
-                            }),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    Asset.location,
+                                    width: 9,
+                                    height: 12.22,
+                                    color: MyColors.custom('545454'),
+                                  ),
+                                  SizedBox(width: 0.4.h),
+                                  Expanded(
+                                    child: Obx(() {
+                                      return RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        text: TextSpan(
+                                          style: MyTexts.medium14.copyWith(
+                                            color: MyColors.custom('545454'),
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: controller
+                                                  .getCurrentAddress()
+                                                  .value,
+                                            ),
+                                            const WidgetSpan(
+                                              alignment:
+                                                  PlaceholderAlignment.middle,
+                                              child: Padding(
+                                                padding: EdgeInsets.only(left: 4),
+                                                child: Icon(
+                                                  Icons.keyboard_arrow_down,
+                                                  size: 16,
+                                                  color: Colors.black54,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
+                        ),
+                      ),
+                      const Gap(10),
+                      Image.asset(Asset.explore, width: 18.w),
+                      const Gap(10),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.NOTIFICATIONS);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: MyColors.white,
+                            border: Border.all(color: MyColors.custom('EAEAEA')),
+                            shape: BoxShape.circle,
+                          ),
+                          child: SvgPicture.asset(
+                            Asset.notification,
+                            width: 24,
+                            height: 24,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
-          ),
+                const Gap(20),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+
+                        children: [
+                          Text(
+                            "Features",
+                            style: MyTexts.extraBold18.copyWith(
+                              color: MyColors.black,
+                            ),
+                          ),
+                          const Gap(10),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final double itemWidth =
+                                  (constraints.maxWidth - (2 * 10)) /
+                                  3; // 4 per row with spacing
+                              final double itemHeight =
+                                  itemWidth + 10; // for icon + text
+                              return GridView.builder(
+                                padding: EdgeInsets.zero,
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: controller.features.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 12,
+                                      mainAxisSpacing: 17,
+                                      childAspectRatio: itemWidth / itemHeight,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final item = controller.features[index];
+
+                                  return Obx(() {
+                                    final isSelected =
+                                        controller.selectedIndex.value == index;
+                                    return BuildFeatureCard(
+                                      isSelected: isSelected,
+                                      item: item,
+                                      itemWidth: itemWidth,
+                                      onTap: () {
+                                        if (index == 0 || index == 1) {
+                                          controller.selectedIndex.value = index;
+                                        }
+                                      },
+                                    );
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                          SizedBox(height: 3.5.h),
+                          Obx(
+                            () => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                tabBar(
+                                  onTap: () {
+                                    controller.marketPlace.value = 0;
+                                  },
+                                  icon: Asset.MM,
+                                  name: 'Material\nMarketplace',
+                                  isMarketPlace:
+                                      controller.marketPlace.value == 0,
+                                ),
+                                tabBar(
+                                  onTap: () {
+                                    controller.marketPlace.value = 1;
+                                  },
+                                  icon: Asset.CM,
+                                  name: 'Construction line\nMarketplace',
+                                  isMarketPlace:
+                                      controller.marketPlace.value == 1,
+                                ),
+                                tabBar(
+                                  onTap: () {
+                                    controller.marketPlace.value = 2;
+                                  },
+                                  icon: Asset.TEM,
+                                  name: 'Tools & equipment\nMarketplace',
+                                  isMarketPlace:
+                                      controller.marketPlace.value == 2,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 2.h,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: AlignmentGeometry.topCenter,
+                                end: AlignmentGeometry.bottomCenter,
+                                colors: [
+                                  MyColors.custom('FFF9BD').withOpacity(0.1),
+                                  MyColors.white,
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                    border: Border.all(
+                                      color: MyColors.custom('EAEAEA'),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Waiting for banner content',
+                                      style: MyTexts.medium16,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 2.h),
+                                // Main Categories ListView
+                                Obx(() {
+                                  if (controller
+                                              .categoryHierarchyData
+                                              .value
+                                              .data ==
+                                          null ||
+                                      controller
+                                          .categoryHierarchyData
+                                          .value
+                                          .data!
+                                          .isEmpty) {
+                                    return const SizedBox.shrink();
+                                  }
+
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: controller
+                                        .categoryHierarchyData
+                                        .value
+                                        .data!
+                                        .length,
+                                    itemBuilder: (context, mainIndex) {
+                                      final mainCategory = controller
+                                          .categoryHierarchyData
+                                          .value
+                                          .data![mainIndex];
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.toNamed(
+                                                Routes.SELECT_PRODUCT,
+                                                arguments: {
+                                                  "mainCategoryId":
+                                                      mainCategory.id ?? 0,
+                                                  "mainCategoryName":
+                                                      mainCategory.name ?? '',
+                                                },
+                                              );
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '${mainCategory.name ?? ''}  ',
+                                                  style: MyTexts.bold18,
+                                                ),
+                                                const Icon(
+                                                  Icons.arrow_forward_ios,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 1.h),
+                                          // Subcategories GridView
+                                          if (mainCategory.subCategories !=
+                                                  null &&
+                                              mainCategory
+                                                  .subCategories!
+                                                  .isNotEmpty)
+                                            GridView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 3,
+                                                    crossAxisSpacing: 8,
+                                                    mainAxisSpacing: 8,
+                                                    childAspectRatio: 0.8,
+                                                  ),
+                                              itemCount: mainCategory
+                                                  .subCategories!
+                                                  .length,
+                                              itemBuilder: (context, subIndex) {
+                                                final subCategory = mainCategory
+                                                    .subCategories![subIndex];
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    Get.toNamed(
+                                                      Routes.SELECT_PRODUCT,
+                                                      arguments: {
+                                                        "selectedSubCategoryId":
+                                                            subCategory.id ?? 0,
+                                                        "mainCategoryId":
+                                                            mainCategory.id ?? 0,
+                                                        "mainCategoryName":
+                                                            mainCategory.name ??
+                                                            '',
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  24,
+                                                                ),
+                                                            gradient: LinearGradient(
+                                                              end: Alignment
+                                                                  .bottomCenter,
+                                                              begin: Alignment
+                                                                  .topCenter,
+                                                              colors: [
+                                                                MyColors.custom(
+                                                                  'EAEAEA',
+                                                                ).withOpacity(0),
+                                                                MyColors.custom(
+                                                                  'EAEAEA',
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          child: Stack(
+                                                            alignment:
+                                                                Alignment.center,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets.symmetric(
+                                                                      horizontal:
+                                                                          10.0,
+                                                                    ),
+                                                                child: CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      APIConstants
+                                                                          .bucketUrl +
+                                                                      (subCategory
+                                                                              .image ??
+                                                                          ''),
+                                                                  fit:
+                                                                      BoxFit.fill,
+                                                                  placeholder:
+                                                                      (
+                                                                        context,
+                                                                        url,
+                                                                      ) => const Center(
+                                                                        child:
+                                                                            CircularProgressIndicator(),
+                                                                      ),
+                                                                  errorWidget:
+                                                                      (
+                                                                        context,
+                                                                        url,
+                                                                        error,
+                                                                      ) => const Icon(
+                                                                        Icons
+                                                                            .category,
+                                                                        color: MyColors
+                                                                            .primary,
+                                                                        size: 24,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      SizedBox(
+                                                        height: 50,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal: 4,
+                                                              ),
+                                                          child: Text(
+                                                            subCategory.name ??
+                                                                '',
+                                                            style:
+                                                                MyTexts.medium16,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          SizedBox(
+                                            height: 2.h,
+                                          ), // Spacing between main categories
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -603,7 +619,11 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _addressCard({Address? address, String? addressType, bool isSelected = false}) {
+  Widget _addressCard({
+    Address? address,
+    String? addressType,
+    bool isSelected = false,
+  }) {
     final displayText =
         "${address?.addressLine1}, ${address?.addressLine2}, ${address?.landmark}, ${address?.city}, ${address?.state} , ${address?.pinCode}";
     return GestureDetector(
@@ -623,7 +643,9 @@ class HomeView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: MyColors.white,
-          border: Border.all(color: isSelected ? MyColors.primary : MyColors.grayD4),
+          border: Border.all(
+            color: isSelected ? MyColors.primary : MyColors.grayD4,
+          ),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -714,7 +736,9 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
+              style: MyTexts.extraBold18.copyWith(
+                color: MyColors.textFieldBackground,
+              ),
             ),
           ],
         ),
@@ -754,7 +778,10 @@ class HomeView extends StatelessWidget {
                     icon ?? "",
                     height: 30,
                     width: 30,
-                    colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
+                    colorFilter: ColorFilter.mode(
+                      color ?? Colors.black,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
                 Container(
@@ -807,7 +834,14 @@ class StaticsCard extends StatefulWidget {
   Color? color;
   Color? bColor;
 
-  StaticsCard({super.key, this.icon, this.title, this.value, this.color, this.bColor});
+  StaticsCard({
+    super.key,
+    this.icon,
+    this.title,
+    this.value,
+    this.color,
+    this.bColor,
+  });
 
   @override
   State<StaticsCard> createState() => _StaticsCardState();
@@ -832,7 +866,10 @@ class _StaticsCardState extends State<StaticsCard> {
             width: 20,
             colorFilter: widget.color == null
                 ? null
-                : ColorFilter.mode(widget.color ?? Colors.black, BlendMode.srcIn),
+                : ColorFilter.mode(
+                    widget.color ?? Colors.black,
+                    BlendMode.srcIn,
+                  ),
           ),
           const Gap(6),
           Text(

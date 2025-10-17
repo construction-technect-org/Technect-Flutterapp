@@ -296,6 +296,21 @@ class HomeController extends GetxController {
     }
   }
 
+
+  final features = [
+    {"title": "Marketplace", "icon": Asset.role1, "available": true},
+    {"title": "CRM", "icon": Asset.crm, "available": true},
+    {"title": "ERP", "icon": Asset.erp, "available": false},
+    {"title": "Project Management", "icon": Asset.project, "available": false},
+    {"title": "HRMS", "icon": Asset.hrms, "available": false},
+    {
+      "title": "Portfolio Management",
+      "icon": Asset.portfolio,
+      "available": false,
+    },
+    {"title": "OVP", "icon": Asset.ovp, "available": false},
+    {"title": "Construction Taxi", "icon": Asset.taxi, "available": false},
+  ];
   @override
   void onReady() {
     // TODO: implement onReady

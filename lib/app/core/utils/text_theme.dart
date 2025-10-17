@@ -37,14 +37,14 @@ class MyTexts {
     color: MyColors.black,
     fontFamily: SpaceGrotesk,
   );
-  static TextStyle get medium13 => TextStyle(
-    fontSize: 13.sp,
+  static TextStyle get medium10 => TextStyle(
+    fontSize: 10.sp,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
     fontFamily: SpaceGrotesk,
   );
-  static TextStyle get medium10 => TextStyle(
-    fontSize: 10.sp,
+  static TextStyle get medium13 => TextStyle(
+    fontSize: 13.sp,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
     fontFamily: SpaceGrotesk,

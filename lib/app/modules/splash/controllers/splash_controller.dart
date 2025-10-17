@@ -52,9 +52,8 @@ class SplashController extends GetxController {
 
   void _navigateToHome() {
     Future.delayed(const Duration(seconds: 3), () {
-      print(myPref.role.val);
       if (myPref.role.val.isNotEmpty) {
-        Get.offAllNamed(Routes.MAIN);
+        Get.offAllNamed(Routes.DASHBOARD);
       } else {
         Get.offAllNamed(Routes.LOGIN);
       }

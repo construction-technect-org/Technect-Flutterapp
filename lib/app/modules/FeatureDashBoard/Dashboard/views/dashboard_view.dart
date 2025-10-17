@@ -162,8 +162,8 @@ class DashboardView extends GetView<DashboardController> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 17,
                                 childAspectRatio: itemWidth / itemHeight,
                               ),
                           itemBuilder: (context, index) {
@@ -172,18 +172,13 @@ class DashboardView extends GetView<DashboardController> {
                             return Obx(() {
                               final isSelected =
                                   controller.selectedIndex.value == index;
-                              return _buildFeatureCard(
-                                controller: controller,
+                              return BuildFeatureCard(
                                 isSelected: isSelected,
                                 item: item,
                                 itemWidth: itemWidth,
                                 onTap: () {
-                                  if (index == 0) {
+                                  if (index == 0 || index == 1) {
                                     controller.selectedIndex.value = index;
-                                  } else {
-                                    SnackBars.successSnackBar(
-                                      content: 'This feature will come soon',
-                                    );
                                   }
                                 },
                               );
@@ -202,9 +197,9 @@ class DashboardView extends GetView<DashboardController> {
                       children: [
                         Expanded(
                           child: _buildStatCard(
-                            "Partners",
+                            "Merchant",
                             "32",
-                            Asset.noOfUsers,
+                            Asset.role1,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -212,7 +207,7 @@ class DashboardView extends GetView<DashboardController> {
                           child: _buildStatCard(
                             "Connectors",
                             "22",
-                            Asset.noOfConectors,
+                            Asset.contractor,
                           ),
                         ),
                       ],
@@ -242,7 +237,7 @@ class DashboardView extends GetView<DashboardController> {
 
   Widget _buildStatCard(String title, String value, String icon) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       decoration: BoxDecoration(
         border: Border.all(color: const Color(0xFFFFFDEA)),
         borderRadius: BorderRadius.circular(12),
@@ -255,7 +250,7 @@ class DashboardView extends GetView<DashboardController> {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                Image.asset(Asset.role1, height: 31, width: 31),
+                Image.asset(icon, height: 31, width: 31),
                 const Gap(7),
                 Text(
                   title,
@@ -268,9 +263,9 @@ class DashboardView extends GetView<DashboardController> {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color:  const Color(0xFFFFFDEA),
+              color: const Color(0xFFFFFDEA),
               border: Border.all(color: const Color(0xFFFFFDEA)),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(43),
             ),
             child: Text(
               value,
@@ -283,18 +278,16 @@ class DashboardView extends GetView<DashboardController> {
   }
 }
 
-class _buildFeatureCard extends StatelessWidget {
-  const _buildFeatureCard({
-    required this.controller,
+class BuildFeatureCard extends StatelessWidget {
+  const BuildFeatureCard({
     required this.isSelected,
     required this.item,
     required this.itemWidth,
     required this.onTap,
   });
 
-  final DashboardController controller;
   final bool isSelected;
-  final Map<String, String> item;
+  final Map<String, Object> item;
   final double itemWidth;
   final void Function() onTap;
 
@@ -304,49 +297,65 @@ class _buildFeatureCard extends StatelessWidget {
       onTap: onTap,
       child: Stack(
         children: [
+          // Container(
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(8),
+          //     image: const DecorationImage(
+          //       image: AssetImage(Asset.categoryBg),
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
           Container(
+            width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              image: const DecorationImage(
-                image: AssetImage(Asset.categoryBg),
-                fit: BoxFit.fill,
-              ),
+              gradient: isSelected
+                  ? LinearGradient(
+                      begin: AlignmentGeometry.topCenter,
+                      end: AlignmentGeometry.bottomCenter,
+                      colors: [
+                        const Color(0xFFE9EBF8).withValues(alpha: 0),
+                        const Color(0xFFE9EBF8),
+                      ],
+                    )
+                  : null,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(item['icon']!, height: itemWidth * 0.50),
-                  const SizedBox(height: 6),
-                  Text(
-                    item["title"]!,
-                    textAlign: TextAlign.center,
-                    style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+            child: Column(
+              children: [
+                if (item["available"] == false)
+                  Align(
+                    alignment: AlignmentGeometry.topRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                      decoration: const BoxDecoration(
+                        color: MyColors.grayEA,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(32),
+                          bottomLeft: Radius.circular(32),
+                          topRight: Radius.circular(8),
+                        ),
+                      ),
+                      child:  Text("Coming Soon",style: MyTexts.medium13.copyWith(color: MyColors.gray2E),),
+                    ),
                   ),
-                ],
-              ),
+                Spacer(),
+                Image.asset(
+                  item['icon'].toString(),
+                  height: itemWidth * 0.50,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  item["title"].toString(),
+                  textAlign: TextAlign.center,
+                  style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                ),
+                Spacer(),
+
+              ],
             ),
           ),
-          if (isSelected)
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                height: 20,
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: MyColors.primary,
-                  borderRadius: BorderRadius.circular(5),
-                  // shape: BoxShape.s,
-                ),
-                child: const Icon(Icons.check, size: 14, color: Colors.white),
-              ),
-            ),
+
         ],
       ),
     );
