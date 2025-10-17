@@ -43,16 +43,15 @@ class CommonDropdown<T> extends StatelessWidget {
                 children: [
                   Text(
                     headerText ?? "",
-                    style: MyTexts.regular16.copyWith(
-                      color: MyColors.lightBlue,
-                      fontFamily: MyTexts.SpaceGrotesk,
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.gra54,
                     ),
                   ),
-                  if (isRed == true)
-                    Text(
-                      '*',
-                      style: MyTexts.regular16.copyWith(color: Colors.red),
-                    ),
+                  // if (isRed == true)
+                  //   Text(
+                  //     '*',
+                  //     style: MyTexts.regular16.copyWith(color: Colors.red),
+                  //   ),
                 ],
               ),
               const Gap(5),
@@ -87,7 +86,7 @@ class CommonDropdown<T> extends StatelessWidget {
 
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
-                      color: MyColors.textFieldBorder,
+                      color: MyColors.grayEA,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -117,17 +116,16 @@ class CommonDropdown<T> extends StatelessWidget {
                 ),
                 hint: Text(
                   hintText,
-                  style: MyTexts.regular16.copyWith(
+                  style: MyTexts.medium13.copyWith(
                     color: MyColors.primary.withValues(alpha: 0.5),
                     fontFamily: MyTexts.SpaceGrotesk,
                   ),
                 ),
-                // ✅ This ensures same hint style as TextField
                 selectedItemBuilder: (context) {
                   return items.map((item) {
                     return Text(
                       itemLabel(item),
-                      style: MyTexts.medium16.copyWith(
+                      style: MyTexts.medium15.copyWith(
                         color: MyColors.primary,
                         fontFamily: MyTexts.SpaceGrotesk,
                       ),
@@ -139,7 +137,7 @@ class CommonDropdown<T> extends StatelessWidget {
                     value: item,
                     child: Text(
                       itemLabel(item),
-                      style: MyTexts.medium16.copyWith(
+                      style: MyTexts.medium14.copyWith(
                         color: enabled
                             ? MyColors.primary
                             : Colors.grey.shade400,

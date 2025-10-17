@@ -18,10 +18,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       isLoading: (controller.isFromConnector.value == true)
           ? false.obs
           : (controller.isFromAdd.value
-          ? Get
-          .find<AddProductController>()
-          .isLoading
-          : false.obs),
+                ? Get.find<AddProductController>().isLoading
+                : false.obs),
       child: Scaffold(
         backgroundColor: MyColors.white,
         appBar: CommonAppBar(
@@ -46,181 +44,181 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         ),
         bottomNavigationBar: Obx(() {
           return (controller.isFromAdd.value == false &&
-              controller.isFromConnector.value == false)
+                  controller.isFromConnector.value == false)
               ? const SizedBox()
               : Row(
-            children: <Widget>[
-              const Gap(16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Explore More!",
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.grayA5,
-                      ),
-                    ),
-                    const Gap(8),
-                    Text(
-                      "View Categories >",
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.gray54,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Obx(() {
-                final product = controller.product;
-
-                // CASE 1: When coming from Add screen
-                if (controller.isFromAdd.value == true &&
-                    controller.isFromConnector.value == false) {
-                  return Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: RoundedButton(
-                      horizontalPadding: 20,
-                      buttonName: 'SUBMIT',
-                      onTap:
-                      Get
-                          .find<AddProductController>()
-                          .isLoading
-                          .value
-                          ? null
-                          : Get
-                          .find<AddProductController>()
-                          .createProduct,
-                    ),
-                  );
-                }
-
-                if (product.outOfStock == true ||
-                    (product.stockQty ?? 0) <= 0) {
-                  if (product.isNotify == true) {
-                    return Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: RoundedButton(
-                        horizontalPadding: 20,
-                        buttonName: 'Notified',
-                        color: Colors.grey[400],
-                        fontColor: Colors.white,
-                        borderRadius: 8,
-                        fontSize: 16.sp,
-                        style: MyTexts.medium16.copyWith(
-                          color: Colors.white,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    if (!(controller.isFromAdd.value == true &&
+                        controller.isFromConnector.value == false))
+                      const Gap(16),
+                    if (!(controller.isFromAdd.value == true &&
+                        controller.isFromConnector.value == false))
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Explore More!",
+                              style: MyTexts.medium14.copyWith(
+                                color: MyColors.grayA5,
+                              ),
+                            ),
+                            const Gap(8),
+                            Text(
+                              "View Categories >",
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: RoundedButton(
-                        horizontalPadding: 20,
-                        buttonName: 'Notify Me',
-                        color: MyColors.primary,
-                        fontColor: Colors.white,
-                        borderRadius: 8,
-                        style: MyTexts.medium16.copyWith(
-                          color: Colors.white,
-                        ),
-                        onTap: () async {
-                          await Get.find<SelectedProductController>()
-                              .notifyMeApi(mID: product.id ?? 0);
-                          Get.back();
-                        },
-                      ),
-                    );
-                  }
-                }
-
-                // CASE 3: Handle Connection Status Logic
-                final String? connectionStatus = product.status;
-
-                print(connectionStatus);
-                if ((connectionStatus ?? "").isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: RoundedButton(
-                      horizontalPadding: 20,
-                      buttonName: 'Connect',
-                      color: MyColors.primary,
-                      style: MyTexts.medium16.copyWith(
-                        color: Colors.white,
-                      ),
-                      onTap: () {
-                        ConnectionDialogs.showSendConnectionDialog(
-                          context,
-                          controller.product,
-                          isFromIn: true,
-                          onTap: () async {
-                            Get.back();
-                            await Get.find<SelectedProductController>()
-                                .addToConnectApi(
-                              mID: product.merchantProfileId ?? 0,
-                              message: '',
-                              pID: product.id ?? 0,
-                            );
-                            Get.back();
-                          },
+                    Obx(() {
+                      final product = controller.product;
+                      if (controller.isFromAdd.value == true &&
+                          controller.isFromConnector.value == false) {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            width: MediaQuery.of(context).size.width / 1.15,
+                            horizontalPadding: 20,
+                            buttonName: 'SUBMIT',
+                            onTap:
+                                Get.find<AddProductController>().isLoading.value
+                                ? null
+                                : Get.find<AddProductController>()
+                                      .createProduct,
+                          ),
                         );
-                      },
-                    ),
-                  );
-                } else if (connectionStatus == 'pending') {
-                  return Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: RoundedButton(
-                      color: MyColors.pendingBtn,
-                      horizontalPadding: 20,
-                      buttonName: 'Pending',
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.gray54,
-                      ),
-                    ),
-                  );
-                } else if (connectionStatus == 'accepted') {
-                  return Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: RoundedButton(
-                      horizontalPadding: 20,
-                      color: MyColors.grayEA,
-                      buttonName: 'Connected',
-                      borderRadius: 8,
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.gray54,
-                      ),
-                    ),
-                  );
-                } else if (connectionStatus == 'rejected') {
-                  return Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: RoundedButton(
-                      horizontalPadding: 20,
-                      color: MyColors.rejectBtn,
-                      buttonName: 'Rejected',
-                      borderRadius: 8,
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.gray54,
-                      ),
-                    ),
-                  );
-                } else {
-                  // Default fallback (in case of any unknown status)
-                  return Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: RoundedButton(
-                      horizontalPadding: 20,
-                      color: MyColors.grey,
-                      buttonName: connectionStatus ?? '',
-                      fontColor: Colors.white,
-                    ),
-                  );
-                }
-              }),
-            ],
-          );
+                      }
+
+                      if (product.outOfStock == true ||
+                          (product.stockQty ?? 0) <= 0) {
+                        if (product.isNotify == true) {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              horizontalPadding: 20,
+                              buttonName: 'Notified',
+                              color: Colors.grey[400],
+                              fontColor: Colors.white,
+                              borderRadius: 8,
+                              fontSize: 16.sp,
+                              style: MyTexts.medium16.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              horizontalPadding: 20,
+                              buttonName: 'Notify Me',
+                              color: MyColors.primary,
+                              fontColor: Colors.white,
+                              borderRadius: 8,
+                              style: MyTexts.medium16.copyWith(
+                                color: Colors.white,
+                              ),
+                              onTap: () async {
+                                await Get.find<SelectedProductController>()
+                                    .notifyMeApi(mID: product.id ?? 0);
+                                Get.back();
+                              },
+                            ),
+                          );
+                        }
+                      }
+
+                      // CASE 3: Handle Connection Status Logic
+                      final String? connectionStatus = product.status;
+
+                      print(connectionStatus);
+                      if ((connectionStatus ?? "").isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            horizontalPadding: 20,
+                            buttonName: 'Connect',
+                            color: MyColors.primary,
+                            style: MyTexts.medium16.copyWith(
+                              color: Colors.white,
+                            ),
+                            onTap: () {
+                              ConnectionDialogs.showSendConnectionDialog(
+                                context,
+                                controller.product,
+                                isFromIn: true,
+                                onTap: () async {
+                                  Get.back();
+                                  await Get.find<SelectedProductController>()
+                                      .addToConnectApi(
+                                        mID: product.merchantProfileId ?? 0,
+                                        message: '',
+                                        pID: product.id ?? 0,
+                                      );
+                                  Get.back();
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      } else if (connectionStatus == 'pending') {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            color: MyColors.pendingBtn,
+                            horizontalPadding: 20,
+                            buttonName: 'Pending',
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        );
+                      } else if (connectionStatus == 'accepted') {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            horizontalPadding: 20,
+                            color: MyColors.grayEA,
+                            buttonName: 'Connected',
+                            borderRadius: 8,
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        );
+                      } else if (connectionStatus == 'rejected') {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            horizontalPadding: 20,
+                            color: MyColors.rejectBtn,
+                            buttonName: 'Rejected',
+                            borderRadius: 8,
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        );
+                      } else {
+                        // Default fallback (in case of any unknown status)
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            horizontalPadding: 20,
+                            color: MyColors.grey,
+                            buttonName: connectionStatus ?? '',
+                            fontColor: Colors.white,
+                          ),
+                        );
+                      }
+                    }),
+                  ],
+                );
         }),
         body: SingleChildScrollView(
           child: Column(
@@ -239,221 +237,216 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         alignment: Alignment.center,
                         child: ((controller.product.images ?? []).isNotEmpty)
                             ? Obx(() {
-                          final isNetwork =
-                              controller.isFromAdd.value == false;
-                          final List<String> imageUrls = [];
+                                final isNetwork =
+                                    controller.isFromAdd.value == false;
+                                final List<String> imageUrls = [];
 
-                          if (isNetwork) {
-                            if (controller.product.images?.isNotEmpty ??
-                                false) {
-                              imageUrls.addAll(
-                                controller.product.images!
-                                    .map(
-                                      (img) =>
-                                  "${APIConstants.bucketUrl}${img.s3Key ??
-                                      controller.product.productImage ?? ''}",
-                                )
-                                    .toList(),
-                              );
-                            } else if (controller.product.productImage !=
-                                null) {
-                              imageUrls.add(
-                                "${APIConstants.bucketUrl}${controller.product
-                                    .productImage!}",
-                              );
-                            }
-                          } else {
-                            // From local files
-                            if (controller.product.images?.isNotEmpty ??
-                                false) {
-                              imageUrls.addAll(
-                                controller.product.images!
-                                    .map(
-                                      (img) =>
-                                  img.s3Url ??
-                                      controller
-                                          .product
-                                          .productImage ??
-                                      '',
-                                )
-                                    .toList(),
-                              );
-                            } else if (controller.product.productImage !=
-                                null) {
-                              imageUrls.add(
-                                "${APIConstants.bucketUrl}${controller.product
-                                    .productImage!}",
-                              );
-                            }
-                          }
+                                if (isNetwork) {
+                                  if (controller.product.images?.isNotEmpty ??
+                                      false) {
+                                    imageUrls.addAll(
+                                      controller.product.images!
+                                          .map(
+                                            (img) =>
+                                                "${APIConstants.bucketUrl}${img.s3Key ?? controller.product.productImage ?? ''}",
+                                          )
+                                          .toList(),
+                                    );
+                                  } else if (controller.product.productImage !=
+                                      null) {
+                                    imageUrls.add(
+                                      "${APIConstants.bucketUrl}${controller.product.productImage!}",
+                                    );
+                                  }
+                                } else {
+                                  // From local files
+                                  if (controller.product.images?.isNotEmpty ??
+                                      false) {
+                                    imageUrls.addAll(
+                                      controller.product.images!
+                                          .map(
+                                            (img) =>
+                                                img.s3Url ??
+                                                controller
+                                                    .product
+                                                    .productImage ??
+                                                '',
+                                          )
+                                          .toList(),
+                                    );
+                                  } else if (controller.product.productImage !=
+                                      null) {
+                                    imageUrls.add(
+                                      "${APIConstants.bucketUrl}${controller.product.productImage!}",
+                                    );
+                                  }
+                                }
 
-                          if (imageUrls.isEmpty) {
-                            return const Center(
-                              child: Icon(
-                                Icons.broken_image,
+                                if (imageUrls.isEmpty) {
+                                  return const Center(
+                                    child: Icon(
+                                      Icons.broken_image,
+                                      size: 60,
+                                      color: Colors.grey,
+                                    ),
+                                  );
+                                }
+
+                                // ✅ Image carousel
+                                return SizedBox(
+                                  height: 35.h,
+                                  width: 360.w,
+                                  child: PageView.builder(
+                                    itemCount: imageUrls.length,
+                                    controller: PageController(
+                                      viewportFraction: 1,
+                                    ),
+                                    onPageChanged: (index) =>
+                                        controller.currentIndex.value = index,
+                                    itemBuilder: (context, index) {
+                                      final imagePath = imageUrls[index];
+                                      final isHttp = imagePath.startsWith(
+                                        'http',
+                                      );
+
+                                      return GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => Dialog(
+                                              insetPadding:
+                                                  const EdgeInsets.all(16),
+                                              child: InteractiveViewer(
+                                                child: isHttp
+                                                    ? Image.network(
+                                                        imagePath,
+                                                        width: 360.w,
+                                                        fit: BoxFit.contain,
+                                                      )
+                                                    : Image.file(
+                                                        File(imagePath),
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0,
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              0,
+                                            ),
+                                            child: isHttp
+                                                ? Image.network(
+                                                    imagePath,
+                                                    fit: BoxFit.cover,
+                                                    height: 35.h,
+                                                    width: 360.w,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) => const Icon(
+                                                          Icons.broken_image,
+                                                          size: 60,
+                                                          color: Colors.grey,
+                                                        ),
+                                                  )
+                                                : Image.file(
+                                                    File(imagePath),
+                                                    fit: BoxFit.cover,
+                                                    height: 35.h,
+                                                    width: 360.w,
+                                                  ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              })
+                            : const Icon(
+                                Icons.image_not_supported,
                                 size: 60,
                                 color: Colors.grey,
                               ),
-                            );
-                          }
-
-                          // ✅ Image carousel
-                          return SizedBox(
-                            height: 35.h,
-                            width: 360.w,
-                            child: PageView.builder(
-                              itemCount: imageUrls.length,
-                              controller: PageController(
-                                viewportFraction: 1,
-                              ),
-                              onPageChanged: (index) =>
-                              controller.currentIndex.value = index,
-                              itemBuilder: (context, index) {
-                                final imagePath = imageUrls[index];
-                                final isHttp = imagePath.startsWith(
-                                  'http',
-                                );
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) =>
-                                          Dialog(
-                                            insetPadding:
-                                            const EdgeInsets.all(16),
-                                            child: InteractiveViewer(
-                                              child: isHttp
-                                                  ? Image.network(
-                                                imagePath,
-                                                width: 360.w,
-                                                fit: BoxFit.contain,
-                                              )
-                                                  : Image.file(
-                                                File(imagePath),
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 4.0,
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                        0,
-                                      ),
-                                      child: isHttp
-                                          ? Image.network(
-                                        imagePath,
-                                        fit: BoxFit.cover,
-                                        height: 35.h,
-                                        width: 360.w,
-                                        errorBuilder:
-                                            (context,
-                                            error,
-                                            stackTrace,) =>
-                                        const Icon(
-                                          Icons.broken_image,
-                                          size: 60,
-                                          color: Colors.grey,
-                                        ),
-                                      )
-                                          : Image.file(
-                                        File(imagePath),
-                                        fit: BoxFit.cover,
-                                        height: 35.h,
-                                        width: 360.w,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        })
-                            : const Icon(
-                          Icons.image_not_supported,
-                          size: 60,
-                          color: Colors.grey,
-                        ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.all(20),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: MyColors.white,
-                        ),
-                        child: Obx(() {
-                          return GestureDetector(
-                            onTap: () async {
-                              await Get.find<SelectedProductController>()
-                                  .wishListApi(
-                                status:
-                                controller.isLiked.value == true
-                                    ? "remove"
-                                    : "add",
-                                mID: controller.product.id ?? 0,
-                              );
-                              controller.isLiked.value =
-                              !controller.isLiked.value;
-                            },
-                            child: Icon(
-                              (controller.isLiked.value)
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              size: 24,
-                              color: controller.isLiked.value
-                                  ? MyColors.custom('E53D26')
-                                  : MyColors.gray54,
-                            ),
-                          );
-                        }),
-                      ),
+
+                      Obx(() {
+                        return !(controller.isFromAdd.value == true &&
+                                controller.isFromConnector.value == false)
+                            ? Container(
+                                margin: const EdgeInsets.all(20),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: MyColors.white,
+                                ),
+                                child: Obx(() {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      await Get.find<
+                                            SelectedProductController
+                                          >()
+                                          .wishListApi(
+                                            status:
+                                                controller.isLiked.value == true
+                                                ? "remove"
+                                                : "add",
+                                            mID: controller.product.id ?? 0,
+                                          );
+                                      controller.isLiked.value =
+                                          !controller.isLiked.value;
+                                    },
+                                    child: Icon(
+                                      (controller.isLiked.value)
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      size: 24,
+                                      color: controller.isLiked.value
+                                          ? MyColors.custom('E53D26')
+                                          : MyColors.gray54,
+                                    ),
+                                  );
+                                }),
+                              )
+                            : const SizedBox();
+                      }),
                     ],
                   ),
-
-                  // ✅ Indicator dots
                   if ((controller.product.images ?? []).length >= 2)
                     Positioned(
                       bottom: 8,
                       child: Obx(
-                            () =>
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(
-                                (controller.product.images ?? []).length,
-                                    (index) =>
-                                    AnimatedContainer(
-                                      duration: const Duration(
-                                          milliseconds: 300),
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 4),
-                                      height: controller.currentIndex.value ==
-                                          index
-                                          ? 14
-                                          : 9,
-                                      width: controller.currentIndex.value ==
-                                          index
-                                          ? 14
-                                          : 9,
-                                      decoration: BoxDecoration(
-                                        color: controller.currentIndex.value ==
-                                            index
-                                            ? MyColors.primary
-                                            : MyColors.primary.withValues(
-                                            alpha: 0.5),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                            (controller.product.images ?? []).length,
+                            (index) => AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              height: controller.currentIndex.value == index
+                                  ? 14
+                                  : 9,
+                              width: controller.currentIndex.value == index
+                                  ? 14
+                                  : 9,
+                              decoration: BoxDecoration(
+                                color: controller.currentIndex.value == index
+                                    ? MyColors.primary
+                                    : MyColors.primary.withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
+                          ),
+                        ),
                       ),
                     ),
                 ],
@@ -468,9 +461,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       children: [
                         Text(
                           controller
-                              .product
-                              .categoryProductName
-                              ?.capitalizeFirst ??
+                                  .product
+                                  .categoryProductName
+                                  ?.capitalizeFirst ??
                               '-',
                           style: MyTexts.medium18.copyWith(
                             color: MyColors.fontBlack,
@@ -479,26 +472,26 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         ),
                         Obx(() {
                           return (controller.isFromAdd.value == false &&
-                              controller.isFromConnector.value == false)
+                                  controller.isFromConnector.value == false)
                               ? TextButton.icon(
-                            onPressed: controller.onEditProduct,
-                            icon: SvgPicture.asset(
-                              Asset.editIcon,
-                              width: 16,
-                              height: 16,
-                              colorFilter: const ColorFilter.mode(
-                                MyColors.primary,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            label: Text(
-                              "Edit",
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.primary,
-                                fontFamily: MyTexts.SpaceGrotesk,
-                              ),
-                            ),
-                          )
+                                  onPressed: controller.onEditProduct,
+                                  icon: SvgPicture.asset(
+                                    Asset.editIcon,
+                                    width: 16,
+                                    height: 16,
+                                    colorFilter: const ColorFilter.mode(
+                                      MyColors.primary,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  label: Text(
+                                    "Edit",
+                                    style: MyTexts.regular16.copyWith(
+                                      color: MyColors.primary,
+                                      fontFamily: MyTexts.SpaceGrotesk,
+                                    ),
+                                  ),
+                                )
                               : const SizedBox();
                         }),
                       ],
@@ -519,8 +512,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               ),
                               SizedBox(height: 0.5.h),
                               Text(
-                                "GSTIN - ${controller.product
-                                    .merchantGstNumber ?? ''}",
+                                "GSTIN - ${controller.product.merchantGstNumber ?? ''}",
                                 style: MyTexts.medium14.copyWith(
                                   color: MyColors.fontBlack,
                                 ),
@@ -529,7 +521,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           ),
                         ),
                         if ((controller.isFromConnector.value == true &&
-                            controller.isFromAdd.value == false) ||
+                                controller.isFromAdd.value == false) ||
                             (controller.isFromConnector.value == false &&
                                 controller.isFromAdd.value == false))
                           Container(
@@ -555,9 +547,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   controller.product.totalRatings == 0
                                       ? "(No ratings yet)"
                                       : double.parse(
-                                    controller.product.averageRating
-                                        .toString(),
-                                  ).toStringAsFixed(1),
+                                          controller.product.averageRating
+                                              .toString(),
+                                        ).toStringAsFixed(1),
                                   style: MyTexts.bold14.copyWith(
                                     color: Colors.white,
                                   ),
@@ -570,7 +562,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     Obx(() {
                       return Gap(
                         (controller.isFromAdd.value == false &&
-                            controller.isFromConnector.value == false)
+                                controller.isFromConnector.value == false)
                             ? 0
                             : 20,
                       );
@@ -594,85 +586,81 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       child: Column(
                         children: [
                           rowText(
-                            'Ex factory rate',
                             '₹ ${controller.product.price ?? 0}',
+
+                            'Ex factory rate',
                           ),
                           const Gap(4),
                           rowText(
+                            '₹ ${controller.product.gstPercentage?.split(".").first ?? 0}% - (₹${controller.product.gstAmount ?? 0})',
                             'Gst',
-                            '₹ ${controller.product.gstPercentage
-                                ?.split(".")
-                                .first ?? 0}% - (₹${controller.product
-                                .gstAmount ?? 0})',
                           ),
                           Divider(color: MyColors.white),
                           rowText(
-                            'Ex Factory Amount',
                             "₹ ${controller.product.totalAmount ?? "0"}",
+                            'Ex Factory Amount',
                             isBold: true,
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 2.h),
+                    Obx(() {
+                      return !(controller.isFromAdd.value == true &&
+                              controller.isFromConnector.value == false)
+                          ? Container(
+                              margin: EdgeInsets.only(top: 2.h),
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: MyColors.brightGray),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Delivery address",
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.gray54,
+                                    ),
+                                  ),
+                                  const Gap(12),
+                                  Text(
+                                    "Deliver to",
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.grayA5,
+                                    ),
+                                  ),
+                                  const Gap(8),
 
-                    Container(
-                      width: double.infinity,
-
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: MyColors.brightGray),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Delivery address",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
-                            ),
-                          ),
-                          const Gap(12),
-                          Text(
-                            "Deliver to",
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.grayA5,
-                            ),
-                          ),
-                          const Gap(8),
-
-                          Text(
-                            "Location : ${controller.product.address ?? "-"}",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
-                            ),
-                          ),
-                          const Gap(12),
-                          Text(
-                            "Manufacturing Unit",
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.grayA5,
-                            ),
-                          ),
-                          const Gap(8),
-                          Text(
-                            "Near by : ${controller.product.distanceKm != null
-                                ? double.parse(
-                                controller.product.distanceKm.toString())
-                                .toStringAsFixed(2)
-                                : "-"} km",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
+                                  Text(
+                                    "Location : ${controller.product.address ?? "-"}",
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.gray54,
+                                    ),
+                                  ),
+                                  const Gap(12),
+                                  Text(
+                                    "Manufacturing Unit",
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.grayA5,
+                                    ),
+                                  ),
+                                  const Gap(8),
+                                  Text(
+                                    "Near by : ${controller.product.distanceKm != null ? double.parse(controller.product.distanceKm.toString()).toStringAsFixed(2) : "-"} km",
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.gray54,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox();
+                    }),
                     SizedBox(height: 1.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -737,229 +725,228 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         Obx(() {
                           return controller.reviewList.isNotEmpty
                               ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              HearderText(
-                                text: "Ratings and reviews",
-                                textStyle: MyTexts.bold16.copyWith(
-                                  color: MyColors.black,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                              SizedBox(height: 1.h),
-                              Obx(() {
-                                return controller.reviewList.isNotEmpty
-                                    ? ListView.builder(
-                                  shrinkWrap: true,
-                                  physics:
-                                  const NeverScrollableScrollPhysics(),
-                                  itemCount:
-                                  controller.reviewList.length,
-                                  padding:
-                                  const EdgeInsets.symmetric(
-                                    vertical: 8,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    final review = controller
-                                        .reviewList[index];
-                                    return Container(
-                                      margin: const EdgeInsets.only(
-                                        bottom: 12,
-                                      ),
-                                      padding: const EdgeInsets.all(
-                                        14,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                          12,
-                                        ),
-                                        border: Border.all(
-                                          color: MyColors.greyE5,
-                                        ),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey
-                                                .withOpacity(0.08),
-                                            blurRadius: 6,
-                                            offset: const Offset(
-                                              0,
-                                              3,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                decoration:
-                                                BoxDecoration(
-                                                  color: MyColors
-                                                      .white,
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                    4,
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.star,
-                                                      color: MyColors
-                                                          .green,
-                                                      size: 20,
-                                                    ),
-                                                    const Gap(4),
-                                                    Text(
-                                                      controller.product
-                                                          .totalRatings ==
-                                                          0
-                                                          ? "(No ratings yet)"
-                                                          : double.parse(
-                                                        controller
-                                                            .product
-                                                            .averageRating
-                                                            .toString(),
-                                                      ).toStringAsFixed(
-                                                        1,
-                                                      ),
-                                                      style: MyTexts
-                                                          .bold16
-                                                          .copyWith(
-                                                        color: Colors
-                                                            .green,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              const Spacer(),
-                                              Text(
-                                                DateFormat(
-                                                  'dd MMM yyyy',
-                                                ).format(
-                                                  DateTime.parse(
-                                                    review.createdAt ??
-                                                        "",
-                                                  ),
-                                                ),
-                                                style: MyTexts
-                                                    .regular14
-                                                    .copyWith(
-                                                  color: MyColors
-                                                      .black,
-                                                  fontFamily:
-                                                  MyTexts
-                                                      .SpaceGrotesk,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-
-                                          /// 💬 Review Text
-                                          Text(
-                                            review.reviewText ?? '',
-                                            style: MyTexts.medium16
-                                                .copyWith(
-                                              color: MyColors
-                                                  .black,
-                                              fontFamily: MyTexts
-                                                  .SpaceGrotesk,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Row(
-                                            children: [
-                                              CircleAvatar(
-                                                radius: 16,
-                                                backgroundColor:
-                                                MyColors.primary
-                                                    .withOpacity(
-                                                  0.1,
-                                                ),
-                                                child: Text(
-                                                  review.isAnonymous ??
-                                                      false
-                                                      ? "A"
-                                                      : (review.userName
-                                                      ?.substring(
-                                                    0,
-                                                    1,
-                                                  )
-                                                      .toUpperCase() ??
-                                                      "?"),
-                                                  style: MyTexts
-                                                      .medium16
-                                                      .copyWith(
-                                                    color: MyColors
-                                                        .primary,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                    fontFamily:
-                                                    MyTexts
-                                                        .SpaceGrotesk,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  review.isAnonymous ??
-                                                      false
-                                                      ? "Anonymous User"
-                                                      : (review.userName ??
-                                                      ""),
-                                                  style: MyTexts
-                                                      .regular14
-                                                      .copyWith(
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .w600,
-                                                    color: MyColors
-                                                        .dustyGray,
-                                                    fontFamily:
-                                                    MyTexts
-                                                        .SpaceGrotesk,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                )
-                                    : Padding(
-                                  padding: const EdgeInsets.only(
-                                    bottom: 16.0,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "No review given yet",
-                                      style: MyTexts.regular14
-                                          .copyWith(
-                                        color:
-                                        MyColors.dustyGray,
-                                        fontFamily: MyTexts
-                                            .SpaceGrotesk,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    HearderText(
+                                      text: "Ratings and reviews",
+                                      textStyle: MyTexts.bold16.copyWith(
+                                        color: MyColors.black,
+                                        fontFamily: MyTexts.SpaceGrotesk,
                                       ),
                                     ),
-                                  ),
-                                );
-                              }),
-                            ],
-                          )
+                                    SizedBox(height: 1.h),
+                                    Obx(() {
+                                      return controller.reviewList.isNotEmpty
+                                          ? ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount:
+                                                  controller.reviewList.length,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 8,
+                                                  ),
+                                              itemBuilder: (context, index) {
+                                                final review = controller
+                                                    .reviewList[index];
+                                                return Container(
+                                                  margin: const EdgeInsets.only(
+                                                    bottom: 12,
+                                                  ),
+                                                  padding: const EdgeInsets.all(
+                                                    14,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: MyColors.greyE5,
+                                                    ),
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.08),
+                                                        blurRadius: 6,
+                                                        offset: const Offset(
+                                                          0,
+                                                          3,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                  color: MyColors
+                                                                      .white,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        4,
+                                                                      ),
+                                                                ),
+                                                            child: Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons.star,
+                                                                  color: MyColors
+                                                                      .green,
+                                                                  size: 20,
+                                                                ),
+                                                                const Gap(4),
+                                                                Text(
+                                                                  controller.product.totalRatings ==
+                                                                          0
+                                                                      ? "(No ratings yet)"
+                                                                      : double.parse(
+                                                                          controller
+                                                                              .product
+                                                                              .averageRating
+                                                                              .toString(),
+                                                                        ).toStringAsFixed(
+                                                                          1,
+                                                                        ),
+                                                                  style: MyTexts
+                                                                      .bold16
+                                                                      .copyWith(
+                                                                        color: Colors
+                                                                            .green,
+                                                                      ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          const Spacer(),
+                                                          Text(
+                                                            DateFormat(
+                                                              'dd MMM yyyy',
+                                                            ).format(
+                                                              DateTime.parse(
+                                                                review.createdAt ??
+                                                                    "",
+                                                              ),
+                                                            ),
+                                                            style: MyTexts
+                                                                .regular14
+                                                                .copyWith(
+                                                                  color: MyColors
+                                                                      .black,
+                                                                  fontFamily:
+                                                                      MyTexts
+                                                                          .SpaceGrotesk,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 8),
+
+                                                      /// 💬 Review Text
+                                                      Text(
+                                                        review.reviewText ?? '',
+                                                        style: MyTexts.medium16
+                                                            .copyWith(
+                                                              color: MyColors
+                                                                  .black,
+                                                              fontFamily: MyTexts
+                                                                  .SpaceGrotesk,
+                                                            ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Row(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius: 16,
+                                                            backgroundColor:
+                                                                MyColors.primary
+                                                                    .withOpacity(
+                                                                      0.1,
+                                                                    ),
+                                                            child: Text(
+                                                              review.isAnonymous ??
+                                                                      false
+                                                                  ? "A"
+                                                                  : (review.userName
+                                                                            ?.substring(
+                                                                              0,
+                                                                              1,
+                                                                            )
+                                                                            .toUpperCase() ??
+                                                                        "?"),
+                                                              style: MyTexts
+                                                                  .medium16
+                                                                  .copyWith(
+                                                                    color: MyColors
+                                                                        .primary,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        MyTexts
+                                                                            .SpaceGrotesk,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              review.isAnonymous ??
+                                                                      false
+                                                                  ? "Anonymous User"
+                                                                  : (review.userName ??
+                                                                        ""),
+                                                              style: MyTexts
+                                                                  .regular14
+                                                                  .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: MyColors
+                                                                        .dustyGray,
+                                                                    fontFamily:
+                                                                        MyTexts
+                                                                            .SpaceGrotesk,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                bottom: 16.0,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "No review given yet",
+                                                  style: MyTexts.regular14
+                                                      .copyWith(
+                                                        color:
+                                                            MyColors.dustyGray,
+                                                        fontFamily: MyTexts
+                                                            .SpaceGrotesk,
+                                                      ),
+                                                ),
+                                              ),
+                                            );
+                                    }),
+                                  ],
+                                )
                               : const SizedBox();
                         }),
                       ],
@@ -1104,30 +1091,27 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               ],
             ),
             ...specifications.map(
-                  (spec) =>
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          spec['label']!,
-                          style: MyTexts.medium15.copyWith(
-                              color: MyColors.gray54),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Align(
-                          alignment: AlignmentDirectional.topEnd,
-                          child: Text(
-                            spec['value']!,
-                            style: MyTexts.medium15.copyWith(color: MyColors
-                                .black),
-                          ),
-                        ),
-                      ),
-                    ],
+              (spec) => TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      spec['label']!,
+                      style: MyTexts.medium15.copyWith(color: MyColors.gray54),
+                    ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Align(
+                      alignment: AlignmentDirectional.topEnd,
+                      child: Text(
+                        spec['value']!,
+                        style: MyTexts.medium15.copyWith(color: MyColors.black),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

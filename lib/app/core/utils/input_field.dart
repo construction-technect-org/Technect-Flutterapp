@@ -211,14 +211,13 @@ class CommonTextField extends StatelessWidget {
                     headerText ?? "",
                     style: MyTexts.medium14.copyWith(
                       color: MyColors.gra54,
-                      fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
-                  if (isRed == true)
-                    Text(
-                      '*',
-                      style: MyTexts.medium14.copyWith(color: MyColors.red33),
-                    ),
+                  // if (isRed == true)
+                  //   Text(
+                  //     '*',
+                  //     style: MyTexts.medium14.copyWith(color: MyColors.red33),
+                  //   ),
                 ],
               ),
               const Gap(5),
@@ -226,9 +225,8 @@ class CommonTextField extends StatelessWidget {
           ),
         TextFormField(
           textCapitalization: textCapitalization ?? TextCapitalization.none,
-          style: MyTexts.medium16.copyWith(
+          style: MyTexts.medium15.copyWith(
             color: MyColors.primary,
-            fontFamily: MyTexts.SpaceGrotesk,
           ),
 
           autofillHints: autofillHints,
@@ -263,7 +261,7 @@ class CommonTextField extends StatelessWidget {
                   )
                 : null,
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: MyColors.textFieldBorder),
+              borderSide: const BorderSide(color: MyColors.grayEA),
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             focusedBorder: OutlineInputBorder(

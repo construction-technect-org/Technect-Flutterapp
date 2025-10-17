@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/utils/stepper_widget_add_product.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +13,7 @@ class AddProductView extends GetView<AddProductController> {
 
   final formKey1 = GlobalKey<FormState>();
   final formKey2 = GlobalKey<FormState>();
+  final formKey3 = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,11 @@ class AddProductView extends GetView<AddProductController> {
                 onTap: () {
                   if (controller.pageController.page == 0) {
                     Get.back();
-                  } else {
+                  }
+                  if (controller.pageController.page == 1) {
                     controller.pageController.jumpToPage(0);
+                  } else {
+                    controller.pageController.jumpToPage(1);
                   }
                 },
                 behavior: HitTestBehavior.translucent,
@@ -49,7 +52,7 @@ class AddProductView extends GetView<AddProductController> {
                   child: Icon(Icons.arrow_back_ios, color: MyColors.black),
                 ),
               ),
-              title: Text(controller.isEdit ? "EDIT PRODUCT" : "ADD PRODUCT"),
+              title: Text(controller.isEdit ? "Edit product" : "Add product"),
               isCenter: false,
             ),
 
@@ -57,6 +60,7 @@ class AddProductView extends GetView<AddProductController> {
               controller: controller.pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
+                // ------------------- PAGE 1 -------------------
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(
@@ -64,18 +68,8 @@ class AddProductView extends GetView<AddProductController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const StepperWidgetAddProduct(currentStep: 1),
-                        SizedBox(height: 3.h),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Text(
-                            "Product Image",
-                            style: MyTexts.regular18.copyWith(
-                              color: MyColors.lightBlue,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 1.h),
+                        buildStepper(0),
+                        const Gap(20),
                         if (controller.isEdit)
                           Obx(
                             () => SingleChildScrollView(
@@ -146,23 +140,23 @@ class AddProductView extends GetView<AddProductController> {
                                       child: GestureDetector(
                                         onTap: controller.pickImageEdit,
                                         child: Container(
-                                          width: 80,
-                                          height: 80,
+                                          width: 78,
+                                          height: 78,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: MyColors.grey,
+                                              color: MyColors.grayCD,
                                               width: 1.2,
                                             ),
                                             borderRadius: BorderRadius.circular(
-                                              12,
+                                              40,
                                             ),
-                                            color: Colors.grey.shade100,
+                                            color: MyColors.grayEA,
                                           ),
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.add,
-                                              size: 30,
-                                              color: Colors.grey,
+                                          child: Center(
+                                            child: SvgPicture.asset(
+                                              Asset.add,
+                                              height: 24,
+                                              width: 24,
                                             ),
                                           ),
                                         ),
@@ -190,7 +184,7 @@ class AddProductView extends GetView<AddProductController> {
                                           ),
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(
-                                              12,
+                                              53,
                                             ),
                                             child: GestureDetector(
                                               onTap: () {
@@ -254,14 +248,14 @@ class AddProductView extends GetView<AddProductController> {
                                               child: path.contains('http')
                                                   ? getImageView(
                                                       finalUrl: path ?? "",
-                                                      width: 80,
-                                                      height: 80,
+                                                      width: 78,
+                                                      height: 78,
                                                       fit: BoxFit.cover,
                                                     )
                                                   : Image.file(
                                                       File(path),
-                                                      width: 80,
-                                                      height: 80,
+                                                      width: 78,
+                                                      height: 78,
                                                       fit: BoxFit.cover,
                                                     ),
                                             ),
@@ -300,23 +294,23 @@ class AddProductView extends GetView<AddProductController> {
                                       child: GestureDetector(
                                         onTap: controller.pickImage,
                                         child: Container(
-                                          width: 80,
-                                          height: 80,
+                                          width: 78,
+                                          height: 78,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: MyColors.grey,
+                                              color: MyColors.grayCD,
                                               width: 1.2,
                                             ),
                                             borderRadius: BorderRadius.circular(
-                                              12,
+                                              40,
                                             ),
-                                            color: Colors.grey.shade100,
+                                            color: MyColors.grayEA,
                                           ),
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.add,
-                                              size: 30,
-                                              color: Colors.grey,
+                                          child: Center(
+                                            child: SvgPicture.asset(
+                                              Asset.add,
+                                              height: 24,
+                                              width: 24,
                                             ),
                                           ),
                                         ),
@@ -329,7 +323,7 @@ class AddProductView extends GetView<AddProductController> {
                         SizedBox(height: 3.h),
                         CommonTextField(
                           headerText: 'Brand Name',
-                          hintText: "ENTER PRODUCT BRAND NAME",
+                          hintText: "Enter product brand name",
                           controller: controller.brandNameController,
                           validator: (val) {
                             if (val == null || val.trim().isEmpty) {
@@ -356,7 +350,7 @@ class AddProductView extends GetView<AddProductController> {
                             }
                             return null;
                           },
-                          hintText: "SELECT PRODUCT MAIN CATEGORY",
+                          hintText: "Select product main category",
                           items: controller.mainCategoryNames,
                           selectedValue: controller.selectedMainCategory,
                           itemLabel: (item) => item,
@@ -376,7 +370,7 @@ class AddProductView extends GetView<AddProductController> {
                             }
                             return null;
                           },
-                          hintText: "SELECT PRODUCT SUB- CATEGORY",
+                          hintText: "Select product sub-category",
                           items: controller.subCategoryNames,
                           selectedValue: controller.selectedSubCategory,
                           itemLabel: (item) => item,
@@ -388,57 +382,6 @@ class AddProductView extends GetView<AddProductController> {
                           enabled: !controller.isEdit,
                         ),
                         SizedBox(height: 2.h),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'In Stock',
-                                  style: MyTexts.light16.copyWith(
-                                    color: MyColors.lightBlue,
-                                  ),
-                                ),
-                                const Spacer(),
-                                Obx(() {
-                                  return CupertinoSwitch(
-                                    value: controller.isOutStock.value,
-                                    onChanged: (val) {
-                                      controller.isOutStock.value = val;
-                                    },
-                                  );
-                                }),
-                              ],
-                            ),
-                            Obx(() {
-                              return controller.isOutStock.value
-                                  ? Column(
-                                      children: [
-                                        SizedBox(height: 1.h),
-                                        CommonTextField(
-                                          hintText: "Add  Stock",
-                                          controller:
-                                              controller.stockController,
-                                          keyboardType: TextInputType.number,
-                                          validator: (val) {
-                                            if (val == null || val.isEmpty) {
-                                              return "Please enter stock";
-                                            }
-                                            if (double.tryParse(val) == null) {
-                                              return "Enter valid number";
-                                            }
-                                            if (int.tryParse(val) == 0) {
-                                              return "Stock can not be zero";
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ],
-                                    )
-                                  : const SizedBox();
-                            }),
-                            SizedBox(height: 2.h),
-                          ],
-                        ),
                         Obx(() {
                           if (controller.productNames.isNotEmpty) {
                             return Column(
@@ -470,7 +413,150 @@ class AddProductView extends GetView<AddProductController> {
                             return const SizedBox.shrink();
                           }
                         }),
-                        SizedBox(height: 1.h),
+                        Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: MyColors.grayEA),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'In Stock',
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.gra54,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Obx(() {
+                                    return CupertinoSwitch(
+                                      value: controller.isOutStock.value,
+                                      onChanged: (val) {
+                                        controller.isOutStock.value = val;
+                                      },
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                            Obx(() {
+                              return controller.isOutStock.value
+                                  ? Column(
+                                      children: [
+                                        SizedBox(height: 2.h),
+                                        CommonTextField(
+                                          headerText: "Add Stock",
+                                          hintText: "Enter stock quantity",
+                                          controller:
+                                              controller.stockController,
+                                          keyboardType: TextInputType.number,
+                                          validator: (val) {
+                                            if (val == null || val.isEmpty) {
+                                              return "Please enter stock";
+                                            }
+                                            if (double.tryParse(val) == null) {
+                                              return "Enter valid number";
+                                            }
+                                            if (int.tryParse(val) == 0) {
+                                              return "Stock can not be zero";
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox();
+                            }),
+                            SizedBox(height: 2.h),
+                          ],
+                        ),
+                        CommonTextField(
+                          headerText: 'Note',
+                          hintText: "Write a note",
+                          maxLine: 4,
+                          controller: controller.noteController,
+                          validator: (val) {
+                            if (val == null || val.trim().isEmpty) {
+                              return "Please enter note";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 2.h),
+                        CommonTextField(
+                          headerText: 'Terms & Conditions',
+                          hintText: "Write terms & conditions",
+                          validator: (val) {
+                            if (val == null || val.trim().isEmpty) {
+                              return "Please enter terms & condition";
+                            }
+                            return null;
+                          },
+                          maxLine: 4,
+                          controller: controller.termsController,
+                        ),
+                        SizedBox(height: 4.h),
+                        Center(
+                          child: RoundedButton(
+                            buttonName: 'Continue',
+                            onTap: () async {
+                              if (controller.pickedFilePathList.isEmpty &&
+                                  !controller.isEdit) {
+                                SnackBars.errorSnackBar(
+                                  content: 'Please upload at least one image',
+                                );
+                                return;
+                              }
+                              if (controller.isEdit) {
+                                final hasImage = controller.imageSlots.any(
+                                  (path) =>
+                                      path != null &&
+                                      path.toString().trim().isNotEmpty,
+                                );
+                                if (!hasImage) {
+                                  SnackBars.errorSnackBar(
+                                    content: 'Please upload at least one image',
+                                  );
+                                  return;
+                                }
+                              }
+                              if (formKey2.currentState!.validate()) {
+                                controller.showExtraFields.value = true;
+                                controller.pageController.animateToPage(
+                                  1,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeInOut,
+                                );
+                              } else {
+                                SnackBars.errorSnackBar(
+                                  content:
+                                      "Please fill all required fields properly",
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // ------------------- PAGE 2 -------------------
+                SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Form(
+                    key: formKey3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildStepper(1),
+                        const Gap(20),
+
                         Row(
                           children: [
                             Expanded(
@@ -572,68 +658,18 @@ class AddProductView extends GetView<AddProductController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 2.h),
-                        CommonTextField(
-                          headerText: 'Note',
-                          hintText: "ADD  NOTE",
-                          maxLine: 3,
-                          controller: controller.noteController,
-                          validator: (val) {
-                            if (val == null || val.trim().isEmpty) {
-                              return "Please enter note";
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 2.h),
-                        CommonTextField(
-                          headerText: 'Terms & Conditions',
-                          hintText: "ADD  CONDITIONS",
-                          validator: (val) {
-                            if (val == null || val.trim().isEmpty) {
-                              return "Please enter terms & condition";
-                            }
-                            return null;
-                          },
-                          maxLine: 3,
-                          controller: controller.termsController,
-                        ),
-                        SizedBox(height: 4.h),
+                        const Gap(20),
                         Center(
                           child: RoundedButton(
-                            buttonName: 'PROCEED',
-                            onTap: () async {
-                              if (controller.pickedFilePathList.isEmpty &&
-                                  !controller.isEdit) {
-                                SnackBars.errorSnackBar(
-                                  content: 'Please upload at least one image',
-                                );
-                                return;
-                              }
-                              if (controller.isEdit) {
-                                final hasImage = controller.imageSlots.any(
-                                  (path) =>
-                                      path != null &&
-                                      path.toString().trim().isNotEmpty,
-                                );
-                                if (!hasImage) {
-                                  SnackBars.errorSnackBar(
-                                    content: 'Please upload at least one image',
-                                  );
-                                  return;
-                                }
-                              }
-                              if (formKey2.currentState!.validate()) {
+                            buttonName: 'Continue',
+                            onTap: () {
+                              hideKeyboard();
+                              if (formKey3.currentState!.validate()) {
                                 controller.showExtraFields.value = true;
                                 controller.pageController.animateToPage(
-                                  1,
+                                  2,
                                   duration: const Duration(milliseconds: 500),
                                   curve: Curves.easeInOut,
-                                );
-                              } else {
-                                SnackBars.errorSnackBar(
-                                  content:
-                                      "Please fill all required fields properly",
                                 );
                               }
                             },
@@ -644,7 +680,7 @@ class AddProductView extends GetView<AddProductController> {
                   ),
                 ),
 
-                // ------------------- PAGE 2 -------------------
+                // ------------------- PAGE 3 -------------------
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(
@@ -652,8 +688,8 @@ class AddProductView extends GetView<AddProductController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const StepperWidgetAddProduct(currentStep: 2),
-                        SizedBox(height: 3.h),
+                        buildStepper(2),
+                        const Gap(20),
                         Obx(() {
                           return ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
@@ -722,16 +758,8 @@ class AddProductView extends GetView<AddProductController> {
                                           children: [
                                             Text(
                                               filter.filterLabel ?? '',
-                                              style: MyTexts.regular16.copyWith(
-                                                color: MyColors.lightBlue,
-                                                fontFamily: MyTexts.SpaceGrotesk,
-                                              ),
-                                            ),
-                                            const Text(
-                                              '*',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 16,
+                                              style: MyTexts.medium14.copyWith(
+                                                color: MyColors.gra54,
                                               ),
                                             ),
                                           ],
@@ -760,11 +788,11 @@ class AddProductView extends GetView<AddProductController> {
                                                     "Select ${filter.filterLabel ?? ''}",
                                                   ),
                                                   titleTextStyle: MyTexts
-                                                      .medium14
+                                                      .medium15
                                                       .copyWith(
                                                         color: MyColors.primary,
-                                                        fontFamily:
-                                                            MyTexts.SpaceGrotesk,
+                                                        fontFamily: MyTexts
+                                                            .SpaceGrotesk,
                                                       ),
                                                   content: Obx(
                                                     () => SingleChildScrollView(
@@ -780,6 +808,12 @@ class AddProductView extends GetView<AddProductController> {
                                                           return CheckboxListTile(
                                                             title: Text(item),
                                                             value: isSelected,
+                                                            fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+                                                              if (states.contains(MaterialState.selected)) {
+                                                                return MyColors.primary;
+                                                              }
+                                                              return Colors.white;
+                                                            }),
                                                             onChanged: (checked) {
                                                               if (checked ==
                                                                   true) {
@@ -799,11 +833,12 @@ class AddProductView extends GetView<AddProductController> {
                                                   ),
                                                   actions: [
                                                     TextButton(
+
                                                       onPressed: () => Get.back(
                                                         result: tempSelection
                                                             .toList(),
                                                       ),
-                                                      child: const Text("OK"),
+                                                      child:  Text("OK",style: MyTexts.bold16.copyWith(color: MyColors.primary),),
                                                     ),
                                                   ],
                                                 );
@@ -818,8 +853,6 @@ class AddProductView extends GetView<AddProductController> {
                                                   ?.text = selected.join(
                                                 ', ',
                                               );
-
-                                              // 🧠 Validation: clear error if at least one item selected
                                               if (selectedList.isNotEmpty) {
                                                 errorText.value = '';
                                               }
@@ -834,9 +867,7 @@ class AddProductView extends GetView<AddProductController> {
                                               border: Border.all(
                                                 color: errorText.isNotEmpty
                                                     ? Colors.red
-                                                    : MyColors.grey.withOpacity(
-                                                        0.4,
-                                                      ),
+                                                    : MyColors.grayEA,
                                               ),
                                               borderRadius:
                                                   BorderRadius.circular(10),
@@ -855,24 +886,19 @@ class AddProductView extends GetView<AddProductController> {
                                                             ', ',
                                                           ),
                                                     style: selectedList.isEmpty
-                                                        ? MyTexts.regular16
-                                                              .copyWith(
-                                                                color: MyColors
-                                                                    .primary
-                                                                    .withOpacity(
-                                                                      0.5,
-                                                                    ),
-                                                                fontFamily:
-                                                                    MyTexts
-                                                                        .SpaceGrotesk,
-                                                              )
-                                                        : MyTexts.medium16
+                                                        ? MyTexts.medium13.copyWith(
+                                                            color: MyColors
+                                                                .primary
+                                                                .withValues(
+                                                                  alpha: 0.5,
+                                                                ),
+                                                            fontFamily: MyTexts
+                                                                .SpaceGrotesk,
+                                                          )
+                                                        : MyTexts.medium15
                                                               .copyWith(
                                                                 color: MyColors
                                                                     .primary,
-                                                                fontFamily:
-                                                                    MyTexts
-                                                                        .SpaceGrotesk,
                                                               ),
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -930,18 +956,30 @@ class AddProductView extends GetView<AddProductController> {
                                       if (val == null || val.isEmpty) {
                                         return "Please enter a value";
                                       }
+
                                       final numValue = double.tryParse(val);
                                       if (numValue == null) {
                                         return "Enter a valid number";
                                       }
+
+                                      // If both min and max are same, require exact match
+                                      if (min != null && max != null && min == max) {
+                                        if (numValue != min) {
+                                          return "Value must be exactly $min";
+                                        }
+                                        return null;
+                                      }
+
                                       if (min != null && numValue < min) {
                                         return "Value must be ≥ $min";
                                       }
                                       if (max != null && numValue > max) {
                                         return "Value must be ≤ $max";
                                       }
+
                                       return null;
                                     },
+
                                     suffixIcon: filter.unit != null
                                         ? Padding(
                                             padding: const EdgeInsets.only(
@@ -995,7 +1033,7 @@ class AddProductView extends GetView<AddProductController> {
                         SizedBox(height: 2.h),
                         Center(
                           child: RoundedButton(
-                            buttonName: 'SUBMIT',
+                            buttonName: 'Submit',
                             onTap: () {
                               hideKeyboard();
 
@@ -1036,6 +1074,32 @@ class AddProductView extends GetView<AddProductController> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildStepper(int index) {
+    return SizedBox(
+      height: 20,
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.addProduct.length,
+        itemBuilder: (context, i) {
+          final isActive = i <= index;
+          return Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Text(
+              controller.addProduct[i] ?? "",
+              style: MyTexts.medium14.copyWith(
+                decoration: isActive
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
+                color: isActive ? MyColors.primary : MyColors.grayA5,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

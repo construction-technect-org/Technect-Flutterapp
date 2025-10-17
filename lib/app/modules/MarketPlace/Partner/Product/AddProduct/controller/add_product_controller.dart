@@ -15,10 +15,16 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 class AddProductController extends GetxController {
   final pageController = PageController();
   Product product = Product();
+
   // ProductManagementController controller = Get.find();
 
   // ---------------- Form Controllers ----------------
 
+  RxList addProduct = [
+    "1.Basic Product Details",
+    "2.Pricing & Units",
+    "3.Technical Specifications",
+  ].obs;
   RxList<String?> imageSlots = List<String?>.filled(5, null).obs;
   Map<String, String> removedImages = {};
 
@@ -93,7 +99,6 @@ class AddProductController extends GetxController {
       selectedMainCategoryId.value = (product.mainCategoryId ?? 0).toString();
       selectedSubCategoryId.value = (product.subCategoryId ?? 0).toString();
       selectedProductId.value = (product.categoryProductId ?? 0).toString();
-
     }
   }
 
@@ -114,7 +119,7 @@ class AddProductController extends GetxController {
     brandNameController.text = product.brand ?? '';
     if ((product.images ?? []).isNotEmpty) {
       for (final image in product.images!) {
-          pickedFilePathList.add("${APIConstants.bucketUrl}${image.s3Key!}");
+        pickedFilePathList.add("${APIConstants.bucketUrl}${image.s3Key!}");
       }
     }
     // 🟩 Always create 5 slots
@@ -125,15 +130,14 @@ class AddProductController extends GetxController {
     for (int i = 0; i < existingImages.length && i < 5; i++) {
       imageSlots[i] = "${APIConstants.bucketUrl}${existingImages[i].s3Key!}";
     }
-
   }
+
   void removeImageAt(int index) {
     if (imageSlots[index] != null) {
       removedImages["remove_image_${index + 1}"] = "remove";
       imageSlots[index] = null;
     }
   }
-
 
   Map<String, dynamic>? _storedFilterValues;
 
@@ -240,11 +244,9 @@ class AddProductController extends GetxController {
         for (final FilterData filter in filters) {
           if (filter.filterType == 'dropdown') {
             dropdownValues[filter.filterName ?? ''] = Rxn<String>();
-          }
-          else if (filter.filterType == 'dropdown_multiple') {
+          } else if (filter.filterType == 'dropdown_multiple') {
             multiDropdownValues[filter.filterName ?? ''] = <String>[].obs;
-          }
-          else {
+          } else {
             dynamicControllers[filter.filterName ?? ''] =
                 TextEditingController();
           }
@@ -426,6 +428,7 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: 'Failed to pick file: $e', time: 3);
     }
   }
+
   Future<void> pickImageEdit() async {
     try {
       final XFile? picked = await CommonConstant().pickImageFromGallery();
@@ -434,7 +437,9 @@ class AddProductController extends GetxController {
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
-          if (index >= 0 && index < imageSlots.length && imageSlots[index] != null) {
+          if (index >= 0 &&
+              index < imageSlots.length &&
+              imageSlots[index] != null) {
             toRemove.add(key);
           }
         });
@@ -456,7 +461,9 @@ class AddProductController extends GetxController {
         }
 
         // 🟥 Step 5: Cleanup: remove remove flags if at least one valid image exists
-        final hasAnyImage = imageSlots.any((e) => e != null && e.toString().isNotEmpty);
+        final hasAnyImage = imageSlots.any(
+          (e) => e != null && e.toString().isNotEmpty,
+        );
         if (hasAnyImage) {
           removedImages.removeWhere((key, value) {
             final index = int.parse(key.split('_').last) - 1;
@@ -470,8 +477,6 @@ class AddProductController extends GetxController {
       SnackBars.errorSnackBar(content: "Failed to pick image: $e", time: 3);
     }
   }
-
-
 
   void createProductValidation(GlobalKey<FormState> formKey) {
     final form = formKey.currentState;
@@ -506,15 +511,12 @@ class AddProductController extends GetxController {
         if (selectedValue != null && selectedValue.isNotEmpty) {
           filterValues[filterName] = selectedValue;
         }
-      }
-      else if (filter.filterType == 'dropdown_multiple') {
+      } else if (filter.filterType == 'dropdown_multiple') {
         final selectedList = multiDropdownValues[filterName];
         if (selectedList != null && selectedList.isNotEmpty) {
           filterValues[filterName] = selectedList.toList();
         }
-
-      }
-      else {
+      } else {
         final textValue = dynamicControllers[filterName]?.text.trim();
         if (textValue != null && textValue.isNotEmpty) {
           filterValues[filterName] = textValue;
@@ -586,17 +588,23 @@ class AddProductController extends GetxController {
   void navigate() {
     hideKeyboard();
     final List<ProductImage> productImages = pickedFilePathList.map((file) {
-      return ProductImage(
-        s3Url: file,
-      );
+      return ProductImage(s3Url: file);
     }).toList();
     final Product p = Product(
-      images:productImages,
+      images: productImages,
       gstAmount: gstPriceController.text,
-      merchantGstNumber: Get.find<HomeController>().profileData.value.data?.merchantProfile?.gstinNumber ?? '',
+      merchantGstNumber:
+          Get.find<HomeController>()
+              .profileData
+              .value
+              .data
+              ?.merchantProfile
+              ?.gstinNumber ??
+          '',
       mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
       productName: productNameController.text,
+      categoryProductName: selectedProduct.value,
       brand: brandNameController.text,
       mainCategoryId: int.parse(selectedMainCategoryId.value ?? "0"),
       subCategoryId: int.parse(selectedSubCategoryId.value ?? "0"),
@@ -615,10 +623,7 @@ class AddProductController extends GetxController {
     );
     Get.toNamed(
       Routes.PRODUCT_DETAILS,
-      arguments: {"product": p, "isFromAdd": true,
-        "isFromConnector": false,
-
-      },
+      arguments: {"product": p, "isFromAdd": true, "isFromConnector": false},
     );
   }
 
@@ -673,11 +678,9 @@ class AddProductController extends GetxController {
         fields: fields,
         files: selectedFiles,
       );
-
       if (addTeamResponse.success == true) {
         // await controller.fetchProducts();
         isLoading.value = false;
-        Get.back();
         Get.back();
         Get.back();
       } else {
@@ -765,6 +768,4 @@ class AddProductController extends GetxController {
       isLoading.value = false;
     }
   }
-
-
 }

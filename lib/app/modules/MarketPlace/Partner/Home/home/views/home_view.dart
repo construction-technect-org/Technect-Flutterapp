@@ -38,7 +38,12 @@ class HomeView extends StatelessWidget {
                   child: Row(
                     children: [
                       Obx(() {
-                        return (controller.profileData.value.data?.user?.image ??
+                        return (controller
+                                        .profileData
+                                        .value
+                                        .data
+                                        ?.user
+                                        ?.image ??
                                     "")
                                 .isEmpty
                             ? Image.asset(Asset.profil, height: 48, width: 48)
@@ -71,7 +76,8 @@ class HomeView extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 final addresses =
-                                    controller.addressData.data?.addresses ?? [];
+                                    controller.addressData.data?.addresses ??
+                                    [];
 
                                 if (addresses.isEmpty) {
                                   Get.snackbar(
@@ -83,7 +89,8 @@ class HomeView extends StatelessWidget {
                                 }
 
                                 final officeAddress = addresses.firstWhere(
-                                  (a) => a.addressType?.toLowerCase() == 'office',
+                                  (a) =>
+                                      a.addressType?.toLowerCase() == 'office',
                                   orElse: () => Address(),
                                 );
 
@@ -118,9 +125,10 @@ class HomeView extends StatelessWidget {
                                           children: [
                                             Text(
                                               "Select Address",
-                                              style: MyTexts.extraBold18.copyWith(
-                                                color: MyColors.black,
-                                              ),
+                                              style: MyTexts.extraBold18
+                                                  .copyWith(
+                                                    color: MyColors.black,
+                                                  ),
                                             ),
                                             const SizedBox(height: 16),
                                             IntrinsicHeight(
@@ -206,7 +214,9 @@ class HomeView extends StatelessWidget {
                                               alignment:
                                                   PlaceholderAlignment.middle,
                                               child: Padding(
-                                                padding: EdgeInsets.only(left: 4),
+                                                padding: EdgeInsets.only(
+                                                  left: 4,
+                                                ),
                                                 child: Icon(
                                                   Icons.keyboard_arrow_down,
                                                   size: 16,
@@ -236,7 +246,9 @@ class HomeView extends StatelessWidget {
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: MyColors.white,
-                            border: Border.all(color: MyColors.custom('EAEAEA')),
+                            border: Border.all(
+                              color: MyColors.custom('EAEAEA'),
+                            ),
                             shape: BoxShape.circle,
                           ),
                           child: SvgPicture.asset(
@@ -296,7 +308,8 @@ class HomeView extends StatelessWidget {
                                       itemWidth: itemWidth,
                                       onTap: () {
                                         if (index == 0 || index == 1) {
-                                          controller.selectedIndex.value = index;
+                                          controller.selectedIndex.value =
+                                              index;
                                         }
                                       },
                                     );
@@ -353,229 +366,234 @@ class HomeView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(24),
-                                    border: Border.all(
-                                      color: MyColors.custom('EAEAEA'),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Waiting for banner content',
-                                      style: MyTexts.medium16,
-                                    ),
+                          Column(
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(
+                                    color: MyColors.custom('EAEAEA'),
+                                    width: 2,
                                   ),
                                 ),
-                                SizedBox(height: 2.h),
-                                // Main Categories ListView
-                                Obx(() {
-                                  if (controller
-                                              .categoryHierarchyData
-                                              .value
-                                              .data ==
-                                          null ||
-                                      controller
-                                          .categoryHierarchyData
-                                          .value
-                                          .data!
-                                          .isEmpty) {
-                                    return const SizedBox.shrink();
-                                  }
-
-                                  return ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: controller
+                                child: Center(
+                                  child: Text(
+                                    'Waiting for banner content',
+                                    style: MyTexts.medium16,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+                              // Main Categories ListView
+                              Obx(() {
+                                if (controller
+                                            .categoryHierarchyData
+                                            .value
+                                            .data ==
+                                        null ||
+                                    controller
                                         .categoryHierarchyData
                                         .value
                                         .data!
-                                        .length,
-                                    itemBuilder: (context, mainIndex) {
-                                      final mainCategory = controller
-                                          .categoryHierarchyData
-                                          .value
-                                          .data![mainIndex];
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                Routes.SELECT_PRODUCT,
-                                                arguments: {
-                                                  "mainCategoryId":
-                                                      mainCategory.id ?? 0,
-                                                  "mainCategoryName":
-                                                      mainCategory.name ?? '',
-                                                },
-                                              );
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${mainCategory.name ?? ''}  ',
-                                                  style: MyTexts.bold18,
-                                                ),
-                                                const Icon(
-                                                  Icons.arrow_forward_ios,
-                                                ),
-                                              ],
-                                            ),
+                                        .isEmpty) {
+                                  return const SizedBox.shrink();
+                                }
+
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics:
+                                      const NeverScrollableScrollPhysics(),
+                                  itemCount: controller
+                                      .categoryHierarchyData
+                                      .value
+                                      .data!
+                                      .length,
+                                  itemBuilder: (context, mainIndex) {
+                                    final mainCategory = controller
+                                        .categoryHierarchyData
+                                        .value
+                                        .data![mainIndex];
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(
+                                              Routes.SELECT_PRODUCT,
+                                              arguments: {
+                                                "mainCategoryId":
+                                                    mainCategory.id ?? 0,
+                                                "mainCategoryName":
+                                                    mainCategory.name ?? '',
+                                              },
+                                            );
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                            children: [
+                                              Text(
+                                                '${mainCategory.name ?? ''}  ',
+                                                style: MyTexts.bold18,
+                                              ),
+                                              const Icon(
+                                                Icons.arrow_forward_ios,
+                                                size: 20,
+                                              ),
+                                            ],
                                           ),
-                                          SizedBox(height: 1.h),
-                                          // Subcategories GridView
-                                          if (mainCategory.subCategories !=
-                                                  null &&
-                                              mainCategory
-                                                  .subCategories!
-                                                  .isNotEmpty)
-                                            GridView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 3,
-                                                    crossAxisSpacing: 8,
-                                                    mainAxisSpacing: 8,
-                                                    childAspectRatio: 0.8,
-                                                  ),
-                                              itemCount: mainCategory
-                                                  .subCategories!
-                                                  .length,
-                                              itemBuilder: (context, subIndex) {
-                                                final subCategory = mainCategory
-                                                    .subCategories![subIndex];
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    Get.toNamed(
-                                                      Routes.SELECT_PRODUCT,
-                                                      arguments: {
-                                                        "selectedSubCategoryId":
-                                                            subCategory.id ?? 0,
-                                                        "mainCategoryId":
-                                                            mainCategory.id ?? 0,
-                                                        "mainCategoryName":
-                                                            mainCategory.name ??
-                                                            '',
-                                                      },
-                                                    );
-                                                  },
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                  24,
-                                                                ),
-                                                            gradient: LinearGradient(
-                                                              end: Alignment
-                                                                  .bottomCenter,
-                                                              begin: Alignment
-                                                                  .topCenter,
-                                                              colors: [
-                                                                MyColors.custom(
-                                                                  'EAEAEA',
-                                                                ).withOpacity(0),
-                                                                MyColors.custom(
-                                                                  'EAEAEA',
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          child: Stack(
-                                                            alignment:
-                                                                Alignment.center,
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          10.0,
-                                                                    ),
-                                                                child: CachedNetworkImage(
-                                                                  imageUrl:
-                                                                      APIConstants
-                                                                          .bucketUrl +
-                                                                      (subCategory
-                                                                              .image ??
-                                                                          ''),
-                                                                  fit:
-                                                                      BoxFit.fill,
-                                                                  placeholder:
-                                                                      (
-                                                                        context,
-                                                                        url,
-                                                                      ) => const Center(
-                                                                        child:
-                                                                            CircularProgressIndicator(),
-                                                                      ),
-                                                                  errorWidget:
-                                                                      (
-                                                                        context,
-                                                                        url,
-                                                                        error,
-                                                                      ) => const Icon(
-                                                                        Icons
-                                                                            .category,
-                                                                        color: MyColors
-                                                                            .primary,
-                                                                        size: 24,
-                                                                      ),
-                                                                ),
+                                        ),
+                                        SizedBox(height: 2.h),
+                                        if (mainCategory.subCategories !=
+                                                null &&
+                                            mainCategory
+                                                .subCategories!
+                                                .isNotEmpty)
+                                          GridView.builder(
+                                            padding: EdgeInsets.zero,
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 3,
+                                                  crossAxisSpacing: 12,
+                                                  mainAxisSpacing: 6,
+                                                  childAspectRatio: 0.8,
+                                                ),
+                                            itemCount: mainCategory
+                                                .subCategories!
+                                                .length,
+                                            itemBuilder: (context, subIndex) {
+                                              final subCategory = mainCategory
+                                                  .subCategories![subIndex];
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                    Routes.SELECT_PRODUCT,
+                                                    arguments: {
+                                                      "selectedSubCategoryId":
+                                                          subCategory.id ?? 0,
+                                                      "mainCategoryId":
+                                                          mainCategory.id ??
+                                                          0,
+                                                      "mainCategoryName":
+                                                          mainCategory.name ??
+                                                          '',
+                                                    },
+                                                  );
+                                                },
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                          gradient: LinearGradient(
+                                                            end: Alignment
+                                                                .bottomCenter,
+                                                            begin: Alignment
+                                                                .topCenter,
+                                                            colors: [
+                                                              MyColors.custom(
+                                                                'EAEAEA',
+                                                              ).withOpacity(
+                                                                0,
+                                                              ),
+                                                              MyColors.custom(
+                                                                'EAEAEA',
                                                               ),
                                                             ],
                                                           ),
                                                         ),
-                                                      ),
-                                                      const SizedBox(height: 8),
-                                                      SizedBox(
-                                                        height: 50,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets.symmetric(
-                                                                horizontal: 4,
+                                                        child: Stack(
+                                                          alignment: Alignment
+                                                              .center,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    horizontal:
+                                                                        10.0,
+                                                                  ),
+                                                              child: CachedNetworkImage(
+                                                                imageUrl:
+                                                                    APIConstants
+                                                                        .bucketUrl +
+                                                                    (subCategory
+                                                                            .image ??
+                                                                        ''),
+                                                                fit: BoxFit
+                                                                    .fill,
+                                                                placeholder:
+                                                                    (
+                                                                      context,
+                                                                      url,
+                                                                    ) => const Center(
+                                                                      child:
+                                                                          CircularProgressIndicator(),
+                                                                    ),
+                                                                errorWidget:
+                                                                    (
+                                                                      context,
+                                                                      url,
+                                                                      error,
+                                                                    ) => const Icon(
+                                                                      Icons
+                                                                          .category,
+                                                                      color: MyColors
+                                                                          .primary,
+                                                                      size:
+                                                                          24,
+                                                                    ),
                                                               ),
-                                                          child: Text(
-                                                            subCategory.name ??
-                                                                '',
-                                                            style:
-                                                                MyTexts.medium16,
-                                                            textAlign:
-                                                                TextAlign.center,
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          SizedBox(
-                                            height: 2.h,
-                                          ), // Spacing between main categories
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }),
-                              ],
-                            ),
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    SizedBox(
+                                                      height: 50,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.symmetric(
+                                                              horizontal: 4,
+                                                            ),
+                                                        child: Text(
+                                                          subCategory.name ??
+                                                              '',
+                                                          style: MyTexts
+                                                              .medium14,
+                                                          textAlign: TextAlign
+                                                              .center,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        SizedBox(
+                                          height: 2.h,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }),
+                            ],
                           ),
                         ],
                       ),

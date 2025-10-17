@@ -1,9 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
-import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:gap/gap.dart';
 
 class MenuView extends StatelessWidget {
@@ -17,7 +13,7 @@ class MenuView extends StatelessWidget {
         isCenter: false,
         leading: const SizedBox(),
         leadingWidth: 0,
-        title: const Text("MENU"),
+        title: const Text("More"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -68,179 +64,221 @@ class MenuView extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 2.h),
-              HearderText(text: "Profile"),
               Gap(1.h),
               CommonContainer(
-                children: [
-                  CommonRowItem(
-                    icon: Asset.profile,
-                    title: "Profile Details",
-                    onTap: () {
-                      if ((Get.find<HomeController>()
-                                      .profileData
-                                      .value
-                                      .data
-                                      ?.user
-                                      ?.roleName ??
-                                  "")
-                              .toLowerCase() ==
-                          "House-Owner".toLowerCase()) {
-                        Get.toNamed(Routes.CONNECTOR_PROFILE);
-                      } else {
-                        Get.toNamed(Routes.PROFILE);
-                      }
-                    },
-                  ),
-                  const Gap(20),
-                  CommonRowItem(
-                    icon: Asset.peoples,
-                    title: "Teams & Roles",
-                    onTap: () {
-                      Get.toNamed(Routes.ROLE_MANAGEMENT);
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 2.h),
-              HearderText(text: "Support"),
-              Gap(1.h),
-              CommonContainer(
-                children: [
-                  CommonRowItem(
-                    icon: Asset.suportTicket,
-
-                    title: "Help & Support",
-                    onTap: () {
-                      Get.find<BottomController>().currentIndex.value = 2;
-                    },
-                  ),
-                  const Gap(20),
-                  CommonRowItem(
-                    icon: Asset.youtube,
-
-                    title: "Tutorials",
-                    onTap: () {
-                      openUrl(
-                        url: "https://www.youtube.com/watch?v=hcvmq-hcDIE",
-                      );
-                    },
-                  ),
-                  const Gap(20),
-
-                  CommonRowItem(
-                    icon: Asset.faq,
-
-                    title: "F.A.Q.S",
-                    onTap: () {
-                      Get.toNamed(Routes.FAQ);
-                    },
-                  ),
-                  const Gap(20),
-                  CommonRowItem(
-                    icon: Asset.feed,
-
-                    title: "Feedback",
-                    onTap: () {
-                      Get.toNamed(Routes.FEEDBACK_VIEW);
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 2.h),
-              Visibility(
-                visible: false,
-                child: Column(
-                  children: [
-                    HearderText(text: "Others"),
-                    Gap(1.h),
-                    CommonContainer(
-                      children: [
-                        CommonRowItem(
-                          icon: Asset.sub,
-                          title: "Explore Subscription Plans",
-                          onTap: () {},
-                        ),
-                        const Gap(20),
-                        CommonRowItem(
-                          icon: Asset.gift,
-
-                          title: "Refer & Get Coupons",
-                          onTap: () {
-                            Get.toNamed(Routes.REFER_EARN);
-                          },
-                        ),
-                        const Gap(20),
-
-                        CommonRowItem(
-                          icon: Asset.link,
-
-                          title: "Use on Desktop",
-                          onTap: () {
-                            openUrl(url: "https://www.google.com");
-                          },
-                        ),
-                        const Gap(20),
-                        CommonRowItem(
-                          icon: Asset.notifications,
-
-                          title: "Whats NEWS",
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 2.h),
-                  ],
-                ),
-              ),
-
-              HearderText(text: "About"),
-              Gap(1.h),
-              CommonContainer(
-                children: [
-                  CommonRowItem(
-                    icon: Asset.info,
-                    title: "About Us",
-                    onTap: () {
-                      openUrl(url: Constants.aboutUS);
-                    },
-                  ),
-                  const Gap(20),
-                  CommonRowItem(
-                    icon: Asset.policy,
-                    title: "Privacy Policy",
-                    onTap: () {
-                      openUrl(url: Constants.privacyPolicy);
-                    },
-                  ),
-                  const Gap(20),
-                  CommonRowItem(
-                    icon: Asset.tc,
-                    title: "Terms & Conditions",
-                    onTap: () {
-                      openUrl(url: Constants.termsCondition);
-                    },
-                  ),
-                ],
-              ),
-              const Gap(20),
-
-              _buildMenuItem(
-                'Log Out',
-                false,
+                icon: Asset.inbox,
+                title: "Inbox",
                 onTap: () {
-                  _showConfirmDialog(
-                    context,
-                    title: "Log Out",
-                    message: "Are you sure you want to log out?",
-                    confirmText: "Log Out",
-                    onConfirm: () {
-                      myPref.logout();
-                      Get.offAllNamed(Routes.LOGIN);
-                    },
-                  );
+                  Get.toNamed(Routes.APPROVAL_INBOX);
                 },
               ),
+              const Gap(16),
+              CommonContainer(
+                icon: Asset.report,
+                title: "Report",
+                onTap: () {
+                  Get.toNamed(Routes.REPORT, arguments: {"isReport": true});
+                },
+              ),
+              const Gap(16),
+              CommonContainer(
+                icon: Asset.analysis,
+                title: "Analysis",
+                onTap: () {
+                  Get.toNamed(Routes.REPORT, arguments: {"isReport": false});
+                },
+              ),
+              const Gap(16),
+              CommonContainer(
+                icon: Asset.setting,
+                title: "Setting",
+                onTap: () {
+                  Get.toNamed(Routes.SETTING);
+                },
+              ),
+              const Gap(16),
+              CommonContainer(
+                icon: Asset.team,
+                title: "Team",
+                onTap: () {
+                  Get.toNamed(Routes.ROLE_MANAGEMENT);
+                },
+              ),
+              const Gap(16),
+              CommonContainer(
+                icon: Asset.inventory,
+                title: "Inventory",
+                onTap: () {
+                  Get.toNamed(Routes.INVENTORY);
+                },
+              ),
+              const Gap(16),
+              CommonContainer(
+                icon: Asset.news,
+                title: "News",
+                onTap: () {
+                  Get.toNamed(Routes.NEWS);
+                },
+              ),
+              const Gap(16),
+              CommonContainer(
+                icon: Asset.refer,
+                title: "Refer & Earn",
+                onTap: () {
+                  Get.toNamed(Routes.REFER_EARN);
+                },
+              ),
+              const Gap(16),
+              // CommonContainer(
+              //   icon: Asset.profile,
+              //   title: "Profile Details",
+              //   onTap: () {
+              //     if ((Get.find<HomeController>()
+              //                     .profileData
+              //                     .value
+              //                     .data
+              //                     ?.user
+              //                     ?.roleName ??
+              //                 "")
+              //             .toLowerCase() ==
+              //         "House-Owner".toLowerCase()) {
+              //       Get.toNamed(Routes.CONNECTOR_PROFILE);
+              //     } else {
+              //       Get.toNamed(Routes.PROFILE);
+              //     }
+              //   },
+              // ),
+              // const Gap(20),
+              // CommonContainer(
+              //   icon: Asset.peoples,
+              //   title: "Teams & Roles",
+              //   onTap: () {
+              //     Get.toNamed(Routes.ROLE_MANAGEMENT);
+              //   },
+              // ),
+              // SizedBox(height: 2.h),
+              // HearderText(text: "Support"),
+              // Gap(1.h),
+              // CommonContainer(
+              //   icon: Asset.suportTicket,
+              //
+              //   title: "Help & Support",
+              //   onTap: () {
+              //     Get.find<BottomController>().currentIndex.value = 2;
+              //   },
+              // ),
+              // const Gap(20),
+              // CommonContainer(
+              //   icon: Asset.youtube,
+              //   title: "Tutorials",
+              //   onTap: () {
+              //     openUrl(url: "https://www.youtube.com/watch?v=hcvmq-hcDIE");
+              //   },
+              // ),
+              // const Gap(20),
+              //
+              // CommonContainer(
+              //   icon: Asset.faq,
+              //   title: "F.A.Q.S",
+              //   onTap: () {
+              //     Get.toNamed(Routes.FAQ);
+              //   },
+              // ),
+              // const Gap(20),
+              // CommonContainer(
+              //   icon: Asset.feed,
+              //
+              //   title: "Feedback",
+              //   onTap: () {
+              //     Get.toNamed(Routes.FEEDBACK_VIEW);
+              //   },
+              // ),
+              // SizedBox(height: 2.h),
+              // Visibility(
+              //   visible: false,
+              //   child: Column(
+              //     children: [
+              //       HearderText(text: "Others"),
+              //       Gap(1.h),
+              //       CommonContainer(
+              //         icon: Asset.sub,
+              //         title: "Explore Subscription Plans",
+              //         onTap: () {},
+              //       ),
+              //       const Gap(20),
+              //       CommonContainer(
+              //         icon: Asset.gift,
+              //
+              //         title: "Refer & Get Coupons",
+              //         onTap: () {
+              //           Get.toNamed(Routes.REFER_EARN);
+              //         },
+              //       ),
+              //       const Gap(20),
+              //
+              //       CommonContainer(
+              //         icon: Asset.link,
+              //
+              //         title: "Use on Desktop",
+              //         onTap: () {
+              //           openUrl(url: "https://www.google.com");
+              //         },
+              //       ),
+              //       const Gap(20),
+              //       CommonContainer(
+              //         icon: Asset.notifications,
+              //
+              //         title: "Whats NEWS",
+              //         onTap: () {},
+              //       ),
+              //       SizedBox(height: 2.h),
+              //     ],
+              //   ),
+              // ),
+              //
+              // HearderText(text: "About"),
+              // Gap(1.h),
+              // CommonContainer(
+              //   icon: Asset.info,
+              //   title: "About Us",
+              //   onTap: () {
+              //     openUrl(url: Constants.aboutUS);
+              //   },
+              // ),
+              // const Gap(20),
+              // CommonContainer(
+              //   icon: Asset.policy,
+              //   title: "Privacy Policy",
+              //   onTap: () {
+              //     openUrl(url: Constants.privacyPolicy);
+              //   },
+              // ),
+              // const Gap(20),
+              // CommonContainer(
+              //   icon: Asset.tc,
+              //   title: "Terms & Conditions",
+              //   onTap: () {
+              //     openUrl(url: Constants.termsCondition);
+              //   },
+              // ),
+              // const Gap(20),
+              //
+              // _buildMenuItem(
+              //   'Log Out',
+              //   false,
+              //   onTap: () {
+              //     _showConfirmDialog(
+              //       context,
+              //       title: "Log Out",
+              //       message: "Are you sure you want to log out?",
+              //       confirmText: "Log Out",
+              //       onConfirm: () {
+              //         myPref.logout();
+              //         Get.offAllNamed(Routes.LOGIN);
+              //       },
+              //     );
+              //   },
+              // ),
               // SizedBox(height: 1.h),
               // _buildMenuItem(
               //   'Product Management',
@@ -417,22 +455,32 @@ class MenuView extends StatelessWidget {
   }
 
   void _showConfirmDialog(
-      BuildContext context, {
-        required String title,
-        required String message,
-        required String confirmText,
-        required VoidCallback onConfirm,
-      }) {
+    BuildContext context, {
+    required String title,
+    required String message,
+    required String confirmText,
+    required VoidCallback onConfirm,
+  }) {
     Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: Colors.white,
         titlePadding: const EdgeInsets.all(20),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 10,
+        ),
+        actionsPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         title: Row(
           children: [
-            const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: Colors.red,
+              size: 28,
+            ),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -459,11 +507,17 @@ class MenuView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
             ),
             onPressed: () => Get.back(),
-            child: const Text("Cancel", style: TextStyle(color: Colors.black87)),
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: Colors.black87),
+            ),
           ),
           ElevatedButton.icon(
             icon: const Icon(Icons.logout, size: 18, color: Colors.white),
-            label: Text(confirmText, style: const TextStyle(color: Colors.white)),
+            label: Text(
+              confirmText,
+              style: const TextStyle(color: Colors.white),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               elevation: 0,
@@ -478,32 +532,15 @@ class MenuView extends StatelessWidget {
       ),
       barrierDismissible: false,
     );
-  }}
-
-class CommonContainer extends StatelessWidget {
-  final List<Widget> children;
-
-  const CommonContainer({super.key, required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 14),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: MyColors.grayD4),
-      ),
-      child: Column(children: children),
-    );
   }
 }
 
-class CommonRowItem extends StatelessWidget {
+class CommonContainer extends StatelessWidget {
   final String icon;
   final String title;
   final VoidCallback onTap;
 
-  const CommonRowItem({
+  const CommonContainer({
     super.key,
     required this.icon,
     required this.title,
@@ -515,31 +552,51 @@ class CommonRowItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
-      child: Row(
+      child: Stack(
         children: [
-          SizedBox(
-            height: 20,
-            width: 20,
-            child: SvgPicture.asset(
-              icon,
-              colorFilter: const ColorFilter.mode(
-                MyColors.primary,
-                BlendMode.srcIn,
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+
+                boxShadow: [
+                  BoxShadow(
+                    color: MyColors.grayEA.withValues(alpha: 0.32),
+                    blurRadius: 4,
+                  ),
+                ],
+                image: const DecorationImage(
+                  image: AssetImage(Asset.moreBg),
+                  fit: BoxFit.cover,
+                ),
               ),
-              height: 20,
-              width: 20,
             ),
           ),
-          const Gap(20),
-          Text(
-            title,
-            style: MyTexts.regular16.copyWith(color: MyColors.primary),
-          ),
-          const Spacer(),
-          const Icon(
-            Icons.arrow_forward_ios,
-            color: MyColors.primary,
-            size: 16,
+          Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: SvgPicture.asset(
+                    icon,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.black,
+                      BlendMode.srcIn,
+                    ),
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+                const Gap(8),
+                Text(
+                  title,
+                  style: MyTexts.medium14.copyWith(color: MyColors.primary),
+                ),
+              ],
+            ),
           ),
         ],
       ),

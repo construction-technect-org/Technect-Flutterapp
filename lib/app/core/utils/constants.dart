@@ -13,6 +13,7 @@ class Asset {
   static const String loginBg = '${bg}loginBg.png';
   static const String categoryBg = '${bg}categoryBg.png';
   static const String cBg = '${bg}cBg.png';
+  static const String moreBg = '${bg}moreBg.png';
 
   static const String appLogo = '${png}appLogo.png';
   static const String ob1 = '${png}ob1.png';
@@ -24,6 +25,15 @@ class Asset {
   static const String chat = '${svg}chat.svg';
   static const String block = '${svg}block.svg';
   static const String removeC = '${svg}removeC.svg';
+  static const String add = '${svg}add.svg';
+  static const String analysis = '${svg}analysis.svg';
+  static const String inbox = '${svg}inbox.svg';
+  static const String inventory = '${svg}inventory.svg';
+  static const String news = '${svg}news.svg';
+  static const String refer = '${svg}refer.svg';
+  static const String report = '${svg}report.svg';
+  static const String setting = '${svg}setting.svg';
+  static const String team = '${svg}team.svg';
 
 
   static const String crm = '${feature}crm.png';
@@ -185,10 +195,7 @@ class Asset {
   static const String warning = 'assets/images/warning.svg';
   static const String thumbup = 'assets/images/thumbup.svg';
   static const String cart = 'assets/images/cart.svg';
-  static const String inbox = 'assets/images/inbox.svg';
   static const String insights = 'assets/images/insights.svg';
-  static const String report = 'assets/images/report.svg';
-  static const String setting = 'assets/images/setting.svg';
   static const String aTeam = 'assets/images/ateam.png';
   static const String link = 'assets/images/link.svg';
   static const String gift = 'assets/images/gift.svg';
@@ -226,6 +233,7 @@ class Asset {
   static const String home1 = '${newIcons}home1.svg';
   static const String home = '${newIcons}home.svg';
   static const String more = '${newIcons}more.svg';
+  static const String more1 = '${newIcons}more1.svg';
   static const String center = '${newIcons}center.svg';
   static const String location = '${newIcons}location.svg';
   static const String notification = '${newIcons}notification.svg';

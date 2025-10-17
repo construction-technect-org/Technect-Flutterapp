@@ -98,8 +98,8 @@ class BottomBarView extends GetView<BottomController> {
                   ),
                   bottomBar(
                     Asset.more,
-                    Asset.more,
-                    'Mote',
+                    Asset.more1,
+                    'More',
                     onTap: () {
                       controller.currentIndex.value = 3;
                     },

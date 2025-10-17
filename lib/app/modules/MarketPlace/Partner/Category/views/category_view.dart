@@ -7,8 +7,8 @@ class CategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> categories = [
-      "Interior Materials",
       "Construction Materials",
+      "Interior Materials",
       "Brands",
       "New Launches",
       "Best Sellers",
