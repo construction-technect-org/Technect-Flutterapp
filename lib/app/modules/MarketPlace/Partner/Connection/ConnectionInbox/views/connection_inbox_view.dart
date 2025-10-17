@@ -119,7 +119,7 @@ class ConnectionInboxView extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             itemBuilder: (context, index) {
                               final connection =
-                              controller.filteredConnections[index];
+                                  controller.filteredConnections[index];
                               return InkWell(
                                 onTap: () {
                                   Get.toNamed(Routes.CONNECTION_INBOX);
@@ -173,23 +173,23 @@ class ConnectionInboxView extends StatelessWidget {
                     radius: 18,
                     child: connection.connectorProfileImageUrl != null
                         ? ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl:
-                        APIConstants.bucketUrl +
-                            connection.connectorProfileImageUrl!,
-                        width: 36,
-                        height: 36,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => const ColoredBox(
-                          color: MyColors.lightGray,
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.person, color: MyColors.white),
-                      ),
-                    )
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  APIConstants.bucketUrl +
+                                  connection.connectorProfileImageUrl!,
+                              width: 36,
+                              height: 36,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const ColoredBox(
+                                color: MyColors.lightGray,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.person, color: MyColors.white),
+                            ),
+                          )
                         : Icon(Icons.person, color: MyColors.white),
                   ),
                   const Gap(12),
@@ -252,22 +252,38 @@ class ConnectionInboxView extends StatelessWidget {
                   ),
                   if (connection.status == "accepted") const Gap(12),
                   if (connection.status == "accepted")
-                    Container(
-                      height: 36,
-                      width: 36,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: MyColors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: MyColors.grayEA.withValues(alpha: 0.32),
-                            blurRadius: 4,
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(24),
+                            ),
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: SvgPicture.asset(Asset.chat),
+                          builder: (_) =>
+                              ChatBottomSheet(connection: connection),
+                        );
+                      },
+                      child: Container(
+                        height: 36,
+                        width: 36,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: MyColors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: MyColors.grayEA.withValues(alpha: 0.32),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: SvgPicture.asset(Asset.chat),
+                        ),
                       ),
                     ),
                 ],
@@ -349,23 +365,23 @@ class ConnectionInboxView extends StatelessWidget {
                     radius: 18,
                     child: connection.connectorProfileImageUrl != null
                         ? ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl:
-                        APIConstants.bucketUrl +
-                            connection.connectorProfileImageUrl!,
-                        width: 36,
-                        height: 36,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => const ColoredBox(
-                          color: MyColors.lightGray,
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.person, color: MyColors.white),
-                      ),
-                    )
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  APIConstants.bucketUrl +
+                                  connection.connectorProfileImageUrl!,
+                              width: 36,
+                              height: 36,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const ColoredBox(
+                                color: MyColors.lightGray,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.person, color: MyColors.white),
+                            ),
+                          )
                         : Icon(Icons.person, color: MyColors.white),
                   ),
                   const Gap(12),
@@ -403,7 +419,7 @@ class ConnectionInboxView extends StatelessWidget {
                           ],
                         ),
                         const Gap(8),
-                        if (connection.status == "pending")...[
+                        if (connection.status == "pending") ...[
                           Row(
                             children: [
                               GestureDetector(
@@ -457,7 +473,7 @@ class ConnectionInboxView extends StatelessWidget {
                               ),
                             ],
                           ),
-                        ]else...[
+                        ] else ...[
                           Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 8,
@@ -478,28 +494,43 @@ class ConnectionInboxView extends StatelessWidget {
                           ),
                         ],
                         const Gap(10),
-
                       ],
                     ),
                   ),
                   if (connection.status == "accepted") const Gap(12),
                   if (connection.status == "accepted")
-                    Container(
-                      height: 36,
-                      width: 36,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: MyColors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: MyColors.grayEA.withValues(alpha: 0.32),
-                            blurRadius: 4,
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(24),
+                            ),
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: SvgPicture.asset(Asset.chat),
+                          builder: (_) =>
+                              ChatBottomSheet(connection: connection),
+                        );
+                      },
+                      child: Container(
+                        height: 36,
+                        width: 36,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: MyColors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: MyColors.grayEA.withValues(alpha: 0.32),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: SvgPicture.asset(Asset.chat),
+                        ),
                       ),
                     ),
                 ],
@@ -547,5 +578,234 @@ class ConnectionInboxView extends StatelessWidget {
       return const Color(0xFFFCECE9);
     }
     return MyColors.grayEA;
+  }
+}
+
+class ChatBottomSheet extends StatelessWidget {
+  final Connection connection;
+
+  const ChatBottomSheet({super.key, required this.connection});
+
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController messageController = TextEditingController();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24, top: 24, left: 24, right: 24),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height / 2,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: MyColors.grey,
+                  backgroundImage: connection.connectorProfileImageUrl != null
+                      ? CachedNetworkImageProvider(
+                          APIConstants.bucketUrl +
+                              connection.connectorProfileImageUrl!,
+                        )
+                      : null,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    connection.connectorName ?? "Unknown",
+                    style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
+                  ),
+                ),
+                PopupMenuButton<String>(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  onSelected: (value) {
+                    if (value == 'remove') {
+                      ConnectionDialogs.showRemoveConnectionDialog(
+                        context,
+                        connection,
+                      );
+                    } else if (value == 'block') {
+                      ConnectionDialogs.showBlockDialog(context, connection);
+                    }
+                  },
+                  itemBuilder: (_) => [
+                    PopupMenuItem(
+                      value: 'remove',
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(Asset.removeC),
+                          const Gap(4),
+                          Text('Remove Connection', style: MyTexts.medium14),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'block',
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(Asset.block),
+                          const Gap(4),
+                          Text(
+                            'Block',
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: MyColors.grayEA),
+                    ),
+                    child: const Icon(Icons.more_horiz, color: MyColors.gra54),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+
+            // Chat Messages
+            Expanded(
+              child: ListView(
+                children: const [
+                  ChatBubble(
+                    isSender: false,
+                    text:
+                        "Hi, I’m interested in the OPC 43 Grade Cement you listed. Is it available in bulk?",
+                  ),
+                  ChatBubble(
+                    isSender: true,
+                    text:
+                        "Hello! Yes, we have OPC 43 Grade in stock. How much quantity are you looking for?",
+                  ),
+                  ChatBubble(
+                    isSender: false,
+                    text:
+                        "I need around 500 bags for a site in Bangalore. What’s the best price you can offer?",
+                  ),
+                  ChatBubble(
+                    isSender: true,
+                    text:
+                        "For 500 bags, we can offer ₹310 per bag. Delivery charges depend on location.",
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.info_outline,
+                              color: MyColors.primary,
+                              size: 60,
+                            ),
+                            SizedBox(height: 2.h),
+                            Text(
+                              "Feature Available in CRM",
+                              style: MyTexts.extraBold16.copyWith(
+                                color: MyColors.primary,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 1.h),
+                            Text(
+                              "To use this chat feature, please move to the CRM section.",
+                              style: MyTexts.regular14.copyWith(
+                                color: MyColors.dopelyColors,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 2.h),
+                            RoundedButton(
+                              buttonName: "Go to CRM",
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              color: MyColors.primary,
+                              height: 45,
+                              borderRadius: 12,
+                            ),
+                            SizedBox(height: 1.h),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text(
+                                "Cancel",
+                                style: TextStyle(color: MyColors.dopelyColors),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Row(
+                children: [
+                  Expanded(
+                    child: AbsorbPointer(
+                      child: CommonTextField(
+                        controller: messageController,
+                        hintText: 'Start typing...',
+                      ),
+                    ),
+                  ),
+                  const Gap(20),
+                  const Icon(Icons.send_rounded, color: MyColors.primary),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ChatBubble extends StatelessWidget {
+  final bool isSender;
+  final String text;
+
+  const ChatBubble({Key? key, required this.isSender, required this.text})
+    : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSender ? const Color(0xFFE8F0FE) : const Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          text,
+          style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
+        ),
+      ),
+    );
   }
 }

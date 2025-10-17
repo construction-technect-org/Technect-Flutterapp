@@ -28,7 +28,8 @@ class SelectedProductView extends StatelessWidget {
           elevation: 0,
           leading: IconButton(
             icon: const Icon(
-              Icons.arrow_back_ios, color: MyColors.fontBlack,
+              Icons.arrow_back_ios,
+              color: MyColors.fontBlack,
               size: 20,
             ),
             onPressed: () {
@@ -588,14 +589,15 @@ class SelectedProductView extends StatelessWidget {
                                       child: CircularProgressIndicator(),
                                     ),
                                   ),
-                                  errorWidget: (context, url, error) => Container(
-                                    color: Colors.grey[200],
-                                    child: const Icon(
-                                      Icons.inventory_2,
-                                      size: 40,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                        color: Colors.grey[200],
+                                        child: const Icon(
+                                          Icons.inventory_2,
+                                          size: 40,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
                                 )
                               : Container(
                                   color: Colors.grey[200],
@@ -669,7 +671,7 @@ class SelectedProductView extends StatelessWidget {
                             size: 24,
                             color: (product.isInWishList ?? false)
                                 ? MyColors.custom('E53D26')
-                                : MyColors.white,
+                                : MyColors.gray54,
                           ),
                         ),
                       ),
@@ -871,36 +873,31 @@ class SelectedProductView extends StatelessWidget {
     if (connectionStatus == 'pending') {
       return RoundedButton(
         buttonName: 'Pending',
-        color: Colors.orange,
-        fontColor: Colors.white,
+        color: MyColors.pendingBtn,
         borderRadius: 8,
         fontSize: 16.sp,
         height: 32,
-        style: MyTexts.medium14.copyWith(color: Colors.white),
+        style: MyTexts.medium14.copyWith(color:  MyColors.gray54),
       );
     } else if (connectionStatus == 'accepted') {
       return RoundedButton(
         buttonName: 'Connected',
-        color: Colors.green,
-        fontColor: Colors.white,
+        color: MyColors.grayEA,
         borderRadius: 8,
         fontSize: 16.sp,
         height: 32,
-        style: MyTexts.medium14.copyWith(color: Colors.white),
+        style: MyTexts.medium14.copyWith(color: MyColors.gray54),
       );
-    }
-    else if (connectionStatus == 'rejected') {
+    } else if (connectionStatus == 'rejected') {
       return RoundedButton(
         buttonName: 'Rejected',
-        color: Colors.red,
-        fontColor: Colors.white,
+        color: MyColors.rejectBtn,
         borderRadius: 8,
         fontSize: 16.sp,
         height: 32,
-        style: MyTexts.medium14.copyWith(color: Colors.white),
+        style: MyTexts.medium14.copyWith(color:  MyColors.gray54),
       );
-    }
-    else {
+    } else {
       return RoundedButton(
         buttonName: 'Connect',
         color: MyColors.primary,

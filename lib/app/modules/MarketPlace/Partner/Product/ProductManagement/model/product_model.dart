@@ -109,7 +109,7 @@ class Product {
   final bool? isActive;
   final bool? isNotify;
   final String? status;
-  final bool? isInWishList;
+   bool? isInWishList;
   final String? approvalStatus;
   final String? mainCategoryName;
   final String? subCategoryName;

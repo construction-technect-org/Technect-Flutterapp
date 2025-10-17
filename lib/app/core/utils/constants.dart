@@ -20,6 +20,8 @@ class Asset {
 
   static const String back = '${svg}back.svg';
   static const String chat = '${svg}chat.svg';
+  static const String block = '${svg}block.svg';
+  static const String removeC = '${svg}removeC.svg';
 
   static const String explore = '${newPng}explore.png';
   static const String bricksBackground = 'assets/images/bricks_background.png';

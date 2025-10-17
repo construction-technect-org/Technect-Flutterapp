@@ -16,6 +16,7 @@ class SelectedProductController extends GetxController {
   RxBool isProductView = false.obs;
   RxBool isLoadingProducts = false.obs;
   RxBool isLoading = false.obs;
+  RxBool moreThenHundred = false.obs;
 
   // Product categories (from CategoryData model) and main products from API
   Rx<SubCategory> productCategories = SubCategory().obs;
@@ -325,6 +326,45 @@ class SelectedProductController extends GetxController {
                 ],
               ),
               const SizedBox(height: 10),
+              Obx(() {
+                return GestureDetector(
+                  onTap: () async {
+                    moreThenHundred.value = !moreThenHundred.value;
+                    Get.back();
+
+                    if (moreThenHundred.value == true) {
+                      radiusKm = 10000000000;
+                      await fetchProductsFromApi();
+
+                    } else {
+                      await applyRadius();
+                    }
+
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: moreThenHundred.value == true
+                          ? MyColors.primary
+                          : MyColors.white,
+                      borderRadius: BorderRadius.circular(44),
+                      border: Border.all(color: MyColors.grayEA),
+                    ),
+                    child: Text(
+                      'More than 100 km',
+                      style: MyTexts.medium14.copyWith(
+                        color: moreThenHundred.value == true
+                            ? MyColors.white
+                            : Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Text(
@@ -353,6 +393,7 @@ class SelectedProductController extends GetxController {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
+                    moreThenHundred.value=false;
                     await applyRadius();
                     Get.back();
                   },

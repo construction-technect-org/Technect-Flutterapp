@@ -97,6 +97,9 @@ class MyColors {
   static const Color grayC2 = Color(0xFFC2D3FF);
   static const Color grayEA = Color(0xFFEAEAEA);
   static const Color grayA5 = Color(0xFFA5A5A5);
+  static const Color pendingBtn = Color(0xFFFEF7E8);
+  static const Color rejectBtn = Color(0xFFFCECE9);
+  static const Color grayCD = Color(0xFFCDCDCD);
 
 
 

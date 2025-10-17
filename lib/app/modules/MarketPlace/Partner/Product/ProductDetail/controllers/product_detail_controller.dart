@@ -13,6 +13,7 @@ class ProductDetailsController extends GetxController {
   final RxBool isFromAdd = false.obs;
   final RxBool isFromConnector = false.obs;
   final RxBool isLoading = false.obs;
+  final RxBool isLiked = false.obs;
   final RxInt currentIndex = 0.obs;
   final ProductDetailService _service = ProductDetailService();
 
@@ -20,6 +21,7 @@ class ProductDetailsController extends GetxController {
   void onInit() {
     final argument = Get.arguments as Map;
     product = argument['product'] ?? Product();
+    isLiked.value=product.isInWishList??false;
     isFromAdd.value = argument["isFromAdd"];
     isFromConnector.value = argument["isFromConnector"];
     if (isFromAdd.value == false) {

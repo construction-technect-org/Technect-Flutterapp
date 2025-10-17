@@ -1,11 +1,16 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/controllers/connection_inbox_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/model/connectionModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
+import 'package:gap/gap.dart';
 
 class ConnectionDialogs {
-  static void showAcceptConnectionDialog(BuildContext context, Connection connection) {
+  static void showAcceptConnectionDialog(
+    BuildContext context,
+    Connection connection,
+  ) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Welcome! Let's connect";
 
@@ -14,7 +19,9 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -48,7 +55,9 @@ class ConnectionDialogs {
                   controller: messageController,
                   decoration: InputDecoration(
                     hintText: "Enter your response message",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   maxLines: 3,
                 ),
@@ -72,10 +81,11 @@ class ConnectionDialogs {
                       child: RoundedButton(
                         onTap: () {
                           Navigator.of(context).pop();
-                          Get.find<ConnectionInboxController>().acceptConnection(
-                            connection.id ?? 0,
-                            messageController.text.trim(),
-                          );
+                          Get.find<ConnectionInboxController>()
+                              .acceptConnection(
+                                connection.id ?? 0,
+                                messageController.text.trim(),
+                              );
                         },
                         buttonName: 'Accept',
                         borderRadius: 12,
@@ -94,7 +104,10 @@ class ConnectionDialogs {
     );
   }
 
-  static void showRejectConnectionDialog(BuildContext context, Connection connection) {
+  static void showRejectConnectionDialog(
+    BuildContext context,
+    Connection connection,
+  ) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Not interested at this time";
 
@@ -103,7 +116,9 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -113,7 +128,7 @@ class ConnectionDialogs {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.cancel_outlined, size: 60, color: MyColors.red),
+                const Icon(Icons.cancel_outlined, size: 60, color: MyColors.red),
                 SizedBox(height: 2.h),
                 Text(
                   "Reject Connection",
@@ -134,7 +149,9 @@ class ConnectionDialogs {
                   controller: messageController,
                   decoration: InputDecoration(
                     hintText: "Enter your rejection message",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   maxLines: 3,
                 ),
@@ -158,10 +175,11 @@ class ConnectionDialogs {
                       child: RoundedButton(
                         onTap: () {
                           Navigator.of(context).pop();
-                          Get.find<ConnectionInboxController>().rejectConnection(
-                            connection.id ?? 0,
-                            messageController.text.trim(),
-                          );
+                          Get.find<ConnectionInboxController>()
+                              .rejectConnection(
+                                connection.id ?? 0,
+                                messageController.text.trim(),
+                              );
                         },
                         buttonName: 'Reject',
                         borderRadius: 12,
@@ -189,7 +207,9 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -199,7 +219,11 @@ class ConnectionDialogs {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.cancel_outlined, size: 60, color: MyColors.red),
+                const Icon(
+                  Icons.cancel_outlined,
+                  size: 60,
+                  color: MyColors.red,
+                ),
                 SizedBox(height: 2.h),
                 Text(
                   "Cancel Connection",
@@ -271,7 +295,9 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -332,6 +358,231 @@ class ConnectionDialogs {
                         verticalPadding: 0,
                         height: 45,
                         color: MyColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// ----------------------------------------------------------
+  /// REMOVE CONNECTION DIALOG
+  /// ----------------------------------------------------------
+  static void showRemoveConnectionDialog(
+    BuildContext context,
+    Connection connection,
+  ) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: getImageView(
+                        finalUrl: APIConstants.bucketUrl+( connection.merchantProfileImageUrl ?? ""),
+                        height: 36,
+                        width: 36,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const Gap(12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          connection.merchantName??"",
+                          style: MyTexts.medium14.copyWith(color: MyColors.black),
+                          textAlign: TextAlign.center,
+                        ),
+                        Row(
+                          children:  [
+                            const Icon(Icons.location_on_rounded,size: 14,color: MyColors.veryDarkGray,),
+                            const Gap(4),
+                            Text(
+                              connection.productName??"",
+                              style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )
+                      ],
+                    )
+
+                  ],
+                ),
+                SizedBox(height: 2.h),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color(0xFFFEF7E8),
+                    border: Border.all(color: const Color(0xFFFDEBC8)),
+                  ),
+                  child: Text(
+                    "Do you really want to disconnect\nfrom this manufacturer?",
+                    style: MyTexts.medium14.copyWith(color: MyColors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () => Get.back(),
+                        buttonName: 'Cancel',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        fontColor: MyColors.white,
+                        color: MyColors.grayCD,
+                      ),
+                    ),
+                    SizedBox(width: 2.w),
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () {
+                          Get.back();
+                          // Get.find<ConnectionInboxController>()
+                          //     .removeConnection(connection.id ?? 0);
+                        },
+                        buttonName: 'Confirm',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        color: MyColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// ----------------------------------------------------------
+  /// BLOCK CONNECTION DIALOG
+  /// ----------------------------------------------------------
+  static void showBlockDialog(BuildContext context, Connection connection) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: getImageView(
+                        finalUrl: APIConstants.bucketUrl+( connection.merchantProfileImageUrl ?? ""),
+                        height: 36,
+                        width: 36,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const Gap(12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          connection.merchantName??"",
+                          style: MyTexts.medium14.copyWith(color: MyColors.black),
+                          textAlign: TextAlign.center,
+                        ),
+                        Row(
+                          children:  [
+                            const Icon(Icons.location_on_rounded,size: 14,color: MyColors.veryDarkGray,),
+                            const Gap(4),
+                            Text(
+                              connection.productName??"",
+                              style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )
+                      ],
+                    )
+
+                  ],
+                ),
+                SizedBox(height: 2.h),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color(0xFFFCECE9),
+                    border: Border.all(color: const Color(0xFFF9D0CB)),
+                  ),
+                  child: Text(
+                    "Do you really want to block this\nHouse owner?",
+                    style: MyTexts.medium14.copyWith(color: MyColors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () => Get.back(),
+                        buttonName: 'Cancel',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        fontColor: MyColors.white,
+                        color: MyColors.grayCD,
+                      ),
+                    ),
+                    SizedBox(width: 2.w),
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () {
+                          Get.back();
+                          // Get.find<ConnectionInboxController>()
+                          //     .removeConnection(connection.id ?? 0);
+                        },
+                        buttonName: 'Block',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        color: MyColors.red,
                       ),
                     ),
                   ],
