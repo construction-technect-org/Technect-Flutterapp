@@ -14,12 +14,14 @@ class Asset {
   static const String categoryBg = '${bg}categoryBg.png';
   static const String cBg = '${bg}cBg.png';
   static const String moreBg = '${bg}moreBg.png';
+  static const String moreIBg = '${bg}moreIBg.png';
 
   static const String appLogo = '${png}appLogo.png';
   static const String ob1 = '${png}ob1.png';
   static const String auth = '${png}auth.png';
   static const String role1 = '${png}role1.png';
   static const String contractor = '${png}contractor.png';
+  static const String totalProduct = '${png}totalProduct.png';
 
   static const String back = '${svg}back.svg';
   static const String chat = '${svg}chat.svg';

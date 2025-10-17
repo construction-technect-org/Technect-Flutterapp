@@ -32,7 +32,7 @@ class HomeView extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Gap(40),
+                const Gap(50),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
@@ -261,7 +261,7 @@ class HomeView extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Gap(20),
+                const Gap(24),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -276,7 +276,7 @@ class HomeView extends StatelessWidget {
                               color: MyColors.black,
                             ),
                           ),
-                          const Gap(10),
+                          const Gap(16),
                           LayoutBuilder(
                             builder: (context, constraints) {
                               final double itemWidth =

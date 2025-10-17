@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 
 class MenuView extends StatelessWidget {
@@ -129,25 +130,25 @@ class MenuView extends StatelessWidget {
                 },
               ),
               const Gap(16),
-              // CommonContainer(
-              //   icon: Asset.profile,
-              //   title: "Profile Details",
-              //   onTap: () {
-              //     if ((Get.find<HomeController>()
-              //                     .profileData
-              //                     .value
-              //                     .data
-              //                     ?.user
-              //                     ?.roleName ??
-              //                 "")
-              //             .toLowerCase() ==
-              //         "House-Owner".toLowerCase()) {
-              //       Get.toNamed(Routes.CONNECTOR_PROFILE);
-              //     } else {
-              //       Get.toNamed(Routes.PROFILE);
-              //     }
-              //   },
-              // ),
+              CommonContainer(
+                icon: Asset.profile,
+                title: "Profile Details",
+                onTap: () {
+                  if ((Get.find<HomeController>()
+                                  .profileData
+                                  .value
+                                  .data
+                                  ?.user
+                                  ?.roleName ??
+                              "")
+                          .toLowerCase() ==
+                      "House-Owner".toLowerCase()) {
+                    Get.toNamed(Routes.CONNECTOR_PROFILE);
+                  } else {
+                    Get.toNamed(Routes.PROFILE);
+                  }
+                },
+              ),
               // const Gap(20),
               // CommonContainer(
               //   icon: Asset.peoples,
