@@ -15,7 +15,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
     required DateTime dateTime,
   }) {
     return Padding(
-      padding:  const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Stack(
         alignment: AlignmentGeometry.bottomRight,
         children: [
@@ -67,7 +67,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             decoration: BoxDecoration(
               color: MyColors.white,
               borderRadius: const BorderRadius.only(
@@ -77,9 +77,9 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
               ),
             ),
             child: Text(
-              DateFormat("dd MMM yyyy, hh:mma").format(
-                DateTime.parse("2025-09-27T05:26:33.061Z").toLocal(),
-              ),
+              DateFormat(
+                "dd MMM yyyy, hh:mma",
+              ).format(DateTime.parse("2025-09-27T05:26:33.061Z").toLocal()),
               style: MyTexts.medium13.copyWith(
                 color: MyColors.gray2E,
                 fontFamily: MyTexts.SpaceGrotesk,
@@ -140,57 +140,83 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                           const Gap(12),
                           HeaderText(text: "Statistics"),
                           const Gap(24),
-                          buildRow(
-                            image: Asset.totalProduct,
-                            title: "Total Products",
-                            data:
-                                (controller
-                                            .approvalInboxList
-                                            .value
-                                            .data
-                                            ?.productStatistics
-                                            ?.totalProducts ??
-                                        0)
-                                    .toString(),
-                          ),
-                          const Gap(16),
-                          buildRow(
-                            image: Asset.totalProduct,
-                            title: "Approved Products",
-                            data:
-                                (controller
-                                            .approvalInboxList
-                                            .value
-                                            .data
-                                            ?.productStatistics
-                                            ?.approvedProducts ??
-                                        0)
-                                    .toString(),
-                          ),
-                          const Gap(16),
-                          buildRow(
-                            image: Asset.totalProduct,
-                            title: "Rejected Products",
-                            data:
-                                (controller
-                                            .approvalInboxList
-                                            .value
-                                            .data
-                                            ?.productStatistics
-                                            ?.rejectedProducts ??
-                                        0)
-                                    .toString(),
-                          ),
+                          Obx(() {
+                            return IntrinsicHeight(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: buildRow(
+                                      image: Asset.totalProduct,
+                                      title: "Total Products",
+                                      data:
+                                      (controller
+                                          .approvalInboxList
+                                          .value
+                                          .data
+                                          ?.productStatistics
+                                          ?.totalProducts ??
+                                          0)
+                                          .toString(),
+                                      filter: ApprovalFilter.all,
+                                    ),
+                                  ),
+                                  const Gap(16),
+                                  Expanded(
+                                    child: buildRow(
+                                      image: Asset.totalProduct,
+                                      title: "Approved Products",
+                                      data:
+                                      (controller
+                                          .approvalInboxList
+                                          .value
+                                          .data
+                                          ?.productStatistics
+                                          ?.approvedProducts ??
+                                          0)
+                                          .toString(),
+                                      filter: ApprovalFilter.approved,
+                                    ),
+                                  ),
+                                  const Gap(16),
+                                  Expanded(
+                                    child: buildRow(
+                                      image: Asset.totalProduct,
+                                      title: "Rejected Products",
+                                      data:
+                                      (controller
+                                          .approvalInboxList
+                                          .value
+                                          .data
+                                          ?.productStatistics
+                                          ?.rejectedProducts ??
+                                          0)
+                                          .toString(),
+                                      filter: ApprovalFilter.rejected,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
                           const Gap(32),
                           HeaderText(text: "Inbox"),
                           Obx(() {
                             final list = controller.filteredInbox;
                             if (list.isEmpty) {
-                              return Center(
-                                child: Text(
-                                  "No data found",
-                                  style: MyTexts.medium16.copyWith(
-                                    color: MyColors.darkGray,
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height / 4,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "No data found",
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.darkGray,
+                                    ),
                                   ),
                                 ),
                               );
@@ -202,16 +228,12 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 final card = list[index];
-                                IconData statusIcon;
                                 Color statusColor;
-
                                 switch (card.status?.toLowerCase()) {
                                   case "approved":
-                                    statusColor =const Color(0xFFE6F5E6);
-                                    break;
+                                    statusColor = const Color(0xFFE6F5E6);
                                   case "rejected":
-                                    statusColor =const Color(0xFFFCECE9);
-                                    break;
+                                    statusColor = const Color(0xFFFCECE9);
                                   default:
                                     statusColor = const Color(0xFFFEF7E8);
                                 }
@@ -240,30 +262,56 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
     );
   }
 
-  Row buildRow({
+  Widget buildRow({
     required String image,
     required String data,
     required String title,
+    required ApprovalFilter filter,
   }) {
-    return Row(
-      children: [
-        Image.asset(image, height: 58, width: 82, fit: BoxFit.cover),
-        const Gap(8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              data,
-              style: MyTexts.extraBold16.copyWith(color: MyColors.black),
+    return Obx(() {
+      final isSelected = controller.selectedFilter.value == filter;
+
+      return GestureDetector(
+        onTap: () {
+          controller.selectedFilter.value = filter;
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isSelected
+                  ? MyColors.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
             ),
-            const Gap(8),
-            Text(
-              title,
-              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-            ),
-          ],
+
+            borderRadius: BorderRadius.circular(8),
+            color: MyColors.white,
+            boxShadow: [
+              BoxShadow(
+                color: MyColors.grayEA.withValues(alpha: 0.32),
+                blurRadius: 4,
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(image, height: 27, width: 28, fit: BoxFit.cover),
+              const Gap(4),
+              Text(
+                data,
+                style: MyTexts.extraBold18.copyWith(color: MyColors.black),
+              ),
+              const Gap(4),
+              Text(
+                title,
+                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+              ),
+            ],
+          ),
         ),
-      ],
-    );
+      );
+    });
   }
 }

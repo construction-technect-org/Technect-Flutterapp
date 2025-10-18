@@ -29,7 +29,7 @@ class NewsView extends GetView<NewsController> {
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: const Text('Inbox'),
+                  title: const Text('News'),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () {
@@ -50,7 +50,8 @@ class NewsView extends GetView<NewsController> {
                     child: Column(
                       children: [
                         Obx(() {
-                          if (controller.newsModel.value.data?.news?.isEmpty ?? true) {
+                          if (controller.newsModel.value.data?.news?.isEmpty ??
+                              true) {
                             return Padding(
                               padding: const EdgeInsets.only(top: 100.0),
                               child: Center(
@@ -72,14 +73,16 @@ class NewsView extends GetView<NewsController> {
                                     SizedBox(height: 0.5.h),
                                     Text(
                                       'Check back later for updates',
-                                      style: MyTexts.regular14.copyWith(color: MyColors.grey),
+                                      style: MyTexts.regular14.copyWith(
+                                        color: MyColors.grey,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                             );
                           }
-                        
+
                           return RefreshIndicator(
                             color: Colors.white,
                             backgroundColor: MyColors.primary,
@@ -87,9 +90,20 @@ class NewsView extends GetView<NewsController> {
                             child: ListView.builder(
                               shrinkWrap: true,
                               padding: const EdgeInsets.all(16),
-                              itemCount: controller.newsModel.value.data?.news?.length ?? 0,
+                              itemCount:
+                                  controller
+                                      .newsModel
+                                      .value
+                                      .data
+                                      ?.news
+                                      ?.length ??
+                                  0,
                               itemBuilder: (context, index) {
-                                final news = controller.newsModel.value.data!.news![index];
+                                final news = controller
+                                    .newsModel
+                                    .value
+                                    .data!
+                                    .news![index];
                                 return _buildNewsCard(news);
                               },
                             ),
@@ -111,84 +125,139 @@ class NewsView extends GetView<NewsController> {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: MyColors.grayD4),
+        color: MyColors.grayF7,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: MyColors.grayEA.withValues(alpha: 0.32),
+            blurRadius: 4,
+          ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
               children: [
-                Expanded(
-                  child: Text(
-                    news.title ?? '',
-                    style: MyTexts.bold16.copyWith(
-                      color: MyColors.fontBlack,
-                      fontFamily: MyTexts.SpaceGrotesk,
+                const Gap(16),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        news.title ?? '',
+                        style: MyTexts.medium16.copyWith(color: MyColors.black),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                Text(
-                  _formatDate(news.createdAt),
-                  style: MyTexts.regular14.copyWith(
-                    color: MyColors.grey,
+                const Gap(8),
+                ReadMoreText(
+                  news.description ?? '',
+                  trimMode: TrimMode.Line,
+                  style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+                  trimLines: 3,
+                  colorClickableText: Colors.pink,
+                  trimCollapsedText: 'Show more',
+                  trimExpandedText: 'Show less',
+                  moreStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
                     fontFamily: MyTexts.SpaceGrotesk,
+                    color: MyColors.primary,
+                  ),
+                  lessStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: MyTexts.SpaceGrotesk,
+                    color: MyColors.primary,
                   ),
                 ),
+                const Gap(16),
               ],
             ),
-            const Gap(8),
-            ReadMoreText(
-              news.description ?? '',
-              trimMode: TrimMode.Line,
-              style: MyTexts.regular14.copyWith(
-                color: MyColors.fontBlack,
-                height: 1.4,
-                fontFamily: MyTexts.SpaceGrotesk,
-              ),
-              trimLines: 2,
-              colorClickableText: Colors.pink,
-              trimCollapsedText: 'Show more',
-              trimExpandedText: 'Show less',
-              moreStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                fontFamily: MyTexts.SpaceGrotesk,
-                color: MyColors.primary,
-              ),
-              lessStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                fontFamily: MyTexts.SpaceGrotesk,
-                color: MyColors.primary,
-              ),
-            ),
-            const Gap(12),
-            Row(
-              children: [
-                const Icon(Icons.visibility, size: 16, color: MyColors.grey),
-                const SizedBox(width: 4),
-                Text(
-                  'Published',
-                  style: MyTexts.regular12.copyWith(
-                    color: MyColors.grey,
-                    fontFamily: MyTexts.SpaceGrotesk,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: MyColors.white,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    topRight: Radius.circular(8),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.visibility,
+                      size: 12,
+                      color: MyColors.grey,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Published',
+                      style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: MyColors.white,
+                  borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(16),
+                    topLeft: Radius.circular(8),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _formatDate(news.createdAt),
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.gray54,
+                        fontFamily: MyTexts.SpaceGrotesk,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
   String _formatDate(DateTime? date) {
     if (date == null) return '';
-    return DateFormat('MMM dd, yyyy').format(date);
+
+    final String day = date.day.toString();
+    String suffix;
+    if (day.endsWith('1') && day != '11') {
+      suffix = 'st';
+    } else if (day.endsWith('2') && day != '12') {
+      suffix = 'nd';
+    } else if (day.endsWith('3') && day != '13') {
+      suffix = 'rd';
+    } else {
+      suffix = 'th';
+    }
+
+    final String formattedDate = DateFormat("MMM yyyy, hh:mm a").format(date);
+    return "${date.day}$suffix $formattedDate";
   }
 }

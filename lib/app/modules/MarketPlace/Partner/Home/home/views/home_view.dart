@@ -925,7 +925,7 @@ class _HeaderTextState extends State<HeaderText> {
   Widget build(BuildContext context) {
     return Text(
       widget.text,
-      style: MyTexts.medium18.copyWith(
+      style: MyTexts.medium17.copyWith(
         color: MyColors.black,
         fontFamily: MyTexts.SpaceGrotesk,
       ),

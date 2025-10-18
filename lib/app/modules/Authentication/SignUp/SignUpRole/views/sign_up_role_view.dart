@@ -163,7 +163,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Center(
                     child: FittedBox(
-                      fit: BoxFit.scaleDown, // 🔹 ensures content scales properly
+                      fit: BoxFit.scaleDown,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
