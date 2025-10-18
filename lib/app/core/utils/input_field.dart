@@ -269,7 +269,7 @@ class CommonTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: const BorderSide(color:MyColors.red33),
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             errorBorder: OutlineInputBorder(
@@ -286,7 +286,6 @@ class CommonTextField extends StatelessWidget {
             ),
             errorStyle: MyTexts.medium13.copyWith(
               color:MyColors.red33,
-              fontFamily: MyTexts.SpaceGrotesk,
             ),
             errorMaxLines: 2,
             hintText: hintText,

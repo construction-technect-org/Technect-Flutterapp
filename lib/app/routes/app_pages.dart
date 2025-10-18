@@ -177,12 +177,12 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ADD_ROLE,
-      page: () => const AddRoleView(),
+      page: () =>  AddRoleView(),
       binding: AddRoleBinding(),
     ),
     GetPage(
       name: _Paths.ADD_TEAM,
-      page: () => const AddTeamView(),
+      page: () =>  AddTeamView(),
       binding: AddTeamBinding(),
     ),
     GetPage(

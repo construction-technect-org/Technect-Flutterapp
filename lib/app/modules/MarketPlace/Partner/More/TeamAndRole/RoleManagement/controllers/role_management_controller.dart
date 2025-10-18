@@ -11,6 +11,8 @@ class RoleManagementController extends GetxController {
   final RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<Statistics> statistics = Statistics().obs;
 
+  RxBool showRoles = true.obs;
+
   final Rx<TeamStatsModel?> teamStats = Rx<TeamStatsModel?>(null);
   AddTeamService addTeamService = AddTeamService();
   HomeController homeController = Get.find();

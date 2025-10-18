@@ -36,6 +36,8 @@ class Asset {
   static const String report = '${svg}report.svg';
   static const String setting = '${svg}setting.svg';
   static const String team = '${svg}team.svg';
+  static const String edit = '${svg}edit.svg';
+  static const String remove = '${svg}remove.svg';
 
 
   static const String crm = '${feature}crm.png';

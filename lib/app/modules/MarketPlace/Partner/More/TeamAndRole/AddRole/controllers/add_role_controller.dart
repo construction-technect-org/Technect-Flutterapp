@@ -1,7 +1,6 @@
 // ignore_for_file: type_annotate_public_apis
 
 import 'dart:developer';
-
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/AddRoleService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
@@ -42,11 +41,8 @@ class AddRoleController extends GetxController {
   }
 
   Future<void> saveRole() async {
-    if (roleController.text.isEmpty || roleDescription.text.isEmpty) {
-      Get.snackbar("Error", "Please fill all fields");
-      return;
-    }
-    else if(selectedFunctionalities.value.isEmpty){
+
+    if(selectedFunctionalities.value.isEmpty){
       Get.snackbar("Error", "Please select functionality");
       return;
     }
@@ -65,7 +61,6 @@ class AddRoleController extends GetxController {
 
         if (result != null && result.success) {
           await _refreshRoleManagement();
-          Get.back();
           Get.back();
         } else {
           Get.snackbar("Failed", result?.message ?? "Something went wrong");

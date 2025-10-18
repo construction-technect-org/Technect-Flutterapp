@@ -7,9 +7,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/components/delete_team_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 
-
 class AddTeamView extends GetView<AddTeamController> {
-  const AddTeamView({super.key});
+  AddTeamView({super.key});
+
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -19,159 +20,244 @@ class AddTeamView extends GetView<AddTeamController> {
         onTap: hideKeyboard,
         child: Scaffold(
           backgroundColor: MyColors.white,
-          appBar: CommonAppBar(
-            title: Text(controller.isEdit.value ? "EDIT TEAM" : "ADD TEAM"),
-            isCenter: false,
-            action: controller.isEdit.value
-                ? [
-                    IconButton(
-                      onPressed: () {
-                        DeleteTeamDialog.showDeleteTeamDialog(
-                          context,
-                          controller.teamDetailsModel.value,
-                          () {
-                            controller.deleteTeamMember(
-                              controller.teamDetailsModel.value.id!,
-                            );
-                            Get.back();
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.delete_outline,
-                        color: MyColors.red,
-                        size: 24,
-                      ),
-                    ),
-                  ]
-                : null,
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: GestureDetector(
-                    onTap: () => controller.pickImageBottomSheet(context),
-                    child: Obx(() {
-                      if (controller.selectedImage.value != null) {
-                        return ClipOval(
-                          child: Image.file(
-                            controller.selectedImage.value!,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      }
-
-                      final imagePath =
-                          controller.teamDetailsModel.value.profilePhotoUrl ??
-                          "";
-                      final imageUrl = imagePath.isNotEmpty ? imagePath : null;
-
-                      if (imageUrl == null) {
-                        return const Icon(
-                          Icons.account_circle,
-                          size: 100,
-                          color: Colors.grey,
-                        );
-                      }
-
-                      return ClipOval(
-                        child: getImageView(
-                          finalUrl: imageUrl,
-                          height: 100,
-                          width: 100,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    }),
+          body: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(Asset.moreIBg),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () => controller.pickImageBottomSheet(context),
-                    icon: const Icon(Icons.camera_alt, color: Colors.white),
-                    label: Text(
-                      controller.isEdit.value ? "Change Photo" : "Upload Photo",
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MyColors.primary, // or Colors.blue
-                    ),
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                CommonTextField(
-                  hintText: "Enter your First name",
-                  headerText: 'First Name',
-                  controller: controller.fNameController,
-                ),
-                SizedBox(height: 2.h),
-                CommonTextField(
-                  hintText: "Enter your Last name",
-                  headerText: 'Last Name',
-                  controller: controller.lNameController,
-                ),
-                SizedBox(height: 2.h),
-                CommonTextField(
-                  hintText: "Enter your email address",
-                  headerText: 'Email ID',
-                  controller: controller.emialIdController,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                SizedBox(height: 2.h),
-                CommonTextField(
-                  hintText: "Enter your phone number",
-                  headerText: 'Phone number',
-                  controller: controller.phoneNumberController,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 10,
-                ),
+              ),
 
-                SizedBox(height: 2.h),
-
-                Row(
-                  children: [
-                    Text(
-                      'User Role',
-                      style: MyTexts.light16.copyWith(
-                        color: MyColors.lightBlue,
-                      ),
+              Column(
+                children: [
+                  CommonAppBar(
+                    backgroundColor: Colors.transparent,
+                    title: Text(
+                      controller.isEdit.value ? "EDIT TEAM" : "ADD TEAM",
                     ),
-                    Text(
-                      '*',
-                      style: MyTexts.regular16.copyWith(color: Colors.red),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 1.h),
-                Obx(
-                  () => controller.roles.isNotEmpty
-                      ? CommonDropdown<GetAllRole>(
-                          hintText: "Select User Role",
-                          items: controller.roles,
-                          selectedValue: controller.selectedRole!,
-                          itemLabel: (item) => item.roleTitle ?? '',
-                        )
-                      : const SizedBox.shrink(),
-                ),
-
-                SizedBox(height: 4.h),
-                Center(
-                  child: Obx(
-                    () => RoundedButton(
-                      buttonName: controller.isEdit.value ? "UPDATE" : 'ADD',
+                    isCenter: false,
+                    leading: GestureDetector(
                       onTap: () {
-                        controller.filedValidation();
+                        Get.back();
                       },
+                      child: const Padding(
+                        padding: EdgeInsets.zero,
+                        child: Icon(
+                          Icons.arrow_back_ios_new_sharp,
+                          color: Colors.black,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                    action: controller.isEdit.value
+                        ? [
+                            GestureDetector(
+                              onTap: () {
+                                DeleteTeamDialog.showDeleteTeamDialog(
+                                  context,
+                                  controller.teamDetailsModel.value,
+                                  () {
+                                    controller.deleteTeamMember(
+                                      controller.teamDetailsModel.value.id!,
+                                    );
+                                    Get.back();
+                                  },
+                                );
+                              },
+                              behavior: HitTestBehavior.translucent,
+                              child: SvgPicture.asset(Asset.remove),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                GestureDetector(
+                                  onTap: () =>
+                                      controller.pickImageBottomSheet(context),
+                                  child: Obx(() {
+                                    if (controller.selectedImage.value !=
+                                        null) {
+                                      return ClipOval(
+                                        child: Image.file(
+                                          controller.selectedImage.value!,
+                                          width: 78,
+                                          height: 78,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      );
+                                    }
+
+                                    final imagePath =
+                                        controller
+                                            .teamDetailsModel
+                                            .value
+                                            .profilePhotoUrl ??
+                                        "";
+                                    final imageUrl = imagePath.isNotEmpty
+                                        ? imagePath
+                                        : null;
+
+                                    if (imageUrl == null) {
+                                      return CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor: MyColors.grayEA,
+                                        child: SvgPicture.asset(
+                                          Asset.add,
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                      );
+                                    }
+
+                                    return ClipOval(
+                                      child: getImageView(
+                                        finalUrl: imageUrl,
+                                        height: 78,
+                                        width: 78,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  }),
+                                ),
+
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () => controller
+                                        .pickImageBottomSheet(context),
+                                    child: Container(
+                                      height: 32,
+                                      width: 32,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: SvgPicture.asset(
+                                          Asset.edit,
+                                          height: 12,
+                                          width: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 2.h),
+                            CommonTextField(
+                              hintText: "Enter your first name",
+                              headerText: 'First Name',
+                              controller: controller.fNameController,
+                              autofillHints: const [AutofillHints.givenName],
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(30),
+                                NameInputFormatter(),
+                              ],
+                              validator: (value) =>
+                                  validateName(value, fieldName: "first name"),
+                            ),
+                            SizedBox(height: 2.h),
+                            CommonTextField(
+                              hintText: "Enter your last name",
+                              headerText: 'Last Name',
+                              controller: controller.lNameController,
+                              autofillHints: const [AutofillHints.familyName],
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(30),
+                                NameInputFormatter(),
+                              ],
+                              validator: (value) =>
+                                  validateName(value, fieldName: "last name"),
+                            ),
+                            SizedBox(height: 2.h),
+                            CommonTextField(
+                              hintText: "Enter your email address",
+                              headerText: 'Email ID',
+                              controller: controller.emialIdController,
+                              keyboardType: TextInputType.emailAddress,
+                              autofillHints: const [AutofillHints.email],
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(50),
+                                EmailInputFormatter(),
+                              ],
+                              validator: validateEmail,
+                            ),
+                            SizedBox(height: 2.h),
+                            CommonTextField(
+                              hintText: "Enter your phone number",
+                              headerText: 'Phone number',
+                              controller: controller.phoneNumberController,
+                              keyboardType: TextInputType.phone,
+                              maxLength: 10,
+                              validator: (val) {
+                                if ((val ?? "").isEmpty) {
+                                  return "Please enter phone number";
+                                }
+                                if (val!.length < 10) {
+                                  return "Phone number length should be 10";
+                                }
+                                return null;
+                              },
+                            ),
+
+                            SizedBox(height: 2.h),
+                            Obx(
+                              () => controller.roles.isNotEmpty
+                                  ? CommonDropdown<GetAllRole>(
+                                      headerText: 'User Role',
+                                      hintText: "Select User Role",
+                                      items: controller.roles,
+                                      validator: (val) {
+                                        if (val == null) {
+                                          return "Please select role";
+                                        }
+                                        return null;
+                                      },
+                                      selectedValue: controller.selectedRole!,
+                                      itemLabel: (item) => item.roleTitle ?? '',
+                                    )
+                                  : const SizedBox.shrink(),
+                            ),
+
+                            SizedBox(height: 2.h),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ],
+          ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Obx(
+              () => RoundedButton(
+                buttonName: controller.isEdit.value ? "Update" : 'Add',
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    controller.filedValidation();
+                  }
+                },
+              ),
             ),
           ),
         ),

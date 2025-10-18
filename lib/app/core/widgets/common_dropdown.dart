@@ -13,7 +13,7 @@ class CommonDropdown<T> extends StatelessWidget {
   final bool? isRed;
   final bool enabled;
   final Color? borderColor;
-  final String? Function(T?)? validator; // ✅ supports form validation
+  final String? Function(T?)? validator;
 
   const CommonDropdown({
     required this.hintText,
@@ -43,9 +43,7 @@ class CommonDropdown<T> extends StatelessWidget {
                 children: [
                   Text(
                     headerText ?? "",
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.gra54,
-                    ),
+                    style: MyTexts.medium14.copyWith(color: MyColors.gra54),
                   ),
                   // if (isRed == true)
                   //   Text(
@@ -85,9 +83,7 @@ class CommonDropdown<T> extends StatelessWidget {
                       ),
 
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: MyColors.grayEA,
-                    ),
+                    borderSide: const BorderSide(color: MyColors.grayEA),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -95,11 +91,11 @@ class CommonDropdown<T> extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   focusedErrorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red),
+                    borderSide: const BorderSide(color: MyColors.red33),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   errorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red),
+                    borderSide: const BorderSide(color: MyColors.red33),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   isDense: true,
@@ -109,10 +105,7 @@ class CommonDropdown<T> extends StatelessWidget {
                     horizontal: 12,
                     vertical: 12,
                   ),
-                  errorStyle: MyTexts.regular13.copyWith(
-                    color: Colors.red,
-                    fontFamily: MyTexts.SpaceGrotesk,
-                  ),
+                  errorStyle: MyTexts.medium13.copyWith(color: MyColors.red33),
                 ),
                 hint: Text(
                   hintText,

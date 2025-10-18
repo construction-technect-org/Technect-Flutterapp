@@ -22,15 +22,19 @@ class AddTeamController extends GetxController {
   RxBool isEdit = false.obs;
   RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<GetAllRole>? selectedRole = GetAllRole().obs;
+
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile == null) return;
-    final compressedFile = await CommonConstant().compressImage(File(pickedFile.path));
+    final compressedFile = await CommonConstant().compressImage(
+      File(pickedFile.path),
+    );
     selectedImage.value = File(compressedFile.path);
   }
 
   Rx<File?> selectedImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();
+
   @override
   void onInit() {
     _loadRolesFromStorage();
@@ -53,16 +57,22 @@ class AddTeamController extends GetxController {
         child: Wrap(
           children: [
             ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text("Camera"),
+              leading: const Icon(Icons.camera_alt, color: MyColors.gray2E),
+              title: Text(
+                "Camera",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.camera);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.photo),
-              title: const Text("Gallery"),
+              leading: const Icon(Icons.photo, color: MyColors.gray2E),
+              title: Text(
+                "Gallery",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.gallery);
@@ -172,29 +182,7 @@ class AddTeamController extends GetxController {
   }
 
   Future<void> filedValidation() async {
-    // Validate Full Name
-    if (fNameController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'First name is required');
-    } else if (fNameController.text.length < 3) {
-      SnackBars.errorSnackBar(content: 'First name must be at least 3 characters');
-    }
-    if (lNameController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'First name is required');
-    } else if (lNameController.text.length < 2) {
-      SnackBars.errorSnackBar(content: 'Last name must be at least 2 characters');
-    } else if (emialIdController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Email is required');
-    } else if (!GetUtils.isEmail(emialIdController.text)) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid email');
-    } else if (phoneNumberController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: 'Phone number is required');
-    } else if (!GetUtils.isPhoneNumber(phoneNumberController.text)) {
-      SnackBars.errorSnackBar(content: 'Please enter a valid phone number');
-    } else if (phoneNumberController.text.length != 10) {
-      SnackBars.errorSnackBar(content: 'Phone number must be 10 digits');
-    } else if (selectedCategory.value == "") {
-      SnackBars.errorSnackBar(content: 'User role is required');
-    } else if (!isEdit.value) {
+    if (!isEdit.value) {
       await addTeam();
     } else {
       await addTeam();
