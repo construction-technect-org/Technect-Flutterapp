@@ -117,15 +117,43 @@ class ReportController extends GetxController {
         await file.writeAsBytes(pdfBytes);
 
         Get.defaultDialog(
+          titlePadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
           backgroundColor: Colors.white,
           title: "Success",
+          titleStyle: MyTexts.medium16.copyWith(color: MyColors.gray2E),
+          middleTextStyle:  MyTexts.medium14.copyWith(color: MyColors.gray54),
           middleText: "PDF downloaded successfully",
-          textConfirm: "Open",
-          textCancel: "Close",
-          onConfirm: () {
-            OpenFilex.open(file.path);
-            Get.back();
-          },
+          actions: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: RoundedButton(
+                    onTap: () => Get.back(),
+                    buttonName: 'Cancel',
+                    borderRadius: 12,
+                    verticalPadding: 0,
+                    height: 45,
+                    color: MyColors.grayCD,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Flexible(
+                  child: RoundedButton(
+                    onTap: () {
+                      OpenFilex.open(file.path);
+                      Get.back();
+                    },
+                    buttonName: "Open",
+                    borderRadius: 12,
+                    verticalPadding: 0,
+                    height: 45,
+                    color: MyColors.primary,
+                  ),
+                ),
+              ],
+            ),
+          ],
         );
       } else {
         Get.defaultDialog(

@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/controllers/report_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -20,7 +19,7 @@ class ReportView extends GetView<ReportController> {
         backgroundColor: MyColors.white,
         appBar: CommonAppBar(
           title: Obx(
-                () => Text(controller.isReport.value ? 'Reports' : "Analysis"),
+            () => Text(controller.isReport.value ? 'Reports' : "Analysis"),
           ),
           isCenter: false,
         ),
@@ -38,40 +37,74 @@ class ReportView extends GetView<ReportController> {
                   children: [
                     Obx(() {
                       return ProductStatCard(
-                        iconAsset: Asset.noOfPartner,
+                        iconAsset: Asset.totalProduct,
                         title: "Total Connectors",
-                        value: controller.analysisModel.value.overallStatistics
-                            ?.totalConnectors.toString() ?? "",
+                        value:
+                            controller
+                                .analysisModel
+                                .value
+                                .overallStatistics
+                                ?.totalConnectors
+                                .toString() ??
+                            "",
                         subtitle: "Active Connectors",
-                        subValue: controller.analysisModel.value
-                            .overallStatistics?.activeConnectors.toString() ??
+                        subValue:
+                            controller
+                                .analysisModel
+                                .value
+                                .overallStatistics
+                                ?.activeConnectors
+                                .toString() ??
                             "",
                       );
                     }),
                     const Gap(5),
                     Obx(() {
                       return ProductStatCard(
-                        iconAsset: Asset.noOfConectors,
+                        iconAsset: Asset.totalProduct,
                         title: "Total Products",
-                        value: controller.analysisModel.value.overallStatistics
-                            ?.totalProducts.toString() ?? "",
+                        value:
+                            controller
+                                .analysisModel
+                                .value
+                                .overallStatistics
+                                ?.totalProducts
+                                .toString() ??
+                            "",
                         subtitle: "Active Products",
-                        subValue: controller.analysisModel.value
-                            .overallStatistics
-                            ?.activeProducts.toString() ?? "",
+                        subValue:
+                            controller
+                                .analysisModel
+                                .value
+                                .overallStatistics
+                                ?.activeProducts
+                                .toString() ??
+                            "",
                       );
                     }),
                     const Gap(5),
                     Obx(() {
                       return ProductStatCard(
-                        iconAsset: Asset.noOfUsers,
+                        iconAsset: Asset.totalProduct,
+
                         title: "Total Users",
-                        value: controller.analysisModel.value.overallStatistics
-                            ?.totalUsers.toString() ?? "",
+                        value:
+                            controller
+                                .analysisModel
+                                .value
+                                .overallStatistics
+                                ?.totalUsers
+                                .toString() ??
+                            "",
                         subtitle: "Active Users",
-                        subValue: controller.analysisModel.value
-                            .overallStatistics
-                            ?.activeUsers.toString() ?? "",
+                        subValue:
+                            controller
+                                .analysisModel
+                                .value
+                                .overallStatistics
+                                ?.activeUsers
+                                .toString() ??
+                            "",
                       );
                     }),
                   ],
@@ -86,94 +119,51 @@ class ReportView extends GetView<ReportController> {
                 const Gap(20),
                 _buildPeriodDropdown(),
                 const Gap(20),
-                Obx(
-                      () =>
-                  controller.isReport.value == true
-                      ? RoundedButton(
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.white,
-                      fontFamily: MyTexts.SpaceGrotesk,
-                    ),
-                    verticalPadding: 0,
-
-                    buttonName: "Download PDF",
-                    onTap: () {
-                      if (controller.selectedPeriod.value.isEmpty) {
-                        controller.downloadReportPdf(isPeriod: false);
-                      } else {
-                        controller.downloadReportPdf(isPeriod: true);
-
-                        // controller.fetchReportByDD();
-                      }
-                      // PDF generation logic
-                      // generatePdfReport(controller.analysisModel.value);
-                    },
-                    width: 150,
-                    height: 48,
-                  )
-                      : const SizedBox(),
-                ),
-
-                const Gap(20),
-
                 // Charts
                 _buildCharts(),
               ],
             ),
           ),
         ),
+        bottomNavigationBar: Obx(
+          () => controller.isReport.value == true
+              ? Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: RoundedButton(
+                    buttonName: "Download PDF",
+                    onTap: () {
+                      if (controller.selectedPeriod.value.isEmpty) {
+                        controller.downloadReportPdf(isPeriod: false);
+                      } else {
+                        controller.downloadReportPdf(isPeriod: true);
+                      }
+                    },
+                    width: 150,
+                    height: 48,
+                  ),
+                )
+              : const SizedBox(),
+        ),
       ),
     );
   }
 
   Widget _buildGreeting() {
-    final profile = Get
-        .find<HomeController>()
-        .profileData
-        .value
-        .data
-        ?.user;
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(right: 10),
-              height: 102,
-              width: 88,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: const Color(0xFFC6D7E2),
-              ),
-            ),
-            Image.asset(Asset.con, height: 102, width: 88, fit: BoxFit.fill),
-          ],
+        Text(
+          controller.isReport.value
+              ? "Download reports by selecting a date range from start month to end month."
+              : "Reports Dashboard",
+          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
         ),
-        const Gap(15),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Good Morning ${profile?.firstName ?? ""} ${profile?.lastName ??
-                    ""}!",
-                style: MyTexts.bold18.copyWith(
-                  color: MyColors.primary,
-                  fontFamily: MyTexts.SpaceGrotesk,
-                ),
-              ),
-              const Gap(5),
-              Text(
-                "Use this platform to manage your team, merchants, services and get analytic reports.",
-                style: MyTexts.regular13.copyWith(
-                  color: MyColors.black,
-                  fontFamily: MyTexts.SpaceGrotesk,
-                ),
-              ),
-            ],
-          ),
+        const Gap(8),
+        Text(
+          controller.isReport.value
+              ? "Select a start and end month to generate and download your report."
+              : "Clearly indicates the purpose of the section—it's where users manage or view reports",
+          style: MyTexts.medium14.copyWith(color: MyColors.gray54),
         ),
       ],
     );
@@ -205,23 +195,26 @@ class ReportView extends GetView<ReportController> {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                border: Border.all(color: MyColors.grayD4),
+                border: Border.all(color: MyColors.grayEA),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Obx(
-                    () =>
-                    Text(
-                      controller.startMonth.value != null
-                          ? DateFormat(
-                        "MMM yyyy",
-                      ).format(controller.startMonth.value!)
-                          : "Start Month",
-                    ),
+                () => Text(
+                  controller.startMonth.value != null
+                      ? DateFormat(
+                          "MMM yyyy",
+                        ).format(controller.startMonth.value!)
+                      : "Start Month",
+                  style: MyTexts.medium14.copyWith(
+                    color: controller.startMonth.value != null
+                        ? MyColors.gray2E
+                        : MyColors.grayA5,
+                  ),
+                ),
               ),
             ),
           ),
         ),
-
         const SizedBox(width: 10),
         Expanded(
           child: GestureDetector(
@@ -236,7 +229,7 @@ class ReportView extends GetView<ReportController> {
               final picked = await showMonthPicker(
                 context: context,
                 initialDate:
-                controller.endMonth.value ??
+                    controller.endMonth.value ??
                     controller.startMonth.value!.add(const Duration(days: 30)),
                 firstDate: controller.startMonth.value!.add(
                   const Duration(days: 30),
@@ -254,40 +247,33 @@ class ReportView extends GetView<ReportController> {
                   ),
                 ),
               );
-              if (picked != null) controller.endMonth.value = picked;
+              if (picked != null) {
+                controller.endMonth.value = picked;
+                controller.onApplyReport();
+              }
             },
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                border: Border.all(color: MyColors.grayD4),
+                border: Border.all(color: MyColors.grayEA),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Obx(
-                    () =>
-                    Text(
-                      controller.endMonth.value != null
-                          ? DateFormat(
-                        "MMM yyyy",
-                      ).format(controller.endMonth.value!)
-                          : "End Month",
-                    ),
+                () => Text(
+                  controller.endMonth.value != null
+                      ? DateFormat(
+                          "MMM yyyy",
+                        ).format(controller.endMonth.value!)
+                      : "End Month",
+                  style: MyTexts.medium14.copyWith(
+                    color: controller.endMonth.value != null
+                        ? MyColors.gray2E
+                        : MyColors.grayA5,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-
-        const SizedBox(width: 10),
-        RoundedButton(
-          style: MyTexts.medium14.copyWith(
-            color: MyColors.white,
-            fontFamily: MyTexts.SpaceGrotesk,
-          ),
-          verticalPadding: 0,
-
-          buttonName: "Apply",
-          onTap: controller.onApplyReport,
-          width: 100,
-          height: 48,
         ),
       ],
     );
@@ -295,34 +281,42 @@ class ReportView extends GetView<ReportController> {
 
   Widget _buildPeriodDropdown() {
     return Obx(
-          () =>
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              margin: const EdgeInsets.only(top: 10),
-              width: controller.isReport.value ? null : 200,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                border: Border.all(color: MyColors.grayD4),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: DropdownButton<String>(
-                dropdownColor: Colors.white,
-                isExpanded: true,
-                underline: const SizedBox(),
-                value: controller.selectedPeriod.value.isEmpty
-                    ? null
-                    : controller.selectedPeriod.value,
-                hint: const Text("Select Period"),
-                items: controller.periodOptions
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (val) {
-                  if (val != null) controller.onPeriodSelected(val);
-                },
-              ),
+      () => Container(
+        margin: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: MyColors.grayEA),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: DropdownButton<String>(
+          dropdownColor: Colors.white,
+          isExpanded: true,
+          underline: const SizedBox(),
+          value: controller.selectedPeriod.value.isEmpty
+              ? null
+              : controller.selectedPeriod.value,
+          hint: Text(
+            "Select Period",
+            style: MyTexts.medium14.copyWith(
+              color: MyColors.primary.withValues(alpha: 0.5),
             ),
           ),
+          items: controller.periodOptions
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(
+                    e,
+                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: (val) {
+            if (val != null) controller.onPeriodSelected(val);
+          },
+        ),
+      ),
     );
   }
 
@@ -356,6 +350,7 @@ class ReportView extends GetView<ReportController> {
                 "Rejected Products",
               ],
             ),
+            const Gap(10),
             ReportGraph(
               title: "Team Analysis",
               labels: analysis.teamAnalytics!.monthlyBreakdown!
@@ -372,6 +367,8 @@ class ReportView extends GetView<ReportController> {
               colors: const [MyColors.primary, MyColors.green],
               legends: const ["Added Member", "Active Member"],
             ),
+            const Gap(10),
+
             ReportGraph(
               title: "Role Analysis",
               labels: analysis.roleAnalytics!.monthlyBreakdown!
@@ -388,6 +385,8 @@ class ReportView extends GetView<ReportController> {
               colors: const [MyColors.primary, MyColors.green],
               legends: const ["Role Created", "Active Role"],
             ),
+            const Gap(10),
+
             ReportGraph(
               title: "Support Ticket Analysis",
               labels: analysis.supportTicketAnalytics!.monthlyBreakdown!
@@ -444,34 +443,34 @@ class ProductStatCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: MyColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: MyColors.grayD4),
+          border: Border.all(color: MyColors.gra54EA),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SvgPicture.asset(iconAsset),
+            Image.asset(iconAsset, height: 50, width: 50, fit: BoxFit.cover),
             const Gap(10),
+            Text(value, style: MyTexts.bold18.copyWith(color: MyColors.gray2E)),
+            const Gap(2),
             Text(
               title,
-              style: MyTexts.regular14.copyWith(color: MyColors.black),
+              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
-            Text(
-              value,
-              style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
-            ),
+
             const Gap(10),
             Text(
+              subValue,
+              style: MyTexts.bold18.copyWith(color: MyColors.gray2E),
+            ),
+            const Gap(2),
+            Text(
               subtitle,
-              style: MyTexts.regular14.copyWith(color: MyColors.black),
+              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-            ),
-            Text(
-              subValue,
-              style: MyTexts.bold16.copyWith(color: subValueColor),
             ),
           ],
         ),
@@ -508,15 +507,16 @@ class ReportGraph extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
-      padding: const EdgeInsets.all(16),
+      // padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: MyColors.grayD4),
+        // border: Border.all(color: MyColors.grayD4),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: MyTexts.bold16),
+          Text(title, style: MyTexts.medium17.copyWith(color: MyColors.gray2E)),
+          const Gap(12),
           if (legends != null && legends!.isNotEmpty) ...[
             const Gap(4),
             Wrap(
@@ -531,20 +531,20 @@ class ReportGraph extends StatelessWidget {
                       height: 12,
                       decoration: BoxDecoration(
                         color: colors[i],
-                        borderRadius: BorderRadius.circular(3),
+                        shape: BoxShape.circle,
                       ),
                     ),
                     const Gap(6),
                     Text(
                       legends![i],
-                      style: MyTexts.regular13.copyWith(color: MyColors.black),
+                      style: MyTexts.medium13.copyWith(color: MyColors.gray54),
                     ),
                   ],
                 );
               }),
             ),
           ],
-          const Gap(20),
+          const Gap(24),
           SizedBox(
             height: 220,
             child: BarChart(
@@ -576,7 +576,7 @@ class ReportGraph extends StatelessWidget {
                             angle: -1.5708,
                             child: Text(
                               label,
-                              style: const TextStyle(fontSize: 10),
+                              style:MyTexts.bold13.copyWith(color: MyColors.grayA5),
                             ),
                           ),
                         );
@@ -589,7 +589,9 @@ class ReportGraph extends StatelessWidget {
                       showTitles: true,
                       interval: interval,
                       getTitlesWidget: (value, meta) {
-                        return Text(value.toInt().toString());
+                        return Text(value.toInt().toString(),
+                          style:MyTexts.bold13.copyWith(color: MyColors.grayA5),
+                        );
                       },
                     ),
                   ),
@@ -599,7 +601,7 @@ class ReportGraph extends StatelessWidget {
                   show: true,
                   border: Border.all(color: MyColors.grayD4),
                 ),
-                gridData: FlGridData(show: false),
+                gridData: const FlGridData(show: false),
               ),
             ),
           ),
@@ -625,4 +627,3 @@ class ReportGraph extends StatelessWidget {
     return (niceNormalized * magnitude).ceilToDouble();
   }
 }
-

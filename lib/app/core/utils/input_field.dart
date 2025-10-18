@@ -292,7 +292,6 @@ class CommonTextField extends StatelessWidget {
             hintText: hintText,
             hintStyle: MyTexts.medium13.copyWith(
               color: MyColors.primary.withValues(alpha: 0.5),
-              fontFamily: MyTexts.SpaceGrotesk,
             ),
           ),
         ),

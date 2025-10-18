@@ -195,7 +195,12 @@ class MyTexts {
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
-
+  static TextStyle get bold13 => TextStyle(
+    fontFamily: SpaceGrotesk,
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w600,
+    color: MyColors.black,
+  );
   static TextStyle get bold18 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 18.sp,
