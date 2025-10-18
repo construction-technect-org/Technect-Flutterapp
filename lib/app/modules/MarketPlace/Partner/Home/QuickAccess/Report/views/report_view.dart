@@ -17,113 +17,144 @@ class ReportView extends GetView<ReportController> {
       isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar: CommonAppBar(
-          title: Obx(
-            () => Text(controller.isReport.value ? 'Reports' : "Analysis"),
-          ),
-          isCenter: false,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(16),
-                _buildGreeting(),
-                const Gap(20),
-
-                Row(
-                  children: [
-                    Obx(() {
-                      return ProductStatCard(
-                        iconAsset: Asset.totalProduct,
-                        title: "Total Connectors",
-                        value:
-                            controller
-                                .analysisModel
-                                .value
-                                .overallStatistics
-                                ?.totalConnectors
-                                .toString() ??
-                            "",
-                        subtitle: "Active Connectors",
-                        subValue:
-                            controller
-                                .analysisModel
-                                .value
-                                .overallStatistics
-                                ?.activeConnectors
-                                .toString() ??
-                            "",
-                      );
-                    }),
-                    const Gap(5),
-                    Obx(() {
-                      return ProductStatCard(
-                        iconAsset: Asset.totalProduct,
-                        title: "Total Products",
-                        value:
-                            controller
-                                .analysisModel
-                                .value
-                                .overallStatistics
-                                ?.totalProducts
-                                .toString() ??
-                            "",
-                        subtitle: "Active Products",
-                        subValue:
-                            controller
-                                .analysisModel
-                                .value
-                                .overallStatistics
-                                ?.activeProducts
-                                .toString() ??
-                            "",
-                      );
-                    }),
-                    const Gap(5),
-                    Obx(() {
-                      return ProductStatCard(
-                        iconAsset: Asset.totalProduct,
-
-                        title: "Total Users",
-                        value:
-                            controller
-                                .analysisModel
-                                .value
-                                .overallStatistics
-                                ?.totalUsers
-                                .toString() ??
-                            "",
-                        subtitle: "Active Users",
-                        subValue:
-                            controller
-                                .analysisModel
-                                .value
-                                .overallStatistics
-                                ?.activeUsers
-                                .toString() ??
-                            "",
-                      );
-                    }),
-                  ],
+        body: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Asset.moreIBg),
+                  fit: BoxFit.cover,
                 ),
-                const Gap(20),
+              ),
+            ),
+            Column(
+              children: [
+                CommonAppBar(
+                  backgroundColor: Colors.transparent,
+                  title: Text(controller.isReport.value ? 'Reports' : "Analysis"),
+                  isCenter: false,
+                  leading: GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.zero,
+                      child: Icon(
+                        Icons.arrow_back_ios_new_sharp,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Gap(16),
+                          _buildGreeting(),
+                          const Gap(20),
+                          Row(
+                            children: [
+                              Obx(() {
+                                return ProductStatCard(
+                                  iconAsset: Asset.totalProduct,
+                                  title: "Total Connectors",
+                                  value:
+                                      controller
+                                          .analysisModel
+                                          .value
+                                          .overallStatistics
+                                          ?.totalConnectors
+                                          .toString() ??
+                                      "",
+                                  subtitle: "Active Connectors",
+                                  subValue:
+                                      controller
+                                          .analysisModel
+                                          .value
+                                          .overallStatistics
+                                          ?.activeConnectors
+                                          .toString() ??
+                                      "",
+                                );
+                              }),
+                              const Gap(5),
+                              Obx(() {
+                                return ProductStatCard(
+                                  iconAsset: Asset.totalProduct,
+                                  title: "Total Products",
+                                  value:
+                                      controller
+                                          .analysisModel
+                                          .value
+                                          .overallStatistics
+                                          ?.totalProducts
+                                          .toString() ??
+                                      "",
+                                  subtitle: "Active Products",
+                                  subValue:
+                                      controller
+                                          .analysisModel
+                                          .value
+                                          .overallStatistics
+                                          ?.activeProducts
+                                          .toString() ??
+                                      "",
+                                );
+                              }),
+                              const Gap(5),
+                              Obx(() {
+                                return ProductStatCard(
+                                  iconAsset: Asset.totalProduct,
 
-                HeaderText(text: "Select month and download report"),
-                const Gap(20),
+                                  title: "Total Users",
+                                  value:
+                                      controller
+                                          .analysisModel
+                                          .value
+                                          .overallStatistics
+                                          ?.totalUsers
+                                          .toString() ??
+                                      "",
+                                  subtitle: "Active Users",
+                                  subValue:
+                                      controller
+                                          .analysisModel
+                                          .value
+                                          .overallStatistics
+                                          ?.activeUsers
+                                          .toString() ??
+                                      "",
+                                );
+                              }),
+                            ],
+                          ),
+                          const Gap(20),
 
-                _buildMonthFilter(context),
+                          HeaderText(text: "Select month and download report"),
+                          const Gap(20),
 
-                const Gap(20),
-                _buildPeriodDropdown(),
-                const Gap(20),
-                // Charts
-                _buildCharts(),
+                          _buildMonthFilter(context),
+
+                          const Gap(20),
+                          _buildPeriodDropdown(),
+                          const Gap(20),
+                          // Charts
+                          _buildCharts(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
+          ],
         ),
         bottomNavigationBar: Obx(
           () => controller.isReport.value == true
@@ -410,6 +441,7 @@ class ReportView extends GetView<ReportController> {
                 "Resoled Tickets",
               ],
             ),
+            const Gap(20),
           ],
         );
       }
@@ -576,7 +608,9 @@ class ReportGraph extends StatelessWidget {
                             angle: -1.5708,
                             child: Text(
                               label,
-                              style:MyTexts.bold13.copyWith(color: MyColors.grayA5),
+                              style: MyTexts.bold13.copyWith(
+                                color: MyColors.grayA5,
+                              ),
                             ),
                           ),
                         );
@@ -589,8 +623,11 @@ class ReportGraph extends StatelessWidget {
                       showTitles: true,
                       interval: interval,
                       getTitlesWidget: (value, meta) {
-                        return Text(value.toInt().toString(),
-                          style:MyTexts.bold13.copyWith(color: MyColors.grayA5),
+                        return Text(
+                          value.toInt().toString(),
+                          style: MyTexts.bold13.copyWith(
+                            color: MyColors.grayA5,
+                          ),
                         );
                       },
                     ),
