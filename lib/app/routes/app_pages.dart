@@ -51,6 +51,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/binding/account_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/view/account_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/views/notification_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
@@ -369,6 +371,11 @@ class AppPages {
       name: Routes.ON_BOARDING,
       page: () => const OnBoardingScreen(),
       binding: OnBoardingBinding(),
+    ),
+    GetPage(
+      name: Routes.ACCOUNT,
+      page: () => const AccountScreen(),
+      binding: AccountBinding(),
     ),
     GetPage(
       name: Routes.SELECT_PRODUCT,

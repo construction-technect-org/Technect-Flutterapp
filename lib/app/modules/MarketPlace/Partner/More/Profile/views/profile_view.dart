@@ -4,7 +4,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/certifications_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/info_metrics_component.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/marketplace_performance_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:gap/gap.dart';
 
@@ -196,7 +195,7 @@ class ProfileView extends GetView<ProfileController> {
         child: RoundedButton(
           buttonName: controller.merchantProfile != null ? "Save" : "Proceed",
           onTap: () {
-            for (var cert in controller.certificates) {
+            for (final cert in controller.certificates) {
               if (cert.isDefault &&
                   (cert.filePath == null || cert.filePath!.isEmpty)) {
                 SnackBars.errorSnackBar(
@@ -297,7 +296,7 @@ class ProfileView extends GetView<ProfileController> {
   Widget _buildTabContent() {
     return Obx(() {
       final index = controller.selectedTabIndex.value;
-      final hasMarketplaceTab = controller.profileCompletionPercentage > 90;
+      // final hasMarketplaceTab = controller.profileCompletionPercentage > 90;
       Widget content;
 
       if (index == 0) {

@@ -37,26 +37,32 @@ class HomeView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     children: [
-                      Obx(() {
-                        return (controller
-                                        .profileData
-                                        .value
-                                        .data
-                                        ?.user
-                                        ?.image ??
-                                    "")
-                                .isEmpty
-                            ? Image.asset(Asset.profil, height: 48, width: 48)
-                            : ClipOval(
-                                child: getImageView(
-                                  finalUrl:
-                                      "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
-                                  fit: BoxFit.cover,
-                                  height: 48,
-                                  width: 48,
-                                ),
-                              );
-                      }),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.ACCOUNT);
+                        },
+                        behavior: HitTestBehavior.translucent,
+                        child: Obx(() {
+                          return (controller
+                                          .profileData
+                                          .value
+                                          .data
+                                          ?.user
+                                          ?.image ??
+                                      "")
+                                  .isEmpty
+                              ? Image.asset(Asset.profil, height: 48, width: 48)
+                              : ClipOval(
+                                  child: getImageView(
+                                    finalUrl:
+                                        "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                                    fit: BoxFit.cover,
+                                    height: 48,
+                                    width: 48,
+                                  ),
+                                );
+                        }),
+                      ),
                       SizedBox(width: 1.h),
                       Flexible(
                         child: Column(
@@ -403,8 +409,7 @@ class HomeView extends StatelessWidget {
 
                                 return ListView.builder(
                                   shrinkWrap: true,
-                                  physics:
-                                      const NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: controller
                                       .categoryHierarchyData
                                       .value
@@ -433,8 +438,7 @@ class HomeView extends StatelessWidget {
                                           },
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
                                                 '${mainCategory.name ?? ''}  ',
@@ -479,8 +483,7 @@ class HomeView extends StatelessWidget {
                                                       "selectedSubCategoryId":
                                                           subCategory.id ?? 0,
                                                       "mainCategoryId":
-                                                          mainCategory.id ??
-                                                          0,
+                                                          mainCategory.id ?? 0,
                                                       "mainCategoryName":
                                                           mainCategory.name ??
                                                           '',
@@ -489,8 +492,7 @@ class HomeView extends StatelessWidget {
                                                 },
                                                 child: Column(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .center,
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     Expanded(
                                                       child: Container(
@@ -507,9 +509,7 @@ class HomeView extends StatelessWidget {
                                                             colors: [
                                                               MyColors.custom(
                                                                 'EAEAEA',
-                                                              ).withOpacity(
-                                                                0,
-                                                              ),
+                                                              ).withOpacity(0),
                                                               MyColors.custom(
                                                                 'EAEAEA',
                                                               ),
@@ -517,8 +517,8 @@ class HomeView extends StatelessWidget {
                                                           ),
                                                         ),
                                                         child: Stack(
-                                                          alignment: Alignment
-                                                              .center,
+                                                          alignment:
+                                                              Alignment.center,
                                                           children: [
                                                             Padding(
                                                               padding:
@@ -533,8 +533,8 @@ class HomeView extends StatelessWidget {
                                                                     (subCategory
                                                                             .image ??
                                                                         ''),
-                                                                fit: BoxFit
-                                                                    .fill,
+                                                                fit:
+                                                                    BoxFit.fill,
                                                                 placeholder:
                                                                     (
                                                                       context,
@@ -553,8 +553,7 @@ class HomeView extends StatelessWidget {
                                                                           .category,
                                                                       color: MyColors
                                                                           .primary,
-                                                                      size:
-                                                                          24,
+                                                                      size: 24,
                                                                     ),
                                                               ),
                                                             ),
@@ -573,10 +572,10 @@ class HomeView extends StatelessWidget {
                                                         child: Text(
                                                           subCategory.name ??
                                                               '',
-                                                          style: MyTexts
-                                                              .medium14,
-                                                          textAlign: TextAlign
-                                                              .center,
+                                                          style:
+                                                              MyTexts.medium14,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                         ),
                                                       ),
                                                     ),
@@ -585,9 +584,7 @@ class HomeView extends StatelessWidget {
                                               );
                                             },
                                           ),
-                                        SizedBox(
-                                          height: 2.h,
-                                        ),
+                                        SizedBox(height: 2.h),
                                       ],
                                     );
                                   },

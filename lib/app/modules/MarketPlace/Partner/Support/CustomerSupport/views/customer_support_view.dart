@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/controller/customer_support_controller.dart';
 import 'package:gap/gap.dart';
@@ -19,415 +20,499 @@ class CustomerSupportView extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar: CommonAppBar(
-          isCenter: false,
-          leading: const SizedBox(),
-          leadingWidth: 0,
-          title: const Text("SUPPORT TICKETS"),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: CommonTextField(
-                onChange: (value) {
-                  controller.searchTickets(value ?? "");
-                },
-                borderRadius: 22,
-                hintText: 'Search',
-                // suffixIcon: SvgPicture.asset(
-                //   Asset.filterIcon,
-                //   height: 20,
-                //   width: 20,
-                // ),
-                prefixIcon: SvgPicture.asset(
-                  Asset.searchIcon,
-                  height: 16,
-                  width: 16,
+            const CommonBgImage(),
+            Column(
+              children: [
+                CommonAppBar(
+                  backgroundColor: Colors.transparent,
+                  title: const Text('Customer Support'),
+                  isCenter: false,
+                  leading: GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.zero,
+                      child: Icon(
+                        Icons.arrow_back_ios_new_sharp,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 1.h),
-            Expanded(
-              child: RefreshIndicator(
-                backgroundColor: MyColors.primary,
-                color: Colors.white,
-                onRefresh: () async {
-                  controller.clearSearch();
-                  await controller.fetchMyTickets();
-                },
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            HearderText(text: "Customer Support Ticket"),
-                            SizedBox(height: 2.h),
-                            Row(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: CommonTextField(
+                    onChange: (value) {
+                      controller.searchTickets(value ?? "");
+                    },
+                    borderRadius: 22,
+                    hintText: 'Search',
+                    prefixIcon: SvgPicture.asset(
+                      Asset.searchIcon,
+                      height: 16,
+                      width: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Expanded(
+                  child: RefreshIndicator(
+                    backgroundColor: MyColors.primary,
+                    color: Colors.white,
+                    onRefresh: () async {
+                      controller.clearSearch();
+                      await controller.fetchMyTickets();
+                    },
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18.0,
+                            ),
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Obx(() {
-                                    return StatCard(
-                                      onTap: () {
-                                        Get.toNamed(
-                                          Routes.SUPPORT_REQUEST,
-                                          arguments: {"status": "open"},
-                                        );
-                                      },
-                                      title: 'Open Tickets',
-                                      value:
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Obx(() {
+                                        return StatCard(
+                                          onTap: () {
+                                            Get.toNamed(
+                                              Routes.SUPPORT_REQUEST,
+                                              arguments: {
+                                                "status": "open",
+                                              },
+                                            );
+                                          },
+                                          title: 'Open Tickets',
+                                          value:
                                           "${controller.supportMyTickets.value.data?.statistics?.openTickets ?? 0}",
-                                      icon: SvgPicture.asset(
-                                        Asset.warning,
-                                        height: 20,
-                                        width: 20,
-                                      ),
-                                      iconBackground: MyColors.red.withValues(
-                                        alpha: 0.2,
-                                      ),
-                                    );
-                                  }),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Obx(() {
-                                    return StatCard(
-                                      onTap: () {
-                                        Get.toNamed(
-                                          Routes.SUPPORT_REQUEST,
-                                          arguments: {"status": "inprogress"},
+                                          icon: SvgPicture.asset(
+                                            Asset.warning,
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                          iconBackground: MyColors.red
+                                              .withValues(alpha: 0.2),
                                         );
-                                      },
-                                      title: 'In Progress',
-                                      value:
+                                      }),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Obx(() {
+                                        return StatCard(
+                                          onTap: () {
+                                            Get.toNamed(
+                                              Routes.SUPPORT_REQUEST,
+                                              arguments: {
+                                                "status": "inprogress",
+                                              },
+                                            );
+                                          },
+                                          title: 'In Progress',
+                                          value:
                                           "${controller.supportMyTickets.value.data?.statistics?.inProgressTickets ?? 0}",
-                                      icon: const Icon(
-                                        Icons.watch_later_outlined,
-                                        size: 30,
-                                        color: MyColors.warning,
-                                      ),
-                                      iconBackground: MyColors.warning
-                                          .withValues(alpha: 0.2),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 1.h),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Obx(() {
-                                    return StatCard(
-                                      onTap: () {
-                                        Get.toNamed(
-                                          Routes.SUPPORT_REQUEST,
-                                          arguments: {"status": "resolved"},
+                                          icon: const Icon(
+                                            Icons.watch_later_outlined,
+                                            size: 30,
+                                            color: MyColors.warning,
+                                          ),
+                                          iconBackground: MyColors
+                                              .warning
+                                              .withValues(alpha: 0.2),
                                         );
-                                      },
-                                      title: 'Resolved',
-                                      value:
+                                      }),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 1.h),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Obx(() {
+                                        return StatCard(
+                                          onTap: () {
+                                            Get.toNamed(
+                                              Routes.SUPPORT_REQUEST,
+                                              arguments: {
+                                                "status": "resolved",
+                                              },
+                                            );
+                                          },
+                                          title: 'Resolved',
+                                          value:
                                           "${controller.supportMyTickets.value.data?.statistics?.resolvedTickets ?? 0}",
-                                      icon: const Icon(
-                                        Icons.check_circle_rounded,
-                                        size: 30,
-                                        color: MyColors.green,
-                                      ),
-                                      iconBackground: MyColors.green.withValues(
-                                        alpha: 0.2,
-                                      ),
-                                    );
-                                  }),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Obx(() {
-                                    return StatCard(
-                                      onTap: () {
-                                        Get.toNamed(
-                                          Routes.SUPPORT_REQUEST,
-                                          arguments: {"status": "closed"},
+                                          icon: const Icon(
+                                            Icons.check_circle_rounded,
+                                            size: 30,
+                                            color: MyColors.green,
+                                          ),
+                                          iconBackground: MyColors.green
+                                              .withValues(alpha: 0.2),
                                         );
-                                      },
-                                      title: 'Closed',
-                                      value:
+                                      }),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Obx(() {
+                                        return StatCard(
+                                          onTap: () {
+                                            Get.toNamed(
+                                              Routes.SUPPORT_REQUEST,
+                                              arguments: {
+                                                "status": "closed",
+                                              },
+                                            );
+                                          },
+                                          title: 'Closed',
+                                          value:
                                           "${controller.supportMyTickets.value.data?.statistics?.closedTickets ?? 0}",
-                                      icon: const Icon(
-                                        Icons.watch_later_outlined,
-                                        size: 30,
-                                        color: MyColors.primary,
-                                      ),
-                                      iconBackground: MyColors.lightBlue
-                                          .withValues(alpha: 0.2),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                            const Gap(20),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: OutlinedButton(
-                                    onPressed: () {
-                                      Get.toNamed(Routes.REQUEST_DEMO);
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(
-                                        color: MyColors.primary,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          12,
-                                        ), // Rounded corners
-                                      ),
+                                          icon: const Icon(
+                                            Icons.watch_later_outlined,
+                                            size: 30,
+                                            color: MyColors.primary,
+                                          ),
+                                          iconBackground: MyColors
+                                              .lightBlue
+                                              .withValues(alpha: 0.2),
+                                        );
+                                      }),
                                     ),
-                                    child: Text(
-                                      "Request a Demo",
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.primary,
-                                        fontFamily: MyTexts.SpaceGrotesk,
-                                      ),
-                                    ),
-                                  ),
+                                  ],
                                 ),
                                 const Gap(20),
-                                Expanded(
-                                  child: Center(
-                                    child: RoundedButton(
-                                      onTap: () {
-                                        Get.toNamed(Routes.CREATE_NEW_TICKET);
-                                      },
-                                      buttonName: '',
-                                      borderRadius: 12,
-                                      height: 48,
-                                      verticalPadding: 0,
-                                      horizontalPadding: 0,
-                                      child: Center(
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          Get.toNamed(
+                                            Routes.REQUEST_DEMO,
+                                          );
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          side: const BorderSide(
+                                            color: MyColors.primary,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                              12,
+                                            ), // Rounded corners
+                                          ),
+                                        ),
                                         child: Text(
-                                          '+ Create New Ticket',
-                                          style: MyTexts.medium16.copyWith(
-                                            color: MyColors.white,
-                                            fontFamily: MyTexts.SpaceGrotesk,
+                                          "Request a Demo",
+                                          style: MyTexts.medium15
+                                              .copyWith(
+                                            color: MyColors.primary,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                    const Gap(20),
+                                    Expanded(
+                                      child: Center(
+                                        child: RoundedButton(
+                                          onTap: () {
+                                            Get.toNamed(
+                                              Routes.CREATE_NEW_TICKET,
+                                            );
+                                          },
+                                          buttonName: '',
+                                          borderRadius: 12,
+                                          height: 40,
+                                          verticalPadding: 0,
+                                          horizontalPadding: 0,
+                                          child: Center(
+                                            child: Text(
+                                              '+ Create New Ticket',
+                                              style: MyTexts.medium15
+                                                  .copyWith(
+                                                color:
+                                                MyColors.white,
+
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                      Obx(() {
-                        if (controller
+                          ),
+                          Obx(() {
+                            if (controller
                                 .supportMyTickets
                                 .value
                                 .data
                                 ?.tickets
                                 ?.isEmpty ??
-                            true) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 80),
-                            child: Center(
-                              child: Text(
-                                "No tickets found !!",
-                                style: MyTexts.regular16.copyWith(
-                                  color: Colors.black,
+                                true) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 80),
+                                child: Center(
+                                  child: Text(
+                                    "No tickets found !!",
+                                    style: MyTexts.medium15.copyWith(
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
-                        }
+                              );
+                            }
 
-                        return (controller.filteredTickets.isEmpty &&
-                                controller.searchQuery.value.isNotEmpty)
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 100.0),
-                                child: Column(
-                                  children: [
-                                    const Gap(20),
-                                    const Icon(
-                                      Icons.support_agent,
-                                      size: 64,
+                            return (controller
+                                .filteredTickets
+                                .isEmpty &&
+                                controller
+                                    .searchQuery
+                                    .value
+                                    .isNotEmpty)
+                                ? Padding(
+                              padding: const EdgeInsets.only(
+                                top: 100.0,
+                              ),
+                              child: Column(
+                                children: [
+                                  const Gap(20),
+                                  const Icon(
+                                    Icons.support_agent,
+                                    size: 64,
+                                    color: MyColors.grey,
+                                  ),
+                                  SizedBox(height: 2.h),
+                                  Text(
+                                    'No tickets found',
+                                    style: MyTexts.medium18
+                                        .copyWith(
+                                      color:
+                                      MyColors.fontBlack,
+                                    ),
+                                  ),
+                                  SizedBox(height: 0.5.h),
+                                  Text(
+                                    'Try searching with different keywords',
+                                    style: MyTexts.regular14
+                                        .copyWith(
                                       color: MyColors.grey,
                                     ),
-                                    SizedBox(height: 2.h),
-                                    Text(
-                                      'No tickets found',
-                                      style: MyTexts.medium18.copyWith(
-                                        color: MyColors.fontBlack,
-                                      ),
-                                    ),
-                                    SizedBox(height: 0.5.h),
-                                    Text(
-                                      'Try searching with different keywords',
-                                      style: MyTexts.regular14.copyWith(
-                                        color: MyColors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.all(16),
-                                itemCount: controller.filteredTickets.length,
-                                itemBuilder: (context, index) {
-                                  final ticket =
-                                      controller.filteredTickets[index];
+                                  ),
+                                ],
+                              ),
+                            )
+                                : ListView.builder(
+                              shrinkWrap: true,
+                              physics:
+                              const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.all(16),
+                              itemCount: controller
+                                  .filteredTickets
+                                  .length,
+                              itemBuilder: (context, index) {
+                                final ticket = controller
+                                    .filteredTickets[index];
 
-                                  return Card(
-                                    color: MyColors.white,
-                                    margin: const EdgeInsets.only(bottom: 12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      side: const BorderSide(
-                                        color: MyColors.americanSilver,
-                                      ),
+                                return Container(
+                                  margin: const EdgeInsets.only(
+                                    bottom: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(12),
+                                    border: Border.all(  color:
+                                    MyColors.grayEA,)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(
+                                      16,
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              _buildChip(
-                                                ticket.ticketNumber ?? "",
-                                                MyColors.white,
-                                                MyColors.black,
-                                                borderColor:
-                                                    MyColors.americanSilver,
-                                              ),
-                                              SizedBox(width: 2.w),
-                                              _buildChip(
-                                                ticket.statusName ?? "",
-                                                _getStatusBgColor(
-                                                  ticket.statusName ?? "",
-                                                ),
-                                                MyColors.white,
-                                                icon: _getStatusIcon(
-                                                  ticket.statusName ?? "",
-                                                ),
-                                              ),
-                                              SizedBox(width: 2.w),
-                                              _buildChip(
-                                                ticket.priorityName ?? "",
-                                                MyColors.white,
-                                                _getPriorityColor(
-                                                  ticket.priorityName ?? "",
-                                                ),
-                                                borderColor: _getPriorityColor(
-                                                  ticket.priorityName ?? "",
-                                                ),
-                                                icon: _getPriorityIcon(
-                                                  ticket.priorityName ?? "",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 1.h),
-                                          Text(
-                                            (ticket.subject ?? "")
-                                                    .capitalizeFirst ??
-                                                "-",
-                                            style: MyTexts.medium16.copyWith(
-                                              color: MyColors.fontBlack,
-                                              fontFamily: MyTexts.SpaceGrotesk,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment
+                                          .start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            _buildChip(
+                                              ticket.ticketNumber ??
+                                                  "",
+                                              MyColors.white,
+                                              MyColors.black,
+                                              borderColor: MyColors
+                                                  .americanSilver,
                                             ),
-                                          ),
-                                          SizedBox(height: 1.h),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.person_outline,
-                                                size: 18,
-                                                color: MyColors.darkGray,
+                                            SizedBox(width: 2.w),
+                                            _buildChip(
+                                              ticket.statusName ??
+                                                  "",
+                                              _getStatusBgColor(
+                                                ticket.statusName ??
+                                                    "",
                                               ),
-                                              SizedBox(width: 0.4.w),
-                                              Text(
-                                                ticket.userMobile ?? "",
-                                                style: MyTexts.regular14
-                                                    .copyWith(
-                                                      color: MyColors.darkGray,
-                                                      fontFamily:
-                                                          MyTexts.SpaceGrotesk,
-                                                    ),
+                                              MyColors.white,
+                                              icon: _getStatusIcon(
+                                                ticket.statusName ??
+                                                    "",
                                               ),
-                                              SizedBox(width: 3.w),
-                                              const Icon(
-                                                Icons.category,
-                                                size: 16,
-                                                color: Colors.grey,
-                                              ),
-                                              SizedBox(width: 1.w),
-                                              Text(
-                                                ticket.categoryName ?? "",
-                                                style: MyTexts.regular14
-                                                    .copyWith(
-                                                      color: MyColors.darkGray,
-                                                      fontFamily:
-                                                          MyTexts.SpaceGrotesk,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 0.8.h),
-                                          Text(
-                                            ticket.description ?? "",
-                                            style: MyTexts.regular14.copyWith(
-                                              color: MyColors.darkGray,
-                                              fontFamily: MyTexts.SpaceGrotesk,
                                             ),
-                                          ),
-                                          SizedBox(height: 1.h),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
-                                                style: MyTexts.bold14.copyWith(
-                                                  color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.SpaceGrotesk,
-                                                ),
+                                            SizedBox(width: 2.w),
+                                            _buildChip(
+                                              ticket.priorityName ??
+                                                  "",
+                                              MyColors.white,
+                                              _getPriorityColor(
+                                                ticket.priorityName ??
+                                                    "",
                                               ),
-                                              const Spacer(),
-                                              Text(
-                                                "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
-                                                style: MyTexts.bold14.copyWith(
-                                                  color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.SpaceGrotesk,
-                                                ),
+                                              borderColor:
+                                              _getPriorityColor(
+                                                ticket.priorityName ??
+                                                    "",
                                               ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            "● Assigned to: ${ticket.assignedTo?.toString() ?? "Unassigned"}",
-                                            style: MyTexts.bold14.copyWith(
-                                              color: MyColors.darkGray,
-                                              fontFamily: MyTexts.SpaceGrotesk,
+                                              icon: _getPriorityIcon(
+                                                ticket.priorityName ??
+                                                    "",
+                                              ),
                                             ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 1.h),
+                                        Text(
+                                          (ticket.subject ?? "")
+                                              .capitalizeFirst ??
+                                              "-",
+                                          style: MyTexts.medium16
+                                              .copyWith(
+                                            color: MyColors
+                                                .gray2E,
+
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        SizedBox(height: 0.8.h),
+                                        Text(
+                                          ticket.description ??
+                                              "",
+                                          style: MyTexts.regular14
+                                              .copyWith(
+                                            color: MyColors
+                                                .darkGray,
+                                            fontFamily: MyTexts
+                                                .SpaceGrotesk,
+                                          ),
+                                        ),
+                                        SizedBox(height: 1.h),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons
+                                                  .person_outline,
+                                              size: 18,
+                                              color: MyColors
+                                                  .darkGray,
+                                            ),
+                                            SizedBox(
+                                              width: 0.4.w,
+                                            ),
+                                            Text(
+                                              ticket.userMobile ??
+                                                  "",
+                                              style: MyTexts
+                                                  .regular14
+                                                  .copyWith(
+                                                color: MyColors
+                                                    .darkGray,
+                                                fontFamily:
+                                                MyTexts
+                                                    .SpaceGrotesk,
+                                              ),
+                                            ),
+                                            SizedBox(width: 3.w),
+                                            const Icon(
+                                              Icons.category,
+                                              size: 16,
+                                              color: Colors.grey,
+                                            ),
+                                            SizedBox(width: 1.w),
+                                            Text(
+                                              ticket.categoryName ??
+                                                  "",
+                                              style: MyTexts
+                                                  .regular14
+                                                  .copyWith(
+                                                color: MyColors
+                                                    .darkGray,
+                                                fontFamily:
+                                                MyTexts
+                                                    .SpaceGrotesk,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 1.h),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
+                                              style: MyTexts
+                                                  .bold14
+                                                  .copyWith(
+                                                color: MyColors
+                                                    .darkGray,
+                                                fontFamily:
+                                                MyTexts
+                                                    .SpaceGrotesk,
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
+                                              style: MyTexts
+                                                  .bold14
+                                                  .copyWith(
+                                                color: MyColors
+                                                    .darkGray,
+                                                fontFamily:
+                                                MyTexts
+                                                    .SpaceGrotesk,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "● Assigned to: ${ticket.assignedTo?.toString() ?? "Unassigned"}",
+                                          style: MyTexts.bold14
+                                              .copyWith(
+                                            color: MyColors
+                                                .darkGray,
+                                            fontFamily: MyTexts
+                                                .SpaceGrotesk,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  );
-                                },
-                              );
-                      }),
-                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),

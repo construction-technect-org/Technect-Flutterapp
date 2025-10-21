@@ -40,6 +40,14 @@ class Asset {
   static const String edit = '${svg}edit.svg';
   static const String remove = '${svg}remove.svg';
   static const String moon = '${svg}moon.svg';
+  static const String cs = '${svg}cs.svg';
+  static const String faq = '${svg}faq.svg';
+  static const String feedback = '${svg}feedback.svg';
+  static const String location = '${svg}location.svg';
+  static const String person = '${svg}person.svg';
+  static const String privacy = '${svg}privacy.svg';
+  static const String tc = '${svg}tc.svg';
+  static const String tutorial = '${svg}tutorial.svg';
 
 
   static const String crm = '${feature}crm.png';
@@ -205,13 +213,11 @@ class Asset {
   static const String aTeam = 'assets/images/ateam.png';
   static const String link = 'assets/images/link.svg';
   static const String gift = 'assets/images/gift.svg';
-  static const String faq = 'assets/images/faq.svg';
   static const String feed = 'assets/images/feed.svg';
   static const String info = 'assets/images/info.svg';
   static const String policy = 'assets/images/policy.svg';
   static const String profile = 'assets/images/profile.svg';
   static const String sub = 'assets/images/sub.svg';
-  static const String tc = 'assets/images/tc.svg';
 
   // Connector Category
 
@@ -241,7 +247,6 @@ class Asset {
   static const String more = '${newIcons}more.svg';
   static const String more1 = '${newIcons}more1.svg';
   static const String center = '${newIcons}center.svg';
-  static const String location = '${newIcons}location.svg';
   static const String notification = '${newIcons}notification.svg';
   static const String MM = '${newIcons}MM.svg';
   static const String TEM = '${newIcons}TEM.svg';

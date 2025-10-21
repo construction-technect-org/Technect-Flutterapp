@@ -66,6 +66,7 @@ abstract class Routes {
   static const NEWS = _Paths.NEWS;
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
   static const SETTING = _Paths.SETTING;
+  static const ACCOUNT = _Paths.ACCOUNT;
 }
 
 abstract class _Paths {
@@ -132,4 +133,5 @@ abstract class _Paths {
   static const CONNECTOR_CREATE_NEW_TICKET = '/connector-create-new-ticket';
   static const WISH_LIST = '/wish-list';
   static const ON_BOARDING = '/on-boarding';
+  static const ACCOUNT = '/account';
 }
