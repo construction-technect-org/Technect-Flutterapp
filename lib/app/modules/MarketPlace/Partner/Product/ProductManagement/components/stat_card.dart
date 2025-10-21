@@ -25,8 +25,8 @@ class StatCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: MyColors.americanSilver),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: MyColors.grayEA),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
         child: Row(
@@ -37,10 +37,10 @@ class StatCard extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     color: iconBackground,
-                    borderRadius: BorderRadius.circular(10),
+                    shape: BoxShape.circle
                   ),
                   padding: const EdgeInsets.all(10),
-                  child: SizedBox(height: 36, width: 36, child: icon),
+                  child: SizedBox(height: 30, width: 30, child: icon),
                 ),
 
                 if (showCornerBadge)
@@ -64,22 +64,23 @@ class StatCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
-                    style: MyTexts.regular14.copyWith(
-                      color: MyColors.davysGrey,
-                      fontFamily: MyTexts.SpaceGrotesk,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  SizedBox(height: 0.4.h),
-                  Text(
                     value,
                     style: MyTexts.bold18.copyWith(
                       color: MyColors.fontBlack,
                       fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),
+                  SizedBox(height: 0.4.h),
+                  Text(
+                    title,
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.davysGrey,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+
+
                 ],
               ),
             ),

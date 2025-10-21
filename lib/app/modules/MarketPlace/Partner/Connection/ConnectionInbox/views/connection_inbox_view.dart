@@ -27,7 +27,7 @@ class ConnectionInboxView extends StatelessWidget {
             isCenter: false,
             leading: const SizedBox(),
             leadingWidth: 0,
-            title: const Text("CONNECTION INBOX"),
+            title: const Text("Connection Inbox"),
           ),
           body: Stack(
             children: [

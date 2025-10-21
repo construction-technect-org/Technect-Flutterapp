@@ -192,10 +192,10 @@ class CommonContainer extends StatelessWidget {
                     width: 20,
                   ),
                 ),
-                const Gap(8),
+                const Gap(12),
                 Text(
                   title,
-                  style: MyTexts.medium14.copyWith(color: MyColors.primary),
+                  style: MyTexts.medium15.copyWith(color: MyColors.primary),
                 ),
               ],
             ),

@@ -50,6 +50,8 @@ class Asset {
   static const String privacy = '${svg}privacy.svg';
   static const String tc = '${svg}tc.svg';
   static const String tutorial = '${svg}tutorial.svg';
+  static const String check = '${svg}check.svg';
+  static const String info = '${svg}info.svg';
 
 
   static const String crm = '${feature}crm.png';
@@ -216,7 +218,6 @@ class Asset {
   static const String link = 'assets/images/link.svg';
   static const String gift = 'assets/images/gift.svg';
   static const String feed = 'assets/images/feed.svg';
-  static const String info = 'assets/images/info.svg';
   static const String policy = 'assets/images/policy.svg';
   static const String profile = 'assets/images/profile.svg';
   static const String sub = 'assets/images/sub.svg';

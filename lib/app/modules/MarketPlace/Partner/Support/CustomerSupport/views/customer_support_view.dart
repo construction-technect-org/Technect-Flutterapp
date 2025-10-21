@@ -75,8 +75,7 @@ class CustomerSupportView extends StatelessWidget {
                               horizontal: 18.0,
                             ),
                             child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
@@ -86,21 +85,19 @@ class CustomerSupportView extends StatelessWidget {
                                           onTap: () {
                                             Get.toNamed(
                                               Routes.SUPPORT_REQUEST,
-                                              arguments: {
-                                                "status": "open",
-                                              },
+                                              arguments: {"status": "open"},
                                             );
                                           },
                                           title: 'Open Tickets',
                                           value:
-                                          "${controller.supportMyTickets.value.data?.statistics?.openTickets ?? 0}",
+                                              "${controller.supportMyTickets.value.data?.statistics?.openTickets ?? 0}",
                                           icon: SvgPicture.asset(
-                                            Asset.warning,
-                                            height: 20,
-                                            width: 20,
+                                            Asset.info
+                                            ,height: 24,width: 24,
                                           ),
-                                          iconBackground: MyColors.red
-                                              .withValues(alpha: 0.2),
+                                          iconBackground: const Color(
+                                            0xFFE53D26,
+                                          ),
                                         );
                                       }),
                                     ),
@@ -118,15 +115,15 @@ class CustomerSupportView extends StatelessWidget {
                                           },
                                           title: 'In Progress',
                                           value:
-                                          "${controller.supportMyTickets.value.data?.statistics?.inProgressTickets ?? 0}",
-                                          icon: const Icon(
+                                              "${controller.supportMyTickets.value.data?.statistics?.inProgressTickets ?? 0}",
+                                          icon: Icon(
                                             Icons.watch_later_outlined,
-                                            size: 30,
-                                            color: MyColors.warning,
+                                            size: 28,
+                                            color: MyColors.white,
                                           ),
-                                          iconBackground: MyColors
-                                              .warning
-                                              .withValues(alpha: 0.2),
+                                          iconBackground: const Color(
+                                            0xFFF5AC19,
+                                          ),
                                         );
                                       }),
                                     ),
@@ -141,21 +138,16 @@ class CustomerSupportView extends StatelessWidget {
                                           onTap: () {
                                             Get.toNamed(
                                               Routes.SUPPORT_REQUEST,
-                                              arguments: {
-                                                "status": "resolved",
-                                              },
+                                              arguments: {"status": "resolved"},
                                             );
                                           },
                                           title: 'Resolved',
                                           value:
-                                          "${controller.supportMyTickets.value.data?.statistics?.resolvedTickets ?? 0}",
-                                          icon: const Icon(
-                                            Icons.check_circle_rounded,
-                                            size: 30,
-                                            color: MyColors.green,
+                                              "${controller.supportMyTickets.value.data?.statistics?.resolvedTickets ?? 0}",
+                                          icon: SvgPicture.asset(Asset.check,height: 24,width: 24,),
+                                          iconBackground: const Color(
+                                            0xFF069900,
                                           ),
-                                          iconBackground: MyColors.green
-                                              .withValues(alpha: 0.2),
                                         );
                                       }),
                                     ),
@@ -166,22 +158,20 @@ class CustomerSupportView extends StatelessWidget {
                                           onTap: () {
                                             Get.toNamed(
                                               Routes.SUPPORT_REQUEST,
-                                              arguments: {
-                                                "status": "closed",
-                                              },
+                                              arguments: {"status": "closed"},
                                             );
                                           },
                                           title: 'Closed',
                                           value:
-                                          "${controller.supportMyTickets.value.data?.statistics?.closedTickets ?? 0}",
-                                          icon: const Icon(
+                                              "${controller.supportMyTickets.value.data?.statistics?.closedTickets ?? 0}",
+                                          icon: Icon(
                                             Icons.watch_later_outlined,
-                                            size: 30,
-                                            color: MyColors.primary,
+                                            size: 28,
+                                            color: MyColors.white,
                                           ),
-                                          iconBackground: MyColors
-                                              .lightBlue
-                                              .withValues(alpha: 0.2),
+                                          iconBackground: const Color(
+                                            0xFF0F1A36,
+                                          ),
                                         );
                                       }),
                                     ),
@@ -193,25 +183,21 @@ class CustomerSupportView extends StatelessWidget {
                                     Expanded(
                                       child: OutlinedButton(
                                         onPressed: () {
-                                          Get.toNamed(
-                                            Routes.REQUEST_DEMO,
-                                          );
+                                          Get.toNamed(Routes.REQUEST_DEMO);
                                         },
                                         style: OutlinedButton.styleFrom(
                                           side: const BorderSide(
                                             color: MyColors.primary,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(
+                                            borderRadius: BorderRadius.circular(
                                               12,
                                             ), // Rounded corners
                                           ),
                                         ),
                                         child: Text(
                                           "Request a Demo",
-                                          style: MyTexts.medium15
-                                              .copyWith(
+                                          style: MyTexts.medium15.copyWith(
                                             color: MyColors.primary,
                                           ),
                                         ),
@@ -234,11 +220,8 @@ class CustomerSupportView extends StatelessWidget {
                                           child: Center(
                                             child: Text(
                                               '+ Create New Ticket',
-                                              style: MyTexts.medium15
-                                                  .copyWith(
-                                                color:
-                                                MyColors.white,
-
+                                              style: MyTexts.medium15.copyWith(
+                                                color: MyColors.white,
                                               ),
                                             ),
                                           ),
@@ -252,11 +235,11 @@ class CustomerSupportView extends StatelessWidget {
                           ),
                           Obx(() {
                             if (controller
-                                .supportMyTickets
-                                .value
-                                .data
-                                ?.tickets
-                                ?.isEmpty ??
+                                    .supportMyTickets
+                                    .value
+                                    .data
+                                    ?.tickets
+                                    ?.isEmpty ??
                                 true) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 80),
@@ -271,240 +254,211 @@ class CustomerSupportView extends StatelessWidget {
                               );
                             }
 
-                            return (controller
-                                .filteredTickets
-                                .isEmpty &&
-                                controller
-                                    .searchQuery
-                                    .value
-                                    .isNotEmpty)
+                            return (controller.filteredTickets.isEmpty &&
+                                    controller.searchQuery.value.isNotEmpty)
                                 ? Padding(
-                              padding: const EdgeInsets.only(
-                                top: 100.0,
-                              ),
-                              child: Column(
-                                children: [
-                                  const Gap(20),
-                                  const Icon(
-                                    Icons.support_agent,
-                                    size: 64,
-                                    color: MyColors.grey,
-                                  ),
-                                  SizedBox(height: 2.h),
-                                  Text(
-                                    'No tickets found',
-                                    style: MyTexts.medium18
-                                        .copyWith(
-                                      color:
-                                      MyColors.fontBlack,
-                                    ),
-                                  ),
-                                  SizedBox(height: 0.5.h),
-                                  Text(
-                                    'Try searching with different keywords',
-                                    style: MyTexts.regular14
-                                        .copyWith(
-                                      color: MyColors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                                : ListView.builder(
-                              shrinkWrap: true,
-                              physics:
-                              const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.all(16),
-                              itemCount: controller
-                                  .filteredTickets
-                                  .length,
-                              itemBuilder: (context, index) {
-                                final ticket = controller
-                                    .filteredTickets[index];
-
-                                return Container(
-                                  margin: const EdgeInsets.only(
-                                    bottom: 12,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(12),
-                                    border: Border.all(  color:
-                                    MyColors.grayEA,)
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(
-                                      16,
-                                    ),
+                                    padding: const EdgeInsets.only(top: 100.0),
                                     child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment
-                                          .start,
                                       children: [
-                                        Row(
-                                          children: [
-                                            _buildChip(
-                                              ticket.ticketNumber ??
-                                                  "",
-                                              MyColors.white,
-                                              MyColors.black,
-                                              borderColor: MyColors
-                                                  .americanSilver,
-                                            ),
-                                            SizedBox(width: 2.w),
-                                            _buildChip(
-                                              ticket.statusName ??
-                                                  "",
-                                              _getStatusBgColor(
-                                                ticket.statusName ??
-                                                    "",
-                                              ),
-                                              MyColors.white,
-                                              icon: _getStatusIcon(
-                                                ticket.statusName ??
-                                                    "",
-                                              ),
-                                            ),
-                                            SizedBox(width: 2.w),
-                                            _buildChip(
-                                              ticket.priorityName ??
-                                                  "",
-                                              MyColors.white,
-                                              _getPriorityColor(
-                                                ticket.priorityName ??
-                                                    "",
-                                              ),
-                                              borderColor:
-                                              _getPriorityColor(
-                                                ticket.priorityName ??
-                                                    "",
-                                              ),
-                                              icon: _getPriorityIcon(
-                                                ticket.priorityName ??
-                                                    "",
-                                              ),
-                                            ),
-                                          ],
+                                        const Gap(20),
+                                        const Icon(
+                                          Icons.support_agent,
+                                          size: 64,
+                                          color: MyColors.grey,
                                         ),
-                                        SizedBox(height: 1.h),
+                                        SizedBox(height: 2.h),
                                         Text(
-                                          (ticket.subject ?? "")
-                                              .capitalizeFirst ??
-                                              "-",
-                                          style: MyTexts.medium16
-                                              .copyWith(
-                                            color: MyColors
-                                                .gray2E,
-
+                                          'No tickets found',
+                                          style: MyTexts.medium18.copyWith(
+                                            color: MyColors.fontBlack,
                                           ),
                                         ),
-                                        SizedBox(height: 0.8.h),
+                                        SizedBox(height: 0.5.h),
                                         Text(
-                                          ticket.description ??
-                                              "",
-                                          style: MyTexts.regular14
-                                              .copyWith(
-                                            color: MyColors
-                                                .darkGray,
-                                            fontFamily: MyTexts
-                                                .SpaceGrotesk,
-                                          ),
-                                        ),
-                                        SizedBox(height: 1.h),
-                                        Row(
-                                          children: [
-                                            const Icon(
-                                              Icons
-                                                  .person_outline,
-                                              size: 18,
-                                              color: MyColors
-                                                  .darkGray,
-                                            ),
-                                            SizedBox(
-                                              width: 0.4.w,
-                                            ),
-                                            Text(
-                                              ticket.userMobile ??
-                                                  "",
-                                              style: MyTexts
-                                                  .regular14
-                                                  .copyWith(
-                                                color: MyColors
-                                                    .darkGray,
-                                                fontFamily:
-                                                MyTexts
-                                                    .SpaceGrotesk,
-                                              ),
-                                            ),
-                                            SizedBox(width: 3.w),
-                                            const Icon(
-                                              Icons.category,
-                                              size: 16,
-                                              color: Colors.grey,
-                                            ),
-                                            SizedBox(width: 1.w),
-                                            Text(
-                                              ticket.categoryName ??
-                                                  "",
-                                              style: MyTexts
-                                                  .regular14
-                                                  .copyWith(
-                                                color: MyColors
-                                                    .darkGray,
-                                                fontFamily:
-                                                MyTexts
-                                                    .SpaceGrotesk,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 1.h),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
-                                              style: MyTexts
-                                                  .bold14
-                                                  .copyWith(
-                                                color: MyColors
-                                                    .darkGray,
-                                                fontFamily:
-                                                MyTexts
-                                                    .SpaceGrotesk,
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
-                                              style: MyTexts
-                                                  .bold14
-                                                  .copyWith(
-                                                color: MyColors
-                                                    .darkGray,
-                                                fontFamily:
-                                                MyTexts
-                                                    .SpaceGrotesk,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          "● Assigned to: ${ticket.assignedTo?.toString() ?? "Unassigned"}",
-                                          style: MyTexts.bold14
-                                              .copyWith(
-                                            color: MyColors
-                                                .darkGray,
-                                            fontFamily: MyTexts
-                                                .SpaceGrotesk,
+                                          'Try searching with different keywords',
+                                          style: MyTexts.regular14.copyWith(
+                                            color: MyColors.grey,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                );
-                              },
-                            );
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.all(16),
+                                    itemCount:
+                                        controller.filteredTickets.length,
+                                    itemBuilder: (context, index) {
+                                      final ticket =
+                                          controller.filteredTickets[index];
+
+                                      return Container(
+                                        margin: const EdgeInsets.only(
+                                          bottom: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: MyColors.grayF7,
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: MyColors.grayEA.withValues(
+                                                alpha: 0.32,
+                                              ),
+                                              blurRadius: 4,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  // Row(
+                                                  //   children: [
+                                                  //     _buildChip(
+                                                  //       ticket.ticketNumber ??
+                                                  //           "",
+                                                  //       MyColors.white,
+                                                  //       MyColors.black,
+                                                  //       borderColor: MyColors
+                                                  //           .americanSilver,
+                                                  //     ),
+                                                  //     SizedBox(width: 2.w),
+                                                  //     _buildChip(
+                                                  //       ticket.statusName ??
+                                                  //           "",
+                                                  //       _getStatusBgColor(
+                                                  //         ticket.statusName ??
+                                                  //             "",
+                                                  //       ),
+                                                  //       MyColors.white,
+                                                  //       icon: _getStatusIcon(
+                                                  //         ticket.statusName ??
+                                                  //             "",
+                                                  //       ),
+                                                  //     ),
+                                                  //     SizedBox(width: 2.w),
+                                                  //     _buildChip(
+                                                  //       ticket.priorityName ??
+                                                  //           "",
+                                                  //       MyColors.white,
+                                                  //       _getPriorityColor(
+                                                  //         ticket.priorityName ??
+                                                  //             "",
+                                                  //       ),
+                                                  //       borderColor:
+                                                  //       _getPriorityColor(
+                                                  //         ticket.priorityName ??
+                                                  //             "",
+                                                  //       ),
+                                                  //       icon: _getPriorityIcon(
+                                                  //         ticket.priorityName ??
+                                                  //             "",
+                                                  //       ),
+                                                  //     ),
+                                                  //   ],
+                                                  // ),
+                                                  // Text(
+                                                  //   "Category - ${(ticket.categoryName ?? "")
+                                                  //       .capitalizeFirst ??
+                                                  //       "-"}"
+                                                  //   ,
+                                                  //   style: MyTexts.medium16
+                                                  //       .copyWith(
+                                                  //     color: MyColors
+                                                  //         .black,
+                                                  //
+                                                  //   ),
+                                                  // ),
+                                                  SizedBox(height: 0.8.h),
+                                                  Text(
+                                                    (ticket.subject ?? "")
+                                                            .capitalizeFirst ??
+                                                        "-",
+                                                    style: MyTexts.medium15
+                                                        .copyWith(
+                                                          color:
+                                                              MyColors.gray2E,
+                                                        ),
+                                                  ),
+                                                  SizedBox(height: 0.8.h),
+                                                  Text(
+                                                    ticket.description ?? "",
+                                                    style: MyTexts.medium14
+                                                        .copyWith(
+                                                          color:
+                                                              MyColors.darkGray,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 16,
+                                                    vertical: 6,
+                                                  ),
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(16),
+                                                  bottomRight: Radius.circular(
+                                                    16,
+                                                  ),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                ticket.categoryName ?? "",
+                                                style: MyTexts.medium15
+                                                    .copyWith(
+                                                      color: MyColors.black,
+                                                    ),
+                                              ),
+                                            ),
+                                            const Gap(8),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 16,
+                                                    vertical: 6,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                color: _getPriorityColor(
+                                                  ticket.priorityName ?? "",
+                                                ),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                      topRight: Radius.circular(
+                                                        8,
+                                                      ),
+                                                      // topLeft: Radius.circular(8),
+                                                      bottomLeft:
+                                                          Radius.circular(16),
+                                                    ),
+                                              ),
+                                              child: Text(
+                                                ticket.priorityName ?? "",
+                                                style: MyTexts.medium14
+                                                    .copyWith(
+                                                      color: MyColors.gray54,
+                                                    ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
                           }),
                         ],
                       ),
@@ -545,11 +499,13 @@ class CustomerSupportView extends StatelessWidget {
   Color _getPriorityColor(String priority) {
     switch (priority) {
       case "Medium":
-        return MyColors.warning;
+        return const Color(0xFFE6EDFF);
       case "High":
-        return MyColors.red;
+        return const Color(0xFFFCECE9);
+      case "Low":
+        return const Color(0xFFFEF7E8);
       default:
-        return MyColors.fontBlack;
+        return const Color(0xFFFCECE9);
     }
   }
 
