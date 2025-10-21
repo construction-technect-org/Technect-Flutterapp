@@ -7,7 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 class SettingView extends GetView<SettingController> {
   const SettingView({super.key});
@@ -193,7 +192,7 @@ class SettingView extends GetView<SettingController> {
                                   onChanged: (val) {
                                     controller.isDarkMode.value = val;
                                     controller.isLightMode.value =
-                                    !controller.isLightMode.value;
+                                        !controller.isLightMode.value;
                                   },
                                 );
                               }),
@@ -216,7 +215,7 @@ class SettingView extends GetView<SettingController> {
                                   onChanged: (val) {
                                     controller.isLightMode.value = val;
                                     controller.isDarkMode.value =
-                                    !controller.isDarkMode.value;
+                                        !controller.isDarkMode.value;
                                   },
                                 );
                               }),
@@ -282,7 +281,7 @@ class SettingView extends GetView<SettingController> {
 void _showConfirmDialog(
   BuildContext context, {
   required String title,
-   String? message,
+  String? message,
   required String confirmText,
   required VoidCallback onConfirm,
 }) {
@@ -291,30 +290,30 @@ void _showConfirmDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       backgroundColor: Colors.white,
       titlePadding: const EdgeInsets.all(20),
-      contentPadding: const EdgeInsets.only(left: 16,right: 16, bottom: 16),
+      contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       title: Container(
         decoration: BoxDecoration(
           border: Border.all(color: const Color(0xFFF9D0CB)),
           color: const Color(0xFFFCECE9),
-          borderRadius: BorderRadius.circular(8)
+          borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Center(
           child: Text(
             title,
-            style: MyTexts.medium15.copyWith(
-              color: MyColors.gray2E,
-            ),
+            style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
             textAlign: TextAlign.center,
           ),
         ),
       ),
-      content:(message??"").isEmpty?null: Text(
-        message??"",
-        style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-        textAlign: TextAlign.center,
-      ),
+      content: (message ?? "").isEmpty
+          ? null
+          : Text(
+              message ?? "",
+              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+              textAlign: TextAlign.center,
+            ),
       actions: [
         Row(
           children: [
@@ -382,7 +381,9 @@ class AccountActionScreen extends StatelessWidget {
                 children: [
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
-                    title: Text(isDelete ? "Delete Account" : "Deactivate Account"),
+                    title: Text(
+                      isDelete ? "Delete Account" : "Deactivate Account",
+                    ),
                     isCenter: false,
                     leading: GestureDetector(
                       onTap: () {
@@ -399,11 +400,12 @@ class AccountActionScreen extends StatelessWidget {
                     ),
                   ),
                   SingleChildScrollView(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Obx(
                       () => Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const Gap(16),
                           CommonPhoneField(
                             headerText: "Mobile Number",
                             controller: controller.mobileController,
@@ -430,59 +432,6 @@ class AccountActionScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          if (controller.isOtpStep.value) ...[
-                            Text(
-                              "Enter the verification code sent to your mobile/email",
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.primary,
-                                fontFamily: MyTexts.SpaceGrotesk,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            PinCodeTextField(
-                              appContext: context,
-                              length: 4,
-                              controller: controller.otpController,
-                              onChanged: (value) =>
-                                  controller.otpController.text = value,
-                              onCompleted: (value) =>
-                                  controller.otpController.text = value,
-                              keyboardType: TextInputType.number,
-                              textStyle: MyTexts.extraBold16.copyWith(
-                                color: MyColors.primary,
-                              ),
-                              pinTheme: PinTheme(
-                                shape: PinCodeFieldShape.box,
-                                borderRadius: BorderRadius.circular(12),
-                                borderWidth: 0.5,
-                                fieldHeight: 57,
-                                fieldWidth: 57,
-                                activeFillColor: MyColors.white,
-                                inactiveFillColor: MyColors.white,
-                                selectedFillColor: MyColors.white,
-                                activeColor: MyColors.primary,
-                                inactiveColor: MyColors.textFieldBorder,
-                                selectedColor: MyColors.primary,
-                              ),
-                              enableActiveFill: true,
-                              animationType: AnimationType.fade,
-                            ),
-                            const SizedBox(height: 20),
-
-                            /// Step 2 button
-                            RoundedButton(
-                              onTap: controller.isLoading.value
-                                  ? () {}
-                                  : () => controller.confirmAction(
-                                      actionType: actionType,
-                                      isDeactivate: !isDelete,
-                                    ),
-                              buttonName: isDelete
-                                  ? "Confirm Delete"
-                                  : "Confirm Deactivate",
-                            ),
-                            const SizedBox(height: 20),
-                          ],
 
                           /// Info text
                           Row(
@@ -501,17 +450,6 @@ class AccountActionScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
-                          if (!controller.isOtpStep.value)
-                            RoundedButton(
-                              onTap: controller.isLoading.value
-                                  ? () {}
-                                  : () =>
-                                        controller.requestOtp(isDeactivate: !isDelete),
-                              buttonName: isDelete
-                                  ? "Request OTP for Deletion"
-                                  : "Request OTP for Deactivation",
-                            ),
                         ],
                       ),
                     ),
@@ -520,7 +458,66 @@ class AccountActionScreen extends StatelessWidget {
               ),
             ],
           ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: RoundedButton(
+              onTap: controller.isLoading.value
+                  ? () {}
+                  : () => controller.requestOtp(
+                      isDeactivate: !isDelete,
+                      actionType: actionType,
+                    ),
+              buttonName: isDelete
+                  ? "Request OTP for Deletion"
+                  : "Request OTP for Deactivation",
+            ),
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class SuccessAction extends StatelessWidget {
+  final String actionType;
+
+  const SuccessAction({super.key, required this.actionType});
+
+  @override
+  Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 2), () {
+      Get.offAllNamed(Routes.LOGIN);
+    });
+    return Scaffold(
+      body: Stack(
+        alignment: AlignmentGeometry.center,
+        children: [
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Asset.loginBg),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 34, horizontal: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xffFCECE9),
+              border: Border.all(color: const Color(0xffF9D0CB)),
+            ),
+            child: Text(
+              "Your account is $actionType",
+              style: MyTexts.bold18.copyWith(color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }

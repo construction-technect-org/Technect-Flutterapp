@@ -1,7 +1,10 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/services/SettingService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/views/setting_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:timer_count_down/timer_controller.dart';
 
 class SettingController extends GetxController {
   RxBool isNotification = false.obs;
@@ -37,9 +40,23 @@ class SettingController extends GetxController {
 
   SettingService settingService = SettingService();
 
-  Future<void> requestOtp({required bool isDeactivate}) async {
+  final countdownController = CountdownController(autoStart: true);
+  RxBool isResendVisible = false.obs;
+
+  void startTimer() {
+    isResendVisible.value = false;
+    countdownController.restart();
+  }
+
+  void onCountdownFinish() {
+    isResendVisible.value = true;
+  }
+
+  Future<void> requestOtp({
+    required bool isDeactivate,
+    required String actionType,
+  }) async {
     if (!_validateInputs()) return;
-    isLoading.value = true;
     isLoading.value = true;
 
     try {
@@ -52,6 +69,26 @@ class SettingController extends GetxController {
 
       if (otpResponse.success == true) {
         isOtpStep.value = true;
+        Get.to(
+          () => OtpVerificationView(
+            isLoading: isLoading,
+            isBackToLogin: false,
+            onTap: () {
+              // await sendOtp().then((val) {
+              startTimer();
+              // });
+            },
+            countdownController: countdownController,
+            isResendVisible: isResendVisible,
+            otpController: otpController,
+            onCompleted: (value) {
+              confirmAction(actionType: actionType, isDeactivate: isDeactivate);
+            },
+            onFinished: () {
+              onCountdownFinish();
+            },
+          ),
+        );
         SnackBars.successSnackBar(content: 'OTP sent successfully');
       } else {
         SnackBars.errorSnackBar(
@@ -86,14 +123,11 @@ class SettingController extends GetxController {
         otp: otpController.text,
       );
 
-      if (otpResponse.success == true && otpResponse.data?.verified == true) {
-        SnackBars.successSnackBar(
-          content: "${actionType ?? "".capitalizeFirst} account completed",
-        );
+      if (otpResponse.success == true) {
         myPref.clear();
         Get.offAllNamed(Routes.LOGIN);
+        Get.to(() => SuccessAction(actionType: actionType??""));
       } else {
-
         SnackBars.errorSnackBar(
           content: otpResponse.message ?? 'OTP verification failed',
         );
@@ -113,26 +147,14 @@ class SettingController extends GetxController {
       );
 
       if (otpResponse.success == true) {
-        if (myPref.getRole() == "merchant_connector"){
-          Get.find<ConnectorHomeController>()
-              .profileData
-              .value
-              .data
-              ?.user
-              ?.isNotificationSend =
-              isNotification;
-          Get.find<ConnectorHomeController>().profileData.refresh();
-        }
-        else{
-          Get.find<HomeController>()
-              .profileData
-              .value
-              .data
-              ?.user
-              ?.isNotificationSend =
-              isNotification;
-          Get.find<HomeController>().profileData.refresh();
-        }
+        Get.find<HomeController>()
+                .profileData
+                .value
+                .data
+                ?.user
+                ?.isNotificationSend =
+            isNotification;
+        Get.find<HomeController>().profileData.refresh();
 
         SnackBars.successSnackBar(content: otpResponse.message ?? "");
       } else {
@@ -151,24 +173,13 @@ class SettingController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    if (myPref.getRole() == "merchant_connector") {
-      isNotification.value =
-          Get.find<ConnectorHomeController>()
-              .profileData
-              .value
-              .data
-              ?.user
-              ?.isNotificationSend ??
-          false;
-    } else {
-      isNotification.value =
-          Get.find<HomeController>()
-              .profileData
-              .value
-              .data
-              ?.user
-              ?.isNotificationSend ??
-          false;
-    }
+    isNotification.value =
+        Get.find<HomeController>()
+            .profileData
+            .value
+            .data
+            ?.user
+            ?.isNotificationSend ??
+        false;
   }
 }

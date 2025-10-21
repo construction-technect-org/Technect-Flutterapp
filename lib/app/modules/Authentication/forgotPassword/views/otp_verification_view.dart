@@ -7,6 +7,7 @@ import 'package:timer_count_down/timer_count_down.dart';
 
 class OtpVerificationView extends StatelessWidget {
   RxBool isLoading;
+  bool? isBackToLogin;
   RxBool isResendVisible;
   TextEditingController otpController;
   Function(String)? onCompleted;
@@ -18,6 +19,7 @@ class OtpVerificationView extends StatelessWidget {
     super.key,
     required this.isLoading,
     required this.isResendVisible,
+     this.isBackToLogin=true,
     required this.otpController,
     required this.onCompleted,
     required this.onFinished,
@@ -132,6 +134,7 @@ class OtpVerificationView extends StatelessWidget {
                         );
                 }),
                 Gap(MediaQuery.of(context).size.height / 3),
+                if(isBackToLogin==true)
                 TextButton(
                   onPressed: () {
                     Get.offAllNamed(Routes.LOGIN);
