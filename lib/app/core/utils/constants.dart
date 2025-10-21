@@ -15,6 +15,7 @@ class Asset {
   static const String cBg = '${bg}cBg.png';
   static const String moreBg = '${bg}moreBg.png';
   static const String moreIBg = '${bg}moreIBg.png';
+  static const String exploreBg = '${bg}exploreBg.png';
 
   static const String appLogo = '${png}appLogo.png';
   static const String ob1 = '${png}ob1.png';
@@ -23,6 +24,7 @@ class Asset {
   static const String contractor = '${png}contractor.png';
   static const String totalProduct = '${png}totalProduct.png';
   static const String pdf = '${png}pdf.png';
+  static const String comingSoon = '${png}comingSoon.png';
 
   static const String back = '${svg}back.svg';
   static const String chat = '${svg}chat.svg';

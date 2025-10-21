@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/controllers/dashboard_controller.dart';
+import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/explore_view.dart';
 import 'package:gap/gap.dart';
 
 class DashboardView extends GetView<DashboardController> {
@@ -115,7 +116,11 @@ class DashboardView extends GetView<DashboardController> {
                           ),
                         ),
                         const Gap(10),
-                        Image.asset(Asset.explore, width: 18.w),
+                        GestureDetector(
+                            onTap: (){
+                              Get.to(()=>const ExploreView());
+                            },
+                            child: Image.asset(Asset.explore, width: 18.w)),
                         const Gap(10),
                         GestureDetector(
                           onTap: () {
@@ -220,10 +225,10 @@ class DashboardView extends GetView<DashboardController> {
           bottomNavigationBar: Padding(
             padding: EdgeInsets.only(left: 2.h, right: 2.h, bottom: 2.h),
             child: RoundedButton(
-              buttonName: 'PROCEED',
+              buttonName: 'Process',
               onTap: () {
                 if (controller.selectedIndex.value == 0) {
-                  Get.toNamed(Routes.MAIN);
+                  Get.offAllNamed(Routes.MAIN);
                 } else {
                   SnackBars.errorSnackBar(content: 'Please select one feature');
                 }
@@ -339,7 +344,7 @@ class BuildFeatureCard extends StatelessWidget {
                       child:  Text("Coming Soon",style: MyTexts.medium13.copyWith(color: MyColors.gray2E),),
                     ),
                   ),
-                Spacer(),
+                const Spacer(),
                 Image.asset(
                   item['icon'].toString(),
                   height: itemWidth * 0.50,
@@ -350,7 +355,7 @@ class BuildFeatureCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                 ),
-                Spacer(),
+                const Spacer(),
 
               ],
             ),

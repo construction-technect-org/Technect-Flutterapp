@@ -17,9 +17,7 @@ class CategoryView extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Image
           Container(
-            margin: const EdgeInsets.only(top: 25),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(Asset.categoryBg),

@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/dashboard_view.dart';
+import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/explore_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:gap/gap.dart';
@@ -21,7 +22,6 @@ class HomeView extends StatelessWidget {
         body: Stack(
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 25),
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(Asset.categoryBg),
@@ -242,7 +242,11 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
                       const Gap(10),
-                      Image.asset(Asset.explore, width: 18.w),
+                      GestureDetector(
+                          onTap: (){
+                            Get.to(()=>const ExploreView());
+                          },
+                          child: Image.asset(Asset.explore, width: 18.w)),
                       const Gap(10),
                       GestureDetector(
                         onTap: () {
