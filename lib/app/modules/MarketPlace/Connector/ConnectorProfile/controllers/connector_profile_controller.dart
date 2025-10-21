@@ -3,7 +3,7 @@
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
 class ConnectorProfileController extends GetxController {
@@ -11,7 +11,7 @@ class ConnectorProfileController extends GetxController {
   final isLoading = false.obs;
 
 
-  ConnectorHomeController get homeController => Get.find<ConnectorHomeController>();
+  HomeController get homeController => Get.find<HomeController>();
 
   ProfileModel get profileData => homeController.profileData.value;
   ConnectorProfile? get connectorProfile => profileData.data?.connectorProfile;

@@ -16,43 +16,6 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 4.h),
-        // Avatar
-        Center(
-          child: Stack(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 8, right: 8),
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  color: MyColors.primary,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Image.asset(Asset.infoIcon),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFED29),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Icon(Icons.photo_camera,
-                      size: 20, color: MyColors.black),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Info Section
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Row(
@@ -60,18 +23,18 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
             children: [
               Text(
                 'Information',
-                style: MyTexts.medium16.copyWith(
-                  color: MyColors.fontBlack,
-                  fontFamily: MyTexts.SpaceGrotesk,
-                ),
+                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
               ),
               const Spacer(),
-              IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: (){
-                  Get.to(()=>EditProfile());
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => EditProfile());
                 },
-                icon: const Icon(Icons.edit, color: Colors.black, size: 20),
+                behavior: HitTestBehavior.translucent,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: SvgPicture.asset(Asset.edit),
+                ),
               ),
             ],
           ),
@@ -87,44 +50,50 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'VERIFY KYC',
-                style: MyTexts.medium16.copyWith(
-                  color: MyColors.fontBlack,
-                  fontFamily: MyTexts.SpaceGrotesk,
-                ),
+                'KYC Details',
+                style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
               ),
-              const Spacer(),
-              if (connectorProfile != null &&
-                  (connectorProfile.aadhaarNumber != null ||
-                      connectorProfile.panNumber != null))
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    Get.toNamed(
-                      Routes.ADD_KYC,
-                      arguments: {
-                        'kycId': connectorProfile.id,
-                        'aadhaar_number': connectorProfile.aadhaarNumber,
-                        'pan_number': connectorProfile.panNumber,
-                        'aadhaar_front': connectorProfile.documents
-                            ?.firstWhereOrNull(
-                                (d) => d.documentType == 'aadhaar_front')
-                            ?.filePath,
-                        'aadhaar_back': connectorProfile.documents
-                            ?.firstWhereOrNull(
-                                (d) => d.documentType == 'aadhaar_back')
-                            ?.filePath,
-                        'pan_front': connectorProfile.documents
-                            ?.firstWhereOrNull((d) => d.documentType == 'pan_front')
-                            ?.filePath,
-                        'pan_back': connectorProfile.documents
-                            ?.firstWhereOrNull((d) => d.documentType == 'pan_back')
-                            ?.filePath,
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.edit, color: Colors.black, size: 20),
-                ),
+              // const Spacer(),
+              // if (connectorProfile != null &&
+              //     (connectorProfile.aadhaarNumber != null ||
+              //         connectorProfile.panNumber != null))
+              //   GestureDetector(
+              //     onTap: () {
+              //       Get.toNamed(
+              //         Routes.ADD_KYC,
+              //         arguments: {
+              //           'kycId': connectorProfile.id,
+              //           'aadhaar_number': connectorProfile.aadhaarNumber,
+              //           'pan_number': connectorProfile.panNumber,
+              //           'aadhaar_front': connectorProfile.documents
+              //               ?.firstWhereOrNull(
+              //                 (d) => d.documentType == 'aadhaar_front',
+              //               )
+              //               ?.filePath,
+              //           'aadhaar_back': connectorProfile.documents
+              //               ?.firstWhereOrNull(
+              //                 (d) => d.documentType == 'aadhaar_back',
+              //               )
+              //               ?.filePath,
+              //           'pan_front': connectorProfile.documents
+              //               ?.firstWhereOrNull(
+              //                 (d) => d.documentType == 'pan_front',
+              //               )
+              //               ?.filePath,
+              //           'pan_back': connectorProfile.documents
+              //               ?.firstWhereOrNull(
+              //                 (d) => d.documentType == 'pan_back',
+              //               )
+              //               ?.filePath,
+              //         },
+              //       );
+              //     },
+              //     behavior: HitTestBehavior.translucent,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(4.0),
+              //       child: SvgPicture.asset(Asset.edit),
+              //     ),
+              //   ),
             ],
           ),
         ),
@@ -148,7 +117,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: MyColors.white,
-          border: Border.all(color: MyColors.primary),
+          border: Border.all(color: MyColors.grayEA),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Obx(() {
@@ -160,18 +129,18 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
               buildRow(
                 title: "Name",
                 data:
-                '${(userData?.firstName ?? '').capitalizeFirst} ${(userData?.lastName ?? '').capitalizeFirst}'
-                    .trim()
-                    .isEmpty
+                    '${(userData?.firstName ?? '').capitalizeFirst} ${(userData?.lastName ?? '').capitalizeFirst}'
+                        .trim()
+                        .isEmpty
                     ? 'User Name'
                     : '${(userData?.firstName ?? '').capitalizeFirst} ${(userData?.lastName ?? '').capitalizeFirst}'
-                    .trim(),
+                          .trim(),
               ),
               const Gap(6),
               buildRow(
                 title: "Mobile Number",
                 data:
-                "${userData?.countryCode ?? ''} ${userData?.mobileNumber ?? ''}",
+                    "${userData?.countryCode ?? ''} ${userData?.mobileNumber ?? ''}",
               ),
               const Gap(6),
               buildRow(title: "Email ID", data: userData?.email ?? "-"),
@@ -188,20 +157,11 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
   Widget buildRow({String? data, required String title}) {
     return Row(
       children: [
-        Text(
-          title,
-          style: MyTexts.medium16.copyWith(
-            color: MyColors.primary.withValues(alpha: 0.5),
-            fontFamily: MyTexts.SpaceGrotesk,
-          ),
-        ),
+        Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
         const Spacer(),
         Text(
           data ?? "",
-          style: MyTexts.medium16.copyWith(
-            color: MyColors.black,
-            fontFamily: MyTexts.SpaceGrotesk,
-          ),
+          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
         ),
       ],
     );
@@ -216,19 +176,21 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: MyColors.white,
-          border: Border.all(color: MyColors.primary),
+          border: Border.all(color: MyColors.grayEA),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             buildRow(
-                title: "Aadhaar Number",
-                data: connectorProfile.aadhaarNumber ?? "-"),
+              title: "Aadhaar Number",
+              data: connectorProfile.aadhaarNumber ?? "-",
+            ),
             const Gap(6),
             buildRow(
-                title: "PAN Number", data: connectorProfile.panNumber ?? "-"),
-            const Gap(12),
+              title: "PAN Number",
+              data: connectorProfile.panNumber ?? "-",
+            ),
           ],
         ),
       ),
@@ -236,60 +198,69 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
   }
 
   Widget _buildBusinessMetricsContent(connectorProfile) {
-    final bool hasKyc = connectorProfile != null &&
+    final bool hasKyc =
+        connectorProfile != null &&
         connectorProfile.aadhaarNumber != null &&
         connectorProfile.panNumber != null;
 
-    return hasKyc? const SizedBox(): GestureDetector(
-      onTap: () {
-        Get.toNamed(
-          Routes.ADD_KYC,
-          arguments: hasKyc
-              ? {
-            'kycId': connectorProfile.id,
-            'aadhaar_number': connectorProfile.aadhaarNumber,
-            'pan_number': connectorProfile.panNumber,
-            'aadhaar_front': connectorProfile.documents
-                ?.firstWhereOrNull(
-                    (d) => d.documentType == 'aadhaar_front')
-                ?.filePath,
-            'aadhaar_back': connectorProfile.documents
-                ?.firstWhereOrNull(
-                    (d) => d.documentType == 'aadhaar_back')
-                ?.filePath,
-            'pan_front': connectorProfile.documents
-                ?.firstWhereOrNull((d) => d.documentType == 'pan_front')
-                ?.filePath,
-            'pan_back': connectorProfile.documents
-                ?.firstWhereOrNull((d) => d.documentType == 'pan_back')
-                ?.filePath,
-          }
-              : null,
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: MyColors.white,
-            border: Border.all(
-              color: hasKyc ? MyColors.primary : MyColors.grey,
-              width: 1.2,
-            ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Text(
-              "+ ADD KYC DETAILS",
-              style: MyTexts.bold16.copyWith(
-                color: hasKyc ? MyColors.primary : MyColors.grey,
+    return hasKyc
+        ? const SizedBox()
+        : GestureDetector(
+            onTap: () {
+              Get.toNamed(
+                Routes.ADD_KYC,
+                arguments: hasKyc
+                    ? {
+                        'kycId': connectorProfile.id,
+                        'aadhaar_number': connectorProfile.aadhaarNumber,
+                        'pan_number': connectorProfile.panNumber,
+                        'aadhaar_front': connectorProfile.documents
+                            ?.firstWhereOrNull(
+                              (d) => d.documentType == 'aadhaar_front',
+                            )
+                            ?.filePath,
+                        'aadhaar_back': connectorProfile.documents
+                            ?.firstWhereOrNull(
+                              (d) => d.documentType == 'aadhaar_back',
+                            )
+                            ?.filePath,
+                        'pan_front': connectorProfile.documents
+                            ?.firstWhereOrNull(
+                              (d) => d.documentType == 'pan_front',
+                            )
+                            ?.filePath,
+                        'pan_back': connectorProfile.documents
+                            ?.firstWhereOrNull(
+                              (d) => d.documentType == 'pan_back',
+                            )
+                            ?.filePath,
+                      }
+                    : null,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: MyColors.white,
+                  border: Border.all(
+                    color: hasKyc ? MyColors.primary : MyColors.grey,
+                    width: 1.2,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    "+ ADD KYC DETAILS",
+                    style: MyTexts.bold16.copyWith(
+                      color: hasKyc ? MyColors.primary : MyColors.grey,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

@@ -5,7 +5,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/controllers/connector_home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:gap/gap.dart';
@@ -221,7 +220,7 @@ class EditProfileController extends GetxController {
       emailController.text = pController.userData?.email ?? "";
       image.value = pController.userData?.image ?? "";
     } else {
-      final pController = Get.find<ConnectorHomeController>();
+      final pController = Get.find<HomeController>();
       lNameController.text =
           pController.profileData.value.data?.user?.lastName ?? "";
       fNameController.text =
@@ -301,13 +300,8 @@ class EditProfileController extends GetxController {
         fields: fields,
         files: files,
       );
+      await Get.find<HomeController>().fetchProfileData();
 
-      // Handle success
-      if (myPref.getRole() == "partner") {
-        await Get.find<HomeController>().fetchProfileData();
-      } else {
-        await Get.find<ConnectorHomeController>().fetchProfileData();
-      }
       Get.back();
       SnackBars.successSnackBar(content: "Profile updated successfully!");
     } catch (e, st) {
