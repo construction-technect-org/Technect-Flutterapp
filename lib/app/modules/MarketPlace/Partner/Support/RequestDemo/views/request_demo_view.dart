@@ -38,7 +38,7 @@ class RequestDemoView extends StatelessWidget {
                     formKey.currentState?.reset();
                   },
                   child: const Text(
-                    "CANCEL",
+                    "Cancel",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -67,7 +67,7 @@ class RequestDemoView extends StatelessWidget {
                     }
                   },
                   child: Text(
-                    "SUBMIT",
+                    "Submit",
                     style: TextStyle(color: MyColors.white),
                   ),
                 ),

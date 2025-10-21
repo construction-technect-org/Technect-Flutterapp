@@ -133,7 +133,7 @@ class CreatNewTicket extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30),
             child: Obx(
               () => RoundedButton(
-                buttonName:  'SUBMIT',
+                buttonName:  'Submit',
                 onTap: controller.isSubmitting.value
                     ? null
                     : () async {
