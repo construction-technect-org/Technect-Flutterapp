@@ -126,7 +126,7 @@ class SettingController extends GetxController {
       if (otpResponse.success == true) {
         myPref.clear();
         Get.offAllNamed(Routes.LOGIN);
-        Get.to(() => SuccessAction(actionType: actionType??""));
+        Get.offAll(() => SuccessAction(actionType: actionType ?? ""));
       } else {
         SnackBars.errorSnackBar(
           content: otpResponse.message ?? 'OTP verification failed',
