@@ -563,7 +563,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       return Gap(
                         (controller.isFromAdd.value == false &&
                                 controller.isFromConnector.value == false)
-                            ? 0
+                            ? 20
                             : 20,
                       );
                     }),
@@ -605,7 +605,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ),
                     ),
                     Obx(() {
-                      return !(controller.isFromAdd.value == true &&
+                      return (controller.isFromAdd.value == false &&
+                          controller.isFromConnector.value == false)? const SizedBox():  !(controller.isFromAdd.value == true &&
                               controller.isFromConnector.value == false)
                           ? Container(
                               margin: EdgeInsets.only(top: 2.h),

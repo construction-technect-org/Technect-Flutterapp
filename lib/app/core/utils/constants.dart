@@ -38,6 +38,7 @@ class Asset {
   static const String team = '${svg}team.svg';
   static const String edit = '${svg}edit.svg';
   static const String remove = '${svg}remove.svg';
+  static const String moon = '${svg}moon.svg';
 
 
   static const String crm = '${feature}crm.png';

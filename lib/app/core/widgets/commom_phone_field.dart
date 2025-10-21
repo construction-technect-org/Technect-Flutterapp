@@ -51,10 +51,10 @@ class CommonPhoneField extends StatelessWidget {
                         fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
-                    Text(
-                      '*',
-                      style: MyTexts.medium14.copyWith(color: MyColors.red33),
-                    ),
+                    // Text(
+                    //   '*',
+                    //   style: MyTexts.medium14.copyWith(color: MyColors.red33),
+                    // ),
                   ],
                 ),
                 const Gap(5),

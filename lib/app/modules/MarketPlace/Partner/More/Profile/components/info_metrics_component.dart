@@ -13,55 +13,55 @@ class InfoMetricsComponent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 4.h),
-        Center(
-          child: Stack(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 8, right: 8),
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  color: MyColors.primary,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Image.asset(Asset.infoIcon),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFED29),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Icon(Icons.photo_camera, size: 20, color: MyColors.black),
-                ),
-              ),
-            ],
-          ),
-        ),
+        SizedBox(height: 1.h),
+        // Center(
+        //   child: Stack(
+        //     children: [
+        //       Container(
+        //         margin: const EdgeInsets.only(bottom: 8, right: 8),
+        //         width: 90,
+        //         height: 90,
+        //         decoration: BoxDecoration(
+        //           color: MyColors.primary,
+        //           borderRadius: BorderRadius.circular(18),
+        //         ),
+        //         child: Padding(
+        //           padding: const EdgeInsets.all(16),
+        //           child: Image.asset(Asset.infoIcon),
+        //         ),
+        //       ),
+        //       Positioned(
+        //         bottom: 0,
+        //         right: 0,
+        //         child: Container(
+        //           width: 30,
+        //           height: 30,
+        //           decoration: BoxDecoration(
+        //             color: const Color(0xFFFFED29),
+        //             borderRadius: BorderRadius.circular(4),
+        //           ),
+        //           child: Icon(Icons.photo_camera, size: 20, color: MyColors.black),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Information',
-              style: MyTexts.medium16.copyWith(
-                color: MyColors.fontBlack,
-                fontFamily: MyTexts.SpaceGrotesk,
-              ),
+              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
             ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 Get.to(() => EditProfile());
               },
-              icon: const Icon(Icons.edit, color: Colors.black, size: 20),
+              behavior: HitTestBehavior.translucent,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: SvgPicture.asset(Asset.edit),
+              ),
             ),
           ],
         ),
@@ -72,18 +72,18 @@ class InfoMetricsComponent extends StatelessWidget {
           children: [
             Text(
               'Business Metrics',
-              style: MyTexts.medium16.copyWith(
-                color: MyColors.fontBlack,
-                fontFamily: MyTexts.SpaceGrotesk,
-              ),
+              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
             ),
             const Spacer(),
-            IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: () async {
-                return Get.toNamed(Routes.EDIT_PROFILE);
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.EDIT_PROFILE);
               },
-              icon: const Icon(Icons.edit, color: Colors.black, size: 20),
+              behavior: HitTestBehavior.translucent,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: SvgPicture.asset(Asset.edit),
+              ),
             ),
           ],
         ),
@@ -100,9 +100,8 @@ class InfoMetricsComponent extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: () async {
+            GestureDetector(
+              onTap: () async {
                 final previousData = controller.businessHoursData.toList();
                 final result = await Get.toNamed(
                   Routes.BUSINESS_HOURS,
@@ -113,7 +112,11 @@ class InfoMetricsComponent extends StatelessWidget {
                   print(controller.businessHoursData);
                 }
               },
-              icon: const Icon(Icons.edit, color: Colors.black, size: 20),
+              behavior: HitTestBehavior.translucent,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: SvgPicture.asset(Asset.edit),
+              ),
             ),
           ],
         ),
@@ -131,7 +134,7 @@ class InfoMetricsComponent extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: MyColors.white,
-        border: Border.all(color: MyColors.primary),
+        border: Border.all(color: MyColors.grayEA),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -164,10 +167,14 @@ class InfoMetricsComponent extends StatelessWidget {
                           const Gap(6),
                           buildRow(
                             title: "Mobile Number",
-                            data: "${userData?.countryCode} ${userData?.mobileNumber}",
+                            data:
+                                "${userData?.countryCode} ${userData?.mobileNumber}",
                           ),
                           const Gap(6),
-                          buildRow(title: "Email ID", data: "${userData?.email}"),
+                          buildRow(
+                            title: "Email ID",
+                            data: "${userData?.email}",
+                          ),
                           SizedBox(height: 0.5.h),
                         ],
                       );
@@ -194,12 +201,12 @@ class InfoMetricsComponent extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: MyColors.white,
-              border: Border.all(color: MyColors.grey),
+              border: Border.all(color: MyColors.grayEA),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
               child: Text(
-                " + ADD BUSINESS DETAILS",
+                " + Add Business Details",
                 style: MyTexts.bold16.copyWith(color: MyColors.grey),
               ),
             ),
@@ -211,7 +218,7 @@ class InfoMetricsComponent extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: MyColors.white,
-            border: Border.all(color: MyColors.primary),
+            border: Border.all(color: MyColors.grayEA),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -269,129 +276,128 @@ class InfoMetricsComponent extends StatelessWidget {
   }
 
   Widget _buildBusinessHourContent() {
+    final data = controller.businessHoursData;
     return Obx(() {
-      if (controller.businessHoursData.isEmpty) {
-        return GestureDetector(
-          onTap: () async {
-            final previousData = controller.businessHoursData.toList();
-            final result = await Get.toNamed(
-              Routes.BUSINESS_HOURS,
-              arguments: previousData.isNotEmpty ? previousData : null,
-            );
-            if (result != null && result is List<Map<String, dynamic>>) {
-              controller.handleBusinessHoursData(result);
-            }
-          },
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: MyColors.white,
-              border: Border.all(color: MyColors.grey),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(
-                " + ADD BUSINESS HOURS",
-                style: MyTexts.bold16.copyWith(color: MyColors.grey),
-              ),
-            ),
-          ),
-        );
-      } else {
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: MyColors.white,
-            border: Border.all(color: MyColors.primary),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Working Hours",
-                style: MyTexts.medium16.copyWith(
-                  color: MyColors.primary.withValues(alpha: 0.5),
-                  fontFamily: MyTexts.SpaceGrotesk,
-                ),
-              ),
-              const Gap(20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [_buildBusinessHourItem()],
-                ),
-              ),
-
-              // _buildBusinessHourItem(),
-            ],
-          ),
+      if (data.isEmpty) {
+        return Text(
+          "No business hours set",
+          style: MyTexts.medium16.copyWith(color: MyColors.gray54),
         );
       }
+      data.sort(
+        (a, b) => (a['day_of_week'] as int).compareTo(b['day_of_week'] as int),
+      );
+
+      final openDays = data.where((d) => d['is_open'] == true).toList();
+      final closedDays = data.where((d) => d['is_open'] == false).toList();
+
+      final List<Widget> items = [];
+
+      for (final day in openDays) {
+        items.add(_buildBusinessHourItem([day], isOpen: true));
+      }
+
+      if (closedDays.isNotEmpty) {
+        items.add(_buildBusinessHourItem(closedDays, isOpen: false));
+      }
+
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: MyColors.grayEA),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Working Hours",
+              style: MyTexts.medium15.copyWith(color: MyColors.grayA5),
+            ),
+            const Gap(12),
+            Column(children: items),
+          ],
+        ),
+      );
     });
   }
 
-  Widget _buildBusinessHourItem() {
-    final openDays = controller.businessHoursData
-        .where((day) => day['is_open'] == true)
-        .toList();
-
-    if (openDays.isEmpty) {
-      return Text("Closed", style: MyTexts.medium14.copyWith(color: MyColors.red));
-    }
-
-    String dayRange = "";
-    if (openDays.length == 1) {
-      // Only one open day → show just that day
-      dayRange = openDays.first['day_name'];
+  Widget _buildBusinessHourItem(
+    List<Map<String, dynamic>> days, {
+    required bool isOpen,
+  }) {
+    String dayLabel = "";
+    if (days.length == 1) {
+      dayLabel = days.first['day_name'];
     } else {
-      // More than one open day → show range
-      final firstDay = openDays.first['day_name'];
-      final lastDay = openDays.last['day_name'];
-      dayRange = "$firstDay to $lastDay";
+      dayLabel = days.map((d) => d['day_name']).join(", ");
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(dayRange, style: MyTexts.medium16.copyWith(color: MyColors.green)),
-        Text(
-          "${openDays.first['open_time']} to ${openDays.first['close_time']}",
-          style: MyTexts.medium16.copyWith(color: MyColors.green),
+    final String openTime = isOpen ? (days.first['open_time'] ?? "") : "";
+    final String closeTime = isOpen ? (days.first['close_time'] ?? "") : "";
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: isOpen ? const Color(0xFFEAF0FF) : const Color(0xFFFFEEEE),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isOpen ? const Color(0xFFCAD6FF) : const Color(0xFFF5C8C8),
         ),
-        const Gap(8),
-        ...controller.businessHoursData.map((day) {
-          if (day['is_open'] == false) {
-            return Text(
-              "${day['day_name']} Closed",
-              style: MyTexts.medium14.copyWith(color: MyColors.red),
-            );
-          }
-          return const SizedBox();
-        }),
-      ],
+      ),
+      child: Column(
+        children: [
+          const Gap(16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    isOpen
+                        ? "$dayLabel ${openTime.isNotEmpty ? '$openTime - $closeTime' : ''}"
+                        : dayLabel,
+                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: AlignmentGeometry.bottomRight,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32),
+                  bottomLeft: Radius.circular(32),
+                  bottomRight: Radius.circular(32),
+                ),
+              ),
+              child: Text(
+                isOpen ? "Open" : "Closed",
+                style: MyTexts.medium14.copyWith(
+                  color: MyColors.gray2E,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget buildRow({String? data, required String title}) {
     return Row(
       children: [
-        Text(
-          title,
-          style: MyTexts.medium16.copyWith(
-            color: MyColors.primary.withValues(alpha: 0.5),
-            fontFamily: MyTexts.SpaceGrotesk,
-          ),
-        ),
+        Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
         const Spacer(),
         Text(
           data ?? "",
-          style: MyTexts.medium16.copyWith(
-            color: MyColors.black,
-            fontFamily: MyTexts.SpaceGrotesk,
-          ),
+          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
         ),
       ],
     );

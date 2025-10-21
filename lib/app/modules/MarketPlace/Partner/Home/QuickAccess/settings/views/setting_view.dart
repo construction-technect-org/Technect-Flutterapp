@@ -365,128 +365,160 @@ class AccountActionScreen extends StatelessWidget {
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
-          appBar: CommonAppBar(
-            title: Text(isDelete ? "Delete Account" : "Deactivate Account"),
-            isCenter: false,
-          ),
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Obx(
-              () => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          body: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(Asset.moreIBg),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Column(
                 children: [
-                  CommonPhoneField(
-                    headerText: "Mobile Number",
-                    controller: controller.mobileController,
-                    focusNode: FocusNode(),
-                    isValid: controller.isValid,
-                    onCountryCodeChanged: (code) =>
-                        controller.countryCode.value = code,
-                  ),
-                  const SizedBox(height: 16),
-                  CommonTextField(
-                    headerText: "Password",
-                    controller: controller.passwordController,
-                    obscureText: !controller.isPasswordVisible.value,
-                    hintText: "Enter your password",
-                    suffixIcon: GestureDetector(
-                      onTap: () => controller.isPasswordVisible.value =
-                          !controller.isPasswordVisible.value,
-                      child: Icon(
-                        controller.isPasswordVisible.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: MyColors.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  if (controller.isOtpStep.value) ...[
-                    Text(
-                      "Enter the verification code sent to your mobile/email",
-                      style: MyTexts.regular16.copyWith(
-                        color: MyColors.primary,
-                        fontFamily: MyTexts.SpaceGrotesk,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    PinCodeTextField(
-                      appContext: context,
-                      length: 4,
-                      controller: controller.otpController,
-                      onChanged: (value) =>
-                          controller.otpController.text = value,
-                      onCompleted: (value) =>
-                          controller.otpController.text = value,
-                      keyboardType: TextInputType.number,
-                      textStyle: MyTexts.extraBold16.copyWith(
-                        color: MyColors.primary,
-                      ),
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(12),
-                        borderWidth: 0.5,
-                        fieldHeight: 57,
-                        fieldWidth: 57,
-                        activeFillColor: MyColors.white,
-                        inactiveFillColor: MyColors.white,
-                        selectedFillColor: MyColors.white,
-                        activeColor: MyColors.primary,
-                        inactiveColor: MyColors.textFieldBorder,
-                        selectedColor: MyColors.primary,
-                      ),
-                      enableActiveFill: true,
-                      animationType: AnimationType.fade,
-                    ),
-                    const SizedBox(height: 20),
-
-                    /// Step 2 button
-                    RoundedButton(
-                      onTap: controller.isLoading.value
-                          ? () {}
-                          : () => controller.confirmAction(
-                              actionType: actionType,
-                              isDeactivate: !isDelete,
-                            ),
-                      buttonName: isDelete
-                          ? "Confirm Delete"
-                          : "Confirm Deactivate",
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-
-                  /// Info text
-                  Row(
-                    children: [
-                      const Icon(Icons.info, color: MyColors.red),
-                      const Gap(12),
-                      Expanded(
-                        child: Text(
-                          isDelete
-                              ? "Deleting your account will remove all stored data and connections permanently."
-                              : "Deactivating will disable your account temporarily. You can log back in to reactivate.",
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.red,
-                          ),
+                  CommonAppBar(
+                    backgroundColor: Colors.transparent,
+                    title: Text(isDelete ? "Delete Account" : "Deactivate Account"),
+                    isCenter: false,
+                    leading: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.zero,
+                        child: Icon(
+                          Icons.arrow_back_ios_new_sharp,
+                          color: Colors.black,
+                          size: 20,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  if (!controller.isOtpStep.value)
-                    RoundedButton(
-                      onTap: controller.isLoading.value
-                          ? () {}
-                          : () =>
-                                controller.requestOtp(isDeactivate: !isDelete),
-                      buttonName: isDelete
-                          ? "Request OTP for Deletion"
-                          : "Request OTP for Deactivation",
                     ),
+                  ),
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: Obx(
+                      () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonPhoneField(
+                            headerText: "Mobile Number",
+                            controller: controller.mobileController,
+                            focusNode: FocusNode(),
+                            isValid: controller.isValid,
+                            onCountryCodeChanged: (code) =>
+                                controller.countryCode.value = code,
+                          ),
+                          const SizedBox(height: 16),
+                          CommonTextField(
+                            headerText: "Password",
+                            controller: controller.passwordController,
+                            obscureText: !controller.isPasswordVisible.value,
+                            hintText: "Enter your password",
+                            suffixIcon: GestureDetector(
+                              onTap: () => controller.isPasswordVisible.value =
+                                  !controller.isPasswordVisible.value,
+                              child: Icon(
+                                controller.isPasswordVisible.value
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: MyColors.primary,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          if (controller.isOtpStep.value) ...[
+                            Text(
+                              "Enter the verification code sent to your mobile/email",
+                              style: MyTexts.regular16.copyWith(
+                                color: MyColors.primary,
+                                fontFamily: MyTexts.SpaceGrotesk,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            PinCodeTextField(
+                              appContext: context,
+                              length: 4,
+                              controller: controller.otpController,
+                              onChanged: (value) =>
+                                  controller.otpController.text = value,
+                              onCompleted: (value) =>
+                                  controller.otpController.text = value,
+                              keyboardType: TextInputType.number,
+                              textStyle: MyTexts.extraBold16.copyWith(
+                                color: MyColors.primary,
+                              ),
+                              pinTheme: PinTheme(
+                                shape: PinCodeFieldShape.box,
+                                borderRadius: BorderRadius.circular(12),
+                                borderWidth: 0.5,
+                                fieldHeight: 57,
+                                fieldWidth: 57,
+                                activeFillColor: MyColors.white,
+                                inactiveFillColor: MyColors.white,
+                                selectedFillColor: MyColors.white,
+                                activeColor: MyColors.primary,
+                                inactiveColor: MyColors.textFieldBorder,
+                                selectedColor: MyColors.primary,
+                              ),
+                              enableActiveFill: true,
+                              animationType: AnimationType.fade,
+                            ),
+                            const SizedBox(height: 20),
+
+                            /// Step 2 button
+                            RoundedButton(
+                              onTap: controller.isLoading.value
+                                  ? () {}
+                                  : () => controller.confirmAction(
+                                      actionType: actionType,
+                                      isDeactivate: !isDelete,
+                                    ),
+                              buttonName: isDelete
+                                  ? "Confirm Delete"
+                                  : "Confirm Deactivate",
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+
+                          /// Info text
+                          Row(
+                            children: [
+                              const Icon(Icons.info, color: MyColors.red),
+                              const Gap(12),
+                              Expanded(
+                                child: Text(
+                                  isDelete
+                                      ? "Deleting your account will remove all stored data and connections permanently."
+                                      : "Deactivating will disable your account temporarily. You can log back in to reactivate.",
+                                  style: MyTexts.regular14.copyWith(
+                                    color: MyColors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          if (!controller.isOtpStep.value)
+                            RoundedButton(
+                              onTap: controller.isLoading.value
+                                  ? () {}
+                                  : () =>
+                                        controller.requestOtp(isDeactivate: !isDelete),
+                              buttonName: isDelete
+                                  ? "Request OTP for Deletion"
+                                  : "Request OTP for Deactivation",
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
-            ),
+            ],
           ),
         ),
       ),

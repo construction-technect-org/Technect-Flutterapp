@@ -14,8 +14,8 @@ import 'package:image_picker/image_picker.dart';
 class EditProfile extends StatelessWidget {
   EditProfile({super.key});
 
-  // final controller = Get.find<HomeController>();
   final eController = Get.put<EditProfileController>(EditProfileController());
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,89 +24,174 @@ class EditProfile extends StatelessWidget {
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
-          appBar: CommonAppBar(
-            isCenter: false,
-            title: const Text("Edit Profile"),
-          ),
           backgroundColor: Colors.white,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              children: [
-                Obx(() {
-                  if (eController.selectedImage.value != null) {
-                    return ClipOval(
-                      child: Image.file(
-                        eController.selectedImage.value!,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
+          body: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(Asset.moreIBg),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Column(
+                children: [
+                  CommonAppBar(
+                    backgroundColor: Colors.transparent,
+                    title: const Text('Edit profile information'),
+                    isCenter: false,
+                    leading: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.zero,
+                        child: Icon(
+                          Icons.arrow_back_ios_new_sharp,
+                          color: Colors.black,
+                          size: 20,
+                        ),
                       ),
-                    );
-                  }
-
-                  final imagePath =
-                      eController.image.value;
-                  final imageUrl = imagePath.isNotEmpty
-                      ? "${APIConstants.bucketUrl}$imagePath"
-                      : null;
-                  return ClipOval(
-                    child: getImageView(
-                      finalUrl: imageUrl ?? "",
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
                     ),
-                  );
-                }),
-                const Gap(8),
-                ElevatedButton.icon(
-                  onPressed: () => eController.pickImageBottomSheet(context),
-                  icon: const Icon(Icons.camera_alt, color: Colors.white),
-                  label: const Text(
-                    "Change Photo",
-                    style: TextStyle(color: Colors.white),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.primary, // or Colors.blue
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Gap(16),
+                              Stack(
+                                alignment: Alignment.bottomRight,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => eController
+                                        .pickImageBottomSheet(context),
+                                    child: Obx(() {
+                                      if (eController.selectedImage.value !=
+                                          null) {
+                                        return ClipOval(
+                                          child: Image.file(
+                                            eController.selectedImage.value!,
+                                            width: 78,
+                                            height: 78,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        );
+                                      }
+
+                                      final imagePath = eController.image.value;
+                                      final imageUrl = imagePath.isNotEmpty
+                                          ? "${APIConstants.bucketUrl}$imagePath"
+                                          : null;
+                                      if (imageUrl == null) {
+                                        return CircleAvatar(
+                                          radius: 50,
+                                          backgroundColor: MyColors.grayEA,
+                                          child: SvgPicture.asset(
+                                            Asset.add,
+                                            height: 24,
+                                            width: 24,
+                                          ),
+                                        );
+                                      }
+
+                                      return ClipOval(
+                                        child: getImageView(
+                                          finalUrl: imageUrl,
+                                          height: 78,
+                                          width: 78,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: GestureDetector(
+                                      onTap: () => eController
+                                          .pickImageBottomSheet(context),
+                                      child: Container(
+                                        height: 32,
+                                        width: 32,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: SvgPicture.asset(
+                                            Asset.edit,
+                                            height: 12,
+                                            width: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Gap(3.h),
+                              CommonTextField(
+                                hintText: "Enter your first name",
+                                headerText: "First Name",
+                                controller: eController.fNameController,
+                                autofillHints: const [AutofillHints.givenName],
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(30),
+                                  NameInputFormatter(),
+                                ],
+                                validator: (value) => validateName(
+                                  value,
+                                  fieldName: "first name",
+                                ),
+                              ),
+                              Gap(2.h),
+                              CommonTextField(
+                                hintText: "Enter your last name",
+                                headerText: "Last Name",
+                                controller: eController.lNameController,
+                                autofillHints: const [AutofillHints.familyName],
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(30),
+                                  NameInputFormatter(),
+                                ],
+                                validator: (value) =>
+                                    validateName(value, fieldName: "last name"),
+                              ),
+                              Gap(2.h),
+                              CommonTextField(
+                                readOnly: true,
+                                hintText: "Enter your email address",
+                                headerText: "Email",
+                                controller: eController.emailController,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                Gap(2.h),
-                CommonTextField(
-                  hintText: "Enter your first name",
-                  headerText: "First Name",
-                  controller: eController.fNameController,
-                ),
-                Gap(2.h),
-                CommonTextField(
-                  hintText: "Enter your last name",
-                  headerText: "Last Name",
-                  controller: eController.lNameController,
-                ),
-                Gap(2.h),
-                CommonTextField(
-                  readOnly: true,
-                  hintText: "Enter your email address",
-                  headerText: "Email",
-                  controller: eController.emailController,
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(24.0),
             child: RoundedButton(
               buttonName: "Update",
               onTap: () {
-                if (eController.fNameController.text.isEmpty) {
-                  SnackBars.errorSnackBar(content: "Please fill first name");
-                  return;
+                if (formKey.currentState!.validate()) {
+                  eController.updateProfile();
                 }
-                if (eController.lNameController.text.isEmpty) {
-                  SnackBars.errorSnackBar(content: "Please fill last name");
-                  return;
-                }
-                eController.updateProfile();
               },
             ),
           ),
@@ -120,7 +205,7 @@ class EditProfileController extends GetxController {
   final fNameController = TextEditingController();
   final lNameController = TextEditingController();
   final emailController = TextEditingController();
-  RxString image="".obs;
+  RxString image = "".obs;
 
   Rx<File?> selectedImage = Rx<File?>(null);
 
@@ -129,20 +214,22 @@ class EditProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (myPref.getRole() == "merchant_partner") {
+    if (myPref.getRole() == "partner") {
       final pController = Get.find<ProfileController>();
       lNameController.text = pController.userData?.lastName ?? "";
       fNameController.text = pController.userData?.firstName ?? "";
       emailController.text = pController.userData?.email ?? "";
       image.value = pController.userData?.image ?? "";
-    }else{
+    } else {
       final pController = Get.find<ConnectorHomeController>();
-      lNameController.text = pController.profileData.value.data?.user?.lastName ?? "";
-      fNameController.text = pController.profileData.value.data?.user?.firstName ?? "";
-      emailController.text = pController.profileData.value.data?.user?.email ?? "";
+      lNameController.text =
+          pController.profileData.value.data?.user?.lastName ?? "";
+      fNameController.text =
+          pController.profileData.value.data?.user?.firstName ?? "";
+      emailController.text =
+          pController.profileData.value.data?.user?.email ?? "";
       image.value = pController.profileData.value.data?.user?.image ?? "";
     }
-
   }
 
   void pickImageBottomSheet(BuildContext context) {
@@ -156,16 +243,22 @@ class EditProfileController extends GetxController {
         child: Wrap(
           children: [
             ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text("Camera"),
+              leading: const Icon(Icons.camera_alt, color: MyColors.gray2E),
+              title: Text(
+                "Camera",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.camera);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.photo),
-              title: const Text("Gallery"),
+              leading: const Icon(Icons.photo, color: MyColors.gray2E),
+              title: Text(
+                "Gallery",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
               onTap: () {
                 Get.back();
                 _pickImage(ImageSource.gallery);
@@ -210,7 +303,7 @@ class EditProfileController extends GetxController {
       );
 
       // Handle success
-      if (myPref.getRole() == "merchant_partner") {
+      if (myPref.getRole() == "partner") {
         await Get.find<HomeController>().fetchProfileData();
       } else {
         await Get.find<ConnectorHomeController>().fetchProfileData();

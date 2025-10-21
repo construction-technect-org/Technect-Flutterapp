@@ -21,7 +21,6 @@ class InventoryView extends GetView<InventoryController> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
-                const Gap(16),
                 CommonTextField(
                   onChange: (value) {
                     controller.searchProducts(value);
@@ -101,6 +100,7 @@ class InventoryView extends GetView<InventoryController> {
                                     false,
                                     "isFromConnector":
                                     false,
+                                    "isFromEdit": false,
                                   },
                                 );
                               },
