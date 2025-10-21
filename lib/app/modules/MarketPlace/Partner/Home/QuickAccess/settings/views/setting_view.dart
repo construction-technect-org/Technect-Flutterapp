@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/controller/setting_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 
@@ -17,16 +18,7 @@ class SettingView extends GetView<SettingController> {
       backgroundColor: MyColors.white,
       body: Stack(
         children: [
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Asset.moreIBg),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          const CommonBgImage(),
           Column(
             children: [
               CommonAppBar(

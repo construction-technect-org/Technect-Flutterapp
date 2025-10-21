@@ -38,7 +38,7 @@ class AddTeamView extends GetView<AddTeamController> {
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
                     title: Text(
-                      controller.isEdit.value ? "EDIT TEAM" : "ADD TEAM",
+                      controller.isEdit.value ? "Edit Team" : "Add Team",
                     ),
                     isCenter: false,
                     leading: GestureDetector(

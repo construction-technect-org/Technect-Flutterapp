@@ -22,6 +22,7 @@ class Asset {
   static const String role1 = '${png}role1.png';
   static const String contractor = '${png}contractor.png';
   static const String totalProduct = '${png}totalProduct.png';
+  static const String pdf = '${png}pdf.png';
 
   static const String back = '${svg}back.svg';
   static const String chat = '${svg}chat.svg';

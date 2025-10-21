@@ -30,10 +30,9 @@ class CertificationsComponent extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${cert.title}${cert.isDefault ? "*" : ''}',
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.fontBlack,
-                        fontFamily: MyTexts.SpaceGrotesk,
+                      cert.title,
+                      style: MyTexts.medium15.copyWith(
+                        color: MyColors.gray2E,
                       ),
                     ),
                     const Spacer(),
@@ -43,7 +42,10 @@ class CertificationsComponent extends StatelessWidget {
                         final fileName = cert.name ?? '';
 
                         if (url != null && url.isNotEmpty) {
-                          final fileExtension = fileName.toLowerCase().split('.').last;
+                          final fileExtension = fileName
+                              .toLowerCase()
+                              .split('.')
+                              .last;
                           final isImage = [
                             'jpg',
                             'jpeg',
@@ -56,7 +58,10 @@ class CertificationsComponent extends StatelessWidget {
                           if (url.startsWith("merchant")) {
                             final uri = Uri.parse(APIConstants.bucketUrl + url);
                             if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                              await launchUrl(
+                                uri,
+                                mode: LaunchMode.externalApplication,
+                              );
                             }
                           } else if (url.startsWith("/") ||
                               url.contains("file://") ||
@@ -104,7 +109,9 @@ class CertificationsComponent extends StatelessWidget {
                                     ),
                                     () async => await launchUrl(uri),
                                     () async => await launchUrl(uri),
-                                    () async => await launchUrl(Uri.parse('file://$url')),
+                                    () async => await launchUrl(
+                                      Uri.parse('file://$url'),
+                                    ),
                                   ];
 
                                   bool launched = false;
@@ -125,30 +132,48 @@ class CertificationsComponent extends StatelessWidget {
                                   }
                                 } else {
                                   SnackBars.errorSnackBar(
-                                    content: "Only PDF and image files are supported.",
+                                    content:
+                                        "Only PDF and image files are supported.",
                                   );
                                 }
                               } else {
-                                SnackBars.errorSnackBar(content: "File not found");
+                                SnackBars.errorSnackBar(
+                                  content: "File not found",
+                                );
                               }
                             } catch (e) {
-                              SnackBars.errorSnackBar(content: "Unable to open file: $e");
+                              SnackBars.errorSnackBar(
+                                content: "Unable to open file: $e",
+                              );
                             }
                           } else if (url.startsWith("http://") ||
                               url.startsWith("https://")) {
                             final uri = Uri.parse(url);
                             if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                              await launchUrl(
+                                uri,
+                                mode: LaunchMode.externalApplication,
+                              );
                             }
                           }
                         }
                       },
-                      child: const Icon(Icons.visibility, color: MyColors.primary),
+                      child: const Icon(
+                        Icons.visibility,
+                        color: MyColors.primary,
+                      ),
                     ),
                     if (cert.filePath != null)
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: MyColors.red),
-                        onPressed: () => controller.removeCertificate(index),
+                      Row(
+                        children: [
+                          const Gap(10),
+                          GestureDetector(
+                            onTap: () {
+                              controller.removeCertificate(index);
+                            },
+                            child: SvgPicture.asset(Asset.delete),
+                          ),
+                        ],
                       ),
                   ],
                 ),
@@ -194,7 +219,6 @@ class CertificationsComponent extends StatelessWidget {
                                 "Upload Certification",
                                 style: MyTexts.bold16.copyWith(
                                   color: MyColors.black,
-                                  fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
                             ],
@@ -208,6 +232,7 @@ class CertificationsComponent extends StatelessWidget {
                               Text(
                                 "File uploaded: ${cert.name}",
                                 textAlign: TextAlign.center,
+                                style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                               ),
                             ],
                           ),
@@ -249,7 +274,7 @@ class CertificationsComponent extends StatelessWidget {
 
     switch (extension) {
       case 'pdf':
-        return Image.asset(Asset.pdfImage, height: 50, width: 32);
+        return Image.asset(Asset.pdf, height: 64, width: 64);
       case 'jpg':
       case 'jpeg':
       case 'png':

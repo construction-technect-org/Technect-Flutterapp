@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/certifications_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/info_metrics_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/marketplace_performance_component.dart';
@@ -18,16 +19,7 @@ class ProfileView extends GetView<ProfileController> {
       backgroundColor: MyColors.white,
       body: Stack(
         children: [
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Asset.moreIBg),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+                     const CommonBgImage(),
           Column(
             children: [
               CommonAppBar(
@@ -134,52 +126,52 @@ class ProfileView extends GetView<ProfileController> {
                                   ),
                                 ),
                               ),
-                              const Gap(10),
-                              Obx(() {
-                                return controller.profileCompletionPercentage >
-                                        90
-                                    ? GestureDetector(
-                                        onTap: () =>
-                                            controller.selectedTabIndex.value =
-                                                2,
-                                        child: AnimatedContainer(
-                                          duration: const Duration(
-                                            milliseconds: 250,
-                                          ),
-                                          curve: Curves.easeInOut,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white.withValues(
-                                              alpha:
-                                                  controller
-                                                          .selectedTabIndex
-                                                          .value ==
-                                                      2
-                                                  ? 1
-                                                  : 0,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              24,
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 4,
-                                              horizontal: 16,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "Marketplace Performance",
-                                                style: MyTexts.medium15
-                                                    .copyWith(
-                                                      color: MyColors.gray2E,
-                                                    ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : const SizedBox();
-                              }),
+                              // const Gap(10),
+                              // Obx(() {
+                              //   return controller.profileCompletionPercentage >
+                              //           90
+                              //       ? GestureDetector(
+                              //           onTap: () =>
+                              //               controller.selectedTabIndex.value =
+                              //                   2,
+                              //           child: AnimatedContainer(
+                              //             duration: const Duration(
+                              //               milliseconds: 250,
+                              //             ),
+                              //             curve: Curves.easeInOut,
+                              //             decoration: BoxDecoration(
+                              //               color: Colors.white.withValues(
+                              //                 alpha:
+                              //                     controller
+                              //                             .selectedTabIndex
+                              //                             .value ==
+                              //                         2
+                              //                     ? 1
+                              //                     : 0,
+                              //               ),
+                              //               borderRadius: BorderRadius.circular(
+                              //                 24,
+                              //               ),
+                              //             ),
+                              //             child: Padding(
+                              //               padding: const EdgeInsets.symmetric(
+                              //                 vertical: 4,
+                              //                 horizontal: 16,
+                              //               ),
+                              //               child: Center(
+                              //                 child: Text(
+                              //                   "Marketplace Performance",
+                              //                   style: MyTexts.medium15
+                              //                       .copyWith(
+                              //                         color: MyColors.gray2E,
+                              //                       ),
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         )
+                              //       : const SizedBox();
+                              // }),
                             ],
                           ),
                         );
@@ -312,9 +304,11 @@ class ProfileView extends GetView<ProfileController> {
         content = const InfoMetricsComponent();
       } else if (index == 1) {
         content = const CertificationsComponent(isDelete: true);
-      } else if (index == 2 && hasMarketplaceTab) {
-        content = const MarketplacePerformanceComponent();
-      } else {
+      }
+      // else if (index == 2 && hasMarketplaceTab) {
+      //   content = const MarketplacePerformanceComponent();
+      // }
+      else {
         content = const InfoMetricsComponent();
       }
 

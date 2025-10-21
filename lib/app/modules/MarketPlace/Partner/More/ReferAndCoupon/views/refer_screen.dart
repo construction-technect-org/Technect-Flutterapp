@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:gap/gap.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -13,16 +14,7 @@ class ReferAndEarnScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Asset.moreIBg),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          const CommonBgImage(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -113,7 +105,7 @@ class ReferAndEarnScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color:  const Color(0xFFE6EDFF),
+                            color: const Color(0xFFE6EDFF),
                             border: Border.all(color: const Color(0xFFC2D3FF)),
                             borderRadius: BorderRadius.circular(24),
                           ),
@@ -162,17 +154,19 @@ class ReferAndEarnScreen extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: MyColors.white,
-                                  border: Border.all(color: const Color(0xFFC3E7C2)),
+                                  border: Border.all(
+                                    color: const Color(0xFFC3E7C2),
+                                  ),
                                 ),
                                 child: Obx(() {
                                   return Text(
                                     Get.find<HomeController>()
-                                        .profileData
-                                        .value
-                                        .data
-                                        ?.referral
-                                        ?.totalReferrals
-                                        .toString() ??
+                                            .profileData
+                                            .value
+                                            .data
+                                            ?.referral
+                                            ?.totalReferrals
+                                            .toString() ??
                                         "0",
                                     style: MyTexts.bold16.copyWith(
                                       color: MyColors.gray2E,
@@ -205,7 +199,10 @@ class ReferAndEarnScreen extends StatelessWidget {
                         ),
                         const Gap(16),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 16),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 16,
+                          ),
                           decoration: BoxDecoration(
                             color: MyColors.white,
                             border: Border.all(color: MyColors.grayEA),
@@ -252,12 +249,16 @@ class _StepItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: MyColors.white,
             shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFFC2D3FF))
+            border: Border.all(color: const Color(0xFFC2D3FF)),
           ),
           child: Center(
             child: Text(
               step,
-              style:  const TextStyle(color: Colors.black, fontSize: 12,fontFamily: MyTexts.SpaceGrotesk),
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 12,
+                fontFamily: MyTexts.SpaceGrotesk,
+              ),
             ),
           ),
         ),
@@ -265,9 +266,7 @@ class _StepItem extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: MyTexts.medium15.copyWith(
-              color: MyColors.gray2E,
-            ),
+            style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
           ),
         ),
       ],
