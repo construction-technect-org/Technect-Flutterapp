@@ -58,6 +58,9 @@ class APIConstants {
   static const String merchantAnalytics = "merchant/analytics";
   static const String merchantReport = "merchant/analytics/pdf";
 
+  static const String connectorAnalytics = "connector/analytics";
+  static const String connectorReport = "connector/analytics/pdf";
+
   // Service Management APIs
   static const String getServiceList = "service/merchant/list";
   static const String createService = "service/create";

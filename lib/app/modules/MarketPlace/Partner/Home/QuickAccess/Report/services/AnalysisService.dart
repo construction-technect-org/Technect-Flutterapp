@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/model/analysis_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +23,9 @@ class AnalysisService {
         "endYear": endYear,
       };
       final response = await _apiManager.get(
-        url: APIConstants.merchantAnalytics,
+        url: myPref.role.val == "partner"
+            ? APIConstants.merchantAnalytics
+            : APIConstants.connectorAnalytics,
         params: par,
       );
       if (response != null) {
@@ -40,7 +43,9 @@ class AnalysisService {
     try {
       final par = {"period": period};
       final response = await _apiManager.get(
-        url: APIConstants.merchantAnalytics,
+        url: myPref.role.val == "partner"
+            ? APIConstants.merchantAnalytics
+            : APIConstants.connectorAnalytics,
         params: par,
       );
       if (response != null) {
@@ -62,8 +67,10 @@ class AnalysisService {
     String? endYear,
   }) async {
     try {
-      final uri = Uri.parse(ApiManager.baseUrl + APIConstants.merchantReport)
-          .replace(
+      final uri =
+          Uri.parse(
+            "${ApiManager.baseUrl}${myPref.role.val == "partner" ? APIConstants.merchantReport : APIConstants.connectorReport}",
+          ).replace(
             queryParameters: isPeriod
                 ? {"period": period ?? ""}
                 : {

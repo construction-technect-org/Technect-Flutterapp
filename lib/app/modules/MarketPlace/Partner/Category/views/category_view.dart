@@ -10,8 +10,8 @@ class CategoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<String> categories = [
       "Construction Materials",
-      "Interior Materials",
-      "Brands",
+      // "Interior Materials",
+      // "Brands",
       "New Launches",
       "Best Sellers",
     ];
@@ -71,7 +71,7 @@ class CategoryView extends StatelessWidget {
                                     '',
                               },
                             );
-                          } else if (index == 3) {
+                          } else if (index == 1) {
                             Get.to(()=>NewLaunchesProduct());
                           }
                         },

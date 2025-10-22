@@ -64,14 +64,16 @@ class MenuView extends StatelessWidget {
                   ],
                 ),
               ),
-              Gap(1.h),
-              CommonContainer(
-                icon: Asset.inbox,
-                title: "Inbox",
-                onTap: () {
-                  Get.toNamed(Routes.APPROVAL_INBOX);
-                },
-              ),
+              if (myPref.role.val == "partner") ...[
+                Gap(1.h),
+                CommonContainer(
+                  icon: Asset.inbox,
+                  title: "Inbox",
+                  onTap: () {
+                    Get.toNamed(Routes.APPROVAL_INBOX);
+                  },
+                ),
+              ],
               const Gap(16),
               CommonContainer(
                 icon: Asset.report,
@@ -96,22 +98,25 @@ class MenuView extends StatelessWidget {
                   Get.toNamed(Routes.SETTING);
                 },
               ),
-              const Gap(16),
-              CommonContainer(
-                icon: Asset.team,
-                title: "Team",
-                onTap: () {
-                  Get.toNamed(Routes.ROLE_MANAGEMENT);
-                },
-              ),
-              const Gap(16),
-              CommonContainer(
-                icon: Asset.inventory,
-                title: "Inventory",
-                onTap: () {
-                  Get.toNamed(Routes.INVENTORY);
-                },
-              ),
+              if (myPref.role.val == "partner") ...[
+                const Gap(16),
+                CommonContainer(
+                  icon: Asset.team,
+                  title: "Team",
+                  onTap: () {
+                    Get.toNamed(Routes.ROLE_MANAGEMENT);
+                  },
+                ),
+                const Gap(16),
+                CommonContainer(
+                  icon: Asset.inventory,
+                  title: "Inventory",
+                  onTap: () {
+                    Get.toNamed(Routes.INVENTORY);
+                  },
+                ),
+              ],
+
               const Gap(16),
               CommonContainer(
                 icon: Asset.news,
