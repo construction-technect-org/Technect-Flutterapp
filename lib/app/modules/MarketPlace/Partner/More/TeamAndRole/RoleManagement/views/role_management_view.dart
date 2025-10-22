@@ -183,7 +183,7 @@ class RoleManagementView extends StatelessWidget {
                         },
                         child: Obx(() {
                           return controller.showRoles.value
-                              ? _buildRolesView()
+                              ? _buildRolesView(context)
                               : _buildTeamsView(context);
                         }),
                       ),
@@ -198,7 +198,7 @@ class RoleManagementView extends StatelessWidget {
     );
   }
 
-  Widget _buildRolesView() {
+  Widget _buildRolesView(context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -235,7 +235,17 @@ class RoleManagementView extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (controller.roles.isEmpty) {
-                return const Center(child: Text('No roles found'));
+                   return Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 4,
+                    ),
+                    child: Text(
+                      'No role found',
+                      style: MyTexts.medium15.copyWith(color: MyColors.gra54),
+                    ),
+                  ),
+                );
               }
               return ListView.builder(
                 shrinkWrap: true,
@@ -303,7 +313,7 @@ class RoleManagementView extends StatelessWidget {
                     ),
                     child: Text(
                       'No team members found',
-                      style: MyTexts.medium15,
+                      style: MyTexts.medium15.copyWith(color: MyColors.gra54),
                     ),
                   ),
                 );

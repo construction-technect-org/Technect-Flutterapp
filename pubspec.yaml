@@ -43,6 +43,7 @@ dependencies:
   readmore: ^3.0.0
   month_picker_dialog: ^6.5.0
   open_filex: ^4.7.0
+  video_player: ^2.10.0
 
 
 

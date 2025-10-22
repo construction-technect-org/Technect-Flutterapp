@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/models/rating_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/services/ProductDetailService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
+import 'package:video_player/video_player.dart';
 
 class ProductDetailsController extends GetxController {
   Product product = Product();
+
   ProfileModel profileData = ProfileModel.fromJson(
     myPref.getProfileData() ?? {},
   );
@@ -16,9 +20,10 @@ class ProductDetailsController extends GetxController {
   final RxBool isLiked = false.obs;
   final RxInt currentIndex = 0.obs;
   final ProductDetailService _service = ProductDetailService();
+  VideoPlayerController? videoPlayerController;
 
   @override
-  void onInit() {
+  void onInit()  {
     final argument = Get.arguments as Map;
     product = argument['product'] ?? Product();
     isLiked.value=product.isInWishList??false;
@@ -26,6 +31,10 @@ class ProductDetailsController extends GetxController {
     isFromConnector.value = argument["isFromConnector"];
     if (isFromAdd.value == false) {
       fetchReview(product.id ?? 0, isFromConnector.value);
+      WidgetsBinding.instance.addPostFrameCallback((val) async {
+        videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()));
+        await videoPlayerController?.initialize();
+      });
     }
     super.onInit();
   }
@@ -57,4 +66,51 @@ class ProductDetailsController extends GetxController {
       isLoading.value = false;
     }
   }
+  void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
+    final playerController = isNetwork
+        ? VideoPlayerController.network(videoPath)
+        : VideoPlayerController.file(File(videoPath));
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(16),
+          child: FutureBuilder(
+            future: playerController.initialize(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                playerController.play();
+                return AspectRatio(
+                  aspectRatio: playerController.value.aspectRatio,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      VideoPlayer(playerController),
+                      VideoProgressIndicator(playerController, allowScrubbing: true,colors:const VideoProgressColors(backgroundColor: MyColors.grayEA,playedColor: MyColors.primary,bufferedColor: MyColors.grayEA)),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          onPressed: () {
+                            playerController.pause();
+                            playerController.dispose();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
+
 }

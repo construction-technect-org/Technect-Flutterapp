@@ -176,6 +176,9 @@ class SignUpPasswordController extends GetxController {
         password: passwordController.text,
         gst: userData!.gst,
         confirmPassword: confirmPasswordController.text,
+        address: userData!.address,
+        aadhaar: userData!.aadhaar,
+        panCard: userData!.panCard,
       );
 
       if (signUpResponse.success == true) {

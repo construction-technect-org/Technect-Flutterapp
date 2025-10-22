@@ -49,6 +49,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/SuppoerRequestFilter/views/connector_support_request_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/bindings/wish_list_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/binding/new_launch_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/view/new_launches_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/binding/account_binding.dart';
@@ -376,6 +378,11 @@ class AppPages {
       name: Routes.ACCOUNT,
       page: () => const AccountScreen(),
       binding: AccountBinding(),
+    ),
+    GetPage(
+      name: Routes.NEW_LAUNCH,
+      page: () =>  NewLaunchesProduct(),
+      binding: NewLaunchBinding(),
     ),
     GetPage(
       name: Routes.SELECT_PRODUCT,

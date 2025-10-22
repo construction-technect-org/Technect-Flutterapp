@@ -10,6 +10,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Pr
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:video_player/video_player.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
   @override
@@ -235,145 +236,197 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         height: 35.h,
                         decoration: const BoxDecoration(color: MyColors.grayF2),
                         alignment: Alignment.center,
-                        child: ((controller.product.images ?? []).isNotEmpty)
-                            ? Obx(() {
-                                final isNetwork =
-                                    controller.isFromAdd.value == false;
-                                final List<String> imageUrls = [];
+                        child: Obx(() {
+                          final isNetwork = controller.isFromAdd.value == false;
+                          final List<String> imageUrls = [];
+                          String? videoUrl;
 
-                                if (isNetwork) {
-                                  if (controller.product.images?.isNotEmpty ??
-                                      false) {
-                                    imageUrls.addAll(
-                                      controller.product.images!
-                                          .map(
-                                            (img) =>
-                                                "${APIConstants.bucketUrl}${img.s3Key ?? controller.product.productImage ?? ''}",
-                                          )
-                                          .toList(),
-                                    );
-                                  } else if (controller.product.productImage !=
-                                      null) {
-                                    imageUrls.add(
-                                      "${APIConstants.bucketUrl}${controller.product.productImage!}",
-                                    );
-                                  }
-                                } else {
-                                  // From local files
-                                  if (controller.product.images?.isNotEmpty ??
-                                      false) {
-                                    imageUrls.addAll(
-                                      controller.product.images!
-                                          .map(
-                                            (img) =>
-                                                img.s3Url ??
-                                                controller
-                                                    .product
-                                                    .productImage ??
-                                                '',
-                                          )
-                                          .toList(),
-                                    );
-                                  } else if (controller.product.productImage !=
-                                      null) {
-                                    imageUrls.add(
-                                      "${APIConstants.bucketUrl}${controller.product.productImage!}",
-                                    );
-                                  }
-                                }
+                          // 🟦 Collect images
+                          if (isNetwork) {
+                            if (controller.product.images?.isNotEmpty ??
+                                false) {
+                              imageUrls.addAll(
+                                controller.product.images!
+                                    .map(
+                                      (img) =>
+                                          "${APIConstants.bucketUrl}${img.s3Key ?? controller.product.productImage ?? ''}",
+                                    )
+                                    .toList(),
+                              );
+                            } else if (controller.product.productImage !=
+                                null) {
+                              imageUrls.add(
+                                "${APIConstants.bucketUrl}${controller.product.productImage!}",
+                              );
+                            }
 
-                                if (imageUrls.isEmpty) {
-                                  return const Center(
-                                    child: Icon(
-                                      Icons.broken_image,
-                                      size: 60,
-                                      color: Colors.grey,
-                                    ),
-                                  );
-                                }
+                            // 🟩 Check if video exists from network (edit mode)
+                            if (controller.product.productVideo != null &&
+                                controller.product.productVideo!.isNotEmpty) {
+                              videoUrl =
+                                  "${APIConstants.bucketUrl}${controller.product.productVideo!}";
+                            }
+                          } else {
+                            // From local (add mode)
+                            if (controller.product.images?.isNotEmpty ??
+                                false) {
+                              imageUrls.addAll(
+                                controller.product.images!
+                                    .map(
+                                      (img) =>
+                                          img.s3Url ??
+                                          controller.product.productImage ??
+                                          '',
+                                    )
+                                    .toList(),
+                              );
+                            } else if (controller.product.productImage !=
+                                null) {
+                              imageUrls.add(
+                                "${APIConstants.bucketUrl}${controller.product.productImage!}",
+                              );
+                            }
 
-                                // ✅ Image carousel
-                                return SizedBox(
-                                  height: 35.h,
-                                  width: 360.w,
-                                  child: PageView.builder(
-                                    itemCount: imageUrls.length,
-                                    controller: PageController(
-                                      viewportFraction: 1,
-                                    ),
-                                    onPageChanged: (index) =>
-                                        controller.currentIndex.value = index,
-                                    itemBuilder: (context, index) {
-                                      final imagePath = imageUrls[index];
-                                      final isHttp = imagePath.startsWith(
-                                        'http',
-                                      );
+                            // 🟩 Local video (from file)
+                            if (controller.product.productVideo != null) {
+                              videoUrl = controller.product.productVideo;
+                            }
+                          }
 
-                                      return GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (_) => Dialog(
-                                              insetPadding:
-                                                  const EdgeInsets.all(16),
-                                              child: InteractiveViewer(
-                                                child: isHttp
-                                                    ? Image.network(
-                                                        imagePath,
-                                                        width: 360.w,
-                                                        fit: BoxFit.contain,
-                                                      )
-                                                    : Image.file(
-                                                        File(imagePath),
-                                                        fit: BoxFit.contain,
-                                                      ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0,
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              0,
-                                            ),
-                                            child: isHttp
-                                                ? Image.network(
-                                                    imagePath,
-                                                    fit: BoxFit.cover,
-                                                    height: 35.h,
-                                                    width: 360.w,
-                                                    errorBuilder:
-                                                        (
-                                                          context,
-                                                          error,
-                                                          stackTrace,
-                                                        ) => const Icon(
-                                                          Icons.broken_image,
-                                                          size: 60,
-                                                          color: Colors.grey,
-                                                        ),
-                                                  )
-                                                : Image.file(
-                                                    File(imagePath),
-                                                    fit: BoxFit.cover,
-                                                    height: 35.h,
-                                                    width: 360.w,
-                                                  ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              })
-                            : const Icon(
+                          // 🟪 If nothing to show
+                          if (imageUrls.isEmpty && videoUrl == null) {
+                            return const Center(
+                              child: Icon(
                                 Icons.image_not_supported,
                                 size: 60,
                                 color: Colors.grey,
                               ),
+                            );
+                          }
+
+                          // Combine both (images + optional video)
+                          final List<Map<String, dynamic>> mediaList = [
+                            ...imageUrls.map(
+                              (e) => {'type': 'image', 'path': e},
+                            ),
+                            if (videoUrl != null)
+                              {'type': 'video', 'path': videoUrl},
+                          ];
+
+                          // 🧭 PageView (images + video)
+                          return SizedBox(
+                            height: 35.h,
+                            width: 360.w,
+                            child: PageView.builder(
+                              itemCount: mediaList.length,
+                              controller: PageController(viewportFraction: 1),
+                              onPageChanged: (index) =>
+                                  controller.currentIndex.value = index,
+                              itemBuilder: (context, index) {
+                                final media = mediaList[index];
+                                final path = media['path'] as String;
+                                final isHttp = path.startsWith('http');
+
+                                if (media['type'] == 'video') {
+                                  // 🟠 Video Thumbnail
+                                  return GestureDetector(
+                                    onTap: () => controller.openVideoDialog(
+                                      context,
+                                      path,
+                                      isHttp,
+                                    ),
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        ColoredBox(
+                                          color: Colors.black12,
+                                          child: isHttp
+                                              ? AspectRatio(
+                                            aspectRatio: 16 / 11,
+                                            child: VideoPlayer(
+                                              controller.videoPlayerController!,
+                                            ),
+                                          )
+                                              : AspectRatio(
+                                                  aspectRatio: 16 / 11,
+                                                  child: VideoPlayer(
+                                                    Get.find<
+                                                          AddProductController
+                                                        >()
+                                                        .videoPlayerController!,
+                                                  ),
+                                                ),
+                                        ),
+                                        Container(
+                                          width: 60,
+                                          height: 60,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.black45,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: const Icon(
+                                            Icons.play_arrow,
+                                            color: Colors.white,
+                                            size: 40,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                                return GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => Dialog(
+                                        insetPadding: const EdgeInsets.all(16),
+                                        child: InteractiveViewer(
+                                          child: isHttp
+                                              ? Image.network(
+                                                  path,
+                                                  width: 360.w,
+                                                  fit: BoxFit.contain,
+                                                )
+                                              : Image.file(
+                                                  File(path),
+                                                  fit: BoxFit.contain,
+                                                ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(0),
+                                      child: isHttp
+                                          ? Image.network(
+                                              path,
+                                              fit: BoxFit.cover,
+                                              height: 35.h,
+                                              width: 360.w,
+                                              errorBuilder: (_, __, ___) =>
+                                                  const Icon(
+                                                    Icons.broken_image,
+                                                    size: 60,
+                                                    color: Colors.grey,
+                                                  ),
+                                            )
+                                          : Image.file(
+                                              File(path),
+                                              fit: BoxFit.cover,
+                                              height: 35.h,
+                                              width: 360.w,
+                                            ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }),
                       ),
 
                       Obx(() {
@@ -421,14 +474,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       }),
                     ],
                   ),
-                  if ((controller.product.images ?? []).length >= 2)
                     Positioned(
                       bottom: 8,
                       child: Obx(
                         () => Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: List.generate(
-                            (controller.product.images ?? []).length,
+                            (controller.product.images ?? []).length+1,
                             (index) => AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
                               margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -605,62 +657,70 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ),
                     ),
                     Obx(() {
-                      return (controller.isFromAdd.value == false &&
-                          controller.isFromConnector.value == false)? const SizedBox():  !(controller.isFromAdd.value == true &&
-                              controller.isFromConnector.value == false)
-                          ? Container(
-                              margin: EdgeInsets.only(top: 2.h),
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 12,
-                                horizontal: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: MyColors.brightGray),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Delivery address",
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.gray54,
-                                    ),
+                      print("controller.product.distanceKm");
+                      print(controller.product.distanceKm);
+                      if (controller.isFromAdd.value == false &&
+                          controller.isFromConnector.value == false) {
+                        return const SizedBox();
+                      } else {
+                        return !(controller.isFromAdd.value == true &&
+                                controller.isFromConnector.value == false)
+                            ? Container(
+                                margin: EdgeInsets.only(top: 2.h),
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                  horizontal: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: MyColors.brightGray,
                                   ),
-                                  const Gap(12),
-                                  Text(
-                                    "Deliver to",
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.grayA5,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Delivery address",
+                                      style: MyTexts.medium16.copyWith(
+                                        color: MyColors.gray54,
+                                      ),
                                     ),
-                                  ),
-                                  const Gap(8),
+                                    const Gap(12),
+                                    Text(
+                                      "Deliver to",
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.grayA5,
+                                      ),
+                                    ),
+                                    const Gap(8),
 
-                                  Text(
-                                    "Location : ${controller.product.address ?? "-"}",
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.gray54,
+                                    Text(
+                                      "Location : ${controller.product.address ?? "-"}",
+                                      style: MyTexts.medium16.copyWith(
+                                        color: MyColors.gray54,
+                                      ),
                                     ),
-                                  ),
-                                  const Gap(12),
-                                  Text(
-                                    "Manufacturing Unit",
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.grayA5,
+                                    const Gap(12),
+                                    Text(
+                                      "Manufacturing Unit",
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.grayA5,
+                                      ),
                                     ),
-                                  ),
-                                  const Gap(8),
-                                  Text(
-                                    "Near by : ${controller.product.distanceKm != null ? double.parse(controller.product.distanceKm.toString()).toStringAsFixed(2) : "-"} km",
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.gray54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : const SizedBox();
+                                    const Gap(8),
+                                    // Text(
+                                    //   "Near by : ${controller.product.distanceKm!=null ? double.parse(controller.product.distanceKm.toString() ).toStringAsFixed(2) : "-"} km",
+                                    //   style: MyTexts.medium16.copyWith(
+                                    //     color: MyColors.gray54,
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox();
+                      }
                     }),
                     SizedBox(height: 1.h),
                     Column(

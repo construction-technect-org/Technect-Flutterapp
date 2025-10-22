@@ -6,6 +6,9 @@ class UserDataModel {
   final String mobileNumber;
   final String email;
   final String gst;
+  final String aadhaar;
+  final String panCard;
+  final String address;
 
   UserDataModel({
     required this.roleName,
@@ -14,6 +17,9 @@ class UserDataModel {
     required this.countryCode,
     required this.mobileNumber,
     required this.email,
+    required this.aadhaar,
+    required this.panCard,
+    required this.address,
      this.gst="",
   });
 
@@ -24,6 +30,9 @@ class UserDataModel {
     "countryCode": countryCode,
     "mobileNumber": mobileNumber,
     "email": email,
+    "aadharNumber": aadhaar,
+    "panCardNumber": panCard,
+    "address": address,
     "gstNumber":gst
   };
 
@@ -35,5 +44,8 @@ class UserDataModel {
     mobileNumber: json["mobileNumber"] ?? "",
     email: json["email"] ?? "",
     gst: json["gstNumber"] ?? "",
+    aadhaar: json["aadharNumber"] ?? "",
+    panCard: json["panCardNumber"] ?? "",
+    address: json["address"] ?? "",
   );
 }

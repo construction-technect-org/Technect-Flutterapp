@@ -116,6 +116,7 @@ class Product {
   final String? categoryProductName;
   final String? distanceKm;
   final String? merchantGstNumber;
+  final String? productVideo;
   final int? stockQty;
   final Map<String, dynamic>? filterValues;
   final List<ProductImage>? images;
@@ -162,6 +163,7 @@ class Product {
     this.subCategoryName,
     this.categoryProductName,
     this.stockQty,
+    this.productVideo,
     this.filterValues,
     this.images,
   });
@@ -208,6 +210,7 @@ class Product {
       status: json["connection_request_status"],
       isNotify: json["has_stock_notification"],
       isInWishList: json["is_in_wishlist"],
+      productVideo: json["product_video"],
       merchantGstNumber: json["merchant_gst_number"],
       filterValues: json["filter_values"] != null
           ? Map<String, dynamic>.from(json["filter_values"])
@@ -263,6 +266,7 @@ class Product {
     "connection_request_status": status,
     "has_stock_notification": isNotify,
     "is_in_wishlist": isInWishList,
+    "product_video": productVideo,
     "images": images == null
         ? []
         : List<dynamic>.from(images!.map((x) => x.toJson())),

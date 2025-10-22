@@ -12,7 +12,6 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
     return GestureDetector(
       onTap: hideKeyboard,
       child: Scaffold(
-        appBar: CommonAppBar(title: const Text("SIGN UP"), isCenter: false),
         backgroundColor: Colors.white,
         body: Stack(
           children: [
@@ -24,22 +23,40 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6.sw),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // SizedBox(height: 2.h),
-                  // const StepperWidget(currentStep: 0),
-                  // SizedBox(height: 2.h),
-                  Expanded(
-                    child: SingleChildScrollView(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // SizedBox(height: 2.h),
+                // const StepperWidget(currentStep: 0),
+                // SizedBox(height: 2.h),
+                CommonAppBar(
+                  backgroundColor: Colors.transparent,
+                  title: const Text("Sign up"),
+                  isCenter: false,
+                  leading: GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.zero,
+                      child: Icon(
+                        Icons.arrow_back_ios_new_sharp,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 6.sw),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Select Role',
+                            'Select your Role',
                             style: MyTexts.medium16.copyWith(
                               color: MyColors.lightBlue,
                               fontFamily: MyTexts.SpaceGrotesk,
@@ -100,15 +117,15 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(24.0),
           child: RoundedButton(
-            buttonName: 'PROCEED',
+            buttonName: 'Proceed',
             onTap: () {
               if (controller.selectedRole.value > 0) {
                 if (controller.selectedRole.value == 6 &&

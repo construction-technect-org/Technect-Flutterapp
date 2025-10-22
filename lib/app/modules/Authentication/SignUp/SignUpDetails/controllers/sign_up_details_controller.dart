@@ -41,8 +41,6 @@ class SignUpDetailsController extends GetxController {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 
-
-
   Future<void> verifyMobileNumber() async {
     if (!otpSend.value) {
       final otpResponse = await signUpService.sendOtp(
@@ -63,7 +61,6 @@ class SignUpDetailsController extends GetxController {
       await sendOtp();
     }
   }
-
 
   // Resend OTP method
   Future<void> sendOtp() async {
@@ -126,14 +123,17 @@ class SignUpDetailsController extends GetxController {
           SnackBars.successSnackBar(content: 'OTP verified successfully!');
           final userData = UserDataModel(
             roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
-            // Default role ID
             firstName: firstNameController.text,
             lastName: lastNameController.text,
             countryCode: countryCode.value,
             mobileNumber: mobileNumberController.text,
             email: emailController.text,
             gst: gstController.text,
+            aadhaar: aadhaarController.text,
+            panCard: "",
+            address: "",
           );
+          Get.back();
           Get.toNamed(Routes.SIGN_UP_PASSWORD, arguments: userData);
         } else {
           SnackBars.errorSnackBar(

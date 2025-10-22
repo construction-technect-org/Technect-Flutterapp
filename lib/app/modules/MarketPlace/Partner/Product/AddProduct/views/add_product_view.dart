@@ -7,6 +7,8 @@ import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:video_player/video_player.dart';
 
 class AddProductView extends GetView<AddProductController> {
   AddProductView({super.key});
@@ -659,12 +661,215 @@ class AddProductView extends GetView<AddProductController> {
                           ],
                         ),
                         const Gap(20),
+                        Text(
+                          "Product Demo Video",
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.gray2E,
+                          ),
+                        ),
+                        const Gap(16),
+                        if (controller.isEdit)
+                          Obx(() {
+                            return Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: MyColors.grayF7,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: MyColors.grayEA),
+                              ),
+                              child: Column(
+                                children: [
+                                  if (controller.selectedVideo.value!=null)
+                                    Stack(
+                                      alignment: AlignmentGeometry.topRight,
+                                      children: [
+                                        Stack(
+                                          alignment: AlignmentGeometry.center,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: AspectRatio(
+                                                aspectRatio: 16 / 9,
+                                                child: VideoPlayer(
+                                                  controller
+                                                      .videoPlayerController!,
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+
+                                                // OpenFilex.open(video.path);
+                                              },
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: MyColors.primary,
+                                                ),
+                                                padding: const EdgeInsets.all(
+                                                  12,
+                                                ),
+                                                child: const Icon(
+                                                  Icons
+                                                      .video_camera_back_outlined,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        GestureDetector(
+                                          onTap: controller.removeVideo,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SvgPicture.asset(
+                                              Asset.delete,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    GestureDetector(
+                                      onTap: () =>
+                                          controller.openVideoPickerBottomSheet(
+                                            Get.context!,
+                                          ),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Gap(24),
+
+                                            SvgPicture.asset(
+                                              Asset.add,
+                                              height: 40,
+                                            ),
+                                            const Gap(16),
+                                            Text(
+                                              "Upload Video (max 24 MB)",
+                                              textAlign: TextAlign.center,
+                                              style: MyTexts.regular14,
+                                            ),
+                                            const Gap(24),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          }),
+                        if (!controller.isEdit)
+                          Obx(() {
+                            final video = controller.selectedVideo.value;
+                            return Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: MyColors.grayF7,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: MyColors.grayEA),
+                              ),
+                              child: Column(
+                                children: [
+                                  if (video != null)
+                                    Stack(
+                                      alignment: AlignmentGeometry.topRight,
+                                      children: [
+                                        Stack(
+                                          alignment: AlignmentGeometry.center,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: AspectRatio(
+                                                aspectRatio: 16 / 9,
+                                                child: VideoPlayer(
+                                                  controller
+                                                      .videoPlayerController!,
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                OpenFilex.open(video.path);
+                                              },
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: MyColors.primary,
+                                                ),
+                                                padding: const EdgeInsets.all(
+                                                  12,
+                                                ),
+                                                child: const Icon(
+                                                  Icons
+                                                      .video_camera_back_outlined,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        GestureDetector(
+                                          onTap: controller.removeVideo,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SvgPicture.asset(
+                                              Asset.delete,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    GestureDetector(
+                                      onTap: () =>
+                                          controller.openVideoPickerBottomSheet(
+                                            Get.context!,
+                                          ),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Gap(24),
+
+                                            SvgPicture.asset(
+                                              Asset.add,
+                                              height: 40,
+                                            ),
+                                            const Gap(16),
+                                            Text(
+                                              "Upload Video (max 24 MB)",
+                                              textAlign: TextAlign.center,
+                                              style: MyTexts.regular14,
+                                            ),
+                                            const Gap(24),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          }),
+
+                        const Gap(35),
                         Center(
                           child: RoundedButton(
                             buttonName: 'Continue',
                             onTap: () {
                               hideKeyboard();
                               if (formKey3.currentState!.validate()) {
+                                if (controller.selectedVideo.value == null) {
+                                  SnackBars.errorSnackBar(
+                                    content: "Please upload a video",
+                                  );
+                                  return;
+                                }
                                 controller.showExtraFields.value = true;
                                 controller.pageController.animateToPage(
                                   2,
@@ -808,12 +1013,20 @@ class AddProductView extends GetView<AddProductController> {
                                                           return CheckboxListTile(
                                                             title: Text(item),
                                                             value: isSelected,
-                                                            fillColor: MaterialStateProperty.resolveWith<Color>((states) {
-                                                              if (states.contains(MaterialState.selected)) {
-                                                                return MyColors.primary;
-                                                              }
-                                                              return Colors.white;
-                                                            }),
+                                                            fillColor:
+                                                                MaterialStateProperty.resolveWith<
+                                                                  Color
+                                                                >((states) {
+                                                                  if (states.contains(
+                                                                    MaterialState
+                                                                        .selected,
+                                                                  )) {
+                                                                    return MyColors
+                                                                        .primary;
+                                                                  }
+                                                                  return Colors
+                                                                      .white;
+                                                                }),
                                                             onChanged: (checked) {
                                                               if (checked ==
                                                                   true) {
@@ -833,12 +1046,18 @@ class AddProductView extends GetView<AddProductController> {
                                                   ),
                                                   actions: [
                                                     TextButton(
-
                                                       onPressed: () => Get.back(
                                                         result: tempSelection
                                                             .toList(),
                                                       ),
-                                                      child:  Text("OK",style: MyTexts.bold16.copyWith(color: MyColors.primary),),
+                                                      child: Text(
+                                                        "OK",
+                                                        style: MyTexts.bold16
+                                                            .copyWith(
+                                                              color: MyColors
+                                                                  .primary,
+                                                            ),
+                                                      ),
                                                     ),
                                                   ],
                                                 );
@@ -963,7 +1182,9 @@ class AddProductView extends GetView<AddProductController> {
                                       }
 
                                       // If both min and max are same, require exact match
-                                      if (min != null && max != null && min == max) {
+                                      if (min != null &&
+                                          max != null &&
+                                          min == max) {
                                         if (numValue != min) {
                                           return "Value must be exactly $min";
                                         }

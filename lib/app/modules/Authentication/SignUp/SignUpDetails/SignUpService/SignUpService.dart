@@ -65,6 +65,9 @@ class SignUpService {
     required String password,
     required String confirmPassword,
      String? gst,
+     String? aadhaar,
+     String? panCard,
+     String? address,
   }) async {
     try {
       final response = await apiManager.postObject(
@@ -76,10 +79,16 @@ class SignUpService {
           "countryCode": countryCode,
           "mobileNumber": mobileNumber,
           "email": email,
-          if((gst??"").isNotEmpty)
-          "gstNumber":gst,
           "password": password,
           "confirmPassword": confirmPassword,
+          if((gst??"").isNotEmpty)
+            "gstNumber":gst,
+          if((aadhaar??"").isNotEmpty)
+            "aadharNumber":aadhaar,
+          if((panCard??"").isNotEmpty)
+            "panCardNumber":panCard,
+          if((address??"").isNotEmpty)
+            "gstNumber":address,
         },
       );
       return SignUpModel.fromJson(response);

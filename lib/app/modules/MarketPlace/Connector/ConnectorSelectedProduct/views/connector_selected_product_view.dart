@@ -168,7 +168,6 @@ class SelectedProductView extends StatelessWidget {
             ),
           ),
         ),
-        // Right Side - Product List
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

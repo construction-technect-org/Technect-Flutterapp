@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -11,6 +12,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:gap/gap.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 class AddProductController extends GetxController {
   final pageController = PageController();
@@ -80,6 +84,18 @@ class AddProductController extends GetxController {
     if (args != null) {
       isEdit = args['isEdit'] ?? false;
       product = args['product'] ?? Product();
+      if (isEdit == true) {
+        WidgetsBinding.instance.addPostFrameCallback((val) async {
+          selectedVideo.value = File("abc");
+          videoPlayerController?.dispose();
+          videoPlayerController = VideoPlayerController.networkUrl(
+            Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()),
+          );
+          await videoPlayerController!.initialize();
+          videoPlayerController!.setLooping(false);
+        });
+      }
+
       _initializeEditMode();
     }
     initCalled();
@@ -544,6 +560,12 @@ class AddProductController extends GetxController {
         if (selectedValue != null && selectedValue.isNotEmpty) {
           value = selectedValue;
         }
+      }
+      if (filter.filterType == 'dropdown_multiple') {
+        final selectedList = multiDropdownValues[filterName];
+        if (selectedList != null && selectedList.isNotEmpty) {
+          filterValues[filterName] = selectedList.toList();
+        }
       } else {
         final textValue = dynamicControllers[filterName]?.text.trim();
         if (textValue != null && textValue.isNotEmpty) {
@@ -604,6 +626,7 @@ class AddProductController extends GetxController {
       mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
       productName: productNameController.text,
+      productVideo: selectedVideo.value?.path,
       categoryProductName: selectedProduct.value,
       brand: brandNameController.text,
       mainCategoryId: int.parse(selectedMainCategoryId.value ?? "0"),
@@ -642,6 +665,8 @@ class AddProductController extends GetxController {
       index++;
     }
 
+    selectedFiles["product_video"] = selectedVideo.value?.path ?? "";
+
     final Map<String, String> payload = {};
     dynamicControllers.forEach((key, controller) {
       if (controller.text.isNotEmpty) {
@@ -668,7 +693,7 @@ class AddProductController extends GetxController {
           : 0,
       "outofstock": !isOutStock.value,
       "brand": brandNameController.text,
-      "is_active": isEnabled.value,
+      // "is_active": isEnabled.value,
       "is_featured": false,
       "sort_order": "1",
       "filter_values": jsonEncode(buildFilterValues()),
@@ -724,6 +749,9 @@ class AddProductController extends GetxController {
         selectedFiles[key] = path;
       }
     }
+    if ((selectedVideo.value?.path ?? "") != "abc") {
+      selectedFiles["product_video"] = selectedVideo.value?.path ?? "";
+    }
 
     // 🟥 Step 3: Add remove flags to fields
     fields.addAll(tempRemoved);
@@ -735,7 +763,7 @@ class AddProductController extends GetxController {
       "terms_and_conditions": termsController.text,
       "stock_qty": isOutStock.value ? stockController.text : "0",
       "brand": brandNameController.text,
-      "is_active": isEnabled.value.toString(),
+      // "is_active": isEnabled.value.toString(),
       "is_featured": "false",
       "sort_order": "1",
       "low_stock_threshold": "10",
@@ -767,5 +795,77 @@ class AddProductController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  final Rx<File?> selectedVideo = Rx<File?>(null);
+  VideoPlayerController? videoPlayerController;
+
+  Future<void> openVideoPickerBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Select Video Option", style: MyTexts.medium16),
+                const Gap(20),
+                ListTile(
+                  leading: const Icon(Icons.videocam_rounded),
+                  title: const Text("Record Video"),
+                  onTap: () {
+                    Get.back();
+                    pickVideo(isRecord: true);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.video_library_rounded),
+                  title: const Text("Upload from Gallery"),
+                  onTap: () {
+                    Get.back();
+                    pickVideo(isRecord: false);
+                  },
+                ),
+                const Gap(8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> pickVideo({required bool isRecord}) async {
+    final picker = ImagePicker();
+    final XFile? picked = await picker.pickVideo(
+      source: isRecord ? ImageSource.camera : ImageSource.gallery,
+      maxDuration: const Duration(minutes: 2),
+    );
+
+    if (picked != null) {
+      final file = File(picked.path);
+      final sizeInMB = file.lengthSync() / (1024 * 1024);
+      if (sizeInMB > 24) {
+        SnackBars.errorSnackBar(content: "Video must be less than 24 MB");
+        return;
+      }
+
+      selectedVideo.value = file;
+      videoPlayerController?.dispose();
+      videoPlayerController = VideoPlayerController.file(file);
+      await videoPlayerController!.initialize();
+      videoPlayerController!.setLooping(false);
+    }
+  }
+
+  void removeVideo() {
+    selectedVideo.value = null;
+    videoPlayerController?.dispose();
+    videoPlayerController = null;
   }
 }

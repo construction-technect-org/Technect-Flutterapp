@@ -29,7 +29,7 @@ class ConnectorSelectedProductModel {
 }
 
 class ConnectorSelectedProductData {
-  final List<Product> products;
+   List<Product> products;
   final Pagination pagination;
   final Filters filters;
 
