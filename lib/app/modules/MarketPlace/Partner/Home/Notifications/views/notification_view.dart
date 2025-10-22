@@ -7,115 +7,117 @@ import 'package:intl/intl.dart';
 class NotificationView extends GetView<NotificationController> {
   @override
   Widget build(BuildContext context) {
-    return LoaderWrapper(
-      isLoading: controller.isLoading,
-      child: Scaffold(
-        backgroundColor: MyColors.white,
-        body: Stack(
-          children: [
-            const CommonBgImage(),
+    return Scaffold(
+      backgroundColor: MyColors.white,
+      body: Stack(
+        children: [
+          const CommonBgImage(),
 
-            Column(
-              children: [
-                CommonAppBar(
-                  backgroundColor: Colors.transparent,
-                  title: const Text('Notifications'),
-                  isCenter: false,
-                  leading: GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+          Column(
+            children: [
+              CommonAppBar(
+                backgroundColor: Colors.transparent,
+                title: const Text('Notifications'),
+                isCenter: false,
+                leading: GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.zero,
+                    child: Icon(
+                      Icons.arrow_back_ios_new_sharp,
+                      color: Colors.black,
+                      size: 20,
                     ),
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Obx(() {
-                            final notifications =
-                                controller.notificationModel.value.data?.notifications ?? [];
-
-                            if (notifications.isEmpty) {
-                              return Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.notifications_none, size: 64, color: MyColors.grey),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      'No notifications found',
-                                      style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      "You'll see notifications here",
-                                      style: MyTexts.regular14.copyWith(color: MyColors.grey),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-
-                            return RefreshIndicator(
-                              color: Colors.white,
-                              backgroundColor: MyColors.primary,
-                              onRefresh: controller.refreshNotifications,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(vertical: 20),
-                                itemCount: notifications.length,
-                                itemBuilder: (context, index) {
-                                  final notification = notifications[index];
-                                  Color statusColor;
-
-                                  switch (notification.notificationType?.toLowerCase()) {
-                                    case "connection_accepted":
-                                      statusColor =const Color(0xffE6F5E6);
-                                      case "connection_rejected":
-                                      statusColor = const Color(0xffFCECE9);
-                                    case "product_approved":
-                                      statusColor =const Color(0xffE6F5E6);
-                                    case "product_verification":
-                                      statusColor = const Color(0xFFFEF7E8);
-                                    case "product_rejected":
-                                      statusColor = const Color(0xffFCECE9);
-                                    default:
-                                      statusColor = MyColors.veryPaleBlue;
-                                  }
-
-                                  return buildNotificationCard(
-                                    title: notification.title ?? "",
-                                    category: notification.entityType ?? "",
-                                    dateTime: notification.createdAt ?? DateTime.now(),
-                                    iconColor: statusColor,
-                                    message: notification.message ?? "",
-                                    product: notification.metadata?.productName ?? "",
-                                    isRead: notification.isRead ?? false,
-                                  );
-                                },
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Obx(() {
+                          final notifications =
+                              controller.notificationModel.value.data?.notifications ?? [];
+                          if(controller.isLoading.value){
+                            return Padding(
+                              padding:  EdgeInsets.only(top:MediaQuery.of(context).size.height/2.5),
+                              child: const Center(child: CircularProgressIndicator(backgroundColor: MyColors.primary, color: MyColors.verypaleBlue,)),
+                            );
+                          }
+                          if (notifications.isEmpty) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.notifications_none, size: 64, color: MyColors.grey),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    'No notifications found',
+                                    style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    "You'll see notifications here",
+                                    style: MyTexts.regular14.copyWith(color: MyColors.grey),
+                                  ),
+                                ],
                               ),
                             );
-                          }),
-                        ),
-                      ],
-                    ),
+                          }
+
+                          return RefreshIndicator(
+                            color: Colors.white,
+                            backgroundColor: MyColors.primary,
+                            onRefresh: controller.refreshNotifications,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              itemCount: notifications.length,
+                              itemBuilder: (context, index) {
+                                final notification = notifications[index];
+                                Color statusColor;
+
+                                switch (notification.notificationType?.toLowerCase()) {
+                                  case "connection_accepted":
+                                    statusColor =const Color(0xffE6F5E6);
+                                    case "connection_rejected":
+                                    statusColor = const Color(0xffFCECE9);
+                                  case "product_approved":
+                                    statusColor =const Color(0xffE6F5E6);
+                                  case "product_verification":
+                                    statusColor = const Color(0xFFFEF7E8);
+                                  case "product_rejected":
+                                    statusColor = const Color(0xffFCECE9);
+                                  default:
+                                    statusColor = MyColors.veryPaleBlue;
+                                }
+
+                                return buildNotificationCard(
+                                  title: notification.title ?? "",
+                                  category: notification.entityType ?? "",
+                                  dateTime: notification.createdAt ?? DateTime.now(),
+                                  iconColor: statusColor,
+                                  message: notification.message ?? "",
+                                  product: notification.metadata?.productName ?? "",
+                                  isRead: notification.isRead ?? false,
+                                );
+                              },
+                            ),
+                          );
+                        }),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
