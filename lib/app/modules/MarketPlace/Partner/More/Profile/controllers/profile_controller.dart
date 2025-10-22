@@ -529,11 +529,7 @@ class ProfileController extends GetxController {
                   title: "Success!",
                   header: "Thanks for Connecting !",
                   onTap: () {
-                    if (myPref.getRole() == "merchant_partner") {
-                      Get.offAllNamed(Routes.MAIN);
-                    } else {
-                      Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
-                    }
+                    Get.offAllNamed(Routes.MAIN);
                   },
                 ),
               );
@@ -549,11 +545,7 @@ class ProfileController extends GetxController {
                   title: "Success!",
                   header: "Thanks for Connecting !",
                   onTap: () {
-                    if (myPref.getRole() == "merchant_partner") {
-                      Get.offAllNamed(Routes.MAIN);
-                    } else {
-                      Get.offAllNamed(Routes.CONNECTOR_MAIN_TAB);
-                    }
+                    Get.offAllNamed(Routes.MAIN);
                   },
                 ),
               );
