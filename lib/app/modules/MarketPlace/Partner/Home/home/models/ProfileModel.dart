@@ -103,6 +103,7 @@ class ReferralUser {
 class MerchantProfile {
   int? id;
   String? businessName;
+  String? merchantLogo;
   String? gstinNumber;
   String? businessEmail;
   String? businessContactNumber;
@@ -142,6 +143,7 @@ class MerchantProfile {
     this.verificationStatus,
     this.trustScore,
     this.marketplaceTier,
+    this.merchantLogo,
     this.memberSince,
     this.businessHours,
     this.documents,
@@ -153,6 +155,7 @@ class MerchantProfile {
       MerchantProfile(
         id: json["id"],
         businessName: json["businessName"],
+        merchantLogo: json["logo"],
         gstinNumber: json["gstinNumber"],
         website: json["website"],
         businessEmail: json["businessEmail"],
@@ -189,6 +192,7 @@ class MerchantProfile {
     "id": id,
     "businessName": businessName,
     "gstinNumber": gstinNumber,
+    "logo": merchantLogo,
     "businessEmail": businessEmail,
     "businessContactNumber": businessContactNumber,
     "businessWebsite": businessWebsite,

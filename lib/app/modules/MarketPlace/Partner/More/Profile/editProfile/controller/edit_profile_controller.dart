@@ -1,9 +1,12 @@
-import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
-import 'package:construction_technect/app/core/utils/validation_utils.dart';
+import 'dart:io';
+
+import 'package:construction_technect/app/core/utils/CommonConstant.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileController extends GetxController {
   final businessNameController = TextEditingController();
@@ -35,6 +38,7 @@ class EditProfileController extends GetxController {
 
       if (merchantProfile != null) {
         // Populate text fields
+        image.value = merchantProfile.merchantLogo ?? "";
         businessNameController.text = merchantProfile.businessName ?? '';
         gstNumberController.text = merchantProfile.gstinNumber ?? '';
         businessEmailController.text = merchantProfile.businessEmail ?? '';
@@ -103,16 +107,6 @@ class EditProfileController extends GetxController {
     businessHoursData.value = data;
   }
 
-  void scrollToTitle() {
-    final context = titleKey.currentContext;
-    if (context != null) {
-      Scrollable.ensureVisible(
-        context,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
 
   void nextStep() {
     Get.find<ProfileController>().businessModel.value = BusinessModel(
@@ -122,61 +116,64 @@ class EditProfileController extends GetxController {
       gstinNumber: gstNumberController.text,
       website: businessWebsiteController.text,
       address: addressContoller.text,
+      image: selectedImage.value!=null? selectedImage.value?.path:image.value,
     );
     Get.find<ProfileController>().businessModel.refresh();
     Get.back();
   }
 
   void updateProfile() {
-    if (_validateBusinessDetails()) {
-      nextStep();
-    }
+    nextStep();
+  }
+  final ImagePicker _picker = ImagePicker();
+  RxString image = "".obs;
+
+  void pickImageBottomSheet(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt, color: MyColors.gray2E),
+              title: Text(
+                "Camera",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
+              onTap: () {
+                Get.back();
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo, color: MyColors.gray2E),
+              title: Text(
+                "Gallery",
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              ),
+              onTap: () {
+                Get.back();
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Rx<File?> selectedImage = Rx<File?>(null);
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile == null) return;
+    final compressedFile = await CommonConstant().compressImage(
+      File(pickedFile.path),
+    );
+    selectedImage.value = File(compressedFile.path);
   }
 
-  bool _validateBusinessDetails() {
-    final businessNameError = ValidationUtils.validateName(
-      businessNameController.text,
-      "business name",
-    );
-    if (businessNameError != null) {
-      SnackBars.errorSnackBar(content: businessNameError);
-      return false;
-    }
-    final websiteError = ValidationUtils.validateWebsiteUrl(
-      businessWebsiteController.text,
-    );
-    if (websiteError != null) {
-      SnackBars.errorSnackBar(content: websiteError);
-      return false;
-    }
-    final emailError = ValidationUtils.validateBusinessEmail(
-      businessEmailController.text,
-    );
-    if (emailError != null) {
-      SnackBars.errorSnackBar(content: emailError);
-      return false;
-    }
-
-    final gstError = ValidationUtils.validateGSTINNumber(gstNumberController.text);
-    if (gstError != null) {
-      SnackBars.errorSnackBar(content: gstError);
-      return false;
-    }
-    final contactError = ValidationUtils.validateBusinessContactNumber(
-      businessContactController.text,
-    );
-    if (contactError != null) {
-      SnackBars.errorSnackBar(content: contactError);
-      return false;
-    }
-    return true;
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-    Future.delayed(const Duration(milliseconds: 300), () {
-      scrollToTitle();
-    });
-  }
 }

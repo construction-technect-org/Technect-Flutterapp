@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/components/business_detail_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/controllers/product_detail_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
@@ -29,7 +31,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
             onTap: () {
               Get.back();
             },
-            child: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 24),
+            child: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.black,
+              size: 24,
+            ),
           ),
           isCenter: false,
           // action: [
@@ -165,7 +171,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                             0,
                                         message: '',
                                         pID: controller.product.id ?? 0,
-                                        onSuccess: ()  {
+                                        onSuccess: () {
                                           controller.onApiCall?.call();
                                           Get.back();
                                         },
@@ -457,15 +463,17 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 child: Obx(() {
                                   return GestureDetector(
                                     onTap: () async {
-                                      await Get.find<HomeController>().wishListApi(
-                                        status: controller.isLiked.value == true
-                                            ? "remove"
-                                            : "add",
-                                        mID: controller.product.id ?? 0,
-                                        onSuccess: ()  {
-                                          controller.onApiCall?.call();
-                                        },
-                                      );
+                                      await Get.find<HomeController>()
+                                          .wishListApi(
+                                            status:
+                                                controller.isLiked.value == true
+                                                ? "remove"
+                                                : "add",
+                                            mID: controller.product.id ?? 0,
+                                            onSuccess: () {
+                                              controller.onApiCall?.call();
+                                            },
+                                          );
                                       controller.isLiked.value =
                                           !controller.isLiked.value;
                                     },
@@ -562,6 +570,34 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     SizedBox(height: 2.h),
                     Row(
                       children: [
+                        if ((controller.product.merchantLogo ?? "")
+                            .isNotEmpty) ...[
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(() => BusinessDetailView());
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadiusGeometry.circular(20),
+                              child: getImageView(
+                                finalUrl:
+                                    APIConstants.bucketUrl +
+                                    (controller.product.merchantLogo ?? ""),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ] else ...[
+                          ClipRRect(
+                            borderRadius: BorderRadiusGeometry.circular(20),
+                            child: Image.asset(
+                              Asset.appLogo,
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ],
+                        const Gap(12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1042,7 +1078,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Explore our other product', style: MyTexts.bold18),
+                              Text(
+                                'Explore our other product',
+                                style: MyTexts.bold18,
+                              ),
                               const Icon(Icons.arrow_forward_ios, size: 20),
                             ],
                           ),
@@ -1068,42 +1107,62 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                         .data
                                         ?.similarProducts?[index] ??
                                     Product();
-                                return Container(
-                                  width: 112,
-                                  margin: EdgeInsets.only(
-                                    right: index < 4 ? 12 : 0,
-                                  ), // Add margin except for last item
-                                  child: Column(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: CachedNetworkImage(
-                                          height: 90,
-                                          width: 112,
-                                          imageUrl:
-                                              APIConstants.bucketUrl +
-                                              (data.images?.first.s3Key ?? ''),
-                                          fit: BoxFit.fill,
-                                          placeholder: (context, url) => const Center(
-                                            child: CircularProgressIndicator(),
+                                return GestureDetector(
+                                  onTap: () {
+                                    Get.offNamed(
+                                      Routes.PRODUCT_DETAILS,
+                                      arguments: {
+                                        "product": data,
+                                        "isFromAdd": controller.isFromAdd.value,
+                                        "isFromConnector":
+                                            controller.isFromConnector.value,
+                                        "onApiCall": controller.onApiCall,
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 112,
+                                    margin: EdgeInsets.only(
+                                      right: index < 4 ? 12 : 0,
+                                    ), // Add margin except for last item
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
                                           ),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(
-                                                Icons.category,
-                                                color: MyColors.primary,
-                                                size: 24,
-                                              ),
+                                          child: CachedNetworkImage(
+                                            height: 90,
+                                            width: 112,
+                                            imageUrl:
+                                                APIConstants.bucketUrl +
+                                                (data.images?.first.s3Key ??
+                                                    ''),
+                                            fit: BoxFit.fill,
+                                            placeholder: (context, url) =>
+                                                const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(
+                                                      Icons.category,
+                                                      color: MyColors.primary,
+                                                      size: 24,
+                                                    ),
+                                          ),
                                         ),
-                                      ),
-                                      const Gap(10),
-                                      Text(
-                                        data.brand ?? '',
-                                        style: MyTexts.medium14,
-                                        textAlign: TextAlign.center,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
+                                        const Gap(10),
+                                        Text(
+                                          data.brand ?? '',
+                                          style: MyTexts.medium14,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

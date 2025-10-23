@@ -665,7 +665,7 @@ class AddProductController extends GetxController {
       index++;
     }
 
-    selectedFiles["product_video"] = selectedVideo.value?.path ?? "";
+    selectedFiles["video"] = selectedVideo.value?.path ?? "";
 
     final Map<String, String> payload = {};
     dynamicControllers.forEach((key, controller) {
@@ -750,7 +750,7 @@ class AddProductController extends GetxController {
       }
     }
     if ((selectedVideo.value?.path ?? "") != "abc") {
-      selectedFiles["product_video"] = selectedVideo.value?.path ?? "";
+      selectedFiles["video"] = selectedVideo.value?.path ?? "";
     }
 
     // 🟥 Step 3: Add remove flags to fields

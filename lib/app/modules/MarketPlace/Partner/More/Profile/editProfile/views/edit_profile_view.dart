@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
@@ -19,7 +20,8 @@ class UpperCaseTextFormatter extends TextInputFormatter {
 }
 
 class EditProfileView extends GetView<EditProfileController> {
-   EditProfileView({super.key});
+  EditProfileView({super.key});
+
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -37,6 +39,15 @@ class EditProfileView extends GetView<EditProfileController> {
                 buttonName: 'Update',
                 onTap: () {
                   if (formKey.currentState!.validate()) {
+                    if (controller.image.value.isEmpty) {
+                      if (controller.selectedImage.value == null) {
+                        SnackBars.errorSnackBar(
+                          content: "Please upload business logo",
+                        );
+                        return;
+                      }
+                    }
+
                     controller.updateProfile();
                   }
                 },
@@ -58,12 +69,9 @@ class EditProfileView extends GetView<EditProfileController> {
 
               Column(
                 children: [
-
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
-                    title: const Text(
-                      "Edit Business Metrics",
-                    ),
+                    title: const Text("Edit Business Metrics"),
                     isCenter: false,
                     leading: GestureDetector(
                       onTap: () {
@@ -77,7 +85,8 @@ class EditProfileView extends GetView<EditProfileController> {
                           size: 20,
                         ),
                       ),
-                    ),),
+                    ),
+                  ),
                   Expanded(
                     child: SingleChildScrollView(
                       controller: controller.scrollController,
@@ -85,7 +94,79 @@ class EditProfileView extends GetView<EditProfileController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Gap(20),
+                          const Gap(16),
+                          Stack(
+                            alignment: Alignment.bottomRight,
+                            children: [
+                              GestureDetector(
+                                onTap: () =>
+                                    controller.pickImageBottomSheet(context),
+                                child: Obx(() {
+                                  if (controller.selectedImage.value != null) {
+                                    return ClipOval(
+                                      child: Image.file(
+                                        controller.selectedImage.value!,
+                                        width: 78,
+                                        height: 78,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  }
+
+                                  final imagePath = controller.image.value;
+                                  final imageUrl = imagePath.isNotEmpty
+                                      ? "${APIConstants.bucketUrl}$imagePath"
+                                      : null;
+                                  if (imageUrl == null) {
+                                    return CircleAvatar(
+                                      radius: 50,
+                                      backgroundColor: MyColors.grayEA,
+                                      child: SvgPicture.asset(
+                                        Asset.add,
+                                        height: 24,
+                                        width: 24,
+                                      ),
+                                    );
+                                  }
+
+                                  return ClipOval(
+                                    child: getImageView(
+                                      finalUrl: imageUrl,
+                                      height: 78,
+                                      width: 78,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                }),
+                              ),
+
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      controller.pickImageBottomSheet(context),
+                                  child: Container(
+                                    height: 32,
+                                    width: 32,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: SvgPicture.asset(
+                                        Asset.edit,
+                                        height: 12,
+                                        width: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Gap(3.h),
                           _buildBusinessDetailsStep(),
                           SizedBox(height: 4.h),
                         ],
@@ -118,10 +199,8 @@ class EditProfileView extends GetView<EditProfileController> {
               LengthLimitingTextInputFormatter(30),
               NameInputFormatter(),
             ],
-            validator: (value) => validateName(
-              value,
-              fieldName: "business name",
-            ),
+            validator: (value) =>
+                validateName(value, fieldName: "business name"),
           ),
           SizedBox(height: 2.h),
           CommonTextField(

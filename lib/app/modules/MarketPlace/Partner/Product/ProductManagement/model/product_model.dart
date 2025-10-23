@@ -105,6 +105,7 @@ class Product {
   final String? totalAmount;
   final String? productNote;
   final String? address;
+  final String? merchantLogo;
   final bool? outOfStock;
   final bool? isActive;
   final bool? isNotify;
@@ -120,6 +121,10 @@ class Product {
   final int? stockQty;
   final Map<String, dynamic>? filterValues;
   final List<ProductImage>? images;
+  final String? merchantName;
+  final String? merchantEmail;
+  final String? merchantPhone;
+  final String? merchantWebsite;
 
   Product({
     this.id,
@@ -129,11 +134,16 @@ class Product {
     this.isNotify,
     this.mainCategoryId,
     this.subCategoryId,
+    this.merchantName,
+    this.merchantEmail,
     this.categoryProductId,
+    this.merchantWebsite,
     this.brand,
+    this.merchantPhone,
     this.merchantGstNumber,
     this.uom,
     this.packageType,
+    this.merchantLogo,
     this.address,
     this.packageSize,
     this.isActive,
@@ -179,6 +189,7 @@ class Product {
       categoryProductId: json["category_product_id"],
       brand: json["brand"],
       uom: json["uom"],
+      merchantLogo: json["merchant_logo"],
       isActive: json["isActive"],
       packageType: json["package_type"],
       packageSize: json["package_size"],
@@ -210,8 +221,12 @@ class Product {
       status: json["connection_request_status"],
       isNotify: json["has_stock_notification"],
       isInWishList: json["is_in_wishlist"],
-      productVideo: json["product_video"],
+      productVideo: json["video"],
+      merchantName: json["merchant_name"],
+      merchantWebsite: json["merchant_website"],
+      merchantEmail: json["merchant_email"],
       merchantGstNumber: json["merchant_gst_number"],
+      merchantPhone: json["merchant_phone"],
       filterValues: json["filter_values"] != null
           ? Map<String, dynamic>.from(json["filter_values"])
           : null,
@@ -230,10 +245,15 @@ class Product {
     "product_image": productImage,
     "main_category_id": mainCategoryId,
     "sub_category_id": subCategoryId,
+    "merchant_name": merchantName,
+    "merchant_email": merchantEmail,
     "category_product_id": categoryProductId,
+    "merchant_logo":  merchantLogo,
     "brand": brand,
+    "merchant_phone": merchantPhone,
     "uom": uom,
     "package_type": packageType,
+    "merchant_website": merchantWebsite,
     "package_size": packageSize,
     "shape": shape,
     "isActive": isActive,
@@ -266,7 +286,7 @@ class Product {
     "connection_request_status": status,
     "has_stock_notification": isNotify,
     "is_in_wishlist": isInWishList,
-    "product_video": productVideo,
+    "video": productVideo,
     "images": images == null
         ? []
         : List<dynamic>.from(images!.map((x) => x.toJson())),

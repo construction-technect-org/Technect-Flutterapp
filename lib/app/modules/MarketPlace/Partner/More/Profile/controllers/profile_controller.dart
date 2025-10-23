@@ -1,8 +1,5 @@
 import 'dart:convert';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/success_screen.dart';
-import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
@@ -21,11 +18,15 @@ class ProfileController extends GetxController {
 
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website.toString();
-      businessModel.value.businessEmail = merchantProfile?.businessEmail.toString();
-      businessModel.value.businessContactNumber = merchantProfile?.businessContactNumber
+      businessModel.value.businessEmail = merchantProfile?.businessEmail
           .toString();
-      businessModel.value.businessName = merchantProfile?.businessName.toString();
+      businessModel.value.businessContactNumber = merchantProfile
+          ?.businessContactNumber
+          .toString();
+      businessModel.value.businessName = merchantProfile?.businessName
+          .toString();
       businessModel.value.gstinNumber = merchantProfile?.gstinNumber.toString();
+      businessModel.value.image = merchantProfile?.merchantLogo.toString();
       print(businessHours);
 
       final timeFormatter = DateFormat.jm();
@@ -79,7 +80,9 @@ class ProfileController extends GetxController {
         // Add extra certificates dynamically
         certificates.add(
           CertificateModel(
-            title: (doc.documentType ?? type).replaceAll("_", " ").toUpperCase(),
+            title: (doc.documentType ?? type)
+                .replaceAll("_", " ")
+                .toUpperCase(),
             filePath: path,
             name: doc.documentName ?? "",
           ),
@@ -149,7 +152,9 @@ class ProfileController extends GetxController {
         );
         await homeController.fetchProfileData();
       } else {
-        SnackBars.errorSnackBar(content: response.message ?? 'Failed to delete document');
+        SnackBars.errorSnackBar(
+          content: response.message ?? 'Failed to delete document',
+        );
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error deleting document: $e');
@@ -214,7 +219,15 @@ class ProfileController extends GetxController {
 
         final fileName = file.name.toLowerCase();
         final fileExtension = fileName.split('.').last;
-        final allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx', 'txt'];
+        final allowedExtensions = [
+          'pdf',
+          'jpg',
+          'jpeg',
+          'png',
+          'doc',
+          'docx',
+          'txt',
+        ];
 
         if (!fileName.contains('.')) {
           SnackBars.errorSnackBar(
@@ -247,7 +260,8 @@ class ProfileController extends GetxController {
 
         if (!allowedExtensions.contains(fileExtension)) {
           SnackBars.errorSnackBar(
-            content: "Only PDF, JPG, and PNG files are allowed for certificates",
+            content:
+                "Only PDF, JPG, and PNG files are allowed for certificates",
           );
           return;
         }
@@ -258,7 +272,8 @@ class ProfileController extends GetxController {
 
           if (!isValidFile) {
             SnackBars.errorSnackBar(
-              content: "Invalid file format. Please select a valid PDF, JPG, or PNG file",
+              content:
+                  "Invalid file format. Please select a valid PDF, JPG, or PNG file",
             );
             return;
           }
@@ -293,7 +308,15 @@ class ProfileController extends GetxController {
       // Robust validation for file extension and MIME type
       final fileName = file.name.toLowerCase();
       final fileExtension = fileName.split('.').last;
-      final allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx', 'txt'];
+      final allowedExtensions = [
+        'pdf',
+        'jpg',
+        'jpeg',
+        'png',
+        'doc',
+        'docx',
+        'txt',
+      ];
 
       // Check if file has an extension
       if (!fileName.contains('.')) {
@@ -329,7 +352,8 @@ class ProfileController extends GetxController {
       // Check file extension
       if (!allowedExtensions.contains(fileExtension)) {
         SnackBars.errorSnackBar(
-          content: "Only PDF, JPG, PNG, DOC, and TXT files are allowed for certificates",
+          content:
+              "Only PDF, JPG, PNG, DOC, and TXT files are allowed for certificates",
         );
         return null;
       }
@@ -341,7 +365,8 @@ class ProfileController extends GetxController {
 
         if (!isValidFile) {
           SnackBars.errorSnackBar(
-            content: "Invalid file format. Please select a valid PDF, JPG, or PNG file",
+            content:
+                "Invalid file format. Please select a valid PDF, JPG, or PNG file",
           );
           return null;
         }
@@ -418,11 +443,15 @@ class ProfileController extends GetxController {
         if (bytes.isEmpty) return true;
         int printableCount = 0;
         for (int byte in bytes) {
-          if (byte >= 32 && byte <= 126 || byte == 9 || byte == 10 || byte == 13) {
+          if (byte >= 32 && byte <= 126 ||
+              byte == 9 ||
+              byte == 10 ||
+              byte == 13) {
             printableCount++;
           }
         }
-        return printableCount >= (bytes.length * 0.8); // 80% printable characters
+        return printableCount >=
+            (bytes.length * 0.8); // 80% printable characters
 
       default:
         return false;
@@ -451,20 +480,25 @@ class ProfileController extends GetxController {
 
       // Check if this is update or submit based on merchant ID
       final homeController = Get.find<HomeController>();
-      final merchantProfile = homeController.profileData.value.data?.merchantProfile;
+      final merchantProfile =
+          homeController.profileData.value.data?.merchantProfile;
       final isUpdate = merchantProfile?.id != null;
 
       final formFields = <String, dynamic>{
         'business_name': businessModel.value.businessName.toString(),
         'gstin_number': businessModel.value.gstinNumber.toString(),
         'business_email': businessModel.value.businessEmail.toString(),
-        'business_contact_number': businessModel.value.businessContactNumber.toString(),
+        'business_contact_number': businessModel.value.businessContactNumber
+            .toString(),
         'website': businessModel.value.website.toString(),
-        if (!isUpdate) 'business_hours': json.encode(businessHoursData.toList()),
+        if (!isUpdate)
+          'business_hours': json.encode(businessHoursData.toList()),
       };
 
       final files = <String, String>{};
-
+      if (!(businessModel.value.image ?? "").contains("merchant-logo")) {
+        files['merchant_logo'] = businessModel.value.image??"";
+      }
       if (certificates.isNotEmpty &&
           !(certificates[0].filePath ?? "").startsWith("merchant-documents")) {
         files['gst_certificate'] = certificates[0].filePath!;
@@ -483,7 +517,9 @@ class ProfileController extends GetxController {
       // For any additional certificates
       if (certificates.length > 3) {
         for (var i = 3; i < certificates.length; i++) {
-          if (!(certificates[i].filePath ?? "").startsWith("merchant-documents")) {
+          if (!(certificates[i].filePath ?? "").startsWith(
+            "merchant-documents",
+          )) {
             files[certificates[i].title] = certificates[i].filePath!;
           }
         }
@@ -512,46 +548,14 @@ class ProfileController extends GetxController {
 
       if (response['success'] == true) {
         try {
-          final commonController = Get.find<CommonController>();
-
           if (isUpdate) {
             await homeController.fetchProfileData();
-            final updatedProfile = homeController.profileData.value.data?.merchantProfile;
-            if (updatedProfile?.profileCompletionPercentage != null &&
-                updatedProfile!.profileCompletionPercentage! < 80) {
-              commonController.hasProfileComplete.value = false;
-            }
-            if (commonController.hasProfileComplete.value == false) {
-              commonController.hasProfileComplete.value = true;
-
-              Get.offAll(
-                () => SuccessScreen(
-                  title: "Success!",
-                  header: "Thanks for Connecting !",
-                  onTap: () {
-                    Get.offAllNamed(Routes.MAIN);
-                  },
-                ),
-              );
-            } else {
-              Get.back();
-              SnackBars.successSnackBar(content: "Profile update successfully");
-            }
+            Get.back();
+            SnackBars.successSnackBar(content: "Profile update successfully");
           } else {
-            if (commonController.hasProfileComplete.value == false) {
-              commonController.hasProfileComplete.value = true;
-              Get.offAll(
-                () => SuccessScreen(
-                  title: "Success!",
-                  header: "Thanks for Connecting !",
-                  onTap: () {
-                    Get.offAllNamed(Routes.MAIN);
-                  },
-                ),
-              );
-            } else {
-              Get.back();
-            }
+            await homeController.fetchProfileData();
+            Get.back();
+            SnackBars.successSnackBar(content: "Profile update successfully");
           }
         } catch (e) {
           Get.printError(info: 'Could not notify Home controller: $e');
@@ -593,6 +597,7 @@ class BusinessModel {
   String? gstinNumber;
   String? address;
   String? businessContactNumber;
+  String? image;
 
   BusinessModel({
     this.businessName,
@@ -601,5 +606,6 @@ class BusinessModel {
     this.gstinNumber,
     this.businessContactNumber,
     this.address,
+    this.image,
   });
 }

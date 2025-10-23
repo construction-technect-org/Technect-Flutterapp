@@ -136,4 +136,7 @@ class ProductDetailsController extends GetxController {
     );
   }
 
+  RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
+
+
 }
