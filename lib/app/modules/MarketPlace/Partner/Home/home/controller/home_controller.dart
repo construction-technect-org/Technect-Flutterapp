@@ -1,5 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
@@ -296,7 +298,6 @@ class HomeController extends GetxController {
     }
   }
 
-
   final features = [
     {"title": "Marketplace", "icon": Asset.role1, "available": true},
     {"title": "CRM", "icon": Asset.crm, "available": true},
@@ -311,6 +312,72 @@ class HomeController extends GetxController {
     {"title": "OVP", "icon": Asset.ovp, "available": false},
     {"title": "Construction Taxi", "icon": Asset.taxi, "available": false},
   ];
+
+  Future<void> notifyMeApi({int? mID, VoidCallback? onSuccess}) async {
+    try {
+      isLoading.value = true;
+      final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
+      if (res.success == true) {
+        SnackBars.successSnackBar(
+          content: "You’ll be notified when it’s restocked!",
+        );
+        if (onSuccess != null) onSuccess();
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(
+        content: "Something went wrong. Please try again.",
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> addToConnectApi({
+    int? mID,
+    int? pID,
+    String? message,
+    VoidCallback? onSuccess,
+  }) async {
+    try {
+      isLoading.value = true;
+      final res = await ConnectorSelectedProductServices().addToConnect(
+        mID: mID,
+        message: message,
+        pID: pID,
+      );
+      if (res.success == true) {
+        SnackBars.successSnackBar(content: "Request sent successfully!");
+        if (onSuccess != null) onSuccess();
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: "Unable to send connection request.");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> wishListApi({
+    required int mID,
+    required String status,
+    VoidCallback? onSuccess,
+  }) async {
+    try {
+      isLoading.value = true;
+      final res = await WishListServices().wishList(mID: mID, status: status);
+      if (res.success == true) {
+        final msg = status == "add"
+            ? "Added to wishlist!"
+            : "Removed from wishlist!";
+        SnackBars.successSnackBar(content: msg);
+        if (onSuccess != null) onSuccess();
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: "Unable to update wishlist.");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   @override
   void onReady() {
     // TODO: implement onReady

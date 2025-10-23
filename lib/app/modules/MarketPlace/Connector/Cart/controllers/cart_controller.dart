@@ -1,22 +1,25 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/model/wishlist_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/model/cart_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/services/CartService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class CartListController extends GetxController {
   RxBool isLoading = false.obs;
-  final WishListServices _service = WishListServices();
-  Rx<AllWishListModel> productListModel = AllWishListModel().obs;
+  RxBool isLoaderWrapper = false.obs;
+
+  final CartListServices _service = CartListServices();
+  Rx<AllCartModel> cartModel = AllCartModel().obs;
   RxList<Product> filteredProducts = <Product>[].obs;
   RxString searchQuery = ''.obs;
-  Future<void> fetchWishList() async {
+  Future<void> fetchCartList({bool? isLoad}) async {
     try {
-      isLoading.value = true;
-      final result = await _service.allWishList();
+      isLoading.value = isLoad??false;
+      final result = await _service.allCartList();
       if (result.success == true) {
-        productListModel.value = result;
-        filteredProducts.assignAll(result.data ?? []);
+        cartModel.value = result;
+        filteredProducts.assignAll(result.data?.products ?? []);
       }
+      isLoading.value=false;
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -28,10 +31,10 @@ class CartListController extends GetxController {
   void searchProducts(String? value) {
     searchQuery.value = value ?? '';
     if (value == null || value.isEmpty) {
-      filteredProducts.assignAll(productListModel.value.data ?? []);
+      filteredProducts.assignAll(cartModel.value.data?.products ?? []);
     } else {
       filteredProducts.assignAll(
-        (productListModel.value.data ?? [])
+        (cartModel.value.data?.products ?? [])
             .where(
               (product) =>
           (product.productName?.toLowerCase().contains(
@@ -66,6 +69,6 @@ class CartListController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    fetchWishList();
+    fetchCartList(isLoad: true);
   }
 }

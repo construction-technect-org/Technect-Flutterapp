@@ -2,10 +2,9 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/widgets/common_product_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/controllers/inventory_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/product_card.dart';
-
-import 'package:gap/gap.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class InventoryView extends GetView<InventoryController> {
   @override
@@ -17,115 +16,91 @@ class InventoryView extends GetView<InventoryController> {
         child: Scaffold(
           backgroundColor: MyColors.white,
           appBar: CommonAppBar(title: const Text('Inventory'), isCenter: false),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                CommonTextField(
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: CommonTextField(
                   onChange: (value) {
                     controller.searchProducts(value);
                   },
                   borderRadius: 22,
                   hintText: 'Search',
-                  // suffixIcon: SvgPicture.asset(Asset.filterIcon, height: 20, width: 20),
-                  prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                  prefixIcon: SvgPicture.asset(
+                    Asset.searchIcon,
+                    height: 16,
+                    width: 16,
+                  ),
                 ),
-                Obx(() {
-                  if (controller.filteredProducts.isEmpty &&
-                      controller.searchQuery.value.isNotEmpty) {
-                    return Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Gap(50),
-                          const Icon(Icons.search_off, size: 64, color: MyColors.grey),
-                          SizedBox(height: 2.h),
-                          Text(
-                            'No products found',
-                            style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                          ),
-                          SizedBox(height: 0.5.h),
-                          Text(
-                            'Try searching with different keywords',
-                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
-                          ),
-                        ],
-                      ),
-                    );
-                  } 
-                  else if (controller.filteredProducts.isEmpty) {
-                    return Expanded(
-                      child: Column(
-                        children: [
-                          const Gap(20),
-                          const Icon(
-                            Icons.inventory_2_outlined,
-                            size: 64,
-                            color: MyColors.grey,
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            'No products available',
-                            style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                          ),
-                          SizedBox(height: 0.5.h),
-                          Text(
-                            'Add your first product to get started',
-                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
+              ),
+              Obx(() {
+                if (controller.filteredProducts.isEmpty &&
+                    controller.searchQuery.value.isNotEmpty) {
                   return Expanded(
-                    child:
-                    SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: Wrap(
-                          spacing: 12,
-                          runSpacing: 12,
-                          children: controller
-                              .filteredProducts
-                              .map((product) {
-                            return GestureDetector(
-                              onTap: () {
-                                Get.toNamed(
-                                  Routes
-                                      .PRODUCT_DETAILS,
-                                  arguments: {
-                                    "product":
-                                    product,
-                                    "isFromAdd":
-                                    false,
-                                    "isFromConnector":
-                                    false,
-                                    "isFromEdit": false,
-                                  },
-                                );
-                              },
-                              child: SizedBox(
-                                width:
-                                Get.width / 2 -
-                                    24,
-                                child: ProductCard(
-                                  product: product,
-                                ),
-                              ),
-                            );
-                          })
-                              .toList(),
+                    child: Center(
+                      child: Text(
+                        'No inventory found',
+                        style: MyTexts.medium14.copyWith(
+                          color: MyColors.dustyGray,
                         ),
                       ),
                     ),
                   );
-                }),
-              ],
-            ),
+                } else if (controller.filteredProducts.isEmpty) {
+                  return Expanded(
+                    child: Center(
+                      child: Text(
+                        'No inventory available',
+                        style: MyTexts.medium14.copyWith(
+                          color: MyColors.dustyGray,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.5,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                    itemCount:
+                        controller
+                            .productListModel
+                            .value
+                            .data
+                            ?.products
+                            ?.length ??
+                        0,
+                    itemBuilder: (context, index) {
+                      final item =
+                          controller
+                              .productListModel
+                              .value
+                              .data
+                              ?.products?[index] ??
+                          Product();
+                      return ProductCard(
+                        isFromAdd: false,
+                        isFromConnector: false,
+                        product: item,
+                        onWishlistTap: () {},
+                        onNotifyTap: () {},
+
+                        onConnectTap: () {},
+                      );
+                    },
+                  ),
+                );
+              }),
+            ],
           ),
         ),
       ),
     );
   }
 }
-

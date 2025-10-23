@@ -67,7 +67,6 @@ class ConnectorSelectedProductController extends GetxController {
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
-
   void onCameraMove(CameraPosition position) {
     currentPosition.value = position.target;
   }
@@ -536,7 +535,7 @@ class FeedbackBottomSheetView extends StatelessWidget {
                         addFeedBack();
                         // SnackBars.successSnackBar(content: "Feedback sent successfully");
                       },
-                      child: Text("SUBMIT", style: TextStyle(color: MyColors.white)),
+                      child: Text("Submit", style: TextStyle(color: MyColors.white)),
                     ),
                   ),
                 ],

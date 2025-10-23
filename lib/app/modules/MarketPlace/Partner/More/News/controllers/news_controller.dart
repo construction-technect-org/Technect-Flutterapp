@@ -13,7 +13,6 @@ class NewsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // _loadNewsFromStorage();
     isConnector.value = myPref.getRole() == "connector";
     fetchNews();
   }

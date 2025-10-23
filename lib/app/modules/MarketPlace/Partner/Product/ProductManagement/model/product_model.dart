@@ -186,7 +186,7 @@ class Product {
       texture: json["texture"],
       colour: json["colour"],
       size: json["size"],
-      distanceKm: json["distance_km"].toString(),
+      distanceKm: json["distance_km"]!=null ?json["distance_km"].toString():"",
       price: json["price"],
       address: json["address"],
       gstPercentage: json["gst_percentage"],

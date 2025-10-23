@@ -537,6 +537,7 @@ class HomeView extends StatelessWidget {
                                                                     (subCategory
                                                                             .image ??
                                                                         ''),
+                                                                width: double.infinity,
                                                                 fit:
                                                                     BoxFit.fill,
                                                                 placeholder:

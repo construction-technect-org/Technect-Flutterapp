@@ -53,31 +53,13 @@ class NewsView extends GetView<NewsController> {
                           if (controller.newsModel.value.data?.news?.isEmpty ??
                               true) {
                             return Padding(
-                              padding: const EdgeInsets.only(top: 100.0),
+                              padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height/2.3),
                               child: Center(
-                                child: Column(
-                                  children: [
-                                    const Gap(20),
-                                    const Icon(
-                                      Icons.newspaper_outlined,
-                                      size: 64,
-                                      color: MyColors.grey,
-                                    ),
-                                    SizedBox(height: 2.h),
-                                    Text(
-                                      'No news available',
-                                      style: MyTexts.medium18.copyWith(
-                                        color: MyColors.fontBlack,
-                                      ),
-                                    ),
-                                    SizedBox(height: 0.5.h),
-                                    Text(
-                                      'Check back later for updates',
-                                      style: MyTexts.regular14.copyWith(
-                                        color: MyColors.grey,
-                                      ),
-                                    ),
-                                  ],
+                                child: Text(
+                                  'No news available',
+                                  style: MyTexts.medium16.copyWith(
+                                    color: MyColors.dustyGray,
+                                  ),
                                 ),
                               ),
                             );

@@ -145,78 +145,89 @@ class DashboardView extends GetView<DashboardController> {
                       ],
                     ),
                     const Gap(24),
-                    Text(
-                      "Features",
-                      style: MyTexts.extraBold18.copyWith(
-                        color: MyColors.black,
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Features",
+                              style: MyTexts.extraBold18.copyWith(
+                                color: MyColors.black,
+                              ),
+                            ),
+                            const Gap(16),
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                final double itemWidth =
+                                    (constraints.maxWidth - (2 * 10)) /
+                                        3; // 4 per row with spacing
+                                final double itemHeight =
+                                    itemWidth + 10; // for icon + text
+                                return GridView.builder(
+                                  padding: EdgeInsets.zero,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: controller.features.length,
+                                  gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 12,
+                                    mainAxisSpacing: 17,
+                                    childAspectRatio: itemWidth / itemHeight,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    final item = controller.features[index];
+
+                                    return Obx(() {
+                                      final isSelected =
+                                          controller.selectedIndex.value == index;
+                                      return BuildFeatureCard(
+                                        isSelected: isSelected,
+                                        item: item,
+                                        itemWidth: itemWidth,
+                                        onTap: () {
+                                          if (index == 0 || index == 1) {
+                                            controller.selectedIndex.value = index;
+                                          }
+                                        },
+                                      );
+                                    });
+                                  },
+                                );
+                              },
+                            ),
+                            SizedBox(height: 1.h),
+                            Text(
+                              "Statics",
+                              style: MyTexts.bold18.copyWith(color: MyColors.black),
+                            ),
+                            SizedBox(height: 1.h),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildStatCard(
+                                    "Merchant",
+                                    "32",
+                                    Asset.role1,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildStatCard(
+                                    "Connectors",
+                                    "22",
+                                    Asset.contractor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(24),
+                          ],
+                        ),
                       ),
                     ),
-                    const Gap(16),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        final double itemWidth =
-                            (constraints.maxWidth - (2 * 10)) /
-                            3; // 4 per row with spacing
-                        final double itemHeight =
-                            itemWidth + 10; // for icon + text
-                        return GridView.builder(
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: controller.features.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 17,
-                                childAspectRatio: itemWidth / itemHeight,
-                              ),
-                          itemBuilder: (context, index) {
-                            final item = controller.features[index];
 
-                            return Obx(() {
-                              final isSelected =
-                                  controller.selectedIndex.value == index;
-                              return BuildFeatureCard(
-                                isSelected: isSelected,
-                                item: item,
-                                itemWidth: itemWidth,
-                                onTap: () {
-                                  if (index == 0 || index == 1) {
-                                    controller.selectedIndex.value = index;
-                                  }
-                                },
-                              );
-                            });
-                          },
-                        );
-                      },
-                    ),
-                    SizedBox(height: 1.h),
-                    Text(
-                      "Statics",
-                      style: MyTexts.bold18.copyWith(color: MyColors.black),
-                    ),
-                    SizedBox(height: 1.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildStatCard(
-                            "Merchant",
-                            "32",
-                            Asset.role1,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _buildStatCard(
-                            "Connectors",
-                            "22",
-                            Asset.contractor,
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

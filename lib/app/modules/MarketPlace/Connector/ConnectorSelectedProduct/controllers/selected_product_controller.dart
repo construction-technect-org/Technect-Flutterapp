@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
@@ -123,51 +122,6 @@ class SelectedProductController extends GetxController {
     }
   }
 
-  Future<void> notifyMeApi({int? mID}) async {
-    try {
-      isLoading.value = true;
-      final res = await services.notifyMe(mID: mID);
-      if (res.success == true) {
-        await fetchProductsFromApi(isLoading: false);
-      }
-    } catch (e) {
-      // No Error
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> addToConnectApi({int? mID, int? pID, String? message}) async {
-    try {
-      isLoading.value = true;
-      final res = await services.addToConnect(
-        mID: mID,
-        message: message,
-        pID: pID,
-      );
-      if (res.success == true) {
-        await fetchProductsFromApi(isLoading: false);
-      }
-    } catch (e) {
-      // No Error
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> wishListApi({required int mID, required String status}) async {
-    try {
-      isLoading.value = true;
-      final res = await WishListServices().wishList(mID: mID, status: status);
-      if (res.success == true) {
-        await fetchProductsFromApi(isLoading: false);
-      }
-    } catch (e) {
-      // No Error
-    } finally {
-      isLoading.value = false;
-    }
-  }
 
   // Select product category
   void selectProductCategory(int index) {

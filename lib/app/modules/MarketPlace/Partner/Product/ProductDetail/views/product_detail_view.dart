@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/selected_product_controller.dart';
@@ -60,12 +58,16 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           children: [
                             Text(
                               "Explore More!",
-                              style: MyTexts.medium14.copyWith(color: MyColors.grayA5),
+                              style: MyTexts.medium14.copyWith(
+                                color: MyColors.grayA5,
+                              ),
                             ),
                             const Gap(8),
                             Text(
                               "View Categories >",
-                              style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
+                              ),
                             ),
                           ],
                         ),
@@ -79,15 +81,18 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           child: RoundedButton(
                             width: MediaQuery.of(context).size.width / 1.15,
                             horizontalPadding: 20,
-                            buttonName: 'SUBMIT',
-                            onTap: Get.find<AddProductController>().isLoading.value
+                            buttonName: 'Submit',
+                            onTap:
+                                Get.find<AddProductController>().isLoading.value
                                 ? null
-                                : Get.find<AddProductController>().createProduct,
+                                : Get.find<AddProductController>()
+                                      .createProduct,
                           ),
                         );
                       }
 
-                      if (product.outOfStock == true || (product.stockQty ?? 0) <= 0) {
+                      if (product.outOfStock == true ||
+                          (product.stockQty ?? 0) <= 0) {
                         if (product.isNotify == true) {
                           return Padding(
                             padding: const EdgeInsets.all(24.0),
@@ -98,7 +103,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               fontColor: Colors.white,
                               borderRadius: 8,
                               fontSize: 16.sp,
-                              style: MyTexts.medium16.copyWith(color: Colors.white),
+                              style: MyTexts.medium16.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
                           );
                         } else {
@@ -110,10 +117,15 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               color: MyColors.primary,
                               fontColor: Colors.white,
                               borderRadius: 8,
-                              style: MyTexts.medium16.copyWith(color: Colors.white),
+                              style: MyTexts.medium16.copyWith(
+                                color: Colors.white,
+                              ),
                               onTap: () async {
-                                await Get.find<SelectedProductController>().notifyMeApi(
+                                await Get.find<HomeController>().notifyMeApi(
                                   mID: product.id ?? 0,
+                                  onSuccess: () {
+                                    controller.onApiCall?.call();
+                                  },
                                 );
                                 Get.back();
                               },
@@ -133,7 +145,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             horizontalPadding: 20,
                             buttonName: 'Connect',
                             color: MyColors.primary,
-                            style: MyTexts.medium16.copyWith(color: Colors.white),
+                            style: MyTexts.medium16.copyWith(
+                              color: Colors.white,
+                            ),
                             onTap: () {
                               ConnectionDialogs.showSendConnectionDialog(
                                 context,
@@ -141,13 +155,20 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 isFromIn: true,
                                 onTap: () async {
                                   Get.back();
-                                  await Get.find<SelectedProductController>()
+                                  await Get.find<HomeController>()
                                       .addToConnectApi(
-                                        mID: product.merchantProfileId ?? 0,
+                                        mID:
+                                            controller
+                                                .product
+                                                .merchantProfileId ??
+                                            0,
                                         message: '',
-                                        pID: product.id ?? 0,
+                                        pID: controller.product.id ?? 0,
+                                        onSuccess: ()  {
+                                          controller.onApiCall?.call();
+                                          Get.back();
+                                        },
                                       );
-                                  Get.back();
                                 },
                               );
                             },
@@ -160,7 +181,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             color: MyColors.pendingBtn,
                             horizontalPadding: 20,
                             buttonName: 'Pending',
-                            style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
                           ),
                         );
                       } else if (connectionStatus == 'accepted') {
@@ -171,7 +194,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             color: MyColors.grayEA,
                             buttonName: 'Connected',
                             borderRadius: 8,
-                            style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
                           ),
                         );
                       } else if (connectionStatus == 'rejected') {
@@ -182,7 +207,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             color: MyColors.rejectBtn,
                             buttonName: 'Rejected',
                             borderRadius: 8,
-                            style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
                           ),
                         );
                       } else {
@@ -223,7 +250,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
                           // 🟦 Collect images
                           if (isNetwork) {
-                            if (controller.product.images?.isNotEmpty ?? false) {
+                            if (controller.product.images?.isNotEmpty ??
+                                false) {
                               imageUrls.addAll(
                                 controller.product.images!
                                     .map(
@@ -232,7 +260,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                     )
                                     .toList(),
                               );
-                            } else if (controller.product.productImage != null) {
+                            } else if (controller.product.productImage !=
+                                null) {
                               imageUrls.add(
                                 "${APIConstants.bucketUrl}${controller.product.productImage!}",
                               );
@@ -246,7 +275,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             }
                           } else {
                             // From local (add mode)
-                            if (controller.product.images?.isNotEmpty ?? false) {
+                            if (controller.product.images?.isNotEmpty ??
+                                false) {
                               imageUrls.addAll(
                                 controller.product.images!
                                     .map(
@@ -257,7 +287,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                     )
                                     .toList(),
                               );
-                            } else if (controller.product.productImage != null) {
+                            } else if (controller.product.productImage !=
+                                null) {
                               imageUrls.add(
                                 "${APIConstants.bucketUrl}${controller.product.productImage!}",
                               );
@@ -282,8 +313,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
                           // Combine both (images + optional video)
                           final List<Map<String, dynamic>> mediaList = [
-                            ...imageUrls.map((e) => {'type': 'image', 'path': e}),
-                            if (videoUrl != null) {'type': 'video', 'path': videoUrl},
+                            ...imageUrls.map(
+                              (e) => {'type': 'image', 'path': e},
+                            ),
+                            if (videoUrl != null)
+                              {'type': 'video', 'path': videoUrl},
                           ];
 
                           // 🧭 PageView (images + video)
@@ -303,8 +337,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 if (media['type'] == 'video') {
                                   // 🟠 Video Thumbnail
                                   return GestureDetector(
-                                    onTap: () =>
-                                        controller.openVideoDialog(context, path, isHttp),
+                                    onTap: () => controller.openVideoDialog(
+                                      context,
+                                      path,
+                                      isHttp,
+                                    ),
                                     child: Stack(
                                       alignment: Alignment.center,
                                       children: [
@@ -314,13 +351,16 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               ? AspectRatio(
                                                   aspectRatio: 16 / 11,
                                                   child: VideoPlayer(
-                                                    controller.videoPlayerController!,
+                                                    controller
+                                                        .videoPlayerController!,
                                                   ),
                                                 )
                                               : AspectRatio(
                                                   aspectRatio: 16 / 11,
                                                   child: VideoPlayer(
-                                                    Get.find<AddProductController>()
+                                                    Get.find<
+                                                          AddProductController
+                                                        >()
                                                         .videoPlayerController!,
                                                   ),
                                                 ),
@@ -364,7 +404,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                     );
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4.0,
+                                    ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(0),
                                       child: isHttp
@@ -373,11 +415,12 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               fit: BoxFit.cover,
                                               height: 35.h,
                                               width: 360.w,
-                                              errorBuilder: (_, __, ___) => const Icon(
-                                                Icons.broken_image,
-                                                size: 60,
-                                                color: Colors.grey,
-                                              ),
+                                              errorBuilder: (_, __, ___) =>
+                                                  const Icon(
+                                                    Icons.broken_image,
+                                                    size: 60,
+                                                    color: Colors.grey,
+                                                  ),
                                             )
                                           : Image.file(
                                               File(path),
@@ -413,13 +456,15 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 child: Obx(() {
                                   return GestureDetector(
                                     onTap: () async {
-                                      await Get.find<SelectedProductController>()
-                                          .wishListApi(
-                                            status: controller.isLiked.value == true
-                                                ? "remove"
-                                                : "add",
-                                            mID: controller.product.id ?? 0,
-                                          );
+                                      await Get.find<HomeController>().wishListApi(
+                                        status: controller.isLiked.value == true
+                                            ? "remove"
+                                            : "add",
+                                        mID: controller.product.id ?? 0,
+                                        onSuccess: ()  {
+                                          controller.onApiCall?.call();
+                                        },
+                                      );
                                       controller.isLiked.value =
                                           !controller.isLiked.value;
                                     },
@@ -449,8 +494,12 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           (index) => AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
                             margin: const EdgeInsets.symmetric(horizontal: 4),
-                            height: controller.currentIndex.value == index ? 14 : 9,
-                            width: controller.currentIndex.value == index ? 14 : 9,
+                            height: controller.currentIndex.value == index
+                                ? 14
+                                : 9,
+                            width: controller.currentIndex.value == index
+                                ? 14
+                                : 9,
                             decoration: BoxDecoration(
                               color: controller.currentIndex.value == index
                                   ? MyColors.primary
@@ -473,7 +522,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          controller.product.categoryProductName?.capitalizeFirst ?? '-',
+                          controller
+                                  .product
+                                  .categoryProductName
+                                  ?.capitalizeFirst ??
+                              '-',
                           style: MyTexts.medium18.copyWith(
                             color: MyColors.fontBlack,
                             fontFamily: MyTexts.SpaceGrotesk,
@@ -546,15 +599,22 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             ),
                             child: Row(
                               children: [
-                                Icon(Icons.star, color: MyColors.white, size: 16),
+                                Icon(
+                                  Icons.star,
+                                  color: MyColors.white,
+                                  size: 16,
+                                ),
                                 const Gap(4),
                                 Text(
                                   controller.product.totalRatings == 0
                                       ? "(No ratings yet)"
                                       : double.parse(
-                                          controller.product.averageRating.toString(),
+                                          controller.product.averageRating
+                                              .toString(),
                                         ).toStringAsFixed(1),
-                                  style: MyTexts.bold14.copyWith(color: Colors.white),
+                                  style: MyTexts.bold14.copyWith(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ],
                             ),
@@ -571,7 +631,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     }),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(6),
@@ -621,7 +684,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: MyColors.brightGray),
+                                  border: Border.all(
+                                    color: MyColors.brightGray,
+                                  ),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -674,7 +739,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         const Gap(10),
                         HearderText(
                           text: "Product Specifications",
-                          textStyle: MyTexts.bold18.copyWith(color: MyColors.black),
+                          textStyle: MyTexts.bold18.copyWith(
+                            color: MyColors.black,
+                          ),
                         ),
                         const SizedBox(height: 10),
                         _buildSpecificationsTable(),
@@ -697,22 +764,30 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             children: [
                               Text(
                                 "Notes",
-                                style: MyTexts.medium14.copyWith(color: MyColors.grayA5),
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.grayA5,
+                                ),
                               ),
                               const Gap(8),
                               Text(
                                 controller.product.productNote ?? "-",
-                                style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.gray54,
+                                ),
                               ),
                               const Gap(12),
                               Text(
                                 "Terms and condition",
-                                style: MyTexts.medium14.copyWith(color: MyColors.grayA5),
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.grayA5,
+                                ),
                               ),
                               const Gap(8),
                               Text(
                                 controller.product.termsAndConditions ?? "-",
-                                style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.gray54,
+                                ),
                               ),
                             ],
                           ),
@@ -737,62 +812,71 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               shrinkWrap: true,
                                               physics:
                                                   const NeverScrollableScrollPhysics(),
-                                              itemCount: controller.reviewList.length,
-                                              padding: const EdgeInsets.symmetric(
-                                                vertical: 8,
-                                              ),
+                                              itemCount:
+                                                  controller.reviewList.length,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 8,
+                                                  ),
                                               itemBuilder: (context, index) {
-                                                final review =
-                                                    controller.reviewList[index];
+                                                final review = controller
+                                                    .reviewList[index];
                                                 return Container(
                                                   margin: const EdgeInsets.only(
                                                     bottom: 12,
                                                   ),
-                                                  padding: const EdgeInsets.all(14),
+                                                  padding: const EdgeInsets.all(
+                                                    14,
+                                                  ),
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(
-                                                      12,
-                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
                                                     border: Border.all(
                                                       color: MyColors.greyE5,
                                                     ),
                                                     color: Colors.white,
                                                     boxShadow: [
                                                       BoxShadow(
-                                                        color: Colors.grey.withOpacity(
-                                                          0.08,
-                                                        ),
+                                                        color: Colors.grey
+                                                            .withOpacity(0.08),
                                                         blurRadius: 6,
-                                                        offset: const Offset(0, 3),
+                                                        offset: const Offset(
+                                                          0,
+                                                          3,
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Row(
                                                         children: [
                                                           Container(
-                                                            decoration: BoxDecoration(
-                                                              color: MyColors.white,
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                    4,
-                                                                  ),
-                                                            ),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                  color: MyColors
+                                                                      .white,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        4,
+                                                                      ),
+                                                                ),
                                                             child: Row(
                                                               children: [
                                                                 const Icon(
                                                                   Icons.star,
-                                                                  color: MyColors.green,
+                                                                  color: MyColors
+                                                                      .green,
                                                                   size: 20,
                                                                 ),
                                                                 const Gap(4),
                                                                 Text(
-                                                                  controller
-                                                                              .product
-                                                                              .totalRatings ==
+                                                                  controller.product.totalRatings ==
                                                                           0
                                                                       ? "(No ratings yet)"
                                                                       : double.parse(
@@ -803,10 +887,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                                         ).toStringAsFixed(
                                                                           1,
                                                                         ),
-                                                                  style: MyTexts.bold16
+                                                                  style: MyTexts
+                                                                      .bold16
                                                                       .copyWith(
-                                                                        color:
-                                                                            Colors.green,
+                                                                        color: Colors
+                                                                            .green,
                                                                       ),
                                                                 ),
                                                               ],
@@ -818,14 +903,18 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                               'dd MMM yyyy',
                                                             ).format(
                                                               DateTime.parse(
-                                                                review.createdAt ?? "",
+                                                                review.createdAt ??
+                                                                    "",
                                                               ),
                                                             ),
-                                                            style: MyTexts.regular14
+                                                            style: MyTexts
+                                                                .regular14
                                                                 .copyWith(
-                                                                  color: MyColors.black,
-                                                                  fontFamily: MyTexts
-                                                                      .SpaceGrotesk,
+                                                                  color: MyColors
+                                                                      .black,
+                                                                  fontFamily:
+                                                                      MyTexts
+                                                                          .SpaceGrotesk,
                                                                 ),
                                                           ),
                                                         ],
@@ -835,22 +924,27 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                       /// 💬 Review Text
                                                       Text(
                                                         review.reviewText ?? '',
-                                                        style: MyTexts.medium16.copyWith(
-                                                          color: MyColors.black,
-                                                          fontFamily:
-                                                              MyTexts.SpaceGrotesk,
-                                                        ),
+                                                        style: MyTexts.medium16
+                                                            .copyWith(
+                                                              color: MyColors
+                                                                  .black,
+                                                              fontFamily: MyTexts
+                                                                  .SpaceGrotesk,
+                                                            ),
                                                       ),
                                                       const SizedBox(height: 8),
                                                       Row(
                                                         children: [
                                                           CircleAvatar(
                                                             radius: 16,
-                                                            backgroundColor: MyColors
-                                                                .primary
-                                                                .withOpacity(0.1),
+                                                            backgroundColor:
+                                                                MyColors.primary
+                                                                    .withOpacity(
+                                                                      0.1,
+                                                                    ),
                                                             child: Text(
-                                                              review.isAnonymous ?? false
+                                                              review.isAnonymous ??
+                                                                      false
                                                                   ? "A"
                                                                   : (review.userName
                                                                             ?.substring(
@@ -859,32 +953,41 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                                             )
                                                                             .toUpperCase() ??
                                                                         "?"),
-                                                              style: MyTexts.medium16
+                                                              style: MyTexts
+                                                                  .medium16
                                                                   .copyWith(
-                                                                    color:
-                                                                        MyColors.primary,
+                                                                    color: MyColors
+                                                                        .primary,
                                                                     fontWeight:
-                                                                        FontWeight.bold,
-                                                                    fontFamily: MyTexts
-                                                                        .SpaceGrotesk,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        MyTexts
+                                                                            .SpaceGrotesk,
                                                                   ),
                                                             ),
                                                           ),
-                                                          const SizedBox(width: 10),
+                                                          const SizedBox(
+                                                            width: 10,
+                                                          ),
                                                           Expanded(
                                                             child: Text(
-                                                              review.isAnonymous ?? false
+                                                              review.isAnonymous ??
+                                                                      false
                                                                   ? "Anonymous User"
                                                                   : (review.userName ??
                                                                         ""),
-                                                              style: MyTexts.regular14
+                                                              style: MyTexts
+                                                                  .regular14
                                                                   .copyWith(
                                                                     fontWeight:
-                                                                        FontWeight.w600,
+                                                                        FontWeight
+                                                                            .w600,
                                                                     color: MyColors
                                                                         .dustyGray,
-                                                                    fontFamily: MyTexts
-                                                                        .SpaceGrotesk,
+                                                                    fontFamily:
+                                                                        MyTexts
+                                                                            .SpaceGrotesk,
                                                                   ),
                                                             ),
                                                           ),
@@ -902,10 +1005,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               child: Center(
                                                 child: Text(
                                                   "No review given yet",
-                                                  style: MyTexts.regular14.copyWith(
-                                                    color: MyColors.dustyGray,
-                                                    fontFamily: MyTexts.SpaceGrotesk,
-                                                  ),
+                                                  style: MyTexts.regular14
+                                                      .copyWith(
+                                                        color:
+                                                            MyColors.dustyGray,
+                                                        fontFamily: MyTexts
+                                                            .SpaceGrotesk,
+                                                      ),
                                                 ),
                                               ),
                                             );
@@ -1013,7 +1119,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
   }
 
   Widget buildRatingRow(Product product) {
-    final double averageRating = double.tryParse(product.averageRating ?? '0') ?? 0.0;
+    final double averageRating =
+        double.tryParse(product.averageRating ?? '0') ?? 0.0;
     final int totalRatings = product.totalRatings ?? 0;
 
     final int fullStars = averageRating.floor();
@@ -1071,7 +1178,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         valueMap = value;
       }
 
-      var displayValue = valueMap['display_value'] ?? valueMap['value'] ?? value;
+      var displayValue =
+          valueMap['display_value'] ?? valueMap['value'] ?? value;
 
       if (displayValue is String &&
           displayValue.trim().startsWith('[') &&

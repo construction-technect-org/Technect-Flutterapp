@@ -80,20 +80,11 @@ class ConnectionInboxView extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Gap(20),
-                                  Icon(
-                                    controller.searchQuery.value.isNotEmpty
-                                        ? Icons.search_off
-                                        : Icons.people_outline,
-                                    size: 64,
-                                    color: MyColors.grey,
-                                  ),
-                                  SizedBox(height: 1.h),
                                   Text(
                                     controller.searchQuery.value.isNotEmpty
                                         ? 'No connections found'
                                         : 'No connection requests',
-                                    style: MyTexts.medium18.copyWith(
+                                    style: MyTexts.medium16.copyWith(
                                       color: MyColors.fontBlack,
                                       fontFamily: MyTexts.SpaceGrotesk,
                                     ),

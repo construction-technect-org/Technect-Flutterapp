@@ -58,6 +58,7 @@ class EditProfileView extends GetView<EditProfileController> {
 
               Column(
                 children: [
+
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
                     title: const Text(
