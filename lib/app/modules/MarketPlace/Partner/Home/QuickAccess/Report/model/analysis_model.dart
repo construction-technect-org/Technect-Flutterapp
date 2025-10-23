@@ -27,6 +27,8 @@ class Analysis {
   TeamAnalytics? teamAnalytics;
   RoleAnalytics? roleAnalytics;
   SupportTicketAnalytics? supportTicketAnalytics;
+  WishlistAnalytics? wishlist;
+  ConnectionsAnalytics? connections;
   String? generatedAt;
   DateRange? dateRange;
   OverallStatistics? overallStatistics;
@@ -37,6 +39,8 @@ class Analysis {
         this.teamAnalytics,
         this.overallStatistics,
         this.roleAnalytics,
+        this.wishlist,
+        this.connections,
         this.supportTicketAnalytics,
         this.generatedAt,
         this.dateRange});
@@ -61,6 +65,12 @@ class Analysis {
     dateRange = json['date_range'] != null
         ? DateRange.fromJson(json['date_range'])
         : null;
+    wishlist = json['wishlist'] != null
+        ? WishlistAnalytics.fromJson(json['wishlist'])
+        : null;
+    connections = json['connections'] != null
+        ? ConnectionsAnalytics.fromJson(json['connections'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +89,12 @@ class Analysis {
     }
     if (overallStatistics != null) {
       data['overall_statistics'] = overallStatistics!.toJson();
+    }
+    if (wishlist != null) {
+      data['wishlist'] = wishlist!.toJson();
+    }
+    if (connections != null) {
+      data['connections'] = connections!.toJson();
     }
     data['generated_at'] = generatedAt;
     if (dateRange != null) {
@@ -484,6 +500,126 @@ class DateRange {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['start_date'] = startDate;
     data['end_date'] = endDate;
+    return data;
+  }
+}
+
+
+class WishlistAnalytics {
+  int? totalItems;
+  int? itemsAddedInPeriod;
+  List<WishlistMonthlyBreakdown>? monthlyBreakdown;
+
+  WishlistAnalytics({this.totalItems, this.itemsAddedInPeriod, this.monthlyBreakdown});
+
+  WishlistAnalytics.fromJson(Map<String, dynamic> json) {
+    totalItems = json['total_items'];
+    itemsAddedInPeriod = json['items_added_in_period'];
+    if (json['monthly_breakdown'] != null) {
+      monthlyBreakdown = <WishlistMonthlyBreakdown>[];
+      json['monthly_breakdown'].forEach((v) {
+        monthlyBreakdown!.add(WishlistMonthlyBreakdown.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_items'] = totalItems;
+    data['items_added_in_period'] = itemsAddedInPeriod;
+    if (monthlyBreakdown != null) {
+      data['monthly_breakdown'] =
+          monthlyBreakdown!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class WishlistMonthlyBreakdown {
+  int? monthNumber;
+  String? monthName;
+  int? year;
+  int? itemsAdded;
+
+  WishlistMonthlyBreakdown(
+      {this.monthNumber, this.monthName, this.year, this.itemsAdded});
+
+  WishlistMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
+    monthNumber = json['month_number'];
+    monthName = json['month_name'];
+    year = json['year'];
+    itemsAdded = json['items_added'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['month_number'] = monthNumber;
+    data['month_name'] = monthName;
+    data['year'] = year;
+    data['items_added'] = itemsAdded;
+    return data;
+  }
+}
+class ConnectionsAnalytics {
+  int? totalConnections;
+  int? connectionsCreatedInPeriod;
+  List<ConnectionsMonthlyBreakdown>? monthlyBreakdown;
+
+  ConnectionsAnalytics({
+    this.totalConnections,
+    this.connectionsCreatedInPeriod,
+    this.monthlyBreakdown,
+  });
+
+  ConnectionsAnalytics.fromJson(Map<String, dynamic> json) {
+    totalConnections = json['total_connections'];
+    connectionsCreatedInPeriod = json['connections_created_in_period'];
+    if (json['monthly_breakdown'] != null) {
+      monthlyBreakdown = <ConnectionsMonthlyBreakdown>[];
+      json['monthly_breakdown'].forEach((v) {
+        monthlyBreakdown!.add(ConnectionsMonthlyBreakdown.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_connections'] = totalConnections;
+    data['connections_created_in_period'] = connectionsCreatedInPeriod;
+    if (monthlyBreakdown != null) {
+      data['monthly_breakdown'] =
+          monthlyBreakdown!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class ConnectionsMonthlyBreakdown {
+  int? monthNumber;
+  String? monthName;
+  int? year;
+  int? connectionsCreated;
+
+  ConnectionsMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.connectionsCreated,
+  });
+
+  ConnectionsMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
+    monthNumber = json['month_number'];
+    monthName = json['month_name'];
+    year = json['year'];
+    connectionsCreated = json['connections_created'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['month_number'] = monthNumber;
+    data['month_name'] = monthName;
+    data['year'] = year;
+    data['connections_created'] = connectionsCreated;
     return data;
   }
 }

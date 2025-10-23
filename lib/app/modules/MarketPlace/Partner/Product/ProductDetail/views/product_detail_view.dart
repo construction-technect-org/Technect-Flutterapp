@@ -342,11 +342,12 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           color: Colors.black12,
                                           child: isHttp
                                               ? AspectRatio(
-                                            aspectRatio: 16 / 11,
-                                            child: VideoPlayer(
-                                              controller.videoPlayerController!,
-                                            ),
-                                          )
+                                                  aspectRatio: 16 / 11,
+                                                  child: VideoPlayer(
+                                                    controller
+                                                        .videoPlayerController!,
+                                                  ),
+                                                )
                                               : AspectRatio(
                                                   aspectRatio: 16 / 11,
                                                   child: VideoPlayer(
@@ -430,8 +431,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ),
 
                       Obx(() {
-                        return !(controller.isFromAdd.value == true &&
+                        return (controller.isFromAdd.value == false &&
                                 controller.isFromConnector.value == false)
+                            ? const SizedBox()
+                            : !(controller.isFromAdd.value == true &&
+                                  controller.isFromConnector.value == false)
                             ? Container(
                                 margin: const EdgeInsets.all(20),
                                 padding: const EdgeInsets.symmetric(
@@ -474,33 +478,33 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       }),
                     ],
                   ),
-                    Positioned(
-                      bottom: 8,
-                      child: Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            (controller.product.images ?? []).length+1,
-                            (index) => AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              height: controller.currentIndex.value == index
-                                  ? 14
-                                  : 9,
-                              width: controller.currentIndex.value == index
-                                  ? 14
-                                  : 9,
-                              decoration: BoxDecoration(
-                                color: controller.currentIndex.value == index
-                                    ? MyColors.primary
-                                    : MyColors.primary.withValues(alpha: 0.5),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                  Positioned(
+                    bottom: 8,
+                    child: Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          (controller.product.images ?? []).length + 1,
+                          (index) => AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            height: controller.currentIndex.value == index
+                                ? 14
+                                : 9,
+                            width: controller.currentIndex.value == index
+                                ? 14
+                                : 9,
+                            decoration: BoxDecoration(
+                              color: controller.currentIndex.value == index
+                                  ? MyColors.primary
+                                  : MyColors.primary.withValues(alpha: 0.5),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),
                       ),
                     ),
+                  ),
                 ],
               ),
               Padding(

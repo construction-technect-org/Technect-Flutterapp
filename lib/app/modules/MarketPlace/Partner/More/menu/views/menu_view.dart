@@ -73,6 +73,23 @@ class MenuView extends StatelessWidget {
                     Get.toNamed(Routes.APPROVAL_INBOX);
                   },
                 ),
+              ]else...[
+                Gap(1.h),
+                CommonContainer(
+                  icon: Asset.wishlistIcon,
+                  title: "WishList",
+                  onTap: () {
+                    Get.toNamed(Routes.WISH_LIST);
+                  },
+                ),
+                const Gap(16),
+                CommonContainer(
+                  icon: Asset.wishlistIcon,
+                  title: "Cart",
+                  onTap: () {
+                    Get.toNamed(Routes.CART_LIST);
+                  },
+                ),
               ],
               const Gap(16),
               CommonContainer(

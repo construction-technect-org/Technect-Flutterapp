@@ -9,11 +9,12 @@ class NewsController extends GetxController {
   RxBool isConnector = false.obs;
   Rx<NewsModel> newsModel = NewsModel().obs;
 
+
   @override
   void onInit() {
     super.onInit();
     // _loadNewsFromStorage();
-    isConnector.value = myPref.getRole() == "merchant_connector";
+    isConnector.value = myPref.getRole() == "connector";
     fetchNews();
   }
 

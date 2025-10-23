@@ -117,6 +117,8 @@ class APIConstants {
   static const String connectorMerchantStore= "connector/merchant-store/merchant-stores";
   static const String connectorNotifications = "connector/notifications";
   static const String newsConnector = "news/connector";
+  static const String cartList = "connector/connection-request/cart";
+
 
 
 }

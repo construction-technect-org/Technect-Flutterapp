@@ -20,6 +20,8 @@ import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMark
 import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMarketPlace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/bindings/add_kyc_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/views/add_kyc_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/bindings/cart_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/views/cart_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocation/bindings/connector_add_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocation/views/connector_add_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocationManually/bindings/connector_add_location_manually_binding.dart';
@@ -383,6 +385,11 @@ class AppPages {
       name: Routes.NEW_LAUNCH,
       page: () =>  NewLaunchesProduct(),
       binding: NewLaunchBinding(),
+    ),
+    GetPage(
+      name: Routes.CART_LIST,
+      page: () =>  CartListView(),
+      binding: CartListBinding(),
     ),
     GetPage(
       name: Routes.SELECT_PRODUCT,

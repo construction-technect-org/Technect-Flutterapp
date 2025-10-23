@@ -33,7 +33,9 @@ class ReportView extends GetView<ReportController> {
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: Text(controller.isReport.value ? 'Reports' : "Analysis"),
+                  title: Text(
+                    controller.isReport.value ? 'Reports' : "Analysis",
+                  ),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () {
@@ -59,6 +61,7 @@ class ReportView extends GetView<ReportController> {
                           const Gap(16),
                           _buildGreeting(),
                           const Gap(20),
+                          if(myPref.role.val == "partner")
                           Row(
                             children: [
                               Obx(() {
@@ -135,6 +138,83 @@ class ReportView extends GetView<ReportController> {
                               }),
                             ],
                           ),
+                          if(myPref.role.val == "connector")
+                            Row(
+                              children: [
+                                Obx(() {
+                                  return ProductStatCard(
+                                    iconAsset: Asset.totalProduct,
+                                    title: "Total Connectors",
+                                    value:
+                                    controller
+                                        .analysisModel
+                                        .value
+                                        .overallStatistics
+                                        ?.totalConnectors
+                                        .toString() ??
+                                        "",
+                                    subtitle: "Active Connectors",
+                                    subValue:
+                                    controller
+                                        .analysisModel
+                                        .value
+                                        .overallStatistics
+                                        ?.activeConnectors
+                                        .toString() ??
+                                        "",
+                                  );
+                                }),
+                                const Gap(5),
+                                Obx(() {
+                                  return ProductStatCard(
+                                    iconAsset: Asset.totalProduct,
+                                    title: "Total Products",
+                                    value:
+                                    controller
+                                        .analysisModel
+                                        .value
+                                        .overallStatistics
+                                        ?.totalProducts
+                                        .toString() ??
+                                        "",
+                                    subtitle: "Active Products",
+                                    subValue:
+                                    controller
+                                        .analysisModel
+                                        .value
+                                        .overallStatistics
+                                        ?.activeProducts
+                                        .toString() ??
+                                        "",
+                                  );
+                                }),
+                                const Gap(5),
+                                Obx(() {
+                                  return ProductStatCard(
+                                    iconAsset: Asset.totalProduct,
+
+                                    title: "Total Users",
+                                    value:
+                                    controller
+                                        .analysisModel
+                                        .value
+                                        .overallStatistics
+                                        ?.totalUsers
+                                        .toString() ??
+                                        "",
+                                    subtitle: "Active Users",
+                                    subValue:
+                                    controller
+                                        .analysisModel
+                                        .value
+                                        .overallStatistics
+                                        ?.activeUsers
+                                        .toString() ??
+                                        "",
+                                  );
+                                }),
+                              ],
+                            ),
                           const Gap(20),
 
                           HeaderText(text: "Select month and download report"),
@@ -352,98 +432,170 @@ class ReportView extends GetView<ReportController> {
   }
 
   Widget _buildCharts() {
+    print(myPref.role.val);
     return Obx(() {
-      if (!controller.isReport.value &&
-          controller.analysisModel.value.productAnalytics != null) {
+      if (!controller.isReport.value) {
         final analysis = controller.analysisModel.value;
-        return Column(
-          children: [
-            ReportGraph(
-              title: "Products Analysis",
-              labels: analysis.productAnalytics!.monthlyBreakdown!
-                  .map((e) => e.monthName!)
-                  .toList(),
-              values: [
-                analysis.productAnalytics!.monthlyBreakdown!
-                    .map((e) => e.productsAdded ?? 0)
-                    .toList(),
-                analysis.productAnalytics!.monthlyBreakdown!
-                    .map((e) => e.activeProducts ?? 0)
-                    .toList(),
-                analysis.productAnalytics!.monthlyBreakdown!
-                    .map((e) => e.rejectedProducts ?? 0)
-                    .toList(),
-              ],
-              colors: const [MyColors.primary, MyColors.green, Colors.red],
-              legends: const [
-                "Products Added",
-                "Active Products",
-                "Rejected Products",
-              ],
-            ),
-            const Gap(10),
-            ReportGraph(
-              title: "Team Analysis",
-              labels: analysis.teamAnalytics!.monthlyBreakdown!
-                  .map((e) => e.monthName!)
-                  .toList(),
-              values: [
-                analysis.teamAnalytics!.monthlyBreakdown!
-                    .map((e) => e.teamMembersAdded ?? 0)
-                    .toList(),
-                analysis.teamAnalytics!.monthlyBreakdown!
-                    .map((e) => e.availableTeamMembers ?? 0)
-                    .toList(),
-              ],
-              colors: const [MyColors.primary, MyColors.green],
-              legends: const ["Added Member", "Active Member"],
-            ),
-            const Gap(10),
+        return myPref.role.val == "partner"
+            ? Column(
+                children: [
+                  if (analysis.productAnalytics != null)
+                    ReportGraph(
+                      title: "Products Analysis",
+                      labels: analysis.productAnalytics!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.productAnalytics!.monthlyBreakdown!
+                            .map((e) => e.productsAdded ?? 0)
+                            .toList(),
+                        analysis.productAnalytics!.monthlyBreakdown!
+                            .map((e) => e.activeProducts ?? 0)
+                            .toList(),
+                        analysis.productAnalytics!.monthlyBreakdown!
+                            .map((e) => e.rejectedProducts ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [
+                        MyColors.primary,
+                        MyColors.green,
+                        Colors.red,
+                      ],
+                      legends: const [
+                        "Products Added",
+                        "Active Products",
+                        "Rejected Products",
+                      ],
+                    ),
+                  const Gap(10),
+                  if (analysis.teamAnalytics != null)
+                    ReportGraph(
+                      title: "Team Analysis",
+                      labels: analysis.teamAnalytics!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.teamAnalytics!.monthlyBreakdown!
+                            .map((e) => e.teamMembersAdded ?? 0)
+                            .toList(),
+                        analysis.teamAnalytics!.monthlyBreakdown!
+                            .map((e) => e.availableTeamMembers ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [MyColors.primary, MyColors.green],
+                      legends: const ["Added Member", "Active Member"],
+                    ),
+                  const Gap(10),
 
-            ReportGraph(
-              title: "Role Analysis",
-              labels: analysis.roleAnalytics!.monthlyBreakdown!
-                  .map((e) => e.monthName!)
-                  .toList(),
-              values: [
-                analysis.roleAnalytics!.monthlyBreakdown!
-                    .map((e) => e.rolesCreated ?? 0)
-                    .toList(),
-                analysis.roleAnalytics!.monthlyBreakdown!
-                    .map((e) => e.activeRoles ?? 0)
-                    .toList(),
-              ],
-              colors: const [MyColors.primary, MyColors.green],
-              legends: const ["Role Created", "Active Role"],
-            ),
-            const Gap(10),
+                  if (analysis.roleAnalytics != null)
+                    ReportGraph(
+                      title: "Role Analysis",
+                      labels: analysis.roleAnalytics!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.roleAnalytics!.monthlyBreakdown!
+                            .map((e) => e.rolesCreated ?? 0)
+                            .toList(),
+                        analysis.roleAnalytics!.monthlyBreakdown!
+                            .map((e) => e.activeRoles ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [MyColors.primary, MyColors.green],
+                      legends: const ["Role Created", "Active Role"],
+                    ),
+                  const Gap(10),
+                  if (analysis.supportTicketAnalytics != null)
+                    ReportGraph(
+                      title: "Support Ticket Analysis",
+                      labels: analysis.supportTicketAnalytics!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                            .map((e) => e.openTickets ?? 0)
+                            .toList(),
+                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                            .map((e) => e.closedTickets ?? 0)
+                            .toList(),
+                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                            .map((e) => e.resolvedTickets ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [Colors.orange, Colors.red, MyColors.green],
+                      legends: const [
+                        "Open Tickets",
+                        "Closed Tickets",
+                        "Resoled Tickets",
+                      ],
+                    ),
+                  const Gap(20),
+                ],
+              )
+            : Column(
+                children: [
+                  if (analysis.wishlist != null)
+                    ReportGraph(
+                      title: "WishList Analysis",
+                      labels: analysis.wishlist!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.wishlist!.monthlyBreakdown!
+                            .map((e) => e.itemsAdded ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [
+                        MyColors.primary,
+                        MyColors.green,
+                        Colors.red,
+                      ],
+                      legends: const ["Item Added"],
+                    ),
+                  const Gap(10),
+                  if (analysis.connections != null)
+                    ReportGraph(
+                      title: "Connection Analysis",
+                      labels: analysis.connections!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.connections!.monthlyBreakdown!
+                            .map((e) => e.connectionsCreated ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [MyColors.primary, MyColors.green],
+                      legends: const ["Created Connection"],
+                    ),
+                  const Gap(10),
+                  if (analysis.supportTicketAnalytics != null)
+                    ReportGraph(
+                      title: "Support Ticket Analysis",
+                      labels: analysis.supportTicketAnalytics!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                            .map((e) => e.openTickets ?? 0)
+                            .toList(),
+                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                            .map((e) => e.closedTickets ?? 0)
+                            .toList(),
+                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                            .map((e) => e.resolvedTickets ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [MyColors.primary, MyColors.green],
+                      legends: const [
+                        "Open Tickets",
+                        "Closed Tickets",
+                        "Resolved Tickets",
+                      ],
+                    ),
 
-            ReportGraph(
-              title: "Support Ticket Analysis",
-              labels: analysis.supportTicketAnalytics!.monthlyBreakdown!
-                  .map((e) => e.monthName!)
-                  .toList(),
-              values: [
-                analysis.supportTicketAnalytics!.monthlyBreakdown!
-                    .map((e) => e.openTickets ?? 0)
-                    .toList(),
-                analysis.supportTicketAnalytics!.monthlyBreakdown!
-                    .map((e) => e.closedTickets ?? 0)
-                    .toList(),
-                analysis.supportTicketAnalytics!.monthlyBreakdown!
-                    .map((e) => e.resolvedTickets ?? 0)
-                    .toList(),
-              ],
-              colors: const [Colors.orange, Colors.red, MyColors.green],
-              legends: const [
-                "Open Tickets",
-                "Closed Tickets",
-                "Resoled Tickets",
-              ],
-            ),
-            const Gap(20),
-          ],
-        );
+                  const Gap(20),
+                ],
+              );
       }
       return const SizedBox();
     });
