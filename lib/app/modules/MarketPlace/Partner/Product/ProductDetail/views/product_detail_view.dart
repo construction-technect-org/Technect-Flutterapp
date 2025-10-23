@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/selected_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/home/ConnectorHome/views/connector_home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/controllers/product_detail_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
