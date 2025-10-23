@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/models/ProductDetailsModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/models/rating_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/services/ProductDetailService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
@@ -10,9 +12,7 @@ import 'package:video_player/video_player.dart';
 class ProductDetailsController extends GetxController {
   Product product = Product();
 
-  ProfileModel profileData = ProfileModel.fromJson(
-    myPref.getProfileData() ?? {},
-  );
+  ProfileModel profileData = ProfileModel.fromJson(myPref.getProfileData() ?? {});
   final RxBool showProductDetails = false.obs;
   final RxBool isFromAdd = false.obs;
   final RxBool isFromConnector = false.obs;
@@ -21,30 +21,30 @@ class ProductDetailsController extends GetxController {
   final RxInt currentIndex = 0.obs;
   final ProductDetailService _service = ProductDetailService();
   VideoPlayerController? videoPlayerController;
+  Rx<ProductDetailsModel> productDetailsModel = ProductDetailsModel().obs;
 
   @override
-  void onInit()  {
+  void onInit() {
     final argument = Get.arguments as Map;
     product = argument['product'] ?? Product();
-    isLiked.value=product.isInWishList??false;
+    isLiked.value = product.isInWishList ?? false;
     isFromAdd.value = argument["isFromAdd"];
     isFromConnector.value = argument["isFromConnector"];
     if (isFromAdd.value == false) {
       fetchReview(product.id ?? 0, isFromConnector.value);
+      productDetails(product.id ?? 0);
       WidgetsBinding.instance.addPostFrameCallback((val) async {
-        videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()));
+        videoPlayerController = VideoPlayerController.networkUrl(
+          Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()),
+        );
         await videoPlayerController?.initialize();
       });
     }
     super.onInit();
   }
 
-
   void onEditProduct() {
-    Get.toNamed(
-      Routes.ADD_PRODUCT,
-      arguments: {"isEdit": true, 'product': product},
-    );
+    Get.toNamed(Routes.ADD_PRODUCT, arguments: {"isEdit": true, 'product': product});
   }
 
   final RxList<Ratings> reviewList = <Ratings>[].obs;
@@ -66,6 +66,24 @@ class ProductDetailsController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> productDetails(int id) async {
+    try {
+      isLoading.value = true;
+      productDetailsModel.value = await _service.productDetails(
+        id: id.toString(),
+        latitude: Get.find<HomeController>().currentLatitude.toString(),
+        longitude: Get.find<HomeController>().currentLongitude.toString(),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
     final playerController = isNetwork
         ? VideoPlayerController.network(videoPath)
@@ -87,7 +105,15 @@ class ProductDetailsController extends GetxController {
                     alignment: Alignment.bottomCenter,
                     children: [
                       VideoPlayer(playerController),
-                      VideoProgressIndicator(playerController, allowScrubbing: true,colors:const VideoProgressColors(backgroundColor: MyColors.grayEA,playedColor: MyColors.primary,bufferedColor: MyColors.grayEA)),
+                      VideoProgressIndicator(
+                        playerController,
+                        allowScrubbing: true,
+                        colors: const VideoProgressColors(
+                          backgroundColor: MyColors.grayEA,
+                          playedColor: MyColors.primary,
+                          bufferedColor: MyColors.grayEA,
+                        ),
+                      ),
                       Positioned(
                         top: 8,
                         right: 8,
@@ -112,5 +138,4 @@ class ProductDetailsController extends GetxController {
       },
     );
   }
-
 }
