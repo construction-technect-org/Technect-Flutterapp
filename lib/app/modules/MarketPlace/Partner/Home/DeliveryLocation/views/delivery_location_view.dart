@@ -116,7 +116,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                     ),
                                     child: Column(
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.location_off,
                                           size: 48,
                                           color: MyColors.gray54,
@@ -181,16 +181,14 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: address.isDefault == true
-                                                  ? MyColors.primary.withValues(
-                                                      alpha: 0.1,
-                                                    )
+                                                  ? MyColors.veryPaleBlue
                                                   : Colors.white,
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                               border: address.isDefault == true
                                                   ? Border.all(
-                                                      color: MyColors.primary,
-                                                      width: 2,
+                                                      color: MyColors.verypaleBlue,
+                                                      width: 1.2,
                                                     )
                                                   : null,
                                             ),
@@ -212,7 +210,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                                             Row(
                                                               children: [
                                                                 Text(
-                                                                  address.siteName ??
+                                                                  address.siteName?.capitalizeFirst ??
                                                                       'Address',
                                                                   style: MyTexts
                                                                       .medium16
@@ -230,7 +228,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                                                       horizontal:
                                                                           8,
                                                                       vertical:
-                                                                          2,
+                                                                          3,
                                                                     ),
                                                                     decoration: BoxDecoration(
                                                                       color: MyColors
@@ -243,7 +241,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                                                     child: Text(
                                                                       'Default',
                                                                       style: MyTexts
-                                                                          .regular12
+                                                                          .medium13
                                                                           .copyWith(
                                                                             color:
                                                                                 Colors.white,
@@ -255,7 +253,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                                             ),
                                                             const Gap(4),
                                                             Text(
-                                                              address.fullAddress ??
+                                                              address.fullAddress?.capitalizeFirst ??
                                                                   '',
                                                               style: MyTexts
                                                                   .medium14
