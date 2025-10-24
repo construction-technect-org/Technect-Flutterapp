@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/AddRolemodel.dart';
 
 class FeedbackService {
@@ -13,7 +14,9 @@ class FeedbackService {
   }) async {
     try {
       final response = await _apiManager.postObject(
-        url: APIConstants.merchantFeedback,
+        url: myPref.role.val == "connector"
+            ? APIConstants.connectorFeedback
+            : APIConstants.merchantFeedback,
         body: {
           "rating": rating,
           "feedback_text": text,
@@ -45,11 +48,7 @@ class FeedbackService {
     try {
       final response = await _apiManager.postObject(
         url: "${APIConstants.connectorGetProductReview}$id/rating",
-        body: {
-          "rating": rating,
-          "review_text": text,
-          "is_anonymous": false,
-        },
+        body: {"rating": rating, "review_text": text, "is_anonymous": false},
       );
 
       if (response != null) {
@@ -66,5 +65,4 @@ class FeedbackService {
       return AddRolemodel(success: false, data: null, message: e.toString());
     }
   }
-
 }

@@ -23,27 +23,30 @@ class ProductDetailsController extends GetxController {
   final RxInt currentIndex = 0.obs;
   final ProductDetailService _service = ProductDetailService();
   VideoPlayerController? videoPlayerController;
-  final VoidCallback? onApiCall = Get.arguments['onApiCall']??(){};
+  final VoidCallback? onApiCall = Get.arguments['onApiCall'] ?? () {};
   Rx<ProductDetailsModel> productDetailsModel = ProductDetailsModel().obs;
 
   @override
-  void onInit()  {
+  void onInit() {
     final argument = Get.arguments as Map;
     product = argument['product'] ?? Product();
-    isLiked.value=product.isInWishList??false;
+    isLiked.value = product.isInWishList ?? false;
     isFromAdd.value = argument["isFromAdd"];
     isFromConnector.value = argument["isFromConnector"];
     if (isFromAdd.value == false) {
       fetchReview(product.id ?? 0, isFromConnector.value);
-      productDetails(product.id ?? 0);
+      if (!(isFromAdd.value == false && isFromConnector.value==false)) {
+        productDetails(product.id ?? 0);
+      }
       WidgetsBinding.instance.addPostFrameCallback((val) async {
-        videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()));
+        videoPlayerController = VideoPlayerController.networkUrl(
+          Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()),
+        );
         await videoPlayerController?.initialize();
       });
     }
     super.onInit();
   }
-
 
   void onEditProduct() {
     Get.toNamed(
@@ -110,7 +113,15 @@ class ProductDetailsController extends GetxController {
                     alignment: Alignment.bottomCenter,
                     children: [
                       VideoPlayer(playerController),
-                      VideoProgressIndicator(playerController, allowScrubbing: true,colors:const VideoProgressColors(backgroundColor: MyColors.grayEA,playedColor: MyColors.primary,bufferedColor: MyColors.grayEA)),
+                      VideoProgressIndicator(
+                        playerController,
+                        allowScrubbing: true,
+                        colors: const VideoProgressColors(
+                          backgroundColor: MyColors.grayEA,
+                          playedColor: MyColors.primary,
+                          bufferedColor: MyColors.grayEA,
+                        ),
+                      ),
                       Positioned(
                         top: 8,
                         right: 8,
@@ -137,6 +148,4 @@ class ProductDetailsController extends GetxController {
   }
 
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
-
-
 }

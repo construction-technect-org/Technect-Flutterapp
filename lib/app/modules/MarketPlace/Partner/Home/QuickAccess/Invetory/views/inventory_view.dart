@@ -64,7 +64,7 @@ class InventoryView extends GetView<InventoryController> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 0.5,
+                          childAspectRatio: 0.6,
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                         ),

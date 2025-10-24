@@ -71,8 +71,9 @@ class APIConstants {
   // Service SupportTicket API
   static const String getSupportTicketCategories = "support-ticket/categories";
   static const String getSupportTicketPriorities = "support-ticket/priorities";
-  static const String SupportTicketCreat = "support-ticket/create";
-  static const String getSupportMyTickets = "support-ticket/my-tickets";
+  static const String createPartnerSupportTicket = "support-ticket/create";
+  static const String getPartnerSupportTickets = "support-ticket/my-tickets";
+
 
   // Connection Inbox API
   static const String connectionInbox = "connection-request/merchant/inbox";
@@ -97,7 +98,6 @@ class APIConstants {
       "connector/support-ticket/my-tickets";
 
   // Connector Demo Request API
-  static const String connectorDemoRequest = "connector/demo-request/my-requests";
   static const String connectorDemoRequestCreate = "connector/demo-request/create";
 
   static const String connectionConnectorInbox = "connector/connection-request/inbox";
@@ -113,4 +113,7 @@ class APIConstants {
   static const String connectorNotifications = "connector/notifications";
   static const String newsConnector = "news/connector";
   static const String cartList = "connector/connection-request/cart";
+  static const String getConnectorSupportTicket = "connector/support-ticket/my-tickets?";
+  static const String createConnectorSupportTicket = "connector/support-ticket/create";
+  static const String connectorFeedback = "feedback/connector";
 }

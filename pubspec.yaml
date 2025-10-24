@@ -63,6 +63,7 @@ flutter:
     - assets/images/bg/
     - assets/images/png/
     - assets/images/png/feature/
+    - assets/images/png/role/
     - assets/images/svg/
     - assets/animation/
 

@@ -14,7 +14,11 @@ class CartListController extends GetxController {
   Future<void> fetchCartList({bool? isLoad}) async {
     try {
       isLoading.value = isLoad??false;
-      final result = await _service.allCartList();
+      String? statusParam;
+      if (selectedStatus.value != 'All') {
+        statusParam = selectedStatus.value.toLowerCase();
+      }
+      final result = await _service.allCartList(status: statusParam);
       if (result.success == true) {
         cartModel.value = result;
         filteredProducts.assignAll(result.data?.products ?? []);
@@ -64,6 +68,17 @@ class CartListController extends GetxController {
       );
     }
   }
+
+  RxString selectedStatus = 'All'.obs;
+
+  final List<String> statusOptions = [
+    'All',
+    'Pending',
+    'Accepted',
+    'Rejected',
+    'Cancelled',
+  ];
+
 
   @override
   void onInit() {

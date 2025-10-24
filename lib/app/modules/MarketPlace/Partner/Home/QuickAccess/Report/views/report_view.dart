@@ -61,130 +61,78 @@ class ReportView extends GetView<ReportController> {
                           const Gap(16),
                           _buildGreeting(),
                           const Gap(20),
-                          if(myPref.role.val == "partner")
-                          Row(
-                            children: [
-                              Obx(() {
-                                return ProductStatCard(
-                                  iconAsset: Asset.totalProduct,
-                                  title: "Total Connectors",
-                                  value:
-                                      controller
-                                          .analysisModel
-                                          .value
-                                          .overallStatistics
-                                          ?.totalConnectors
-                                          .toString() ??
-                                      "",
-                                  subtitle: "Active Connectors",
-                                  subValue:
-                                      controller
-                                          .analysisModel
-                                          .value
-                                          .overallStatistics
-                                          ?.activeConnectors
-                                          .toString() ??
-                                      "",
-                                );
-                              }),
-                              const Gap(5),
-                              Obx(() {
-                                return ProductStatCard(
-                                  iconAsset: Asset.totalProduct,
-                                  title: "Total Products",
-                                  value:
-                                      controller
-                                          .analysisModel
-                                          .value
-                                          .overallStatistics
-                                          ?.totalProducts
-                                          .toString() ??
-                                      "",
-                                  subtitle: "Active Products",
-                                  subValue:
-                                      controller
-                                          .analysisModel
-                                          .value
-                                          .overallStatistics
-                                          ?.activeProducts
-                                          .toString() ??
-                                      "",
-                                );
-                              }),
-                              const Gap(5),
-                              Obx(() {
-                                return ProductStatCard(
-                                  iconAsset: Asset.totalProduct,
-
-                                  title: "Total Users",
-                                  value:
-                                      controller
-                                          .analysisModel
-                                          .value
-                                          .overallStatistics
-                                          ?.totalUsers
-                                          .toString() ??
-                                      "",
-                                  subtitle: "Active Users",
-                                  subValue:
-                                      controller
-                                          .analysisModel
-                                          .value
-                                          .overallStatistics
-                                          ?.activeUsers
-                                          .toString() ??
-                                      "",
-                                );
-                              }),
-                            ],
-                          ),
-                          if(myPref.role.val == "connector")
                             Row(
                               children: [
-                                Obx(() {
-                                  return ProductStatCard(
-                                    iconAsset: Asset.totalProduct,
-                                    title: "Total Connectors",
-                                    value:
-                                    controller
-                                        .analysisModel
-                                        .value
-                                        .overallStatistics
-                                        ?.totalConnectors
-                                        .toString() ??
-                                        "",
-                                    subtitle: "Active Connectors",
-                                    subValue:
-                                    controller
-                                        .analysisModel
-                                        .value
-                                        .overallStatistics
-                                        ?.activeConnectors
-                                        .toString() ??
-                                        "",
-                                  );
-                                }),
+                                if (myPref.role.val == "connector")
+                                  Obx(() {
+                                    return ProductStatCard(
+                                      iconAsset: Asset.totalProduct,
+                                      title: "Total Merchants",
+                                      value:
+                                          controller
+                                              .analysisModel
+                                              .value
+                                              .overallStatistics
+                                              ?.totalMerchant
+                                              .toString() ??
+                                          "",
+                                      subtitle: "Active Merchants",
+                                      subValue:
+                                          controller
+                                              .analysisModel
+                                              .value
+                                              .overallStatistics
+                                              ?.activeMerchant
+                                              .toString() ??
+                                          "",
+                                    );
+                                  }),
+                                if (myPref.role.val == "partner")
+                                  Obx(() {
+                                    return ProductStatCard(
+                                      iconAsset: Asset.totalProduct,
+                                      title: "Total Connectors",
+                                      value:
+                                          controller
+                                              .analysisModel
+                                              .value
+                                              .overallStatistics
+                                              ?.totalConnectors
+                                              .toString() ??
+                                          "",
+                                      subtitle: "Active Connectors",
+                                      subValue:
+                                          controller
+                                              .analysisModel
+                                              .value
+                                              .overallStatistics
+                                              ?.activeConnectors
+                                              .toString() ??
+                                          "",
+                                    );
+                                  }),
+
                                 const Gap(5),
                                 Obx(() {
                                   return ProductStatCard(
                                     iconAsset: Asset.totalProduct,
                                     title: "Total Products",
                                     value:
-                                    controller
-                                        .analysisModel
-                                        .value
-                                        .overallStatistics
-                                        ?.totalProducts
-                                        .toString() ??
+                                        controller
+                                            .analysisModel
+                                            .value
+                                            .overallStatistics
+                                            ?.totalProducts
+                                            .toString() ??
                                         "",
                                     subtitle: "Active Products",
                                     subValue:
-                                    controller
-                                        .analysisModel
-                                        .value
-                                        .overallStatistics
-                                        ?.activeProducts
-                                        .toString() ??
+                                        controller
+                                            .analysisModel
+                                            .value
+                                            .overallStatistics
+                                            ?.activeProducts
+                                            .toString() ??
                                         "",
                                   );
                                 }),
@@ -195,26 +143,27 @@ class ReportView extends GetView<ReportController> {
 
                                     title: "Total Users",
                                     value:
-                                    controller
-                                        .analysisModel
-                                        .value
-                                        .overallStatistics
-                                        ?.totalUsers
-                                        .toString() ??
+                                        controller
+                                            .analysisModel
+                                            .value
+                                            .overallStatistics
+                                            ?.totalUsers
+                                            .toString() ??
                                         "",
                                     subtitle: "Active Users",
                                     subValue:
-                                    controller
-                                        .analysisModel
-                                        .value
-                                        .overallStatistics
-                                        ?.activeUsers
-                                        .toString() ??
+                                        controller
+                                            .analysisModel
+                                            .value
+                                            .overallStatistics
+                                            ?.activeUsers
+                                            .toString() ??
                                         "",
                                   );
                                 }),
                               ],
                             ),
+
                           const Gap(20),
 
                           HeaderText(text: "Select month and download report"),

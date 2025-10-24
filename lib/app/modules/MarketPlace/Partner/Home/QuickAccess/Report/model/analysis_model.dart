@@ -33,17 +33,17 @@ class Analysis {
   DateRange? dateRange;
   OverallStatistics? overallStatistics;
 
-
-  Analysis(
-      {this.productAnalytics,
-        this.teamAnalytics,
-        this.overallStatistics,
-        this.roleAnalytics,
-        this.wishlist,
-        this.connections,
-        this.supportTicketAnalytics,
-        this.generatedAt,
-        this.dateRange});
+  Analysis({
+    this.productAnalytics,
+    this.teamAnalytics,
+    this.overallStatistics,
+    this.roleAnalytics,
+    this.wishlist,
+    this.connections,
+    this.supportTicketAnalytics,
+    this.generatedAt,
+    this.dateRange,
+  });
 
   Analysis.fromJson(Map<String, dynamic> json) {
     productAnalytics = json['product_analytics'] != null
@@ -106,7 +106,9 @@ class Analysis {
 
 class OverallStatistics {
   int? totalConnectors;
+  int? totalMerchant;
   int? activeConnectors;
+  int? activeMerchant;
   int? totalUsers;
   int? activeUsers;
   int? totalProducts;
@@ -119,6 +121,8 @@ class OverallStatistics {
     this.activeUsers,
     this.totalProducts,
     this.activeProducts,
+    this.activeMerchant,
+    this.totalMerchant,
   });
 
   OverallStatistics.fromJson(Map<String, dynamic> json) {
@@ -128,6 +132,8 @@ class OverallStatistics {
     activeUsers = json['active_users'];
     totalProducts = json['total_products'];
     activeProducts = json['active_products'];
+    totalMerchant = json['total_merchants'];
+    activeMerchant = json['active_merchants'];
   }
 
   Map<String, dynamic> toJson() {
@@ -138,9 +144,12 @@ class OverallStatistics {
     data['active_users'] = activeUsers;
     data['total_products'] = totalProducts;
     data['active_products'] = activeProducts;
+    data['total_merchants'] = totalMerchant;
+    data['active_merchants'] = activeMerchant;
     return data;
   }
 }
+
 // ------------------- PRODUCT -------------------
 class ProductAnalytics {
   int? totalProducts;
@@ -150,13 +159,14 @@ class ProductAnalytics {
   int? rejectedProducts;
   List<ProductMonthlyBreakdown>? monthlyBreakdown;
 
-  ProductAnalytics(
-      {this.totalProducts,
-        this.productsAdded,
-        this.productsOnReview,
-        this.activeProducts,
-        this.rejectedProducts,
-        this.monthlyBreakdown});
+  ProductAnalytics({
+    this.totalProducts,
+    this.productsAdded,
+    this.productsOnReview,
+    this.activeProducts,
+    this.rejectedProducts,
+    this.monthlyBreakdown,
+  });
 
   ProductAnalytics.fromJson(Map<String, dynamic> json) {
     totalProducts = json['total_products'];
@@ -180,8 +190,9 @@ class ProductAnalytics {
     data['active_products'] = activeProducts;
     data['rejected_products'] = rejectedProducts;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] =
-          monthlyBreakdown!.map((v) => v.toJson()).toList();
+      data['monthly_breakdown'] = monthlyBreakdown!
+          .map((v) => v.toJson())
+          .toList();
     }
     return data;
   }
@@ -196,14 +207,15 @@ class ProductMonthlyBreakdown {
   int? activeProducts;
   int? rejectedProducts;
 
-  ProductMonthlyBreakdown(
-      {this.monthNumber,
-        this.monthName,
-        this.year,
-        this.productsAdded,
-        this.productsOnReview,
-        this.activeProducts,
-        this.rejectedProducts});
+  ProductMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.productsAdded,
+    this.productsOnReview,
+    this.activeProducts,
+    this.rejectedProducts,
+  });
 
   ProductMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
     monthNumber = json['month_number'];
@@ -235,11 +247,12 @@ class TeamAnalytics {
   int? availableTeamMembers;
   List<TeamMonthlyBreakdown>? monthlyBreakdown;
 
-  TeamAnalytics(
-      {this.totalTeamMembers,
-        this.teamMembersAdded,
-        this.availableTeamMembers,
-        this.monthlyBreakdown});
+  TeamAnalytics({
+    this.totalTeamMembers,
+    this.teamMembersAdded,
+    this.availableTeamMembers,
+    this.monthlyBreakdown,
+  });
 
   TeamAnalytics.fromJson(Map<String, dynamic> json) {
     totalTeamMembers = json['total_team_members'];
@@ -259,8 +272,9 @@ class TeamAnalytics {
     data['team_members_added'] = teamMembersAdded;
     data['available_team_members'] = availableTeamMembers;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] =
-          monthlyBreakdown!.map((v) => v.toJson()).toList();
+      data['monthly_breakdown'] = monthlyBreakdown!
+          .map((v) => v.toJson())
+          .toList();
     }
     return data;
   }
@@ -273,12 +287,13 @@ class TeamMonthlyBreakdown {
   int? teamMembersAdded;
   int? availableTeamMembers;
 
-  TeamMonthlyBreakdown(
-      {this.monthNumber,
-        this.monthName,
-        this.year,
-        this.teamMembersAdded,
-        this.availableTeamMembers});
+  TeamMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.teamMembersAdded,
+    this.availableTeamMembers,
+  });
 
   TeamMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
     monthNumber = json['month_number'];
@@ -307,12 +322,13 @@ class RoleAnalytics {
   List<RoleDistribution>? roleDistribution;
   List<RoleMonthlyBreakdown>? monthlyBreakdown;
 
-  RoleAnalytics(
-      {this.totalRoles,
-        this.rolesCreated,
-        this.activeRoles,
-        this.roleDistribution,
-        this.monthlyBreakdown});
+  RoleAnalytics({
+    this.totalRoles,
+    this.rolesCreated,
+    this.activeRoles,
+    this.roleDistribution,
+    this.monthlyBreakdown,
+  });
 
   RoleAnalytics.fromJson(Map<String, dynamic> json) {
     totalRoles = json['total_roles'];
@@ -338,17 +354,18 @@ class RoleAnalytics {
     data['roles_created'] = rolesCreated;
     data['active_roles'] = activeRoles;
     if (roleDistribution != null) {
-      data['role_distribution'] =
-          roleDistribution!.map((v) => v.toJson()).toList();
+      data['role_distribution'] = roleDistribution!
+          .map((v) => v.toJson())
+          .toList();
     }
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] =
-          monthlyBreakdown!.map((v) => v.toJson()).toList();
+      data['monthly_breakdown'] = monthlyBreakdown!
+          .map((v) => v.toJson())
+          .toList();
     }
     return data;
   }
 }
-
 
 class RoleDistribution {
   String? roleName;
@@ -368,6 +385,7 @@ class RoleDistribution {
     return data;
   }
 }
+
 class RoleMonthlyBreakdown {
   int? monthNumber;
   String? monthName;
@@ -375,8 +393,13 @@ class RoleMonthlyBreakdown {
   int? rolesCreated;
   int? activeRoles;
 
-  RoleMonthlyBreakdown(
-      {this.monthNumber, this.monthName, this.year, this.rolesCreated, this.activeRoles});
+  RoleMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.rolesCreated,
+    this.activeRoles,
+  });
 
   RoleMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
     monthNumber = json['month_number'];
@@ -406,13 +429,14 @@ class SupportTicketAnalytics {
   int? resolvedTickets;
   List<SupportTicketMonthlyBreakdown>? monthlyBreakdown;
 
-  SupportTicketAnalytics(
-      {this.totalTickets,
-        this.ticketsCreated,
-        this.openTickets,
-        this.closedTickets,
-        this.resolvedTickets,
-        this.monthlyBreakdown});
+  SupportTicketAnalytics({
+    this.totalTickets,
+    this.ticketsCreated,
+    this.openTickets,
+    this.closedTickets,
+    this.resolvedTickets,
+    this.monthlyBreakdown,
+  });
 
   SupportTicketAnalytics.fromJson(Map<String, dynamic> json) {
     totalTickets = json['total_tickets'];
@@ -436,8 +460,9 @@ class SupportTicketAnalytics {
     data['closed_tickets'] = closedTickets;
     data['resolved_tickets'] = resolvedTickets;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] =
-          monthlyBreakdown!.map((v) => v.toJson()).toList();
+      data['monthly_breakdown'] = monthlyBreakdown!
+          .map((v) => v.toJson())
+          .toList();
     }
     return data;
   }
@@ -452,14 +477,15 @@ class SupportTicketMonthlyBreakdown {
   int? closedTickets;
   int? resolvedTickets;
 
-  SupportTicketMonthlyBreakdown(
-      {this.monthNumber,
-        this.monthName,
-        this.year,
-        this.ticketsCreated,
-        this.openTickets,
-        this.closedTickets,
-        this.resolvedTickets});
+  SupportTicketMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.ticketsCreated,
+    this.openTickets,
+    this.closedTickets,
+    this.resolvedTickets,
+  });
 
   SupportTicketMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
     monthNumber = json['month_number'];
@@ -504,13 +530,16 @@ class DateRange {
   }
 }
 
-
 class WishlistAnalytics {
   int? totalItems;
   int? itemsAddedInPeriod;
   List<WishlistMonthlyBreakdown>? monthlyBreakdown;
 
-  WishlistAnalytics({this.totalItems, this.itemsAddedInPeriod, this.monthlyBreakdown});
+  WishlistAnalytics({
+    this.totalItems,
+    this.itemsAddedInPeriod,
+    this.monthlyBreakdown,
+  });
 
   WishlistAnalytics.fromJson(Map<String, dynamic> json) {
     totalItems = json['total_items'];
@@ -528,8 +557,9 @@ class WishlistAnalytics {
     data['total_items'] = totalItems;
     data['items_added_in_period'] = itemsAddedInPeriod;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] =
-          monthlyBreakdown!.map((v) => v.toJson()).toList();
+      data['monthly_breakdown'] = monthlyBreakdown!
+          .map((v) => v.toJson())
+          .toList();
     }
     return data;
   }
@@ -541,8 +571,12 @@ class WishlistMonthlyBreakdown {
   int? year;
   int? itemsAdded;
 
-  WishlistMonthlyBreakdown(
-      {this.monthNumber, this.monthName, this.year, this.itemsAdded});
+  WishlistMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.itemsAdded,
+  });
 
   WishlistMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
     monthNumber = json['month_number'];
@@ -560,6 +594,7 @@ class WishlistMonthlyBreakdown {
     return data;
   }
 }
+
 class ConnectionsAnalytics {
   int? totalConnections;
   int? connectionsCreatedInPeriod;
@@ -587,8 +622,9 @@ class ConnectionsAnalytics {
     data['total_connections'] = totalConnections;
     data['connections_created_in_period'] = connectionsCreatedInPeriod;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] =
-          monthlyBreakdown!.map((v) => v.toJson()).toList();
+      data['monthly_breakdown'] = monthlyBreakdown!
+          .map((v) => v.toJson())
+          .toList();
     }
     return data;
   }

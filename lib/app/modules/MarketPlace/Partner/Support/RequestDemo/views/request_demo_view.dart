@@ -78,7 +78,6 @@ class RequestDemoView extends StatelessWidget {
         body: Stack(
           children: [
             const CommonBgImage(),
-
             Column(
               children: [
                 CommonAppBar(

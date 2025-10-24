@@ -11,7 +11,7 @@ class FeedBackController extends GetxController {
       SnackBars.errorSnackBar(content: "Please give rate");
       return;
     } else if (suggestionController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: "Please add feedback/suggection");
+      SnackBars.errorSnackBar(content: "Please add feedback/suggetion");
       return;
     }
     isLoading.value = true;

@@ -10,7 +10,9 @@ class SupportTicketCategoriesServices {
   /// Category
   Future<SupportTicketCategoriesModel> supportTicketCategories() async {
     try {
-      final response = await apiManager.get(url: APIConstants.getSupportTicketCategories);
+      final response = await apiManager.get(
+        url: APIConstants.getSupportTicketCategories,
+      );
       return SupportTicketCategoriesModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in sendOtp: $e , $st');
@@ -20,7 +22,9 @@ class SupportTicketCategoriesServices {
   /// Priorities
   Future<SupportTicketPrioritiesModel> supportTicketPriorities() async {
     try {
-      final response = await apiManager.get(url: APIConstants.getSupportTicketPriorities);
+      final response = await apiManager.get(
+        url: APIConstants.getSupportTicketPriorities,
+      );
       return SupportTicketPrioritiesModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in sendOtp: $e , $st');
@@ -36,7 +40,9 @@ class SupportTicketCategoriesServices {
   }) async {
     try {
       final response = await apiManager.postObject(
-        url: APIConstants.SupportTicketCreat,
+        url: myPref.role.val == "connector"
+            ? APIConstants.createConnectorSupportTicket
+            : APIConstants.createPartnerSupportTicket,
         body: {
           "category_id": categoryId,
           "priority_id": priorityId,
@@ -50,16 +56,17 @@ class SupportTicketCategoriesServices {
     }
   }
 
-
   /// Support My Tickets
   Future<SupportMyTicketsModel> supportMyTicketsModel({String? filter}) async {
     try {
-      final qp={
-        if((filter??"").isNotEmpty)
-        "status":filter
-      };
+      final qp = {if ((filter ?? "").isNotEmpty) "status": filter};
 
-      final response = await apiManager.get(url: APIConstants.getSupportMyTickets,params:qp );
+      final response = await apiManager.get(
+        url: myPref.role.val == "connector"
+            ? APIConstants.getConnectorSupportTicket
+            : APIConstants.getPartnerSupportTickets,
+        params: qp,
+      );
       return SupportMyTicketsModel.fromJson(response);
     } catch (e, st) {
       throw Exception('Error in sendOtp: $e , $st');

@@ -1064,7 +1064,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               ),
 
               Obx(
-                () =>
+                () =>  (controller.isFromAdd.value == false &&
+                    controller.isFromConnector.value == false)?const SizedBox() :
                     (controller
                             .productDetailsModel
                             .value

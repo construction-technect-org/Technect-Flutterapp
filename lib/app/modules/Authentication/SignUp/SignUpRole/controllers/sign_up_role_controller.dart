@@ -19,11 +19,11 @@ class SignUpRoleController extends GetxController {
 
   final roleImages = [
     Asset.role1,
-    Asset.role1,
-    Asset.role1,
-    Asset.role1,
-    Asset.role1,
-    Asset.role1,
+    Asset.houseOwner,
+    Asset.architect,
+    Asset.design,
+    Asset.contractor,
+    Asset.other,
   ];
 
   void selectRole(int index) {

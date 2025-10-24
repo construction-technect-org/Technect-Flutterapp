@@ -8,6 +8,7 @@ class Asset {
   static const svg = "${images}svg/";
   static const newPng = "${images}png/";
   static const feature = "${newPng}feature/";
+  static const roles = "${newPng}role/";
 
   static const String splashBg = '${bg}splashBg.png';
   static const String loginBg = '${bg}loginBg.png';
@@ -21,7 +22,6 @@ class Asset {
   static const String ob1 = '${png}ob1.png';
   static const String auth = '${png}auth.png';
   static const String role1 = '${png}role1.png';
-  static const String contractor = '${png}contractor.png';
   static const String totalProduct = '${png}totalProduct.png';
   static const String pdf = '${png}pdf.png';
   static const String comingSoon = '${png}comingSoon.png';
@@ -52,8 +52,10 @@ class Asset {
   static const String tutorial = '${svg}tutorial.svg';
   static const String check = '${svg}check.svg';
   static const String info = '${svg}info.svg';
+  static const String cart = '${svg}cart.svg';
+  static const String wishlist = '${svg}wishlist.svg';
 
-
+  /// feature
   static const String crm = '${feature}crm.png';
   static const String erp = '${feature}erp.png';
   static const String hrms = '${feature}hrms.png';
@@ -61,6 +63,13 @@ class Asset {
   static const String portfolio = '${feature}portfolio.png';
   static const String project = '${feature}project.png';
   static const String taxi = '${feature}taxi.png';
+
+  /// role
+  static const String houseOwner = '${roles}houseOwner.png';
+  static const String contractor = '${roles}contractor.png';
+  static const String design = '${roles}design.png';
+  static const String architect = '${roles}architect.png';
+  static const String other = '${roles}other.png';
 
   static const String explore = '${newPng}explore.png';
   static const String bricksBackground = 'assets/images/bricks_background.png';
@@ -134,9 +143,11 @@ class Asset {
   static const String marketplaceIcon = 'assets/images/marketpalce.png';
   static const String crmIcon = 'assets/images/crm.png';
   static const String erpIcon = 'assets/images/erp.png';
-  static const String projectManagementIcon = 'assets/images/project_management.png';
+  static const String projectManagementIcon =
+      'assets/images/project_management.png';
   static const String hrmsIcon = 'assets/images/hrms.png';
-  static const String portfolioManagementIcon = 'assets/images/portfolio_management.png';
+  static const String portfolioManagementIcon =
+      'assets/images/portfolio_management.png';
   static const String ovpIcon = 'assets/images/ovp.png';
   static const String constructionTaxi = 'assets/images/team.png';
 
@@ -180,7 +191,8 @@ class Asset {
   static const String materialMarketplace = 'assets/images/material_market.png';
   static const String constructionCinemarketPlace =
       'assets/images/construction-cine marketplace.png';
-  static const String logisticMarketPlace = 'assets/images/logistic_marketplace.png';
+  static const String logisticMarketPlace =
+      'assets/images/logistic_marketplace.png';
 
   // Your Role
   static const String partner = 'assets/images/partner.png';
@@ -212,7 +224,6 @@ class Asset {
   static const String noOfPartner = 'assets/images/noOfPartner.svg';
   static const String warning = 'assets/images/warning.svg';
   static const String thumbup = 'assets/images/thumbup.svg';
-  static const String cart = 'assets/images/cart.svg';
   static const String insights = 'assets/images/insights.svg';
   static const String aTeam = 'assets/images/ateam.png';
   static const String link = 'assets/images/link.svg';
@@ -224,12 +235,14 @@ class Asset {
 
   // Connector Category
 
-  static const String constuctionMaterial = 'assets/images/constuction_material.png';
+  static const String constuctionMaterial =
+      'assets/images/constuction_material.png';
   static const String interiorMateria = 'assets/images/interior_material.png';
   static const String con = 'assets/images/constructionn.png';
 
   // connector location
-  static const String connectorLocation = 'assets/images/connector_location.svg';
+  static const String connectorLocation =
+      'assets/images/connector_location.svg';
 
   // connector details icon
   static const String userx = 'assets/images/userx.svg';
@@ -258,10 +271,11 @@ class Asset {
 
 class Constants {
   static const String constructionTechnect = 'Construction Technect';
-  static const String privacyPolicy = 'http://43.205.117.97/merchant-privacy-policy.html';
+  static const String privacyPolicy =
+      'http://43.205.117.97/privacy-policy';
   static const String termsCondition =
-      'http://43.205.117.97/merchant-terms-conditions.html';
-  static const String aboutUS = 'http://43.205.117.97/merchant-about-us.html';
+      'http://43.205.117.97/terms-and-conditions';
+  static const String aboutUS = 'http://43.205.117.97/about-us';
   static const String connectingConstructionWorldwide =
       'Connecting Construction Worldwide';
 }

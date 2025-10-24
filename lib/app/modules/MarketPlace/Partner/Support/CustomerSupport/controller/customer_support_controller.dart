@@ -12,7 +12,8 @@ class CustomerSupportController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadTicketsFromStorage();
+    // _loadTicketsFromStorage();
+    fetchMyTickets();
   }
 
   Rx<SupportMyTicketsModel> supportMyTickets = SupportMyTicketsModel().obs;

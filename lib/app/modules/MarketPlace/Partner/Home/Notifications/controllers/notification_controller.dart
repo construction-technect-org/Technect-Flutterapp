@@ -13,7 +13,7 @@ class NotificationController extends GetxController {
   void onInit() {
     super.onInit();
     // _loadNotificationsFromStorage();
-    isConnector.value = myPref.getRole() == "merchant_connector";
+    isConnector.value = myPref.getRole() == "connector";
     fetchNotifications();
   }
 
