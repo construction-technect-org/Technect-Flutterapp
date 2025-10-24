@@ -79,33 +79,36 @@ class DashboardView extends GetView<DashboardController> {
                                     ),
                                     SizedBox(width: 0.4.h),
                                     Expanded(
-                                      child: RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        text: TextSpan(
-                                          style: MyTexts.medium14.copyWith(
-                                            color: MyColors.custom('545454'),
-                                          ),
-                                          children: const [
-                                            TextSpan(
-                                              text:
-                                                  "Jp nagar 7th phase rbi layout",
+                                      child: Obx(
+                                        () => RichText(
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          text: TextSpan(
+                                            style: MyTexts.medium14.copyWith(
+                                              color: MyColors.custom('545454'),
                                             ),
-                                            WidgetSpan(
-                                              alignment:
-                                                  PlaceholderAlignment.middle,
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  left: 4,
-                                                ),
-                                                child: Icon(
-                                                  Icons.keyboard_arrow_down,
-                                                  size: 16,
-                                                  color: Colors.black54,
+                                            children: [
+                                              TextSpan(
+                                                text: controller
+                                                    .getCurrentAddress()
+                                                    .value,
+                                              ),
+                                              const WidgetSpan(
+                                                alignment:
+                                                    PlaceholderAlignment.middle,
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                    left: 4,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    size: 16,
+                                                    color: Colors.black54,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -117,10 +120,11 @@ class DashboardView extends GetView<DashboardController> {
                         ),
                         const Gap(10),
                         GestureDetector(
-                            onTap: (){
-                              Get.to(()=>const ExploreView());
-                            },
-                            child: Image.asset(Asset.explore, width: 18.w)),
+                          onTap: () {
+                            Get.to(() => const ExploreView());
+                          },
+                          child: Image.asset(Asset.explore, width: 18.w),
+                        ),
                         const Gap(10),
                         GestureDetector(
                           onTap: () {
@@ -161,7 +165,7 @@ class DashboardView extends GetView<DashboardController> {
                               builder: (context, constraints) {
                                 final double itemWidth =
                                     (constraints.maxWidth - (2 * 10)) /
-                                        3; // 4 per row with spacing
+                                    3; // 4 per row with spacing
                                 final double itemHeight =
                                     itemWidth + 10; // for icon + text
                                 return GridView.builder(
@@ -170,25 +174,28 @@ class DashboardView extends GetView<DashboardController> {
                                   shrinkWrap: true,
                                   itemCount: controller.features.length,
                                   gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: 12,
-                                    mainAxisSpacing: 17,
-                                    childAspectRatio: itemWidth / itemHeight,
-                                  ),
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 12,
+                                        mainAxisSpacing: 17,
+                                        childAspectRatio:
+                                            itemWidth / itemHeight,
+                                      ),
                                   itemBuilder: (context, index) {
                                     final item = controller.features[index];
 
                                     return Obx(() {
                                       final isSelected =
-                                          controller.selectedIndex.value == index;
+                                          controller.selectedIndex.value ==
+                                          index;
                                       return BuildFeatureCard(
                                         isSelected: isSelected,
                                         item: item,
                                         itemWidth: itemWidth,
                                         onTap: () {
                                           if (index == 0 || index == 1) {
-                                            controller.selectedIndex.value = index;
+                                            controller.selectedIndex.value =
+                                                index;
                                           }
                                         },
                                       );
@@ -200,7 +207,9 @@ class DashboardView extends GetView<DashboardController> {
                             SizedBox(height: 1.h),
                             Text(
                               "Statics",
-                              style: MyTexts.bold18.copyWith(color: MyColors.black),
+                              style: MyTexts.bold18.copyWith(
+                                color: MyColors.black,
+                              ),
                             ),
                             SizedBox(height: 1.h),
                             Row(
@@ -227,7 +236,6 @@ class DashboardView extends GetView<DashboardController> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -343,7 +351,10 @@ class BuildFeatureCard extends StatelessWidget {
                   Align(
                     alignment: AlignmentGeometry.topRight,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3,
+                        horizontal: 8,
+                      ),
                       decoration: const BoxDecoration(
                         color: MyColors.grayEA,
                         borderRadius: BorderRadius.only(
@@ -352,14 +363,16 @@ class BuildFeatureCard extends StatelessWidget {
                           topRight: Radius.circular(8),
                         ),
                       ),
-                      child:  Text("Coming Soon",style: MyTexts.medium13.copyWith(color: MyColors.gray2E),),
+                      child: Text(
+                        "Coming Soon",
+                        style: MyTexts.medium13.copyWith(
+                          color: MyColors.gray2E,
+                        ),
+                      ),
                     ),
                   ),
                 const Spacer(),
-                Image.asset(
-                  item['icon'].toString(),
-                  height: itemWidth * 0.50,
-                ),
+                Image.asset(item['icon'].toString(), height: itemWidth * 0.50),
                 const SizedBox(height: 6),
                 Text(
                   item["title"].toString(),
@@ -367,11 +380,9 @@ class BuildFeatureCard extends StatelessWidget {
                   style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                 ),
                 const Spacer(),
-
               ],
             ),
           ),
-
         ],
       ),
     );
