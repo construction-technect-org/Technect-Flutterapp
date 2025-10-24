@@ -1064,15 +1064,17 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               ),
 
               Obx(
-                () =>  (controller.isFromAdd.value == false &&
-                    controller.isFromConnector.value == false)?const SizedBox() :
-                    (controller
-                            .productDetailsModel
-                            .value
-                            .data
-                            ?.similarProducts
-                            ?.isEmpty ??
-                        true)
+                () =>
+                    (controller.isFromAdd.value == false &&
+                        controller.isFromConnector.value == false)
+                    ? const SizedBox()
+                    : (controller
+                              .productDetailsModel
+                              .value
+                              .data
+                              ?.similarProducts
+                              ?.isEmpty ??
+                          true)
                     ? const SizedBox()
                     : Column(
                         children: [
@@ -1110,21 +1112,18 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                     Product();
                                 return GestureDetector(
                                   onTap: () {
-                                    final finalData={
+                                    final finalData = {
                                       "product": data,
                                       "isFromAdd": controller.isFromAdd.value,
                                       "isFromConnector":
-                                      controller.isFromConnector.value,
+                                          controller.isFromConnector.value,
                                       "onApiCall": controller.onApiCall,
                                     };
-                                    Get.back();
-                                    0.5.delay((){
-                                      Get.toNamed(
-                                        Routes.PRODUCT_DETAILS,
-                                        arguments: finalData,
-                                      );
-                                    });
-
+                                    Get.offNamed(
+                                      Routes.PRODUCT_DETAILS,
+                                      arguments: finalData,
+                                      preventDuplicates: false,
+                                    );
                                   },
                                   child: Container(
                                     width: 112,

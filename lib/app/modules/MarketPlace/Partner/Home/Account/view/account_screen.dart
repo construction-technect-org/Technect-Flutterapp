@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/components/deleivery_location.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/controller/account_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
@@ -117,7 +116,7 @@ class AccountScreen extends GetView<AccountController> {
                         icon: Asset.cs,
                         title: "Customer support",
                         onTap: () {
-                          Get.to(()=>CustomerSupportView());
+                          Get.to(() => CustomerSupportView());
                         },
                       ),
                       const Gap(16),
@@ -143,7 +142,7 @@ class AccountScreen extends GetView<AccountController> {
                         icon: Asset.location,
                         title: "Delivery location",
                         onTap: () {
-                          Get.to(()=>const DeliveryLocation());
+                          Get.toNamed(Routes.DELIVERY_LOCATION);
                         },
                       ),
                       const Gap(16),

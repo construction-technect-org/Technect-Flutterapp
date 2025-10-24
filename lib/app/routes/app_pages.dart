@@ -41,8 +41,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/views/connector_selected_product_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/bindings/connector_site_location_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/views/connector_site_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/AddSupportTickets/views/connector_create_new_ticket.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/CustomerSupport/bindings/connector_create_new_ticket_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/bindings/connector_request_demo_binding.dart';
@@ -57,6 +55,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/binding/account_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/view/account_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/bindings/add_delivery_address_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/views/add_delivery_address_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/bindings/delivery_location_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/views/notification_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
@@ -181,16 +183,8 @@ class AppPages {
       page: () => RoleManagementView(),
       binding: RoleManagementBinding(),
     ),
-    GetPage(
-      name: _Paths.ADD_ROLE,
-      page: () =>  AddRoleView(),
-      binding: AddRoleBinding(),
-    ),
-    GetPage(
-      name: _Paths.ADD_TEAM,
-      page: () =>  AddTeamView(),
-      binding: AddTeamBinding(),
-    ),
+    GetPage(name: _Paths.ADD_ROLE, page: () => AddRoleView(), binding: AddRoleBinding()),
+    GetPage(name: _Paths.ADD_TEAM, page: () => AddTeamView(), binding: AddTeamBinding()),
     GetPage(
       name: _Paths.APPROVAL_INBOX,
       page: () => ApprovalInboxView(),
@@ -244,7 +238,7 @@ class AppPages {
 
     GetPage(
       name: _Paths.EDIT_PROFILE,
-      page: () =>  EditProfileView(),
+      page: () => EditProfileView(),
       binding: EditProfileBinding(),
     ),
     // Connector
@@ -294,11 +288,6 @@ class AppPages {
       name: Routes.CONNECTOR_ADD_LOCATION_MANUALLY,
       page: () => const ConnectorAddLocationManuallyView(),
       binding: ConnectorAddLocationManuallyBinding(),
-    ),
-    GetPage(
-      name: Routes.CONNECTOR_SITE_LOCATION,
-      page: () => const ConnectorSiteLocationView(),
-      binding: ConnectorSiteLocationBinding(),
     ),
     GetPage(
       name: Routes.CONNECTOR_PRODUCT_DETAILS,
@@ -383,18 +372,28 @@ class AppPages {
     ),
     GetPage(
       name: Routes.NEW_LAUNCH,
-      page: () =>  NewLaunchesProduct(),
+      page: () => NewLaunchesProduct(),
       binding: NewLaunchBinding(),
     ),
     GetPage(
       name: Routes.CART_LIST,
-      page: () =>  CartListView(),
+      page: () => CartListView(),
       binding: CartListBinding(),
     ),
     GetPage(
       name: Routes.SELECT_PRODUCT,
       page: () => SelectedProductView(),
       // binding: OnBoardingBinding(),
+    ),
+    GetPage(
+      name: Routes.DELIVERY_LOCATION,
+      page: () => const DeliveryLocationView(),
+      binding: DeliveryLocationBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_DELIVERY_ADDRESS,
+      page: () => const AddDeliveryAddressView(),
+      binding: AddDeliveryAddressBinding(),
     ),
   ];
 }
