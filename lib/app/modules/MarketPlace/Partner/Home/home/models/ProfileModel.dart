@@ -1,4 +1,3 @@
-
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 
 class ProfileModel {
@@ -20,9 +19,15 @@ class Data {
   MerchantProfile? merchantProfile;
   ConnectorProfile? connectorProfile;
   Referral? referral;
+  List<SiteLocation>? siteLocations;
 
-
-  Data({this.user, this.merchantProfile, this.connectorProfile, this.referral});
+  Data({
+    this.user,
+    this.merchantProfile,
+    this.connectorProfile,
+    this.referral,
+    this.siteLocations,
+  });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
@@ -35,16 +40,24 @@ class Data {
     referral: json["referral"] == null
         ? null
         : Referral.fromJson(json["referral"]),
+    siteLocations: json["siteLocations"] == null
+        ? []
+        : List<SiteLocation>.from(
+            json["siteLocations"]!.map((x) => SiteLocation.fromJson(x)),
+          ),
   );
 
   Map<String, dynamic> toJson() => {
     "user": user?.toJson(),
     "merchantProfile": merchantProfile?.toJson(),
-    "connectorProfile": connectorProfile?.toJson(),        "referral": referral?.toJson(),
-
-
+    "connectorProfile": connectorProfile?.toJson(),
+    "referral": referral?.toJson(),
+    "siteLocations": siteLocations == null
+        ? []
+        : List<dynamic>.from(siteLocations!.map((x) => x.toJson())),
   };
 }
+
 class Referral {
   String? myReferralCode;
   int? totalReferrals;
@@ -65,15 +78,15 @@ class Referral {
     recentReferrals: json["recent_referrals"] == null
         ? []
         : List<ReferralUser>.from(
-        json["recent_referrals"]!.map((x) => ReferralUser.fromJson(x))),
+            json["recent_referrals"]!.map((x) => ReferralUser.fromJson(x)),
+          ),
   );
 
   Map<String, dynamic> toJson() => {
     "my_referral_code": myReferralCode,
     "total_referrals": totalReferrals,
     "total_earnings": totalEarnings,
-    "recent_referrals":
-    recentReferrals?.map((x) => x.toJson()).toList() ?? [],
+    "recent_referrals": recentReferrals?.map((x) => x.toJson()).toList() ?? [],
   };
 }
 
@@ -279,6 +292,7 @@ class BusinessHours {
     "day_of_week": dayOfWeek,
   };
 }
+
 class ConnectorProfile {
   int? id;
   String? aadhaarNumber;
@@ -293,19 +307,20 @@ class ConnectorProfile {
   String? createdAt;
   String? updatedAt;
 
-  ConnectorProfile(
-      {this.id,
-        this.aadhaarNumber,
-        this.panNumber,
-        this.profileCompletionPercentage,
-        this.isProfileComplete,
-        this.kycVerified,
-        this.trustScore,
-        this.marketplaceTier,
-        this.memberSince,
-        this.documents,
-        this.createdAt,
-        this.updatedAt});
+  ConnectorProfile({
+    this.id,
+    this.aadhaarNumber,
+    this.panNumber,
+    this.profileCompletionPercentage,
+    this.isProfileComplete,
+    this.kycVerified,
+    this.trustScore,
+    this.marketplaceTier,
+    this.memberSince,
+    this.documents,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   ConnectorProfile.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -346,6 +361,7 @@ class ConnectorProfile {
     return data;
   }
 }
+
 class Documents {
   int? id;
   String? filePath;
@@ -439,5 +455,57 @@ class DeleteDocumentData {
     "profile_completion_percentage": profileCompletionPercentage,
     "is_profile_complete": isProfileComplete,
     "verification_status": verificationStatus?.toJson(),
+  };
+}
+
+class SiteLocation {
+  int? id;
+  String? siteName;
+  String? fullAddress;
+  String? landmark;
+  String? latitude;
+  String? longitude;
+  bool? isDefault;
+  bool? isActive;
+  String? createdAt;
+  String? updatedAt;
+
+  SiteLocation({
+    this.id,
+    this.siteName,
+    this.fullAddress,
+    this.landmark,
+    this.latitude,
+    this.longitude,
+    this.isDefault,
+    this.isActive,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory SiteLocation.fromJson(Map<String, dynamic> json) => SiteLocation(
+    id: json["id"],
+    siteName: json["siteName"],
+    fullAddress: json["fullAddress"],
+    landmark: json["landmark"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
+    isDefault: json["isDefault"],
+    isActive: json["isActive"],
+    createdAt: json["createdAt"],
+    updatedAt: json["updatedAt"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "siteName": siteName,
+    "fullAddress": fullAddress,
+    "landmark": landmark,
+    "latitude": latitude,
+    "longitude": longitude,
+    "isDefault": isDefault,
+    "isActive": isActive,
+    "createdAt": createdAt,
+    "updatedAt": updatedAt,
   };
 }

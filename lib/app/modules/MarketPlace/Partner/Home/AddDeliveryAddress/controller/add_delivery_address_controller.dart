@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/controller/delivery_location_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -71,7 +72,8 @@ class AddDeliveryAddressController extends GetxController {
       final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         SnackBars.errorSnackBar(
-          content: 'Location services are disabled. Please enable location services.',
+          content:
+              'Location services are disabled. Please enable location services.',
         );
         return;
       }
@@ -86,7 +88,9 @@ class AddDeliveryAddressController extends GetxController {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        SnackBars.errorSnackBar(content: 'Location permissions are permanently denied.');
+        SnackBars.errorSnackBar(
+          content: 'Location permissions are permanently denied.',
+        );
         return;
       }
 
@@ -125,7 +129,10 @@ class AddDeliveryAddressController extends GetxController {
 
   Future<void> _getAddressFromCoordinates(double lat, double lng) async {
     try {
-      final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      final List<Placemark> placemarks = await placemarkFromCoordinates(
+        lat,
+        lng,
+      );
       if (placemarks.isNotEmpty) {
         final Placemark place = placemarks[0];
         final String address =
@@ -174,7 +181,11 @@ class AddDeliveryAddressController extends GetxController {
       } else {
         await DeliveryAddressService.submitDeliveryAddress(deliveryAddress);
       }
-      await controller.loadSavedAddresses();
+
+      // Refresh home controller profile data
+      final homeController = Get.find<HomeController>();
+      await homeController.fetchProfileData();
+
       Get.back();
     } catch (e) {
       // No error

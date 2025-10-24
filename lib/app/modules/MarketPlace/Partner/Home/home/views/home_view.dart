@@ -43,13 +43,7 @@ class HomeView extends StatelessWidget {
                         },
                         behavior: HitTestBehavior.translucent,
                         child: Obx(() {
-                          return (controller
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.user
-                                          ?.image ??
-                                      "")
+                          return (controller.profileData.value.data?.user?.image ?? "")
                                   .isEmpty
                               ? Image.asset(Asset.profil, height: 48, width: 48)
                               : ClipOval(
@@ -81,116 +75,117 @@ class HomeView extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                final addresses =
-                                    controller.addressData.data?.addresses ??
-                                    [];
+                                Get.toNamed(Routes.DELIVERY_LOCATION);
+                                //   final addresses =
+                                //       controller.addressData.data?.addresses ??
+                                //       [];
 
-                                if (addresses.isEmpty) {
-                                  Get.snackbar(
-                                    "No Address",
-                                    "Please add an address first",
-                                    snackPosition: SnackPosition.BOTTOM,
-                                  );
-                                  return;
-                                }
+                                //   if (addresses.isEmpty) {
+                                //     Get.snackbar(
+                                //       "No Address",
+                                //       "Please add an address first",
+                                //       snackPosition: SnackPosition.BOTTOM,
+                                //     );
+                                //     return;
+                                //   }
 
-                                final officeAddress = addresses.firstWhere(
-                                  (a) =>
-                                      a.addressType?.toLowerCase() == 'office',
-                                  orElse: () => Address(),
-                                );
+                                //   final officeAddress = addresses.firstWhere(
+                                //     (a) =>
+                                //         a.addressType?.toLowerCase() == 'office',
+                                //     orElse: () => Address(),
+                                //   );
 
-                                final factoryAddress = addresses.firstWhere(
-                                  (a) =>
-                                      a.addressType?.toLowerCase() == 'factory',
-                                  orElse: () => Address(),
-                                );
+                                //   final factoryAddress = addresses.firstWhere(
+                                //     (a) =>
+                                //         a.addressType?.toLowerCase() == 'factory',
+                                //     orElse: () => Address(),
+                                //   );
 
-                                showModalBottomSheet(
-                                  context: Get.context!,
-                                  isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20),
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.white,
-                                  builder: (context) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(
-                                          context,
-                                        ).viewInsets.bottom,
-                                      ),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(16),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Select Address",
-                                              style: MyTexts.extraBold18
-                                                  .copyWith(
-                                                    color: MyColors.black,
-                                                  ),
-                                            ),
-                                            const SizedBox(height: 16),
-                                            IntrinsicHeight(
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Expanded(
-                                                    child:
-                                                        officeAddress
-                                                                .addressType !=
-                                                            null
-                                                        ? _addressCard(
-                                                            address:
-                                                                officeAddress,
-                                                            addressType:
-                                                                officeAddress
-                                                                    .addressType,
-                                                            isSelected:
-                                                                controller
-                                                                    .isDefaultOffice
-                                                                    .value ==
-                                                                true,
-                                                          )
-                                                        : Container(),
-                                                  ),
-                                                  const SizedBox(width: 16),
-                                                  Expanded(
-                                                    child:
-                                                        factoryAddress
-                                                                .addressType !=
-                                                            null
-                                                        ? _addressCard(
-                                                            address:
-                                                                factoryAddress,
-                                                            addressType:
-                                                                factoryAddress
-                                                                    .addressType,
-                                                            isSelected:
-                                                                controller
-                                                                    .isDefaultOffice
-                                                                    .value ==
-                                                                false,
-                                                          )
-                                                        : Container(),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(height: 16),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                //   showModalBottomSheet(
+                                //     context: Get.context!,
+                                //     isScrollControlled: true,
+                                //     shape: const RoundedRectangleBorder(
+                                //       borderRadius: BorderRadius.vertical(
+                                //         top: Radius.circular(20),
+                                //       ),
+                                //     ),
+                                //     backgroundColor: Colors.white,
+                                //     builder: (context) {
+                                //       return Padding(
+                                //         padding: EdgeInsets.only(
+                                //           bottom: MediaQuery.of(
+                                //             context,
+                                //           ).viewInsets.bottom,
+                                //         ),
+                                //         child: Container(
+                                //           padding: const EdgeInsets.all(16),
+                                //           child: Column(
+                                //             mainAxisSize: MainAxisSize.min,
+                                //             crossAxisAlignment:
+                                //                 CrossAxisAlignment.start,
+                                //             children: [
+                                //               Text(
+                                //                 "Select Address",
+                                //                 style: MyTexts.extraBold18
+                                //                     .copyWith(
+                                //                       color: MyColors.black,
+                                //                     ),
+                                //               ),
+                                //               const SizedBox(height: 16),
+                                //               IntrinsicHeight(
+                                //                 child: Row(
+                                //                   crossAxisAlignment:
+                                //                       CrossAxisAlignment.stretch,
+                                //                   children: [
+                                //                     Expanded(
+                                //                       child:
+                                //                           officeAddress
+                                //                                   .addressType !=
+                                //                               null
+                                //                           ? _addressCard(
+                                //                               address:
+                                //                                   officeAddress,
+                                //                               addressType:
+                                //                                   officeAddress
+                                //                                       .addressType,
+                                //                               isSelected:
+                                //                                   controller
+                                //                                       .isDefaultOffice
+                                //                                       .value ==
+                                //                                   true,
+                                //                             )
+                                //                           : Container(),
+                                //                     ),
+                                //                     const SizedBox(width: 16),
+                                //                     Expanded(
+                                //                       child:
+                                //                           factoryAddress
+                                //                                   .addressType !=
+                                //                               null
+                                //                           ? _addressCard(
+                                //                               address:
+                                //                                   factoryAddress,
+                                //                               addressType:
+                                //                                   factoryAddress
+                                //                                       .addressType,
+                                //                               isSelected:
+                                //                                   controller
+                                //                                       .isDefaultOffice
+                                //                                       .value ==
+                                //                                   false,
+                                //                             )
+                                //                           : Container(),
+                                //                     ),
+                                //                   ],
+                                //                 ),
+                                //               ),
+                                //               const SizedBox(height: 16),
+                                //             ],
+                                //           ),
+                                //         ),
+                                //       );
+                                //     },
+                                //   );
                               },
                               child: Row(
                                 children: [
@@ -212,17 +207,12 @@ class HomeView extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                              text: controller
-                                                  .getCurrentAddress()
-                                                  .value,
+                                              text: controller.getCurrentAddress().value,
                                             ),
                                             const WidgetSpan(
-                                              alignment:
-                                                  PlaceholderAlignment.middle,
+                                              alignment: PlaceholderAlignment.middle,
                                               child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  left: 4,
-                                                ),
+                                                padding: EdgeInsets.only(left: 4),
                                                 child: Icon(
                                                   Icons.keyboard_arrow_down,
                                                   size: 16,
@@ -243,10 +233,11 @@ class HomeView extends StatelessWidget {
                       ),
                       const Gap(10),
                       GestureDetector(
-                          onTap: (){
-                            Get.to(()=>const ExploreView());
-                          },
-                          child: Image.asset(Asset.explore, width: 18.w)),
+                        onTap: () {
+                          Get.to(() => const ExploreView());
+                        },
+                        child: Image.asset(Asset.explore, width: 18.w),
+                      ),
                       const Gap(10),
                       GestureDetector(
                         onTap: () {
@@ -256,9 +247,7 @@ class HomeView extends StatelessWidget {
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: MyColors.white,
-                            border: Border.all(
-                              color: MyColors.custom('EAEAEA'),
-                            ),
+                            border: Border.all(color: MyColors.custom('EAEAEA')),
                             shape: BoxShape.circle,
                           ),
                           child: SvgPicture.asset(
@@ -282,9 +271,7 @@ class HomeView extends StatelessWidget {
                         children: [
                           Text(
                             "Features",
-                            style: MyTexts.extraBold18.copyWith(
-                              color: MyColors.black,
-                            ),
+                            style: MyTexts.extraBold18.copyWith(color: MyColors.black),
                           ),
                           const Gap(16),
                           LayoutBuilder(
@@ -292,20 +279,18 @@ class HomeView extends StatelessWidget {
                               final double itemWidth =
                                   (constraints.maxWidth - (2 * 10)) /
                                   3; // 4 per row with spacing
-                              final double itemHeight =
-                                  itemWidth + 10; // for icon + text
+                              final double itemHeight = itemWidth + 10; // for icon + text
                               return GridView.builder(
                                 padding: EdgeInsets.zero,
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: controller.features.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 12,
-                                      mainAxisSpacing: 17,
-                                      childAspectRatio: itemWidth / itemHeight,
-                                    ),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 17,
+                                  childAspectRatio: itemWidth / itemHeight,
+                                ),
                                 itemBuilder: (context, index) {
                                   final item = controller.features[index];
 
@@ -318,8 +303,7 @@ class HomeView extends StatelessWidget {
                                       itemWidth: itemWidth,
                                       onTap: () {
                                         if (index == 0 || index == 1) {
-                                          controller.selectedIndex.value =
-                                              index;
+                                          controller.selectedIndex.value = index;
                                         }
                                       },
                                     );
@@ -339,8 +323,7 @@ class HomeView extends StatelessWidget {
                                   },
                                   icon: Asset.MM,
                                   name: 'Material\nMarketplace',
-                                  isMarketPlace:
-                                      controller.marketPlace.value == 0,
+                                  isMarketPlace: controller.marketPlace.value == 0,
                                 ),
                                 tabBar(
                                   onTap: () {
@@ -348,8 +331,7 @@ class HomeView extends StatelessWidget {
                                   },
                                   icon: Asset.CM,
                                   name: 'Construction line\nMarketplace',
-                                  isMarketPlace:
-                                      controller.marketPlace.value == 1,
+                                  isMarketPlace: controller.marketPlace.value == 1,
                                 ),
                                 tabBar(
                                   onTap: () {
@@ -357,8 +339,7 @@ class HomeView extends StatelessWidget {
                                   },
                                   icon: Asset.TEM,
                                   name: 'Tools & equipment\nMarketplace',
-                                  isMarketPlace:
-                                      controller.marketPlace.value == 2,
+                                  isMarketPlace: controller.marketPlace.value == 2,
                                 ),
                               ],
                             ),
@@ -398,11 +379,7 @@ class HomeView extends StatelessWidget {
                               SizedBox(height: 2.h),
                               // Main Categories ListView
                               Obx(() {
-                                if (controller
-                                            .categoryHierarchyData
-                                            .value
-                                            .data ==
-                                        null ||
+                                if (controller.categoryHierarchyData.value.data == null ||
                                     controller
                                         .categoryHierarchyData
                                         .value
@@ -414,27 +391,22 @@ class HomeView extends StatelessWidget {
                                 return ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: controller
-                                      .categoryHierarchyData
-                                      .value
-                                      .data!
-                                      .length,
+                                  itemCount:
+                                      controller.categoryHierarchyData.value.data!.length,
                                   itemBuilder: (context, mainIndex) {
                                     final mainCategory = controller
                                         .categoryHierarchyData
                                         .value
                                         .data![mainIndex];
                                     return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         GestureDetector(
                                           onTap: () {
                                             Get.toNamed(
                                               Routes.SELECT_PRODUCT,
                                               arguments: {
-                                                "mainCategoryId":
-                                                    mainCategory.id ?? 0,
+                                                "mainCategoryId": mainCategory.id ?? 0,
                                                 "mainCategoryName":
                                                     mainCategory.name ?? '',
                                               },
@@ -456,16 +428,12 @@ class HomeView extends StatelessWidget {
                                           ),
                                         ),
                                         SizedBox(height: 2.h),
-                                        if (mainCategory.subCategories !=
-                                                null &&
-                                            mainCategory
-                                                .subCategories!
-                                                .isNotEmpty)
+                                        if (mainCategory.subCategories != null &&
+                                            mainCategory.subCategories!.isNotEmpty)
                                           GridView.builder(
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
+                                            physics: const NeverScrollableScrollPhysics(),
                                             gridDelegate:
                                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                                   crossAxisCount: 3,
@@ -473,12 +441,10 @@ class HomeView extends StatelessWidget {
                                                   mainAxisSpacing: 6,
                                                   childAspectRatio: 0.8,
                                                 ),
-                                            itemCount: mainCategory
-                                                .subCategories!
-                                                .length,
+                                            itemCount: mainCategory.subCategories!.length,
                                             itemBuilder: (context, subIndex) {
-                                              final subCategory = mainCategory
-                                                  .subCategories![subIndex];
+                                              final subCategory =
+                                                  mainCategory.subCategories![subIndex];
                                               return GestureDetector(
                                                 onTap: () {
                                                   Get.toNamed(
@@ -489,8 +455,7 @@ class HomeView extends StatelessWidget {
                                                       "mainCategoryId":
                                                           mainCategory.id ?? 0,
                                                       "mainCategoryName":
-                                                          mainCategory.name ??
-                                                          '',
+                                                          mainCategory.name ?? '',
                                                     },
                                                   );
                                                 },
@@ -502,44 +467,34 @@ class HomeView extends StatelessWidget {
                                                       child: Container(
                                                         decoration: BoxDecoration(
                                                           borderRadius:
-                                                              BorderRadius.circular(
-                                                                8,
-                                                              ),
+                                                              BorderRadius.circular(8),
                                                           gradient: LinearGradient(
-                                                            end: Alignment
-                                                                .bottomCenter,
-                                                            begin: Alignment
-                                                                .topCenter,
+                                                            end: Alignment.bottomCenter,
+                                                            begin: Alignment.topCenter,
                                                             colors: [
                                                               MyColors.custom(
                                                                 'EAEAEA',
                                                               ).withOpacity(0),
-                                                              MyColors.custom(
-                                                                'EAEAEA',
-                                                              ),
+                                                              MyColors.custom('EAEAEA'),
                                                             ],
                                                           ),
                                                         ),
                                                         child: Stack(
-                                                          alignment:
-                                                              Alignment.center,
+                                                          alignment: Alignment.center,
                                                           children: [
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets.symmetric(
-                                                                    horizontal:
-                                                                        10.0,
+                                                                    horizontal: 10.0,
                                                                   ),
                                                               child: CachedNetworkImage(
                                                                 imageUrl:
                                                                     APIConstants
                                                                         .bucketUrl +
-                                                                    (subCategory
-                                                                            .image ??
+                                                                    (subCategory.image ??
                                                                         ''),
                                                                 width: double.infinity,
-                                                                fit:
-                                                                    BoxFit.fill,
+                                                                fit: BoxFit.fill,
                                                                 placeholder:
                                                                     (
                                                                       context,
@@ -554,8 +509,7 @@ class HomeView extends StatelessWidget {
                                                                       url,
                                                                       error,
                                                                     ) => const Icon(
-                                                                      Icons
-                                                                          .category,
+                                                                      Icons.category,
                                                                       color: MyColors
                                                                           .primary,
                                                                       size: 24,
@@ -575,12 +529,9 @@ class HomeView extends StatelessWidget {
                                                               horizontal: 4,
                                                             ),
                                                         child: Text(
-                                                          subCategory.name ??
-                                                              '',
-                                                          style:
-                                                              MyTexts.medium14,
-                                                          textAlign:
-                                                              TextAlign.center,
+                                                          subCategory.name ?? '',
+                                                          style: MyTexts.medium14,
+                                                          textAlign: TextAlign.center,
                                                         ),
                                                       ),
                                                     ),
@@ -639,11 +590,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _addressCard({
-    Address? address,
-    String? addressType,
-    bool isSelected = false,
-  }) {
+  Widget _addressCard({Address? address, String? addressType, bool isSelected = false}) {
     final displayText =
         "${address?.addressLine1}, ${address?.addressLine2}, ${address?.landmark}, ${address?.city}, ${address?.state} , ${address?.pinCode}";
     return GestureDetector(
@@ -663,9 +610,7 @@ class HomeView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: MyColors.white,
-          border: Border.all(
-            color: isSelected ? MyColors.primary : MyColors.grayD4,
-          ),
+          border: Border.all(color: isSelected ? MyColors.primary : MyColors.grayD4),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -756,9 +701,7 @@ class HomeView extends StatelessWidget {
             SizedBox(height: 0.8.h),
             Text(
               value,
-              style: MyTexts.extraBold18.copyWith(
-                color: MyColors.textFieldBackground,
-              ),
+              style: MyTexts.extraBold18.copyWith(color: MyColors.textFieldBackground),
             ),
           ],
         ),
@@ -798,10 +741,7 @@ class HomeView extends StatelessWidget {
                     icon ?? "",
                     height: 30,
                     width: 30,
-                    colorFilter: ColorFilter.mode(
-                      color ?? Colors.black,
-                      BlendMode.srcIn,
-                    ),
+                    colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
                   ),
                 ),
                 Container(
@@ -854,14 +794,7 @@ class StaticsCard extends StatefulWidget {
   Color? color;
   Color? bColor;
 
-  StaticsCard({
-    super.key,
-    this.icon,
-    this.title,
-    this.value,
-    this.color,
-    this.bColor,
-  });
+  StaticsCard({super.key, this.icon, this.title, this.value, this.color, this.bColor});
 
   @override
   State<StaticsCard> createState() => _StaticsCardState();
@@ -886,10 +819,7 @@ class _StaticsCardState extends State<StaticsCard> {
             width: 20,
             colorFilter: widget.color == null
                 ? null
-                : ColorFilter.mode(
-                    widget.color ?? Colors.black,
-                    BlendMode.srcIn,
-                  ),
+                : ColorFilter.mode(widget.color ?? Colors.black, BlendMode.srcIn),
           ),
           const Gap(6),
           Text(

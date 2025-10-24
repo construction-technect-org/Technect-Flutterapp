@@ -544,23 +544,30 @@ class SelectedProductView extends StatelessWidget {
                               isFromConnector: true,
                               product: item,
                               onApiCall: () async {
-                                await controller.fetchProductsFromApi(isLoading: false);
+                                await controller.fetchProductsFromApi(
+                                  isLoading: false,
+                                );
                               },
                               onWishlistTap: () async {
                                 await Get.find<HomeController>().wishListApi(
-                                  status: item.isInWishList == true ? "remove" : "add",
+                                  status: item.isInWishList == true
+                                      ? "remove"
+                                      : "add",
                                   mID: item.id ?? 0,
                                   onSuccess: () async {
-                                    await controller.fetchProductsFromApi(isLoading: false);
+                                    await controller.fetchProductsFromApi(
+                                      isLoading: false,
+                                    );
                                   },
                                 );
-
                               },
                               onNotifyTap: () async {
                                 await Get.find<HomeController>().notifyMeApi(
                                   mID: item.id ?? 0,
                                   onSuccess: () async {
-                                    await controller.fetchProductsFromApi(isLoading: false);
+                                    await controller.fetchProductsFromApi(
+                                      isLoading: false,
+                                    );
                                   },
                                 );
                               },
@@ -572,14 +579,18 @@ class SelectedProductView extends StatelessWidget {
 
                                   onTap: () async {
                                     Get.back();
-                                    await Get.find<HomeController>().addToConnectApi(
-                                      mID: item.merchantProfileId ?? 0,
-                                      message: '',
-                                      pID: item.id ?? 0,
-                                      onSuccess: () async {
-                                        await controller.fetchProductsFromApi(isLoading: false);
-                                      },
-                                    );
+                                    await Get.find<HomeController>()
+                                        .addToConnectApi(
+                                          mID: item.merchantProfileId ?? 0,
+                                          message: '',
+                                          pID: item.id ?? 0,
+                                          onSuccess: () async {
+                                            await controller
+                                                .fetchProductsFromApi(
+                                                  isLoading: false,
+                                                );
+                                          },
+                                        );
                                   },
                                 );
                               },

@@ -2,11 +2,13 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/controller/delivery_location_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:gap/gap.dart';
 
 class DeliveryLocationView extends GetView<DeliveryLocationController> {
-  const DeliveryLocationView({super.key});
+  DeliveryLocationView({super.key});
+  final HomeController homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +60,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: MyColors.grayEA.withValues(
-                                      alpha: 0.32,
-                                    ),
+                                    color: MyColors.grayEA.withValues(alpha: 0.32),
                                     blurRadius: 4,
                                   ),
                                 ],
@@ -85,20 +85,19 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                           const Gap(16),
                           Text(
                             "Saved Address",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray2E,
-                            ),
+                            style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
                           ),
                           const Gap(16),
                           // Saved Addresses List
                           Obx(
                             () =>
-                                controller.savedAddresses.value.data == null ||
-                                    controller
-                                        .savedAddresses
+                                homeController
+                                        .profileData
                                         .value
-                                        .data!
-                                        .isEmpty
+                                        .data
+                                        ?.siteLocations
+                                        ?.isEmpty ??
+                                    true
                                 ? Container(
                                     width: double.infinity,
                                     padding: const EdgeInsets.all(32),
@@ -107,9 +106,7 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                       borderRadius: BorderRadius.circular(16),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: MyColors.grayEA.withValues(
-                                            alpha: 0.32,
-                                          ),
+                                          color: MyColors.grayEA.withValues(alpha: 0.32),
                                           blurRadius: 4,
                                         ),
                                       ],
@@ -143,25 +140,25 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
                                     physics: const ScrollPhysics(),
-                                    itemCount: controller
-                                        .savedAddresses
-                                        .value
-                                        .data!
-                                        .length,
+                                    itemCount:
+                                        homeController
+                                            .profileData
+                                            .value
+                                            .data
+                                            ?.siteLocations
+                                            ?.length ??
+                                        0,
                                     itemBuilder: (context, index) {
-                                      final address = controller
-                                          .savedAddresses
+                                      final address = homeController
+                                          .profileData
                                           .value
-                                          .data![index];
+                                          .data
+                                          ?.siteLocations?[index];
                                       return Container(
-                                        margin: const EdgeInsets.only(
-                                          bottom: 16,
-                                        ),
+                                        margin: const EdgeInsets.only(bottom: 16),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
+                                          borderRadius: BorderRadius.circular(16),
                                           boxShadow: [
                                             BoxShadow(
                                               color: MyColors.grayEA.withValues(
@@ -172,20 +169,18 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                           ],
                                         ),
                                         child: GestureDetector(
-                                          onTap: address.isDefault == true
+                                          onTap: address?.isDefault == true
                                               ? null
-                                              : () => controller
-                                                    .setDefaultAddress(
-                                                      address.id.toString(),
-                                                    ),
+                                              : () => controller.setDefaultAddress(
+                                                  address?.id.toString() ?? '',
+                                                ),
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: address.isDefault == true
+                                              color: address?.isDefault == true
                                                   ? MyColors.veryPaleBlue
                                                   : Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              border: address.isDefault == true
+                                              borderRadius: BorderRadius.circular(16),
+                                              border: address?.isDefault == true
                                                   ? Border.all(
                                                       color: MyColors.verypaleBlue,
                                                       width: 1.2,
@@ -198,38 +193,35 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                                 children: [
                                                   Row(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                        CrossAxisAlignment.start,
                                                     children: [
                                                       Expanded(
                                                         child: Column(
                                                           crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
+                                                              CrossAxisAlignment.start,
                                                           children: [
                                                             Row(
                                                               children: [
                                                                 Text(
-                                                                  address.siteName?.capitalizeFirst ??
+                                                                  address
+                                                                          ?.siteName
+                                                                          ?.capitalizeFirst ??
                                                                       'Address',
-                                                                  style: MyTexts
-                                                                      .medium16
+                                                                  style: MyTexts.medium16
                                                                       .copyWith(
                                                                         color: MyColors
                                                                             .black,
                                                                       ),
                                                                 ),
-                                                                if (address
-                                                                        .isDefault ==
+                                                                if (address?.isDefault ==
                                                                     true) ...[
                                                                   const Gap(8),
                                                                   Container(
-                                                                    padding: const EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          8,
-                                                                      vertical:
-                                                                          3,
-                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.symmetric(
+                                                                          horizontal: 8,
+                                                                          vertical: 3,
+                                                                        ),
                                                                     decoration: BoxDecoration(
                                                                       color: MyColors
                                                                           .primary,
@@ -243,8 +235,8 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                                                       style: MyTexts
                                                                           .medium13
                                                                           .copyWith(
-                                                                            color:
-                                                                                Colors.white,
+                                                                            color: Colors
+                                                                                .white,
                                                                           ),
                                                                     ),
                                                                   ),
@@ -253,13 +245,14 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                                             ),
                                                             const Gap(4),
                                                             Text(
-                                                              address.fullAddress?.capitalizeFirst ??
+                                                              address
+                                                                      ?.fullAddress
+                                                                      ?.capitalizeFirst ??
                                                                   '',
-                                                              style: MyTexts
-                                                                  .medium14
+                                                              style: MyTexts.medium14
                                                                   .copyWith(
-                                                                    color: MyColors
-                                                                        .gray54,
+                                                                    color:
+                                                                        MyColors.gray54,
                                                                   ),
                                                             ),
                                                           ],
@@ -267,44 +260,38 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                                                       ),
                                                       const Gap(8),
                                                       GestureDetector(
-                                                        onTap: () => controller
-                                                            .editAddress(
-                                                              address.id
+                                                        onTap: () =>
+                                                            controller.editAddress(
+                                                              (address?.id ?? '')
                                                                   .toString(),
                                                             ),
                                                         behavior:
-                                                            HitTestBehavior
-                                                                .translucent,
+                                                            HitTestBehavior.translucent,
                                                         child: Padding(
-                                                          padding:
-                                                              const EdgeInsets.all(
-                                                                4.0,
-                                                              ),
-                                                          child:
-                                                              SvgPicture.asset(
-                                                                Asset.edit,
-                                                              ),
+                                                          padding: const EdgeInsets.all(
+                                                            4.0,
+                                                          ),
+                                                          child: SvgPicture.asset(
+                                                            Asset.edit,
+                                                          ),
                                                         ),
                                                       ),
                                                       const Gap(4),
                                                       GestureDetector(
-                                                        onTap: () => controller
-                                                            .deleteAddress(
-                                                              address.id
+                                                        onTap: () =>
+                                                            controller.deleteAddress(
+                                                              (address?.id ?? '')
                                                                   .toString(),
                                                             ),
                                                         behavior:
-                                                            HitTestBehavior
-                                                                .translucent,
+                                                            HitTestBehavior.translucent,
                                                         child: Padding(
-                                                          padding:
-                                                              const EdgeInsets.all(
-                                                                4.0,
-                                                              ),
-                                                          child:
-                                                              SvgPicture.asset(
-                                                                Asset.delete,
-                                                              ),
+                                                          padding: const EdgeInsets.all(
+                                                            4.0,
+                                                          ),
+                                                          child: SvgPicture.asset(
+                                                            Asset.delete,
+                                                          ),
                                                         ),
                                                       ),
                                                     ],

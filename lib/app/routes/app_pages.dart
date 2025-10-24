@@ -387,7 +387,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.DELIVERY_LOCATION,
-      page: () => const DeliveryLocationView(),
+      page: () => DeliveryLocationView(),
       binding: DeliveryLocationBinding(),
     ),
     GetPage(

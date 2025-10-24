@@ -1,31 +1,13 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/models/delivery_address_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 
 class DeliveryLocationController extends GetxController {
+  HomeController homeController = Get.find();
   // Observable variables
   RxBool isLoading = false.obs;
-  Rx<DeliveryAddressModel> savedAddresses = DeliveryAddressModel().obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    loadSavedAddresses();
-  }
-
-  // Load saved addresses
-  Future<void> loadSavedAddresses() async {
-    try {
-      isLoading.value = true;
-      savedAddresses.value = await DeliveryAddressService.getDeliveryAddresses();
-    } catch (e) {
-      log('Error fetching delivery addresses: $e');
-    } finally {
-      isLoading.value = false;
-    }
-  }
 
   // Add new address
   void addAddress() {
@@ -35,9 +17,8 @@ class DeliveryLocationController extends GetxController {
   // Edit address
   void editAddress(String addressId) {
     // Find the address to edit
-    final address = savedAddresses.value.data?.firstWhere(
-      (addr) => addr.id.toString() == addressId,
-    );
+    final address = homeController.profileData.value.data?.siteLocations
+        ?.firstWhere((addr) => addr.id.toString() == addressId);
 
     if (address != null) {
       Get.toNamed(
@@ -63,7 +44,10 @@ class DeliveryLocationController extends GetxController {
         backgroundColor: Colors.white,
         titlePadding: const EdgeInsets.all(20),
         contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        actionsPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         title: Container(
           decoration: BoxDecoration(
             border: Border.all(color: const Color(0xFFF9D0CB)),
@@ -120,10 +104,10 @@ class DeliveryLocationController extends GetxController {
     try {
       isLoading.value = true;
       await DeliveryAddressService.deleteDeliveryAddress(addressId);
+      await homeController.fetchProfileData();
       Get.back();
-      loadSavedAddresses();
     } catch (e) {
-      log('Failed to update default address: $e');
+      log('Failed to delete address: $e');
     } finally {
       isLoading.value = false;
     }
@@ -133,8 +117,10 @@ class DeliveryLocationController extends GetxController {
     try {
       isLoading.value = true;
 
-      await DeliveryAddressService.updateDeliveryAddress(addressId, {"is_default": true});
-      loadSavedAddresses();
+      await DeliveryAddressService.updateDeliveryAddress(addressId, {
+        "is_default": true,
+      });
+      await homeController.fetchProfileData();
     } catch (e) {
       log('Failed to update default address: $e');
     } finally {

@@ -8,6 +8,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 import 'package:gap/gap.dart';
 
 class SelectedProductController extends GetxController {
+  HomeController homeController = Get.find<HomeController>();
   // Observable variables
   RxInt selectedProductIndex = (-1).obs;
 
@@ -99,6 +100,27 @@ class SelectedProductController extends GetxController {
 
     isLoadingProducts.value = isLoading ?? true;
 
+    final selectedAddress = homeController.profileData.value.data?.siteLocations
+        ?.where((element) => element.isDefault == true)
+        .first;
+
+    String latitude = '';
+    String longitude = '';
+
+    if (selectedAddress != null) {
+      final latitudeString = selectedAddress.latitude?.toString();
+      final longitudeString = selectedAddress.longitude?.toString();
+      if (latitudeString != null && longitudeString != null) {
+        latitude = latitudeString;
+        longitude = longitudeString;
+      }
+    }
+    if (latitude.isEmpty || longitude.isEmpty) {
+      SnackBars.errorSnackBar(
+        content: 'No address found. Please add an address first.',
+      );
+      return;
+    }
     try {
       // Call the service
       productListModel.value = await services.connectorProduct(
@@ -106,8 +128,8 @@ class SelectedProductController extends GetxController {
         subCategoryId: selectedSubCategory.value!.id.toString(),
         categoryProductId: selectedProduct.value!.id.toString(),
         radius: radiusKm.toInt(),
-        latitude: Get.find<HomeController>().currentLatitude.toString(),
-        longitude: Get.find<HomeController>().currentLongitude.toString(),
+        latitude: latitude,
+        longitude: longitude,
         filters: filtersData,
       );
       isProductView.value = true;
@@ -121,7 +143,6 @@ class SelectedProductController extends GetxController {
       isLoadingProducts.value = false;
     }
   }
-
 
   // Select product category
   void selectProductCategory(int index) {
@@ -289,11 +310,9 @@ class SelectedProductController extends GetxController {
                     if (moreThenHundred.value == true) {
                       radiusKm = 10000000000;
                       await fetchProductsFromApi();
-
                     } else {
                       await applyRadius();
                     }
-
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -347,7 +366,7 @@ class SelectedProductController extends GetxController {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    moreThenHundred.value=false;
+                    moreThenHundred.value = false;
                     await applyRadius();
                     Get.back();
                   },
