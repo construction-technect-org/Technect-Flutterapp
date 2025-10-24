@@ -10,10 +10,10 @@ class ProductCard extends StatelessWidget {
   final VoidCallback? onNotifyTap;
   final VoidCallback? onConnectTap;
   final VoidCallback? onApiCall;
-  final bool? isFromAdd;
-  final bool? isFromConnector;
+   bool? isFromAdd;
+   bool? isFromConnector;
 
-  const ProductCard({
+   ProductCard({
     super.key,
     required this.product,
     this.onWishlistTap,

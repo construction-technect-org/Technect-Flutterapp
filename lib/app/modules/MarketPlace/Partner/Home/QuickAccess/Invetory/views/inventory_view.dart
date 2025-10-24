@@ -85,6 +85,9 @@ class InventoryView extends GetView<InventoryController> {
                               ?.products?[index] ??
                           Product();
                       return ProductCard(
+                        onApiCall: (){
+                          controller.fetchProducts();
+                        },
                         isFromAdd: false,
                         isFromConnector: false,
                         product: item,

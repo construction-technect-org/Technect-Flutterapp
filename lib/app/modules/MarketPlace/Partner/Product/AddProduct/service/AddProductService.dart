@@ -71,7 +71,7 @@ class AddProductService {
     }
   }
 
-  Future<CreateProductModel> updateProduct({
+  Future<ApiResponse> updateProduct({
     required int productId,
     required Map<String, dynamic> fields,
     Map<String, String>? files,
@@ -82,9 +82,22 @@ class AddProductService {
         fields: fields,
         files: files,
       );
-      return CreateProductModel.fromJson(response);
+
+      final data = response;
+      final success = data["success"] ?? false;
+      final message = data["message"] ?? "No message from server";
+
+      return ApiResponse(success: success, message: message);
     } catch (e, st) {
-      throw Exception('Error in updateProduct: $e , $st');
+      debugPrint("❌ Error in updateProduct: $e");
+      debugPrint("$st");
+      return ApiResponse(success: false, message: e.toString());
     }
   }
+}
+class ApiResponse {
+  final bool success;
+  final String? message;
+
+  ApiResponse({required this.success, this.message});
 }

@@ -76,6 +76,7 @@ class AddProductController extends GetxController {
 
   final AddProductService _service = AddProductService();
   bool isEdit = false;
+  final VoidCallback? onApiCall = Get.arguments['onApiCall'] ?? () {};
 
   @override
   void onInit() {
@@ -781,8 +782,9 @@ class AddProductController extends GetxController {
         files: selectedFiles.isNotEmpty ? selectedFiles : null,
       );
 
-      if (res.success == true) {
-        // await controller.fetchProducts();
+      if (res.success) {
+        onApiCall?.call();
+
         Get.back();
         Get.back();
       } else {
@@ -791,7 +793,7 @@ class AddProductController extends GetxController {
         );
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error updating product: $e');
+      SnackBars.errorSnackBar(content: 'Update failed: $e');
     } finally {
       isLoading.value = false;
     }

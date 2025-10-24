@@ -35,7 +35,7 @@ class ProductDetailsController extends GetxController {
     isFromConnector.value = argument["isFromConnector"];
     if (isFromAdd.value == false) {
       fetchReview(product.id ?? 0, isFromConnector.value);
-      if (!(isFromAdd.value == false && isFromConnector.value==false)) {
+      if (!(isFromAdd.value == false && isFromConnector.value == false)) {
         productDetails(product.id ?? 0);
       }
       WidgetsBinding.instance.addPostFrameCallback((val) async {
@@ -51,7 +51,7 @@ class ProductDetailsController extends GetxController {
   void onEditProduct() {
     Get.toNamed(
       Routes.ADD_PRODUCT,
-      arguments: {"isEdit": true, 'product': product},
+      arguments: {"isEdit": true, 'product': product, "onApiCall": onApiCall},
     );
   }
 
