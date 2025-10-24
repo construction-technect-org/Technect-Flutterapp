@@ -56,7 +56,6 @@ class NewLaunchesProduct extends StatelessWidget {
                     return ProductCard(
                       isFromAdd: false,
                       isFromConnector: myPref.role.val == "connector",
-
                       product: item,
                       onApiCall: () async {
                         await controller.fetchProductsFromApi();
