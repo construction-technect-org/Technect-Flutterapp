@@ -76,7 +76,7 @@ class AddProductController extends GetxController {
 
   final AddProductService _service = AddProductService();
   bool isEdit = false;
-  final VoidCallback? onApiCall = Get.arguments['onApiCall'] ?? () {};
+  final VoidCallback? onApiCall =Get.arguments!=null? Get.arguments['onApiCall'] : () {};
 
   @override
   void onInit() {

@@ -55,7 +55,7 @@ class AddProductService {
     }
   }
 
-  Future<CreateProductModel> createProduct({
+  Future<ApiResponse> createProduct({
     required Map<String, dynamic> fields,
     Map<String, String>? files,
   }) async {
@@ -65,7 +65,11 @@ class AddProductService {
         fields: fields,
         files: files,
       );
-      return CreateProductModel.fromJson(response);
+      final data = response;
+      final success = data["success"] ?? false;
+      final message = data["message"] ?? "No message from server";
+
+      return ApiResponse(success: success, message: message);
     } catch (e, st) {
       throw Exception('Error in createProduct: $e , $st');
     }

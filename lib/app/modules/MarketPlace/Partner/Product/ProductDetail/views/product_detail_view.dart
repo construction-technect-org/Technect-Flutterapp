@@ -759,12 +759,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                       ),
                                     ),
                                     const Gap(8),
-                                    // Text(
-                                    //   "Near by : ${controller.product.distanceKm!=null ? double.parse(controller.product.distanceKm.toString() ).toStringAsFixed(2) : "-"} km",
-                                    //   style: MyTexts.medium16.copyWith(
-                                    //     color: MyColors.gray54,
-                                    //   ),
-                                    // ),
+                                    if((controller.product.distanceKm??"")!="")
+                                    Text(
+                                      "Near by : ${controller.product.distanceKm!=null ? double.parse(controller.product.distanceKm.toString() ).toStringAsFixed(2) : "-"} km",
+                                      style: MyTexts.medium16.copyWith(
+                                        color: MyColors.gray54,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               )
@@ -1087,7 +1088,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 'Explore our other product',
                                 style: MyTexts.bold18,
                               ),
-                              const Icon(Icons.arrow_forward_ios, size: 20),
+                              // const Icon(Icons.arrow_forward_ios, size: 20),
                             ],
                           ),
                           const Gap(12),
