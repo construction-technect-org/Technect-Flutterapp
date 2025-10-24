@@ -579,12 +579,10 @@ class ChatBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController messageController = TextEditingController();
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 24, top: 24, left: 24, right: 24),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(context).size.height / 1.5,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -660,110 +658,50 @@ class ChatBottomSheet extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
+            const Divider(),
+            const SizedBox(height: 12),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFF0F4FF),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  buildRow(title: "Quotation ID", data: "QT-2025-008"),
+                  const Gap(8),
+                  buildRow(title: "Date Issued", data: "QT-2025-008"),
+                  const Gap(8),
 
-            // Chat Messages
-            Expanded(
-              child: ListView(
-                children: const [
-                  ChatBubble(
-                    isSender: false,
-                    text:
-                        "Hi, I’m interested in the OPC 43 Grade Cement you listed. Is it available in bulk?",
-                  ),
-                  ChatBubble(
-                    isSender: true,
-                    text:
-                        "Hello! Yes, we have OPC 43 Grade in stock. How much quantity are you looking for?",
-                  ),
-                  ChatBubble(
-                    isSender: false,
-                    text:
-                        "I need around 500 bags for a site in Bangalore. What’s the best price you can offer?",
-                  ),
-                  ChatBubble(
-                    isSender: true,
-                    text:
-                        "For 500 bags, we can offer ₹310 per bag. Delivery charges depend on location.",
-                  ),
+                  buildRow(title: "Client Name", data: "QT-2025-008"),
+                  const Gap(8),
+
+                  buildRow(title: "Quotation ID", data: "QT-2025-008"),
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.info_outline,
-                              color: MyColors.primary,
-                              size: 60,
-                            ),
-                            SizedBox(height: 2.h),
-                            Text(
-                              "Feature Available in CRM",
-                              style: MyTexts.extraBold16.copyWith(
-                                color: MyColors.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: 1.h),
-                            Text(
-                              "To use this chat feature, please move to the CRM section.",
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.dopelyColors,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: 2.h),
-                            RoundedButton(
-                              buttonName: "Go to CRM",
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              color: MyColors.primary,
-                              height: 45,
-                              borderRadius: 12,
-                            ),
-                            SizedBox(height: 1.h),
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text(
-                                "Cancel",
-                                style: TextStyle(color: MyColors.dopelyColors),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Row(
+            const Gap(16),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF0F4FF),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Expanded(
-                    child: AbsorbPointer(
-                      child: CommonTextField(
-                        controller: messageController,
-                        hintText: 'Start typing...',
-                      ),
-                    ),
+                  Text(
+                    "Hi, I'm interested in the OPC 43 Grade Cement\n you listed. Is it available in bulk?",
+                    style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+                    textAlign: TextAlign.right,
                   ),
-                  const Gap(20),
-                  const Icon(Icons.send_rounded, color: MyColors.primary),
+                  const Gap(16),
+                  RoundedButton(
+                    buttonName: "Connect CRM",
+                    onTap: () {},
+                    width: 160,
+                  ),
                 ],
               ),
             ),
@@ -772,31 +710,14 @@ class ChatBottomSheet extends StatelessWidget {
       ),
     );
   }
-}
 
-class ChatBubble extends StatelessWidget {
-  final bool isSender;
-  final String text;
-
-  const ChatBubble({Key? key, required this.isSender, required this.text})
-    : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSender ? const Color(0xFFE8F0FE) : const Color(0xFFF5F5F5),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          text,
-          style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
-        ),
-      ),
+  Widget buildRow({required String title, required String data}) {
+    return Row(
+      children: [
+        Text(title, style: MyTexts.medium14.copyWith(color: MyColors.gray54)),
+        const Spacer(),
+        Text(data, style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
+      ],
     );
   }
 }
