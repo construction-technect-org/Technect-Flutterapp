@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
@@ -28,7 +27,7 @@ class HomeController extends GetxController {
   final isDefaultOffice = true.obs;
 
   Rx<ProfileModel> profileData = ProfileModel().obs;
-  AddressModel addressData = AddressModel();
+  // AddressModel addressData = AddressModel();
   RxList<TeamListData> teamList = <TeamListData>[].obs;
   Rx<CategoryModel> categoryHierarchyData = CategoryModel().obs;
 
@@ -41,7 +40,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> _initializeHomeData() async {
-    _loadCachedData();
+    // _loadCachedData();
 
     await fetchProfileData();
   }
@@ -55,9 +54,7 @@ class HomeController extends GetxController {
       PopScope(
         canPop: false,
         child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(13),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
           child: GestureDetector(
             onTap: () {
               _handleProfileDialogTap();
@@ -117,45 +114,35 @@ class HomeController extends GetxController {
     }
   }
 
-  void _loadCachedData() {
-    final cachedAddressData = myPref.getAddressData();
-    if (cachedAddressData != null) {
-      try {
-        addressData = AddressModel.fromJson(cachedAddressData);
-        hasAddress.value = addressData.data?.addresses?.isNotEmpty ?? false;
-      } catch (e) {
-        Get.printError(info: 'Error loading cached address data: $e');
-      }
-    }
-
-    final cachedProfileData = myPref.getProfileData();
-    if (cachedProfileData != null) {
-      try {
-        profileData.value = ProfileModel.fromJson(cachedProfileData);
-      } catch (e) {
-        Get.printError(info: 'Error loading cached profile data: $e');
-      }
-    }
-  }
+  // void _loadCachedData() {
+  //   final cachedAddressData = myPref.getAddressData();
+  //   if (cachedAddressData != null) {
+  //     try {
+  //       addressData = AddressModel.fromJson(cachedAddressData);
+  //       hasAddress.value = addressData.data?.addresses?.isNotEmpty ?? false;
+  //     } catch (e) {
+  //       Get.printError(info: 'Error loading cached address data: $e');
+  //     }
+  //   }
+  //
+  //   final cachedProfileData = myPref.getProfileData();
+  //   if (cachedProfileData != null) {
+  //     try {
+  //       profileData.value = ProfileModel.fromJson(cachedProfileData);
+  //     } catch (e) {
+  //       Get.printError(info: 'Error loading cached profile data: $e');
+  //     }
+  //   }
+  // }
 
   RxString getCurrentAddress() {
-    if (hasAddress.value && addressData.data?.addresses?.isNotEmpty == true) {
+    if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
       final int index =
-          addressData.data?.addresses?.indexWhere(
-            (e) => e.addressType == "office",
-          ) ??
+          profileData.value.data?.siteLocations?.indexWhere((e) => e.isDefault == true) ??
           0;
-      final int factoryIndex =
-          addressData.data?.addresses?.indexWhere(
-            (e) => e.addressType == "factory",
-          ) ??
-          0;
-      final address = addressData
-          .data!
-          .addresses?[isDefaultOffice.value == true ? index : factoryIndex];
+      final address = profileData.value.data?.siteLocations?[index];
 
-      return '${address?.addressLine1}, ${address?.city}, ${address?.state} , ${address?.pinCode}'
-          .obs;
+      return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
     }
     return 'No address found'.obs;
   }
@@ -165,17 +152,11 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true &&
-          profileResponse.data?.user != null) {
+      if (profileResponse.success == true && profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
-        if ((profileData
-                    .value
-                    .data
-                    ?.merchantProfile
-                    ?.profileCompletionPercentage ??
-                0) >=
+        if ((profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0) >=
             90) {
           _loadTeamFromStorage();
         }
@@ -304,11 +285,7 @@ class HomeController extends GetxController {
     {"title": "ERP", "icon": Asset.erp, "available": false},
     {"title": "Project Management", "icon": Asset.project, "available": false},
     {"title": "HRMS", "icon": Asset.hrms, "available": false},
-    {
-      "title": "Portfolio Management",
-      "icon": Asset.portfolio,
-      "available": false,
-    },
+    {"title": "Portfolio Management", "icon": Asset.portfolio, "available": false},
     {"title": "OVP", "icon": Asset.ovp, "available": false},
     {"title": "Construction Taxi", "icon": Asset.taxi, "available": false},
   ];
@@ -318,15 +295,11 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
       if (res.success == true) {
-        SnackBars.successSnackBar(
-          content: "You’ll be notified when it’s restocked!",
-        );
+        SnackBars.successSnackBar(content: "You’ll be notified when it’s restocked!");
         if (onSuccess != null) onSuccess();
       }
     } catch (e) {
-      SnackBars.errorSnackBar(
-        content: "Something went wrong. Please try again.",
-      );
+      SnackBars.errorSnackBar(content: "Something went wrong. Please try again.");
     } finally {
       isLoading.value = false;
     }
@@ -365,9 +338,7 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final res = await WishListServices().wishList(mID: mID, status: status);
       if (res.success == true) {
-        final msg = status == "add"
-            ? "Added to wishlist!"
-            : "Removed from wishlist!";
+        final msg = status == "add" ? "Added to wishlist!" : "Removed from wishlist!";
         SnackBars.successSnackBar(content: msg);
         if (onSuccess != null) onSuccess();
       }

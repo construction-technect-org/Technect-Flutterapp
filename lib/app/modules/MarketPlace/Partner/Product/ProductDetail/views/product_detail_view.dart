@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
@@ -16,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
+  final HomeController homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -744,7 +746,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                     const Gap(8),
 
                                     Text(
-                                      "Location : ${controller.product.address ?? "-"}",
+                                      "Location : ${homeController.getCurrentAddress().value}",
                                       style: MyTexts.medium16.copyWith(
                                         color: MyColors.gray54,
                                       ),

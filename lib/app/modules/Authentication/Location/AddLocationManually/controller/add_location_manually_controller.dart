@@ -223,7 +223,7 @@ class AddLocationController extends GetxController {
           if (addressResponse.success == true &&
               (addressResponse.data?.addresses?.isNotEmpty ?? false)) {
             Get.find<HomeController>().hasAddress.value = true;
-            Get.find<HomeController>().addressData = addressResponse;
+            // Get.find<HomeController>().addressData = addressResponse;
             myPref.setAddressData(addressResponse.toJson());
             Get.back();
             SnackBars.successSnackBar(
@@ -233,9 +233,7 @@ class AddLocationController extends GetxController {
         }
       } else {
         locationAdded.value = false;
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to save address',
-        );
+        SnackBars.errorSnackBar(content: response['message'] ?? 'Failed to save address');
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error saving address: $e');

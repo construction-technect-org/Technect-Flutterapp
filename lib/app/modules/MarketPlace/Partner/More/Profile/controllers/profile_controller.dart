@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/document_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/edit_profile_service.dart';
@@ -113,14 +112,15 @@ class ProfileController extends GetxController {
 
   List<Documents> get documents => merchantProfile?.documents ?? [];
 
-  AddressModel get addressData => homeController.addressData;
+  List<SiteLocation> get addressData =>
+      homeController.profileData.value.data?.siteLocations ?? [];
 
   String? get businessWebsite => merchantProfile?.businessWebsite;
 
   String? get currentAddress {
-    if (addressData.data?.addresses?.isNotEmpty == true) {
-      final currentAddress = addressData.data!.addresses!.first;
-      return '${currentAddress.addressLine1 ?? ''}, ${currentAddress.city ?? ''}, ${currentAddress.state ?? ''}';
+    if (addressData.isNotEmpty) {
+      final currentAddress = addressData.first;
+      return '${currentAddress.fullAddress ?? ''}, ${currentAddress.landmark ?? ''}';
     }
     return null;
   }
@@ -497,7 +497,7 @@ class ProfileController extends GetxController {
 
       final files = <String, String>{};
       if (!(businessModel.value.image ?? "").contains("merchant-logo")) {
-        files['merchant_logo'] = businessModel.value.image??"";
+        files['merchant_logo'] = businessModel.value.image ?? "";
       }
       if (certificates.isNotEmpty &&
           !(certificates[0].filePath ?? "").startsWith("merchant-documents")) {
