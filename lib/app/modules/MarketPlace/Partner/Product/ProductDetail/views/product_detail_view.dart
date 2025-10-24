@@ -1099,7 +1099,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               ?.similarProducts
                                               ?.length ??
                                           0)
-                                      .clamp(0, 5), // Limit to max 5 products
+                                      .clamp(0, 5),
                               itemBuilder: (context, index) {
                                 final Product data =
                                     controller
@@ -1110,22 +1110,27 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                     Product();
                                 return GestureDetector(
                                   onTap: () {
-                                    Get.offNamed(
-                                      Routes.PRODUCT_DETAILS,
-                                      arguments: {
-                                        "product": data,
-                                        "isFromAdd": controller.isFromAdd.value,
-                                        "isFromConnector":
-                                            controller.isFromConnector.value,
-                                        "onApiCall": controller.onApiCall,
-                                      },
-                                    );
+                                    final finalData={
+                                      "product": data,
+                                      "isFromAdd": controller.isFromAdd.value,
+                                      "isFromConnector":
+                                      controller.isFromConnector.value,
+                                      "onApiCall": controller.onApiCall,
+                                    };
+                                    Get.back();
+                                    0.5.delay((){
+                                      Get.toNamed(
+                                        Routes.PRODUCT_DETAILS,
+                                        arguments: finalData,
+                                      );
+                                    });
+
                                   },
                                   child: Container(
                                     width: 112,
                                     margin: EdgeInsets.only(
                                       right: index < 4 ? 12 : 0,
-                                    ), // Add margin except for last item
+                                    ),
                                     child: Column(
                                       children: [
                                         ClipRRect(
