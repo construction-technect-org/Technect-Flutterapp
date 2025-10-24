@@ -4,15 +4,13 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDe
 class DeliveryAddressService {
   static final ApiManager _apiManager = ApiManager();
 
-  static Future<DeliveryAddressModel> submitDeliveryAddress(
-    Object deliveryAddress,
-  ) async {
+  static Future submitDeliveryAddress(Object deliveryAddress) async {
     try {
       final response = await _apiManager.postObject(
         url: APIConstants.connectorSiteAddress,
         body: deliveryAddress,
       );
-      return DeliveryAddressModel.fromJson(response);
+      return response;
     } catch (e) {
       throw Exception('Error adding delivery address: $e');
     }
