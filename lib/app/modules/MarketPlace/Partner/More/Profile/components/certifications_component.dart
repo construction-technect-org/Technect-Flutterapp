@@ -30,9 +30,7 @@ class CertificationsComponent extends StatelessWidget {
                   children: [
                     Text(
                       cert.title,
-                      style: MyTexts.medium15.copyWith(
-                        color: MyColors.gray2E,
-                      ),
+                      style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                     ),
                     const Spacer(),
                     GestureDetector(
@@ -52,11 +50,8 @@ class CertificationsComponent extends StatelessWidget {
                               url.contains("storage/") ||
                               url.contains("CoreSimulator") ||
                               url.contains("tmp/")) {
-
                             OpenFilex.open(url);
-                          }
-
-                          else if (url.startsWith("http://") ||
+                          } else if (url.startsWith("http://") ||
                               url.startsWith("https://")) {
                             final uri = Uri.parse(url);
                             if (await canLaunchUrl(uri)) {
@@ -142,7 +137,9 @@ class CertificationsComponent extends StatelessWidget {
                               Text(
                                 "File uploaded: ${cert.name}",
                                 textAlign: TextAlign.center,
-                                style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.gray2E,
+                                ),
                               ),
                             ],
                           ),

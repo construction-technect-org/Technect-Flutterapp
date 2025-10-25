@@ -111,13 +111,15 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
 
                                     if (!isAvailable) {
                                       SnackBars.errorSnackBar(
-                                        content: "This email is already registered",
+                                        content:
+                                            "This email is already registered",
                                       );
                                     }
                                   } else if (email.isNotEmpty &&
                                       !controller.isValidEmail(email)) {
                                     SnackBars.errorSnackBar(
-                                      content: "Please enter a valid email address",
+                                      content:
+                                          "Please enter a valid email address",
                                     );
                                   }
                                 }
@@ -155,21 +157,23 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                           .trim();
                                       if (value.isEmpty) {
                                         SnackBars.errorSnackBar(
-                                          content: "Please enter Aadhaar number",
+                                          content:
+                                              "Please enter Aadhaar number",
                                         );
                                         controller.isVerified.value = false;
                                         return;
                                       } else if (value.length != 12) {
                                         SnackBars.errorSnackBar(
                                           content:
-                                          "Aadhaar number must be exactly 12 digits",
+                                              "Aadhaar number must be exactly 12 digits",
                                         );
                                         controller.isVerified.value = false;
                                         return;
                                       }
                                       controller.isVerified.value = true;
                                       SnackBars.successSnackBar(
-                                        content: "Aadhaar verified successfully!",
+                                        content:
+                                            "Aadhaar verified successfully!",
                                       );
                                     },
                                     child: Container(
@@ -224,7 +228,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     } else if (value.length != 15) {
                                       SnackBars.errorSnackBar(
                                         content:
-                                        "GSTIN must be exactly 15 characters",
+                                            "GSTIN must be exactly 15 characters",
                                       );
                                       controller.isVerified.value = false;
                                       return;
@@ -311,9 +315,9 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         alignment: AlignmentGeometry.topLeft,
                                         child: Text(
                                           Get.find<SignUpRoleController>()
-                                              .selectedRoleName
-                                              .value ==
-                                              "House-Owner"
+                                                      .selectedRoleName
+                                                      .value ==
+                                                  "House-Owner"
                                               ? "Aadhaar card details"
                                               : "Company details",
                                           style: MyTexts.medium13.copyWith(
@@ -326,11 +330,11 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                       padding: const EdgeInsets.all(12.0),
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           if (Get.find<SignUpRoleController>()
-                                              .selectedRoleName
-                                              .value ==
+                                                  .selectedRoleName
+                                                  .value ==
                                               "House-Owner") ...[
                                             Text(
                                               "Aadhaar number ",
