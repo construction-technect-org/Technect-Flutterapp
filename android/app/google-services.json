@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "102792963565",
+    "project_id": "construction-technect-18f09",
+    "storage_bucket": "construction-technect-18f09.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102792963565:android:2369f9d434b8c63460f3e4",
+        "android_client_info": {
+          "package_name": "com.construction_technet.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoyBiJCI-p04Ozy0h2R1Y6yODZL4jK0K4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
