@@ -197,7 +197,7 @@ class EditProfileView extends GetView<EditProfileController> {
             textCapitalization: TextCapitalization.words,
             inputFormatters: [
               LengthLimitingTextInputFormatter(30),
-              NameInputFormatter(),
+              // NameInputFormatter(),
             ],
             validator: (value) =>
                 validateName(value, fieldName: "business name"),

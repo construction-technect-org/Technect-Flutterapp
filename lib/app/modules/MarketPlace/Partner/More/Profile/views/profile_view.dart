@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/certifications_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/info_metrics_component.dart';
@@ -8,9 +7,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:gap/gap.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  ProfileView({super.key});
-
-  final HomeController controller1 = Get.put(HomeController());
+  const ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +81,7 @@ class ProfileView extends GetView<ProfileController> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        "Intro & Matrics",
+                                        "Intro & Metrics",
                                         style: MyTexts.medium15.copyWith(
                                           color: MyColors.gray2E,
                                         ),

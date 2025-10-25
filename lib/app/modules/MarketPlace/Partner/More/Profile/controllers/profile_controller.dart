@@ -15,6 +15,7 @@ class ProfileController extends GetxController {
     // TODO: implement onInit
     super.onInit();
 
+    businessModel.value.gstinNumber=Get.find<HomeController>().profileData.value.data?.user?.gst??"-";
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website.toString();
       businessModel.value.businessEmail = merchantProfile?.businessEmail
@@ -478,7 +479,6 @@ class ProfileController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Check if this is update or submit based on merchant ID
       final homeController = Get.find<HomeController>();
       final merchantProfile =
           homeController.profileData.value.data?.merchantProfile;

@@ -50,21 +50,20 @@ class NotificationView extends GetView<NotificationController> {
                           }
                           if (notifications.isEmpty) {
                             return Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.notifications_none, size: 64, color: MyColors.grey),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    'No notifications found',
-                                    style: MyTexts.medium18.copyWith(color: MyColors.fontBlack),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    "You'll see notifications here",
-                                    style: MyTexts.regular14.copyWith(color: MyColors.grey),
-                                  ),
-                                ],
+                              child: Padding(
+                                padding:  EdgeInsets.only(top:MediaQuery.of(context).size.height/2.3),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'No notifications found',
+                                      style: MyTexts.medium16.copyWith(
+                                        color: MyColors.fontBlack,
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
                               ),
                             );
                           }

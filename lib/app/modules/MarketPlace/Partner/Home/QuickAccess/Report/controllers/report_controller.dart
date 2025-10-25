@@ -137,7 +137,7 @@ class ReportController extends GetxController {
                     color: MyColors.grayCD,
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Flexible(
                   child: RoundedButton(
                     onTap: () {

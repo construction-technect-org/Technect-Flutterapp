@@ -150,7 +150,7 @@ class AppPages {
       binding: ForgotPasswordBinding(),
     ),
     GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
-    GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
+    GetPage(name: _Paths.PROFILE, page: () => const ProfileView(), binding: ProfileBinding()),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
@@ -255,7 +255,7 @@ class AppPages {
 
     GetPage(
       name: _Paths.CONNECTOR_PROFILE,
-      page: () => ConnectorProfileView(),
+      page: () => const ConnectorProfileView(),
       binding: ConnectorProfileBinding(),
     ),
     GetPage(

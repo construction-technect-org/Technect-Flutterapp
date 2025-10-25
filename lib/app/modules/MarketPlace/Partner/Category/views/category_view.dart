@@ -52,27 +52,131 @@ class CategoryView extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           if (index == 0) {
-                            Get.toNamed(
-                              Routes.SELECT_PRODUCT,
-                              arguments: {
-                                "mainCategoryId":
-                                    Get.find<HomeController>()
-                                        .categoryHierarchyData
+                            if ((Get.find<HomeController>()
+                                        .profileData
                                         .value
-                                        .data![0]
-                                        .id ??
-                                    0,
-                                "mainCategoryName":
-                                    Get.find<HomeController>()
-                                        .categoryHierarchyData
-                                        .value
-                                        .data![0]
-                                        .name ??
-                                    '',
-                              },
-                            );
+                                        .data
+                                        ?.siteLocations ??
+                                    [])
+                                .isNotEmpty) {
+                              Get.toNamed(
+                                Routes.SELECT_PRODUCT,
+                                arguments: {
+                                  "mainCategoryId":
+                                      Get.find<HomeController>()
+                                          .categoryHierarchyData
+                                          .value
+                                          .data![0]
+                                          .id ??
+                                      0,
+                                  "mainCategoryName":
+                                      Get.find<HomeController>()
+                                          .categoryHierarchyData
+                                          .value
+                                          .data![0]
+                                          .name ??
+                                      '',
+                                },
+                              );
+                            } else {
+                              Get.dialog(
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  title: const Text(
+                                    "Add Your Address",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  content: const Text(
+                                    "To view a product, please add your address first.",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Get.back(),
+                                      child: const Text(
+                                        "Cancel",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        Get.toNamed(Routes.DELIVERY_LOCATION);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blue,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text("Add Address"),
+                                    ),
+                                  ],
+                                ),
+                                barrierDismissible: false,
+                              );
+                            }
                           } else if (index == 1) {
-                            Get.to(()=>NewLaunchesProduct());
+                            if ((Get.find<HomeController>()
+                                        .profileData
+                                        .value
+                                        .data
+                                        ?.siteLocations ??
+                                    [])
+                                .isNotEmpty) {
+                              Get.to(() => NewLaunchesProduct());
+                            } else {
+                              Get.dialog(
+                                AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  title: const Text(
+                                    "Add Your Address",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  content: const Text(
+                                    "To view a product, please add your address first.",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Get.back(),
+                                      child: const Text(
+                                        "Cancel",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        Get.toNamed(Routes.DELIVERY_LOCATION);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blue,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text("Add Address"),
+                                    ),
+                                  ],
+                                ),
+                                barrierDismissible: false,
+                              );
+                            }
                           }
                         },
                         behavior: HitTestBehavior.translucent,

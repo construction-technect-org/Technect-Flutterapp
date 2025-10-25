@@ -24,9 +24,9 @@ class HomeController extends GetxController {
 
   final isLoading = false.obs;
   final hasAddress = false.obs;
-  final isDefaultOffice = true.obs;
 
   Rx<ProfileModel> profileData = ProfileModel().obs;
+
   // AddressModel addressData = AddressModel();
   RxList<TeamListData> teamList = <TeamListData>[].obs;
   Rx<CategoryModel> categoryHierarchyData = CategoryModel().obs;
@@ -36,7 +36,9 @@ class HomeController extends GetxController {
     super.onInit();
     fetchCategoryHierarchy();
     _initializeHomeData();
-    isDefaultOffice.value = myPref.getDefaultAdd();
+    commonController.hasProfileComplete.value =
+        (profileData.value.data?.merchantProfile?.businessEmail ?? "")
+            .isNotEmpty;
   }
 
   Future<void> _initializeHomeData() async {
@@ -54,7 +56,9 @@ class HomeController extends GetxController {
       PopScope(
         canPop: false,
         child: Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(13),
+          ),
           child: GestureDetector(
             onTap: () {
               _handleProfileDialogTap();
@@ -138,7 +142,9 @@ class HomeController extends GetxController {
   RxString getCurrentAddress() {
     if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
       final int index =
-          profileData.value.data?.siteLocations?.indexWhere((e) => e.isDefault == true) ??
+          profileData.value.data?.siteLocations?.indexWhere(
+            (e) => e.isDefault == true,
+          ) ??
           0;
       final address = profileData.value.data?.siteLocations?[index];
 
@@ -152,11 +158,17 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true && profileResponse.data?.user != null) {
+      if (profileResponse.success == true &&
+          profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
-        if ((profileData.value.data?.merchantProfile?.profileCompletionPercentage ?? 0) >=
+        if ((profileData
+                    .value
+                    .data
+                    ?.merchantProfile
+                    ?.profileCompletionPercentage ??
+                0) >=
             90) {
           _loadTeamFromStorage();
         }
@@ -269,7 +281,9 @@ class HomeController extends GetxController {
 
       // Get current position
       final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
 
       currentLatitude.value = position.latitude;
@@ -285,7 +299,11 @@ class HomeController extends GetxController {
     {"title": "ERP", "icon": Asset.erp, "available": false},
     {"title": "Project Management", "icon": Asset.project, "available": false},
     {"title": "HRMS", "icon": Asset.hrms, "available": false},
-    {"title": "Portfolio Management", "icon": Asset.portfolio, "available": false},
+    {
+      "title": "Portfolio Management",
+      "icon": Asset.portfolio,
+      "available": false,
+    },
     {"title": "OVP", "icon": Asset.ovp, "available": false},
     {"title": "Construction Taxi", "icon": Asset.taxi, "available": false},
   ];
@@ -295,11 +313,15 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
       if (res.success == true) {
-        SnackBars.successSnackBar(content: "You’ll be notified when it’s restocked!");
+        SnackBars.successSnackBar(
+          content: "You’ll be notified when it’s restocked!",
+        );
         if (onSuccess != null) onSuccess();
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: "Something went wrong. Please try again.");
+      SnackBars.errorSnackBar(
+        content: "Something went wrong. Please try again.",
+      );
     } finally {
       isLoading.value = false;
     }
@@ -338,7 +360,9 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final res = await WishListServices().wishList(mID: mID, status: status);
       if (res.success == true) {
-        final msg = status == "add" ? "Added to wishlist!" : "Removed from wishlist!";
+        final msg = status == "add"
+            ? "Added to wishlist!"
+            : "Removed from wishlist!";
         SnackBars.successSnackBar(content: msg);
         if (onSuccess != null) onSuccess();
       }

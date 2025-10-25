@@ -346,7 +346,7 @@ class SelectedProductController extends GetxController {
                   ),
                   Expanded(
                     child: Slider(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       max: 100,
                       divisions: 10,
                       value: selectedRadius.value,

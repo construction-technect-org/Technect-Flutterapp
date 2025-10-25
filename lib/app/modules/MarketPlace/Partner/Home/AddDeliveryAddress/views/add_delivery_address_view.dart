@@ -39,6 +39,7 @@ class AddDeliveryAddressView extends GetView<AddDeliveryAddressController> {
                 child: GooglePlaceAutoCompleteTextField(
                   textEditingController: controller.searchController,
                   googleAPIKey: "AIzaSyAgyOP5KnUC1XJlmp2q7lVBsWpaF6ZsT9Q",
+                   focusNode: controller.googleFocusNode,
                   inputDecoration: InputDecoration(
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(left: 18, right: 8),

@@ -215,7 +215,7 @@ class ProductCard extends StatelessWidget {
                           maxLines: 1,
                         ),
                       ),
-                      if (isPartner == false) Gap(4),
+                      if (isPartner == false) const Gap(4),
                       if (isPartner == false)
                         Text(
                           "- ${double.parse(product.distanceKm ?? "0.0").toStringAsFixed(2)} KM",

@@ -191,7 +191,7 @@ class InfoMetricsComponent extends StatelessWidget {
 
   Widget _buildBusinessMetricsContent() {
     return Obx(() {
-      if ((controller.businessModel.value.businessEmail ?? "").isEmpty) {
+      if ((controller.businessModel.value.gstinNumber ?? "").isEmpty) {
         return GestureDetector(
           onTap: () {
             Get.toNamed(Routes.EDIT_PROFILE);
@@ -227,7 +227,7 @@ class InfoMetricsComponent extends StatelessWidget {
               Obx(() {
                 return buildRow(
                   title: "Business name",
-                  data: controller.businessModel.value.businessName,
+                  data: controller.businessModel.value.businessName??"-",
                 );
               }),
               const Gap(6),
@@ -243,21 +243,21 @@ class InfoMetricsComponent extends StatelessWidget {
               Obx(() {
                 return buildRow(
                   title: "Mobile Number",
-                  data: controller.businessModel.value.businessContactNumber,
+                  data: controller.businessModel.value.businessContactNumber??"-",
                 );
               }),
               const Gap(6),
               Obx(() {
                 return buildRow(
                   title: "Website",
-                  data: controller.businessModel.value.website,
+                  data: controller.businessModel.value.website??"-",
                 );
               }),
               const Gap(6),
               Obx(() {
                 return buildRow(
                   title: "Email id",
-                  data: controller.businessModel.value.businessEmail,
+                  data: controller.businessModel.value.businessEmail??"-",
                 );
               }),
               // const Gap(6),

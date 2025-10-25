@@ -96,7 +96,9 @@ class CreateNewTicketController extends GetxController {
     try {
       myPref.cachedCategories.val = '';
       myPref.cachedPriorities.val = '';
-      print('Cache cleared successfully');
+      if (kDebugMode) {
+        print('Cache cleared successfully');
+      }
     } catch (e) {
       print('Error clearing cache: $e');
     }

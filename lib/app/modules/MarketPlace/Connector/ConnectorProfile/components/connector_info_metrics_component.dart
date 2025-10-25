@@ -53,47 +53,6 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
                 'KYC Details',
                 style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
               ),
-              // const Spacer(),
-              // if (connectorProfile != null &&
-              //     (connectorProfile.aadhaarNumber != null ||
-              //         connectorProfile.panNumber != null))
-              //   GestureDetector(
-              //     onTap: () {
-              //       Get.toNamed(
-              //         Routes.ADD_KYC,
-              //         arguments: {
-              //           'kycId': connectorProfile.id,
-              //           'aadhaar_number': connectorProfile.aadhaarNumber,
-              //           'pan_number': connectorProfile.panNumber,
-              //           'aadhaar_front': connectorProfile.documents
-              //               ?.firstWhereOrNull(
-              //                 (d) => d.documentType == 'aadhaar_front',
-              //               )
-              //               ?.filePath,
-              //           'aadhaar_back': connectorProfile.documents
-              //               ?.firstWhereOrNull(
-              //                 (d) => d.documentType == 'aadhaar_back',
-              //               )
-              //               ?.filePath,
-              //           'pan_front': connectorProfile.documents
-              //               ?.firstWhereOrNull(
-              //                 (d) => d.documentType == 'pan_front',
-              //               )
-              //               ?.filePath,
-              //           'pan_back': connectorProfile.documents
-              //               ?.firstWhereOrNull(
-              //                 (d) => d.documentType == 'pan_back',
-              //               )
-              //               ?.filePath,
-              //         },
-              //       );
-              //     },
-              //     behavior: HitTestBehavior.translucent,
-              //     child: Padding(
-              //       padding: const EdgeInsets.all(4.0),
-              //       child: SvgPicture.asset(Asset.edit),
-              //     ),
-              //   ),
             ],
           ),
         ),
@@ -102,7 +61,6 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
             (connectorProfile.aadhaarNumber != null ||
                 connectorProfile.panNumber != null))
           _buildExistingKycDetails(connectorProfile),
-        _buildBusinessMetricsContent(connectorProfile),
         SizedBox(height: 2.h),
       ],
     );
@@ -195,72 +153,5 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _buildBusinessMetricsContent(connectorProfile) {
-    final bool hasKyc =
-        connectorProfile != null &&
-        connectorProfile.aadhaarNumber != null &&
-        connectorProfile.panNumber != null;
-
-    return hasKyc
-        ? const SizedBox()
-        : GestureDetector(
-            onTap: () {
-              Get.toNamed(
-                Routes.ADD_KYC,
-                arguments: hasKyc
-                    ? {
-                        'kycId': connectorProfile.id,
-                        'aadhaar_number': connectorProfile.aadhaarNumber,
-                        'pan_number': connectorProfile.panNumber,
-                        'aadhaar_front': connectorProfile.documents
-                            ?.firstWhereOrNull(
-                              (d) => d.documentType == 'aadhaar_front',
-                            )
-                            ?.filePath,
-                        'aadhaar_back': connectorProfile.documents
-                            ?.firstWhereOrNull(
-                              (d) => d.documentType == 'aadhaar_back',
-                            )
-                            ?.filePath,
-                        'pan_front': connectorProfile.documents
-                            ?.firstWhereOrNull(
-                              (d) => d.documentType == 'pan_front',
-                            )
-                            ?.filePath,
-                        'pan_back': connectorProfile.documents
-                            ?.firstWhereOrNull(
-                              (d) => d.documentType == 'pan_back',
-                            )
-                            ?.filePath,
-                      }
-                    : null,
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  border: Border.all(
-                    color: hasKyc ? MyColors.primary : MyColors.grey,
-                    width: 1.2,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    "+ ADD KYC DETAILS",
-                    style: MyTexts.bold16.copyWith(
-                      color: hasKyc ? MyColors.primary : MyColors.grey,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
   }
 }

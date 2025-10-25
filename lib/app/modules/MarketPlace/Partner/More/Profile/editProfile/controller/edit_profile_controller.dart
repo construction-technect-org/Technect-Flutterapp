@@ -66,33 +66,32 @@ class EditProfileController extends GetxController {
         }
       }
 
-      if ((Get.find<ProfileController>().businessModel.value.businessEmail ?? "")
+      if ((Get.find<ProfileController>().businessModel.value.gstinNumber ?? "")
           .isNotEmpty) {
         businessNameController.text = Get.find<ProfileController>()
             .businessModel
             .value
-            .businessName
-            .toString();
+            .businessName??"";
         gstNumberController.text = Get.find<ProfileController>()
             .businessModel
             .value
             .gstinNumber
-            .toString();
+            ??"";
         businessEmailController.text = Get.find<ProfileController>()
             .businessModel
             .value
             .businessEmail
-            .toString();
+            ??"";
         businessWebsiteController.text = Get.find<ProfileController>()
             .businessModel
             .value
             .website
-            .toString();
+            ??"";
         businessContactController.text = Get.find<ProfileController>()
             .businessModel
             .value
             .businessContactNumber
-            .toString();
+            ??"";
       }
     } catch (e) {
       Get.printError(info: 'Error populating existing data: $e');

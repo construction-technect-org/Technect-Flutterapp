@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/controller/delivery_location_controller.dart';
@@ -11,6 +10,8 @@ import 'package:google_places_flutter/model/prediction.dart';
 
 class AddDeliveryAddressController extends GetxController {
   RxBool isLoading = false.obs;
+
+  FocusNode googleFocusNode = FocusNode();
   HomeController homeController = Get.find();
   final TextEditingController searchController = TextEditingController();
   final TextEditingController addressNameController = TextEditingController();

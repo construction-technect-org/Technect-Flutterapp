@@ -3,7 +3,7 @@ analyzer:
   errors:
     unused_element: false
     unused_import: error
-    prefer_const_constructors: ignore error
+    prefer_const_constructors: error
     unused_field: error
     file_names: false
     unused_local_variable: error

@@ -76,7 +76,51 @@ class BottomBarView extends GetView<BottomController> {
                   if (myPref.role.val != "connector")
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.ADD_PRODUCT);
+                        if (commonController.hasProfileComplete.value) {
+                          Get.toNamed(Routes.ADD_PRODUCT);
+                        } else {
+                          Get.dialog(
+                            AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              title: const Text(
+                                "Complete Your Profile",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              content: const Text(
+                                "To add a product, please complete your business profile first.",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Get.back(),
+                                  child: const Text(
+                                    "Cancel",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Get.back();
+                                    Get.toNamed(Routes.PROFILE);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Text("Complete Now"),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
                       },
                       behavior: HitTestBehavior.translucent,
                       child: Center(
