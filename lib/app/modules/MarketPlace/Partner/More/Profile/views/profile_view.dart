@@ -20,7 +20,7 @@ class ProfileView extends GetView<ProfileController> {
             children: [
               CommonAppBar(
                 backgroundColor: Colors.transparent,
-                title: const Text('Profile summery view'),
+                title: const Text('Profile summary view'),
                 isCenter: false,
                 leading: GestureDetector(
                   onTap: () {
@@ -81,7 +81,7 @@ class ProfileView extends GetView<ProfileController> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        "Intro & Metrics",
+                                        "Info & Metrics",
                                         style: MyTexts.medium15.copyWith(
                                           color: MyColors.gray2E,
                                         ),

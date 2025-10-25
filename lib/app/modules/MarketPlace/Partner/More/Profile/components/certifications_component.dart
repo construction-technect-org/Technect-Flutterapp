@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:gap/gap.dart';
+import 'package:open_filex/open_filex.dart';
 
 class CertificationsComponent extends StatelessWidget {
   const CertificationsComponent({this.isDelete});
@@ -39,22 +38,7 @@ class CertificationsComponent extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         final url = cert.filePath;
-                        final fileName = cert.name ?? '';
-
                         if (url != null && url.isNotEmpty) {
-                          final fileExtension = fileName
-                              .toLowerCase()
-                              .split('.')
-                              .last;
-                          final isImage = [
-                            'jpg',
-                            'jpeg',
-                            'png',
-                            'gif',
-                            'bmp',
-                            'webp',
-                          ].contains(fileExtension);
-                          final isPdf = fileExtension == 'pdf';
                           if (url.startsWith("merchant")) {
                             final uri = Uri.parse(APIConstants.bucketUrl + url);
                             if (await canLaunchUrl(uri)) {
@@ -68,85 +52,11 @@ class CertificationsComponent extends StatelessWidget {
                               url.contains("storage/") ||
                               url.contains("CoreSimulator") ||
                               url.contains("tmp/")) {
-                            try {
-                              final file = File(url);
-                              final fileExists = await file.exists();
 
-                              if (fileExists) {
-                                final uri = Uri.file(url);
+                            OpenFilex.open(url);
+                          }
 
-                                if (isImage) {
-                                  final imageLaunchMethods = [
-                                    () async => await launchUrl(
-                                      uri,
-                                      mode: LaunchMode.externalApplication,
-                                    ),
-                                    () async => await launchUrl(uri),
-                                    () async => await launchUrl(uri),
-                                  ];
-
-                                  bool launched = false;
-                                  for (final method in imageLaunchMethods) {
-                                    if (!launched) {
-                                      try {
-                                        await method();
-                                        launched = true;
-                                      } catch (e) {}
-                                    }
-                                  }
-
-                                  if (!launched) {
-                                    SnackBars.errorSnackBar(
-                                      content:
-                                          "Cannot open image. No image viewer available.",
-                                    );
-                                  }
-                                } else if (isPdf) {
-                                  final pdfLaunchMethods = [
-                                    () async => await launchUrl(
-                                      uri,
-                                      mode: LaunchMode.externalApplication,
-                                    ),
-                                    () async => await launchUrl(uri),
-                                    () async => await launchUrl(uri),
-                                    () async => await launchUrl(
-                                      Uri.parse('file://$url'),
-                                    ),
-                                  ];
-
-                                  bool launched = false;
-                                  for (final method in pdfLaunchMethods) {
-                                    if (!launched) {
-                                      try {
-                                        await method();
-                                        launched = true;
-                                      } catch (e) {}
-                                    }
-                                  }
-
-                                  if (!launched) {
-                                    SnackBars.errorSnackBar(
-                                      content:
-                                          "Cannot open PDF. No PDF viewer available.",
-                                    );
-                                  }
-                                } else {
-                                  SnackBars.errorSnackBar(
-                                    content:
-                                        "Only PDF and image files are supported.",
-                                  );
-                                }
-                              } else {
-                                SnackBars.errorSnackBar(
-                                  content: "File not found",
-                                );
-                              }
-                            } catch (e) {
-                              SnackBars.errorSnackBar(
-                                content: "Unable to open file: $e",
-                              );
-                            }
-                          } else if (url.startsWith("http://") ||
+                          else if (url.startsWith("http://") ||
                               url.startsWith("https://")) {
                             final uri = Uri.parse(url);
                             if (await canLaunchUrl(uri)) {

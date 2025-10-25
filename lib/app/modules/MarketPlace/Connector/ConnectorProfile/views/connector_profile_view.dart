@@ -28,7 +28,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: const Text('Profile summery view'),
+                  title: const Text('Profile summary view'),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () {
@@ -88,7 +88,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          "Intro & Matrics",
+                                          "Info & Metrics",
                                           style: MyTexts.medium15.copyWith(
                                             color: MyColors.gray2E,
                                           ),
