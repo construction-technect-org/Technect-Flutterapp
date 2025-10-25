@@ -5,11 +5,19 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPa
 class SignUpService {
   ApiManager apiManager = ApiManager();
 
-  Future<bool> checkEmail({required String email}) async {
+  Future<bool> checkAvailability({
+    String? email,
+    String? mobileNumber,
+    String? gstNumber,
+  }) async {
     try {
       final response = await apiManager.postObject(
-        url: APIConstants.checkEmail,
-        body: {"email": email},
+        url: APIConstants.checkAvailability,
+        body: {
+          if ((email ?? "").isNotEmpty) "email": email,
+          if ((mobileNumber ?? "").isNotEmpty) "mobileNumber": mobileNumber,
+          if ((gstNumber ?? "").isNotEmpty) "gstNumber": gstNumber,
+        },
       );
       final bool isAvailable = response["data"]["available"] ?? false;
       return isAvailable;
@@ -17,7 +25,6 @@ class SignUpService {
       throw Exception('Error checking email: $e , $st');
     }
   }
-
 
   Future<OtpModel> sendOtp({required String mobileNumber}) async {
     try {
@@ -31,7 +38,10 @@ class SignUpService {
     }
   }
 
-  Future<OtpModel> resendOtp({required String mobileNumber,String? code}) async {
+  Future<OtpModel> resendOtp({
+    required String mobileNumber,
+    String? code,
+  }) async {
     try {
       final response = await apiManager.postObject(
         url: APIConstants.resendOtp,
@@ -43,7 +53,10 @@ class SignUpService {
     }
   }
 
-  Future<OtpModel> verifyOtp({required String mobileNumber, required String otp}) async {
+  Future<OtpModel> verifyOtp({
+    required String mobileNumber,
+    required String otp,
+  }) async {
     try {
       final response = await apiManager.postObject(
         url: APIConstants.verifyOtp,
@@ -64,10 +77,10 @@ class SignUpService {
     required String email,
     required String password,
     required String confirmPassword,
-     String? gst,
-     String? aadhaar,
-     String? panCard,
-     String? address,
+    String? gst,
+    String? aadhaar,
+    String? panCard,
+    String? address,
   }) async {
     try {
       final response = await apiManager.postObject(
@@ -81,14 +94,10 @@ class SignUpService {
           "email": email,
           "password": password,
           "confirmPassword": confirmPassword,
-          if((gst??"").isNotEmpty)
-            "gstNumber":gst,
-          if((aadhaar??"").isNotEmpty)
-            "aadharNumber":aadhaar,
-          if((panCard??"").isNotEmpty)
-            "panCardNumber":panCard,
-          if((address??"").isNotEmpty)
-            "gstNumber":address,
+          if ((gst ?? "").isNotEmpty) "gstNumber": gst,
+          if ((aadhaar ?? "").isNotEmpty) "aadharNumber": aadhaar,
+          if ((panCard ?? "").isNotEmpty) "panCardNumber": panCard,
+          if ((address ?? "").isNotEmpty) "gstNumber": address,
         },
       );
       return SignUpModel.fromJson(response);

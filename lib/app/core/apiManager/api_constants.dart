@@ -21,7 +21,7 @@ class APIConstants {
 
   static const String signup = "auth/signup";
   static const String login = "auth/login";
-  static const String checkEmail = "auth/check-email";
+  static const String checkAvailability = "auth/check-availability";
   static const String marketplaceUpdate = "auth/marketplace";
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
   static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";

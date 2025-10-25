@@ -91,7 +91,7 @@ class SignUpDetailsController extends GetxController {
 
   Future<bool> checkEmail() async {
     try {
-      final isAvailable = await signUpService.checkEmail(
+      final isAvailable = await signUpService.checkAvailability(
         email: emailController.text,
       );
 

@@ -107,7 +107,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                       controller.isValidEmail(email)) {
                                     final isAvailable = await controller
                                         .signUpService
-                                        .checkEmail(email: email);
+                                        .checkAvailability(email: email);
 
                                     if (!isAvailable) {
                                       SnackBars.errorSnackBar(
