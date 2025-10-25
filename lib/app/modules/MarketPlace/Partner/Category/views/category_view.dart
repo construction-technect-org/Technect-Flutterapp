@@ -13,7 +13,7 @@ class CategoryView extends StatelessWidget {
       // "Interior Materials",
       // "Brands",
       "New Launches",
-      "Best Sellers",
+      // "Best Sellers",
     ];
 
     return Scaffold(
