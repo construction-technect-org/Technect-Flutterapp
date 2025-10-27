@@ -22,6 +22,22 @@
           }
         },
         {
+          "client_id": "102792963565-62tnjo7l019rovmhe22f9j98ohp0066g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.constructiontechnet.app",
+            "certificate_hash": "7918667813c05a50487b510b598725fa04534b93"
+          }
+        },
+        {
+          "client_id": "102792963565-hf4r91tvml46lhh1cg3a5fl1kb5tn0bo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.constructiontechnet.app",
+            "certificate_hash": "6aa4eb8833023b12c473d7bf0af686bef17894a7"
+          }
+        },
+        {
           "client_id": "102792963565-msilqo27io6lgd1q98t644gjedhfefai.apps.googleusercontent.com",
           "client_type": 3
         }
