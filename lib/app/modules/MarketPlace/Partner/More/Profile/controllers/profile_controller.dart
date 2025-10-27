@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
@@ -548,6 +549,8 @@ class ProfileController extends GetxController {
 
       if (response['success'] == true) {
         try {
+          Get.find<CommonController>().hasProfileComplete.value=true;
+
           if (isUpdate) {
             await homeController.fetchProfileData();
             Get.back();

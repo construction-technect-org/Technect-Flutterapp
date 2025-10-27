@@ -37,7 +37,7 @@ class HomeController extends GetxController {
     fetchCategoryHierarchy();
     _initializeHomeData();
     commonController.hasProfileComplete.value =
-        (profileData.value.data?.merchantProfile?.businessEmail ?? "")
+        (profileData.value.data?.merchantProfile?.merchantLogo ?? "")
             .isNotEmpty;
   }
 

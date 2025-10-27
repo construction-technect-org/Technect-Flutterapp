@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/views/category_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
@@ -18,9 +18,9 @@ class BottomBarView extends GetView<BottomController> {
       body: Obx(() {
         switch (controller.currentIndex.value) {
           case 0:
-            return HomeView();
+            return Dashboard();
           case 1:
-            return const CategoryView();
+            return  HomeView();
           case 2:
             return ConnectionInboxView();
           case 3:
@@ -67,12 +67,21 @@ class BottomBarView extends GetView<BottomController> {
                   bottomBar(
                     Asset.category,
                     Asset.category1,
-                    'Category',
+                    'Dashboard',
                     onTap: () {
                       controller.currentIndex.value = 1;
                     },
                     index: 1,
                   ),
+                  // bottomBar(
+                  //   Asset.category,
+                  //   Asset.category1,
+                  //   'Category',
+                  //   onTap: () {
+                  //     controller.currentIndex.value = 1;
+                  //   },
+                  //   index: 1,
+                  // ),
                   if (myPref.role.val != "connector")
                     GestureDetector(
                       onTap: () {

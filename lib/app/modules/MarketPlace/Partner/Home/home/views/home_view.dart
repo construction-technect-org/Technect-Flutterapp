@@ -1,14 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/dashboard_view.dart';
-import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/explore_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 
 class HomeView extends StatelessWidget {
-  final HomeController controller = Get.put<HomeController>(HomeController());
+  final HomeController controller = Get.find<HomeController>();
   final CommonController commonController = Get.find();
 
   @override
@@ -32,133 +29,37 @@ class HomeView extends StatelessWidget {
               children: [
                 const Gap(50),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.ACCOUNT);
-                        },
-                        behavior: HitTestBehavior.translucent,
-                        child: Obx(() {
-                          return (controller
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.user
-                                          ?.image ??
-                                      "")
-                                  .isEmpty
-                              ? Image.asset(Asset.profil, height: 48, width: 48)
-                              : ClipOval(
-                                  child: getImageView(
-                                    finalUrl:
-                                        "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
-                                    fit: BoxFit.cover,
-                                    height: 48,
-                                    width: 48,
-                                  ),
-                                );
-                        }),
-                      ),
-                      SizedBox(width: 1.h),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Obx(
-                              () => Text(
-                                '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
-                                style: MyTexts.medium16.copyWith(
-                                  color: MyColors.fontBlack,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.DELIVERY_LOCATION);
-                              },
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    Asset.location,
-                                    width: 9,
-                                    height: 12.22,
-                                    color: MyColors.custom('545454'),
-                                  ),
-                                  SizedBox(width: 0.4.h),
-                                  Expanded(
-                                    child: Obx(() {
-                                      return RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        text: TextSpan(
-                                          style: MyTexts.medium14.copyWith(
-                                            color: MyColors.custom('545454'),
-                                          ),
-                                          children: [
-                                            TextSpan(
-                                              text: controller
-                                                  .getCurrentAddress()
-                                                  .value,
-                                            ),
-                                            const WidgetSpan(
-                                              alignment:
-                                                  PlaceholderAlignment.middle,
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  left: 4,
-                                                ),
-                                                child: Icon(
-                                                  Icons.keyboard_arrow_down,
-                                                  size: 16,
-                                                  color: Colors.black54,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        tabBar(
+                          onTap: () {
+                            controller.marketPlace.value = 0;
+                          },
+                          icon: Asset.MM,
+                          name: 'Material\nMarketplace',
+                          isMarketPlace: controller.marketPlace.value == 0,
                         ),
-                      ),
-                      const Gap(10),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(() => const ExploreView());
-                        },
-                        child: Image.asset(Asset.explore, width: 18.w),
-                      ),
-                      const Gap(10),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.NOTIFICATIONS);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: MyColors.white,
-                            border: Border.all(
-                              color: MyColors.custom('EAEAEA'),
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: SvgPicture.asset(
-                            Asset.notification,
-                            width: 24,
-                            height: 24,
-                          ),
+                        tabBar(
+                          onTap: () {
+                            controller.marketPlace.value = 1;
+                          },
+                          icon: Asset.CM,
+                          name: 'Construction line\nMarketplace',
+                          isMarketPlace: controller.marketPlace.value == 1,
                         ),
-                      ),
-                    ],
+                        tabBar(
+                          onTap: () {
+                            controller.marketPlace.value = 2;
+                          },
+                          icon: Asset.TEM,
+                          name: 'Tools & equipment\nMarketplace',
+                          isMarketPlace: controller.marketPlace.value == 2,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const Gap(24),
@@ -168,91 +69,7 @@ class HomeView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-
                         children: [
-                          Text(
-                            "Features",
-                            style: MyTexts.extraBold18.copyWith(
-                              color: MyColors.black,
-                            ),
-                          ),
-                          const Gap(16),
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              final double itemWidth =
-                                  (constraints.maxWidth - (2 * 10)) /
-                                  3; // 4 per row with spacing
-                              final double itemHeight =
-                                  itemWidth + 10; // for icon + text
-                              return GridView.builder(
-                                padding: EdgeInsets.zero,
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: controller.features.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 12,
-                                      mainAxisSpacing: 17,
-                                      childAspectRatio: itemWidth / itemHeight,
-                                    ),
-                                itemBuilder: (context, index) {
-                                  final item = controller.features[index];
-
-                                  return Obx(() {
-                                    final isSelected =
-                                        controller.selectedIndex.value == index;
-                                    return BuildFeatureCard(
-                                      isSelected: isSelected,
-                                      item: item,
-                                      itemWidth: itemWidth,
-                                      onTap: () {
-                                        if (index == 0 || index == 1) {
-                                          controller.selectedIndex.value =
-                                              index;
-                                        }
-                                      },
-                                    );
-                                  });
-                                },
-                              );
-                            },
-                          ),
-                          SizedBox(height: 3.5.h),
-                          Obx(
-                            () => Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                tabBar(
-                                  onTap: () {
-                                    controller.marketPlace.value = 0;
-                                  },
-                                  icon: Asset.MM,
-                                  name: 'Material\nMarketplace',
-                                  isMarketPlace:
-                                      controller.marketPlace.value == 0,
-                                ),
-                                tabBar(
-                                  onTap: () {
-                                    controller.marketPlace.value = 1;
-                                  },
-                                  icon: Asset.CM,
-                                  name: 'Construction line\nMarketplace',
-                                  isMarketPlace:
-                                      controller.marketPlace.value == 1,
-                                ),
-                                tabBar(
-                                  onTap: () {
-                                    controller.marketPlace.value = 2;
-                                  },
-                                  icon: Asset.TEM,
-                                  name: 'Tools & equipment\nMarketplace',
-                                  isMarketPlace:
-                                      controller.marketPlace.value == 2,
-                                ),
-                              ],
-                            ),
-                          ),
                           Container(
                             height: 2.h,
                             decoration: BoxDecoration(
@@ -268,24 +85,24 @@ class HomeView extends StatelessWidget {
                           ),
                           Column(
                             children: [
-                              Container(
-                                width: double.infinity,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(24),
-                                  border: Border.all(
-                                    color: MyColors.custom('EAEAEA'),
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Waiting for banner content',
-                                    style: MyTexts.medium16,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 2.h),
+                              // Container(
+                              //   width: double.infinity,
+                              //   height: 100,
+                              //   decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(24),
+                              //     border: Border.all(
+                              //       color: MyColors.custom('EAEAEA'),
+                              //       width: 2,
+                              //     ),
+                              //   ),
+                              //   child: Center(
+                              //     child: Text(
+                              //       'Waiting for banner content',
+                              //       style: MyTexts.medium16,
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(height: 2.h),
                               // Main Categories ListView
                               Obx(() {
                                 if (controller

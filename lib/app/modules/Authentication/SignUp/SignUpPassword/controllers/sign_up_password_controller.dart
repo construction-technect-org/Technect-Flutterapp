@@ -170,6 +170,7 @@ class SignUpPasswordController extends GetxController {
         roleName: userData!.roleName,
         firstName: userData!.firstName,
         lastName: userData!.lastName,
+        marketPlaceRole: userData!.marketPlaceRole,
         countryCode: userData!.countryCode,
         mobileNumber: userData!.mobileNumber,
         email: userData!.email,
@@ -189,11 +190,6 @@ class SignUpPasswordController extends GetxController {
           myPref.setUserModel(signUpResponse.data!.user!);
         }
 
-        if (userData!.roleName != "House-Owner") {
-          myPref.setRole("partner");
-        } else {
-          myPref.setRole("connector");
-        }
         Get.to(
           () => SuccessScreen(
             title: "Success!",

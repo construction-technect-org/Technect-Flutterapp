@@ -19,7 +19,7 @@ class SignUpService {
           if ((gstNumber ?? "").isNotEmpty) "gstNumber": gstNumber,
         },
       );
-      final bool isAvailable = response["data"]["available"] ?? false;
+      final bool isAvailable = response["data"]["email"]["available"] ?? false;
       return isAvailable;
     } catch (e, st) {
       throw Exception('Error checking email: $e , $st');
@@ -74,6 +74,7 @@ class SignUpService {
     required String lastName,
     required String countryCode,
     required String mobileNumber,
+    required String marketPlaceRole,
     required String email,
     required String password,
     required String confirmPassword,
@@ -92,6 +93,7 @@ class SignUpService {
           "countryCode": countryCode,
           "mobileNumber": mobileNumber,
           "email": email,
+          "marketPlaceRole": marketPlaceRole,
           "password": password,
           "confirmPassword": confirmPassword,
           if ((gst ?? "").isNotEmpty) "gstNumber": gst,

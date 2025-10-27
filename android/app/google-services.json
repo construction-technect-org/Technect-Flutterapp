@@ -7,31 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:102792963565:android:2369f9d434b8c63460f3e4",
-        "android_client_info": {
-          "package_name": "com.construction_technet.app"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAoyBiJCI-p04Ozy0h2R1Y6yODZL4jK0K4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:102792963565:android:0ebbe861adb0ebef60f3e4",
         "android_client_info": {
           "package_name": "com.constructiontechnet.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "102792963565-3ugsov23978rn4s16ugstv4favjdmacp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.constructiontechnet.app",
+            "certificate_hash": "1cd6a4e565fa6b0a74d859845e04f632497551b2"
+          }
+        },
+        {
+          "client_id": "102792963565-msilqo27io6lgd1q98t644gjedhfefai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAoyBiJCI-p04Ozy0h2R1Y6yODZL4jK0K4"
@@ -39,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "102792963565-msilqo27io6lgd1q98t644gjedhfefai.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "102792963565-gjk2vameb76lnfcq4ijibqn3nr7v5pm7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.constructiontechnet.app"
+              }
+            }
+          ]
         }
       }
     }

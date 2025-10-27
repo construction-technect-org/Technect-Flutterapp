@@ -143,7 +143,9 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                         controller.roleName[controller.selectedRole.value - 1];
                   }
                   print(controller.selectedRoleName.value);
-                  Get.toNamed(Routes.SIGN_UP_DETAILS);
+                  _showRoleTypeBottomSheet(Get.context!, controller);
+
+                  // Get.toNamed(Routes.SIGN_UP_DETAILS);
                 }
               } else {
                 SnackBars.errorSnackBar(content: 'Please select role');
@@ -153,6 +155,94 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
         ),
       ),
     );
+  }
+
+  void _showRoleTypeBottomSheet(
+    BuildContext context,
+    SignUpRoleController controller,
+  ) {
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              "Choose your role",
+              style: MyTexts.bold18.copyWith(color: MyColors.primary),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Please select whether you want to register as a Partner or Connector.",
+              style: MyTexts.regular14.copyWith(color: MyColors.gray2E),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: _roleOptionButton(
+                    icon: Asset.rMerchant,
+                    onTap: () {
+                      myPref.setRole("partner");
+                      controller.selectedFinalRole.value = "partner";
+                      Get.back();
+                      Get.toNamed(Routes.SIGN_UP_DETAILS);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _roleOptionButton(
+                    icon: Asset.rConnector,
+                    onTap: () {
+                      myPref.setRole("connector");
+                      controller.selectedFinalRole.value = "connector";
+                      Get.back();
+                      Get.toNamed(Routes.SIGN_UP_DETAILS);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Center(
+              child: TextButton(
+                onPressed: () => Get.back(),
+                child: Text(
+                  "Cancel",
+                  style: MyTexts.regular14.copyWith(color: MyColors.gray2E),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: false,
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  Widget _roleOptionButton({
+    required String icon,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(onTap: onTap, child: Image.asset(icon));
   }
 
   Widget _buildRoleCard(int index, String imagePath, String roleName) {
@@ -210,7 +300,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                       ),
                       margin: const EdgeInsets.all(8),
                       padding: const EdgeInsets.all(4.0),
-                      child:  Icon(
+                      child: Icon(
                         Icons.done_rounded,
                         color: MyColors.white,
                         size: 16,

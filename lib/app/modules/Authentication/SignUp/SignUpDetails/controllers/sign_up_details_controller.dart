@@ -122,6 +122,8 @@ class SignUpDetailsController extends GetxController {
           otpVerify.value = true;
           SnackBars.successSnackBar(content: 'OTP verified successfully!');
           final userData = UserDataModel(
+            marketPlaceRole:
+                Get.find<SignUpRoleController>().selectedFinalRole.value,
             roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
             firstName: firstNameController.text,
             lastName: lastNameController.text,

@@ -96,15 +96,22 @@ class AccountScreen extends GetView<AccountController> {
                         icon: Asset.person,
                         title: "My Account",
                         onTap: () {
+                          print(Get.find<HomeController>()
+                              .profileData
+                              .value
+                              .data
+                              ?.user
+                              ?.marketPlaceRole ??
+                              "");
                           if ((Get.find<HomeController>()
                                           .profileData
                                           .value
                                           .data
                                           ?.user
-                                          ?.roleName ??
+                                          ?.marketPlaceRole ??
                                       "")
                                   .toLowerCase() ==
-                              "House-Owner".toLowerCase()) {
+                              "connector".toLowerCase()) {
                             Get.toNamed(Routes.CONNECTOR_PROFILE);
                           } else {
                             Get.toNamed(Routes.PROFILE);

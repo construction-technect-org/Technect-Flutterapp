@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
+// import 'package:construction_technect/app/core/widgets/google_sign_in_service.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:gap/gap.dart';
 
@@ -246,7 +247,11 @@ class LoginView extends GetView<LoginController> {
                                   child: Image.asset(Asset.googleIcon),
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () async {
+                                // final userCredential = await signInWithGoogle();
+                                // print("Signed in: ${userCredential.user?.displayName}");
+
+                              },
                             ),
                             SizedBox(width: 10.sw),
                             GestureDetector(
