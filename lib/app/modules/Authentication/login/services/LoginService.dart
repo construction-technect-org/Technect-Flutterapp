@@ -23,4 +23,41 @@ class LoginService {
       throw Exception('Error in login: $e , $st');
     }
   }
+
+  Future<LoginModel> socialLogin({
+    required String provider,
+    required String providerId,
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String profileImage,
+    required String roleName,
+  }) async {
+    try {
+      final Map<String, dynamic> body = {
+        'provider': provider,
+        'providerId': providerId,
+        'firstName': firstName,
+        'lastName': lastName,
+        'email': email,
+        'profileImage': profileImage,
+        'roleName': roleName,
+      };
+
+      final response = await apiManager.postObject(url: 'auth/social-login', body: body);
+
+      return LoginModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Social login failed: $e');
+    }
+  }
+
+  // Helper method to extract name parts from display name
+  Map<String, String> extractNameParts(String displayName) {
+    final nameParts = displayName.split(' ');
+    final firstName = nameParts.isNotEmpty ? nameParts.first : '';
+    final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+
+    return {'firstName': firstName, 'lastName': lastName};
+  }
 }
