@@ -1,4 +1,4 @@
-package com.construction_technet.app
+package com.constructiontechnet.app
 
 import io.flutter.embedding.android.FlutterActivity
 

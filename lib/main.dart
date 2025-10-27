@@ -16,7 +16,7 @@ Future<void> main() async {
   await initService();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    // options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
     ResponsiveSizer(
@@ -35,7 +35,9 @@ Future<void> main() async {
             // Web-specific configurations
             builder: (context, child) {
               return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                data: MediaQuery.of(
+                  context,
+                ).copyWith(textScaler: TextScaler.noScaling),
                 child: child!,
               );
             },

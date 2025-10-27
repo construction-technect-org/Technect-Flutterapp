@@ -5,7 +5,7 @@ class APIConstants {
   static const String bucketUrl =
       "https://bucket-construction-tech.s3.ap-south-1.amazonaws.com/";
   static const String appUrl =
-      "https://play.google.com/store/apps/details?id=com.construction_technet.app";
+      "https://play.google.com/store/apps/details?id=com.constructiontechnet.app";
   static const String clientId = "";
 
   static const String sendOtp = "auth/send-otp";
