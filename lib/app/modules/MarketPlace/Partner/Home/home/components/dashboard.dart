@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/controllers/dashboard_controller.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/explore_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:gap/gap.dart';
 
 class Dashboard extends StatelessWidget {
@@ -42,23 +42,27 @@ class Dashboard extends StatelessWidget {
                           behavior: HitTestBehavior.translucent,
                           child: Obx(() {
                             return (controller
-                                .profileData
-                                .value
-                                .data
-                                ?.user
-                                ?.image ??
-                                "")
-                                .isEmpty
-                                ? Image.asset(Asset.profil, height: 48, width: 48)
+                                            .profileData
+                                            .value
+                                            .data
+                                            ?.user
+                                            ?.image ??
+                                        "")
+                                    .isEmpty
+                                ? Image.asset(
+                                    Asset.profil,
+                                    height: 48,
+                                    width: 48,
+                                  )
                                 : ClipOval(
-                              child: getImageView(
-                                finalUrl:
-                                "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
-                                fit: BoxFit.cover,
-                                height: 48,
-                                width: 48,
-                              ),
-                            );
+                                    child: getImageView(
+                                      finalUrl:
+                                          "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                                      fit: BoxFit.cover,
+                                      height: 48,
+                                      width: 48,
+                                    ),
+                                  );
                           }),
                         ),
                         SizedBox(width: 1.h),
@@ -67,14 +71,43 @@ class Dashboard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Obx(
-                                    () => Text(
-                                  '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
-                                  style: MyTexts.medium16.copyWith(
-                                    color: MyColors.fontBlack,
-                                    fontFamily: MyTexts.SpaceGrotesk,
+                                () => GestureDetector(
+                                  onTap: () {
+                                    showSwitchAccountBottomSheet();
+                                  },
+                                  child:
+                                  RichText(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    text: TextSpan(
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.custom('545454'),
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                          style: MyTexts.medium16.copyWith(
+                                            color: MyColors.fontBlack,
+                                            fontFamily: MyTexts.SpaceGrotesk,
+                                          ),
+                                        ),
+                                        const WidgetSpan(
+                                          alignment:
+                                          PlaceholderAlignment.middle,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 4,
+                                            ),
+                                            child: Icon(
+                                              Icons.keyboard_arrow_down,
+                                              size: 16,
+                                              color: Colors.black54,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               GestureDetector(
@@ -107,7 +140,7 @@ class Dashboard extends StatelessWidget {
                                               ),
                                               const WidgetSpan(
                                                 alignment:
-                                                PlaceholderAlignment.middle,
+                                                    PlaceholderAlignment.middle,
                                                 child: Padding(
                                                   padding: EdgeInsets.only(
                                                     left: 4,
@@ -177,7 +210,7 @@ class Dashboard extends StatelessWidget {
                               builder: (context, constraints) {
                                 final double itemWidth =
                                     (constraints.maxWidth - (2 * 10)) /
-                                        3; // 4 per row with spacing
+                                    3; // 4 per row with spacing
                                 final double itemHeight =
                                     itemWidth + 10; // for icon + text
                                 return GridView.builder(
@@ -186,20 +219,20 @@ class Dashboard extends StatelessWidget {
                                   shrinkWrap: true,
                                   itemCount: controller.features.length,
                                   gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: 12,
-                                    mainAxisSpacing: 17,
-                                    childAspectRatio:
-                                    itemWidth / itemHeight,
-                                  ),
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 12,
+                                        mainAxisSpacing: 17,
+                                        childAspectRatio:
+                                            itemWidth / itemHeight,
+                                      ),
                                   itemBuilder: (context, index) {
                                     final item = controller.features[index];
 
                                     return Obx(() {
                                       final isSelected =
                                           controller.selectedIndex.value ==
-                                              index;
+                                          index;
                                       return BuildFeatureCard(
                                         isSelected: isSelected,
                                         item: item,
@@ -217,33 +250,6 @@ class Dashboard extends StatelessWidget {
                               },
                             ),
                             SizedBox(height: 1.h),
-                            Text(
-                              "Statics",
-                              style: MyTexts.bold18.copyWith(
-                                color: MyColors.black,
-                              ),
-                            ),
-                            SizedBox(height: 1.h),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _buildStatCard(
-                                    "Merchant",
-                                    "32",
-                                    Asset.role1,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _buildStatCard(
-                                    "Connectors",
-                                    "22",
-                                    Asset.contractor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Gap(24),
                           ],
                         ),
                       ),
@@ -335,13 +341,13 @@ class BuildFeatureCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               gradient: isSelected
                   ? LinearGradient(
-                begin: AlignmentGeometry.topCenter,
-                end: AlignmentGeometry.bottomCenter,
-                colors: [
-                  const Color(0xFFE9EBF8).withValues(alpha: 0),
-                  const Color(0xFFE9EBF8),
-                ],
-              )
+                      begin: AlignmentGeometry.topCenter,
+                      end: AlignmentGeometry.bottomCenter,
+                      colors: [
+                        const Color(0xFFE9EBF8).withValues(alpha: 0),
+                        const Color(0xFFE9EBF8),
+                      ],
+                    )
                   : null,
             ),
             child: Column(
