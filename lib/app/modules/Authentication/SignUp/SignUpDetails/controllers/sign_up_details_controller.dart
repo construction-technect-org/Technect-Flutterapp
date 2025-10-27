@@ -9,6 +9,15 @@ import 'package:gap/gap.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
+
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+
+  }
+
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final mobileNumberController = TextEditingController();

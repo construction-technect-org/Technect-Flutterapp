@@ -1,9 +1,10 @@
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 void showSwitchAccountBottomSheet() {
-  final controller = Get.find<SwitchAccountController>();
+  final controller = Get.put<SwitchAccountController>(
+    SwitchAccountController(),
+  );
 
   Get.bottomSheet(
     Container(
@@ -14,59 +15,74 @@ void showSwitchAccountBottomSheet() {
       ),
       child: Obx(() {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 60,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(4),
+            Center(
+              child: Container(
+                width: 60,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(4),
+                ),
               ),
-            ),
-            const Text(
-              'Account Options',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
 
+            // Text(
+            //   'Account Options',
+            //   style: MyTexts.bold16.copyWith(color: MyColors.primary),
+            // ),
+            // const SizedBox(height: 20),
+
             // Add Partner Account
             if (controller.canAddPartner)
-              ListTile(
-                leading: const Icon(Icons.person_add_alt),
-                title: const Text('Add Partner Account'),
-                onTap: controller.addPartnerAccount,
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: MyColors.grayEA),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.person_add_alt),
+                  title: const Text('Add Partner Account'),
+                  onTap: controller.addPartnerAccount,
+                ),
               ),
 
             // Add Connector Account
             if (controller.canAddConnector)
-              ListTile(
-                leading: const Icon(Icons.person_add),
-                title: const Text('Add Connector Account'),
-                onTap: controller.addConnectorAccount,
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: MyColors.grayEA),
+                ),
+                child:    ListTile(
+                  leading: const Icon(Icons.person_add),
+                  title: const Text('Add Connector Account'),
+                  onTap: controller.addConnectorAccount,
+                ),
               ),
+
 
             // Switch Account
             if (controller.canSwitchAccount)
-              ListTile(
-                leading: const Icon(Icons.swap_horiz),
-                title: Text(
-                  'Switch to ${controller.currentRole.value == 'partner' ? 'Connector' : 'Partner'} Account',
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: MyColors.grayEA),
                 ),
-                onTap: controller.switchAccount,
+                child: ListTile(
+                  leading: const Icon(Icons.swap_horiz),
+                  title: Text(
+                    'Switch to ${controller.currentRole.value == 'partner' ? 'Connector' : 'Partner'} Account',
+                  ),
+                  onTap: controller.switchAccount,
+                ),
               ),
+            const SizedBox(height: 20),
 
-            if (!controller.canAddPartner &&
-                !controller.canAddConnector &&
-                !controller.canSwitchAccount)
-              const Padding(
-                padding: EdgeInsets.all(12),
-                child: Text(
-                  'All accounts are active.',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
           ],
         );
       }),
