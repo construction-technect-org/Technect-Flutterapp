@@ -85,24 +85,27 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           ),
                         ),
 
-                    if (myPref.role.val == "partner")
                     Obx(() {
                       final product = controller.product;
                       if (controller.isFromAdd.value == true &&
                           controller.isFromConnector.value == false) {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            width: MediaQuery.of(context).size.width / 1.15,
-                            horizontalPadding: 20,
-                            buttonName: 'Submit',
-                            onTap:
-                                Get.find<AddProductController>().isLoading.value
-                                ? null
-                                : Get.find<AddProductController>()
-                                      .createProduct,
-                          ),
-                        );
+                        if (myPref.role.val == "partner") {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              width: MediaQuery.of(context).size.width / 1.15,
+                              horizontalPadding: 20,
+                              buttonName: 'Submit',
+                              onTap:
+                                  Get.find<AddProductController>()
+                                      .isLoading
+                                      .value
+                                  ? null
+                                  : Get.find<AddProductController>()
+                                        .createProduct,
+                            ),
+                          );
+                        }
                       }
 
                       if (product.outOfStock == true ||
