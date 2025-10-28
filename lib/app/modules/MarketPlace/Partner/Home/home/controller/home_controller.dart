@@ -181,6 +181,9 @@ class HomeController extends GetxController {
             .isNotEmpty) {
           Get.find<CommonController>().hasProfileComplete.value = true;
         }
+        else{
+          Get.find<CommonController>().hasProfileComplete.value = false;
+        }
         _loadTeamFromStorage();
       }
     } catch (e) {
