@@ -53,37 +53,39 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           return (controller.isFromAdd.value == false &&
                   controller.isFromConnector.value == false)
               ? const SizedBox()
-              : (myPref.role.val == "partner")
-              ? const SizedBox()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    if (!(controller.isFromAdd.value == true &&
-                        controller.isFromConnector.value == false))
-                      const Gap(16),
-                    if (!(controller.isFromAdd.value == true &&
-                        controller.isFromConnector.value == false))
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "Explore More!",
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.grayA5,
+                    if (myPref.role.val == "connector")
+                      if (!(controller.isFromAdd.value == true &&
+                          controller.isFromConnector.value == false))
+                        const Gap(16),
+                    if (myPref.role.val == "connector")
+                      if (!(controller.isFromAdd.value == true &&
+                          controller.isFromConnector.value == false))
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Explore More!",
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.grayA5,
+                                ),
                               ),
-                            ),
-                            const Gap(8),
-                            Text(
-                              "View Categories >",
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
+                              const Gap(8),
+                              Text(
+                                "View Categories >",
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.gray54,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
+
+                    if (myPref.role.val == "partner")
                     Obx(() {
                       final product = controller.product;
                       if (controller.isFromAdd.value == true &&
@@ -710,74 +712,76 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ),
                     ),
                     if (myPref.role.val == "connector")
-                    Obx(() {
-                      print("controller.product.distanceKm");
-                      print(controller.product.distanceKm);
-                      if (controller.isFromAdd.value == false &&
-                          controller.isFromConnector.value == false) {
-                        return const SizedBox();
-                      } else {
-                        return !(controller.isFromAdd.value == true &&
-                                controller.isFromConnector.value == false)
-                            ? Container(
-                                margin: EdgeInsets.only(top: 2.h),
-                                width: double.infinity,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                  horizontal: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(
-                                    color: MyColors.brightGray,
+                      Obx(() {
+                        print("controller.product.distanceKm");
+                        print(controller.product.distanceKm);
+                        if (controller.isFromAdd.value == false &&
+                            controller.isFromConnector.value == false) {
+                          return const SizedBox();
+                        } else {
+                          return !(controller.isFromAdd.value == true &&
+                                  controller.isFromConnector.value == false)
+                              ? Container(
+                                  margin: EdgeInsets.only(top: 2.h),
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                    horizontal: 12,
                                   ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Delivery address",
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.gray54,
-                                      ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                      color: MyColors.brightGray,
                                     ),
-                                    const Gap(12),
-                                    Text(
-                                      "Deliver to",
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.grayA5,
-                                      ),
-                                    ),
-                                    const Gap(8),
-
-                                    Text(
-                                      "Location : ${homeController.getCurrentAddress().value}",
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.gray54,
-                                      ),
-                                    ),
-                                    const Gap(12),
-                                    Text(
-                                      "Manufacturing Unit",
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.grayA5,
-                                      ),
-                                    ),
-                                    const Gap(8),
-                                    if ((controller.product.distanceKm ?? "") !=
-                                        "")
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
                                       Text(
-                                        "Near by : ${controller.product.distanceKm != null ? double.parse(controller.product.distanceKm.toString()).toStringAsFixed(2) : "-"} km",
+                                        "Delivery address",
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.gray54,
                                         ),
                                       ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox();
-                      }
-                    }),
+                                      const Gap(12),
+                                      Text(
+                                        "Deliver to",
+                                        style: MyTexts.medium14.copyWith(
+                                          color: MyColors.grayA5,
+                                        ),
+                                      ),
+                                      const Gap(8),
+
+                                      Text(
+                                        "Location : ${homeController.getCurrentAddress().value}",
+                                        style: MyTexts.medium16.copyWith(
+                                          color: MyColors.gray54,
+                                        ),
+                                      ),
+                                      const Gap(12),
+                                      Text(
+                                        "Manufacturing Unit",
+                                        style: MyTexts.medium14.copyWith(
+                                          color: MyColors.grayA5,
+                                        ),
+                                      ),
+                                      const Gap(8),
+                                      if ((controller.product.distanceKm ??
+                                              "") !=
+                                          "")
+                                        Text(
+                                          "Near by : ${controller.product.distanceKm != null ? double.parse(controller.product.distanceKm.toString()).toStringAsFixed(2) : "-"} km",
+                                          style: MyTexts.medium16.copyWith(
+                                            color: MyColors.gray54,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox();
+                        }
+                      }),
                     SizedBox(height: 1.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
