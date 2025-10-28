@@ -18,6 +18,7 @@ import 'package:video_player/video_player.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
   final HomeController homeController = Get.find<HomeController>();
+
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -51,6 +52,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         bottomNavigationBar: Obx(() {
           return (controller.isFromAdd.value == false &&
                   controller.isFromConnector.value == false)
+              ? const SizedBox()
+              : (myPref.role.val == "partner")
               ? const SizedBox()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -445,54 +448,55 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           );
                         }),
                       ),
-
-                      Obx(() {
-                        return (controller.isFromAdd.value == false &&
-                                controller.isFromConnector.value == false)
-                            ? const SizedBox()
-                            : !(controller.isFromAdd.value == true &&
+                      if (myPref.role.val == "connector")
+                        Obx(() {
+                          return (controller.isFromAdd.value == false &&
                                   controller.isFromConnector.value == false)
-                            ? Container(
-                                margin: const EdgeInsets.all(20),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: MyColors.white,
-                                ),
-                                child: Obx(() {
-                                  return GestureDetector(
-                                    onTap: () async {
-                                      await Get.find<HomeController>()
-                                          .wishListApi(
-                                            status:
-                                                controller.isLiked.value == true
-                                                ? "remove"
-                                                : "add",
-                                            mID: controller.product.id ?? 0,
-                                            onSuccess: () {
-                                              controller.onApiCall?.call();
-                                            },
-                                          );
-                                      controller.isLiked.value =
-                                          !controller.isLiked.value;
-                                    },
-                                    child: Icon(
-                                      (controller.isLiked.value)
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      size: 24,
-                                      color: controller.isLiked.value
-                                          ? MyColors.custom('E53D26')
-                                          : MyColors.gray54,
-                                    ),
-                                  );
-                                }),
-                              )
-                            : const SizedBox();
-                      }),
+                              ? const SizedBox()
+                              : !(controller.isFromAdd.value == true &&
+                                    controller.isFromConnector.value == false)
+                              ? Container(
+                                  margin: const EdgeInsets.all(20),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: MyColors.white,
+                                  ),
+                                  child: Obx(() {
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        await Get.find<HomeController>()
+                                            .wishListApi(
+                                              status:
+                                                  controller.isLiked.value ==
+                                                      true
+                                                  ? "remove"
+                                                  : "add",
+                                              mID: controller.product.id ?? 0,
+                                              onSuccess: () {
+                                                controller.onApiCall?.call();
+                                              },
+                                            );
+                                        controller.isLiked.value =
+                                            !controller.isLiked.value;
+                                      },
+                                      child: Icon(
+                                        (controller.isLiked.value)
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        size: 24,
+                                        color: controller.isLiked.value
+                                            ? MyColors.custom('E53D26')
+                                            : MyColors.gray54,
+                                      ),
+                                    );
+                                  }),
+                                )
+                              : const SizedBox();
+                        }),
                     ],
                   ),
                   Positioned(
@@ -759,13 +763,14 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                       ),
                                     ),
                                     const Gap(8),
-                                    if((controller.product.distanceKm??"")!="")
-                                    Text(
-                                      "Near by : ${controller.product.distanceKm!=null ? double.parse(controller.product.distanceKm.toString() ).toStringAsFixed(2) : "-"} km",
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.gray54,
+                                    if ((controller.product.distanceKm ?? "") !=
+                                        "")
+                                      Text(
+                                        "Near by : ${controller.product.distanceKm != null ? double.parse(controller.product.distanceKm.toString()).toStringAsFixed(2) : "-"} km",
+                                        style: MyTexts.medium16.copyWith(
+                                          color: MyColors.gray54,
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 ),
                               )

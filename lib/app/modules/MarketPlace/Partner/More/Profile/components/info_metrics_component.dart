@@ -227,7 +227,11 @@ class InfoMetricsComponent extends StatelessWidget {
               Obx(() {
                 return buildRow(
                   title: "Business name",
-                  data: controller.businessModel.value.businessName??"-",
+                  data:
+                      (controller.businessModel.value.businessName ?? "")
+                          .isEmpty
+                      ? "-"
+                      : controller.businessModel.value.businessName,
                 );
               }),
               const Gap(6),
@@ -243,21 +247,32 @@ class InfoMetricsComponent extends StatelessWidget {
               Obx(() {
                 return buildRow(
                   title: "Mobile Number",
-                  data: controller.businessModel.value.businessContactNumber??"-",
+                  data:
+                      (controller.businessModel.value.businessContactNumber ??
+                              "")
+                          .isEmpty
+                      ? "-"
+                      : controller.businessModel.value.businessContactNumber,
                 );
               }),
               const Gap(6),
               Obx(() {
                 return buildRow(
                   title: "Website",
-                  data: controller.businessModel.value.website??"-",
+                  data: (controller.businessModel.value.website ?? "").isEmpty
+                      ? "-"
+                      : controller.businessModel.value.website,
                 );
               }),
               const Gap(6),
               Obx(() {
                 return buildRow(
                   title: "Email id",
-                  data: controller.businessModel.value.businessEmail??"-",
+                  data:
+                      (controller.businessModel.value.businessEmail ?? "")
+                          .isEmpty
+                      ? "-"
+                      : controller.businessModel.value.businessEmail,
                 );
               }),
               // const Gap(6),

@@ -8,6 +8,7 @@ class SignUpService {
   Future<bool> checkAvailability({
     String? email,
     String? mobileNumber,
+    String? countryCode,
     String? gstNumber,
   }) async {
     try {
@@ -16,6 +17,7 @@ class SignUpService {
         body: {
           if ((email ?? "").isNotEmpty) "email": email,
           if ((mobileNumber ?? "").isNotEmpty) "mobileNumber": mobileNumber,
+          if ((countryCode ?? "").isNotEmpty) "countryCode": countryCode,
           if ((gstNumber ?? "").isNotEmpty) "gstNumber": gstNumber,
         },
       );

@@ -4,15 +4,18 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/m
 
 class AddkycService {
   ApiManager apiManager = ApiManager();
- Future<AddkycModel> connectorCreateProduct({
-    required Map<String, dynamic> fields,
-    Map<String, String>? files,
+ Future<AddkycModel> connectorAddKYC({
+    String? aadhaar,
+    String? panCard,
   }) async {
     try {
-      final response = await apiManager.postMultipart(
+      final data={
+        "aadhaar_number":aadhaar??"",
+        "pan_number":panCard??"",
+      };
+      final response = await apiManager.postObject(
         url: APIConstants.connectorCreate,
-        fields: fields,
-        files: files,
+        body: data,
       );
       return AddkycModel.fromJson(response);
     } catch (e, st) {

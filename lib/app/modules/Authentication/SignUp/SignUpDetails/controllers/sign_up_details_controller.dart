@@ -16,7 +16,7 @@ class SignUpDetailsController extends GetxController {
   final mobileNumberController = TextEditingController();
   final emailController = TextEditingController();
   final otpController = TextEditingController();
-  final gstController = TextEditingController();
+  final gstController = TextEditingController(text: "33AAACH7409R1Z9");
   final aadhaarController = TextEditingController();
   SignUpService signUpService = SignUpService();
   final otpSend = false.obs;
@@ -48,16 +48,6 @@ class SignUpDetailsController extends GetxController {
   }
 
   Future<void> validateEmailAvailability(String email) async {
-    if (email.trim().isEmpty) {
-      emailError.value = "";
-      return;
-    }
-
-    if (!isValidEmail(email.trim())) {
-      emailError.value = "";
-      return;
-    }
-
     isEmailValidating.value = true;
     emailError.value = "";
 

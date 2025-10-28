@@ -15,7 +15,7 @@ class ProfileView extends GetView<ProfileController> {
       backgroundColor: MyColors.white,
       body: Stack(
         children: [
-                     const CommonBgImage(),
+          const CommonBgImage(),
           Column(
             children: [
               CommonAppBar(

@@ -10,10 +10,10 @@ class ProductCard extends StatelessWidget {
   final VoidCallback? onNotifyTap;
   final VoidCallback? onConnectTap;
   final VoidCallback? onApiCall;
-   bool? isFromAdd;
-   bool? isFromConnector;
+  bool? isFromAdd;
+  bool? isFromConnector;
 
-   ProductCard({
+  ProductCard({
     super.key,
     required this.product,
     this.onWishlistTap,
@@ -56,14 +56,15 @@ class ProductCard extends StatelessWidget {
           _buildLocationRow(),
           const SizedBox(height: 6),
           _buildPriceSection(),
-          if (isFromAdd == false && isFromConnector == true) ...[
-            const SizedBox(height: 8),
-            ProductActionButton(
-              product: product,
-              onNotifyTap: onNotifyTap,
-              onConnectTap: onConnectTap,
-            ),
-          ],
+          if (myPref.role.val == "connector")
+            if (isFromAdd == false && isFromConnector == true) ...[
+              const SizedBox(height: 8),
+              ProductActionButton(
+                product: product,
+                onNotifyTap: onNotifyTap,
+                onConnectTap: onConnectTap,
+              ),
+            ],
         ],
       ),
     );
@@ -218,20 +219,20 @@ class ProductImage extends StatelessWidget {
           ),
         ),
       const Spacer(),
-
-      if (isFromAdd == false && isFromConnector == true)
-        GestureDetector(
-          onTap: onWishlistTap,
-          child: Icon(
-            (product.isInWishList ?? false)
-                ? Icons.favorite
-                : Icons.favorite_border,
-            size: 24,
-            color: (product.isInWishList ?? false)
-                ? MyColors.custom('E53D26')
-                : MyColors.gray54,
+      if (myPref.role.val == "connector")
+        if (isFromAdd == false && isFromConnector == true)
+          GestureDetector(
+            onTap: onWishlistTap,
+            child: Icon(
+              (product.isInWishList ?? false)
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              size: 24,
+              color: (product.isInWishList ?? false)
+                  ? MyColors.custom('E53D26')
+                  : MyColors.gray54,
+            ),
           ),
-        ),
     ],
   );
 }
