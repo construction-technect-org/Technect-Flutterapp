@@ -19,7 +19,7 @@ class Data {
   MerchantProfile? merchantProfile;
   ConnectorProfile? connectorProfile;
   Referral? referral;
-  List<SiteLocation>? addresses;
+  List<ManufacturerAddress>? addresses;
   List<SiteLocation>? siteLocations;
 
   Data({
@@ -49,8 +49,8 @@ class Data {
           ),
     addresses: json["addresses"] == null
         ? []
-        : List<SiteLocation>.from(
-            json["addresses"]!.map((x) => SiteLocation.fromJson(x)),
+        : List<ManufacturerAddress>.from(
+            json["addresses"]!.map((x) => ManufacturerAddress.fromJson(x)),
           ),
   );
 
@@ -515,6 +515,55 @@ class SiteLocation {
     "longitude": longitude,
     "isDefault": isDefault,
     "isActive": isActive,
+    "createdAt": createdAt,
+    "updatedAt": updatedAt,
+  };
+}
+
+class ManufacturerAddress {
+  int? id;
+  String? addressName;
+  String? fullAddress;
+  String? landmark;
+  String? latitude;
+  String? longitude;
+  bool? isDefault;
+  String? createdAt;
+  String? updatedAt;
+
+  ManufacturerAddress({
+    this.id,
+    this.addressName,
+    this.fullAddress,
+    this.landmark,
+    this.latitude,
+    this.longitude,
+    this.isDefault,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory ManufacturerAddress.fromJson(Map<String, dynamic> json) =>
+      ManufacturerAddress(
+        id: json["id"],
+        addressName: json["addressName"],
+        fullAddress: json["fullAddress"],
+        landmark: json["landmark"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        isDefault: json["isDefault"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "addressName": addressName,
+    "fullAddress": fullAddress,
+    "landmark": landmark,
+    "latitude": latitude,
+    "longitude": longitude,
+    "isDefault": isDefault,
     "createdAt": createdAt,
     "updatedAt": updatedAt,
   };

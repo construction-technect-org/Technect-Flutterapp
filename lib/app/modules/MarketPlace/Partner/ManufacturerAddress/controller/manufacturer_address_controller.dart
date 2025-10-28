@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/services/manufacturer_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/services/manufacturer_address_service.dart';
 
 class ManufacturerAddressController extends GetxController {
   HomeController homeController = Get.find();
@@ -17,7 +17,7 @@ class ManufacturerAddressController extends GetxController {
   // Edit address
   void editAddress(String addressId) {
     // Find the address to edit
-    final address = homeController.profileData.value.data?.siteLocations
+    final address = homeController.profileData.value.data?.addresses
         ?.firstWhere((addr) => addr.id.toString() == addressId);
 
     if (address != null) {
@@ -26,7 +26,7 @@ class ManufacturerAddressController extends GetxController {
         arguments: {
           'isEdit': true,
           'addressId': addressId,
-          'addressName': address.siteName,
+          'addressName': address.addressName,
           'landmark': address.landmark,
           'fullAddress': address.fullAddress,
           'latitude': address.latitude,

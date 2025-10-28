@@ -123,5 +123,5 @@ class APIConstants {
   static const String createConnectorSupportTicket =
       "connector/support-ticket/create";
   static const String connectorFeedback = "feedback/connector";
-  static const String manufacturerAddress = "manufacturer/address";
+  static const String manufacturerAddress = "address";
 }
