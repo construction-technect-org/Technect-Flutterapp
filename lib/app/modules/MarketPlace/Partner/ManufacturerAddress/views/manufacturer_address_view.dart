@@ -100,7 +100,7 @@ class ManufacturerAddressView extends GetView<ManufacturerAddressController> {
                                         .profileData
                                         .value
                                         .data
-                                        ?.siteLocations
+                                        ?.addresses
                                         ?.isEmpty ??
                                     true
                                 ? Padding(
@@ -127,7 +127,7 @@ class ManufacturerAddressView extends GetView<ManufacturerAddressController> {
                                             .profileData
                                             .value
                                             .data
-                                            ?.siteLocations
+                                            ?.addresses
                                             ?.length ??
                                         0,
                                     itemBuilder: (context, index) {
@@ -135,7 +135,7 @@ class ManufacturerAddressView extends GetView<ManufacturerAddressController> {
                                           .profileData
                                           .value
                                           .data
-                                          ?.siteLocations?[index];
+                                          ?.addresses?[index];
                                       return Container(
                                         margin: const EdgeInsets.only(
                                           bottom: 16,

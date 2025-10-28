@@ -74,7 +74,7 @@ class Dashboard extends StatelessWidget {
                               Obx(
                                 () => GestureDetector(
                                   onTap: () {
-                                     Get.put<SwitchAccountController>(
+                                    Get.put<SwitchAccountController>(
                                       SwitchAccountController(),
                                     );
                                     showSwitchAccountBottomSheet();
@@ -114,7 +114,12 @@ class Dashboard extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Get.toNamed(Routes.DELIVERY_LOCATION);
+                                  if (myPref.role.val == "partner") {
+                                    Get.toNamed(Routes.MANUFACTURER_ADDRESS);
+
+                                  } else {
+                                    Get.toNamed(Routes.DELIVERY_LOCATION);
+                                  }
                                 },
                                 child: Row(
                                   children: [

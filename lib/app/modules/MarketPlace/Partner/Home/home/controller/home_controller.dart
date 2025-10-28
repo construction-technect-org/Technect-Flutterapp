@@ -137,17 +137,33 @@ class HomeController extends GetxController {
   // }
 
   RxString getCurrentAddress() {
-    if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
-      final int index =
-          profileData.value.data?.siteLocations?.indexWhere(
-            (e) => e.isDefault == true,
-          ) ??
-          0;
-      final address = profileData.value.data?.siteLocations?[index];
+    if(myPref.role.val=="partner"){
+      if (profileData.value.data?.addresses?.isNotEmpty == true) {
+        final int index =
+            profileData.value.data?.addresses?.indexWhere(
+                  (e) => e.isDefault == true,
+            ) ??
+                0;
+        final address = profileData.value.data?.addresses?[index];
 
-      return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+        return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+      }
+      return 'No address found'.obs;
     }
-    return 'No address found'.obs;
+    else{
+      if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
+        final int index =
+            profileData.value.data?.siteLocations?.indexWhere(
+                  (e) => e.isDefault == true,
+            ) ??
+                0;
+        final address = profileData.value.data?.siteLocations?[index];
+
+        return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+      }
+      return 'No address found'.obs;
+    }
+
   }
 
   Future<void> fetchProfileData() async {

@@ -19,6 +19,7 @@ class Data {
   MerchantProfile? merchantProfile;
   ConnectorProfile? connectorProfile;
   Referral? referral;
+  List<SiteLocation>? addresses;
   List<SiteLocation>? siteLocations;
 
   Data({
@@ -27,6 +28,7 @@ class Data {
     this.connectorProfile,
     this.referral,
     this.siteLocations,
+    this.addresses,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -45,6 +47,11 @@ class Data {
         : List<SiteLocation>.from(
             json["siteLocations"]!.map((x) => SiteLocation.fromJson(x)),
           ),
+    addresses: json["addresses"] == null
+        ? []
+        : List<SiteLocation>.from(
+            json["addresses"]!.map((x) => SiteLocation.fromJson(x)),
+          ),
   );
 
   Map<String, dynamic> toJson() => {
@@ -55,6 +62,9 @@ class Data {
     "siteLocations": siteLocations == null
         ? []
         : List<dynamic>.from(siteLocations!.map((x) => x.toJson())),
+    "addresses": addresses == null
+        ? []
+        : List<dynamic>.from(addresses!.map((x) => x.toJson())),
   };
 }
 
