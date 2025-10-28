@@ -369,7 +369,8 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                       child: Align(
                                         alignment: AlignmentGeometry.topLeft,
                                         child: Text(
-                                          Get.find<SignUpRoleController>()
+                                          SignUpRoleController
+                                                      .to
                                                       .selectedRoleName
                                                       .value ==
                                                   "House-Owner"
@@ -387,7 +388,8 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          if (Get.find<SignUpRoleController>()
+                                          if (SignUpRoleController
+                                                  .to
                                                   .selectedRoleName
                                                   .value ==
                                               "House-Owner") ...[

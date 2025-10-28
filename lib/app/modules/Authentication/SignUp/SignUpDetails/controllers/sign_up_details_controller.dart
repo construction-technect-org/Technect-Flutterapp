@@ -6,7 +6,6 @@ import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
-import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
 import 'package:gap/gap.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
@@ -31,6 +30,7 @@ class SignUpDetailsController extends GetxController {
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
   RxBool isLoading = false.obs;
+  RxBool isNavigatingToOtp = false.obs;
 
   // Email validation state
   RxString emailError = "".obs;
@@ -161,9 +161,23 @@ class SignUpDetailsController extends GetxController {
         );
         otpSend.value = false;
       }
+      startTimer();
     } catch (e) {
       otpSend.value = false;
     }
+  }
+
+  void resetOtpState() {
+    try {
+      otpSend.value = false;
+      otpVerify.value = false;
+      isResendVisible.value = false;
+      otpController.text = '';
+      // Safely stop/reset countdown if supported
+      try {
+        countdownController.restart();
+      } catch (_) {}
+    } catch (_) {}
   }
 
   Future<void> proceedToPassword() async {
@@ -202,10 +216,10 @@ class SignUpDetailsController extends GetxController {
         if (otpResponse.data?.verified == true) {
           otpVerify.value = true;
           SnackBars.successSnackBar(content: 'OTP verified successfully!');
+          final cont = SignUpRoleController.to;
           final userData = UserDataModel(
-            marketPlaceRole:
-                Get.find<SignUpRoleController>().selectedFinalRole.value,
-            roleName: Get.find<SignUpRoleController>().selectedRoleName.value,
+            marketPlaceRole: cont.selectedFinalRole.value,
+            roleName: cont.selectedRoleName.value,
             firstName: firstNameController.text,
             lastName: lastNameController.text,
             countryCode: countryCode.value,
@@ -283,29 +297,22 @@ class SignUpDetailsController extends GetxController {
                   if (formKey.currentState!.validate()) {
                     hideKeyboard();
 
-                    final sent = await verifyMobileNumber();
-                    if (sent) {
-                      Get.back();
-                      Get.to(
-                        () => OtpVerificationView(
-                          isLoading: isLoading,
-                          onTap: () async {
-                            await sendOtp().then((val) {
-                              startTimer();
-                            });
-                          },
-                          countdownController: countdownController,
-                          isResendVisible: isResendVisible,
-                          otpController: otpController,
-                          onCompleted: (value) {
-                            verifyOtp();
-                          },
-                          onFinished: () {
-                            onCountdownFinish();
-                          },
-                        ),
-                      );
-                      startTimer();
+                    if (isNavigatingToOtp.value) return;
+                    if (Get.currentRoute == Routes.OTP_Verification) return;
+                    isNavigatingToOtp.value = true;
+                    try {
+                      resetOtpState();
+                      final sent = await verifyMobileNumber();
+                      if (!sent) return;
+
+                      if (Get.isBottomSheetOpen == true) {
+                        Get.back();
+                      }
+                      // Use named route to avoid duplicates
+                      resetOtpState();
+                      await Get.toNamed(Routes.OTP_Verification);
+                    } finally {
+                      isNavigatingToOtp.value = false;
                     }
                   }
                 },

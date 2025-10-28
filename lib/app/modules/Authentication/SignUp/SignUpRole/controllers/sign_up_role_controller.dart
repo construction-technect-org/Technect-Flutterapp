@@ -1,14 +1,13 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class SignUpRoleController extends GetxController {
+  static final SignUpRoleController to = Get.find();
   RxInt selectedRole = (-1).obs;
   TextEditingController otherRoleController = TextEditingController();
   RxString otherRoleString = "".obs;
   RxString selectedRoleName = "".obs;
 
-
   RxString selectedFinalRole = "".obs;
-
 
   List roleName = [
     'Manufacturer',

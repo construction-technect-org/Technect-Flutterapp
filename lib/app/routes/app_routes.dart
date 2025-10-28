@@ -72,6 +72,7 @@ abstract class Routes {
   static const CART_LIST = _Paths.CART_LIST;
   static const DELIVERY_LOCATION = _Paths.DELIVERY_LOCATION;
   static const ADD_DELIVERY_ADDRESS = _Paths.ADD_DELIVERY_ADDRESS;
+  static const OTP_Verification = _Paths.OTP_VERIFICATION_SCREEN;
 }
 
 abstract class _Paths {
@@ -136,6 +137,7 @@ abstract class _Paths {
   static const CONNECTOR_CUSTOMER_SUPPORT_TICKET =
       '/connector-customer-support-ticket';
   static const CONNECTOR_REQUEST_DEMO = '/connector-request-demo';
+  static const OTP_VERIFICATION_SCREEN = '/otp_verification';
   static const CONNECTOR_SUPPORT_REQUEST = '/connector-support-request';
   static const CONNECTOR_CREATE_NEW_TICKET = '/connector-create-new-ticket';
   static const WISH_LIST = '/wish-list';
