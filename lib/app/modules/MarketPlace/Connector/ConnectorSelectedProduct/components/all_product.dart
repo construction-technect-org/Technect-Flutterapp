@@ -257,7 +257,7 @@ class AllProduct extends GetView<ConnectorSelectedProductController> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: MyColors.grayD4 ?? Colors.grey.shade300),
+          border: Border.all(color: MyColors.grayD4),
           borderRadius: BorderRadius.circular(7),
           color: Colors.white,
         ),

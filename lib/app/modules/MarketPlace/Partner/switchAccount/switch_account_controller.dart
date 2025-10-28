@@ -23,7 +23,7 @@ class SwitchAccountController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    currentRole.value = myPref.role.val ?? ''; // "partner" or "connector"
+    currentRole.value = myPref.role.val; // "partner" or "connector"
     hasPartnerAccount.value =
         Get.find<HomeController>().profileData.value.data?.merchantProfile !=
         null;

@@ -95,7 +95,7 @@ class ReportController extends GetxController {
         startYear: !isPeriod ? startMonth.value!.year.toString() : "",
         endMonth: !isPeriod ? endMonth.value!.month.toString() : "",
         endYear: !isPeriod ? endMonth.value!.year.toString() : "",
-        token: myPref.getToken() ?? "",
+        token: myPref.getToken(),
       );
 
       if (pdfBytes != null) {
@@ -117,11 +117,14 @@ class ReportController extends GetxController {
         await file.writeAsBytes(pdfBytes);
 
         Get.defaultDialog(
-          titlePadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+          titlePadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 15,
+          ),
           backgroundColor: Colors.white,
           title: "Success",
           titleStyle: MyTexts.medium16.copyWith(color: MyColors.gray2E),
-          middleTextStyle:  MyTexts.medium14.copyWith(color: MyColors.gray54),
+          middleTextStyle: MyTexts.medium14.copyWith(color: MyColors.gray54),
           middleText: "PDF downloaded successfully",
           actions: [
             Row(
