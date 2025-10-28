@@ -188,18 +188,42 @@ class AddTeamView extends GetView<AddTeamController> {
                                   validateName(value, fieldName: "last name"),
                             ),
                             SizedBox(height: 2.h),
-                            CommonTextField(
-                              hintText: "Enter your email address",
-                              headerText: 'Email ID',
-                              controller: controller.emialIdController,
-                              keyboardType: TextInputType.emailAddress,
-                              autofillHints: const [AutofillHints.email],
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(50),
-                                EmailInputFormatter(),
-                              ],
-                              validator: validateEmail,
+                            Focus(
+                              onFocusChange: (hasFocus) {
+                                if (!hasFocus) {
+                                  final email =
+                                      controller.emialIdController.text;
+                                  controller.validateEmailAvailability(email);
+                                }
+                              },
+                              child: CommonTextField(
+                                hintText: "Enter your email address",
+                                headerText: 'Email ID',
+                                controller: controller.emialIdController,
+                                keyboardType: TextInputType.emailAddress,
+                                autofillHints: const [AutofillHints.email],
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(50),
+                                  EmailInputFormatter(),
+                                ],
+                                validator: validateEmail,
+                              ),
                             ),
+                            Obx(() {
+                              if (controller.emailError.value.isNotEmpty) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    controller.emailError.value,
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            }),
                             SizedBox(height: 2.h),
                             CommonTextField(
                               hintText: "Enter your phone number",

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
@@ -22,6 +23,10 @@ class AddTeamController extends GetxController {
   RxBool isEdit = false.obs;
   RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<GetAllRole>? selectedRole = GetAllRole().obs;
+  // Email availability state
+  RxString emailError = "".obs;
+  RxBool isEmailValidating = false.obs;
+  final SignUpService _signUpService = SignUpService();
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -186,6 +191,36 @@ class AddTeamController extends GetxController {
       await addTeam();
     } else {
       await addTeam();
+    }
+  }
+
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\$').hasMatch(email);
+  }
+
+  Future<void> validateEmailAvailability(String email) async {
+    final trimmed = email.trim();
+    if (trimmed.isEmpty) {
+      emailError.value = "";
+      return;
+    }
+    if (!_isValidEmail(trimmed)) {
+      emailError.value = "";
+      return;
+    }
+    isEmailValidating.value = true;
+    emailError.value = "";
+    try {
+      final available = await _signUpService.checkAvailability(email: trimmed);
+      if (!available) {
+        emailError.value = "This email is already registered";
+      } else {
+        emailError.value = "";
+      }
+    } catch (e) {
+      emailError.value = "Error checking email availability";
+    } finally {
+      isEmailValidating.value = false;
     }
   }
 }
