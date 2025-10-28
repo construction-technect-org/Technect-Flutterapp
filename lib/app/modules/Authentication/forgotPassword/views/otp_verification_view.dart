@@ -19,7 +19,7 @@ class OtpVerificationView extends StatelessWidget {
     super.key,
     required this.isLoading,
     required this.isResendVisible,
-     this.isBackToLogin=true,
+    this.isBackToLogin = true,
     required this.otpController,
     required this.onCompleted,
     required this.onFinished,
@@ -52,7 +52,7 @@ class OtpVerificationView extends StatelessWidget {
                       useHapticFeedback: true,
                       useExternalAutoFillGroup: true,
                       controller: otpController,
-                      onCompleted:onCompleted,
+                      onCompleted: onCompleted,
                       keyboardType: TextInputType.number,
                       textStyle: MyTexts.extraBold16.copyWith(
                         color: MyColors.primary,
@@ -98,7 +98,7 @@ class OtpVerificationView extends StatelessWidget {
                 Obx(() {
                   return isResendVisible.value
                       ? GestureDetector(
-                          onTap:onTap,
+                          onTap: onTap,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -130,24 +130,24 @@ class OtpVerificationView extends StatelessWidget {
                               ),
                             );
                           },
-                          onFinished:onFinished,
+                          onFinished: onFinished,
                         );
                 }),
                 Gap(MediaQuery.of(context).size.height / 3),
-                if(isBackToLogin==true)
-                TextButton(
-                  onPressed: () {
-                    Get.offAllNamed(Routes.LOGIN);
-                  },
-                  child: Text(
-                    'Back to login',
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.lightBlueSecond,
-                      decoration: TextDecoration.underline,
-                      decorationColor: MyColors.primary,
+                if (isBackToLogin == true)
+                  TextButton(
+                    onPressed: () {
+                      Get.offAllNamed(Routes.LOGIN);
+                    },
+                    child: Text(
+                      'Back to login',
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.lightBlueSecond,
+                        decoration: TextDecoration.underline,
+                        decorationColor: MyColors.primary,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

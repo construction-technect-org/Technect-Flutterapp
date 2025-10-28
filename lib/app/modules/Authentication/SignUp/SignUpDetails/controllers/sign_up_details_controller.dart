@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
@@ -75,24 +77,69 @@ class SignUpDetailsController extends GetxController {
     }
   }
 
-  Future<void> verifyMobileNumber() async {
-    if (!otpSend.value) {
-      final otpResponse = await signUpService.sendOtp(
-        mobileNumber: mobileNumberController.text,
+  Future<bool> validateNumberAvailability(String number) async {
+    try {
+      // Check if mobile number is available
+      final isAvailable = await signUpService.checkAvailability(
+        mobileNumber: number,
+        countryCode: countryCode.value,
       );
 
-      if (otpResponse.success == true) {
-        SnackBars.successSnackBar(
-          content: 'OTP sent successfully to ${mobileNumberController.text}',
-        );
-        otpSend.value = true;
-      } else {
+      if (!isAvailable) {
+        log("This mobile number is already registered:$isAvailable ");
         SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to send OTP',
+          content: 'This mobile number is already registered',
         );
+        return false;
+      } else {
+        log("This mobile number is Not registered:$isAvailable ");
+        return true;
       }
-    } else {
-      await sendOtp();
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error verifying mobile number: $e');
+      log("validateNumberAvailability: $e");
+      return false;
+    }
+  }
+
+  Future<bool> verifyMobileNumber() async {
+    try {
+      // First check if mobile number is available
+      final isNumberAvailable = await validateNumberAvailability(
+        mobileNumberController.text,
+      );
+
+      // If number is not available, stop here
+      if (!isNumberAvailable) {
+        return false;
+      }
+
+      // Send OTP if mobile number is available
+      if (!otpSend.value) {
+        final otpResponse = await signUpService.sendOtp(
+          mobileNumber: mobileNumberController.text,
+        );
+
+        if (otpResponse.success == true) {
+          SnackBars.successSnackBar(
+            content: 'OTP sent successfully to ${mobileNumberController.text}',
+          );
+          otpSend.value = true;
+          return true;
+        } else {
+          SnackBars.errorSnackBar(
+            content: otpResponse.message ?? 'Failed to send OTP',
+          );
+          return false;
+        }
+      } else {
+        await sendOtp();
+        return true;
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error sending OTP: $e');
+      log("verifyMobileNumber: $e");
+      return false;
     }
   }
 
@@ -235,7 +282,9 @@ class SignUpDetailsController extends GetxController {
                   }
                   if (formKey.currentState!.validate()) {
                     hideKeyboard();
-                    await verifyMobileNumber().then((val) {
+
+                    final sent = await verifyMobileNumber();
+                    if (sent) {
                       Get.back();
                       Get.to(
                         () => OtpVerificationView(
@@ -257,7 +306,7 @@ class SignUpDetailsController extends GetxController {
                         ),
                       );
                       startTimer();
-                    });
+                    }
                   }
                 },
               ),

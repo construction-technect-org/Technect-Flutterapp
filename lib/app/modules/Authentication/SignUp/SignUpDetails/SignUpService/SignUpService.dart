@@ -9,6 +9,7 @@ class SignUpService {
     String? email,
     String? mobileNumber,
     String? gstNumber,
+    String? countryCode,
   }) async {
     try {
       final response = await apiManager.postObject(
@@ -16,13 +17,39 @@ class SignUpService {
         body: {
           if ((email ?? "").isNotEmpty) "email": email,
           if ((mobileNumber ?? "").isNotEmpty) "mobileNumber": mobileNumber,
+          // API expects countryCode when checking phone availability
+          if ((mobileNumber ?? "").isNotEmpty && (countryCode ?? "").isNotEmpty)
+            "countryCode": countryCode,
           if ((gstNumber ?? "").isNotEmpty) "gstNumber": gstNumber,
         },
       );
-      final bool isAvailable = response["data"]["email"]["available"] ?? false;
-      return isAvailable;
+      // Parse availability based on requested field
+      final data = response["data"] ?? {};
+      if ((email ?? '').isNotEmpty) {
+        final emailData = data["email"];
+        if (emailData is Map) {
+          return emailData["available"] == true;
+        }
+        // if API doesn't return email block, treat as available
+        return true;
+      }
+      if ((mobileNumber ?? '').isNotEmpty) {
+        final phoneData = data["phone"] ?? data["mobileNumber"];
+        if (phoneData is Map) {
+          return phoneData["available"] == true && phoneData["exists"] != true;
+        }
+        return false;
+      }
+      if ((gstNumber ?? '').isNotEmpty) {
+        final gstData = data["gstNumber"] ?? data["gst"];
+        if (gstData is Map) {
+          return gstData["available"] == true;
+        }
+        return true;
+      }
+      return false;
     } catch (e, st) {
-      throw Exception('Error checking email: $e , $st');
+      throw Exception('Error checking availability: $e , $st');
     }
   }
 
