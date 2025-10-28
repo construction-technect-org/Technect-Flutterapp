@@ -24,7 +24,8 @@ class APIConstants {
   static const String checkAvailability = "auth/check-availability";
   static const String marketplaceUpdate = "auth/marketplace";
   static const String forgotPasswordSendOtp = "auth/forgot-password/send-otp";
-  static const String forgotPasswordVerifyOtp = "auth/forgot-password/verify-otp";
+  static const String forgotPasswordVerifyOtp =
+      "auth/forgot-password/verify-otp";
   static const String forgotPasswordReset = "auth/forgot-password/reset";
   static const String profile = "auth/profile";
   static const String address = "address";
@@ -41,7 +42,8 @@ class APIConstants {
   static const String teamStatsOverview = "merchant/team/stats/overview";
   static const String roleDetailById = "merchant/role";
   static const String getMainCategories = "merchant/category/main";
-  static const String getSubCategories = "merchant/category/sub?main_category_id=";
+  static const String getSubCategories =
+      "merchant/category/sub?main_category_id=";
   static const String getProducts = "merchant/category/products/sub/";
   static const String getFilter = "merchant/category/filters/sub/";
   static const String getProductList = "merchant/product/list";
@@ -74,7 +76,6 @@ class APIConstants {
   static const String createPartnerSupportTicket = "support-ticket/create";
   static const String getPartnerSupportTickets = "support-ticket/my-tickets";
 
-
   // Connection Inbox API
   static const String connectionInbox = "connection-request/merchant/inbox";
   static const String acceptReject = "connection-request";
@@ -93,14 +94,17 @@ class APIConstants {
       "connector/support-ticket/categories";
   static const String getConnectorSupportTicketPriorities =
       "connector/support-ticket/priorities";
-  static const String ConnectorSupportTicketCreate = "connector/support-ticket/create";
+  static const String ConnectorSupportTicketCreate =
+      "connector/support-ticket/create";
   static const String getConnectorSupportMyTickets =
       "connector/support-ticket/my-tickets";
 
   // Connector Demo Request API
-  static const String connectorDemoRequestCreate = "connector/demo-request/create";
+  static const String connectorDemoRequestCreate =
+      "connector/demo-request/create";
 
-  static const String connectionConnectorInbox = "connector/connection-request/inbox";
+  static const String connectionConnectorInbox =
+      "connector/connection-request/inbox";
   static const String cancelConnection = "connector/connection-request/";
 
   // Connector Site address
@@ -109,11 +113,15 @@ class APIConstants {
   static const String addToConnect = "connector/connection-request/send";
   static const String wishList = "connector/wishlist";
   static const String connectorGetProductReview = "connector/product/";
-  static const String connectorMerchantStore = "connector/merchant-store/merchant-stores";
+  static const String connectorMerchantStore =
+      "connector/merchant-store/merchant-stores";
   static const String connectorNotifications = "connector/notifications";
   static const String newsConnector = "news/connector";
   static const String cartList = "connector/connection-request/cart";
-  static const String getConnectorSupportTicket = "connector/support-ticket/my-tickets?";
-  static const String createConnectorSupportTicket = "connector/support-ticket/create";
+  static const String getConnectorSupportTicket =
+      "connector/support-ticket/my-tickets?";
+  static const String createConnectorSupportTicket =
+      "connector/support-ticket/create";
   static const String connectorFeedback = "feedback/connector";
+  static const String manufacturerAddress = "manufacturer/address";
 }

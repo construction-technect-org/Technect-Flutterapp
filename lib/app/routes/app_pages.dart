@@ -59,6 +59,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDe
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/views/add_delivery_address_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/bindings/delivery_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/bindings/manufacturer_address_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/views/manufacturer_address_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/views/add_manufacturer_address_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/views/notification_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
@@ -128,7 +132,11 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -149,8 +157,16 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
-    GetPage(name: _Paths.PROFILE, page: () => const ProfileView(), binding: ProfileBinding()),
+    GetPage(
+      name: _Paths.MAIN,
+      page: () => BottomBarView(),
+      binding: BottomBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
+    ),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
@@ -183,8 +199,16 @@ class AppPages {
       page: () => RoleManagementView(),
       binding: RoleManagementBinding(),
     ),
-    GetPage(name: _Paths.ADD_ROLE, page: () => AddRoleView(), binding: AddRoleBinding()),
-    GetPage(name: _Paths.ADD_TEAM, page: () => AddTeamView(), binding: AddTeamBinding()),
+    GetPage(
+      name: _Paths.ADD_ROLE,
+      page: () => AddRoleView(),
+      binding: AddRoleBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_TEAM,
+      page: () => AddTeamView(),
+      binding: AddTeamBinding(),
+    ),
     GetPage(
       name: _Paths.APPROVAL_INBOX,
       page: () => ApprovalInboxView(),
@@ -200,7 +224,11 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
+    GetPage(
+      name: _Paths.FAQ,
+      page: () => const FaqScreen(),
+      binding: FAQBindings(),
+    ),
     GetPage(
       name: _Paths.TEAM_DETAILS,
       page: () => const TeamDetailsView(),
@@ -211,7 +239,9 @@ class AppPages {
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<ServiceManagementController>(() => ServiceManagementController());
+        Get.lazyPut<ServiceManagementController>(
+          () => ServiceManagementController(),
+        );
       }),
     ),
 
@@ -394,6 +424,16 @@ class AppPages {
       name: Routes.ADD_DELIVERY_ADDRESS,
       page: () => const AddDeliveryAddressView(),
       binding: AddDeliveryAddressBinding(),
+    ),
+    GetPage(
+      name: Routes.MANUFACTURER_ADDRESS,
+      page: () => ManufacturerAddressView(),
+      binding: ManufacturerAddressBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_MANUFACTURER_ADDRESS,
+      page: () => AddManufacturerAddressView(),
+      binding: AddManufacturerAddressBinding(),
     ),
   ];
 }
