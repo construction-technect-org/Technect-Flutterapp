@@ -169,25 +169,25 @@ class SignUpDetailsController extends GetxController {
     await verifyOtp();
   }
 
-  Future<bool> checkEmail() async {
-    try {
-      final isAvailable = await signUpService.checkAvailability(
-        email: emailController.text,
-      );
+  // Future<bool> checkEmail() async {
+  //   try {
+  //     final isAvailable = await signUpService.checkAvailability(
+  //       email: emailController.text,
+  //     );
 
-      if (!isAvailable) {
-        SnackBars.errorSnackBar(content: "This email is already registered");
-        return false;
-      }
+  //     if (!isAvailable) {
+  //       SnackBars.errorSnackBar(content: "This email is already registered");
+  //       return false;
+  //     }
 
-      return true;
-    } catch (e) {
-      SnackBars.errorSnackBar(
-        content: "Error verifying email. Please try again",
-      );
-      return false;
-    }
-  }
+  //     return true;
+  //   } catch (e) {
+  //     SnackBars.errorSnackBar(
+  //       content: "Error verifying email. Please try again",
+  //     );
+  //     return false;
+  //   }
+  // }
 
   // Verify OTP method
   Future<void> verifyOtp() async {
