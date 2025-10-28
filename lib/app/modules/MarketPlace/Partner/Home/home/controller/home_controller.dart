@@ -36,9 +36,6 @@ class HomeController extends GetxController {
     super.onInit();
     fetchCategoryHierarchy();
     _initializeHomeData();
-    commonController.hasProfileComplete.value =
-        (profileData.value.data?.merchantProfile?.merchantLogo ?? "")
-            .isNotEmpty;
   }
 
   Future<void> _initializeHomeData() async {
@@ -163,15 +160,12 @@ class HomeController extends GetxController {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
-        if ((profileData
-                    .value
-                    .data
-                    ?.merchantProfile
-                    ?.profileCompletionPercentage ??
-                0) >=
-            90) {
-          _loadTeamFromStorage();
+
+        if ((profileData.value.data?.merchantProfile?.website ?? "")
+            .isNotEmpty) {
+          Get.find<CommonController>().hasProfileComplete.value = true;
         }
+        _loadTeamFromStorage();
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');

@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/explore_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:gap/gap.dart';
 
 class Dashboard extends StatelessWidget {
@@ -73,6 +74,9 @@ class Dashboard extends StatelessWidget {
                               Obx(
                                 () => GestureDetector(
                                   onTap: () {
+                                     Get.put<SwitchAccountController>(
+                                      SwitchAccountController(),
+                                    );
                                     showSwitchAccountBottomSheet();
                                   },
                                   child: RichText(

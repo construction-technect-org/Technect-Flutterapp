@@ -6,28 +6,32 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/document_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/edit_profile_service.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 
 class ProfileController extends GetxController {
+  final isSwitch = false.obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
 
-    businessModel.value.gstinNumber=Get.find<HomeController>().profileData.value.data?.user?.gst??"-";
+    if (Get.arguments != null) {
+      isSwitch.value = true;
+    }
+    businessModel.value.gstinNumber =
+        Get.find<HomeController>().profileData.value.data?.user?.gst ?? "";
     if (merchantProfile != null) {
-      businessModel.value.website = merchantProfile?.website.toString();
-      businessModel.value.businessEmail = merchantProfile?.businessEmail
-          .toString();
+      businessModel.value.website = merchantProfile?.website??"";
+      businessModel.value.businessEmail = merchantProfile?.businessEmail??"";
       businessModel.value.businessContactNumber = merchantProfile
-          ?.businessContactNumber
-          .toString();
-      businessModel.value.businessName = merchantProfile?.businessName
-          .toString();
-      businessModel.value.gstinNumber = merchantProfile?.gstinNumber.toString();
-      businessModel.value.image = merchantProfile?.merchantLogo.toString();
+          ?.businessContactNumber??"";
+      businessModel.value.businessName = merchantProfile?.businessName??"";
+      businessModel.value.gstinNumber = merchantProfile?.gstinNumber??"";
+      businessModel.value.image = merchantProfile?.merchantLogo??"";
       print(businessHours);
 
       final timeFormatter = DateFormat.jm();
@@ -549,8 +553,7 @@ class ProfileController extends GetxController {
 
       if (response['success'] == true) {
         try {
-          Get.find<CommonController>().hasProfileComplete.value=true;
-
+          Get.find<CommonController>().hasProfileComplete.value = true;
           if (isUpdate) {
             await homeController.fetchProfileData();
             Get.back();
@@ -559,6 +562,11 @@ class ProfileController extends GetxController {
             await homeController.fetchProfileData();
             Get.back();
             SnackBars.successSnackBar(content: "Profile update successfully");
+            if (isSwitch.value) {
+              Get.find<SwitchAccountController>().updateRole(role: "partner");
+              myPref.role.val = "partner";
+              Get.offAllNamed(Routes.MAIN);
+            }
           }
         } catch (e) {
           Get.printError(info: 'Could not notify Home controller: $e');

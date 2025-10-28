@@ -20,7 +20,7 @@ class BottomBarView extends GetView<BottomController> {
           case 0:
             return Dashboard();
           case 1:
-            return  HomeView();
+            return HomeView();
           case 2:
             return ConnectionInboxView();
           case 3:
@@ -73,6 +73,7 @@ class BottomBarView extends GetView<BottomController> {
                     },
                     index: 1,
                   ),
+
                   // bottomBar(
                   //   Asset.category,
                   //   Asset.category1,
@@ -82,9 +83,9 @@ class BottomBarView extends GetView<BottomController> {
                   //   },
                   //   index: 1,
                   // ),
-                  if (myPref.role.val != "connector")
-                    GestureDetector(
-                      onTap: () {
+                  GestureDetector(
+                    onTap: () {
+                      if (myPref.role.val != "connector") {
                         if (commonController.hasProfileComplete.value) {
                           Get.toNamed(Routes.ADD_PRODUCT);
                         } else {
@@ -130,16 +131,41 @@ class BottomBarView extends GetView<BottomController> {
                             barrierDismissible: false,
                           );
                         }
-                      },
-                      behavior: HitTestBehavior.translucent,
-                      child: Center(
-                        child: SvgPicture.asset(
-                          Asset.center,
-                          height: 34,
-                          width: 34,
-                        ),
+                      } else {
+                        showModalBottomSheet(
+                          context: Get.context!,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) {
+                            return Container(
+                              width: 150,
+                              height: 316,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Center(
+                                child: Image.asset(
+                                  Asset.comingSoon,
+                                  height: 316,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                    behavior: HitTestBehavior.translucent,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        Asset.center,
+                        height: 34,
+                        width: 34,
                       ),
                     ),
+                  ),
                   bottomBar(
                     Asset.connection,
                     Asset.connection1,

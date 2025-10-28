@@ -119,7 +119,6 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                       EmailInputFormatter(),
                                     ],
                                     onChange: (value) {
-                                      // Clear previous error when user starts typing
                                       if (controller
                                           .emailError
                                           .value
@@ -148,34 +147,6 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     },
                                   ),
                                   Obx(() {
-                                    if (controller.isEmailValidating.value) {
-                                      return const Padding(
-                                        padding: EdgeInsets.only(top: 8.0),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 16,
-                                              height: 16,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                      Color
-                                                    >(MyColors.primary),
-                                              ),
-                                            ),
-                                            SizedBox(width: 8),
-                                            Text(
-                                              "Checking email availability...",
-                                              style: TextStyle(
-                                                color: MyColors.primary,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
                                     if (controller
                                         .emailError
                                         .value
@@ -478,7 +449,6 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                   SnackBars.errorSnackBar(content: controller.emailError.value);
                   return;
                 }
-
                 if (controller.isVerified.value) {
                   controller.openPhoneNumberBottomSheet(context);
                 } else {

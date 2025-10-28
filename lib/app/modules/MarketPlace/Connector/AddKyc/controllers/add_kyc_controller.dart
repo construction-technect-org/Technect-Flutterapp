@@ -176,9 +176,8 @@ class AddKycController extends GetxController {
           SnackBars.errorSnackBar(content: response.message);
         }
       } else {
-        final response = await kycService.connectorCreateProduct(
-          fields: fields,
-          files: files,
+        final response = await kycService.connectorAddKYC(
+
         );
         if (response.success) {
           final commonController = Get.find<CommonController>();

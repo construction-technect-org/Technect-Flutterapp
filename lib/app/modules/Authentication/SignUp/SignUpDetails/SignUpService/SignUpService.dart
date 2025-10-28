@@ -8,6 +8,7 @@ class SignUpService {
   Future<bool> checkAvailability({
     String? email,
     String? mobileNumber,
+    String? countryCode,
     String? gstNumber,
     String? countryCode,
   }) async {

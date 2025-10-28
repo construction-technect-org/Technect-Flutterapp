@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/add_kyc_screen.dart';
 import 'package:gap/gap.dart';
 
 class ConnectorInfoMetricsComponent extends StatelessWidget {
@@ -59,8 +60,24 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
         SizedBox(height: 1.h),
         if (connectorProfile != null &&
             (connectorProfile.aadhaarNumber != null ||
-                connectorProfile.panNumber != null))
+                connectorProfile.panNumber != null)) ...[
           _buildExistingKycDetails(connectorProfile),
+        ] else ...[
+          GestureDetector(
+            onTap: (){
+              Get.to(()=> AddKycScreen());
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                border: Border.all(color: MyColors.grayEA),
+                borderRadius: BorderRadius.circular(8)
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Center(child: Text("+ Add Kyc", style: MyTexts.bold16)),
+            ),
+          ),
+        ],
         SizedBox(height: 2.h),
       ],
     );
@@ -102,12 +119,11 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
               ),
               const Gap(6),
               buildRow(title: "Email ID", data: userData?.email ?? "-"),
-              const Gap(6),
-              buildRow(title: "GSTIN", data: userData?.gst ?? "-"),
               SizedBox(height: 0.5.h),
             ],
           );
         }),
+
       ),
     );
   }
