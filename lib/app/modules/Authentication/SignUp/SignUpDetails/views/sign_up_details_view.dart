@@ -99,6 +99,12 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                             ),
                             SizedBox(height: 1.8.h),
                             Focus(
+                              onFocusChange: (hasFocus) {
+                                if (!hasFocus) {
+                                  final email = controller.emailController.text;
+                                  controller.validateEmailAvailability(email);
+                                }
+                              },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
