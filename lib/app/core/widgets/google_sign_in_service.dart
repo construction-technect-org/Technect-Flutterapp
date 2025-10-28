@@ -1,64 +1,97 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 // Google Sign-In Service Class
 class GoogleSignInService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  static bool isInitialize = false;
-  static Future<void> initSignIn() async {
-    if (!isInitialize) {
-      await _googleSignIn.initialize(
-        serverClientId:
-        '484988555302-d91nev5jn5sit0qoe3oehpgpp58pl5mt.apps.googleusercontent.com',
-      );
-    }
-    isInitialize = true;
+  // static bool _isInitialized = false;
+
+  static Future<void> _initialize() async {
+    log('Initializing Google Sign-In with:');
+    log(
+      'Client ID: 102792963565-3ugsov23978rn4s16ugstv4favjdmacp.apps.googleusercontent.com',
+    );
+    log(
+      'Server Client ID: 102792963565-msilqo27io6lgd1q98t644gjedhfefai.apps.googleusercontent.com',
+    );
+
+    await _googleSignIn.initialize(
+      clientId:
+          '102792963565-3ugsov23978rn4s16ugstv4favjdmacp.apps.googleusercontent.com',
+      serverClientId:
+          '102792963565-msilqo27io6lgd1q98t644gjedhfefai.apps.googleusercontent.com',
+    );
+
+    log('Google Sign-In initialized successfully');
   }
-  // Sign in with Google
-  static Future<UserCredential?> signInWithGoogle() async {
+
+  static Future<User?> signInWithGoogle() async {
     try {
-      initSignIn();
+      await _initialize();
+
+      // Simple sign-out to clear any existing state
+      await _googleSignIn.signOut();
+
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-      final idToken = googleUser.authentication.idToken;
-      final authorizationClient = googleUser.authorizationClient;
-      GoogleSignInClientAuthorization? authorization = await authorizationClient
-          .authorizationForScopes(['email', 'profile']);
-      final accessToken = authorization?.accessToken;
-      if (accessToken == null) {
-        final authorization2 = await authorizationClient.authorizationForScopes(
-          ['email', 'profile'],
-        );
-        if (authorization2?.accessToken == null) {
-          throw FirebaseAuthException(code: "error", message: "error");
-        }
-        authorization = authorization2;
-      }
+      log('Google Sign-In user: $googleUser');
+      log('--------------------------------');
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      log('Google Sign-In auth: $googleAuth');
+      log('--------------------------------');
+
       final credential = GoogleAuthProvider.credential(
-        accessToken: accessToken,
-        idToken: idToken,
+        idToken: googleAuth.idToken,
       );
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
-      final User? user = userCredential.user;
-      if (user != null) {
-        print(user);
+      log('Google Sign-In credential: $credential');
+      log('--------------------------------');
+
+      final UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
+      log('Google Sign-In userCredential: $userCredential');
+      log('--------------------------------');
+
+      return userCredential.user;
+    } on GoogleSignInException catch (e) {
+      log('Google Sign-In error: ${e.code} - ${e.description}');
+      log('Error details: ${e.toString()}');
+      log('--------------------------------');
+
+      // Handle specific error cases
+      switch (e.code) {
+        case GoogleSignInExceptionCode.canceled:
+          log('User canceled the sign-in process');
+          log('This might be due to:');
+          log('1. SHA-1 fingerprint mismatch in Firebase Console');
+          log('2. Google account restrictions');
+          log('3. Device credential manager issues');
+          return null; // Return null instead of throwing
+        default:
+          log('Google Sign-In error: ${e.code}');
+          rethrow;
       }
-      return userCredential;
     } catch (e) {
-      print('Error: $e');
+      log('General Google Sign-In error: $e');
+      log('--------------------------------');
       rethrow;
     }
   }
+
   // Sign out
   static Future<void> signOut() async {
     try {
       await _googleSignIn.signOut();
       await _auth.signOut();
     } catch (e) {
-      print('Error signing out: $e');
-      throw e;
+      log('Error signing out: $e');
+      rethrow;
     }
   }
+
   // Get current user
   static User? getCurrentUser() {
     return _auth.currentUser;

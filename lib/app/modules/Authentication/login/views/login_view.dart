@@ -2,7 +2,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
-// import 'package:construction_technect/app/core/widgets/google_sign_in_service.dart';
+import 'package:construction_technect/app/core/widgets/google_sign_in_service.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:gap/gap.dart';
 
@@ -54,9 +54,7 @@ class LoginView extends GetView<LoginController> {
                         Center(
                           child: Text(
                             'India’s Fastest Growing\nConstruction Network',
-                            style: MyTexts.medium18.copyWith(
-                              color: Colors.black,
-                            ),
+                            style: MyTexts.medium18.copyWith(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -65,9 +63,7 @@ class LoginView extends GetView<LoginController> {
                           alignment: AlignmentGeometry.topLeft,
                           child: Text(
                             'Login',
-                            style: MyTexts.medium20.copyWith(
-                              color: Colors.black,
-                            ),
+                            style: MyTexts.medium20.copyWith(color: Colors.black),
                           ),
                         ),
                         const Gap(16),
@@ -103,8 +99,7 @@ class LoginView extends GetView<LoginController> {
                             },
                             showDivider: true,
                             suffixIcon: GestureDetector(
-                              onTap: () =>
-                                  controller.togglePasswordVisibility(),
+                              onTap: () => controller.togglePasswordVisibility(),
                               child: Icon(
                                 controller.isPasswordVisible.value
                                     ? Icons.visibility
@@ -131,9 +126,7 @@ class LoginView extends GetView<LoginController> {
                                       height: 18,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(3),
-                                        border: Border.all(
-                                          color: MyColors.grey,
-                                        ),
+                                        border: Border.all(color: MyColors.grey),
                                         color: controller.rememberMe.value
                                             ? MyColors.primary
                                             : Colors.transparent,
@@ -151,9 +144,7 @@ class LoginView extends GetView<LoginController> {
                                 const Gap(8),
                                 Text(
                                   'Remember Me',
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.gra54,
-                                  ),
+                                  style: MyTexts.medium14.copyWith(color: MyColors.gra54),
                                 ),
                               ],
                             ),
@@ -180,19 +171,12 @@ class LoginView extends GetView<LoginController> {
                                 ? null
                                 : () {
                                     controller.isValid.value = -1;
-                                    if (controller
-                                        .mobileController
-                                        .text
-                                        .isEmpty) {
+                                    if (controller.mobileController.text.isEmpty) {
                                       controller.isValid.value = 0;
                                     }
-                                    if (controller.formKey.currentState
-                                            ?.validate() ??
+                                    if (controller.formKey.currentState?.validate() ??
                                         false) {
-                                      if (controller
-                                          .mobileController
-                                          .text
-                                          .isEmpty) {
+                                      if (controller.mobileController.text.isEmpty) {
                                         controller.isValid.value = 0;
                                       } else {
                                         hideKeyboard();
@@ -248,9 +232,21 @@ class LoginView extends GetView<LoginController> {
                                 ),
                               ),
                               onTap: () async {
-                                // final userCredential = await signInWithGoogle();
-                                // print("Signed in: ${userCredential.user?.displayName}");
-
+                                try {
+                                  final user =
+                                      await GoogleSignInService.signInWithGoogle();
+                                  if (user != null) {
+                                    await controller.callSocialLoginAPI(user);
+                                  } else {
+                                    SnackBars.errorSnackBar(
+                                      content: 'Google Sign-In was cancelled by user',
+                                    );
+                                  }
+                                } catch (e) {
+                                  SnackBars.errorSnackBar(
+                                    content: 'Google Sign-In failed: $e',
+                                  );
+                                }
                               },
                             ),
                             SizedBox(width: 10.sw),

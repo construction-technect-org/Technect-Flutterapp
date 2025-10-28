@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/explore_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:gap/gap.dart';
 
 class Dashboard extends StatelessWidget {
@@ -70,14 +71,41 @@ class Dashboard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Obx(
-                                () => Text(
-                                  '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
-                                  style: MyTexts.medium16.copyWith(
-                                    color: MyColors.fontBlack,
-                                    fontFamily: MyTexts.SpaceGrotesk,
+                                () => GestureDetector(
+                                  onTap: () {
+                                    showSwitchAccountBottomSheet();
+                                  },
+                                  child: RichText(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    text: TextSpan(
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.custom('545454'),
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                          style: MyTexts.medium16.copyWith(
+                                            color: MyColors.fontBlack,
+                                            fontFamily: MyTexts.SpaceGrotesk,
+                                          ),
+                                        ),
+                                        const WidgetSpan(
+                                          alignment:
+                                              PlaceholderAlignment.middle,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 4),
+                                            child: Icon(
+                                              Icons.keyboard_arrow_down,
+                                              size: 16,
+                                              color: Colors.black54,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               GestureDetector(
@@ -220,33 +248,6 @@ class Dashboard extends StatelessWidget {
                               },
                             ),
                             SizedBox(height: 1.h),
-                            Text(
-                              "Statics",
-                              style: MyTexts.bold18.copyWith(
-                                color: MyColors.black,
-                              ),
-                            ),
-                            SizedBox(height: 1.h),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _buildStatCard(
-                                    "Merchant",
-                                    "32",
-                                    Asset.role1,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _buildStatCard(
-                                    "Connectors",
-                                    "22",
-                                    Asset.contractor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Gap(24),
                           ],
                         ),
                       ),

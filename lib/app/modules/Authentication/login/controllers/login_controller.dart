@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/services/LoginService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -59,17 +60,14 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
-        if ((loginResponse.data?.user?.marketPlaceRole??"").toLowerCase() !=
+        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
             "partner") {
           myPref.setRole("partner");
         } else {
           myPref.setRole("connector");
         }
         if (rememberMe.value) {
-          myPref.saveCredentials(
-            mobileController.text,
-            passwordController.text,
-          );
+          myPref.saveCredentials(mobileController.text, passwordController.text);
         } else {
           myPref.clearCredentials();
         }
@@ -85,14 +83,64 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(
-          content: loginResponse.message ?? 'Login failed',
-        );
+        SnackBars.errorSnackBar(content: loginResponse.message ?? 'Login failed');
       }
     } catch (e) {
       // Error is already shown by ApiManager
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> callSocialLoginAPI(User user) async {
+    try {
+      final loginService = LoginService();
+
+      final nameParts = loginService.extractNameParts(user.displayName ?? '');
+
+      final loginResponse = await loginService.socialLogin(
+        provider: 'google',
+        providerId: user.uid,
+        firstName: nameParts['firstName'] ?? '',
+        lastName: nameParts['lastName'] ?? '',
+        email: user.email ?? '',
+        profileImage: user.photoURL ?? '',
+        roleName: 'Merchant',
+      );
+      if (loginResponse.success == true) {
+        if (loginResponse.data?.token != null) {
+          myPref.setToken(loginResponse.data?.token ?? '');
+        }
+
+        if (loginResponse.data?.user != null) {
+          myPref.setUserModel(loginResponse.data?.user ?? UserModel());
+        }
+
+        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
+            "partner") {
+          myPref.setRole("partner");
+        } else {
+          myPref.setRole("connector");
+        }
+        if (rememberMe.value) {
+          myPref.saveCredentials(mobileController.text, passwordController.text);
+        } else {
+          myPref.clearCredentials();
+        }
+        Get.offAll(
+          () => SuccessScreen(
+            title: "Success!",
+            header: "Thanks for Connecting !",
+            onTap: () {
+              Get.toNamed(Routes.DASHBOARD);
+            },
+          ),
+        );
+      } else {
+        SnackBars.errorSnackBar(content: loginResponse.message ?? 'Login failed');
+      }
+    } catch (e) {
+      // No Error
     }
   }
 }

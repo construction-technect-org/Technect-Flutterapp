@@ -83,7 +83,7 @@ class SettingView extends GetView<SettingController> {
                                     controller.isNotification.value = val;
                                     controller.notificationToggle(
                                       isNotification:
-                                          controller.isNotification.value,
+                                      controller.isNotification.value,
                                     );
                                   },
                                 );
