@@ -95,9 +95,7 @@ class AccountScreen extends GetView<AccountController> {
                         icon: Asset.person,
                         title: "My Account",
                         onTap: () {
-
-                          if (myPref.role.val ==
-                              "connector".toLowerCase()) {
+                          if (myPref.role.val == "connector".toLowerCase()) {
                             Get.toNamed(Routes.CONNECTOR_PROFILE);
                           } else {
                             Get.toNamed(Routes.PROFILE);
@@ -133,9 +131,15 @@ class AccountScreen extends GetView<AccountController> {
                       const Gap(16),
                       CommonContainer(
                         icon: Asset.location,
-                        title: "Delivery location",
+                        title: myPref.role.val == "connector"
+                            ? "Delivery location"
+                            : "Manufacturer Address",
                         onTap: () {
-                          Get.toNamed(Routes.DELIVERY_LOCATION);
+                          if (myPref.role.val == "partner") {
+                            Get.toNamed(Routes.MANUFACTURER_ADDRESS);
+                          } else {
+                            Get.toNamed(Routes.DELIVERY_LOCATION);
+                          }
                         },
                       ),
                       const Gap(16),
