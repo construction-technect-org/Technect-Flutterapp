@@ -3,6 +3,7 @@ import 'package:construction_technect/app/modules/Authentication/Location/AddLoc
 import 'package:construction_technect/app/modules/Authentication/Location/Address/bindings/address_bindings.dart';
 import 'package:construction_technect/app/modules/Authentication/Location/Address/views/address_view.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/bindings/sign_up_details_binding.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/otp_verification_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPassword/bindings/sign_up_password_binding.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPassword/views/sign_up_password_view.dart';
@@ -434,6 +435,11 @@ class AppPages {
       name: Routes.ADD_MANUFACTURER_ADDRESS,
       page: () => AddManufacturerAddressView(),
       binding: AddManufacturerAddressBinding(),
+    ),
+    GetPage(
+      name: Routes.OTP_Verification,
+      page: () => const OtpVerificationScreen(),
+      binding: SignUpDetailsBinding(),
     ),
   ];
 }

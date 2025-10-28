@@ -99,6 +99,12 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                             ),
                             SizedBox(height: 1.8.h),
                             Focus(
+                              onFocusChange: (hasFocus) {
+                                if (!hasFocus) {
+                                  final email = controller.emailController.text;
+                                  controller.validateEmailAvailability(email);
+                                }
+                              },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -340,7 +346,8 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                       child: Align(
                                         alignment: AlignmentGeometry.topLeft,
                                         child: Text(
-                                          Get.find<SignUpRoleController>()
+                                          SignUpRoleController
+                                                      .to
                                                       .selectedRoleName
                                                       .value ==
                                                   "House-Owner"
@@ -358,7 +365,8 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          if (Get.find<SignUpRoleController>()
+                                          if (SignUpRoleController
+                                                  .to
                                                   .selectedRoleName
                                                   .value ==
                                               "House-Owner") ...[
@@ -429,6 +437,14 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
             onTap: () async {
               hideKeyboard();
               if (formKey.currentState!.validate()) {
+                // Check email availability if not already validated
+                if (controller.emailController.text.isNotEmpty) {
+                  await controller.validateEmailAvailability(
+                    controller.emailController.text,
+                  );
+                }
+
+                // Check if email has validation errors
                 if (controller.emailError.value.isNotEmpty) {
                   SnackBars.errorSnackBar(content: controller.emailError.value);
                   return;
