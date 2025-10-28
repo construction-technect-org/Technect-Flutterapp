@@ -10,7 +10,6 @@ class SignUpService {
     String? mobileNumber,
     String? countryCode,
     String? gstNumber,
-    String? countryCode,
   }) async {
     try {
       final response = await apiManager.postObject(
