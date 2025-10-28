@@ -458,6 +458,13 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
             onTap: () async {
               hideKeyboard();
               if (formKey.currentState!.validate()) {
+                // Check email availability if not already validated
+                if (controller.emailController.text.isNotEmpty) {
+                  await controller.validateEmailAvailability(
+                    controller.emailController.text,
+                  );
+                }
+
                 // Check if email has validation errors
                 if (controller.emailError.value.isNotEmpty) {
                   SnackBars.errorSnackBar(content: controller.emailError.value);
