@@ -146,6 +146,7 @@ class CommonTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool? obscureText;
   final String? Function(String?)? validator;
+
   final double? borderRadius;
   final double? suffixPadding;
   final Function(String?)? onChange;
@@ -209,9 +210,7 @@ class CommonTextField extends StatelessWidget {
                 children: [
                   Text(
                     headerText ?? "",
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.gra54,
-                    ),
+                    style: MyTexts.medium14.copyWith(color: MyColors.gra54),
                   ),
                   // if (isRed == true)
                   //   Text(
@@ -225,9 +224,7 @@ class CommonTextField extends StatelessWidget {
           ),
         TextFormField(
           textCapitalization: textCapitalization ?? TextCapitalization.none,
-          style: MyTexts.medium15.copyWith(
-            color: MyColors.primary,
-          ),
+          style: MyTexts.medium15.copyWith(color: MyColors.primary),
 
           autofillHints: autofillHints,
           onFieldSubmitted: onFieldSubmitted,
@@ -256,7 +253,9 @@ class CommonTextField extends StatelessWidget {
                 : null,
             suffixIcon: suffixIcon != null
                 ? Padding(
-                    padding:  EdgeInsets.symmetric(horizontal:suffixPadding?? 16),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: suffixPadding ?? 16,
+                    ),
                     child: suffixIcon,
                   )
                 : null,
@@ -269,7 +268,7 @@ class CommonTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color:MyColors.red33),
+              borderSide: const BorderSide(color: MyColors.red33),
               borderRadius: BorderRadius.circular(borderRadius ?? 10),
             ),
             errorBorder: OutlineInputBorder(
@@ -284,9 +283,7 @@ class CommonTextField extends StatelessWidget {
               horizontal: 12,
               vertical: 12,
             ),
-            errorStyle: MyTexts.medium13.copyWith(
-              color:MyColors.red33,
-            ),
+            errorStyle: MyTexts.medium13.copyWith(color: MyColors.red33),
             errorMaxLines: 2,
             hintText: hintText,
             hintStyle: MyTexts.medium13.copyWith(

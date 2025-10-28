@@ -99,42 +99,97 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                             ),
                             SizedBox(height: 1.8.h),
                             Focus(
-                              onFocusChange: (hasFocus) async {
-                                if (!hasFocus) {
-                                  final email = controller.emailController.text
-                                      .trim();
-                                  if (email.isNotEmpty &&
-                                      controller.isValidEmail(email)) {
-                                    final isAvailable = await controller
-                                        .signUpService
-                                        .checkAvailability(email: email);
-
-                                    if (!isAvailable) {
-                                      SnackBars.errorSnackBar(
-                                        content:
-                                            "This email is already registered",
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CommonTextField(
+                                    headerText: "Email ID",
+                                    hintText: "Enter your email address",
+                                    controller: controller.emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    autofillHints: const [AutofillHints.email],
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(50),
+                                      EmailInputFormatter(),
+                                    ],
+                                    onChange: (value) {
+                                      // Clear previous error when user starts typing
+                                      if (controller
+                                          .emailError
+                                          .value
+                                          .isNotEmpty) {
+                                        controller.emailError.value = "";
+                                      }
+                                    },
+                                    onFieldSubmitted: (value) {
+                                      if (value != null) {
+                                        controller.validateEmailAvailability(
+                                          value,
+                                        );
+                                      }
+                                    },
+                                    validator: (value) {
+                                      if (value == null ||
+                                          value.trim().isEmpty) {
+                                        return "Please enter email";
+                                      }
+                                      if (!RegExp(
+                                        r'^[A-Za-z0-9._%+-]*[A-Za-z]+[A-Za-z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                      ).hasMatch(value.trim())) {
+                                        return "Please enter a valid email address";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  Obx(() {
+                                    if (controller.isEmailValidating.value) {
+                                      return const Padding(
+                                        padding: EdgeInsets.only(top: 8.0),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 16,
+                                              height: 16,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(MyColors.primary),
+                                              ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "Checking email availability...",
+                                              style: TextStyle(
+                                                color: MyColors.primary,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     }
-                                  } else if (email.isNotEmpty &&
-                                      !controller.isValidEmail(email)) {
-                                    SnackBars.errorSnackBar(
-                                      content:
-                                          "Please enter a valid email address",
-                                    );
-                                  }
-                                }
-                              },
-                              child: CommonTextField(
-                                headerText: "Email ID",
-                                hintText: "Enter your email address",
-                                controller: controller.emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                autofillHints: const [AutofillHints.email],
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(50),
-                                  EmailInputFormatter(),
+                                    if (controller
+                                        .emailError
+                                        .value
+                                        .isNotEmpty) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                        ),
+                                        child: Text(
+                                          controller.emailError.value,
+                                          style: const TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  }),
                                 ],
-                                validator: validateEmail,
                               ),
                             ),
 
@@ -400,9 +455,15 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
           padding: const EdgeInsets.all(24.0),
           child: RoundedButton(
             buttonName: 'Proceed',
-            onTap: () {
+            onTap: () async {
               hideKeyboard();
               if (formKey.currentState!.validate()) {
+                // Check if email has validation errors
+                if (controller.emailError.value.isNotEmpty) {
+                  SnackBars.errorSnackBar(content: controller.emailError.value);
+                  return;
+                }
+
                 if (controller.isVerified.value) {
                   controller.openPhoneNumberBottomSheet(context);
                 } else {

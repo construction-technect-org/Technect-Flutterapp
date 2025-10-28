@@ -9,6 +9,8 @@ import 'package:gap/gap.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
+  static final SignUpDetailsController to = Get.find();
+
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final mobileNumberController = TextEditingController();
@@ -28,6 +30,10 @@ class SignUpDetailsController extends GetxController {
   RxBool isResendVisible = false.obs;
   RxBool isLoading = false.obs;
 
+  // Email validation state
+  RxString emailError = "".obs;
+  RxBool isEmailValidating = false.obs;
+
   void startTimer() {
     isResendVisible.value = false;
     countdownController.restart();
@@ -39,6 +45,34 @@ class SignUpDetailsController extends GetxController {
 
   bool isValidEmail(String email) {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  Future<void> validateEmailAvailability(String email) async {
+    if (email.trim().isEmpty) {
+      emailError.value = "";
+      return;
+    }
+
+    if (!isValidEmail(email.trim())) {
+      emailError.value = "";
+      return;
+    }
+
+    isEmailValidating.value = true;
+    emailError.value = "";
+
+    try {
+      final isAvailable = await signUpService.checkAvailability(email: email);
+      if (!isAvailable) {
+        emailError.value = "This email is already registered";
+      } else {
+        emailError.value = "";
+      }
+    } catch (e) {
+      emailError.value = "Error checking email availability";
+    } finally {
+      isEmailValidating.value = false;
+    }
   }
 
   Future<void> verifyMobileNumber() async {
