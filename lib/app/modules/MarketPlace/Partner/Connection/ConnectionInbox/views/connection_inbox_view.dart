@@ -113,7 +113,7 @@ class ConnectionInboxView extends StatelessWidget {
                                   controller.filteredConnections[index];
                               return InkWell(
                                 onTap: () {
-                                  Get.toNamed(Routes.CONNECTION_INBOX);
+                                  // Get.toNamed(Routes.CONNECTION_INBOX);
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(bottom: 12),

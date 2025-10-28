@@ -209,6 +209,7 @@ class ProductImage extends StatelessWidget {
   Widget _buildTopRow() => Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
+      if (myPref.role.val == "connector")
       if ((product.distanceKm ?? "").isNotEmpty)
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

@@ -709,6 +709,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         ],
                       ),
                     ),
+                    if (myPref.role.val == "connector")
                     Obx(() {
                       print("controller.product.distanceKm");
                       print(controller.product.distanceKm);

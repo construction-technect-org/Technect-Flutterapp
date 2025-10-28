@@ -554,7 +554,6 @@ class ProfileController extends GetxController {
       if (response['success'] == true) {
         try {
           Get.find<CommonController>().hasProfileComplete.value = true;
-
           if (isUpdate) {
             await homeController.fetchProfileData();
             Get.back();

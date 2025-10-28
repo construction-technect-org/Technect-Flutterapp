@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/controller/account_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/customer_support_view.dart';
@@ -96,21 +95,8 @@ class AccountScreen extends GetView<AccountController> {
                         icon: Asset.person,
                         title: "My Account",
                         onTap: () {
-                          print(Get.find<HomeController>()
-                              .profileData
-                              .value
-                              .data
-                              ?.user
-                              ?.marketPlaceRole ??
-                              "");
-                          if ((Get.find<HomeController>()
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.user
-                                          ?.marketPlaceRole ??
-                                      "")
-                                  .toLowerCase() ==
+
+                          if (myPref.role.val ==
                               "connector".toLowerCase()) {
                             Get.toNamed(Routes.CONNECTOR_PROFILE);
                           } else {
