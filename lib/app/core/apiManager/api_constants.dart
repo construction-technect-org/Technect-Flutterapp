@@ -87,6 +87,7 @@ class APIConstants {
   //Connector products
   static const String connectorProduct = "connector/product/products";
   static const String recentlyProduct = "connector/product/recently-launched";
+  static const String searchProduct = "connector/product/search";
   static const String productDetails = "connector/product/";
 
   // Connector SupportTicket API

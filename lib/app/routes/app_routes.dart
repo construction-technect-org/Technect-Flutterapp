@@ -74,6 +74,7 @@ abstract class Routes {
   static const ADD_DELIVERY_ADDRESS = _Paths.ADD_DELIVERY_ADDRESS;
   static const MANUFACTURER_ADDRESS = _Paths.MANUFACTURER_ADDRESS;
   static const ADD_MANUFACTURER_ADDRESS = _Paths.ADD_MANUFACTURER_ADDRESS;
+  static const SEARCH_PRODUCT = _Paths.SEARCH_PRODUCT;
   static const OTP_Verification = _Paths.OTP_VERIFICATION_SCREEN;
 }
 
@@ -151,4 +152,5 @@ abstract class _Paths {
   static const ADD_DELIVERY_ADDRESS = '/add-delivery-address';
   static const MANUFACTURER_ADDRESS = '/manufacturer-address';
   static const ADD_MANUFACTURER_ADDRESS = '/add-manufacturer-address';
+  static const SEARCH_PRODUCT = '/search-product';
 }

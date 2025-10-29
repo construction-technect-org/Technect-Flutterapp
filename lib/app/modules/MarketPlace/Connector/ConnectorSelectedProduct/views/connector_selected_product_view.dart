@@ -29,11 +29,7 @@ class SelectedProductView extends StatelessWidget {
           backgroundColor: MyColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: MyColors.fontBlack,
-              size: 20,
-            ),
+            icon: const Icon(Icons.arrow_back_ios, color: MyColors.fontBlack, size: 20),
             onPressed: () {
               if (controller.isProductView.value) {
                 controller.goBackToCategoryView();
@@ -42,6 +38,22 @@ class SelectedProductView extends StatelessWidget {
               }
             },
           ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.SEARCH_PRODUCT);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SvgPicture.asset(
+                  Asset.searchIcon,
+                  height: 20,
+                  width: 20,
+                  colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                ),
+              ),
+            ),
+          ],
         ),
         body: Obx(() {
           if (controller.isProductView.value) {
@@ -71,8 +83,7 @@ class SelectedProductView extends StatelessWidget {
             itemCount: subCategories.length,
             itemBuilder: (context, index) {
               final subCategory = subCategories[index];
-              final isSelected =
-                  controller.selectedSubCategoryId.value == subCategory.id;
+              final isSelected = controller.selectedSubCategoryId.value == subCategory.id;
 
               return GestureDetector(
                 onTap: () => controller.selectSubCategory(index),
@@ -91,9 +102,7 @@ class SelectedProductView extends StatelessWidget {
                               borderRadius: const BorderRadius.horizontal(
                                 right: Radius.circular(10),
                               ),
-                              color: isSelected
-                                  ? MyColors.primary
-                                  : Colors.transparent,
+                              color: isSelected ? MyColors.primary : Colors.transparent,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -116,9 +125,7 @@ class SelectedProductView extends StatelessWidget {
                                 alignment: Alignment.center,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                     child:
                                         subCategory.image != null &&
                                             (subCategory.image!.isNotEmpty)
@@ -127,18 +134,15 @@ class SelectedProductView extends StatelessWidget {
                                                 APIConstants.bucketUrl +
                                                 (subCategory.image ?? ''),
                                             fit: BoxFit.fill,
-                                            placeholder: (context, url) =>
-                                                const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
+                                            placeholder: (context, url) => const Center(
+                                              child: CircularProgressIndicator(),
+                                            ),
+                                            errorWidget: (context, url, error) =>
+                                                const Icon(
+                                                  Icons.category,
+                                                  color: MyColors.primary,
+                                                  size: 24,
                                                 ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(
-                                                      Icons.category,
-                                                      color: MyColors.primary,
-                                                      size: 24,
-                                                    ),
                                           )
                                         : const Icon(
                                             Icons.category,
@@ -163,11 +167,8 @@ class SelectedProductView extends StatelessWidget {
                 ),
               );
             },
-            separatorBuilder: (context, index) => const Divider(
-              height: 1,
-              color: Color(0xFFEAEAEA),
-              thickness: 1,
-            ),
+            separatorBuilder: (context, index) =>
+                const Divider(height: 1, color: Color(0xFFEAEAEA), thickness: 1),
           ),
         ),
         Expanded(
@@ -181,8 +182,7 @@ class SelectedProductView extends StatelessWidget {
                   border: Border(bottom: BorderSide(color: Color(0xFFE9ECEF))),
                 ),
                 child: Text(
-                  controller.selectedSubCategory.value?.name ??
-                      'Select a category',
+                  controller.selectedSubCategory.value?.name ?? 'Select a category',
                   style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
                 ),
               ),
@@ -280,11 +280,7 @@ class SelectedProductView extends StatelessWidget {
                           : null,
                     ),
                     child: product.image == null || product.image!.isEmpty
-                        ? const Icon(
-                            Icons.inventory_2,
-                            color: MyColors.primary,
-                            size: 24,
-                          )
+                        ? const Icon(Icons.inventory_2, color: MyColors.primary, size: 24)
                         : null,
                   ),
                 ),
@@ -322,8 +318,7 @@ class SelectedProductView extends StatelessWidget {
           child: ListView.separated(
             itemCount: controller.productCategories.value.products?.length ?? 0,
             itemBuilder: (context, index) {
-              final category =
-                  controller.productCategories.value.products?[index];
+              final category = controller.productCategories.value.products?[index];
 
               return GestureDetector(
                 onTap: () => controller.selectProductCategory(index),
@@ -344,10 +339,7 @@ class SelectedProductView extends StatelessWidget {
                                   right: Radius.circular(10),
                                 ),
                                 color:
-                                    controller
-                                            .selectedProductCategoryIndex
-                                            .value ==
-                                        index
+                                    controller.selectedProductCategoryIndex.value == index
                                     ? MyColors.primary
                                     : Colors.transparent,
                               ),
@@ -373,30 +365,24 @@ class SelectedProductView extends StatelessWidget {
                                 alignment: Alignment.center,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                     child:
                                         category?.image != null &&
-                                            (category?.image!.isNotEmpty ??
-                                                false)
+                                            (category?.image!.isNotEmpty ?? false)
                                         ? CachedNetworkImage(
                                             imageUrl:
                                                 APIConstants.bucketUrl +
                                                 (category?.image ?? ''),
                                             fit: BoxFit.fill,
-                                            placeholder: (context, url) =>
-                                                const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
+                                            placeholder: (context, url) => const Center(
+                                              child: CircularProgressIndicator(),
+                                            ),
+                                            errorWidget: (context, url, error) =>
+                                                const Icon(
+                                                  Icons.category,
+                                                  color: MyColors.primary,
+                                                  size: 24,
                                                 ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(
-                                                      Icons.category,
-                                                      color: MyColors.primary,
-                                                      size: 24,
-                                                    ),
                                           )
                                         : const Icon(
                                             Icons.category,
@@ -421,11 +407,8 @@ class SelectedProductView extends StatelessWidget {
                 ),
               );
             },
-            separatorBuilder: (context, index) => const Divider(
-              height: 1,
-              color: Color(0xFFEAEAEA),
-              thickness: 1,
-            ),
+            separatorBuilder: (context, index) =>
+                const Divider(height: 1, color: Color(0xFFEAEAEA), thickness: 1),
           ),
         ),
         // Right Side - Products
@@ -460,10 +443,7 @@ class SelectedProductView extends StatelessWidget {
                     ? const SizedBox()
                     : Container(
                         margin: const EdgeInsets.symmetric(horizontal: 16),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFAFBFF),
                           borderRadius: BorderRadius.circular(53),
@@ -473,9 +453,7 @@ class SelectedProductView extends StatelessWidget {
                           children: [
                             Text(
                               controller.selectedSort.value,
-                              style: MyTexts.medium13.copyWith(
-                                color: MyColors.gray2E,
-                              ),
+                              style: MyTexts.medium13.copyWith(color: MyColors.gray2E),
                             ),
                             const Gap(8),
                             GestureDetector(
@@ -495,19 +473,11 @@ class SelectedProductView extends StatelessWidget {
               }),
               const SizedBox(height: 10),
               if (controller.isLoadingProducts.value)
-                const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
-                )
+                const Expanded(child: Center(child: CircularProgressIndicator()))
               else
                 Expanded(
                   child:
-                      (controller
-                              .productListModel
-                              .value
-                              ?.data
-                              ?.products
-                              .isEmpty ??
-                          true)
+                      (controller.productListModel.value?.data?.products.isEmpty ?? true)
                       ? const Center(
                           child: Text(
                             'No products available',
@@ -516,20 +486,14 @@ class SelectedProductView extends StatelessWidget {
                         )
                       : GridView.builder(
                           padding: const EdgeInsets.all(16),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.5,
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 12,
-                              ),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.5,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
                           itemCount:
-                              controller
-                                  .productListModel
-                                  .value
-                                  ?.data
-                                  ?.products
-                                  .length ??
+                              controller.productListModel.value?.data?.products.length ??
                               0,
                           itemBuilder: (context, index) {
                             final item =
@@ -544,15 +508,11 @@ class SelectedProductView extends StatelessWidget {
                               isFromConnector: true,
                               product: item,
                               onApiCall: () async {
-                                await controller.fetchProductsFromApi(
-                                  isLoading: false,
-                                );
+                                await controller.fetchProductsFromApi(isLoading: false);
                               },
                               onWishlistTap: () async {
                                 await Get.find<HomeController>().wishListApi(
-                                  status: item.isInWishList == true
-                                      ? "remove"
-                                      : "add",
+                                  status: item.isInWishList == true ? "remove" : "add",
                                   mID: item.id ?? 0,
                                   onSuccess: () async {
                                     await controller.fetchProductsFromApi(
@@ -579,18 +539,16 @@ class SelectedProductView extends StatelessWidget {
 
                                   onTap: () async {
                                     Get.back();
-                                    await Get.find<HomeController>()
-                                        .addToConnectApi(
-                                          mID: item.merchantProfileId ?? 0,
-                                          message: '',
-                                          pID: item.id ?? 0,
-                                          onSuccess: () async {
-                                            await controller
-                                                .fetchProductsFromApi(
-                                                  isLoading: false,
-                                                );
-                                          },
+                                    await Get.find<HomeController>().addToConnectApi(
+                                      mID: item.merchantProfileId ?? 0,
+                                      message: '',
+                                      pID: item.id ?? 0,
+                                      onSuccess: () async {
+                                        await controller.fetchProductsFromApi(
+                                          isLoading: false,
                                         );
+                                      },
+                                    );
                                   },
                                 );
                               },
@@ -624,9 +582,7 @@ class SelectedProductView extends StatelessWidget {
           children: [
             Text(
               label,
-              style: MyTexts.medium14.copyWith(
-                color: MyColors.custom('2E2E2E'),
-              ),
+              style: MyTexts.medium14.copyWith(color: MyColors.custom('2E2E2E')),
             ),
             const SizedBox(width: 6),
             SvgPicture.asset(iconPath, width: 16, height: 16),

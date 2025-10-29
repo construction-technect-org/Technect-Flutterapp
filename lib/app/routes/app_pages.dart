@@ -42,6 +42,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/views/connector_selected_product_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/bindings/search_product_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/views/search_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/AddSupportTickets/views/connector_create_new_ticket.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/CustomerSupport/bindings/connector_create_new_ticket_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/bindings/connector_request_demo_binding.dart';
@@ -50,6 +52,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/SuppoerRequestFilter/views/connector_support_request_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/bindings/wish_list_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/views/add_manufacturer_address_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/binding/new_launch_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/view/new_launches_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
@@ -60,10 +64,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDe
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/views/add_delivery_address_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/bindings/delivery_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/bindings/manufacturer_address_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/views/manufacturer_address_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/views/add_manufacturer_address_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/views/notification_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
@@ -74,6 +74,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/views/report_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/bindings/setting_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/views/setting_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/bindings/manufacturer_address_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/views/manufacturer_address_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/bindings/faq_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/views/faq_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedBack/bindings/feedback_bindings.dart';
@@ -133,11 +135,7 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(
-      name: _Paths.LOGIN,
-      page: () => const LoginView(),
-      binding: LoginBinding(),
-    ),
+    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -158,11 +156,7 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(
-      name: _Paths.MAIN,
-      page: () => BottomBarView(),
-      binding: BottomBinding(),
-    ),
+    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
     GetPage(
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
@@ -200,16 +194,8 @@ class AppPages {
       page: () => RoleManagementView(),
       binding: RoleManagementBinding(),
     ),
-    GetPage(
-      name: _Paths.ADD_ROLE,
-      page: () => AddRoleView(),
-      binding: AddRoleBinding(),
-    ),
-    GetPage(
-      name: _Paths.ADD_TEAM,
-      page: () => AddTeamView(),
-      binding: AddTeamBinding(),
-    ),
+    GetPage(name: _Paths.ADD_ROLE, page: () => AddRoleView(), binding: AddRoleBinding()),
+    GetPage(name: _Paths.ADD_TEAM, page: () => AddTeamView(), binding: AddTeamBinding()),
     GetPage(
       name: _Paths.APPROVAL_INBOX,
       page: () => ApprovalInboxView(),
@@ -225,11 +211,7 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(
-      name: _Paths.FAQ,
-      page: () => const FaqScreen(),
-      binding: FAQBindings(),
-    ),
+    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
     GetPage(
       name: _Paths.TEAM_DETAILS,
       page: () => const TeamDetailsView(),
@@ -240,9 +222,7 @@ class AppPages {
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<ServiceManagementController>(
-          () => ServiceManagementController(),
-        );
+        Get.lazyPut<ServiceManagementController>(() => ServiceManagementController());
       }),
     ),
 
@@ -440,6 +420,11 @@ class AppPages {
       name: Routes.OTP_Verification,
       page: () => const OtpVerificationScreen(),
       binding: SignUpDetailsBinding(),
+    ),
+    GetPage(
+      name: Routes.SEARCH_PRODUCT,
+      page: () => SearchProductView(),
+      binding: SearchProductBinding(),
     ),
   ];
 }

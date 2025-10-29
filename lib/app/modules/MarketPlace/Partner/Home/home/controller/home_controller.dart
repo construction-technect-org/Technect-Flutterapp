@@ -353,8 +353,9 @@ class HomeController extends GetxController {
         pID: pID,
       );
       if (res.success == true) {
-        SnackBars.successSnackBar(content: "Request sent successfully!");
         if (onSuccess != null) onSuccess();
+        SnackBars.successSnackBar(content: "Request sent successfully!");
+
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Unable to send connection request.");

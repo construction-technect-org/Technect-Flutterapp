@@ -49,10 +49,13 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Get.back();
                 },
             behavior: HitTestBehavior.translucent,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: SvgPicture.asset(
-                Asset.back, color: MyColors.black, height: 24, width: 24,),
+            child: const Padding(
+              padding: EdgeInsets.only(left: 10.0),
+              child:Icon(
+                Icons.arrow_back_ios_new_sharp,
+                color: Colors.black,
+                size: 24,
+              ),
             ),
           )
           : Container(),
