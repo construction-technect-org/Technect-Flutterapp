@@ -12,6 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 
 class ProfileController extends GetxController {
+  static final ProfileController to = Get.find();
+
   final isSwitch = false.obs;
 
   @override
@@ -25,13 +27,13 @@ class ProfileController extends GetxController {
     businessModel.value.gstinNumber =
         Get.find<HomeController>().profileData.value.data?.user?.gst ?? "";
     if (merchantProfile != null) {
-      businessModel.value.website = merchantProfile?.website??"";
-      businessModel.value.businessEmail = merchantProfile?.businessEmail??"";
-      businessModel.value.businessContactNumber = merchantProfile
-          ?.businessContactNumber??"";
-      businessModel.value.businessName = merchantProfile?.businessName??"";
-      businessModel.value.gstinNumber = merchantProfile?.gstinNumber??"";
-      businessModel.value.image = merchantProfile?.merchantLogo??"";
+      businessModel.value.website = merchantProfile?.website ?? "";
+      businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
+      businessModel.value.businessContactNumber =
+          merchantProfile?.businessContactNumber ?? "";
+      businessModel.value.businessName = merchantProfile?.businessName ?? "";
+      businessModel.value.gstinNumber = merchantProfile?.gstinNumber ?? "";
+      businessModel.value.image = merchantProfile?.merchantLogo ?? "";
       print(businessHours);
 
       final timeFormatter = DateFormat.jm();

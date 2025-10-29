@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +23,9 @@ class EditProfileController extends GetxController {
   final titleKey = GlobalKey();
 
   final isLoading = false.obs;
+  // Email validation state
+  RxString emailError = "".obs;
+  RxBool isEmailValidating = false.obs;
 
   RxString businessHours = "".obs;
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
@@ -34,7 +38,8 @@ class EditProfileController extends GetxController {
   void _populateExistingData() {
     try {
       final homeController = Get.find<HomeController>();
-      final merchantProfile = homeController.profileData.value.data?.merchantProfile;
+      final merchantProfile =
+          homeController.profileData.value.data?.merchantProfile;
 
       if (merchantProfile != null) {
         // Populate text fields
@@ -43,7 +48,8 @@ class EditProfileController extends GetxController {
         gstNumberController.text = merchantProfile.gstinNumber ?? '';
         businessEmailController.text = merchantProfile.businessEmail ?? '';
         businessWebsiteController.text = merchantProfile.website ?? '';
-        businessContactController.text = merchantProfile.businessContactNumber ?? '';
+        businessContactController.text =
+            merchantProfile.businessContactNumber ?? '';
         yearsInBusinessController.text =
             merchantProfile.yearsInBusiness?.toString() ?? '';
         projectsCompletedController.text =
@@ -65,33 +71,17 @@ class EditProfileController extends GetxController {
           businessHoursData.value = hoursList;
         }
       }
+      final cont = ProfileController.to;
 
-      if ((Get.find<ProfileController>().businessModel.value.gstinNumber ?? "")
-          .isNotEmpty) {
-        businessNameController.text = Get.find<ProfileController>()
-            .businessModel
-            .value
-            .businessName??"";
-        gstNumberController.text = Get.find<ProfileController>()
-            .businessModel
-            .value
-            .gstinNumber
-            ??"";
-        businessEmailController.text = Get.find<ProfileController>()
-            .businessModel
-            .value
-            .businessEmail
-            ??"";
-        businessWebsiteController.text = Get.find<ProfileController>()
-            .businessModel
-            .value
-            .website
-            ??"";
-        businessContactController.text = Get.find<ProfileController>()
-            .businessModel
-            .value
-            .businessContactNumber
-            ??"";
+      if ((cont.businessModel.value.gstinNumber ?? "").isNotEmpty) {
+        businessNameController.text =
+            cont.businessModel.value.businessName ?? "";
+        gstNumberController.text = cont.businessModel.value.gstinNumber ?? "";
+        businessEmailController.text =
+            cont.businessModel.value.businessEmail ?? "";
+        businessWebsiteController.text = cont.businessModel.value.website ?? "";
+        businessContactController.text =
+            cont.businessModel.value.businessContactNumber ?? "";
       }
     } catch (e) {
       Get.printError(info: 'Error populating existing data: $e');
@@ -106,7 +96,6 @@ class EditProfileController extends GetxController {
     businessHoursData.value = data;
   }
 
-
   void nextStep() {
     Get.find<ProfileController>().businessModel.value = BusinessModel(
       businessContactNumber: businessContactController.text,
@@ -115,7 +104,9 @@ class EditProfileController extends GetxController {
       gstinNumber: gstNumberController.text,
       website: businessWebsiteController.text,
       address: addressContoller.text,
-      image: selectedImage.value!=null? selectedImage.value?.path:image.value,
+      image: selectedImage.value != null
+          ? selectedImage.value?.path
+          : image.value,
     );
     Get.find<ProfileController>().businessModel.refresh();
     Get.back();
@@ -124,6 +115,7 @@ class EditProfileController extends GetxController {
   void updateProfile() {
     nextStep();
   }
+
   final ImagePicker _picker = ImagePicker();
   RxString image = "".obs;
 
@@ -164,6 +156,7 @@ class EditProfileController extends GetxController {
       ),
     );
   }
+
   Rx<File?> selectedImage = Rx<File?>(null);
 
   Future<void> _pickImage(ImageSource source) async {
@@ -175,4 +168,9 @@ class EditProfileController extends GetxController {
     selectedImage.value = File(compressedFile.path);
   }
 
+  Future<void> validateEmailAvailability(String email) async {
+    isEmailValidating.value = true;
+    emailError.value = await Validate().validateEmail(email) ?? "";
+    isEmailValidating.value = false;
+  }
 }

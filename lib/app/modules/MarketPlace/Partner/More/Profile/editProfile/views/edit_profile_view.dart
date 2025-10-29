@@ -211,13 +211,33 @@ class EditProfileView extends GetView<EditProfileController> {
             validator: ValidationUtils.validateWebsiteUrl,
           ),
           SizedBox(height: 2.h),
-          CommonTextField(
-            headerText: "Business Email",
-            hintText: "adc12@business.com",
-            controller: controller.businessEmailController,
-            keyboardType: TextInputType.emailAddress,
-            validator: ValidationUtils.validateBusinessEmail,
+          Focus(
+            onFocusChange: (hasFocus) {
+              if (!hasFocus) {
+                final email = controller.businessEmailController.text;
+                controller.validateEmailAvailability(email);
+              }
+            },
+            child: CommonTextField(
+              headerText: "Business Email",
+              hintText: "adc12@business.com",
+              controller: controller.businessEmailController,
+              keyboardType: TextInputType.emailAddress,
+              // validator: ValidationUtils.validateBusinessEmail,
+            ),
           ),
+          Obx(() {
+            if (controller.emailError.value.isNotEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  controller.emailError.value,
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
           SizedBox(height: 2.h),
           CommonTextField(
             hintText: "xxxxxxxxxxxxxx",
