@@ -40,7 +40,6 @@ class HomeController extends GetxController {
 
   Future<void> _initializeHomeData() async {
     // _loadCachedData();
-
     await fetchProfileData();
   }
 
@@ -308,7 +307,7 @@ class HomeController extends GetxController {
 
   final features = [
     {"title": "Marketplace", "icon": Asset.role1, "available": true},
-    {"title": "CRM", "icon": Asset.crm, "available": true},
+    {"title": "CRM", "icon": Asset.crm, "available": false},
     {"title": "ERP", "icon": Asset.erp, "available": false},
     {"title": "Project Management", "icon": Asset.project, "available": false},
     {"title": "HRMS", "icon": Asset.hrms, "available": false},

@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/explore_view.dart';
 import 'package:gap/gap.dart';
 
 class MenuView extends StatelessWidget {
@@ -73,7 +74,7 @@ class MenuView extends StatelessWidget {
                     Get.toNamed(Routes.APPROVAL_INBOX);
                   },
                 ),
-              ]else...[
+              ] else ...[
                 Gap(1.h),
                 CommonContainer(
                   icon: Asset.wishlist,
@@ -148,6 +149,14 @@ class MenuView extends StatelessWidget {
                 title: "Refer & Earn",
                 onTap: () {
                   Get.toNamed(Routes.REFER_EARN);
+                },
+              ),
+              const Gap(16),
+              CommonContainer(
+                icon: Asset.info,
+                title: "Explore Plan",
+                onTap: () {
+                  Get.to(() => const ExploreView());
                 },
               ),
               const Gap(16),

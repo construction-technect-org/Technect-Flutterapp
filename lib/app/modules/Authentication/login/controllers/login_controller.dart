@@ -76,9 +76,7 @@ class LoginController extends GetxController {
             title: "Success!",
             header: "Thanks for Connecting !",
             onTap: () {
-              Get.toNamed(Routes.DASHBOARD);
-
-              // Get.offAllNamed(Routes.MAIN);
+              Get.offAllNamed(Routes.MAIN);
             },
           ),
         );
@@ -132,7 +130,7 @@ class LoginController extends GetxController {
             title: "Success!",
             header: "Thanks for Connecting !",
             onTap: () {
-              Get.toNamed(Routes.DASHBOARD);
+              Get.offAllNamed(Routes.MAIN);
             },
           ),
         );

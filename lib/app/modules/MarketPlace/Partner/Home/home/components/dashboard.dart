@@ -1,13 +1,12 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/explore_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:gap/gap.dart';
 
 class Dashboard extends StatelessWidget {
-  final HomeController controller = Get.put<HomeController>(HomeController());
+  final HomeController controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -72,43 +71,23 @@ class Dashboard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Obx(
-                                () => GestureDetector(
-                                  onTap: () {
-                                    Get.put<SwitchAccountController>(
-                                      SwitchAccountController(),
-                                    );
-                                    showSwitchAccountBottomSheet();
-                                  },
-                                  child: RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    text: TextSpan(
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.custom('545454'),
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
-                                          style: MyTexts.medium16.copyWith(
-                                            color: MyColors.fontBlack,
-                                            fontFamily: MyTexts.SpaceGrotesk,
-                                          ),
-                                        ),
-                                        const WidgetSpan(
-                                          alignment:
-                                              PlaceholderAlignment.middle,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(left: 4),
-                                            child: Icon(
-                                              Icons.keyboard_arrow_down,
-                                              size: 16,
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                () => RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  text: TextSpan(
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.custom('545454'),
                                     ),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                        style: MyTexts.medium16.copyWith(
+                                          color: MyColors.fontBlack,
+                                          fontFamily: MyTexts.SpaceGrotesk,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -116,7 +95,6 @@ class Dashboard extends StatelessWidget {
                                 onTap: () {
                                   if (myPref.role.val == "partner") {
                                     Get.toNamed(Routes.MANUFACTURER_ADDRESS);
-
                                   } else {
                                     Get.toNamed(Routes.DELIVERY_LOCATION);
                                   }
@@ -173,9 +151,24 @@ class Dashboard extends StatelessWidget {
                         const Gap(10),
                         GestureDetector(
                           onTap: () {
-                            Get.to(() => const ExploreView());
+                            Get.put<SwitchAccountController>(
+                              SwitchAccountController(),
+                            );
+                            showSwitchAccountBottomSheet();
+                            // Get.to(() => const ExploreView());
                           },
-                          child: Image.asset(Asset.explore, width: 18.w),
+                          child: Stack(
+                            alignment: AlignmentGeometry.center,
+                            children: [
+                              Image.asset(Asset.explore, width: 18.w),
+                              Text(
+                                "Switch",
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         const Gap(10),
                         GestureDetector(
@@ -235,7 +228,6 @@ class Dashboard extends StatelessWidget {
                                       ),
                                   itemBuilder: (context, index) {
                                     final item = controller.features[index];
-
                                     return Obx(() {
                                       final isSelected =
                                           controller.selectedIndex.value ==
@@ -245,7 +237,7 @@ class Dashboard extends StatelessWidget {
                                         item: item,
                                         itemWidth: itemWidth,
                                         onTap: () {
-                                          if (index == 0 || index == 1) {
+                                          if (index == 0) {
                                             controller.selectedIndex.value =
                                                 index;
                                           }

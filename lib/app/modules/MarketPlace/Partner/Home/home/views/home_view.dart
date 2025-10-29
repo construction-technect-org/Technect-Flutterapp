@@ -5,8 +5,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:gap/gap.dart';
 
 class HomeView extends StatelessWidget {
-  final HomeController controller = Get.find<HomeController>();
   final CommonController commonController = Get.find();
+  final HomeController controller = Get.put<HomeController>(HomeController());
 
   @override
   Widget build(BuildContext context) {
