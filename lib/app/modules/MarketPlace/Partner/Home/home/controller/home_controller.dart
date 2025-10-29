@@ -40,7 +40,6 @@ class HomeController extends GetxController {
 
   Future<void> _initializeHomeData() async {
     // _loadCachedData();
-
     await fetchProfileData();
   }
 
@@ -137,17 +136,33 @@ class HomeController extends GetxController {
   // }
 
   RxString getCurrentAddress() {
-    if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
-      final int index =
-          profileData.value.data?.siteLocations?.indexWhere(
-            (e) => e.isDefault == true,
-          ) ??
-          0;
-      final address = profileData.value.data?.siteLocations?[index];
+    if(myPref.role.val=="partner"){
+      if (profileData.value.data?.addresses?.isNotEmpty == true) {
+        final int index =
+            profileData.value.data?.addresses?.indexWhere(
+                  (e) => e.isDefault == true,
+            ) ??
+                0;
+        final address = profileData.value.data?.addresses?[index];
 
-      return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+        return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+      }
+      return 'No address found'.obs;
     }
-    return 'No address found'.obs;
+    else{
+      if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
+        final int index =
+            profileData.value.data?.siteLocations?.indexWhere(
+                  (e) => e.isDefault == true,
+            ) ??
+                0;
+        final address = profileData.value.data?.siteLocations?[index];
+
+        return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+      }
+      return 'No address found'.obs;
+    }
+
   }
 
   Future<void> fetchProfileData() async {
@@ -164,6 +179,9 @@ class HomeController extends GetxController {
         if ((profileData.value.data?.merchantProfile?.website ?? "")
             .isNotEmpty) {
           Get.find<CommonController>().hasProfileComplete.value = true;
+        }
+        else{
+          Get.find<CommonController>().hasProfileComplete.value = false;
         }
         _loadTeamFromStorage();
       }
@@ -289,7 +307,7 @@ class HomeController extends GetxController {
 
   final features = [
     {"title": "Marketplace", "icon": Asset.role1, "available": true},
-    {"title": "CRM", "icon": Asset.crm, "available": true},
+    {"title": "CRM", "icon": Asset.crm, "available": false},
     {"title": "ERP", "icon": Asset.erp, "available": false},
     {"title": "Project Management", "icon": Asset.project, "available": false},
     {"title": "HRMS", "icon": Asset.hrms, "available": false},

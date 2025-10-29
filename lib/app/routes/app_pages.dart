@@ -60,6 +60,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDe
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/views/add_delivery_address_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/bindings/delivery_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/bindings/manufacturer_address_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/views/manufacturer_address_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/views/add_manufacturer_address_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/bindings/notification_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/views/notification_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/bindings/approval_Inbox_bindings.dart';
@@ -421,6 +425,16 @@ class AppPages {
       name: Routes.ADD_DELIVERY_ADDRESS,
       page: () => const AddDeliveryAddressView(),
       binding: AddDeliveryAddressBinding(),
+    ),
+    GetPage(
+      name: Routes.MANUFACTURER_ADDRESS,
+      page: () => ManufacturerAddressView(),
+      binding: ManufacturerAddressBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_MANUFACTURER_ADDRESS,
+      page: () => AddManufacturerAddressView(),
+      binding: AddManufacturerAddressBinding(),
     ),
     GetPage(
       name: Routes.OTP_Verification,

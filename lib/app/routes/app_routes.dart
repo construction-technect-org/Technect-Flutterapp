@@ -72,6 +72,8 @@ abstract class Routes {
   static const CART_LIST = _Paths.CART_LIST;
   static const DELIVERY_LOCATION = _Paths.DELIVERY_LOCATION;
   static const ADD_DELIVERY_ADDRESS = _Paths.ADD_DELIVERY_ADDRESS;
+  static const MANUFACTURER_ADDRESS = _Paths.MANUFACTURER_ADDRESS;
+  static const ADD_MANUFACTURER_ADDRESS = _Paths.ADD_MANUFACTURER_ADDRESS;
   static const OTP_Verification = _Paths.OTP_VERIFICATION_SCREEN;
 }
 
@@ -147,4 +149,6 @@ abstract class _Paths {
   static const CART_LIST = '/cart-list';
   static const DELIVERY_LOCATION = '/delivery-location';
   static const ADD_DELIVERY_ADDRESS = '/add-delivery-address';
+  static const MANUFACTURER_ADDRESS = '/manufacturer-address';
+  static const ADD_MANUFACTURER_ADDRESS = '/add-manufacturer-address';
 }

@@ -19,6 +19,7 @@ class Data {
   MerchantProfile? merchantProfile;
   ConnectorProfile? connectorProfile;
   Referral? referral;
+  List<ManufacturerAddress>? addresses;
   List<SiteLocation>? siteLocations;
 
   Data({
@@ -27,6 +28,7 @@ class Data {
     this.connectorProfile,
     this.referral,
     this.siteLocations,
+    this.addresses,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -45,6 +47,11 @@ class Data {
         : List<SiteLocation>.from(
             json["siteLocations"]!.map((x) => SiteLocation.fromJson(x)),
           ),
+    addresses: json["addresses"] == null
+        ? []
+        : List<ManufacturerAddress>.from(
+            json["addresses"]!.map((x) => ManufacturerAddress.fromJson(x)),
+          ),
   );
 
   Map<String, dynamic> toJson() => {
@@ -55,6 +62,9 @@ class Data {
     "siteLocations": siteLocations == null
         ? []
         : List<dynamic>.from(siteLocations!.map((x) => x.toJson())),
+    "addresses": addresses == null
+        ? []
+        : List<dynamic>.from(addresses!.map((x) => x.toJson())),
   };
 }
 
@@ -505,6 +515,55 @@ class SiteLocation {
     "longitude": longitude,
     "isDefault": isDefault,
     "isActive": isActive,
+    "createdAt": createdAt,
+    "updatedAt": updatedAt,
+  };
+}
+
+class ManufacturerAddress {
+  int? id;
+  String? addressName;
+  String? fullAddress;
+  String? landmark;
+  String? latitude;
+  String? longitude;
+  bool? isDefault;
+  String? createdAt;
+  String? updatedAt;
+
+  ManufacturerAddress({
+    this.id,
+    this.addressName,
+    this.fullAddress,
+    this.landmark,
+    this.latitude,
+    this.longitude,
+    this.isDefault,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory ManufacturerAddress.fromJson(Map<String, dynamic> json) =>
+      ManufacturerAddress(
+        id: json["id"],
+        addressName: json["addressName"],
+        fullAddress: json["fullAddress"],
+        landmark: json["landmark"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        isDefault: json["isDefault"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "addressName": addressName,
+    "fullAddress": fullAddress,
+    "landmark": landmark,
+    "latitude": latitude,
+    "longitude": longitude,
+    "isDefault": isDefault,
     "createdAt": createdAt,
     "updatedAt": updatedAt,
   };

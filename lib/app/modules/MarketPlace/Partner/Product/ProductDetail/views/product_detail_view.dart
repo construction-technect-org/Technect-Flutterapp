@@ -53,188 +53,196 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           return (controller.isFromAdd.value == false &&
                   controller.isFromConnector.value == false)
               ? const SizedBox()
-              : (myPref.role.val == "partner")
-              ? const SizedBox()
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    if (!(controller.isFromAdd.value == true &&
-                        controller.isFromConnector.value == false))
-                      const Gap(16),
-                    if (!(controller.isFromAdd.value == true &&
-                        controller.isFromConnector.value == false))
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "Explore More!",
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.grayA5,
+                    if (myPref.role.val == "connector")
+                      if (!(controller.isFromAdd.value == true &&
+                          controller.isFromConnector.value == false))
+                        const Gap(16),
+                    if (myPref.role.val == "connector")
+                      if (!(controller.isFromAdd.value == true &&
+                          controller.isFromConnector.value == false))
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Explore More!",
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.grayA5,
+                                ),
                               ),
-                            ),
-                            const Gap(8),
-                            Text(
-                              "View Categories >",
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
+                              const Gap(8),
+                              Text(
+                                "View Categories >",
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.gray54,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
+
                     Obx(() {
                       final product = controller.product;
                       if (controller.isFromAdd.value == true &&
                           controller.isFromConnector.value == false) {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            width: MediaQuery.of(context).size.width / 1.15,
-                            horizontalPadding: 20,
-                            buttonName: 'Submit',
-                            onTap:
-                                Get.find<AddProductController>().isLoading.value
-                                ? null
-                                : Get.find<AddProductController>()
-                                      .createProduct,
-                          ),
-                        );
-                      }
-
-                      if (product.outOfStock == true ||
-                          (product.stockQty ?? 0) <= 0) {
-                        if (product.isNotify == true) {
+                        if (myPref.role.val == "partner") {
                           return Padding(
                             padding: const EdgeInsets.all(24.0),
                             child: RoundedButton(
+                              width: MediaQuery.of(context).size.width / 1.15,
                               horizontalPadding: 20,
-                              buttonName: 'Notified',
-                              color: Colors.grey[400],
-                              fontColor: Colors.white,
-                              borderRadius: 8,
-                              fontSize: 16.sp,
-                              style: MyTexts.medium16.copyWith(
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              horizontalPadding: 20,
-                              buttonName: 'Notify Me',
-                              color: MyColors.primary,
-                              fontColor: Colors.white,
-                              borderRadius: 8,
-                              style: MyTexts.medium16.copyWith(
-                                color: Colors.white,
-                              ),
-                              onTap: () async {
-                                await Get.find<HomeController>().notifyMeApi(
-                                  mID: product.id ?? 0,
-                                  onSuccess: () {
-                                    controller.onApiCall?.call();
-                                  },
-                                );
-                                Get.back();
-                              },
+                              buttonName: 'Submit',
+                              onTap:
+                                  Get.find<AddProductController>()
+                                      .isLoading
+                                      .value
+                                  ? null
+                                  : Get.find<AddProductController>()
+                                        .createProduct,
                             ),
                           );
                         }
                       }
-
-                      // CASE 3: Handle Connection Status Logic
-                      final String? connectionStatus = product.status;
-
-                      print(connectionStatus);
-                      if ((connectionStatus ?? "").isEmpty) {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            horizontalPadding: 20,
-                            buttonName: 'Connect',
-                            color: MyColors.primary,
-                            style: MyTexts.medium16.copyWith(
-                              color: Colors.white,
-                            ),
-                            onTap: () {
-                              ConnectionDialogs.showSendConnectionDialog(
-                                context,
-                                controller.product,
-                                isFromIn: true,
+                      if (myPref.role.val == "connector") {
+                        if (product.outOfStock == true ||
+                            (product.stockQty ?? 0) <= 0) {
+                          if (product.isNotify == true) {
+                            return Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: RoundedButton(
+                                horizontalPadding: 20,
+                                buttonName: 'Notified',
+                                color: Colors.grey[400],
+                                fontColor: Colors.white,
+                                borderRadius: 8,
+                                fontSize: 16.sp,
+                                style: MyTexts.medium16.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: RoundedButton(
+                                horizontalPadding: 20,
+                                buttonName: 'Notify Me',
+                                color: MyColors.primary,
+                                fontColor: Colors.white,
+                                borderRadius: 8,
+                                style: MyTexts.medium16.copyWith(
+                                  color: Colors.white,
+                                ),
                                 onTap: () async {
+                                  await Get.find<HomeController>().notifyMeApi(
+                                    mID: product.id ?? 0,
+                                    onSuccess: () {
+                                      controller.onApiCall?.call();
+                                    },
+                                  );
                                   Get.back();
-                                  await Get.find<HomeController>()
-                                      .addToConnectApi(
-                                        mID:
-                                            controller
-                                                .product
-                                                .merchantProfileId ??
-                                            0,
-                                        message: '',
-                                        pID: controller.product.id ?? 0,
-                                        onSuccess: () {
-                                          controller.onApiCall?.call();
-                                          Get.back();
-                                        },
-                                      );
                                 },
-                              );
-                            },
-                          ),
-                        );
-                      } else if (connectionStatus == 'pending') {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            color: MyColors.pendingBtn,
-                            horizontalPadding: 20,
-                            buttonName: 'Pending',
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
+                              ),
+                            );
+                          }
+                        }
+
+                        // CASE 3: Handle Connection Status Logic
+                        final String? connectionStatus = product.status;
+
+                        print(connectionStatus);
+                        if ((connectionStatus ?? "").isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              horizontalPadding: 20,
+                              buttonName: 'Connect',
+                              color: MyColors.primary,
+                              style: MyTexts.medium16.copyWith(
+                                color: Colors.white,
+                              ),
+                              onTap: () {
+                                ConnectionDialogs.showSendConnectionDialog(
+                                  context,
+                                  controller.product,
+                                  isFromIn: true,
+                                  onTap: () async {
+                                    Get.back();
+                                    await Get.find<HomeController>()
+                                        .addToConnectApi(
+                                          mID:
+                                              controller
+                                                  .product
+                                                  .merchantProfileId ??
+                                              0,
+                                          message: '',
+                                          pID: controller.product.id ?? 0,
+                                          onSuccess: () {
+                                            controller.onApiCall?.call();
+                                            Get.back();
+                                          },
+                                        );
+                                  },
+                                );
+                              },
                             ),
-                          ),
-                        );
-                      } else if (connectionStatus == 'accepted') {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            horizontalPadding: 20,
-                            color: MyColors.grayEA,
-                            buttonName: 'Connected',
-                            borderRadius: 8,
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
+                          );
+                        } else if (connectionStatus == 'pending') {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              color: MyColors.pendingBtn,
+                              horizontalPadding: 20,
+                              buttonName: 'Pending',
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
+                              ),
                             ),
-                          ),
-                        );
-                      } else if (connectionStatus == 'rejected') {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            horizontalPadding: 20,
-                            color: MyColors.rejectBtn,
-                            buttonName: 'Rejected',
-                            borderRadius: 8,
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
+                          );
+                        } else if (connectionStatus == 'accepted') {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              horizontalPadding: 20,
+                              color: MyColors.grayEA,
+                              buttonName: 'Connected',
+                              borderRadius: 8,
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        } else if (connectionStatus == 'rejected') {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              horizontalPadding: 20,
+                              color: MyColors.rejectBtn,
+                              buttonName: 'Rejected',
+                              borderRadius: 8,
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
+                              ),
+                            ),
+                          );
+                        } else {
+                          // Default fallback (in case of any unknown status)
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              horizontalPadding: 20,
+                              color: MyColors.grey,
+                              buttonName: connectionStatus ?? '',
+                              fontColor: Colors.white,
+                            ),
+                          );
+                        }
                       } else {
-                        // Default fallback (in case of any unknown status)
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            horizontalPadding: 20,
-                            color: MyColors.grey,
-                            buttonName: connectionStatus ?? '',
-                            fontColor: Colors.white,
-                          ),
-                        );
+                        return const SizedBox();
                       }
                     }),
                   ],
@@ -710,74 +718,76 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ),
                     ),
                     if (myPref.role.val == "connector")
-                    Obx(() {
-                      print("controller.product.distanceKm");
-                      print(controller.product.distanceKm);
-                      if (controller.isFromAdd.value == false &&
-                          controller.isFromConnector.value == false) {
-                        return const SizedBox();
-                      } else {
-                        return !(controller.isFromAdd.value == true &&
-                                controller.isFromConnector.value == false)
-                            ? Container(
-                                margin: EdgeInsets.only(top: 2.h),
-                                width: double.infinity,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                  horizontal: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(
-                                    color: MyColors.brightGray,
+                      Obx(() {
+                        print("controller.product.distanceKm");
+                        print(controller.product.distanceKm);
+                        if (controller.isFromAdd.value == false &&
+                            controller.isFromConnector.value == false) {
+                          return const SizedBox();
+                        } else {
+                          return !(controller.isFromAdd.value == true &&
+                                  controller.isFromConnector.value == false)
+                              ? Container(
+                                  margin: EdgeInsets.only(top: 2.h),
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                    horizontal: 12,
                                   ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Delivery address",
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.gray54,
-                                      ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                      color: MyColors.brightGray,
                                     ),
-                                    const Gap(12),
-                                    Text(
-                                      "Deliver to",
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.grayA5,
-                                      ),
-                                    ),
-                                    const Gap(8),
-
-                                    Text(
-                                      "Location : ${homeController.getCurrentAddress().value}",
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.gray54,
-                                      ),
-                                    ),
-                                    const Gap(12),
-                                    Text(
-                                      "Manufacturing Unit",
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.grayA5,
-                                      ),
-                                    ),
-                                    const Gap(8),
-                                    if ((controller.product.distanceKm ?? "") !=
-                                        "")
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
                                       Text(
-                                        "Near by : ${controller.product.distanceKm != null ? double.parse(controller.product.distanceKm.toString()).toStringAsFixed(2) : "-"} km",
+                                        "Delivery address",
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.gray54,
                                         ),
                                       ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox();
-                      }
-                    }),
+                                      const Gap(12),
+                                      Text(
+                                        "Deliver to",
+                                        style: MyTexts.medium14.copyWith(
+                                          color: MyColors.grayA5,
+                                        ),
+                                      ),
+                                      const Gap(8),
+
+                                      Text(
+                                        "Location : ${homeController.getCurrentAddress().value}",
+                                        style: MyTexts.medium16.copyWith(
+                                          color: MyColors.gray54,
+                                        ),
+                                      ),
+                                      const Gap(12),
+                                      Text(
+                                        "Manufacturing Unit",
+                                        style: MyTexts.medium14.copyWith(
+                                          color: MyColors.grayA5,
+                                        ),
+                                      ),
+                                      const Gap(8),
+                                      if ((controller.product.distanceKm ??
+                                              "") !=
+                                          "")
+                                        Text(
+                                          "Near by : ${controller.product.distanceKm != null ? double.parse(controller.product.distanceKm.toString()).toStringAsFixed(2) : "-"} km",
+                                          style: MyTexts.medium16.copyWith(
+                                            color: MyColors.gray54,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox();
+                        }
+                      }),
                     SizedBox(height: 1.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

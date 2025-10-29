@@ -11,7 +11,11 @@ class DashboardController extends GetxController {
     {"title": "ERP", "icon": Asset.erp, "available": false},
     {"title": "Project Management", "icon": Asset.project, "available": false},
     {"title": "HRMS", "icon": Asset.hrms, "available": false},
-    {"title": "Portfolio Management", "icon": Asset.portfolio, "available": false},
+    {
+      "title": "Portfolio Management",
+      "icon": Asset.portfolio,
+      "available": false,
+    },
     {"title": "OVP", "icon": Asset.ovp, "available": false},
     {"title": "Construction Taxi", "icon": Asset.taxi, "available": false},
   ];
@@ -32,7 +36,8 @@ class DashboardController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true && profileResponse.data?.user != null) {
+      if (profileResponse.success == true &&
+          profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
@@ -45,15 +50,31 @@ class DashboardController extends GetxController {
   }
 
   RxString getCurrentAddress() {
-    if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
-      final int index =
-          profileData.value.data?.siteLocations?.indexWhere((e) => e.isDefault == true) ??
-          0;
-      final address = profileData.value.data?.siteLocations?[index];
+    if (myPref.role.val == "partner") {
+      if (profileData.value.data?.addresses?.isNotEmpty == true) {
+        final int index =
+            profileData.value.data?.addresses?.indexWhere(
+              (e) => e.isDefault == true,
+            ) ??
+            0;
+        final address = profileData.value.data?.addresses?[index];
 
-      return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+        return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+      }
+      return 'No address found'.obs;
+    } else {
+      if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
+        final int index =
+            profileData.value.data?.siteLocations?.indexWhere(
+              (e) => e.isDefault == true,
+            ) ??
+            0;
+        final address = profileData.value.data?.siteLocations?[index];
+
+        return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
+      }
+      return 'No address found'.obs;
     }
-    return 'No address found'.obs;
   }
 
   @override

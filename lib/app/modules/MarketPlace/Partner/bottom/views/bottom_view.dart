@@ -83,7 +83,10 @@ class BottomBarView extends GetView<BottomController> {
                   //   },
                   //   index: 1,
                   // ),
-                  GestureDetector(
+                  bottomBar(
+                    Asset.add,
+                    Asset.add,
+                    myPref.role.val != "connector" ? "Product" : 'Request',
                     onTap: () {
                       if (myPref.role.val != "connector") {
                         if (commonController.hasProfileComplete.value) {
@@ -142,7 +145,9 @@ class BottomBarView extends GetView<BottomController> {
                               height: 316,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                ),
                               ),
                               padding: const EdgeInsets.all(16),
                               child: Center(
@@ -157,14 +162,6 @@ class BottomBarView extends GetView<BottomController> {
                         );
                       }
                     },
-                    behavior: HitTestBehavior.translucent,
-                    child: Center(
-                      child: SvgPicture.asset(
-                        Asset.center,
-                        height: 34,
-                        width: 34,
-                      ),
-                    ),
                   ),
                   bottomBar(
                     Asset.connection,

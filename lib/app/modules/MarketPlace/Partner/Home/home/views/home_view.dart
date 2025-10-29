@@ -5,8 +5,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:gap/gap.dart';
 
 class HomeView extends StatelessWidget {
-  final HomeController controller = Get.find<HomeController>();
   final CommonController commonController = Get.find();
+  final HomeController controller = Get.put<HomeController>(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -137,13 +137,86 @@ class HomeView extends StatelessWidget {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            if ((controller
-                                                        .profileData
-                                                        .value
-                                                        .data
-                                                        ?.siteLocations ??
-                                                    [])
-                                                .isNotEmpty) {
+                                            if (myPref.role.val ==
+                                                "connector") {
+                                              if ((controller
+                                                          .profileData
+                                                          .value
+                                                          .data
+                                                          ?.siteLocations ??
+                                                      [])
+                                                  .isNotEmpty) {
+                                                Get.toNamed(
+                                                  Routes.SELECT_PRODUCT,
+                                                  arguments: {
+                                                    "mainCategoryId":
+                                                        mainCategory.id ?? 0,
+                                                    "mainCategoryName":
+                                                        mainCategory.name ?? '',
+                                                  },
+                                                );
+                                              } else {
+                                                Get.dialog(
+                                                  AlertDialog(
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            16,
+                                                          ),
+                                                    ),
+                                                    title: const Text(
+                                                      "Add Your Address",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18,
+                                                      ),
+                                                    ),
+                                                    content: const Text(
+                                                      "To view a product, please add your address first.",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Get.back(),
+                                                        child: const Text(
+                                                          "Cancel",
+                                                          style: TextStyle(
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () {
+                                                          Get.back();
+                                                          Get.toNamed(
+                                                            Routes
+                                                                .DELIVERY_LOCATION,
+                                                          );
+                                                        },
+                                                        style: ElevatedButton.styleFrom(
+                                                          backgroundColor:
+                                                              Colors.blue,
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  8,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        child: const Text(
+                                                          "Add Address",
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  barrierDismissible: false,
+                                                );
+                                              }
+                                            } else {
                                               Get.toNamed(
                                                 Routes.SELECT_PRODUCT,
                                                 arguments: {
@@ -152,66 +225,6 @@ class HomeView extends StatelessWidget {
                                                   "mainCategoryName":
                                                       mainCategory.name ?? '',
                                                 },
-                                              );
-                                            } else {
-                                              Get.dialog(
-                                                AlertDialog(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          16,
-                                                        ),
-                                                  ),
-                                                  title: const Text(
-                                                    "Add Your Address",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                  content: const Text(
-                                                    "To view a product, please add your address first.",
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                    ),
-                                                  ),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Get.back(),
-                                                      child: const Text(
-                                                        "Cancel",
-                                                        style: TextStyle(
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        Get.back();
-                                                        Get.toNamed(
-                                                          Routes
-                                                              .DELIVERY_LOCATION,
-                                                        );
-                                                      },
-                                                      style: ElevatedButton.styleFrom(
-                                                        backgroundColor:
-                                                            Colors.blue,
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                8,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      child: const Text(
-                                                        "Add Address",
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                barrierDismissible: false,
                                               );
                                             }
                                           },
@@ -256,13 +269,95 @@ class HomeView extends StatelessWidget {
                                                   .subCategories![subIndex];
                                               return GestureDetector(
                                                 onTap: () {
-                                                  if ((controller
-                                                              .profileData
-                                                              .value
-                                                              .data
-                                                              ?.siteLocations ??
-                                                          [])
-                                                      .isNotEmpty) {
+                                                  if (myPref.role.val ==
+                                                      "connector") {
+                                                    if ((controller
+                                                                .profileData
+                                                                .value
+                                                                .data
+                                                                ?.siteLocations ??
+                                                            [])
+                                                        .isNotEmpty) {
+                                                      Get.toNamed(
+                                                        Routes.SELECT_PRODUCT,
+                                                        arguments: {
+                                                          "selectedSubCategoryId":
+                                                              subCategory.id ??
+                                                              0,
+                                                          "mainCategoryId":
+                                                              mainCategory.id ??
+                                                              0,
+                                                          "mainCategoryName":
+                                                              mainCategory
+                                                                  .name ??
+                                                              '',
+                                                        },
+                                                      );
+                                                    } else {
+                                                      Get.dialog(
+                                                        AlertDialog(
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  16,
+                                                                ),
+                                                          ),
+                                                          title: const Text(
+                                                            "Add Your Address",
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 18,
+                                                            ),
+                                                          ),
+                                                          content: const Text(
+                                                            "To view a product, please add your address first.",
+                                                            style: TextStyle(
+                                                              fontSize: 14,
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () =>
+                                                                  Get.back(),
+                                                              child: const Text(
+                                                                "Cancel",
+                                                                style: TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            ElevatedButton(
+                                                              onPressed: () {
+                                                                Get.back();
+                                                                Get.toNamed(
+                                                                  Routes
+                                                                      .DELIVERY_LOCATION,
+                                                                );
+                                                              },
+                                                              style: ElevatedButton.styleFrom(
+                                                                backgroundColor:
+                                                                    Colors.blue,
+                                                                shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        8,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                              child: const Text(
+                                                                "Add Address",
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        barrierDismissible:
+                                                            false,
+                                                      );
+                                                    }
+                                                  } else {
                                                     Get.toNamed(
                                                       Routes.SELECT_PRODUCT,
                                                       arguments: {
@@ -275,67 +370,6 @@ class HomeView extends StatelessWidget {
                                                             mainCategory.name ??
                                                             '',
                                                       },
-                                                    );
-                                                  } else {
-                                                    Get.dialog(
-                                                      AlertDialog(
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                16,
-                                                              ),
-                                                        ),
-                                                        title: const Text(
-                                                          "Add Your Address",
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 18,
-                                                          ),
-                                                        ),
-                                                        content: const Text(
-                                                          "To view a product, please add your address first.",
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                          ),
-                                                        ),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Get.back(),
-                                                            child: const Text(
-                                                              "Cancel",
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.grey,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          ElevatedButton(
-                                                            onPressed: () {
-                                                              Get.back();
-                                                              Get.toNamed(
-                                                                Routes
-                                                                    .DELIVERY_LOCATION,
-                                                              );
-                                                            },
-                                                            style: ElevatedButton.styleFrom(
-                                                              backgroundColor:
-                                                                  Colors.blue,
-                                                              shape: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      8,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            child: const Text(
-                                                              "Add Address",
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      barrierDismissible: false,
                                                     );
                                                   }
                                                 },
