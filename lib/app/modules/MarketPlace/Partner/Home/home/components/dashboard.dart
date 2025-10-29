@@ -324,16 +324,8 @@ class BuildFeatureCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Stack(
+        alignment: AlignmentGeometry.topRight,
         children: [
-          // Container(
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(8),
-          //     image: const DecorationImage(
-          //       image: AssetImage(Asset.categoryBg),
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          // ),
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -387,6 +379,8 @@ class BuildFeatureCard extends StatelessWidget {
               ],
             ),
           ),
+          if(isSelected)
+          const Icon(Icons.check_circle_rounded,color: MyColors.primary,size: 20,),
         ],
       ),
     );
