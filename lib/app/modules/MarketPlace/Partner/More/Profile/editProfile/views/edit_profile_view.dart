@@ -37,8 +37,10 @@ class EditProfileView extends GetView<EditProfileController> {
             children: [
               RoundedButton(
                 buttonName: 'Update',
-                onTap: () {
-                  if (formKey.currentState!.validate()) {
+                onTap: () async {
+                  await controller.validateEmailAvailability();
+                  if (formKey.currentState!.validate() &&
+                      controller.emailError.value == '') {
                     if (controller.image.value.isEmpty) {
                       if (controller.selectedImage.value == null) {
                         SnackBars.errorSnackBar(
@@ -208,14 +210,14 @@ class EditProfileView extends GetView<EditProfileController> {
             headerText: "Website",
             controller: controller.businessWebsiteController,
             keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.next,
             validator: ValidationUtils.validateWebsiteUrl,
           ),
           SizedBox(height: 2.h),
           Focus(
             onFocusChange: (hasFocus) {
               if (!hasFocus) {
-                final email = controller.businessEmailController.text;
-                controller.validateEmailAvailability(email);
+                controller.validateEmailAvailability();
               }
             },
             child: CommonTextField(
@@ -252,16 +254,23 @@ class EditProfileView extends GetView<EditProfileController> {
             validator: ValidationUtils.validateGSTINNumber,
           ),
           SizedBox(height: 2.h),
-          CommonTextField(
-            hintText: "9292929929",
-            headerText: "Business Contact Number",
-            controller: controller.businessContactController,
-            keyboardType: TextInputType.phone,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(10),
-            ],
-            validator: ValidationUtils.validateBusinessContactNumber,
+          Focus(
+            onFocusChange: (hasFocus) {
+              if (!hasFocus) {
+                controller.validateEmailAvailability();
+              }
+            },
+            child: CommonTextField(
+              hintText: "9292929929",
+              headerText: "Business Contact Number",
+              controller: controller.businessContactController,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10),
+              ],
+              validator: ValidationUtils.validateBusinessContactNumber,
+            ),
           ),
         ],
       ),

@@ -168,7 +168,9 @@ class EditProfileController extends GetxController {
     selectedImage.value = File(compressedFile.path);
   }
 
-  Future<void> validateEmailAvailability(String email) async {
+  Future<void> validateEmailAvailability() async {
+    final email = businessEmailController.text;
+
     isEmailValidating.value = true;
     emailError.value = await Validate().validateEmail(email) ?? "";
     isEmailValidating.value = false;
