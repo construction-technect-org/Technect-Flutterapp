@@ -14,6 +14,7 @@ class EditProfileController extends GetxController {
   final gstNumberController = TextEditingController();
   final businessEmailController = TextEditingController();
   final businessContactController = TextEditingController();
+  final alternativeContactController = TextEditingController();
   final yearsInBusinessController = TextEditingController();
   final projectsCompletedController = TextEditingController();
   final addressContoller = TextEditingController();
@@ -38,7 +39,7 @@ class EditProfileController extends GetxController {
 
       if (merchantProfile != null) {
         // Populate text fields
-        image.value = merchantProfile.merchantLogo ?? "";
+        Get.find<ProfileController>().image.value = merchantProfile.merchantLogo ?? "";
         businessNameController.text = merchantProfile.businessName ?? '';
         gstNumberController.text = merchantProfile.gstinNumber ?? '';
         businessEmailController.text = merchantProfile.businessEmail ?? '';
@@ -98,13 +99,6 @@ class EditProfileController extends GetxController {
     }
   }
 
-  void addBusinessHours(String hours) {
-    businessHours.value = hours;
-  }
-
-  void handleBusinessHoursData(List<Map<String, dynamic>> data) {
-    businessHoursData.value = data;
-  }
 
 
   void nextStep() {
@@ -115,7 +109,7 @@ class EditProfileController extends GetxController {
       gstinNumber: gstNumberController.text,
       website: businessWebsiteController.text,
       address: addressContoller.text,
-      image: selectedImage.value!=null? selectedImage.value?.path:image.value,
+      image: Get.find<ProfileController>().selectedImage.value!=null? Get.find<ProfileController>().selectedImage.value?.path: Get.find<ProfileController>().image.value,
     );
     Get.find<ProfileController>().businessModel.refresh();
     Get.back();
@@ -124,8 +118,7 @@ class EditProfileController extends GetxController {
   void updateProfile() {
     nextStep();
   }
-  final ImagePicker _picker = ImagePicker();
-  RxString image = "".obs;
+
 
   void pickImageBottomSheet(BuildContext context) {
     Get.bottomSheet(
@@ -164,15 +157,14 @@ class EditProfileController extends GetxController {
       ),
     );
   }
-  Rx<File?> selectedImage = Rx<File?>(null);
 
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source);
+    final pickedFile = await Get.find<ProfileController>().picker.pickImage(source: source);
     if (pickedFile == null) return;
     final compressedFile = await CommonConstant().compressImage(
       File(pickedFile.path),
     );
-    selectedImage.value = File(compressedFile.path);
+    Get.find<ProfileController>().selectedImage.value = File(compressedFile.path);
   }
 
 }

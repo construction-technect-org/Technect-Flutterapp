@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/controller/edit_profile_controller.dart';
 import 'package:gap/gap.dart';
 
@@ -39,8 +40,8 @@ class EditProfileView extends GetView<EditProfileController> {
                 buttonName: 'Update',
                 onTap: () {
                   if (formKey.currentState!.validate()) {
-                    if (controller.image.value.isEmpty) {
-                      if (controller.selectedImage.value == null) {
+                    if (Get.find<ProfileController>().image.value.isEmpty) {
+                      if (Get.find<ProfileController>().selectedImage.value == null) {
                         SnackBars.errorSnackBar(
                           content: "Please upload business logo",
                         );
@@ -102,10 +103,11 @@ class EditProfileView extends GetView<EditProfileController> {
                                 onTap: () =>
                                     controller.pickImageBottomSheet(context),
                                 child: Obx(() {
-                                  if (controller.selectedImage.value != null) {
+
+                                  if (Get.find<ProfileController>().selectedImage.value != null) {
                                     return ClipOval(
                                       child: Image.file(
-                                        controller.selectedImage.value!,
+                                        Get.find<ProfileController>().selectedImage.value!,
                                         width: 78,
                                         height: 78,
                                         fit: BoxFit.cover,
@@ -113,7 +115,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                     );
                                   }
 
-                                  final imagePath = controller.image.value;
+                                  final imagePath = Get.find<ProfileController>().image.value;
                                   final imageUrl = imagePath.isNotEmpty
                                       ? "${APIConstants.bucketUrl}$imagePath"
                                       : null;
@@ -243,6 +245,19 @@ class EditProfileView extends GetView<EditProfileController> {
             ],
             validator: ValidationUtils.validateBusinessContactNumber,
           ),
+          SizedBox(height: 2.h),
+          CommonTextField(
+            hintText: "9292929929",
+            headerText: "Alternative Business Contact Number (Optional)",
+            controller: controller.alternativeContactController,
+            keyboardType: TextInputType.phone,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(10),
+            ],
+          ),
+          SizedBox(height: 2.h),
+
         ],
       ),
     );

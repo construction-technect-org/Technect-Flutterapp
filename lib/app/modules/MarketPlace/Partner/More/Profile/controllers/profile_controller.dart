@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
@@ -8,12 +9,16 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/edit_profile_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 
 class ProfileController extends GetxController {
   final isSwitch = false.obs;
+  Rx<File?> selectedImage = Rx<File?>(null);
 
+  final ImagePicker picker = ImagePicker();
+  RxString image = "".obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -187,7 +192,7 @@ class ProfileController extends GetxController {
   final certificates = <CertificateModel>[
     CertificateModel(title: "GST Certificate", isDefault: true),
     CertificateModel(title: "Udyam Certificate", isDefault: true),
-    CertificateModel(title: "MSME Certificate", isDefault: true),
+    CertificateModel(title: "Pan Certificate", isDefault: true),
   ].obs;
 
   void addCertificate(String title) {

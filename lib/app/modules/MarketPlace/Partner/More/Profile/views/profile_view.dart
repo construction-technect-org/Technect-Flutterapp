@@ -61,14 +61,14 @@ class ProfileView extends GetView<ProfileController> {
                             children: [
                               GestureDetector(
                                 onTap: () =>
-                                    controller.selectedTabIndex.value = 0,
+                                controller.selectedTabIndex.value = 0,
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 250),
                                   curve: Curves.easeInOut,
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(
                                       alpha:
-                                          controller.selectedTabIndex.value == 0
+                                      controller.selectedTabIndex.value == 0
                                           ? 1
                                           : 0,
                                     ),
@@ -93,14 +93,14 @@ class ProfileView extends GetView<ProfileController> {
                               const Gap(10),
                               GestureDetector(
                                 onTap: () =>
-                                    controller.selectedTabIndex.value = 1,
+                                controller.selectedTabIndex.value = 1,
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 250),
                                   curve: Curves.easeInOut,
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(
                                       alpha:
-                                          controller.selectedTabIndex.value == 1
+                                      controller.selectedTabIndex.value == 1
                                           ? 1
                                           : 0,
                                     ),
@@ -189,28 +189,39 @@ class ProfileView extends GetView<ProfileController> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: RoundedButton(
-          buttonName: controller.merchantProfile != null ? "Save" : "Proceed",
-          onTap: () {
-            for (final cert in controller.certificates) {
-              if (cert.isDefault &&
-                  (cert.filePath == null || cert.filePath!.isEmpty)) {
-                SnackBars.errorSnackBar(
-                  content: "Please upload all relevant certificates",
-                );
-                return;
+        child: Obx(() {
+          return RoundedButton(
+            buttonName: controller.selectedTabIndex.value == 0
+                ? "Continue"
+                : "Save",
+            onTap: () {
+              if (controller.selectedTabIndex.value == 0) {
+                if ((controller.businessModel.value.businessEmail ?? "")
+                    .isEmpty) {
+                  SnackBars.errorSnackBar(
+                    content: "Please fill business metrics",
+                  );
+                } else if (controller.businessHoursData.isEmpty) {
+                  SnackBars.errorSnackBar(
+                      content: "Please fill business hours");
+                } else {
+                  controller.selectedTabIndex.value = 1;
+                }
+              } else {
+                for (final cert in controller.certificates) {
+                  if (cert.isDefault &&
+                      (cert.filePath == null || cert.filePath!.isEmpty)) {
+                    SnackBars.errorSnackBar(
+                      content: "Please upload all relevant certificates",
+                    );
+                    return;
+                  }
+                }
+                controller.handleMerchantData();
               }
-            }
-            if ((controller.businessModel.value.businessEmail ?? "").isEmpty) {
-              SnackBars.errorSnackBar(content: "Please fill business metrics");
-            } else if (controller.businessHoursData.isEmpty) {
-              SnackBars.errorSnackBar(content: "Please fill business hours");
-            } else {
-              controller.handleMerchantData();
-              //27ABCDE1234F1Z5
-            }
-          },
-        ),
+            },
+          );
+        }),
       ),
     );
   }

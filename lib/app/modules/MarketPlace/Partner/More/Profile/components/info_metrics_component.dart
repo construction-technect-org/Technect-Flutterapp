@@ -407,12 +407,18 @@ class InfoMetricsComponent extends StatelessWidget {
 
   Widget buildRow({String? data, required String title}) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
-        const Spacer(),
-        Text(
-          data ?? "",
-          style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+        const SizedBox(width: 20),
+        Flexible(
+          child: Text(
+            data ?? "",
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+            style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+          ),
         ),
       ],
     );

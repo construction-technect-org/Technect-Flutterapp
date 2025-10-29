@@ -27,7 +27,14 @@ class HomeView extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Gap(50),
+                Gap(Get.statusBarHeight - 30),
+                Center(
+                  child: Text(
+                    "MarketPlace",
+                    style: MyTexts.bold20.copyWith(color: MyColors.primary),
+                  ),
+                ),
+                const Gap(16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Obx(
@@ -62,7 +69,6 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Gap(24),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -84,7 +90,13 @@ class HomeView extends StatelessWidget {
                             ),
                           ),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const Gap(24),
+                              Text(
+                                "All Category",
+                                style: MyTexts.bold20.copyWith(color: MyColors.primary),
+                              ),
                               // Container(
                               //   width: double.infinity,
                               //   height: 100,
