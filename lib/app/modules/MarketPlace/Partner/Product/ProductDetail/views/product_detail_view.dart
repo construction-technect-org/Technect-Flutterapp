@@ -184,6 +184,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           onSuccess: () {
                                             controller.onApiCall?.call();
                                             Get.back();
+                                            // Get.back();
                                           },
                                         );
                                   },
