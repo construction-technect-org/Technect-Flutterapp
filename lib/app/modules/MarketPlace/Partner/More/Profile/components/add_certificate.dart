@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/widget/file_icon_widget.dart';
 import 'package:gap/gap.dart';
 import 'package:path/path.dart';
 
@@ -119,8 +120,7 @@ class _AddCertificateState extends State<AddCertificate> {
                                           ),
                                           const Gap(10),
                                           Text(
-                                            filePath ??
-                                                "Select File you want to upload",
+                                            "Select File you want to upload",
                                             style: MyTexts.medium14.copyWith(
                                               color: MyColors.grey,
                                             ),
@@ -134,23 +134,9 @@ class _AddCertificateState extends State<AddCertificate> {
                                           ),
                                         ],
                                       )
-                                    : Column(
-                                        children: [
-                                          const Gap(14),
-
-                                          Image.asset(
-                                            Asset.pdfImage,
-                                            height: 50,
-                                            width: 32,
-                                          ),
-                                          const Gap(14),
-                                          Text(
-                                            "File uploaded: ${basename("$filePath")}",
-                                            textAlign: TextAlign.center,
-                                          ),
-
-                                          const Gap(14),
-                                        ],
+                                    : FileIconWidget(
+                                        fileName: filePath!,
+                                        showFileName: true,
                                       ),
                               ),
                             ),
