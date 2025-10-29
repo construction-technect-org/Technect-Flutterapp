@@ -782,6 +782,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                             color: MyColors.gray54,
                                           ),
                                         ),
+                                      const Gap(8),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(Routes.DELIVERY_LOCATION);
+                                        },
+                                        child: SvgPicture.asset(Asset.edit),
+                                      ),
                                     ],
                                   ),
                                 )

@@ -42,6 +42,25 @@ class SelectedProductView extends StatelessWidget {
               }
             },
           ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                // Get.toNamed(SEARCH)
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SvgPicture.asset(
+                  Asset.searchIcon,
+                  height: 20,
+                  width: 20,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.black,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         body: Obx(() {
           if (controller.isProductView.value) {
