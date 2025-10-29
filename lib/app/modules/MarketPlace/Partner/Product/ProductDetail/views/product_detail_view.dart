@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
@@ -64,24 +63,29 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       if (!(controller.isFromAdd.value == true &&
                           controller.isFromConnector.value == false))
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Explore More!",
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.grayA5,
+                          child: GestureDetector(
+                            onTap: (){
+                              Get.offAllNamed(Routes.MAIN);
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "Explore More!",
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.grayA5,
+                                  ),
                                 ),
-                              ),
-                              const Gap(8),
-                              Text(
-                                "View Categories >",
-                                style: MyTexts.medium16.copyWith(
-                                  color: MyColors.gray54,
+                                const Gap(8),
+                                Text(
+                                  "View Categories >",
+                                  style: MyTexts.medium16.copyWith(
+                                    color: MyColors.gray54,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
 

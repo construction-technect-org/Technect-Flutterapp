@@ -67,7 +67,7 @@ class BottomBarView extends GetView<BottomController> {
                   bottomBar(
                     Asset.category,
                     Asset.category1,
-                    'Dashboard',
+                    'Product',
                     onTap: () {
                       controller.currentIndex.value = 1;
                     },
