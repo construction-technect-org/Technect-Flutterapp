@@ -235,7 +235,7 @@ class RoleManagementView extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (controller.roles.isEmpty) {
-                   return Center(
+                return Center(
                   child: Padding(
                     padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height / 4,
@@ -518,8 +518,13 @@ class RoleCard extends StatelessWidget {
                           child: SvgPicture.asset(Asset.edit),
                         ),
                         const Gap(16),
+                        // Delete Role
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            DeleteRoleDialog.showDeleteRoleDialog(context, () {
+                              RoleManagementController.to.deleteRole(role.id!);
+                            });
+                          },
                           behavior: HitTestBehavior.translucent,
                           child: SvgPicture.asset(Asset.remove),
                         ),
