@@ -199,8 +199,7 @@ class AddTeamController extends GetxController {
 
   Future<void> validateEmailAvailability(String email) async {
     isEmailValidating.value = true;
-    emailError.value = await Validate().validateEmail(email).whenComplete(() {
-      isEmailValidating.value = false;
-    });
+    emailError.value = await Validate().validateEmail(email) ?? "";
+    isEmailValidating.value = false;
   }
 }
