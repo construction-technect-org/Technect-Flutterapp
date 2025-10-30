@@ -486,6 +486,10 @@ class AddProductView extends GetView<AddProductController> {
                             if (val == null || val.trim().isEmpty) {
                               return "Please enter note";
                             }
+                            // Accept only if at least one letter or digit is present
+                            if (!RegExp('[a-zA-Z0-9]').hasMatch(val.trim())) {
+                              return "Note must contain at least one letter or number";
+                            }
                             return null;
                           },
                         ),
