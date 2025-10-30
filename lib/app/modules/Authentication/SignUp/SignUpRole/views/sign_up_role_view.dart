@@ -122,37 +122,44 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
             ),
           ],
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: RoundedButton(
-            buttonName: 'Proceed',
-            onTap: () {
-              if (controller.selectedRole.value > 0) {
-                if (controller.selectedRole.value == 6 &&
-                    controller.otherRoleController.text.isEmpty) {
-                  SnackBars.errorSnackBar(content: 'Please enter other role');
-                  return;
-                } else {
-                  if (controller.selectedRole.value == 1) {
-                    controller.selectedRoleName.value = "Merchant";
-                  } else if (controller.selectedRole.value == 6) {
-                    controller.selectedRoleName.value =
-                        controller.otherRoleController.text;
-                  } else {
-                    controller.selectedRoleName.value =
-                        controller.roleName[controller.selectedRole.value - 1];
-                  }
-                  print(controller.selectedRoleName.value);
-                  _showRoleTypeBottomSheet(Get.context!, controller);
+        bottomNavigationBar: Obx(() {
+          return controller.selectedFinalRole.value.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: RoundedButton(
+                    buttonName: 'Proceed',
+                    onTap: () {
+                      if (controller.selectedRole.value > 0) {
+                        if (controller.selectedRole.value == 6 &&
+                            controller.otherRoleController.text.isEmpty) {
+                          SnackBars.errorSnackBar(
+                            content: 'Please enter other role',
+                          );
+                          return;
+                        } else {
+                          if (controller.selectedRole.value == 1) {
+                            controller.selectedRoleName.value = "Merchant";
+                          } else if (controller.selectedRole.value == 6) {
+                            controller.selectedRoleName.value =
+                                controller.otherRoleController.text;
+                          } else {
+                            controller.selectedRoleName.value = controller
+                                .roleName[controller.selectedRole.value - 1];
+                          }
+                          hideKeyboard();
+                          myPref.setRole(controller.selectedFinalRole.value);
+                          Get.toNamed(Routes.SIGN_UP_DETAILS);
 
-                  // Get.toNamed(Routes.SIGN_UP_DETAILS);
-                }
-              } else {
-                SnackBars.errorSnackBar(content: 'Please select role');
-              }
-            },
-          ),
-        ),
+                          // Get.toNamed(Routes.SIGN_UP_DETAILS);
+                        }
+                      } else {
+                        SnackBars.errorSnackBar(content: 'Please select role');
+                      }
+                    },
+                  ),
+                )
+              : const SizedBox();
+        }),
       ),
     );
   }
@@ -201,6 +208,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                     icon: Asset.rMerchant,
                     onTap: () {
                       controller.selectedFinalRole.value = "partner";
+                      Get.back();
                     },
                   ),
                 ),
@@ -211,22 +219,11 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                     icon: Asset.rConnector,
                     onTap: () {
                       controller.selectedFinalRole.value = "connector";
+                      Get.back();
                     },
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 24),
-            Center(
-              child: RoundedButton(
-                buttonName: "Next",
-                width: 100,
-                onTap: () {
-                  myPref.setRole(controller.selectedFinalRole.value);
-                  Get.back();
-                  Get.toNamed(Routes.SIGN_UP_DETAILS);
-                },
-              ),
             ),
             const SizedBox(height: 12),
           ],
@@ -248,12 +245,15 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
         child: Container(
           height: 86,
           decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage(icon),fit: BoxFit.fitWidth),
+            image: DecorationImage(
+              image: AssetImage(icon),
+              fit: BoxFit.fitWidth,
+            ),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: role == controller.selectedFinalRole.value
                   ? MyColors.primary
-                  : Colors.transparent,
+                  : MyColors.grayEA,
             ),
           ),
         ),
@@ -265,7 +265,22 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
     return Expanded(
       child: GestureDetector(
         onTap: () {
+          controller.selectedFinalRole.value = "";
           controller.selectRole(controller.roleId[index]);
+          if (controller.selectedRole.value > 0) {
+            if (controller.selectedRole.value == 1) {
+              controller.selectedRoleName.value = "Merchant";
+            } else if (controller.selectedRole.value == 6) {
+              controller.selectedRoleName.value =
+                  controller.otherRoleController.text;
+            } else {
+              controller.selectedRoleName.value =
+                  controller.roleName[controller.selectedRole.value - 1];
+            }
+            _showRoleTypeBottomSheet(Get.context!, controller);
+          } else {
+            SnackBars.errorSnackBar(content: 'Please select role');
+          }
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, right: 8),
