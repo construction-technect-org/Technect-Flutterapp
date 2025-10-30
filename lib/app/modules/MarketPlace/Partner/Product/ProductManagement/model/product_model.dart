@@ -83,6 +83,7 @@ class Product {
   final int? mainCategoryId;
   final int? subCategoryId;
   final int? categoryProductId;
+  final int? productSubCategoryId;
   final String? brand;
   final String? uom;
   final String? packageType;
@@ -115,6 +116,7 @@ class Product {
   final String? mainCategoryName;
   final String? subCategoryName;
   final String? categoryProductName;
+  final String? productSubCategoryName;
   final String? distanceKm;
   final String? merchantGstNumber;
   final String? productVideo;
@@ -134,11 +136,13 @@ class Product {
     this.isNotify,
     this.mainCategoryId,
     this.subCategoryId,
+    this.productSubCategoryId,
     this.merchantName,
     this.merchantEmail,
     this.categoryProductId,
     this.merchantWebsite,
     this.brand,
+    this.productSubCategoryName,
     this.merchantPhone,
     this.merchantGstNumber,
     this.uom,
@@ -187,6 +191,7 @@ class Product {
       mainCategoryId: json["main_category_id"],
       subCategoryId: json["sub_category_id"],
       categoryProductId: json["category_product_id"],
+      productSubCategoryId: json["product_sub_category_id"],
       brand: json["brand"],
       uom: json["uom"],
       merchantLogo: json["merchant_logo"],
@@ -203,6 +208,7 @@ class Product {
       gstPercentage: json["gst_percentage"],
       gstAmount: json["gst_amount"],
       termsAndConditions: json["terms_and_conditions"],
+      productSubCategoryName: json["product_sub_category_name"],
       createdAt: json["created_at"],
       updatedAt: json["updated_at"],
       averageRating: json["average_rating"],
@@ -272,9 +278,11 @@ class Product {
     "average_rating": averageRating,
     "total_ratings": totalRatings,
     "rating_count": ratingCount,
+    "product_sub_category_name": productSubCategoryName,
     "product_code": productCode,
     "uoc": uoc,
     "total_amount": totalAmount,
+    "product_sub_category_id": productSubCategoryId,
     "product_note": productNote,
     "outofstock": outOfStock,
     "approval_status": approvalStatus,

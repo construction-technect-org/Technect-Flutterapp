@@ -49,12 +49,14 @@ class AddProductController extends GetxController {
   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
   RxList<SubCategory> subCategories = <SubCategory>[].obs;
   RxList<CategoryProduct> productsList = <CategoryProduct>[].obs;
+  RxList<ProductSubCategory> subProductsList = <ProductSubCategory>[].obs;
   RxList<FilterData> filters = <FilterData>[].obs;
 
   // Reactive name lists for dropdowns
   RxList<String> mainCategoryNames = <String>[].obs;
   RxList<String> subCategoryNames = <String>[].obs;
   RxList<String> productNames = <String>[].obs;
+  RxList<String> subProductNames = <String>[].obs;
 
   RxList<String> gstList = <String>["5%", "12%", "18%", "28%"].obs;
 
@@ -62,9 +64,11 @@ class AddProductController extends GetxController {
   Rxn<String> selectedMainCategory = Rxn<String>();
   Rxn<String> selectedSubCategory = Rxn<String>();
   Rxn<String> selectedProduct = Rxn<String>();
+  Rxn<String> selectedSubProduct = Rxn<String>();
   Rxn<String> selectedMainCategoryId = Rxn<String>();
   Rxn<String> selectedSubCategoryId = Rxn<String>();
   Rxn<String> selectedProductId = Rxn<String>();
+  Rxn<String> selectedSubProductId = Rxn<String>();
   Rxn<String> selectedGST = Rxn<String>();
 
   // ---------------- State ----------------
@@ -113,10 +117,11 @@ class AddProductController extends GetxController {
       selectedMainCategory.value = product.mainCategoryName ?? '';
       selectedSubCategory.value = product.subCategoryName ?? '';
       selectedProduct.value = product.categoryProductName ?? '';
-
+      selectedSubProduct.value = product.productSubCategoryName ?? '';
       selectedMainCategoryId.value = (product.mainCategoryId ?? 0).toString();
       selectedSubCategoryId.value = (product.subCategoryId ?? 0).toString();
       selectedProductId.value = (product.categoryProductId ?? 0).toString();
+      selectedSubProductId.value = (product.productSubCategoryId ?? 0).toString();
     }
   }
 
@@ -176,7 +181,9 @@ class AddProductController extends GetxController {
       subCategoryNames.clear();
       selectedSubCategory.value = null;
       productsList.clear();
+      subProductsList.clear();
       productNames.clear();
+      subProductNames.clear();
       selectedProduct.value = null;
       selectedMainCategory.value = null;
       return;
@@ -198,7 +205,9 @@ class AddProductController extends GetxController {
     if (subCategoryName == null) {
       selectedSubCategory.value = null;
       productsList.clear();
+      subProductsList.clear();
       productNames.clear();
+      subProductNames.clear();
       selectedProduct.value = null;
       subCategoryNames.clear();
       return;
@@ -231,15 +240,32 @@ class AddProductController extends GetxController {
                 .cast<String>()
                 .toList() ??
             [];
+        if ((result.data ?? []).isNotEmpty) {
+          subProductsList.value = result.data?.first.productSubCategories??[];
+          final firstProduct = result.data!.first;
+          subProductNames.value =
+              firstProduct.productSubCategories
+                  ?.map((sub) => sub.name)
+                  .whereType<String>()
+                  .toList() ??
+              [];
+        } else {
+          subProductNames.clear();
+        }
+
         selectedProduct.value = null;
       } else {
         productsList.clear();
+        subProductsList.clear();
         productNames.clear();
+        subProductNames.clear();
         selectedProduct.value = null;
       }
     } catch (e) {
       productsList.clear();
+      subProductsList.clear();
       productNames.clear();
+      subProductNames.clear();
       selectedProduct.value = null;
     } finally {
       isLoading(false);
@@ -312,7 +338,6 @@ class AddProductController extends GetxController {
           } catch (_) {}
         }
 
-        // 🟨 Now assign based on field type
         if (actualValue == null) return;
 
         // Text fields
@@ -352,6 +377,15 @@ class AddProductController extends GetxController {
     );
     selectedProductId.value = '${selectedCategorySub?.id ?? 0}';
     await getFilter(selectedCategorySub?.id ?? 0);
+  }
+
+  Future<void> onSubProductSelected(String? productName) async {
+    selectedSubProduct.value = productName;
+    final selectedCategorySub = subProductsList.firstWhereOrNull(
+      (s) => s.name == productName,
+    );
+    selectedSubProductId.value = '${selectedCategorySub?.id ?? 0}';
+    print(  selectedSubProductId.value);
   }
 
   // ---------------- API Calls ----------------
@@ -400,13 +434,18 @@ class AddProductController extends GetxController {
 
       selectedSubCategory.value = null;
       productsList.clear();
+      subProductsList.clear();
       productNames.clear();
+      subProductNames.clear();
       selectedProduct.value = null;
     } catch (e) {
       subCategories.clear();
       subCategoryNames.clear();
       productsList.clear();
+      subProductsList.clear();
       productNames.clear();
+      subProductNames.clear();
+
       selectedProduct.value = null;
     } finally {
       isLoading(false);
@@ -465,7 +504,7 @@ class AddProductController extends GetxController {
 
       // Pick multiple images but only up to the available empty slots
       final List<XFile>? pickedFiles = await ImagePicker().pickMultiImage(
-        limit: emptySlots,
+        limit: emptySlots == 1 ? null : emptySlots,
       );
 
       if (pickedFiles != null && pickedFiles.isNotEmpty) {
@@ -490,7 +529,7 @@ class AddProductController extends GetxController {
             imageSlots[emptyIndex] = path;
             assignIndex++;
           } else {
-            break; // no more space
+            break;
           }
         }
         final hasAnyImage = imageSlots.any(
@@ -641,6 +680,7 @@ class AddProductController extends GetxController {
           '',
       mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
+      productSubCategoryName: selectedSubProduct.value,
       productName: productNameController.text,
       productVideo: selectedVideo.value?.path,
       categoryProductName: selectedProduct.value,
@@ -648,6 +688,8 @@ class AddProductController extends GetxController {
       mainCategoryId: int.parse(selectedMainCategoryId.value ?? "0"),
       subCategoryId: int.parse(selectedSubCategoryId.value ?? "0"),
       categoryProductId: int.parse(selectedProductId.value ?? "0"),
+      productSubCategoryId: int.parse(selectedSubProductId.value ?? "0"),
+
       price: priceController.text,
       productCode: productCodeController.text,
       totalAmount: amountController.text,
@@ -696,6 +738,9 @@ class AddProductController extends GetxController {
 
     if (productNames.isNotEmpty && selectedProductId.value != null) {
       fields["category_product_id"] = selectedProductId.value;
+    }
+    if (subProductNames.isNotEmpty && selectedSubProductId.value != null) {
+      fields["product_sub_category_id"] = selectedSubProductId.value;
     }
 
     fields.addAll({

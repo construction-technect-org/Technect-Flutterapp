@@ -1253,6 +1253,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       {'label': 'Brand Name', 'value': product.brand.toString()},
       {'label': 'Category', 'value': product.categoryProductName.toString()},
       {'label': 'Sub category', 'value': product.subCategoryName.toString()},
+      if((product.productSubCategoryName??"").isNotEmpty)
+      {'label': 'Product type', 'value': product.productSubCategoryName.toString()},
       {'label': 'Stock Quantity', 'value': product.stockQty.toString()},
     ];
 

@@ -87,7 +87,7 @@ class BottomBarView extends GetView<BottomController> {
                   bottomBar(
                     Asset.add,
                     Asset.add,
-                    myPref.role.val != "connector" ? "Product" : 'Request',
+                    myPref.role.val != "connector" ? "Sell" : 'Request',
                     onTap: () {
                       if (myPref.role.val != "connector") {
                         if (!commonController.hasProfileComplete.value) {

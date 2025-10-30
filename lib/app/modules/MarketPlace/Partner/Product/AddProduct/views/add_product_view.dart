@@ -404,8 +404,39 @@ class AddProductView extends GetView<AddProductController> {
                                   onChanged: controller.isEdit
                                       ? null
                                       : (val) {
-                                          controller.onProductSelected(val);
-                                        },
+                                    controller.onProductSelected(val);
+                                  },
+                                  enabled: !controller.isEdit,
+                                ),
+                                SizedBox(height: 2.h),
+                              ],
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        }),
+                        Obx(() {
+                          if (controller.subProductNames.isNotEmpty) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CommonDropdown<String>(
+                                  headerText: 'Product type',
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return "Please select product type";
+                                    }
+                                    return null;
+                                  },
+                                  hintText: "Select Product tye",
+                                  items: controller.subProductNames,
+                                  selectedValue: controller.selectedSubProduct,
+                                  itemLabel: (item) => item,
+                                  onChanged: controller.isEdit
+                                      ? null
+                                      : (val) {
+                                    controller.onSubProductSelected(val);
+                                  },
                                   enabled: !controller.isEdit,
                                 ),
                                 SizedBox(height: 2.h),
