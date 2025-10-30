@@ -92,11 +92,11 @@ class HomeView extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Gap(24),
-                              Text(
-                                "All Category",
-                                style: MyTexts.bold20.copyWith(color: MyColors.primary),
-                              ),
+                              // const Gap(24),
+                              // Text(
+                              //   "All Category",
+                              //   style: MyTexts.bold20.copyWith(color: MyColors.primary),
+                              // ),
                               // Container(
                               //   width: double.infinity,
                               //   height: 100,
