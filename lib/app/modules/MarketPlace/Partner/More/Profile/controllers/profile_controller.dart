@@ -237,9 +237,10 @@ class ProfileController extends GetxController {
           'jpg',
           'jpeg',
           'png',
-          'doc',
-          'docx',
-          'txt',
+          'gif',
+          'bmp',
+          'webp',
+          'svg',
         ];
 
         if (!fileName.contains('.')) {
@@ -274,7 +275,7 @@ class ProfileController extends GetxController {
         if (!allowedExtensions.contains(fileExtension)) {
           SnackBars.errorSnackBar(
             content:
-                "Only PDF, JPG, and PNG files are allowed for certificates",
+                "Invalid certificate. Please upload only PDF or image files.",
           );
           return;
         }
