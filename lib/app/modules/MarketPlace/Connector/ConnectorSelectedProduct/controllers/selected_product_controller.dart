@@ -106,6 +106,54 @@ class SelectedProductController extends GetxController {
     selectedProductIndex.value = -1; // Reset product selection
   }
 
+  void lestSide0LeftView(int index) {
+    navigationIndex.value = 0;
+    selectedSubCategoryId.value = subCategories[index].id ?? 0;
+    selectedSubCategory.value = subCategories[index];
+    products.value = selectedSubCategory.value?.products ?? [];
+    productSubCategories.value =
+        selectedSubCategory.value?.productSubCategories ??
+        <ProductSubCategory>[];
+  }
+
+  void rightSide0RightView(int index) {
+    selectProduct(index);
+    productCategories.value =
+        mainCategory.value?.subCategories?.firstWhere((element) {
+          return element.id == products[index].subCategoryId;
+        }) ??
+        SubCategory();
+    if (productCategories.value.productSubCategories?.isEmpty ?? true) {
+      navigationIndex.value = 1;
+    } else {
+      selectedProductCategoryIndex.value = index;
+      navigationIndex.value = 2;
+    }
+    selectedProduct.value = products[index];
+  }
+
+  void leftSide1LeftView(int index) {
+    navigationIndex.value = 1;
+    selectedProductCategoryIndex.value = index;
+    selectedProduct.value = products[index];
+    if (productSubCategories.isNotEmpty) {
+      return;
+    }
+    fetchProductsFromApi();
+  }
+
+  void leftSide2LeftView(int index) {
+    selectedProductCategoryIndex.value = index;
+    selectedProduct.value =
+        productCategories.value.products?[index] ?? ProductCategory();
+  }
+
+  void rightSide2RightView(int index) {
+    selectedSubProductCategoryIndex.value = index;
+    selectedProductSubCategory.value = productSubCategories[index];
+    fetchProductsFromApi();
+  }
+
   void selectProduct(int index) {
     selectedProductIndex.value = index;
     selectedProduct.value = products[index];
