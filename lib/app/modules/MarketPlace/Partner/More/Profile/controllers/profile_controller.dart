@@ -21,6 +21,7 @@ class ProfileController extends GetxController {
 
   final ImagePicker picker = ImagePicker();
   RxString image = "".obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -36,10 +37,11 @@ class ProfileController extends GetxController {
       businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
       businessModel.value.businessContactNumber =
           merchantProfile?.businessContactNumber ?? "";
+      businessModel.value.alternativeBusinessEmail =
+          merchantProfile?.alternativeBusinessContactNumber ?? "";
       businessModel.value.businessName = merchantProfile?.businessName ?? "";
       businessModel.value.gstinNumber = merchantProfile?.gstinNumber ?? "";
       businessModel.value.image = merchantProfile?.merchantLogo ?? "";
-      print(businessHours);
 
       final timeFormatter = DateFormat.jm();
 
@@ -489,6 +491,11 @@ class ProfileController extends GetxController {
         'business_name': businessModel.value.businessName.toString(),
         'gstin_number': businessModel.value.gstinNumber.toString(),
         'business_email': businessModel.value.businessEmail.toString(),
+        if ((businessModel.value.alternativeBusinessEmail ?? "").isNotEmpty)
+          'alternative_business_contact_number': businessModel
+              .value
+              .alternativeBusinessEmail
+              .toString(),
         'business_contact_number': businessModel.value.businessContactNumber
             .toString(),
         'website': businessModel.value.website.toString(),
@@ -602,6 +609,7 @@ class BusinessModel {
   String? businessName;
   String? website;
   String? businessEmail;
+  String? alternativeBusinessEmail;
   String? gstinNumber;
   String? address;
   String? businessContactNumber;
@@ -613,6 +621,7 @@ class BusinessModel {
     this.businessEmail,
     this.gstinNumber,
     this.businessContactNumber,
+    this.alternativeBusinessEmail,
     this.address,
     this.image,
   });

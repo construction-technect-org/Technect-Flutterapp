@@ -44,6 +44,21 @@ class SelectedProductView extends StatelessWidget {
           actions: [
             GestureDetector(
               onTap: () {
+
+                print(Get.find<HomeController>().profileData.value.data?.siteLocations);
+              },
+              child: SvgPicture.asset(
+                Asset.location,
+                height: 20,
+                width: 20,
+                colorFilter: const ColorFilter.mode(
+                  Colors.black,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
                 Get.toNamed(Routes.SEARCH_PRODUCT);
               },
               child: Padding(

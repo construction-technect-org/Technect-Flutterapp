@@ -94,221 +94,13 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                           ),
                           const Gap(16),
                           // Saved Addresses List
-                          Obx(
-                            () =>
-                                homeController
-                                        .profileData
-                                        .value
-                                        .data
-                                        ?.siteLocations
-                                        ?.isEmpty ??
-                                    true
-                                ? Padding(
-                                    padding: EdgeInsets.only(
-                                      top:
-                                          MediaQuery.of(context).size.height /
-                                          3,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'No Address Found',
-                                        style: MyTexts.medium16.copyWith(
-                                          color: MyColors.gray2E,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    physics: const ScrollPhysics(),
-                                    itemCount:
-                                        homeController
-                                            .profileData
-                                            .value
-                                            .data
-                                            ?.siteLocations
-                                            ?.length ??
-                                        0,
-                                    itemBuilder: (context, index) {
-                                      final address = homeController
-                                          .profileData
-                                          .value
-                                          .data
-                                          ?.siteLocations?[index];
-                                      return Container(
-                                        margin: const EdgeInsets.only(
-                                          bottom: 16,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: MyColors.grayEA.withValues(
-                                                alpha: 0.32,
-                                              ),
-                                              blurRadius: 4,
-                                            ),
-                                          ],
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: address?.isDefault == true
-                                              ? null
-                                              : () => controller
-                                                    .setDefaultAddress(
-                                                      address?.id.toString() ??
-                                                          '',
-                                                    ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: address?.isDefault == true
-                                                  ? MyColors.veryPaleBlue
-                                                  : Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              border: address?.isDefault == true
-                                                  ? Border.all(
-                                                      color:
-                                                          MyColors.verypaleBlue,
-                                                      width: 1.2,
-                                                    )
-                                                  : null,
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(16),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                Text(
-                                                                  address
-                                                                          ?.siteName
-                                                                          ?.capitalizeFirst ??
-                                                                      'Address',
-                                                                  style: MyTexts
-                                                                      .medium16
-                                                                      .copyWith(
-                                                                        color: MyColors
-                                                                            .black,
-                                                                      ),
-                                                                ),
-                                                                if (address
-                                                                        ?.isDefault ==
-                                                                    true) ...[
-                                                                  const Gap(8),
-                                                                  Container(
-                                                                    padding: const EdgeInsets.symmetric(
-                                                                      horizontal:
-                                                                          8,
-                                                                      vertical:
-                                                                          3,
-                                                                    ),
-                                                                    decoration: BoxDecoration(
-                                                                      color: MyColors
-                                                                          .primary,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                            12,
-                                                                          ),
-                                                                    ),
-                                                                    child: Text(
-                                                                      'Default',
-                                                                      style: MyTexts
-                                                                          .medium13
-                                                                          .copyWith(
-                                                                            color:
-                                                                                Colors.white,
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ],
-                                                            ),
-                                                            const Gap(4),
-                                                            Text(
-                                                              address
-                                                                      ?.fullAddress
-                                                                      ?.capitalizeFirst ??
-                                                                  '',
-                                                              style: MyTexts
-                                                                  .medium14
-                                                                  .copyWith(
-                                                                    color: MyColors
-                                                                        .gray54,
-                                                                  ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      const Gap(8),
-                                                      GestureDetector(
-                                                        onTap: () => controller
-                                                            .editAddress(
-                                                              (address?.id ??
-                                                                      '')
-                                                                  .toString(),
-                                                            ),
-                                                        behavior:
-                                                            HitTestBehavior
-                                                                .translucent,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets.all(
-                                                                4.0,
-                                                              ),
-                                                          child:
-                                                              SvgPicture.asset(
-                                                                Asset.edit,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      const Gap(4),
-                                                      GestureDetector(
-                                                        onTap: () => controller
-                                                            .deleteAddress(
-                                                              (address?.id ??
-                                                                      '')
-                                                                  .toString(),
-                                                            ),
-                                                        behavior:
-                                                            HitTestBehavior
-                                                                .translucent,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets.all(
-                                                                4.0,
-                                                              ),
-                                                          child:
-                                                              SvgPicture.asset(
-                                                                Asset.delete,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                          ),
+                          Obx(() => CommonAddressList(
+                            addresses: homeController.profileData.value.data?.siteLocations,
+                            onEdit: controller.editAddress,
+                            onDelete: controller.deleteAddress,
+                            onSetDefault: controller.setDefaultAddress,
+                          )),
+
                         ],
                       ),
                     ),
@@ -319,6 +111,158 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
           ],
         ),
       ),
+    );
+  }
+}
+
+
+
+class CommonAddressList extends StatelessWidget {
+  final List<dynamic>? addresses;
+  final Function(String id)? onEdit;
+  final Function(String id)? onDelete;
+  final Function(String id)? onSetDefault;
+
+  const CommonAddressList({
+    super.key,
+    required this.addresses,
+    this.onEdit,
+    this.onDelete,
+    this.onSetDefault,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (addresses == null || addresses!.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height / 3,
+        ),
+        child: Center(
+          child: Text(
+            'No Address Found',
+            style: MyTexts.medium16.copyWith(
+              color: MyColors.gray2E,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      physics: const ScrollPhysics(),
+      itemCount: addresses!.length,
+      itemBuilder: (context, index) {
+        final address = addresses![index];
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: MyColors.grayEA.withValues(alpha: 0.32),
+                blurRadius: 4,
+              ),
+            ],
+          ),
+          child: GestureDetector(
+            onTap: address.isDefault == true
+                ? null
+                : () => onSetDefault?.call(address.id.toString()),
+            child: Container(
+              decoration: BoxDecoration(
+                color: address.isDefault == true
+                    ? MyColors.veryPaleBlue
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: address.isDefault == true
+                    ? Border.all(
+                  color: MyColors.verypaleBlue,
+                  width: 1.2,
+                )
+                    : null,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    address.siteName ?? 'Address',
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.black,
+                                    ),
+                                  ),
+                                  if (address.isDefault == true) ...[
+                                    const Gap(8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: MyColors.primary,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        'Default',
+                                        style: MyTexts.medium13.copyWith(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              const Gap(4),
+                              Text(
+                                address.fullAddress ?? '',
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.gray54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Gap(8),
+                        GestureDetector(
+                          onTap: () => onEdit?.call(address.id.toString()),
+                          behavior: HitTestBehavior.translucent,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: SvgPicture.asset(Asset.edit),
+                          ),
+                        ),
+                        const Gap(4),
+                        GestureDetector(
+                          onTap: () => onDelete?.call(address.id.toString()),
+                          behavior: HitTestBehavior.translucent,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: SvgPicture.asset(Asset.delete),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

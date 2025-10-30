@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 
 class HomeView extends StatelessWidget {
   final CommonController commonController = Get.find();
-  final HomeController controller = Get.put<HomeController>(HomeController());
+  final HomeController controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Gap(Get.statusBarHeight - 30),
+                const Gap(50),
                 Center(
                   child: Text(
                     "MarketPlace",

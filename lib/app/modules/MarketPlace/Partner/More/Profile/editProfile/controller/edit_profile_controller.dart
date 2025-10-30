@@ -48,6 +48,7 @@ class EditProfileController extends GetxController {
         gstNumberController.text = merchantProfile.gstinNumber ?? '';
         businessEmailController.text = merchantProfile.businessEmail ?? '';
         businessWebsiteController.text = merchantProfile.website ?? '';
+        alternativeContactController.text = merchantProfile.alternativeBusinessContactNumber ?? '';
         businessContactController.text =
             merchantProfile.businessContactNumber ?? '';
         yearsInBusinessController.text =
@@ -82,6 +83,8 @@ class EditProfileController extends GetxController {
         businessWebsiteController.text = cont.businessModel.value.website ?? "";
         businessContactController.text =
             cont.businessModel.value.businessContactNumber ?? "";
+        alternativeContactController.text =
+            cont.businessModel.value.alternativeBusinessEmail ?? "";
       }
     } catch (e) {
       Get.printError(info: 'Error populating existing data: $e');
@@ -93,6 +96,7 @@ class EditProfileController extends GetxController {
       businessContactNumber: businessContactController.text,
       businessEmail: businessEmailController.text,
       businessName: businessNameController.text,
+      alternativeBusinessEmail: alternativeContactController.text,
       gstinNumber: gstNumberController.text,
       website: businessWebsiteController.text,
       address: addressContoller.text,

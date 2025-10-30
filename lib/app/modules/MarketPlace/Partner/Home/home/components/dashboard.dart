@@ -6,7 +6,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAcco
 import 'package:gap/gap.dart';
 
 class Dashboard extends StatelessWidget {
-  final HomeController controller = Get.find<HomeController>();
+
+  final HomeController controller = Get.put<HomeController>(HomeController());
 
   @override
   Widget build(BuildContext context) {

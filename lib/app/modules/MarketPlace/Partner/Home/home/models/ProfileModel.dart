@@ -130,6 +130,7 @@ class MerchantProfile {
   String? gstinNumber;
   String? businessEmail;
   String? businessContactNumber;
+  String? alternativeBusinessContactNumber;
   String? businessWebsite;
   String? website;
   int? yearsInBusiness;
@@ -159,6 +160,7 @@ class MerchantProfile {
     this.projectsCompleted,
     this.profileCompletionPercentage,
     this.isProfileComplete,
+    this.alternativeBusinessContactNumber,
     this.website,
     this.identityVerified,
     this.businessLicense,
@@ -188,6 +190,7 @@ class MerchantProfile {
         projectsCompleted: json["projectsCompleted"],
         profileCompletionPercentage: json["profileCompletionPercentage"],
         isProfileComplete: json["isProfileComplete"],
+        alternativeBusinessContactNumber: json["alternative_business_contact_number"],
         identityVerified: json["identityVerified"],
         businessLicense: json["businessLicense"],
         qualityAssurance: json["qualityAssurance"],
@@ -231,6 +234,7 @@ class MerchantProfile {
     "marketplaceTier": marketplaceTier,
     "memberSince": memberSince,
     "website": website,
+    "alternative_business_contact_number": alternativeBusinessContactNumber,
     "businessHours": businessHours == null
         ? []
         : List<dynamic>.from(businessHours!.map((x) => x.toJson())),
