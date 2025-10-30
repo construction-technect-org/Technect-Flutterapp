@@ -499,7 +499,11 @@ class AddProductView extends GetView<AddProductController> {
                           hintText: "Write terms & conditions",
                           validator: (val) {
                             if (val == null || val.trim().isEmpty) {
-                              return "Please enter terms & condition";
+                              return "Please enter terms & conditions";
+                            }
+                            // Accept only if at least one letter or digit is present
+                            if (!RegExp('[a-zA-Z0-9]').hasMatch(val.trim())) {
+                              return "Note must contain at least one letter or number";
                             }
                             return null;
                           },
