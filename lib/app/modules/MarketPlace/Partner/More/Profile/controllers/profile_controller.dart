@@ -232,16 +232,7 @@ class ProfileController extends GetxController {
 
         final fileName = file.name.toLowerCase();
         final fileExtension = fileName.split('.').last;
-        final allowedExtensions = [
-          'pdf',
-          'jpg',
-          'jpeg',
-          'png',
-          'gif',
-          'bmp',
-          'webp',
-          'svg',
-        ];
+        final allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
 
         if (!fileName.contains('.')) {
           SnackBars.errorSnackBar(
@@ -322,15 +313,7 @@ class ProfileController extends GetxController {
       // Robust validation for file extension and MIME type
       final fileName = file.name.toLowerCase();
       final fileExtension = fileName.split('.').last;
-      final allowedExtensions = [
-        'pdf',
-        'jpg',
-        'jpeg',
-        'png',
-        'doc',
-        'docx',
-        'txt',
-      ];
+      final allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
 
       // Check if file has an extension
       if (!fileName.contains('.')) {
@@ -572,13 +555,11 @@ class ProfileController extends GetxController {
             Get.back();
             SnackBars.successSnackBar(content: "Profile update successfully");
           } else {
-
             if (isSwitch.value) {
               Get.find<SwitchAccountController>().updateRole(role: "partner");
               myPref.role.val = "partner";
               Get.offAllNamed(Routes.MAIN);
-            }
-            else{
+            } else {
               await homeController.fetchProfileData();
               Get.back();
               SnackBars.successSnackBar(content: "Profile update successfully");
