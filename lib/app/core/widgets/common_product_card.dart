@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:gap/gap.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -79,12 +81,30 @@ class ProductCard extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      const SizedBox(height: 6),
-      Text(
-        product.brand ?? 'Unknown Brand',
-        style: MyTexts.medium12.copyWith(color: MyColors.custom('545454')),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+      const SizedBox(height: 4),
+      Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadiusGeometry.circular(4),
+            child: getImageView(
+              finalUrl:
+              APIConstants.bucketUrl +
+                  (product.merchantLogo ?? ""),
+              fit: BoxFit.cover,
+              height: 20,
+              width: 20
+            ),
+          ),
+          const Gap(4),
+          Expanded(
+            child: Text(
+              product.brand ?? 'Unknown Brand',
+              style: MyTexts.medium12.copyWith(color: MyColors.custom('545454')),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     ],
   );
