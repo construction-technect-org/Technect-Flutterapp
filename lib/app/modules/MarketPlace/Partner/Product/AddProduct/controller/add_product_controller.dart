@@ -521,13 +521,13 @@ class AddProductController extends GetxController {
         for (final key in toRemove) {
           removedImages.remove(key);
         }
-        int assignIndex = 0;
+        // int assignIndex = 0;
         for (var path in pickedFiles.map((e) => e.path)) {
           final emptyIndex = imageSlots.indexWhere((e) => e == null);
           if (emptyIndex != -1) {
             removedImages.remove("remove_image_${emptyIndex + 1}");
             imageSlots[emptyIndex] = path;
-            assignIndex++;
+            // assignIndex++;
           } else {
             break;
           }

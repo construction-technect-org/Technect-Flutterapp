@@ -7,6 +7,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Pr
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/models/rating_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/services/ProductDetailService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
+import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
 class ProductDetailsController extends GetxController {
@@ -38,6 +39,32 @@ class ProductDetailsController extends GetxController {
       if (!(isFromAdd.value == false && isFromConnector.value == false)) {
         productDetails(product.id ?? 0);
       }
+      final timeFormatter = DateFormat.jm();
+
+      businessHoursData.value = businessHours.map((e) {
+        String? formattedOpen;
+        String? formattedClose;
+
+        if (e.openTime != null && e.openTime!.isNotEmpty) {
+          final open = DateFormat("HH:mm:ss").parse(e.openTime!);
+          formattedOpen = timeFormatter.format(open);
+        }
+
+        if (e.closeTime != null && e.closeTime!.isNotEmpty) {
+          final close = DateFormat("HH:mm:ss").parse(e.closeTime!);
+          formattedClose = timeFormatter.format(close);
+        }
+
+        return {
+          "id": e.id,
+          "is_open": e.isOpen,
+          "day_name": e.dayName,
+          "open_time": formattedOpen,
+          "close_time": formattedClose,
+          "day_of_week": e.dayOfWeek,
+        };
+      }).toList();
+
       WidgetsBinding.instance.addPostFrameCallback((val) async {
         videoPlayerController = VideoPlayerController.networkUrl(
           Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()),
@@ -47,6 +74,7 @@ class ProductDetailsController extends GetxController {
     }
     super.onInit();
   }
+  List<BusinessHours> get businessHours => product.businessHours ?? [];
 
   void onEditProduct() {
     Get.toNamed(
@@ -146,6 +174,6 @@ class ProductDetailsController extends GetxController {
       },
     );
   }
-
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
+
 }

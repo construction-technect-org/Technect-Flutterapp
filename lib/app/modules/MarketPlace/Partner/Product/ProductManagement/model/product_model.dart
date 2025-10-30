@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+
 ProductListModel getFilterModelFromJson(String str) =>
     ProductListModel.fromJson(json.decode(str));
 
@@ -127,6 +129,8 @@ class Product {
   final String? merchantEmail;
   final String? merchantPhone;
   final String? merchantWebsite;
+  List<BusinessHours>? businessHours;
+
 
   Product({
     this.id,
@@ -142,6 +146,7 @@ class Product {
     this.categoryProductId,
     this.merchantWebsite,
     this.brand,
+    this.businessHours,
     this.productSubCategoryName,
     this.merchantPhone,
     this.merchantGstNumber,
@@ -233,6 +238,11 @@ class Product {
       merchantEmail: json["merchant_email"],
       merchantGstNumber: json["merchant_gst_number"],
       merchantPhone: json["merchant_phone"],
+      businessHours: json["business_hours"] == null
+          ? []
+          : List<BusinessHours>.from(
+        json["business_hours"]!.map((x) => BusinessHours.fromJson(x)),
+      ),
       filterValues: json["filter_values"] != null
           ? Map<String, dynamic>.from(json["filter_values"])
           : null,
@@ -278,6 +288,9 @@ class Product {
     "average_rating": averageRating,
     "total_ratings": totalRatings,
     "rating_count": ratingCount,
+    "business_hours": businessHours == null
+        ? []
+        : List<dynamic>.from(businessHours!.map((x) => x.toJson())),
     "product_sub_category_name": productSubCategoryName,
     "product_code": productCode,
     "uoc": uoc,
