@@ -90,7 +90,6 @@ class BottomBarView extends GetView<BottomController> {
                     myPref.role.val != "connector" ? "Product" : 'Request',
                     onTap: () {
                       if (myPref.role.val != "connector") {
-                        print(commonController.hasProfileComplete.value);
                         if (!commonController.hasProfileComplete.value) {
                           Get.dialog(
                             AlertDialog(
@@ -133,78 +132,114 @@ class BottomBarView extends GetView<BottomController> {
                             ),
                             barrierDismissible: false,
                           );
-                        }
-                        else if((Get.find<HomeController>()
-                            .profileData
-                            .value
-                            .data
-                            ?.addresses ??
-                            [])
-                            .isEmpty){
+                        } else if ((Get.find<HomeController>()
+                                    .profileData
+                                    .value
+                                    .data
+                                    ?.addresses ??
+                                [])
+                            .isEmpty) {
                           Get.dialog(
                             AlertDialog(
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
-                                  16,
-                                ),
+                                borderRadius: BorderRadius.circular(16),
                               ),
                               title: const Text(
                                 "Add Your Address",
                                 style: TextStyle(
-                                  fontWeight:
-                                  FontWeight.bold,
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
                               ),
                               content: const Text(
                                 "To add a product, please add your address first.",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
+                                style: TextStyle(fontSize: 14),
                               ),
                               actions: [
                                 TextButton(
-                                  onPressed: () =>
-                                      Get.back(),
+                                  onPressed: () => Get.back(),
                                   child: const Text(
                                     "Cancel",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                    ),
+                                    style: TextStyle(color: Colors.grey),
                                   ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
                                     Get.back();
-                                    Get.toNamed(
-                                      Routes
-                                          .MANUFACTURER_ADDRESS,
-                                    );
+                                    Get.toNamed(Routes.MANUFACTURER_ADDRESS);
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                    Colors.blue,
+                                    backgroundColor: Colors.blue,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                        8,
-                                      ),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  child: const Text(
-                                    "Add Address",
-                                  ),
+                                  child: const Text("Add Address"),
                                 ),
                               ],
                             ),
                             barrierDismissible: false,
                           );
+                        } else {
+                          Get.bottomSheet(
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: Container(
+                                      width: 50,
+                                      height: 5,
+                                      margin: const EdgeInsets.only(bottom: 20),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                    ),
+                                  ),
+                                  const Text(
+                                    "Select an Option",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  // Add Product
+                                  ListTile(
+                                    leading: SvgPicture.asset(Asset.add),
+                                    title: const Text("Add New Product"),
+                                    titleTextStyle: MyTexts.medium16.copyWith(color: MyColors.black),
+                                    onTap: () {
+                                      Get.back();
+                                      Get.toNamed(Routes.ADD_PRODUCT);
+                                    },
+                                  ),
+                                  const Divider(),
+                                  // Manage Product
+                                  ListTile(
+                                    leading: SvgPicture.asset(Asset.inventory),
+                                    title: const Text("Manage Products"),
+                                    titleTextStyle: MyTexts.medium16.copyWith(color: MyColors.black),
+                                    onTap: () {
+                                      Get.back();
+                                      Get.toNamed(Routes.INVENTORY);
+                                    },
+                                  ),
+                                  const SizedBox(height: 10),
+                                ],
+                              ),
+                            ),
+                          );
                         }
-                        else{
-                          Get.toNamed(Routes.ADD_PRODUCT);
-                        }
-
                       } else {
                         showModalBottomSheet(
                           context: Get.context!,
