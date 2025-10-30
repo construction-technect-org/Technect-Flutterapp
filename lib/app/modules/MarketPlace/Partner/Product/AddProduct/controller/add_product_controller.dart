@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
@@ -76,7 +75,9 @@ class AddProductController extends GetxController {
 
   final AddProductService _service = AddProductService();
   bool isEdit = false;
-  final VoidCallback? onApiCall =Get.arguments!=null? Get.arguments['onApiCall'] : () {};
+  final VoidCallback? onApiCall = Get.arguments != null
+      ? Get.arguments['onApiCall']
+      : () {};
 
   @override
   void onInit() {
@@ -435,22 +436,40 @@ class AddProductController extends GetxController {
 
   Future<void> pickImage() async {
     try {
-      final XFile? result = await CommonConstant().pickImageFromGallery();
+      final remainingSlots = 5 - pickedFilePathList.length;
+      if (remainingSlots <= 0) {
+        SnackBars.errorSnackBar(content: "You can only upload up to 5 images");
+        return;
+      }
 
-      if (result != null && result.path.isNotEmpty) {
-        final XFile file = result;
-        pickedFilePathList.add(file.path);
+      final List<XFile>? results = await ImagePicker().pickMultiImage(
+        limit: remainingSlots,
+      );
+
+      if (results != null && results.isNotEmpty) {
+        pickedFilePathList.addAll(results.map((e) => e.path));
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Failed to pick file: $e', time: 3);
+      SnackBars.errorSnackBar(content: 'Failed to pick images: $e', time: 3);
     }
   }
 
   Future<void> pickImageEdit() async {
     try {
-      final XFile? picked = await CommonConstant().pickImageFromGallery();
-      if (picked != null && picked.path.isNotEmpty) {
-        // 🟩 Step 1: Remove stale remove flags for occupied slots
+      // Count how many slots are still empty
+      final emptySlots = imageSlots.where((e) => e == null).length;
+      if (emptySlots <= 0) {
+        SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
+        return;
+      }
+
+      // Pick multiple images but only up to the available empty slots
+      final List<XFile>? pickedFiles = await ImagePicker().pickMultiImage(
+        limit: emptySlots,
+      );
+
+      if (pickedFiles != null && pickedFiles.isNotEmpty) {
+        // Remove stale removal flags
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
@@ -463,21 +482,17 @@ class AddProductController extends GetxController {
         for (final key in toRemove) {
           removedImages.remove(key);
         }
-
-        // 🟨 Step 2: Find first empty slot
-        final emptyIndex = imageSlots.indexWhere((e) => e == null);
-
-        if (emptyIndex != -1) {
-          // 🟦 Step 3: Cancel its removal flag (if existed)
-          removedImages.remove("remove_image_${emptyIndex + 1}");
-
-          // 🟧 Step 4: Assign new file
-          imageSlots[emptyIndex] = picked.path;
-        } else {
-          SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
+        int assignIndex = 0;
+        for (var path in pickedFiles.map((e) => e.path)) {
+          final emptyIndex = imageSlots.indexWhere((e) => e == null);
+          if (emptyIndex != -1) {
+            removedImages.remove("remove_image_${emptyIndex + 1}");
+            imageSlots[emptyIndex] = path;
+            assignIndex++;
+          } else {
+            break; // no more space
+          }
         }
-
-        // 🟥 Step 5: Cleanup: remove remove flags if at least one valid image exists
         final hasAnyImage = imageSlots.any(
           (e) => e != null && e.toString().isNotEmpty,
         );
@@ -491,7 +506,7 @@ class AddProductController extends GetxController {
         }
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: "Failed to pick image: $e", time: 3);
+      SnackBars.errorSnackBar(content: "Failed to pick images: $e", time: 3);
     }
   }
 
