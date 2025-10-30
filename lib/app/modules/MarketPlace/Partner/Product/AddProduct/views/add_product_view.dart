@@ -249,7 +249,7 @@ class AddProductView extends GetView<AddProductController> {
                                               },
                                               child: path.contains('http')
                                                   ? getImageView(
-                                                      finalUrl: path ?? "",
+                                                      finalUrl: path,
                                                       width: 78,
                                                       height: 78,
                                                       fit: BoxFit.cover,
@@ -679,7 +679,7 @@ class AddProductView extends GetView<AddProductController> {
                               ),
                               child: Column(
                                 children: [
-                                  if (controller.selectedVideo.value!=null)
+                                  if (controller.selectedVideo.value != null)
                                     Stack(
                                       alignment: AlignmentGeometry.topRight,
                                       children: [
@@ -699,7 +699,6 @@ class AddProductView extends GetView<AddProductController> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-
                                                 // OpenFilex.open(video.path);
                                               },
                                               child: Container(

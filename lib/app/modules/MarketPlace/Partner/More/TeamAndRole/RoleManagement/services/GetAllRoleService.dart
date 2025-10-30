@@ -46,4 +46,18 @@ class GetAllRoleService {
     }
     return null;
   }
+
+  Future<Map<String, dynamic>?> deleteRole(int roleId) async {
+    try {
+      final response = await _apiManager.delete(
+        url: APIConstants.deleteRole + roleId.toString(),
+      );
+      if (response != null) {
+        return response as Map<String, dynamic>;
+      }
+    } catch (e) {
+      log("Error deleting role: $e");
+    }
+    return null;
+  }
 }

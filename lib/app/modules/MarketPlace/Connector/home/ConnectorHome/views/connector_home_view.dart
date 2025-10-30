@@ -695,7 +695,7 @@ class ConnectorHomeView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              displayText ?? "",
+              displayText,
               style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
             ),
             const Gap(20),

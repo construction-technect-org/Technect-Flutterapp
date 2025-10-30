@@ -133,18 +133,6 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         );
                                       }
                                     },
-                                    validator: (value) {
-                                      if (value == null ||
-                                          value.trim().isEmpty) {
-                                        return "Please enter email";
-                                      }
-                                      if (!RegExp(
-                                        r'^[A-Za-z0-9._%+-]*[A-Za-z]+[A-Za-z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                                      ).hasMatch(value.trim())) {
-                                        return "Please enter a valid email address";
-                                      }
-                                      return null;
-                                    },
                                   ),
                                   Obx(() {
                                     if (controller
@@ -248,36 +236,8 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                 controller: controller.gstController,
                                 suffixPadding: 0,
                                 suffixIcon: GestureDetector(
-                                  onTap: () {
-                                    final value = controller.gstController.text
-                                        .trim();
-                                    if (value.isEmpty) {
-                                      SnackBars.errorSnackBar(
-                                        content: "Please enter GSTIN number",
-                                      );
-                                      controller.isVerified.value = false;
-                                      return;
-                                    } else if (value.length != 15) {
-                                      SnackBars.errorSnackBar(
-                                        content:
-                                            "GSTIN must be exactly 15 characters",
-                                      );
-                                      controller.isVerified.value = false;
-                                      return;
-                                    } else if (!RegExp(
-                                      r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
-                                    ).hasMatch(value)) {
-                                      SnackBars.errorSnackBar(
-                                        content: "Invalid GSTIN format",
-                                      );
-                                      controller.isVerified.value = false;
-                                      return;
-                                    }
-                                    controller.isVerified.value = true;
-                                    SnackBars.successSnackBar(
-                                      content: "GSTIN verified successfully!",
-                                    );
-                                  },
+                                  onTap: () async => await controller
+                                      .validateGSTAvailability(),
                                   child: Container(
                                     width: 100,
                                     decoration: const BoxDecoration(

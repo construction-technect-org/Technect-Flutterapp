@@ -37,8 +37,6 @@ class MerchantCard extends StatelessWidget {
                             finalUrl:
                                 APIConstants.bucketUrl +
                                 (data.ownerProfileImage ?? ""),
-                            height: 40,
-                            width: 40,
                             fit: BoxFit.cover,
                           ),
                   ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
@@ -22,6 +23,9 @@ class AddTeamController extends GetxController {
   RxBool isEdit = false.obs;
   RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<GetAllRole>? selectedRole = GetAllRole().obs;
+  // Email availability state
+  RxString emailError = "".obs;
+  RxBool isEmailValidating = false.obs;
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -187,5 +191,15 @@ class AddTeamController extends GetxController {
     } else {
       await addTeam();
     }
+  }
+
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\$').hasMatch(email);
+  }
+
+  Future<void> validateEmailAvailability(String email) async {
+    isEmailValidating.value = true;
+    emailError.value = await Validate().validateEmail(email) ?? "";
+    isEmailValidating.value = false;
   }
 }

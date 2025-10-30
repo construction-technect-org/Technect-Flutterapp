@@ -193,8 +193,8 @@ class SelectedProductController extends GetxController {
         case 'Ratings':
           products.sort(
             (a, b) => double.parse(
-              b.ratingCount.toString() ?? '0',
-            ).compareTo(double.parse(a.ratingCount.toString() ?? '0')),
+              b.ratingCount.toString(),
+            ).compareTo(double.parse(a.ratingCount.toString())),
           );
         case 'New Arrivals':
           products.sort(

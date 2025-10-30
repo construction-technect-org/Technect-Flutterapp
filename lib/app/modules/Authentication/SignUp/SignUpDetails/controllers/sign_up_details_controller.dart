@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
@@ -49,22 +50,15 @@ class SignUpDetailsController extends GetxController {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 
+  Future<void> validateGSTAvailability() async {
+    final value = gstController.text.trim();
+    isVerified.value = await Validate().validateGSTAvailability(value);
+  }
+
   Future<void> validateEmailAvailability(String email) async {
     isEmailValidating.value = true;
-    emailError.value = "";
-
-    try {
-      final isAvailable = await signUpService.checkAvailability(email: email);
-      if (!isAvailable) {
-        emailError.value = "This email is already registered";
-      } else {
-        emailError.value = "";
-      }
-    } catch (e) {
-      emailError.value = "Error checking email availability";
-    } finally {
-      isEmailValidating.value = false;
-    }
+    emailError.value = await Validate().validateEmail(email) ?? "";
+    isEmailValidating.value = false;
   }
 
   Future<bool> validateNumberAvailability(String number) async {
@@ -174,25 +168,25 @@ class SignUpDetailsController extends GetxController {
     await verifyOtp();
   }
 
-  Future<bool> checkEmail() async {
-    try {
-      final isAvailable = await signUpService.checkAvailability(
-        email: emailController.text,
-      );
+  // Future<bool> checkEmail() async {
+  //   try {
+  //     final isAvailable = await signUpService.checkAvailability(
+  //       email: emailController.text,
+  //     );
 
-      if (!isAvailable) {
-        SnackBars.errorSnackBar(content: "This email is already registered");
-        return false;
-      }
+  //     if (!isAvailable) {
+  //       SnackBars.errorSnackBar(content: "This email is already registered");
+  //       return false;
+  //     }
 
-      return true;
-    } catch (e) {
-      SnackBars.errorSnackBar(
-        content: "Error verifying email. Please try again",
-      );
-      return false;
-    }
-  }
+  //     return true;
+  //   } catch (e) {
+  //     SnackBars.errorSnackBar(
+  //       content: "Error verifying email. Please try again",
+  //     );
+  //     return false;
+  //   }
+  // }
 
   // Verify OTP method
   Future<void> verifyOtp() async {

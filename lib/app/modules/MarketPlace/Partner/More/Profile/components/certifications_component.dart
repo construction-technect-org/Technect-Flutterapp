@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/widget/file_icon_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:gap/gap.dart';
 import 'package:open_filex/open_filex.dart';
@@ -132,14 +133,9 @@ class CertificationsComponent extends StatelessWidget {
                           Column(
                             children: [
                               const Gap(14),
-                              _buildFileIcon(cert.name ?? ''),
-                              const Gap(14),
-                              Text(
-                                "File uploaded: ${cert.name}",
-                                textAlign: TextAlign.center,
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.gray2E,
-                                ),
+                              FileIconWidget(
+                                fileName: cert.name ?? '',
+                                showFileName: true,
                               ),
                             ],
                           ),
@@ -174,61 +170,6 @@ class CertificationsComponent extends StatelessWidget {
         ],
       );
     });
-  }
-
-  Widget _buildFileIcon(String fileName) {
-    final extension = fileName.toLowerCase().split('.').last;
-
-    switch (extension) {
-      case 'pdf':
-        return Image.asset(Asset.pdf, height: 64, width: 64);
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'gif':
-      case 'bmp':
-      case 'webp':
-        return Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-            color: MyColors.primary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Icon(Icons.image, color: MyColors.primary, size: 30),
-        );
-      case 'doc':
-      case 'docx':
-        return Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-            color: Colors.blue.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Icon(Icons.description, color: Colors.blue, size: 30),
-        );
-      case 'txt':
-        return Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-            color: Colors.grey.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Icon(Icons.text_snippet, color: Colors.grey, size: 30),
-        );
-      default:
-        return Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-            color: Colors.orange.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Icon(Icons.warning, color: Colors.orange, size: 30),
-        );
-    }
   }
 
   Widget _buildCertificationItem(

@@ -38,10 +38,12 @@ class EditProfileView extends GetView<EditProfileController> {
             children: [
               RoundedButton(
                 buttonName: 'Update',
-                onTap: () {
-                  if (formKey.currentState!.validate()) {
-                    if (Get.find<ProfileController>().image.value.isEmpty) {
-                      if (Get.find<ProfileController>().selectedImage.value == null) {
+                onTap: () async {
+                  await controller.validateEmailAvailability();
+                  if (formKey.currentState!.validate() &&
+                      controller.emailError.value == '') {
+                    if (controller.image.value.isEmpty) {
+                      if (controller.selectedImage.value == null) {
                         SnackBars.errorSnackBar(
                           content: "Please upload business logo",
                         );
@@ -103,11 +105,15 @@ class EditProfileView extends GetView<EditProfileController> {
                                 onTap: () =>
                                     controller.pickImageBottomSheet(context),
                                 child: Obx(() {
-
-                                  if (Get.find<ProfileController>().selectedImage.value != null) {
+                                  if (Get.find<ProfileController>()
+                                          .selectedImage
+                                          .value !=
+                                      null) {
                                     return ClipOval(
                                       child: Image.file(
-                                        Get.find<ProfileController>().selectedImage.value!,
+                                        Get.find<ProfileController>()
+                                            .selectedImage
+                                            .value!,
                                         width: 78,
                                         height: 78,
                                         fit: BoxFit.cover,
@@ -115,7 +121,8 @@ class EditProfileView extends GetView<EditProfileController> {
                                     );
                                   }
 
-                                  final imagePath = Get.find<ProfileController>().image.value;
+                                  final imagePath =
+                                      Get.find<ProfileController>().image.value;
                                   final imageUrl = imagePath.isNotEmpty
                                       ? "${APIConstants.bucketUrl}$imagePath"
                                       : null;
@@ -210,16 +217,36 @@ class EditProfileView extends GetView<EditProfileController> {
             headerText: "Website",
             controller: controller.businessWebsiteController,
             keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.next,
             validator: ValidationUtils.validateWebsiteUrl,
           ),
           SizedBox(height: 2.h),
-          CommonTextField(
-            headerText: "Business Email",
-            hintText: "adc12@business.com",
-            controller: controller.businessEmailController,
-            keyboardType: TextInputType.emailAddress,
-            validator: ValidationUtils.validateBusinessEmail,
+          Focus(
+            onFocusChange: (hasFocus) {
+              if (!hasFocus) {
+                controller.validateEmailAvailability();
+              }
+            },
+            child: CommonTextField(
+              headerText: "Business Email",
+              hintText: "adc12@business.com",
+              controller: controller.businessEmailController,
+              keyboardType: TextInputType.emailAddress,
+              // validator: ValidationUtils.validateBusinessEmail,
+            ),
           ),
+          Obx(() {
+            if (controller.emailError.value.isNotEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  controller.emailError.value,
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
           SizedBox(height: 2.h),
           CommonTextField(
             hintText: "xxxxxxxxxxxxxx",
@@ -234,16 +261,23 @@ class EditProfileView extends GetView<EditProfileController> {
             validator: ValidationUtils.validateGSTINNumber,
           ),
           SizedBox(height: 2.h),
-          CommonTextField(
-            hintText: "9292929929",
-            headerText: "Business Contact Number",
-            controller: controller.businessContactController,
-            keyboardType: TextInputType.phone,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(10),
-            ],
-            validator: ValidationUtils.validateBusinessContactNumber,
+          Focus(
+            onFocusChange: (hasFocus) {
+              if (!hasFocus) {
+                controller.validateEmailAvailability();
+              }
+            },
+            child: CommonTextField(
+              hintText: "9292929929",
+              headerText: "Business Contact Number",
+              controller: controller.businessContactController,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10),
+              ],
+              validator: ValidationUtils.validateBusinessContactNumber,
+            ),
           ),
           SizedBox(height: 2.h),
           CommonTextField(
@@ -257,7 +291,6 @@ class EditProfileView extends GetView<EditProfileController> {
             ],
           ),
           SizedBox(height: 2.h),
-
         ],
       ),
     );
