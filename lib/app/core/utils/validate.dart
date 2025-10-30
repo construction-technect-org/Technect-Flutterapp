@@ -4,9 +4,10 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDe
 class Validate {
   bool isValidEmail(String? email) {
     if (email == null || email.isEmpty) return false;
-    return RegExp(
-      r'^[A-Za-z0-9._%+-]*[A-Za-z]+[A-Za-z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    ).hasMatch(email);
+    final regex = RegExp(
+      r"^(?!.*\.\.)[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9-]+\.[A-Za-z]{2,63}$",
+    );
+    return regex.hasMatch(email);
   }
 
   Future<String?> validateEmail(String? email) async {
