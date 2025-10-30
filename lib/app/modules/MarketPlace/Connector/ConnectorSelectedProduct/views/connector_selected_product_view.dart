@@ -119,7 +119,7 @@ class SelectedProductView extends StatelessWidget {
           final item = subCategories[index];
           final isSelected = controller.selectedSubCategoryId.value == item.id;
           return GestureDetector(
-            onTap: () => controller.selectSubCategory(index),
+            onTap: () => controller.lestSide0LeftView(index),
             child: Container(
               height: 140,
               color: const Color(0xFFFAFBFF),
@@ -677,7 +677,7 @@ class SelectedProductView extends StatelessWidget {
           final item = products[index];
 
           return GestureDetector(
-            onTap: () => controller.selectProductCategory(index),
+            onTap: () => controller.leftSide2LeftView(index),
             child: Container(
               height: 140,
               color: const Color(0xFFFAFBFF),
@@ -849,20 +849,7 @@ class SelectedProductView extends StatelessWidget {
     final controller = Get.find<SelectedProductController>();
 
     return GestureDetector(
-      onTap: () {
-        controller.selectProduct(index);
-        controller.productCategories.value =
-            controller.mainCategory.value?.subCategories?.firstWhere((element) {
-              return element.id == product.subCategoryId;
-            }) ??
-            SubCategory();
-        if (controller.productCategories.value.productSubCategories?.isEmpty ??
-            true) {
-          controller.navigationIndex.value = 1;
-        } else {
-          controller.navigationIndex.value = 2;
-        }
-      },
+      onTap: () => controller.rightSide0RightView(index),
       child: SizedBox(
         height: 140,
         child: Column(
@@ -1034,7 +1021,9 @@ class SelectedProductView extends StatelessWidget {
                               right: Radius.circular(10),
                             ),
                             color:
-                                controller.selectedProductCategoryIndex.value ==
+                                controller
+                                        .selectedSubProductCategoryIndex
+                                        .value ==
                                     index
                                 ? MyColors.primary
                                 : Colors.transparent,
