@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDe
 class Validate {
   bool isValidEmail(String? email) {
     if (email == null || email.isEmpty) return false;
+    if (email.length > 254) return false;
     final regex = RegExp(
       r"^(?!.*\.\.)[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9-]+\.[A-Za-z]{2,63}$",
     );
