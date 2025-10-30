@@ -11,18 +11,21 @@ class SelectedProductController extends GetxController {
   HomeController homeController = Get.find<HomeController>();
   // Observable variables
   RxInt selectedProductIndex = (-1).obs;
+  // Two-pane navigation index (0..4)
+  RxInt navigationIndex = 0.obs;
 
-  // View state management
-  RxBool isProductView = false.obs;
+  // View state handled via navigationIndex only (0..4)
   RxBool isLoadingProducts = false.obs;
   RxBool isLoading = false.obs;
   RxBool moreThenHundred = false.obs;
+  RxBool showSubCategoryOptions = false.obs;
 
   // Product categories (from CategoryData model) and main products from API
   Rx<SubCategory> productCategories = SubCategory().obs;
   Rx<ConnectorSelectedProductModel?> productListModel =
       Rx<ConnectorSelectedProductModel?>(null);
   RxInt selectedProductCategoryIndex = 0.obs;
+  RxInt selectedSubProductCategoryIndex = 0.obs;
 
   // Variables for categories and products
   Rx<CategoryData?> mainCategory = CategoryData().obs; // Main Category
@@ -30,12 +33,15 @@ class SelectedProductController extends GetxController {
   Rx<SubCategory?> selectedSubCategory = Rx<SubCategory?>(null);
   RxList<ProductCategory> products = <ProductCategory>[].obs;
   Rx<ProductCategory?> selectedProduct = Rx<ProductCategory?>(null);
+  RxList<ProductSubCategory> productSubCategories = <ProductSubCategory>[].obs;
+  Rx<ProductSubCategory?> selectedProductSubCategory = Rx<ProductSubCategory?>(
+    null,
+  );
 
   // Arguments from navigation
   int? mainCategoryId;
   String? mainCategoryName;
   RxInt selectedSubCategoryId = 0.obs;
-
   double radiusKm = 50000000;
 
   // Service instance
@@ -76,17 +82,37 @@ class SelectedProductController extends GetxController {
     }
   }
 
+  // Explicitly (re)select the main category and refresh right-side subcategories
+  void selectMainCategory() {
+    final categoryHierarchy = myPref.getCategoryHierarchyModel();
+    if (mainCategoryId != null && categoryHierarchy != null) {
+      mainCategory.value =
+          categoryHierarchy.data?.firstWhere((c) => c.id == mainCategoryId) ??
+          CategoryData();
+      subCategories.value =
+          mainCategory.value?.subCategories ?? <SubCategory>[];
+      // Stay on index 0: Left = main category, Right = subcategories
+    }
+  }
+
   // Methods
   void selectSubCategory(int index) {
     selectedSubCategoryId.value = subCategories[index].id ?? 0;
     selectedSubCategory.value = subCategories[index];
     products.value = selectedSubCategory.value?.products ?? [];
+    productSubCategories.value =
+        selectedSubCategory.value?.productSubCategories ??
+        <ProductSubCategory>[];
     selectedProductIndex.value = -1; // Reset product selection
   }
 
   void selectProduct(int index) {
     selectedProductIndex.value = index;
     selectedProduct.value = products[index];
+    if (productSubCategories.isNotEmpty) {
+      return;
+    }
+    fetchProductsFromApi();
   }
 
   // Call API when product is clicked
@@ -127,12 +153,13 @@ class SelectedProductController extends GetxController {
         mainCategoryId: mainCategoryId.toString(),
         subCategoryId: selectedSubCategory.value!.id.toString(),
         categoryProductId: selectedProduct.value!.id.toString(),
+        productSubCategoryId: selectedProductSubCategory.value?.id?.toString(),
         radius: radiusKm.toInt(),
         latitude: latitude,
         longitude: longitude,
         filters: filtersData,
       );
-      isProductView.value = true;
+      showSubCategoryOptions.value = false;
 
       if (allFilters.isEmpty) {
         getFilter(selectedProduct.value!.id.toString());
@@ -149,14 +176,35 @@ class SelectedProductController extends GetxController {
     selectedProductCategoryIndex.value = index;
     selectedProduct.value =
         productCategories.value.products?[index] ?? ProductCategory();
+    if (productSubCategories.isNotEmpty) {
+      return;
+    }
     fetchProductsFromApi();
   }
 
   // Go back to category view
   void goBackToCategoryView() {
-    isProductView.value = false;
-    productListModel.value = null;
-    selectedProductCategoryIndex.value = 0;
+    if (navigationIndex.value == 0) {
+      Get.back();
+      return;
+    }
+    if (navigationIndex.value == 3) {
+      navigationIndex.value = 2;
+    } else if (navigationIndex.value == 2) {
+      if (selectedSubCategory.value?.productSubCategories?.isEmpty ?? true) {
+        navigationIndex.value = 1;
+      } else {
+        navigationIndex.value = 0;
+      }
+    } else {
+      navigationIndex.value = 0;
+    }
+  }
+
+  void selectProductSubCategory(int index) {
+    selectedSubProductCategoryIndex.value = index;
+    selectedProductSubCategory.value = productSubCategories[index];
+    fetchProductsFromApi();
   }
 
   // Inside SelectedProductController
@@ -461,10 +509,7 @@ class SelectedProductController extends GetxController {
                           border: !isExpanded
                               ? null
                               : const Border(
-                                  bottom: BorderSide(
-                                    color: MyColors.grayEA,
-                                    width: 1,
-                                  ),
+                                  bottom: BorderSide(color: MyColors.grayEA),
                                 ),
                         ),
                         child: Column(
@@ -785,7 +830,6 @@ class SelectedProductController extends GetxController {
               "max": range.end,
             };
           }
-          break;
 
         case 'dropdown_multiple':
           final list = multiSelectValues[name]?.toList() ?? [];
@@ -794,7 +838,6 @@ class SelectedProductController extends GetxController {
             "filter_type": "dropdown_multiple",
             "list": list,
           };
-          break;
 
         case 'dropdown':
           final selectedValue = selectedFilters[name]?.value;
@@ -805,7 +848,6 @@ class SelectedProductController extends GetxController {
               "list": [selectedValue],
             };
           }
-          break;
 
         default:
           final selected = selectedFilters[name]?.value ?? '';
@@ -816,11 +858,27 @@ class SelectedProductController extends GetxController {
               "list": [selected],
             };
           }
-          break;
       }
     }
-
-    print("✅ Final Filter Data (for API): $filtersMap");
     return filtersMap;
+  }
+
+  List<dynamic> get rightPanelItems {
+    switch (navigationIndex.value) {
+      case 0:
+        return subCategories;
+      case 1:
+        return products; // local categories (not API)
+      case 2:
+        return productSubCategories.isNotEmpty
+            ? productSubCategories
+            : (productListModel.value?.data?.products ?? []);
+      case 3:
+        return productListModel.value?.data?.products ?? [];
+      case 4:
+        return productListModel.value?.data?.products ?? [];
+      default:
+        return [];
+    }
   }
 }
