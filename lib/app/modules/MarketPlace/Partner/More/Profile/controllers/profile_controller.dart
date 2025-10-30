@@ -494,7 +494,12 @@ class ProfileController extends GetxController {
       final homeController = Get.find<HomeController>();
       final merchantProfile =
           homeController.profileData.value.data?.merchantProfile;
-      final isUpdate = merchantProfile?.id != null;
+      final bool isUpdate;
+      if (isSwitch.value) {
+        isUpdate = false;
+      } else {
+        isUpdate = (merchantProfile?.businessEmail != null);
+      }
 
       final formFields = <String, dynamic>{
         'business_name': businessModel.value.businessName.toString(),
@@ -566,13 +571,16 @@ class ProfileController extends GetxController {
             Get.back();
             SnackBars.successSnackBar(content: "Profile update successfully");
           } else {
-            await homeController.fetchProfileData();
-            Get.back();
-            SnackBars.successSnackBar(content: "Profile update successfully");
+
             if (isSwitch.value) {
               Get.find<SwitchAccountController>().updateRole(role: "partner");
               myPref.role.val = "partner";
               Get.offAllNamed(Routes.MAIN);
+            }
+            else{
+              await homeController.fetchProfileData();
+              Get.back();
+              SnackBars.successSnackBar(content: "Profile update successfully");
             }
           }
         } catch (e) {

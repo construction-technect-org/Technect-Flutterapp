@@ -42,15 +42,14 @@ class EditProfileView extends GetView<EditProfileController> {
                   await controller.validateEmailAvailability();
                   if (formKey.currentState!.validate() &&
                       controller.emailError.value == '') {
-                    if (controller.image.value.isEmpty) {
-                      if (controller.selectedImage.value == null) {
+                    if (Get.find<ProfileController>().image.value.isEmpty) {
+                      if (Get.find<ProfileController>().selectedImage.value == null) {
                         SnackBars.errorSnackBar(
                           content: "Please upload business logo",
                         );
                         return;
                       }
                     }
-
                     controller.updateProfile();
                   }
                 },

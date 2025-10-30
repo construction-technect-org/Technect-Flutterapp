@@ -64,7 +64,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           controller.isFromConnector.value == false))
                         Expanded(
                           child: GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Get.offAllNamed(Routes.MAIN);
                             },
                             child: Column(
@@ -1301,9 +1301,23 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HearderText(
-          text: "Technical Specifications:",
-          textStyle: MyTexts.bold18.copyWith(color: MyColors.black),
+        Row(
+          children: [
+            HearderText(
+              text: "Technical Specifications:",
+              textStyle: MyTexts.bold18.copyWith(color: MyColors.black),
+            ),
+            const Spacer(),
+            if (myPref.role.val == "partner")
+              if (controller.isFromAdd.value == true &&
+                  controller.isFromConnector.value == false)
+                GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: SvgPicture.asset(Asset.edit),
+                ),
+          ],
         ),
         const SizedBox(height: 10),
         _buildSpecificationTable(specifications),

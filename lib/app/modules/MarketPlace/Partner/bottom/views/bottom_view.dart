@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/dashboard.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
@@ -89,9 +90,8 @@ class BottomBarView extends GetView<BottomController> {
                     myPref.role.val != "connector" ? "Product" : 'Request',
                     onTap: () {
                       if (myPref.role.val != "connector") {
-                        if (commonController.hasProfileComplete.value) {
-                          Get.toNamed(Routes.ADD_PRODUCT);
-                        } else {
+                        print(commonController.hasProfileComplete.value);
+                        if (!commonController.hasProfileComplete.value) {
                           Get.dialog(
                             AlertDialog(
                               shape: RoundedRectangleBorder(
@@ -134,6 +134,77 @@ class BottomBarView extends GetView<BottomController> {
                             barrierDismissible: false,
                           );
                         }
+                        else if((Get.find<HomeController>()
+                            .profileData
+                            .value
+                            .data
+                            ?.addresses ??
+                            [])
+                            .isEmpty){
+                          Get.dialog(
+                            AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(
+                                  16,
+                                ),
+                              ),
+                              title: const Text(
+                                "Add Your Address",
+                                style: TextStyle(
+                                  fontWeight:
+                                  FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              content: const Text(
+                                "To add a product, please add your address first.",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Get.back(),
+                                  child: const Text(
+                                    "Cancel",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Get.back();
+                                    Get.toNamed(
+                                      Routes
+                                          .MANUFACTURER_ADDRESS,
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                    Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(
+                                        8,
+                                      ),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Add Address",
+                                  ),
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                        else{
+                          Get.toNamed(Routes.ADD_PRODUCT);
+                        }
+
                       } else {
                         showModalBottomSheet(
                           context: Get.context!,

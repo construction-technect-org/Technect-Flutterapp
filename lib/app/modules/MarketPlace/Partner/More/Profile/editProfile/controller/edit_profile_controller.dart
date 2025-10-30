@@ -96,9 +96,9 @@ class EditProfileController extends GetxController {
       gstinNumber: gstNumberController.text,
       website: businessWebsiteController.text,
       address: addressContoller.text,
-      image: selectedImage.value != null
-          ? selectedImage.value?.path
-          : image.value,
+      image: Get.find<ProfileController>().selectedImage.value != null
+          ? Get.find<ProfileController>().selectedImage.value?.path
+          : Get.find<ProfileController>().image.value,
     );
     Get.find<ProfileController>().businessModel.refresh();
     Get.back();
@@ -107,8 +107,6 @@ class EditProfileController extends GetxController {
   void updateProfile() {
     nextStep();
   }
-
-  RxString image = "".obs;
 
   void pickImageBottomSheet(BuildContext context) {
     Get.bottomSheet(
@@ -148,7 +146,6 @@ class EditProfileController extends GetxController {
     );
   }
 
-  Rx<File?> selectedImage = Rx<File?>(null);
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await Get.find<ProfileController>().picker.pickImage(
