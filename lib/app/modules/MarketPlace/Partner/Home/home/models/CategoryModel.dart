@@ -9,13 +9,17 @@ class CategoryModel {
     success: json["success"],
     data: json["data"] == null
         ? []
-        : List<CategoryData>.from(json["data"]!.map((x) => CategoryData.fromJson(x))),
+        : List<CategoryData>.from(
+            json["data"]!.map((x) => CategoryData.fromJson(x)),
+          ),
     message: json["message"],
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -44,8 +48,12 @@ class CategoryData {
     name: json["name"],
     isActive: json["is_active"],
     sortOrder: json["sort_order"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null
+        ? null
+        : DateTime.parse(json["updated_at"]),
     subCategories: json["sub_categories"] == null
         ? []
         : List<SubCategory>.from(
@@ -77,6 +85,7 @@ class SubCategory {
   String? image;
   String? mainCategoryName;
   List<ProductCategory>? products;
+  List<ProductSubCategory>? productSubCategories;
 
   SubCategory({
     this.id,
@@ -89,6 +98,7 @@ class SubCategory {
     this.image,
     this.mainCategoryName,
     this.products,
+    this.productSubCategories,
   });
 
   factory SubCategory.fromJson(Map<String, dynamic> json) => SubCategory(
@@ -97,14 +107,25 @@ class SubCategory {
     name: json["name"],
     isActive: json["is_active"],
     sortOrder: json["sort_order"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null
+        ? null
+        : DateTime.parse(json["updated_at"]),
     image: json["image"],
     mainCategoryName: json["main_category_name"],
     products: json["products"] == null
         ? []
         : List<ProductCategory>.from(
             json["products"]!.map((x) => ProductCategory.fromJson(x)),
+          ),
+    productSubCategories: json["product_sub_categories"] == null
+        ? []
+        : List<ProductSubCategory>.from(
+            json["product_sub_categories"]!.map(
+              (x) => ProductSubCategory.fromJson(x),
+            ),
           ),
   );
 
@@ -121,6 +142,9 @@ class SubCategory {
     "products": products == null
         ? []
         : List<dynamic>.from(products!.map((x) => x.toJson())),
+    "product_sub_categories": productSubCategories == null
+        ? []
+        : List<dynamic>.from(productSubCategories!.map((x) => x.toJson())),
   };
 }
 
@@ -149,20 +173,27 @@ class ProductCategory {
     this.image,
   });
 
-  factory ProductCategory.fromJson(Map<String, dynamic> json) => ProductCategory(
-    id: json["id"],
-    subCategoryId: json["sub_category_id"],
-    name: json["name"],
-    isActive: json["is_active"],
-    image: json["image"],
-    sortOrder: json["sort_order"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    subCategoryName: json["sub_category_name"],
-    filters: json["filters"] == null
-        ? []
-        : List<Filter>.from(json["filters"]!.map((x) => Filter.fromJson(x))),
-  );
+  factory ProductCategory.fromJson(Map<String, dynamic> json) =>
+      ProductCategory(
+        id: json["id"],
+        subCategoryId: json["sub_category_id"],
+        name: json["name"],
+        isActive: json["is_active"],
+        image: json["image"],
+        sortOrder: json["sort_order"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        subCategoryName: json["sub_category_name"],
+        filters: json["filters"] == null
+            ? []
+            : List<Filter>.from(
+                json["filters"]!.map((x) => Filter.fromJson(x)),
+              ),
+      );
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -174,7 +205,9 @@ class ProductCategory {
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
     "sub_category_name": subCategoryName,
-    "filters": filters == null ? [] : List<dynamic>.from(filters!.map((x) => x.toJson())),
+    "filters": filters == null
+        ? []
+        : List<dynamic>.from(filters!.map((x) => x.toJson())),
   };
 }
 
@@ -243,5 +276,54 @@ class Filter {
     "product_name": productName,
     "sub_category_name": subCategoryName,
     "main_category_name": mainCategoryName,
+  };
+}
+
+class ProductSubCategory {
+  int? id;
+  int? subCategoryId;
+  String? name;
+  bool? isActive;
+  int? sortOrder;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? image;
+
+  ProductSubCategory({
+    this.id,
+    this.subCategoryId,
+    this.name,
+    this.isActive,
+    this.sortOrder,
+    this.createdAt,
+    this.updatedAt,
+    this.image,
+  });
+
+  factory ProductSubCategory.fromJson(Map<String, dynamic> json) =>
+      ProductSubCategory(
+        id: json["id"],
+        subCategoryId: json["sub_category_id"],
+        name: json["name"],
+        isActive: json["is_active"],
+        sortOrder: json["sort_order"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        image: json["image"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "sub_category_id": subCategoryId,
+    "name": name,
+    "is_active": isActive,
+    "sort_order": sortOrder,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "image": image,
   };
 }

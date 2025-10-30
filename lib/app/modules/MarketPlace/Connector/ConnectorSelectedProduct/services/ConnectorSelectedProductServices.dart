@@ -8,6 +8,7 @@ class ConnectorSelectedProductServices {
     String? mainCategoryId,
     String? subCategoryId,
     String? categoryProductId,
+    String? productSubCategoryId,
     int? radius,
     String? latitude,
     String? longitude,
@@ -24,6 +25,8 @@ class ConnectorSelectedProductServices {
           "sub_category_id": subCategoryId,
         if (categoryProductId != null && categoryProductId.isNotEmpty)
           "category_product_id": categoryProductId,
+        if (productSubCategoryId != null && productSubCategoryId.isNotEmpty)
+          "product_sub_category_id": productSubCategoryId,
         if (latitude != null) "latitude": latitude,
         if (longitude != null) "longitude": longitude,
         if (radius != null) "radius_km": radius,
