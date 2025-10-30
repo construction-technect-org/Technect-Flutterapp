@@ -184,7 +184,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
             ),
             const SizedBox(height: 24),
             Text(
-              "Choose your role",
+              "Select a Role",
               style: MyTexts.bold18.copyWith(color: MyColors.primary),
             ),
             const SizedBox(height: 8),
@@ -197,39 +197,38 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
               children: [
                 Expanded(
                   child: _roleOptionButton(
+                    role: "partner",
                     icon: Asset.rMerchant,
                     onTap: () {
-                      myPref.setRole("partner");
                       controller.selectedFinalRole.value = "partner";
-                      Get.back();
-                      Get.toNamed(Routes.SIGN_UP_DETAILS);
                     },
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: _roleOptionButton(
+                    role: "connector",
                     icon: Asset.rConnector,
                     onTap: () {
-                      myPref.setRole("connector");
                       controller.selectedFinalRole.value = "connector";
-                      Get.back();
-                      Get.toNamed(Routes.SIGN_UP_DETAILS);
                     },
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 24),
             Center(
-              child: TextButton(
-                onPressed: () => Get.back(),
-                child: Text(
-                  "Cancel",
-                  style: MyTexts.regular14.copyWith(color: MyColors.gray2E),
-                ),
+              child: RoundedButton(
+                buttonName: "Next",
+                width: 100,
+                onTap: () {
+                  myPref.setRole(controller.selectedFinalRole.value);
+                  Get.back();
+                  Get.toNamed(Routes.SIGN_UP_DETAILS);
+                },
               ),
             ),
+            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -240,9 +239,26 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
 
   Widget _roleOptionButton({
     required String icon,
+    required String role,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(onTap: onTap, child: Image.asset(icon));
+    return Obx(() {
+      return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 86,
+          decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage(icon),fit: BoxFit.fitWidth),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: role == controller.selectedFinalRole.value
+                  ? MyColors.primary
+                  : Colors.transparent,
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   Widget _buildRoleCard(int index, String imagePath, String roleName) {

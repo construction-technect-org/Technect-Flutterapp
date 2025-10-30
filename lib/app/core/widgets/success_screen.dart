@@ -36,7 +36,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
             ),
             const Gap(40),
             RoundedButton(
-              buttonName: "PROCEED",
+              buttonName: "Proceed",
               onTap: widget.onTap,
               height: 67,
               width: 150,

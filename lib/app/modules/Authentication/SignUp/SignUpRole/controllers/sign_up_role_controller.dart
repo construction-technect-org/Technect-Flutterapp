@@ -7,7 +7,7 @@ class SignUpRoleController extends GetxController {
   RxString otherRoleString = "".obs;
   RxString selectedRoleName = "".obs;
 
-  RxString selectedFinalRole = "".obs;
+  RxString selectedFinalRole = "partner".obs;
 
   List roleName = [
     'Manufacturer',
