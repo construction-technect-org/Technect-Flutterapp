@@ -502,8 +502,8 @@ class AddProductView extends GetView<AddProductController> {
                               return "Please enter terms & conditions";
                             }
                             // Accept only if at least one letter or digit is present
-                            if (!RegExp('[a-zA-Z0-9]').hasMatch(val.trim())) {
-                              return "Note must contain at least one letter or number";
+                            if (!RegExp('[a-zA-Z]').hasMatch(val.trim())) {
+                              return "Terms & Conditions must include at least one alphabet character";
                             }
                             return null;
                           },
