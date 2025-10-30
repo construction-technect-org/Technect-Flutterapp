@@ -115,7 +115,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     keyboardType: TextInputType.emailAddress,
                                     autofillHints: const [AutofillHints.email],
                                     inputFormatters: [
-                                      LengthLimitingTextInputFormatter(50),
+                                      LengthLimitingTextInputFormatter(254),
                                       EmailInputFormatter(),
                                     ],
                                     onChange: (value) {
