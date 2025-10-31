@@ -194,7 +194,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
             ),
             const SizedBox(height: 8),
             Text(
-              "Please select whether you want to register as a Partner or Connector.",
+              "Please select whether you want to register as a Merchant or Connector.",
               style: MyTexts.regular14.copyWith(color: MyColors.gray2E),
             ),
             const SizedBox(height: 24),
@@ -271,18 +271,17 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
         onTap: () {
           controller.selectedFinalRole.value = "";
           controller.selectRole(controller.roleId[index]);
-            if (controller.selectedRole.value == 1) {
-              controller.selectedRoleName.value = "Merchant";
-            } else if (controller.selectedRole.value == 6) {
-              controller.selectedRoleName.value =
-                  controller.otherRoleController.text;
-              return;
-            } else {
-              controller.selectedRoleName.value =
-                  controller.roleName[controller.selectedRole.value - 1];
-            }
-            _showRoleTypeBottomSheet(Get.context!, controller);
-
+          if (controller.selectedRole.value == 1) {
+            controller.selectedRoleName.value = "Merchant";
+          } else if (controller.selectedRole.value == 6) {
+            controller.selectedRoleName.value =
+                controller.otherRoleController.text;
+            return;
+          } else {
+            controller.selectedRoleName.value =
+                controller.roleName[controller.selectedRole.value - 1];
+          }
+          _showRoleTypeBottomSheet(Get.context!, controller);
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, right: 8),
