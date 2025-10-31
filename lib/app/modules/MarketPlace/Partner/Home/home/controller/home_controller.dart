@@ -20,7 +20,7 @@ class HomeController extends GetxController {
 
   CommonController commonController = Get.find();
 
-  RxInt selectedIndex = 0.obs;
+  final RxInt selectedIndex = (-1).obs;
 
   HomeService homeService = HomeService();
   GetAllRoleService roleService = GetAllRoleService();
@@ -328,9 +328,9 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
       if (res.success == true) {
-        // SnackBars.successSnackBar(
-        //   content: "You’ll be notified when it’s restocked!",
-        // );
+        SnackBars.successSnackBar(
+          content: "You’ll be notified when it’s restocked!",
+        );
         if (onSuccess != null) onSuccess();
       }
     } catch (e) {
