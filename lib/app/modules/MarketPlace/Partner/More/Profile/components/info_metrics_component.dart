@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:gap/gap.dart';
@@ -175,6 +176,11 @@ class InfoMetricsComponent extends StatelessWidget {
                             title: "Email ID",
                             data: "${userData?.email}",
                           ),
+                          const Gap(6),
+                          buildRow(
+                            title: "Role",
+                            data: userData?.roleName??"-",
+                          ),
                           SizedBox(height: 0.5.h),
                         ],
                       );
@@ -226,7 +232,7 @@ class InfoMetricsComponent extends StatelessWidget {
             children: [
               Obx(() {
                 return buildRow(
-                  title: "Business name",
+                  title: "Company name",
                   data:
                       (controller.businessModel.value.businessName ?? "")
                           .isEmpty
@@ -275,13 +281,36 @@ class InfoMetricsComponent extends StatelessWidget {
                       : controller.businessModel.value.businessEmail,
                 );
               }),
-              // const Gap(6),
-              // Obx(() {
-              //   return buildRow(
-              //     title: "Address",
-              //     data: controller.businessModel.value.address,
-              //   );
-              // }),
+              const Gap(6),
+              Obx(() {
+                return buildRow(
+                  title: "Alternative number",
+                  data:
+                  (controller.businessModel.value.alternativeBusinessEmail ?? "")
+                      .isEmpty
+                      ? "-"
+                      : controller.businessModel.value.alternativeBusinessEmail,
+                );
+              }),
+              const Gap(6),
+              Obx(() {
+                return buildRow(
+                  title: "Year of establish",
+                  data:
+                  (controller.businessModel.value.year ?? "")
+                      .isEmpty
+                      ? "-"
+                      : controller.businessModel.value.year,
+                );
+              }),
+
+              const Gap(6),
+              Obx(() {
+                return buildRow(
+                  title: "Address",
+                  data: Get.find<HomeController>().getCurrentAddress().value,
+                );
+              }),
               const Gap(6),
             ],
           ),

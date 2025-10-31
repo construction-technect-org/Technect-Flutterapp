@@ -21,6 +21,7 @@ class Data {
   Referral? referral;
   List<ManufacturerAddress>? addresses;
   List<SiteLocation>? siteLocations;
+  StatisticsMC? statistics;
 
   Data({
     this.user,
@@ -29,6 +30,7 @@ class Data {
     this.referral,
     this.siteLocations,
     this.addresses,
+    this.statistics
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -52,6 +54,10 @@ class Data {
         : List<ManufacturerAddress>.from(
             json["addresses"]!.map((x) => ManufacturerAddress.fromJson(x)),
           ),
+    statistics: json["statistics"] == null
+        ? null
+        : StatisticsMC.fromJson(json["statistics"]),
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,6 +71,8 @@ class Data {
     "addresses": addresses == null
         ? []
         : List<dynamic>.from(addresses!.map((x) => x.toJson())),
+    "statistics": statistics?.toJson(),
+
   };
 }
 
@@ -186,11 +194,11 @@ class MerchantProfile {
         businessEmail: json["businessEmail"],
         businessContactNumber: json["businessContactNumber"],
         businessWebsite: json["businessWebsite"],
-        yearsInBusiness: json["yearsInBusiness"],
+        yearsInBusiness: json["yearOfEstablished"],
         projectsCompleted: json["projectsCompleted"],
         profileCompletionPercentage: json["profileCompletionPercentage"],
         isProfileComplete: json["isProfileComplete"],
-        alternativeBusinessContactNumber: json["alternative_business_contact_number"],
+        alternativeBusinessContactNumber: json["alternativeBusinessContactNumber"],
         identityVerified: json["identityVerified"],
         businessLicense: json["businessLicense"],
         qualityAssurance: json["qualityAssurance"],
@@ -222,7 +230,7 @@ class MerchantProfile {
     "businessEmail": businessEmail,
     "businessContactNumber": businessContactNumber,
     "businessWebsite": businessWebsite,
-    "yearsInBusiness": yearsInBusiness,
+    "yearOfEstablished": yearsInBusiness,
     "projectsCompleted": projectsCompleted,
     "profileCompletionPercentage": profileCompletionPercentage,
     "isProfileComplete": isProfileComplete,
@@ -234,7 +242,7 @@ class MerchantProfile {
     "marketplaceTier": marketplaceTier,
     "memberSince": memberSince,
     "website": website,
-    "alternative_business_contact_number": alternativeBusinessContactNumber,
+    "alternativeBusinessContactNumber": alternativeBusinessContactNumber,
     "businessHours": businessHours == null
         ? []
         : List<dynamic>.from(businessHours!.map((x) => x.toJson())),
@@ -570,5 +578,25 @@ class ManufacturerAddress {
     "isDefault": isDefault,
     "createdAt": createdAt,
     "updatedAt": updatedAt,
+  };
+}
+
+class StatisticsMC {
+  int? totalMerchantProfilesCreated;
+  int? totalConnectorProfilesCreated;
+
+  StatisticsMC({
+    this.totalMerchantProfilesCreated,
+    this.totalConnectorProfilesCreated,
+  });
+
+  factory StatisticsMC.fromJson(Map<String, dynamic> json) => StatisticsMC(
+    totalMerchantProfilesCreated: json["totalMerchantProfilesCreated"],
+    totalConnectorProfilesCreated: json["totalConnectorProfilesCreated"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "totalMerchantProfilesCreated": totalMerchantProfilesCreated,
+    "totalConnectorProfilesCreated": totalConnectorProfilesCreated,
   };
 }

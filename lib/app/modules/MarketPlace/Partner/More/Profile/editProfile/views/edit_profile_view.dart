@@ -6,6 +6,7 @@ import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/controller/edit_profile_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 
 class UpperCaseTextFormatter extends TextInputFormatter {
@@ -177,7 +178,7 @@ class EditProfileView extends GetView<EditProfileController> {
                             ],
                           ),
                           Gap(3.h),
-                          _buildBusinessDetailsStep(),
+                          _buildBusinessDetailsStep(context),
                           SizedBox(height: 4.h),
                         ],
                       ),
@@ -193,15 +194,15 @@ class EditProfileView extends GetView<EditProfileController> {
   }
 
   /// Build Business Details Step
-  Widget _buildBusinessDetailsStep() {
+  Widget _buildBusinessDetailsStep(context) {
     return Form(
       key: formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CommonTextField(
-            headerText: "Business Name",
-            hintText: "Enter your business name",
+            headerText: "Company Name",
+            hintText: "Enter your company name",
             controller: controller.businessNameController,
             keyboardType: TextInputType.text,
             textCapitalization: TextCapitalization.words,
@@ -210,7 +211,7 @@ class EditProfileView extends GetView<EditProfileController> {
               // NameInputFormatter(),
             ],
             validator: (value) =>
-                Validate().validateName(value, fieldName: "business name"),
+                Validate().validateName(value, fieldName: "company name"),
           ),
           SizedBox(height: 2.h),
           CommonTextField(
@@ -285,6 +286,104 @@ class EditProfileView extends GetView<EditProfileController> {
             hintText: "9292929929",
             headerText: "Alternative Business Contact Number (Optional)",
             controller: controller.alternativeContactController,
+            keyboardType: TextInputType.phone,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(10),
+            ],
+          ),
+          SizedBox(height: 2.h),
+          CommonTextField(
+            onTap: () async {
+              FocusScope.of(context).unfocus();
+
+              final int currentYear = DateTime.now().year;
+              int selectedYear = currentYear;
+
+              await showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                builder: (BuildContext context) {
+                  return Container(
+                    height: 300,
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Column(
+                      children: [
+                        // Header with Done button
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                "Select Year of Establishment",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                controller.yearsInBusinessController.text =
+                                    selectedYear.toString();
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "Done",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Gap(16),
+                        const Divider(height: 1),
+                        const Gap(16),
+                        Expanded(
+                          child: CupertinoPicker(
+                            scrollController: FixedExtentScrollController(
+                              initialItem: currentYear - 1900,
+                            ),
+                            itemExtent: 40,
+                            onSelectedItemChanged: (int index) {
+                              selectedYear = 1900 + index;
+                            },
+                            children: List<Widget>.generate(
+                              currentYear - 1900 + 1,
+                                  (int index) {
+                                final year = 1900 + index;
+                                return Center(
+                                  child: Text(
+                                    year.toString(),
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+            hintText: "2025",
+            readOnly: true,
+            validator: (val){
+              if((val??"").isEmpty){
+                return "Please select year of establish";
+              }
+            },
+            headerText: "Years of Establish",
+            controller: controller.yearsInBusinessController,
             keyboardType: TextInputType.phone,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,

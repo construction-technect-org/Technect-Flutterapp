@@ -191,6 +191,27 @@ class Dashboard extends StatelessWidget {
                             ),
                           ),
                         ),
+                        const Gap(10),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.NEWS);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: MyColors.white,
+                              border: Border.all(
+                                color: MyColors.custom('EAEAEA'),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              Asset.news,
+                              width: 24,
+                              height: 24,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     const Gap(24),
@@ -258,6 +279,42 @@ class Dashboard extends StatelessWidget {
                               },
                             ),
                             SizedBox(height: 1.h),
+                            SizedBox(height: 1.h),
+                            Text(
+                              "Statics",
+                              style: MyTexts.bold18.copyWith(
+                                color: MyColors.black,
+                              ),
+                            ),
+                            SizedBox(height: 1.h),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Obx(() {
+                                    return _buildStatCard(
+                                      "Merchant",
+                                      controller.profileData.value.data?.statistics?.totalMerchantProfilesCreated
+                                          ?.toString() ??
+                                          "0",
+                                      Asset.role1,
+                                    );
+                                  }),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Obx(() {
+                                    return _buildStatCard(
+                                      "Connectors",
+                                      controller.profileData.value.data?.statistics?.totalConnectorProfilesCreated
+                                          ?.toString() ??
+                                          "0",
+                                      Asset.contractor,
+                                    );
+                                  }),
+                                ),
+                              ],
+                            ),
+                            const Gap(24),
                           ],
                         ),
                       ),

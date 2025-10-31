@@ -19,7 +19,6 @@ class EditProfileController extends GetxController {
   final addressContoller = TextEditingController();
 
   final scrollController = ScrollController();
-  final titleKey = GlobalKey();
 
   final isLoading = false.obs;
   // Email validation state
@@ -96,6 +95,7 @@ class EditProfileController extends GetxController {
       businessContactNumber: businessContactController.text,
       businessEmail: businessEmailController.text,
       businessName: businessNameController.text,
+      year: yearsInBusinessController.text,
       alternativeBusinessEmail: alternativeContactController.text,
       gstinNumber: gstNumberController.text,
       website: businessWebsiteController.text,

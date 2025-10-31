@@ -35,6 +35,7 @@ class ProfileController extends GetxController {
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website ?? "";
       businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
+      businessModel.value.year = merchantProfile?.yearsInBusiness!=null? merchantProfile?.yearsInBusiness.toString() :"";
       businessModel.value.businessContactNumber =
           merchantProfile?.businessContactNumber ?? "";
       businessModel.value.alternativeBusinessEmail =
@@ -490,6 +491,7 @@ class ProfileController extends GetxController {
       final formFields = <String, dynamic>{
         'business_name': businessModel.value.businessName.toString(),
         'gstin_number': businessModel.value.gstinNumber.toString(),
+        'year_of_established': businessModel.value.year.toString(),
         'business_email': businessModel.value.businessEmail.toString(),
         if ((businessModel.value.alternativeBusinessEmail ?? "").isNotEmpty)
           'alternative_business_contact_number': businessModel
@@ -611,6 +613,7 @@ class BusinessModel {
   String? businessEmail;
   String? alternativeBusinessEmail;
   String? gstinNumber;
+  String? year;
   String? address;
   String? businessContactNumber;
   String? image;
@@ -623,6 +626,7 @@ class BusinessModel {
     this.businessContactNumber,
     this.alternativeBusinessEmail,
     this.address,
+    this.year,
     this.image,
   });
 }
