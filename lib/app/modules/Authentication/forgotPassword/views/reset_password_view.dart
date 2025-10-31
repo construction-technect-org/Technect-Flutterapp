@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validators.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/controllers/forgot_password_controller.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
 import 'package:gap/gap.dart';
 
 class ResetPasswordView extends StatelessWidget {
@@ -77,7 +78,8 @@ class ResetPasswordView extends StatelessWidget {
                       hintText: "Eg: one uppercase, one number and lowercase",
                       showDivider: true,
                       suffixIcon: GestureDetector(
-                        onTap: () => controller.toggleConfirmPasswordVisibility(),
+                        onTap: () =>
+                            controller.toggleConfirmPasswordVisibility(),
                         child: Icon(
                           controller.isConfirmPasswordVisible.value
                               ? Icons.visibility
@@ -87,6 +89,11 @@ class ResetPasswordView extends StatelessWidget {
                       ),
                     );
                   }),
+
+                  SavePassWidget(
+                    state: controller.rememberMe,
+                    onChanged: (val) => controller.rememberMe.value = val,
+                  ),
                 ],
               ),
             ),

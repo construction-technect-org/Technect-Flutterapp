@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validators.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpPassword/controllers/sign_up_password_controller.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
 
 class SignUpPasswordView extends GetView<SignUpPasswordController> {
   SignUpPasswordView({super.key});
@@ -86,7 +87,8 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                   textInputAction: TextInputAction.next,
                                   headerText: "New Password",
                                   controller: controller.passwordController,
-                                  obscureText: !controller.isPasswordVisible.value,
+                                  obscureText:
+                                      !controller.isPasswordVisible.value,
                                   hintText:
                                       "Eg: one uppercase, one number and lowercase",
                                   showDivider: true,
@@ -111,9 +113,11 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                   ),
                                   textInputAction: TextInputAction.done,
                                   headerText: "Confirm Password",
-                                  controller: controller.confirmPasswordController,
-                                  obscureText:
-                                      !controller.isConfirmPasswordVisible.value,
+                                  controller:
+                                      controller.confirmPasswordController,
+                                  obscureText: !controller
+                                      .isConfirmPasswordVisible
+                                      .value,
                                   hintText:
                                       "Eg: one uppercase, one number and lowercase",
                                   showDivider: true,
@@ -129,6 +133,12 @@ class SignUpPasswordView extends GetView<SignUpPasswordController> {
                                   ),
                                 );
                               }),
+                              SizedBox(height: 2.h),
+                              SavePassWidget(
+                                state: controller.rememberMe,
+                                onChanged: (val) =>
+                                    controller.rememberMe.value = val,
+                              ),
                               SizedBox(height: 5.h),
                             ],
                           ),

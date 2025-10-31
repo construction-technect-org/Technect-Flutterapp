@@ -6,6 +6,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginController extends GetxController {
+  static final LoginController to = Get.find();
   final formKey = GlobalKey<FormState>();
 
   final mobileController = TextEditingController();
@@ -67,7 +68,10 @@ class LoginController extends GetxController {
           myPref.setRole("connector");
         }
         if (rememberMe.value) {
-          myPref.saveCredentials(mobileController.text, passwordController.text);
+          myPref.saveCredentials(
+            mobileController.text,
+            passwordController.text,
+          );
         } else {
           myPref.clearCredentials();
         }
@@ -81,7 +85,9 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(content: loginResponse.message ?? 'Login failed');
+        SnackBars.errorSnackBar(
+          content: loginResponse.message ?? 'Login failed',
+        );
       }
     } catch (e) {
       // Error is already shown by ApiManager
@@ -121,7 +127,10 @@ class LoginController extends GetxController {
           myPref.setRole("connector");
         }
         if (rememberMe.value) {
-          myPref.saveCredentials(mobileController.text, passwordController.text);
+          myPref.saveCredentials(
+            mobileController.text,
+            passwordController.text,
+          );
         } else {
           myPref.clearCredentials();
         }
@@ -135,7 +144,9 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(content: loginResponse.message ?? 'Login failed');
+        SnackBars.errorSnackBar(
+          content: loginResponse.message ?? 'Login failed',
+        );
       }
     } catch (e) {
       // No Error

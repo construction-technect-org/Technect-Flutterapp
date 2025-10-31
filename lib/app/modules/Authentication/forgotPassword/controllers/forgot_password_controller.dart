@@ -10,12 +10,13 @@ class ForgotPasswordController extends GetxController {
   final otpController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  
+
   RxInt isValid = (-1).obs;
   RxString countryCode = "".obs;
 
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
+  final rememberMe = false.obs;
 
   void startTimer() {
     isResendVisible.value = false;
@@ -43,7 +44,6 @@ class ForgotPasswordController extends GetxController {
   void toggleConfirmPasswordVisibility() {
     isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
   }
-
 
   // Send OTP for mobile number verification
   Future<void> sendOtp() async {
@@ -102,7 +102,7 @@ class ForgotPasswordController extends GetxController {
       if (otpResponse.success == true && otpResponse.data?.verified == true) {
         otpVerify.value = true;
         Get.back();
-        Get.to(()=> ResetPasswordView());
+        Get.to(() => ResetPasswordView());
         SnackBars.successSnackBar(content: 'OTP verified successfully');
       } else {
         SnackBars.errorSnackBar(
@@ -132,7 +132,7 @@ class ForgotPasswordController extends GetxController {
 
   // Reset password
   Future<void> resetPassword() async {
-      await _performPasswordReset();
+    await _performPasswordReset();
   }
 
   Future<void> _performPasswordReset() async {
@@ -153,7 +153,7 @@ class ForgotPasswordController extends GetxController {
             image: Asset.forgetSImage,
             header: "Password reset successfully !",
             onTap: () {
-             Get.offAllNamed(Routes.LOGIN);
+              Get.offAllNamed(Routes.LOGIN);
               Get.back();
             },
           ),
