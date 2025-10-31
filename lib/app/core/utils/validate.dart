@@ -63,7 +63,9 @@ class Validate {
       SnackBars.successSnackBar(content: "GSTIN verified successfully!");
       return true;
     } else {
-      SnackBars.errorSnackBar(content: "This GSTIN is already registered");
+      SnackBars.errorSnackBar(
+        content: "User with this GST number already exists",
+      );
       return false;
     }
   }
