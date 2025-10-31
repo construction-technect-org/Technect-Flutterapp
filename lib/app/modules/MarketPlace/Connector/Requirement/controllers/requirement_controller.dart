@@ -122,15 +122,10 @@ class RequirementController extends GetxController {
   Future<void> deleteRequirement(int requirementId) async {
     try {
       isLoading.value = true;
-      Get.back(); // Close dialog
+      Get.back();
 
-      // TODO: Add delete API call when endpoint is available
-      // final result = await requirementService.deleteRequirement(requirementId);
+      await requirementService.deleteRequirement(requirementId: requirementId);
 
-      // For now, just show a message
-      SnackBars.successSnackBar(content: 'Requirement deleted successfully');
-
-      // Refresh the list
       await fetchRequirementsList();
     } catch (e) {
       Get.printError(info: 'Error deleting requirement: $e');

@@ -56,4 +56,17 @@ class AddRequirementService {
       throw Exception('Error in getRequirementsList: $e , $st');
     }
   }
+
+  Future<CreateRequirementModel> deleteRequirement({
+    required int requirementId,
+  }) async {
+    try {
+      final response = await apiManager.delete(
+        url: '${APIConstants.connectorCreateRequirement}/$requirementId',
+      );
+      return CreateRequirementModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in deleteRequirement: $e , $st');
+    }
+  }
 }
