@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
@@ -44,8 +43,12 @@ class SelectedProductView extends StatelessWidget {
           actions: [
             GestureDetector(
               onTap: () {
+                controller.openSelectAddressBottomSheet(
+                  onAddressChanged: () async {
+                    await controller.fetchProductsFromApi(isLoading: true);
+                  },
+                );
 
-                print(Get.find<HomeController>().profileData.value.data?.siteLocations);
               },
               child: SvgPicture.asset(
                 Asset.location,

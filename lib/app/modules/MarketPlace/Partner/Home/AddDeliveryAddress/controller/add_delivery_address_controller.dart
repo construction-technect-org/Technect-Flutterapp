@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/controller/delivery_location_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,7 +15,7 @@ class AddDeliveryAddressController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController addressNameController = TextEditingController();
   final TextEditingController landmarkController = TextEditingController();
-  DeliveryLocationController controller = Get.find();
+  // DeliveryLocationController controller = Get.find();
   RxBool isEditMode = false.obs;
   RxString editAddressId = ''.obs;
 

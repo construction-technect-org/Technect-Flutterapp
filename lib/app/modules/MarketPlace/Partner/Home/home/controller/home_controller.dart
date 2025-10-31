@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
@@ -385,6 +388,121 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  void editAddress(String addressId) {
+    final address = profileData.value.data?.siteLocations
+        ?.firstWhere((addr) => addr.id.toString() == addressId);
+
+    if (address != null) {
+      Get.toNamed(
+        Routes.ADD_DELIVERY_ADDRESS,
+        arguments: {
+          'isEdit': true,
+          'addressId': addressId,
+          'addressName': address.siteName,
+          'landmark': address.landmark,
+          'fullAddress': address.fullAddress,
+          'latitude': address.latitude,
+          'longitude': address.longitude,
+        },
+      );
+    }
+  }
+
+  void deleteAddress(String addressId) {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: Colors.white,
+        titlePadding: const EdgeInsets.all(20),
+        contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        actionsPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+        title: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFFF9D0CB)),
+            color: const Color(0xFFFCECE9),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Center(
+            child: Text(
+              'Delete Address',
+              style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to delete this address? This action cannot be undone.',
+          style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: RoundedButton(
+                  onTap: () => Get.back(),
+                  buttonName: 'Cancel',
+                  borderRadius: 12,
+                  verticalPadding: 0,
+                  height: 45,
+                  color: MyColors.grayCD,
+                ),
+              ),
+              SizedBox(width: 2.w),
+              Expanded(
+                child: RoundedButton(
+                  onTap: () => deleteDeliveryAddress(addressId),
+                  buttonName: 'Delete',
+                  borderRadius: 12,
+                  verticalPadding: 0,
+                  height: 45,
+                  color: const Color(0xFFE53D26),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  Future<void> deleteDeliveryAddress(String addressId) async {
+    try {
+      isLoading.value = true;
+      await DeliveryAddressService.deleteDeliveryAddress(addressId);
+      await fetchProfileData();
+      Get.back();
+    } catch (e) {
+      log('Failed to delete address: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> setDefaultAddress(String addressId, {VoidCallback? onSuccess}) async {
+    try {
+      isLoading.value = true;
+
+      await DeliveryAddressService.updateDeliveryAddress(addressId, {
+        "is_default": true,
+      });
+
+      await fetchProfileData();
+
+      if (onSuccess != null) onSuccess();
+    } catch (e) {
+      log('Failed to update default address: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 
   @override
   void onReady() {

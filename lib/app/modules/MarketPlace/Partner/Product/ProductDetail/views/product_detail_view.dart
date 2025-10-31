@@ -782,7 +782,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               "") !=
                                           "")
                                         Text(
-                                          "Near by : ${controller.product.distanceKm != null ? double.parse(controller.product.distanceKm.toString()).toStringAsFixed(2) : "-"} km",
+                                          "Near by : ${_formatDistance(controller.productDetailsModel.value.data?.product?.distanceKm)} km",
                                           style: MyTexts.medium16.copyWith(
                                             color: MyColors.gray54,
                                           ),
@@ -790,7 +790,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                       const Gap(8),
                                       GestureDetector(
                                         onTap: () {
-                                          Get.toNamed(Routes.DELIVERY_LOCATION);
+                                          Get.toNamed(Routes.DELIVERY_LOCATION)?.then((val){
+                                            controller.productDetails(controller.product.id ?? 0);
+                                            controller.onApiCall?.call();
+                                          });
                                         },
                                         child: SvgPicture.asset(Asset.edit),
                                       ),
@@ -1414,4 +1417,14 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       ),
     );
   }
+  String _formatDistance(dynamic distance) {
+    if (distance == null) return "0";
+    try {
+      final parsed = double.tryParse(distance.toString()) ?? 0;
+      return parsed.toStringAsFixed(2);
+    } catch (e) {
+      return "0";
+    }
+  }
+
 }
