@@ -6,7 +6,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAcco
 import 'package:gap/gap.dart';
 
 class Dashboard extends StatelessWidget {
-
   final HomeController controller = Get.put<HomeController>(HomeController());
 
   @override
@@ -238,9 +237,18 @@ class Dashboard extends StatelessWidget {
                                         item: item,
                                         itemWidth: itemWidth,
                                         onTap: () {
-                                          if (index == 0) {
-                                            controller.selectedIndex.value =
-                                                index;
+                                          // Toggle selection: select on tap, deselect if tapping the same item
+                                          if (item["available"] == true) {
+                                            if (controller
+                                                    .selectedIndex
+                                                    .value ==
+                                                index) {
+                                              controller.selectedIndex.value =
+                                                  -1;
+                                            } else {
+                                              controller.selectedIndex.value =
+                                                  index;
+                                            }
                                           }
                                         },
                                       );
@@ -380,8 +388,12 @@ class BuildFeatureCard extends StatelessWidget {
               ],
             ),
           ),
-          if(isSelected)
-          const Icon(Icons.check_circle_rounded,color: MyColors.primary,size: 20,),
+          if (isSelected)
+            const Icon(
+              Icons.check_circle_rounded,
+              color: MyColors.primary,
+              size: 20,
+            ),
         ],
       ),
     );
