@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
@@ -9,8 +10,11 @@ import 'package:gap/gap.dart';
 
 class SelectedProductController extends GetxController {
   HomeController homeController = Get.find<HomeController>();
+  RxBool hasOpenedOnce = false.obs;
+
   // Observable variables
   RxInt selectedProductIndex = (-1).obs;
+
   // Two-pane navigation index (0..4)
   RxInt navigationIndex = 0.obs;
 
@@ -52,11 +56,33 @@ class SelectedProductController extends GetxController {
   void onInit() {
     super.onInit();
     // Get arguments passed from home page
+    if (myPref.role.val == "connector") {
+      ever(hasOpenedOnce, (opened) {
+        if (!opened) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            openAddressSelection();
+          });
+        }
+      });
+    }
+
+    hasOpenedOnce.value = false; // Reset each time screen is created
     final arguments = Get.arguments as Map<String, dynamic>?;
     mainCategoryId = arguments?['mainCategoryId'] ?? 0;
     mainCategoryName = arguments?['mainCategoryName'] ?? 'Select Product';
     selectedSubCategoryId.value = arguments?['selectedSubCategoryId'] ?? 0;
     _initializeProductCategories();
+  }
+
+  void openAddressSelection() {
+    openSelectAddressBottomSheet(
+      onAddressChanged: () async {
+        // When user selects an address
+        // isAddressSelected.value = true;
+        hasOpenedOnce.value = true;
+        await fetchProductsFromApi(isLoading: true);
+      },
+    );
   }
 
   void _initializeProductCategories() {
@@ -931,5 +957,75 @@ class SelectedProductController extends GetxController {
       default:
         return [];
     }
+  }
+
+  void openSelectAddressBottomSheet({
+    required Future<void> Function() onAddressChanged,
+  }) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  height: 4,
+                  width: 40,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+              Text(
+                "Select Address",
+                style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
+              ),
+              const SizedBox(height: 16),
+
+              Obx(() {
+                final addresses =
+                    homeController.profileData.value.data?.siteLocations ?? [];
+
+                if (addresses.isEmpty) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Text("No saved addresses found."),
+                    ),
+                  );
+                }
+
+                return CommonAddressList(
+                  addresses: addresses,
+                  onEdit: homeController.editAddress,
+                  onDelete: homeController.deleteAddress,
+                  onSetDefault: (addressId) async {
+                    await homeController.setDefaultAddress(
+                      addressId,
+                      onSuccess: () async {
+                        Get.back();
+                        await onAddressChanged();
+                      },
+                    );
+                  },
+                );
+              }),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
   }
 }

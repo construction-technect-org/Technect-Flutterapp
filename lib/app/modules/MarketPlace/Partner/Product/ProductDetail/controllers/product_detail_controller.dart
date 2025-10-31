@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/models/ProductDetailsModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/models/rating_model.dart';
@@ -108,8 +107,6 @@ class ProductDetailsController extends GetxController {
       isLoading.value = true;
       productDetailsModel.value = await _service.productDetails(
         id: id.toString(),
-        latitude: Get.find<HomeController>().currentLatitude.toString(),
-        longitude: Get.find<HomeController>().currentLongitude.toString(),
       );
     } catch (e) {
       if (kDebugMode) {

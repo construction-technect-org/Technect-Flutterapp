@@ -96,9 +96,9 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                           // Saved Addresses List
                           Obx(() => CommonAddressList(
                             addresses: homeController.profileData.value.data?.siteLocations,
-                            onEdit: controller.editAddress,
-                            onDelete: controller.deleteAddress,
-                            onSetDefault: controller.setDefaultAddress,
+                            onEdit: homeController.editAddress,
+                            onDelete: homeController.deleteAddress,
+                            onSetDefault: homeController.setDefaultAddress,
                           )),
 
                         ],

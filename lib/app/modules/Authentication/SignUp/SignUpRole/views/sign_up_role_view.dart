@@ -123,20 +123,20 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
           ],
         ),
         bottomNavigationBar: Obx(() {
-          return controller.selectedFinalRole.value.isNotEmpty
+          return controller.selectedRole.value == 6
               ? Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: RoundedButton(
-                    buttonName: 'Proceed',
+                    buttonName: 'Continue',
                     onTap: () {
-                      if (controller.selectedRole.value > 0) {
-                        if (controller.selectedRole.value == 6 &&
-                            controller.otherRoleController.text.isEmpty) {
-                          SnackBars.errorSnackBar(
-                            content: 'Please enter other role',
-                          );
-                          return;
-                        } else {
+                      if (controller.otherRoleController.text.isEmpty) {
+                        SnackBars.errorSnackBar(
+                          content: 'Please enter other role',
+                        );
+                        return;
+                      } else {
+                        controller.selectedFinalRole.value = "";
+                        if (controller.selectedRole.value > 0) {
                           if (controller.selectedRole.value == 1) {
                             controller.selectedRoleName.value = "Merchant";
                           } else if (controller.selectedRole.value == 6) {
@@ -146,14 +146,12 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                             controller.selectedRoleName.value = controller
                                 .roleName[controller.selectedRole.value - 1];
                           }
-                          hideKeyboard();
-                          myPref.setRole(controller.selectedFinalRole.value);
-                          Get.toNamed(Routes.SIGN_UP_DETAILS);
-
-                          // Get.toNamed(Routes.SIGN_UP_DETAILS);
+                          _showRoleTypeBottomSheet(Get.context!, controller);
+                        } else {
+                          SnackBars.errorSnackBar(
+                            content: 'Please select role',
+                          );
                         }
-                      } else {
-                        SnackBars.errorSnackBar(content: 'Please select role');
                       }
                     },
                   ),
@@ -207,8 +205,11 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                     role: "partner",
                     icon: Asset.rMerchant,
                     onTap: () {
+                      hideKeyboard();
                       controller.selectedFinalRole.value = "partner";
+                      myPref.setRole(controller.selectedFinalRole.value);
                       Get.back();
+                      Get.toNamed(Routes.SIGN_UP_DETAILS);
                     },
                   ),
                 ),
@@ -218,8 +219,11 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                     role: "connector",
                     icon: Asset.rConnector,
                     onTap: () {
+                      hideKeyboard();
                       controller.selectedFinalRole.value = "connector";
+                      myPref.setRole(controller.selectedFinalRole.value);
                       Get.back();
+                      Get.toNamed(Routes.SIGN_UP_DETAILS);
                     },
                   ),
                 ),
@@ -267,20 +271,18 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
         onTap: () {
           controller.selectedFinalRole.value = "";
           controller.selectRole(controller.roleId[index]);
-          if (controller.selectedRole.value > 0) {
             if (controller.selectedRole.value == 1) {
               controller.selectedRoleName.value = "Merchant";
             } else if (controller.selectedRole.value == 6) {
               controller.selectedRoleName.value =
                   controller.otherRoleController.text;
+              return;
             } else {
               controller.selectedRoleName.value =
                   controller.roleName[controller.selectedRole.value - 1];
             }
             _showRoleTypeBottomSheet(Get.context!, controller);
-          } else {
-            SnackBars.errorSnackBar(content: 'Please select role');
-          }
+
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, right: 8),
