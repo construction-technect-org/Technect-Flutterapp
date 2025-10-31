@@ -102,6 +102,9 @@ class SelectedProductController extends GetxController {
         });
         products.value =
             selectedSubCategory.value?.products ?? <ProductCategory>[];
+        productSubCategories.value =
+            selectedSubCategory.value?.productSubCategories ??
+            <ProductSubCategory>[];
       }
     }
   }
