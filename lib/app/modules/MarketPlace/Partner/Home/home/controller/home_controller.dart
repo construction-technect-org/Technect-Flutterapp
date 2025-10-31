@@ -20,7 +20,7 @@ class HomeController extends GetxController {
 
   CommonController commonController = Get.find();
 
-  RxInt selectedIndex = 0.obs;
+  final RxInt selectedIndex = (-1).obs;
 
   HomeService homeService = HomeService();
   GetAllRoleService roleService = GetAllRoleService();
@@ -139,33 +139,31 @@ class HomeController extends GetxController {
   // }
 
   RxString getCurrentAddress() {
-    if(myPref.role.val=="partner"){
+    if (myPref.role.val == "partner") {
       if (profileData.value.data?.addresses?.isNotEmpty == true) {
         final int index =
             profileData.value.data?.addresses?.indexWhere(
-                  (e) => e.isDefault == true,
+              (e) => e.isDefault == true,
             ) ??
-                0;
+            0;
         final address = profileData.value.data?.addresses?[index];
 
         return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
       }
       return 'No address found'.obs;
-    }
-    else{
+    } else {
       if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
         final int index =
             profileData.value.data?.siteLocations?.indexWhere(
-                  (e) => e.isDefault == true,
+              (e) => e.isDefault == true,
             ) ??
-                0;
+            0;
         final address = profileData.value.data?.siteLocations?[index];
 
         return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
       }
       return 'No address found'.obs;
     }
-
   }
 
   Future<void> fetchProfileData() async {
@@ -182,8 +180,7 @@ class HomeController extends GetxController {
         if ((profileData.value.data?.merchantProfile?.website ?? "")
             .isNotEmpty) {
           Get.find<CommonController>().hasProfileComplete.value = true;
-        }
-        else{
+        } else {
           Get.find<CommonController>().hasProfileComplete.value = false;
         }
         _loadTeamFromStorage();
@@ -358,7 +355,6 @@ class HomeController extends GetxController {
       if (res.success == true) {
         if (onSuccess != null) onSuccess();
         SnackBars.successSnackBar(content: "Request sent successfully!");
-
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Unable to send connection request.");
@@ -390,8 +386,9 @@ class HomeController extends GetxController {
   }
 
   void editAddress(String addressId) {
-    final address = profileData.value.data?.siteLocations
-        ?.firstWhere((addr) => addr.id.toString() == addressId);
+    final address = profileData.value.data?.siteLocations?.firstWhere(
+      (addr) => addr.id.toString() == addressId,
+    );
 
     if (address != null) {
       Get.toNamed(
@@ -485,7 +482,10 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> setDefaultAddress(String addressId, {VoidCallback? onSuccess}) async {
+  Future<void> setDefaultAddress(
+    String addressId, {
+    VoidCallback? onSuccess,
+  }) async {
     try {
       isLoading.value = true;
 
@@ -502,7 +502,6 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
-
 
   @override
   void onReady() {
