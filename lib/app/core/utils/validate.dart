@@ -36,8 +36,9 @@ class Validate {
     if (value.trim().length < 2) {
       return "$fieldName must be at least 2 characters long";
     }
-    if (!RegExp(r'^[A-Z][a-zA-Z]*$').hasMatch(value.trim())) {
-      return "$fieldName must start with uppercase and contain only letters";
+    // Allow CamelCase and optional spaces/underscores between words; each segment must start with uppercase and contain only letters
+    if (!RegExp(r'^[A-Z][a-z]*(?:[ _]?[A-Z][a-z]*)*$').hasMatch(value.trim())) {
+      return "$fieldName must have each word start with uppercase and contain only letters";
     }
     return null;
   }

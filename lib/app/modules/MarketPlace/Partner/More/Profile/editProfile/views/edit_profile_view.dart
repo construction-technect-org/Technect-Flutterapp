@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/controller/edit_profile_controller.dart';
@@ -43,7 +44,8 @@ class EditProfileView extends GetView<EditProfileController> {
                   if (formKey.currentState!.validate() &&
                       controller.emailError.value == '') {
                     if (Get.find<ProfileController>().image.value.isEmpty) {
-                      if (Get.find<ProfileController>().selectedImage.value == null) {
+                      if (Get.find<ProfileController>().selectedImage.value ==
+                          null) {
                         SnackBars.errorSnackBar(
                           content: "Please upload business logo",
                         );
@@ -208,7 +210,7 @@ class EditProfileView extends GetView<EditProfileController> {
               // NameInputFormatter(),
             ],
             validator: (value) =>
-                validateName(value, fieldName: "business name"),
+                Validate().validateName(value, fieldName: "business name"),
           ),
           SizedBox(height: 2.h),
           CommonTextField(
