@@ -41,26 +41,25 @@ class SelectedProductView extends StatelessWidget {
             },
           ),
           actions: [
-            if(myPref.role.val == "connector")
-            GestureDetector(
-              onTap: () {
-                controller.openSelectAddressBottomSheet(
-                  onAddressChanged: () async {
-                    await controller.fetchProductsFromApi(isLoading: true);
-                  },
-                );
-
-              },
-              child: SvgPicture.asset(
-                Asset.location,
-                height: 20,
-                width: 20,
-                colorFilter: const ColorFilter.mode(
-                  Colors.black,
-                  BlendMode.srcIn,
+            if (myPref.role.val == "connector")
+              GestureDetector(
+                onTap: () {
+                  controller.openSelectAddressBottomSheet(
+                    onAddressChanged: () async {
+                      await controller.fetchProductsFromApi(isLoading: true);
+                    },
+                  );
+                },
+                child: SvgPicture.asset(
+                  Asset.location,
+                  height: 20,
+                  width: 20,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.black,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
-            ),
             GestureDetector(
               onTap: () {
                 Get.toNamed(Routes.SEARCH_PRODUCT);

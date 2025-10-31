@@ -122,6 +122,7 @@ class CommonAddressList extends StatelessWidget {
   final Function(String id)? onEdit;
   final Function(String id)? onDelete;
   final Function(String id)? onSetDefault;
+  final bool? isBack;
 
   const CommonAddressList({
     super.key,
@@ -129,6 +130,7 @@ class CommonAddressList extends StatelessWidget {
     this.onEdit,
     this.onDelete,
     this.onSetDefault,
+    this.isBack=false,
   });
 
   @override
@@ -171,7 +173,7 @@ class CommonAddressList extends StatelessWidget {
           ),
           child: GestureDetector(
             onTap: address.isDefault == true
-                ? null
+                ? (isBack == true ? () => Get.back() : null)
                 : () => onSetDefault?.call(address.id.toString()),
             child: Container(
               decoration: BoxDecoration(

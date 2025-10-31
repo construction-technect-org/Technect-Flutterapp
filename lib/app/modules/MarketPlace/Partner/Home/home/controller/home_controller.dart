@@ -328,9 +328,9 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
       if (res.success == true) {
-        SnackBars.successSnackBar(
-          content: "You’ll be notified when it’s restocked!",
-        );
+        // SnackBars.successSnackBar(
+        //   content: "You’ll be notified when it’s restocked!",
+        // );
         if (onSuccess != null) onSuccess();
       }
     } catch (e) {
@@ -357,7 +357,7 @@ class HomeController extends GetxController {
       );
       if (res.success == true) {
         if (onSuccess != null) onSuccess();
-        SnackBars.successSnackBar(content: "Request sent successfully!");
+        // SnackBars.successSnackBar(content: "Request sent successfully!");
 
       }
     } catch (e) {
@@ -376,10 +376,10 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final res = await WishListServices().wishList(mID: mID, status: status);
       if (res.success == true) {
-        final msg = status == "add"
-            ? "Added to wishlist!"
-            : "Removed from wishlist!";
-        SnackBars.successSnackBar(content: msg);
+        // final msg = status == "add"
+        //     ? "Added to wishlist!"
+        //     : "Removed from wishlist!";
+        // SnackBars.successSnackBar(content: msg);
         if (onSuccess != null) onSuccess();
       }
     } catch (e) {
