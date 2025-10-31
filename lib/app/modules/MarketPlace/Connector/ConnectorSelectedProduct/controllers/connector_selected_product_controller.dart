@@ -150,8 +150,6 @@ class ConnectorSelectedProductController extends GetxController {
   Future<void> getAllProducts({
     Map<String, dynamic>? filtersData,
     int? radius,
-    String? latitude,
-    String? longitude,
     bool? filter = false,
   }) async {
     try {
@@ -165,8 +163,6 @@ class ConnectorSelectedProductController extends GetxController {
         // longitude: longitude,
         // radius: radius,
         radius: selectedRadius.value,
-        longitude: selectedAddress.value.longitude,
-        latitude: selectedAddress.value.latitude,
       );
       if (filter == true) {
         isFilterApply.value = true;
