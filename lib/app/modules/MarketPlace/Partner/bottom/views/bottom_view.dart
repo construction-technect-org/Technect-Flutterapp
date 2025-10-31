@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
@@ -35,21 +36,12 @@ class BottomBarView extends GetView<BottomController> {
         children: [
           Container(
             margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-            padding: const EdgeInsets.only(
-              right: 30,
-              left: 30,
-              top: 12,
-              bottom: 12,
-            ),
+            padding: const EdgeInsets.only(right: 30, left: 30, top: 12, bottom: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color: Colors.white,
               boxShadow: const [
-                BoxShadow(
-                  color: Color(0x19000000),
-                  blurRadius: 30,
-                  offset: Offset(5, 0),
-                ),
+                BoxShadow(color: Color(0x19000000), blurRadius: 30, offset: Offset(5, 0)),
               ],
             ),
             child: Center(
@@ -217,7 +209,9 @@ class BottomBarView extends GetView<BottomController> {
                                   ListTile(
                                     leading: SvgPicture.asset(Asset.add),
                                     title: const Text("Add New Product"),
-                                    titleTextStyle: MyTexts.medium16.copyWith(color: MyColors.black),
+                                    titleTextStyle: MyTexts.medium16.copyWith(
+                                      color: MyColors.black,
+                                    ),
                                     onTap: () {
                                       Get.back();
                                       Get.toNamed(Routes.ADD_PRODUCT);
@@ -228,7 +222,9 @@ class BottomBarView extends GetView<BottomController> {
                                   ListTile(
                                     leading: SvgPicture.asset(Asset.inventory),
                                     title: const Text("Manage Products"),
-                                    titleTextStyle: MyTexts.medium16.copyWith(color: MyColors.black),
+                                    titleTextStyle: MyTexts.medium16.copyWith(
+                                      color: MyColors.black,
+                                    ),
                                     onTap: () {
                                       Get.back();
                                       Get.toNamed(Routes.INVENTORY);
@@ -241,31 +237,32 @@ class BottomBarView extends GetView<BottomController> {
                           );
                         }
                       } else {
-                        showModalBottomSheet(
-                          context: Get.context!,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) {
-                            return Container(
-                              width: 150,
-                              height: 316,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20),
-                                ),
-                              ),
-                              padding: const EdgeInsets.all(16),
-                              child: Center(
-                                child: Image.asset(
-                                  Asset.comingSoon,
-                                  height: 316,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            );
-                          },
-                        );
+                        Get.toNamed(Routes.ADD_REQUIREMENT);
+                        // showModalBottomSheet(
+                        //   context: Get.context!,
+                        //   isScrollControlled: true,
+                        //   backgroundColor: Colors.transparent,
+                        //   builder: (context) {
+                        //     return Container(
+                        //       width: 150,
+                        //       height: 316,
+                        //       decoration: const BoxDecoration(
+                        //         color: Colors.white,
+                        //         borderRadius: BorderRadius.vertical(
+                        //           top: Radius.circular(20),
+                        //         ),
+                        //       ),
+                        //       padding: const EdgeInsets.all(16),
+                        //       child: Center(
+                        //         child: Image.asset(
+                        //           Asset.comingSoon,
+                        //           height: 316,
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        //       ),
+                        //     );
+                        //   },
+                        // );
                       }
                     },
                   ),
