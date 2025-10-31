@@ -189,7 +189,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
             ),
             const SizedBox(height: 24),
             Text(
-              "Select a Role",
+              "Select a Access",
               style: MyTexts.bold18.copyWith(color: MyColors.primary),
             ),
             const SizedBox(height: 8),
