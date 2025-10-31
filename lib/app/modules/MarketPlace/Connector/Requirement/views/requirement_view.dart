@@ -80,12 +80,12 @@ class RequirementView extends StatelessWidget {
         statusColor = MyColors.fontBlack;
     }
 
-    return Card(
-      color: MyColors.white,
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
+      decoration: BoxDecoration(
+        color: MyColors.white,
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: MyColors.americanSilver),
+        border:  Border.all(color: MyColors.grayEA),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -109,8 +109,8 @@ class RequirementView extends StatelessWidget {
                       if (requirement?.mainCategoryName != null)
                         Text(
                           '${requirement?.mainCategoryName} > ${requirement?.subCategoryName ?? ''}',
-                          style: MyTexts.regular12.copyWith(
-                            color: MyColors.grey,
+                          style: MyTexts.regular14.copyWith(
+                            color: MyColors.black,
                           ),
                         ),
                     ],
@@ -174,11 +174,9 @@ class RequirementView extends StatelessWidget {
                 ),
               ],
             ),
-            const Gap(12),
+            const Gap(8),
             Row(
               children: [
-                const Icon(Icons.numbers, size: 16, color: MyColors.grey),
-                const SizedBox(width: 8),
                 Text(
                   'Quantity: ${requirement?.quantity ?? 0} ${requirement?.uom ?? ''}',
                   style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
@@ -190,7 +188,7 @@ class RequirementView extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.location_on, size: 16, color: MyColors.grey),
+                  const Icon(Icons.location_on_rounded, size: 16, color: MyColors.grey),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -198,7 +196,7 @@ class RequirementView extends StatelessWidget {
                       children: [
                         if (requirement?.siteAddress?.siteName != null)
                           Text(
-                            requirement!.siteAddress!.siteName!,
+                            requirement!.siteAddress!.siteName!.capitalizeFirst??"",
                             style: MyTexts.medium14.copyWith(
                               color: MyColors.fontBlack,
                             ),
@@ -246,16 +244,9 @@ class RequirementView extends StatelessWidget {
               const Gap(4),
               Text(
                 requirement?.note! ?? '',
-                style: MyTexts.regular12.copyWith(color: MyColors.grey),
+                style: MyTexts.regular12.copyWith(color: MyColors.black),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-              ),
-            ],
-            if (requirement?.createdAt != null) ...[
-              const Gap(8),
-              Text(
-                'Created: ${_formatDate(requirement?.createdAt! ?? DateTime.now())}',
-                style: MyTexts.regular12.copyWith(color: MyColors.grey),
               ),
             ],
           ],
