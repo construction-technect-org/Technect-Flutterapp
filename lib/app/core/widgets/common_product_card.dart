@@ -87,19 +87,19 @@ class ProductCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(4),
             child: getImageView(
-              finalUrl:
-              APIConstants.bucketUrl +
-                  (product.merchantLogo ?? ""),
+              finalUrl: APIConstants.bucketUrl + (product.merchantLogo ?? ""),
               fit: BoxFit.cover,
               height: 20,
-              width: 20
+              width: 20,
             ),
           ),
           const Gap(4),
           Expanded(
             child: Text(
               product.brand ?? 'Unknown Brand',
-              style: MyTexts.medium12.copyWith(color: MyColors.custom('545454')),
+              style: MyTexts.medium12.copyWith(
+                color: MyColors.custom('545454'),
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -230,15 +230,15 @@ class ProductImage extends StatelessWidget {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       if (myPref.role.val == "connector")
-      if ((product.distanceKm ?? "").isNotEmpty)
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          color: Colors.white,
-          child: Text(
-            "${double.parse(product.distanceKm ?? '0').toStringAsFixed(1)} km",
-            style: MyTexts.light14,
+        if ((product.distanceKm ?? "").isNotEmpty)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            color: Colors.white,
+            child: Text(
+              "${double.parse(product.distanceKm ?? '0').toStringAsFixed(1)} km",
+              style: MyTexts.light14,
+            ),
           ),
-        ),
       const Spacer(),
       if (myPref.role.val == "connector")
         if (isFromAdd == false && isFromConnector == true)
