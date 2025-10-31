@@ -1006,6 +1006,7 @@ class SelectedProductController extends GetxController {
                 }
 
                 return CommonAddressList(
+                  isBack: true,
                   addresses: addresses,
                   onEdit: homeController.editAddress,
                   onDelete: homeController.deleteAddress,
