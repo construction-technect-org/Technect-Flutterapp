@@ -125,6 +125,7 @@ class SignUpPasswordController extends GetxController {
   final confirmPasswordController = TextEditingController();
   final isPasswordVisible = false.obs;
   final isConfirmPasswordVisible = false.obs;
+  final rememberMe = false.obs;
 
   SignUpService signUpService = SignUpService();
   final isLoading = false.obs;

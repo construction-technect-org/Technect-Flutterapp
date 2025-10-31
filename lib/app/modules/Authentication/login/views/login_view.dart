@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/google_sign_in_service.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:gap/gap.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -54,7 +55,9 @@ class LoginView extends GetView<LoginController> {
                         Center(
                           child: Text(
                             'India’s Fastest Growing\nConstruction Network',
-                            style: MyTexts.medium18.copyWith(color: Colors.black),
+                            style: MyTexts.medium18.copyWith(
+                              color: Colors.black,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -63,7 +66,9 @@ class LoginView extends GetView<LoginController> {
                           alignment: AlignmentGeometry.topLeft,
                           child: Text(
                             'Login',
-                            style: MyTexts.medium20.copyWith(color: Colors.black),
+                            style: MyTexts.medium20.copyWith(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         const Gap(16),
@@ -99,7 +104,8 @@ class LoginView extends GetView<LoginController> {
                             },
                             showDivider: true,
                             suffixIcon: GestureDetector(
-                              onTap: () => controller.togglePasswordVisibility(),
+                              onTap: () =>
+                                  controller.togglePasswordVisibility(),
                               child: Icon(
                                 controller.isPasswordVisible.value
                                     ? Icons.visibility
@@ -113,45 +119,16 @@ class LoginView extends GetView<LoginController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Obx(
-                                  () => GestureDetector(
-                                    onTap: () {
-                                      controller.rememberMe.value =
-                                          !controller.rememberMe.value;
-                                    },
-                                    child: Container(
-                                      width: 18,
-                                      height: 18,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(3),
-                                        border: Border.all(color: MyColors.grey),
-                                        color: controller.rememberMe.value
-                                            ? MyColors.primary
-                                            : Colors.transparent,
-                                      ),
-                                      child: controller.rememberMe.value
-                                          ? const Icon(
-                                              Icons.check,
-                                              size: 14,
-                                              color: Colors.white,
-                                            )
-                                          : null,
-                                    ),
-                                  ),
-                                ),
-                                const Gap(8),
-                                Text(
-                                  'Remember Me',
-                                  style: MyTexts.medium14.copyWith(color: MyColors.gra54),
-                                ),
-                              ],
+                            //Remember Me
+                            SavePassWidget(
+                              state: controller.rememberMe,
+                              onChanged: (val) =>
+                                  controller.rememberMe.value = val,
                             ),
+                            //Forgot Password
                             TextButton(
-                              onPressed: () {
-                                Get.toNamed(Routes.FORGOT_PASSWORD);
-                              },
+                              onPressed: () =>
+                                  Get.toNamed(Routes.FORGOT_PASSWORD),
                               child: Text(
                                 'Forgot Password?',
                                 style: MyTexts.medium14.copyWith(
@@ -171,12 +148,19 @@ class LoginView extends GetView<LoginController> {
                                 ? null
                                 : () {
                                     controller.isValid.value = -1;
-                                    if (controller.mobileController.text.isEmpty) {
+                                    if (controller
+                                        .mobileController
+                                        .text
+                                        .isEmpty) {
                                       controller.isValid.value = 0;
                                     }
-                                    if (controller.formKey.currentState?.validate() ??
+                                    if (controller.formKey.currentState
+                                            ?.validate() ??
                                         false) {
-                                      if (controller.mobileController.text.isEmpty) {
+                                      if (controller
+                                          .mobileController
+                                          .text
+                                          .isEmpty) {
                                         controller.isValid.value = 0;
                                       } else {
                                         hideKeyboard();
@@ -239,7 +223,8 @@ class LoginView extends GetView<LoginController> {
                                     await controller.callSocialLoginAPI(user);
                                   } else {
                                     SnackBars.errorSnackBar(
-                                      content: 'Google Sign-In was cancelled by user',
+                                      content:
+                                          'Google Sign-In was cancelled by user',
                                     );
                                   }
                                 } catch (e) {
