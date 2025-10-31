@@ -232,8 +232,6 @@ class SelectedProductController extends GetxController {
         categoryProductId: selectedProduct.value!.id.toString(),
         productSubCategoryId: selectedProductSubCategory.value?.id?.toString(),
         radius: radiusKm.toInt(),
-        latitude: latitude,
-        longitude: longitude,
         filters: filtersData,
       );
       showSubCategoryOptions.value = false;

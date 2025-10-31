@@ -10,8 +10,6 @@ class ConnectorSelectedProductServices {
     String? categoryProductId,
     String? productSubCategoryId,
     int? radius,
-    String? latitude,
-    String? longitude,
     int page = 1,
     int limit = 20,
     Map<String, dynamic>? filters,
@@ -27,8 +25,6 @@ class ConnectorSelectedProductServices {
           "category_product_id": categoryProductId,
         if (productSubCategoryId != null && productSubCategoryId.isNotEmpty)
           "product_sub_category_id": productSubCategoryId,
-        if (latitude != null) "latitude": latitude,
-        if (longitude != null) "longitude": longitude,
         if (radius != null) "radius_km": radius,
         // "page": page,
         // "limit": limit,
