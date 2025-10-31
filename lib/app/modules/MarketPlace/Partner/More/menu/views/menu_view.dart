@@ -77,6 +77,14 @@ class MenuView extends StatelessWidget {
               ] else ...[
                 Gap(1.h),
                 CommonContainer(
+                  icon: Asset.cart,
+                  title: "Requirement",
+                  onTap: () {
+                    Get.toNamed(Routes.REQUIREMENT);
+                  },
+                ),
+                const Gap(16),
+                CommonContainer(
                   icon: Asset.wishlist,
                   title: "WishList",
                   onTap: () {

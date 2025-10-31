@@ -21,6 +21,8 @@ import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMark
 import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMarketPlace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/bindings/add_kyc_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/views/add_kyc_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/bindings/add_requirement_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/views/add_requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/bindings/cart_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/views/cart_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocation/bindings/connector_add_location_binding.dart';
@@ -42,6 +44,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/views/connector_selected_product_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/bindings/requirement_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/views/requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/bindings/search_product_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/views/search_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/AddSupportTickets/views/connector_create_new_ticket.dart';
@@ -135,7 +139,11 @@ class AppPages {
       page: () => const SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(name: _Paths.LOGIN, page: () => const LoginView(), binding: LoginBinding()),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -156,7 +164,11 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
+    GetPage(
+      name: _Paths.MAIN,
+      page: () => BottomBarView(),
+      binding: BottomBinding(),
+    ),
     GetPage(
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
@@ -194,8 +206,16 @@ class AppPages {
       page: () => RoleManagementView(),
       binding: RoleManagementBinding(),
     ),
-    GetPage(name: _Paths.ADD_ROLE, page: () => AddRoleView(), binding: AddRoleBinding()),
-    GetPage(name: _Paths.ADD_TEAM, page: () => AddTeamView(), binding: AddTeamBinding()),
+    GetPage(
+      name: _Paths.ADD_ROLE,
+      page: () => AddRoleView(),
+      binding: AddRoleBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_TEAM,
+      page: () => AddTeamView(),
+      binding: AddTeamBinding(),
+    ),
     GetPage(
       name: _Paths.APPROVAL_INBOX,
       page: () => ApprovalInboxView(),
@@ -211,7 +231,11 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
+    GetPage(
+      name: _Paths.FAQ,
+      page: () => const FaqScreen(),
+      binding: FAQBindings(),
+    ),
     GetPage(
       name: _Paths.TEAM_DETAILS,
       page: () => const TeamDetailsView(),
@@ -222,7 +246,9 @@ class AppPages {
       name: _Paths.SERVICE_MANAGEMENT,
       page: () => ServiceManagementView(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<ServiceManagementController>(() => ServiceManagementController());
+        Get.lazyPut<ServiceManagementController>(
+          () => ServiceManagementController(),
+        );
       }),
     ),
 
@@ -360,6 +386,16 @@ class AppPages {
       name: Routes.CONNECTOR_SUPPORT_REQUEST,
       page: () => ConnectorSupportRequestScreen(),
       binding: ConnectorSupportRequestBindings(),
+    ),
+    GetPage(
+      name: Routes.ADD_REQUIREMENT,
+      page: () => AddRequirementView(),
+      binding: AddRequirementBinding(),
+    ),
+    GetPage(
+      name: Routes.REQUIREMENT,
+      page: () => RequirementView(),
+      binding: RequirementBinding(),
     ),
     GetPage(
       name: Routes.CONNECTOR_REQUEST_DEMO,

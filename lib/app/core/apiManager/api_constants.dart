@@ -125,4 +125,10 @@ class APIConstants {
       "connector/support-ticket/create";
   static const String connectorFeedback = "feedback/connector";
   static const String manufacturerAddress = "address";
+
+  // Connector Requirement API
+  static const String connectorCreateRequirement = "connector/requirement";
+  static const String connectorUpdateRequirement = "connector/requirement";
+  static const String connectorGetRequirement =
+      "connector/requirement/list/all";
 }
