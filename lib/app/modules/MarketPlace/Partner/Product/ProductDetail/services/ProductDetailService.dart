@@ -24,12 +24,10 @@ class ProductDetailService {
 
   Future<ProductDetailsModel> productDetails({
     required String id,
-    required String longitude,
-    required String latitude,
   }) async {
     try {
       final response = await _apiManager.get(
-        url: "${APIConstants.productDetails}$id?latitude$latitude&longitude=$longitude",
+        url: "${APIConstants.productDetails}$id",
       );
       return ProductDetailsModel.fromJson(response);
     } catch (e) {

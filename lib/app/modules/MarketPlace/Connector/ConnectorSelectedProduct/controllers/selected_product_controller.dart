@@ -10,8 +10,8 @@ import 'package:gap/gap.dart';
 
 class SelectedProductController extends GetxController {
   HomeController homeController = Get.find<HomeController>();
-  RxBool hasOpenedOnce = false
-      .obs;
+  RxBool hasOpenedOnce = false.obs;
+
   // Observable variables
   RxInt selectedProductIndex = (-1).obs;
 
@@ -56,13 +56,15 @@ class SelectedProductController extends GetxController {
   void onInit() {
     super.onInit();
     // Get arguments passed from home page
-    ever(hasOpenedOnce, (opened) {
-      if (!opened) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          openAddressSelection();
-        });
-      }
-    });
+    if (myPref.role.val == "connector") {
+      ever(hasOpenedOnce, (opened) {
+        if (!opened) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            openAddressSelection();
+          });
+        }
+      });
+    }
 
     hasOpenedOnce.value = false; // Reset each time screen is created
     final arguments = Get.arguments as Map<String, dynamic>?;
@@ -71,6 +73,7 @@ class SelectedProductController extends GetxController {
     selectedSubCategoryId.value = arguments?['selectedSubCategoryId'] ?? 0;
     _initializeProductCategories();
   }
+
   void openAddressSelection() {
     openSelectAddressBottomSheet(
       onAddressChanged: () async {
@@ -81,7 +84,6 @@ class SelectedProductController extends GetxController {
       },
     );
   }
-
 
   void _initializeProductCategories() {
     if (mainCategoryId != null) {

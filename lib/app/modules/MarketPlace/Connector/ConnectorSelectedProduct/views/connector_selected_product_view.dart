@@ -41,6 +41,7 @@ class SelectedProductView extends StatelessWidget {
             },
           ),
           actions: [
+            if(myPref.role.val == "connector")
             GestureDetector(
               onTap: () {
                 controller.openSelectAddressBottomSheet(
