@@ -393,7 +393,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(24.0),
           child: RoundedButton(
-            buttonName: 'Proceed',
+            buttonName: 'Continue',
             onTap: () async {
               hideKeyboard();
               if (formKey.currentState!.validate()) {
