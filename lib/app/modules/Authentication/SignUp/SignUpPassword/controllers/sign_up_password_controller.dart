@@ -183,6 +183,7 @@ class SignUpPasswordController extends GetxController {
       );
 
       if (signUpResponse.success == true) {
+        SnackBars.successSnackBar(content: "Password set Successfully");
         if (signUpResponse.data?.token != null) {
           myPref.setToken(signUpResponse.data!.token!);
         }
