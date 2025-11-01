@@ -33,6 +33,8 @@ class HomeController extends GetxController {
   // AddressModel addressData = AddressModel();
   RxList<TeamListData> teamList = <TeamListData>[].obs;
   Rx<CategoryModel> categoryHierarchyData = CategoryModel().obs;
+  Rx<CategoryModel> categoryHierarchyDataCM = CategoryModel().obs;
+  Rx<CategoryModel> categoryHierarchyData2 = CategoryModel().obs;
 
   @override
   void onInit() {
@@ -251,11 +253,13 @@ class HomeController extends GetxController {
       final cachedCategoryHierarchy = myPref.getCategoryHierarchyModel();
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyData.value = cachedCategoryHierarchy;
+        categoryHierarchyDataCM.value = cachedCategoryHierarchy;
       }
 
       // Fetch fresh data from API
       final apiCategoryHierarchy = await homeService.getCategoryHierarchy();
       categoryHierarchyData.value = apiCategoryHierarchy;
+      categoryHierarchyDataCM.value = apiCategoryHierarchy;
 
       // Store in local storage
       myPref.setCategoryHierarchyModel(apiCategoryHierarchy);
@@ -264,6 +268,7 @@ class HomeController extends GetxController {
       final cachedCategoryHierarchy = myPref.getCategoryHierarchyModel();
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyData.value = cachedCategoryHierarchy;
+        categoryHierarchyDataCM.value = cachedCategoryHierarchy;
       }
       Get.printError(info: 'Error fetching category hierarchy: $e');
     } finally {

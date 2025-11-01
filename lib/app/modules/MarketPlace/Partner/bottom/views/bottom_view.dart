@@ -36,12 +36,21 @@ class BottomBarView extends GetView<BottomController> {
         children: [
           Container(
             margin: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-            padding: const EdgeInsets.only(right: 30, left: 30, top: 12, bottom: 12),
+            padding: const EdgeInsets.only(
+              right: 30,
+              left: 30,
+              top: 12,
+              bottom: 12,
+            ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color: Colors.white,
               boxShadow: const [
-                BoxShadow(color: Color(0x19000000), blurRadius: 30, offset: Offset(5, 0)),
+                BoxShadow(
+                  color: Color(0x19000000),
+                  blurRadius: 30,
+                  offset: Offset(5, 0),
+                ),
               ],
             ),
             child: Center(
@@ -81,188 +90,268 @@ class BottomBarView extends GetView<BottomController> {
                     Asset.add,
                     myPref.role.val != "connector" ? "Sell" : 'Request',
                     onTap: () {
-                      if (myPref.role.val != "connector") {
-                        if (!commonController.hasProfileComplete.value) {
-                          Get.dialog(
-                            AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              title: const Text(
-                                "Complete Your Profile",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                      if (Get.find<HomeController>().marketPlace.value == 0) {
+                        if (myPref.role.val != "connector") {
+                          if (!commonController.hasProfileComplete.value) {
+                            Get.dialog(
+                              AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                              ),
-                              content: const Text(
-                                "To add a product, please complete your business profile first.",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Get.back(),
-                                  child: const Text(
-                                    "Cancel",
-                                    style: TextStyle(color: Colors.grey),
+                                title: const Text(
+                                  "Complete Your Profile",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Get.back();
-                                    Get.toNamed(Routes.PROFILE);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                content: const Text(
+                                  "To add a product, please complete your business profile first.",
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Get.back(),
+                                    child: const Text(
+                                      "Cancel",
+                                      style: TextStyle(color: Colors.grey),
                                     ),
                                   ),
-                                  child: const Text("Complete Now"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Get.back();
+                                      Get.toNamed(Routes.PROFILE);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: const Text("Complete Now"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          } else if ((Get.find<HomeController>()
+                                      .profileData
+                                      .value
+                                      .data
+                                      ?.addresses ??
+                                  [])
+                              .isEmpty) {
+                            Get.dialog(
+                              AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                              ],
-                            ),
-                            barrierDismissible: false,
-                          );
-                        } else if ((Get.find<HomeController>()
-                                    .profileData
-                                    .value
-                                    .data
-                                    ?.addresses ??
-                                [])
-                            .isEmpty) {
-                          Get.dialog(
-                            AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              title: const Text(
-                                "Add Your Address",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              content: const Text(
-                                "To add a product, please add your address first.",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Get.back(),
-                                  child: const Text(
-                                    "Cancel",
-                                    style: TextStyle(color: Colors.grey),
+                                title: const Text(
+                                  "Add Your Address",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Get.back();
-                                    Get.toNamed(Routes.MANUFACTURER_ADDRESS);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                content: const Text(
+                                  "To add a product, please add your address first.",
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Get.back(),
+                                    child: const Text(
+                                      "Cancel",
+                                      style: TextStyle(color: Colors.grey),
                                     ),
                                   ),
-                                  child: const Text("Add Address"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Get.back();
+                                      Get.toNamed(Routes.MANUFACTURER_ADDRESS);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: const Text("Add Address"),
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          } else {
+                            Get.bottomSheet(
+                              Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  ),
                                 ),
-                              ],
-                            ),
-                            barrierDismissible: false,
-                          );
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        width: 50,
+                                        height: 5,
+                                        margin: const EdgeInsets.only(
+                                          bottom: 20,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius: BorderRadius.circular(
+                                            5,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Select an Option",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    // Add Product
+                                    ListTile(
+                                      leading: SvgPicture.asset(Asset.add),
+                                      title: const Text("Add New Product"),
+                                      titleTextStyle: MyTexts.medium16.copyWith(
+                                        color: MyColors.black,
+                                      ),
+                                      onTap: () {
+                                        Get.back();
+                                        Get.toNamed(Routes.ADD_PRODUCT);
+                                      },
+                                    ),
+                                    const Divider(),
+                                    // Manage Product
+                                    ListTile(
+                                      leading: SvgPicture.asset(
+                                        Asset.inventory,
+                                      ),
+                                      title: const Text("Manage Products"),
+                                      titleTextStyle: MyTexts.medium16.copyWith(
+                                        color: MyColors.black,
+                                      ),
+                                      onTap: () {
+                                        Get.back();
+                                        Get.toNamed(Routes.INVENTORY);
+                                      },
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
                         } else {
-                          Get.bottomSheet(
-                            Container(
-                              padding: const EdgeInsets.all(20),
+                          Get.toNamed(Routes.ADD_REQUIREMENT);
+                        }
+                      } else if (Get.find<HomeController>().marketPlace.value ==
+                          1) {
+                        Get.bottomSheet(
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    width: 50,
+                                    height: 5,
+                                    margin: const EdgeInsets.only(
+                                      bottom: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(
+                                        5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  "Select an Option",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                // Add Product
+                                ListTile(
+                                  leading: SvgPicture.asset(Asset.add),
+                                  title: const Text("Add New Service"),
+                                  titleTextStyle: MyTexts.medium16.copyWith(
+                                    color: MyColors.black,
+                                  ),
+                                  onTap: () {
+                                    Get.back();
+                                    Get.toNamed(Routes.ADD_PRODUCT);
+                                  },
+                                ),
+                                const Divider(),
+                                // Manage Product
+                                ListTile(
+                                  leading: SvgPicture.asset(
+                                    Asset.inventory,
+                                  ),
+                                  title: const Text("Manage Services"),
+                                  titleTextStyle: MyTexts.medium16.copyWith(
+                                    color: MyColors.black,
+                                  ),
+                                  onTap: () {
+                                    Get.back();
+                                    Get.toNamed(Routes.INVENTORY);
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      else{
+                        showModalBottomSheet(
+                          context: Get.context!,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) {
+                            return Container(
+                              width: 150,
+                              height: 316,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(20),
                                 ),
                               ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Center(
-                                    child: Container(
-                                      width: 50,
-                                      height: 5,
-                                      margin: const EdgeInsets.only(bottom: 20),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                    ),
-                                  ),
-                                  const Text(
-                                    "Select an Option",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  // Add Product
-                                  ListTile(
-                                    leading: SvgPicture.asset(Asset.add),
-                                    title: const Text("Add New Product"),
-                                    titleTextStyle: MyTexts.medium16.copyWith(
-                                      color: MyColors.black,
-                                    ),
-                                    onTap: () {
-                                      Get.back();
-                                      Get.toNamed(Routes.ADD_PRODUCT);
-                                    },
-                                  ),
-                                  const Divider(),
-                                  // Manage Product
-                                  ListTile(
-                                    leading: SvgPicture.asset(Asset.inventory),
-                                    title: const Text("Manage Products"),
-                                    titleTextStyle: MyTexts.medium16.copyWith(
-                                      color: MyColors.black,
-                                    ),
-                                    onTap: () {
-                                      Get.back();
-                                      Get.toNamed(Routes.INVENTORY);
-                                    },
-                                  ),
-                                  const SizedBox(height: 10),
-                                ],
+                              padding: const EdgeInsets.all(16),
+                              child: Center(
+                                child: Image.asset(
+                                  Asset.comingSoon,
+                                  height: 316,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      } else {
-                        Get.toNamed(Routes.ADD_REQUIREMENT);
-                        // showModalBottomSheet(
-                        //   context: Get.context!,
-                        //   isScrollControlled: true,
-                        //   backgroundColor: Colors.transparent,
-                        //   builder: (context) {
-                        //     return Container(
-                        //       width: 150,
-                        //       height: 316,
-                        //       decoration: const BoxDecoration(
-                        //         color: Colors.white,
-                        //         borderRadius: BorderRadius.vertical(
-                        //           top: Radius.circular(20),
-                        //         ),
-                        //       ),
-                        //       padding: const EdgeInsets.all(16),
-                        //       child: Center(
-                        //         child: Image.asset(
-                        //           Asset.comingSoon,
-                        //           height: 316,
-                        //           fit: BoxFit.cover,
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // );
+                            );
+                          },
+                        );
                       }
                     },
                   ),

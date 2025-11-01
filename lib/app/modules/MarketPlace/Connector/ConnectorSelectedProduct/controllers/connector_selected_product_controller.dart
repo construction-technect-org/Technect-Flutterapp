@@ -1,545 +1,1031 @@
-import 'dart:async';
-
-import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/models/site_location_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSiteLocation/services/site_location_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedBack/service/FeedBackService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorSelectedProductController extends GetxController {
-  /// Loading & Search
-  RxBool isLoading = false.obs;
-  RxBool isSearching = false.obs;
-  RxBool isFilterApply = false.obs;
-  final TextEditingController searchController = TextEditingController();
-  RxInt selectedRadius = 5.obs;
-  final Rx<TextEditingController> radiusController = TextEditingController(text: "5").obs;
+  HomeController homeController = Get.find<HomeController>();
+  RxBool hasOpenedOnce = false.obs;
 
-  /// Page Controller
-  late PageController pageController;
-  RxInt currentPage = 0.obs;
-
-  /// Map & Location
-  late GoogleMapController mapController;
-  Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
-  RxDouble mapZoom = 14.0.obs;
-  Rx<MapType> mapType = MapType.normal.obs;
-  final markers = <String, Marker>{}.obs;
-
-  // Site address list
-  RxList<Datum> siteAddressList = <Datum>[].obs;
-  RxBool isLoadingAddresses = false.obs;
-  RxInt selectedSiteIndex = 0.obs;
-
-  Rx<ConnectorSelectedProductModel> productListModel = ConnectorSelectedProductModel(
-    success: false,
-    message: '',
-  ).obs;
-
-  RxInt selectedMainCategoryIndex = (-1).obs;
-  RxInt selectedSubCategoryIndex = (-1).obs;
+  // Observable variables
   RxInt selectedProductIndex = (-1).obs;
 
-  /// Services
-  final ConnectorSelectedProductServices services = ConnectorSelectedProductServices();
+  // Two-pane navigation index (0..4)
+  RxInt navigationIndex = 0.obs;
+
+  // View state handled via navigationIndex only (0..4)
+  RxBool isLoadingProducts = false.obs;
+  RxBool isLoading = false.obs;
+  RxBool moreThenHundred = false.obs;
+  RxBool showSubCategoryOptions = false.obs;
+  RxBool isGridView = true.obs;
+
+  // Product categories (from CategoryData model) and main products from API
+  Rx<SubCategory> productCategories = SubCategory().obs;
+  Rx<ConnectorSelectedProductModel?> productListModel =
+      Rx<ConnectorSelectedProductModel?>(null);
+  RxInt selectedProductCategoryIndex = 0.obs;
+  RxInt selectedSubProductCategoryIndex = 0.obs;
+
+  // Variables for categories and products
+  Rx<CategoryData?> mainCategory = CategoryData().obs; // Main Category
+  RxList<SubCategory> subCategories = <SubCategory>[].obs; // Sub Category
+  Rx<SubCategory?> selectedSubCategory = Rx<SubCategory?>(null);
+  RxList<ProductCategory> products = <ProductCategory>[].obs;
+  Rx<ProductCategory?> selectedProduct = Rx<ProductCategory?>(null);
+  RxList<ProductSubCategory> productSubCategories = <ProductSubCategory>[].obs;
+  Rx<ProductSubCategory?> selectedProductSubCategory = Rx<ProductSubCategory?>(
+    null,
+  );
+
+  // Arguments from navigation
+  int? mainCategoryId;
+  String? mainCategoryName;
+  RxInt selectedSubCategoryId = 0.obs;
+  double radiusKm = 50000000;
+
+  // Service instance
+  final ConnectorSelectedProductServices services =
+      ConnectorSelectedProductServices();
 
   @override
   void onInit() {
     super.onInit();
-
-    fetchMainCategories();
-    getSiteAddresses();
-  }
-
-  /// MAP HANDLERS
-  void onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-  void onCameraMove(CameraPosition position) {
-    currentPosition.value = position.target;
-  }
-
-  void onCameraIdle() {}
-
-  /// SEARCH HANDLER
-  Future<void> onSearchChanged(String query) async {
-    if (query.isEmpty) return;
-    isSearching.value = true;
-    await Future.delayed(const Duration(seconds: 1));
-    isSearching.value = false;
-  }
-
-  /// SITE SELECTION
-  void selectSite(int index) {
-    selectedSiteIndex.value = index;
-  }
-
-  void searchProduct(String value) {
-    searchQuery.value = value.trim();
-    if (searchQuery.value.isEmpty) {
-      filteredProducts.assignAll(productListModel.value.data?.products ?? []);
-      return;
+    // Get arguments passed from home page
+    if (myPref.role.val == "connector") {
+      ever(hasOpenedOnce, (opened) {
+        if (!opened) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            openAddressSelection();
+          });
+        }
+      });
     }
-    final query = searchQuery.value.toLowerCase();
-    final results = (productListModel.value.data?.products ?? []).where((product) {
-      final name = (product.categoryProductName ?? '').toLowerCase();
-      final address = (product.address ?? '').toLowerCase();
-      final brand = (product.brand ?? '').toLowerCase();
-      final price = (product.price ?? '').toLowerCase();
-      return name.contains(query) ||
-          address.contains(query) ||
-          brand.contains(query) ||
-          price.contains(query);
-    }).toList();
-    filteredProducts.assignAll(results);
+
+    hasOpenedOnce.value = false; // Reset each time screen is created
+    final arguments = Get.arguments as Map<String, dynamic>?;
+    mainCategoryId = arguments?['mainCategoryId'] ?? 0;
+    mainCategoryName = arguments?['mainCategoryName'] ?? 'Select Product';
+    selectedSubCategoryId.value = arguments?['selectedSubCategoryId'] ?? 0;
+    _initializeProductCategories();
   }
 
-  /// PAGE NAVIGATION
-  void goToPage(int page) {
-    currentPage.value = page;
-    pageController.animateToPage(
-      page,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+  void openAddressSelection() {
+    openSelectAddressBottomSheet(
+      onAddressChanged: () async {
+        // When user selects an address
+        // isAddressSelected.value = true;
+        hasOpenedOnce.value = true;
+        await fetchProductsFromApi(isLoading: true);
+      },
     );
   }
 
-  RxList<ConnectorCategory> categoryProducts = <ConnectorCategory>[].obs;
+  void _initializeProductCategories() {
+    if (mainCategoryId != null) {
+      final categoryHierarchy = myPref.getCategoryHierarchyModel();
 
-  /// OPTIONAL: RESET SELECTIONS
-  void resetSelections() {
-    selectedMainCategoryIndex.value = -1;
-    selectedSubCategoryIndex.value = -1;
-    selectedProductIndex.value = -1;
-    subCategories.clear();
-    productsList.clear();
-    selectedAddress.value = Datum();
+      mainCategory.value =
+          categoryHierarchy?.data!.firstWhere(
+            (category) => category.id == mainCategoryId,
+          ) ??
+          CategoryData();
+
+      subCategories.value =
+          mainCategory.value?.subCategories ?? <SubCategory>[];
+
+      if (selectedSubCategoryId.value != 0) {
+        selectedSubCategory.value = subCategories.firstWhere((element) {
+          return selectedSubCategoryId.value == element.id;
+        });
+        products.value =
+            selectedSubCategory.value?.products ?? <ProductCategory>[];
+        productSubCategories.value =
+            selectedSubCategory.value?.productSubCategories ??
+            <ProductSubCategory>[];
+      }
+    }
   }
 
-  //////////////
+  // Explicitly (re)select the main category and refresh right-side subcategories
+  void selectMainCategory() {
+    final categoryHierarchy = myPref.getCategoryHierarchyModel();
+    if (mainCategoryId != null && categoryHierarchy != null) {
+      mainCategory.value =
+          categoryHierarchy.data?.firstWhere((c) => c.id == mainCategoryId) ??
+          CategoryData();
+      subCategories.value =
+          mainCategory.value?.subCategories ?? <SubCategory>[];
+      // Stay on index 0: Left = main category, Right = subcategories
+    }
+  }
 
-  RxList<CategoryProduct> productsList = <CategoryProduct>[].obs;
-  Rxn<String> selectedMainCategory = Rxn<String>();
-  Rxn<String> selectedSubCategory = Rxn<String>();
-  Rxn<String> selectedProduct = Rxn<String>();
-  Rxn<String> selectedMainCategoryId = Rxn<String>();
-  Rxn<String> selectedSubCategoryId = Rxn<String>();
-  Rxn<String> selectedProductId = Rxn<String>();
-  RxList<String> mainCategoryNames = <String>[].obs;
-  RxList<String> subCategoryNames = <String>[].obs;
-  RxList<String> productNames = <String>[].obs;
-  RxList<MainCategory> mainCategories = <MainCategory>[].obs;
-  RxList<SubCategory> subCategories = <SubCategory>[].obs;
-  Rx<Datum> selectedAddress = Datum().obs;
-  RxList<Product> filteredProducts = <Product>[].obs;
+  // Methods
+  void selectSubCategory(int index) {
+    selectedSubCategoryId.value = subCategories[index].id ?? 0;
+    selectedSubCategory.value = subCategories[index];
+    products.value = selectedSubCategory.value?.products ?? [];
+    productSubCategories.value =
+        selectedSubCategory.value?.productSubCategories ??
+        <ProductSubCategory>[];
+    selectedProductIndex.value = -1; // Reset product selection
+  }
 
-  RxString searchQuery = ''.obs;
+  void lestSide0LeftView(int index) {
+    navigationIndex.value = 0;
+    selectedSubCategoryId.value = subCategories[index].id ?? 0;
+    selectedSubCategory.value = subCategories[index];
+    products.value = selectedSubCategory.value?.products ?? [];
+    productSubCategories.value =
+        selectedSubCategory.value?.productSubCategories ??
+        <ProductSubCategory>[];
+  }
 
-  Future<void> getAllProducts({
+  void rightSide0RightView(int index) {
+    selectProduct(index);
+    productCategories.value =
+        mainCategory.value?.subCategories?.firstWhere((element) {
+          return element.id == products[index].subCategoryId;
+        }) ??
+        SubCategory();
+    if (productCategories.value.productSubCategories?.isEmpty ?? true) {
+      navigationIndex.value = 1;
+    } else {
+      selectedProductCategoryIndex.value = index;
+      navigationIndex.value = 2;
+    }
+    selectedProduct.value = products[index];
+  }
+
+  void leftSide1LeftView(int index) {
+    navigationIndex.value = 1;
+    selectedProductCategoryIndex.value = index;
+    selectedProduct.value = products[index];
+    if (productSubCategories.isNotEmpty) {
+      return;
+    }
+    fetchProductsFromApi();
+  }
+
+  void leftSide2LeftView(int index) {
+    selectedProductCategoryIndex.value = index;
+    selectedProduct.value =
+        productCategories.value.products?[index] ?? ProductCategory();
+  }
+
+  void rightSide2RightView(int index) {
+    selectedSubProductCategoryIndex.value = index;
+    selectedProductSubCategory.value = productSubCategories[index];
+    fetchProductsFromApi();
+  }
+
+  void selectProduct(int index) {
+    selectedProductIndex.value = index;
+    selectedProduct.value = products[index];
+    if (productSubCategories.isNotEmpty) {
+      return;
+    }
+    fetchProductsFromApi();
+  }
+
+  // Call API when product is clicked
+  Future<void> fetchProductsFromApi({
+    bool? isLoading,
     Map<String, dynamic>? filtersData,
-    int? radius,
-    bool? filter = false,
   }) async {
-    try {
-      isLoading.value = true;
-      final res = await services.connectorProduct(
-        mainCategoryId: selectedMainCategoryId.value ?? '',
-        subCategoryId: selectedSubCategoryId.value ?? '',
-        categoryProductId: selectedProductId.value ?? '',
-        filters: filtersData ?? {},
-        // latitude: latitude,
-        // longitude: longitude,
-        // radius: radius,
-        radius: selectedRadius.value,
+    if (selectedProduct.value == null || selectedSubCategory.value == null) {
+      return;
+    }
+
+    isLoadingProducts.value = isLoading ?? true;
+
+    final selectedAddress = homeController.profileData.value.data?.siteLocations
+        ?.where((element) => element.isDefault == true)
+        .first;
+
+    String latitude = '';
+    String longitude = '';
+
+    if (selectedAddress != null) {
+      final latitudeString = selectedAddress.latitude?.toString();
+      final longitudeString = selectedAddress.longitude?.toString();
+      if (latitudeString != null && longitudeString != null) {
+        latitude = latitudeString;
+        longitude = longitudeString;
+      }
+    }
+    if (latitude.isEmpty || longitude.isEmpty) {
+      SnackBars.errorSnackBar(
+        content: 'No address found. Please add an address first.',
       );
-      if (filter == true) {
-        isFilterApply.value = true;
+      return;
+    }
+    try {
+      // Call the service
+      productListModel.value = await services.connectorProduct(
+        mainCategoryId: mainCategoryId.toString(),
+        subCategoryId: selectedSubCategory.value!.id.toString(),
+        categoryProductId: selectedProduct.value!.id.toString(),
+        productSubCategoryId: selectedProductSubCategory.value?.id?.toString(),
+        radius: radiusKm.toInt(),
+        filters: filtersData,
+      );
+      showSubCategoryOptions.value = false;
+
+      if (allFilters.isEmpty) {
+        getFilter(selectedProduct.value!.id.toString());
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch products: $e');
+    } finally {
+      isLoadingProducts.value = false;
+    }
+  }
+
+  // Select product category
+  void selectProductCategory(int index) {
+    selectedProductCategoryIndex.value = index;
+    selectedProduct.value =
+        productCategories.value.products?[index] ?? ProductCategory();
+    if (productSubCategories.isNotEmpty) {
+      return;
+    }
+    fetchProductsFromApi();
+  }
+
+  // Go back to category view
+  void goBackToCategoryView() {
+    if (navigationIndex.value == 0) {
+      Get.back();
+      return;
+    }
+    if (navigationIndex.value == 3) {
+      navigationIndex.value = 2;
+    } else if (navigationIndex.value == 2) {
+      if (selectedSubCategory.value?.productSubCategories?.isEmpty ?? true) {
+        navigationIndex.value = 1;
       } else {
-        isFilterApply.value = false;
+        navigationIndex.value = 0;
       }
-      productListModel.value = res;
-      filteredProducts.clear();
-      filteredProducts.assignAll(res.data?.products ?? []);
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    } finally {
-      isLoading.value = false;
+    } else {
+      navigationIndex.value = 0;
     }
   }
 
-  Future<void> notifyMeApi({int? mID}) async {
-    try {
-      isLoading.value = true;
-      final res = await services.notifyMe(mID: mID);
-      if (res.success == true) {
-        await getAllProducts();
-        SnackBars.successSnackBar(content: res.message);
+  void selectProductSubCategory(int index) {
+    selectedSubProductCategoryIndex.value = index;
+    selectedProductSubCategory.value = productSubCategories[index];
+    fetchProductsFromApi();
+  }
+
+  // Inside SelectedProductController
+  RxDouble selectedRadius = 50.0.obs;
+  RxString selectedSort = 'Relevance'.obs;
+
+  void updateRadius(double value) {
+    selectedRadius.value = value;
+  }
+
+  Future<void> applyRadius() async {
+    radiusKm = selectedRadius.value;
+    await fetchProductsFromApi();
+  }
+
+  void applySorting(String sortType) {
+    selectedSort.value = sortType;
+
+    if (productListModel.value?.data?.products != null) {
+      final products = productListModel.value!.data!.products;
+      switch (sortType) {
+        case 'Price (Low to High)':
+          products.sort(
+            (a, b) => double.parse(
+              a.price ?? '0',
+            ).compareTo(double.parse(b.price ?? '0')),
+          );
+        case 'Price (High to Low)':
+          products.sort(
+            (a, b) => double.parse(
+              b.price ?? '0',
+            ).compareTo(double.parse(a.price ?? '0')),
+          );
+        case 'Ratings':
+          products.sort(
+            (a, b) => double.parse(
+              b.ratingCount.toString(),
+            ).compareTo(double.parse(a.ratingCount.toString())),
+          );
+        case 'New Arrivals':
+          products.sort(
+            (a, b) => (b.createdAt ?? '').compareTo(a.createdAt ?? ''),
+          );
+        default:
+          break;
       }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    } finally {
-      isLoading.value = false;
+      productListModel.refresh();
     }
   }
 
-  Future<void> wishListApi({required int mID, required String status}) async {
-    try {
-      isLoading.value = true;
-      final res = await WishListServices().wishList(mID: mID, status: status);
-      if (res.success == true) {
-        await getAllProducts();
-        SnackBars.successSnackBar(content: res.message);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  void showSortBottomSheet(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Obx(
+          () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 8),
+              Center(
+                child: Container(height: 4, width: 40, color: Colors.grey[400]),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Sort by',
+                style: MyTexts.medium16.copyWith(color: MyColors.black),
+              ),
+              const SizedBox(height: 12),
+              ...[
+                'Relevance',
+                'New Arrivals',
+                'Price (High to Low)',
+                'Price (Low to High)',
+                'Ratings',
+              ].map((sortType) {
+                return RadioListTile<String>(
+                  dense: true,
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  selectedTileColor: MyColors.primary,
 
-  Future<void> addToConnectApi({int? mID, int? pID, String? message}) async {
-    try {
-      isLoading.value = true;
-      final res = await services.addToConnect(mID: mID, message: message, pID: pID);
-      if (res.success == true) {
-        await getAllProducts();
-
-        SnackBars.successSnackBar(content: res.message);
-        Get.bottomSheet(
-          FeedbackBottomSheetView(id: pID ?? 0),
-          isScrollControlled: true,
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return MyColors.primary;
+                    }
+                    return Colors.grey;
+                  }),
+                  visualDensity: VisualDensity.compact,
+                  contentPadding: EdgeInsets.zero,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  title: Text(
+                    sortType,
+                    style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
+                  ),
+                  value: sortType,
+                  groupValue: selectedSort.value,
+                  onChanged: (value) {
+                    applySorting(value!);
+                    Get.back();
+                  },
+                );
+              }),
+              const SizedBox(height: 10),
+            ],
           ),
-        );
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    } finally {
-      isLoading.value = false;
-    }
+        ),
+      ),
+      isScrollControlled: true,
+    );
   }
 
-  Future<void> fetchMainCategories() async {
-    try {
-      isLoading(true);
-      final result = await AddProductService().mainCategory();
-      if ((result.success) == true) {
-        mainCategories.value = result.data ?? [];
-        mainCategoryNames.value =
-            result.data
-                ?.map((e) => e.name)
-                .where((name) => name != null)
-                .cast<String>()
-                .toList() ??
-            [];
-      } else {
-        mainCategories.clear();
-        mainCategoryNames.clear();
-      }
-    } catch (e) {
-      mainCategories.clear();
-      mainCategoryNames.clear();
-    } finally {
-      isLoading(false);
-    }
+  void showLocationBottomSheet(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: const EdgeInsets.all(20),
+        child: Obx(
+          () => Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Select the radius',
+                    style: MyTexts.medium16.copyWith(
+                      color: MyColors.veryDarkGray,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Get.back(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Obx(() {
+                return GestureDetector(
+                  onTap: () async {
+                    moreThenHundred.value = !moreThenHundred.value;
+                    Get.back();
+
+                    if (moreThenHundred.value == true) {
+                      radiusKm = 10000000000;
+                      await fetchProductsFromApi();
+                    } else {
+                      await applyRadius();
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: moreThenHundred.value == true
+                          ? MyColors.primary
+                          : MyColors.white,
+                      borderRadius: BorderRadius.circular(44),
+                      border: Border.all(color: MyColors.grayEA),
+                    ),
+                    child: Text(
+                      'More than 100 km',
+                      style: MyTexts.medium14.copyWith(
+                        color: moreThenHundred.value == true
+                            ? MyColors.white
+                            : Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(
+                    '0 km',
+                    style: MyTexts.medium14.copyWith(color: Colors.black),
+                  ),
+                  Expanded(
+                    child: Slider(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      max: 100,
+                      divisions: 10,
+                      value: selectedRadius.value,
+                      label: '${selectedRadius.value.toStringAsFixed(0)} km',
+                      onChanged: (value) => updateRadius(value),
+                      activeColor: MyColors.primary,
+                    ),
+                  ),
+                  Text(
+                    '100 km',
+                    style: MyTexts.medium14.copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    moreThenHundred.value = false;
+                    await applyRadius();
+                    Get.back();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MyColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      'Continue',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
   }
 
-  Future<void> fetchSubCategories(int mainCategoryId) async {
-    try {
-      isLoading(true);
-      final result = await AddProductService().subCategory(mainCategoryId);
-      if ((result.success) == true) {
-        subCategories.value = result.data ?? [];
-        subCategoryNames.value =
-            result.data
-                ?.map((e) => e.name)
-                .where((name) => name != null)
-                .cast<String>()
-                .toList() ??
-            [];
-      } else {
-        subCategories.clear();
-        subCategoryNames.clear();
-      }
-
-      selectedSubCategory.value = null;
-      productsList.clear();
-      productNames.clear();
-      selectedProduct.value = null;
-    } catch (e) {
-      subCategories.clear();
-      subCategoryNames.clear();
-      productsList.clear();
-      productNames.clear();
-      selectedProduct.value = null;
-    } finally {
-      isLoading(false);
+  void showFilterBottomSheet(BuildContext context) {
+    final otherFilters = allFilters;
+    if (filters.isEmpty) {
+      filters.assignAll(
+        otherFilters.map(
+          (f) => ConnectorFilterModel(
+            filterName: f.filterName,
+            filterType: f.filterType,
+            min: double.tryParse(f.minValue ?? '0'),
+            max: double.tryParse(f.maxValue ?? '100'),
+            options: f.dropdownList,
+            label: f.filterLabel,
+          ),
+        ),
+      );
+      initFilterControllers();
     }
+
+    Get.bottomSheet(
+      StatefulBuilder(
+        builder: (context, setState) {
+          return Container(
+            height: MediaQuery.of(context).size.height / 1.2,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Select Filter',
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.veryDarkGray,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Get.back(),
+                      ),
+                    ],
+                  ),
+                ),
+
+                /// FILTER LIST
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: filters.length,
+                    itemBuilder: (context, index) {
+                      final filter = filters[index];
+                      final isExpanded = expandedSection.contains(
+                        filter.filterName,
+                      );
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        // margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: !isExpanded
+                              ? null
+                              : const Border(
+                                  bottom: BorderSide(color: MyColors.grayEA),
+                                ),
+                        ),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                filter.label ?? '',
+                                style: MyTexts.bold16.copyWith(
+                                  color: MyColors.fontBlack,
+                                  fontFamily: MyTexts.SpaceGrotesk,
+                                ),
+                              ),
+                              trailing: Icon(
+                                isExpanded
+                                    ? Icons.keyboard_arrow_up_rounded
+                                    : Icons.keyboard_arrow_down_rounded,
+                                color: MyColors.black,
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  if (isExpanded) {
+                                    expandedSection.remove(
+                                      filter.filterName ?? '',
+                                    );
+                                  } else {
+                                    expandedSection.add(
+                                      filter.filterName ?? '',
+                                    );
+                                  }
+                                });
+                              },
+                            ),
+
+                            AnimatedCrossFade(
+                              duration: const Duration(milliseconds: 250),
+                              crossFadeState: isExpanded
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                              firstChild: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  0,
+                                  16,
+                                  16,
+                                ),
+                                child: Builder(
+                                  builder: (context) {
+                                    switch (filter.filterType) {
+                                      case 'number':
+                                        final range =
+                                            rangeValues[filter.filterName]!;
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            RangeSlider(
+                                              values: range.value,
+                                              min: filter.min ?? 0,
+                                              max: filter.max ?? 100,
+                                              divisions: 10,
+                                              activeColor: MyColors.primary,
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  range.value = val;
+                                                });
+                                              },
+                                            ),
+                                            Text(
+                                              "From ${range.value.start.toStringAsFixed(1)} to ${range.value.end.toStringAsFixed(1)}",
+                                              style: MyTexts.regular14.copyWith(
+                                                color: MyColors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        );
+
+                                      case 'dropdown':
+                                        return Align(
+                                          alignment: AlignmentGeometry.topLeft,
+                                          child: Wrap(
+                                            spacing: 8,
+                                            runSpacing: 8,
+                                            children:
+                                                filter.options?.map((opt) {
+                                                  final selected =
+                                                      selectedFilters[filter
+                                                              .filterName]
+                                                          ?.value ==
+                                                      opt;
+                                                  return FilterChip(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 14,
+                                                          vertical: 10,
+                                                        ),
+                                                    label: Text(
+                                                      opt,
+                                                      style: MyTexts.medium16
+                                                          .copyWith(
+                                                            color: selected
+                                                                ? Colors.white
+                                                                : MyColors
+                                                                      .gra54,
+                                                          ),
+                                                    ),
+                                                    selected: selected,
+                                                    backgroundColor:
+                                                        const Color(0xFFFAFBFF),
+                                                    selectedColor:
+                                                        MyColors.primary,
+                                                    surfaceTintColor:
+                                                        Colors.transparent,
+                                                    checkmarkColor:
+                                                        Colors.white,
+                                                    onSelected: (val) {
+                                                      setState(() {
+                                                        if (val) {
+                                                          selectedFilters[filter
+                                                                      .filterName]
+                                                                  ?.value =
+                                                              opt;
+                                                        } else {
+                                                          selectedFilters[filter
+                                                                      .filterName]
+                                                                  ?.value =
+                                                              '';
+                                                        }
+                                                      });
+                                                    },
+                                                  );
+                                                }).toList() ??
+                                                [],
+                                          ),
+                                        );
+
+                                      case 'dropdown_multiple':
+                                        return Align(
+                                          alignment: AlignmentGeometry.topLeft,
+                                          child: Wrap(
+                                            spacing: 8,
+                                            runSpacing: 8,
+                                            children:
+                                                filter.options?.map((opt) {
+                                                  final list =
+                                                      multiSelectValues[filter
+                                                          .filterName]!;
+                                                  final selected = list
+                                                      .contains(opt);
+                                                  return FilterChip(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 14,
+                                                          vertical: 10,
+                                                        ),
+                                                    label: Text(
+                                                      opt,
+                                                      style: MyTexts.medium16
+                                                          .copyWith(
+                                                            color: selected
+                                                                ? Colors.white
+                                                                : MyColors
+                                                                      .gra54,
+                                                          ),
+                                                    ),
+                                                    selected: selected,
+                                                    backgroundColor:
+                                                        const Color(0xFFFAFBFF),
+                                                    selectedColor:
+                                                        MyColors.primary,
+                                                    checkmarkColor:
+                                                        Colors.white,
+                                                    surfaceTintColor:
+                                                        Colors.transparent,
+                                                    onSelected: (val) {
+                                                      setState(() {
+                                                        if (val) {
+                                                          list.add(opt);
+                                                        } else {
+                                                          list.remove(opt);
+                                                        }
+                                                      });
+                                                    },
+                                                  );
+                                                }).toList() ??
+                                                [],
+                                          ),
+                                        );
+
+                                      default:
+                                        return const SizedBox();
+                                    }
+                                  },
+                                ),
+                              ),
+                              secondChild: const SizedBox.shrink(),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RoundedButton(
+                          color: Colors.white,
+                          borderColor: MyColors.primary,
+                          style: MyTexts.bold16.copyWith(
+                            color: MyColors.primary,
+                          ),
+                          buttonName: "Clear All",
+                          onTap: () {
+                            setState(() async {
+                              selectedFilters.clear();
+                              multiSelectValues.clear();
+                              initFilterControllers();
+                              expandedSection.clear();
+                              await fetchProductsFromApi();
+                              Get.back();
+                            });
+                          },
+                        ),
+                      ),
+                      const Gap(16),
+                      Expanded(
+                        child: RoundedButton(
+                          buttonName: "Apply",
+                          onTap: () async {
+                            final filtersData = getFinalFilterData();
+                            await fetchProductsFromApi(
+                              filtersData: filtersData,
+                            );
+                            Get.back();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          );
+        },
+      ),
+      isScrollControlled: true,
+    );
   }
 
-  Future<void> fetchProducts(int subCategoryId) async {
-    try {
-      isLoading(true);
-      final result = await AddProductService().productsBySubCategory(subCategoryId);
-
-      if ((result.success) == true) {
-        productsList.value = result.data ?? [];
-        productNames.value =
-            result.data
-                ?.map((e) => e.name)
-                .where((name) => name != null)
-                .cast<String>()
-                .toList() ??
-            [];
-        selectedProduct.value = null;
-      } else {
-        productsList.clear();
-        productNames.clear();
-        selectedProduct.value = null;
-      }
-    } catch (e) {
-      productsList.clear();
-      productNames.clear();
-      selectedProduct.value = null;
-    } finally {
-      isLoading(false);
-    }
-  }
-
-  RxList<FilterData> filters = <FilterData>[].obs;
+  RxList<FilterData> allFilters = <FilterData>[].obs;
 
   Future<void> getFilter(String subCategoryId) async {
     try {
       isLoading(true);
-      final result = await AddProductService().getFilter(int.parse(subCategoryId));
-
-      if (result.success == true) {
-        filters.value = (result.data as List<FilterData>).map((e) => e).toList();
-      } else {
-        filters.clear();
-      }
-      isLoading(false);
-    } catch (e) {
-      isLoading(false);
-      filters.clear();
-    } finally {
-      isLoading(false);
-    }
-  }
-
-  Future<void> getSiteAddresses() async {
-    try {
-      isLoadingAddresses.value = true;
-      final response = await SiteLocationService.getSiteLocations();
-      if (response.success == true && response.data != null) {
-        siteAddressList.value = response.data!;
-      }
-    } catch (e) {
-      // Handle error silently
-    } finally {
-      isLoadingAddresses.value = false;
-    }
-  }
-
-  Future<void> deleteSiteAddress(int siteId) async {
-    try {
-      isLoading.value = true;
-      final response = await SiteLocationService.deleteSiteLocation(siteId.toString());
-      if (response.success == true) {
-        await getSiteAddresses();
-        siteAddressList.removeWhere((address) => address.id == siteId);
-        selectedAddress.value = Datum();
-        SnackBars.successSnackBar(content: 'Site address deleted successfully');
-      }
-    } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error deleting site address');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-}
-
-class FeedbackBottomSheetView extends StatelessWidget {
-  final int id;
-
-  FeedbackBottomSheetView({super.key, required this.id});
-
-  final suggestionController = TextEditingController();
-  RxInt rating = 0.obs;
-  RxBool isLoading = false.obs;
-
-  Future<void> addFeedBack() async {
-    if (rating.value == 0) {
-      SnackBars.errorSnackBar(content: "Please give rate");
-      return;
-    } else if (suggestionController.text.isEmpty) {
-      SnackBars.errorSnackBar(content: "Please add feedback/suggection");
-      return;
-    }
-    isLoading.value = true;
-
-    try {
-      final result = await FeedbackService.addConnectorFeedback(
-        text: suggestionController.text,
-        rating: rating.value,
-        id: id,
+      final result = await AddProductService().getFilter(
+        int.parse(subCategoryId),
       );
 
-      if (result != null && result.success) {
-        suggestionController.text = "";
-        rating.value = 0;
-        Get.back();
-        SnackBars.successSnackBar(content: result.message);
+      if (result.success == true) {
+        allFilters.value = (result.data as List<FilterData>)
+            .map((e) => e)
+            .toList();
       } else {
-        Get.snackbar("Failed", result?.message ?? "Something went wrong");
+        allFilters.clear();
       }
+      isLoading(false);
     } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e");
+      isLoading(false);
+      allFilters.clear();
     } finally {
-      isLoading.value = false;
+      isLoading(false);
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: hideKeyboard,
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: 18,
-          right: 18,
-          top: 20,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+  RxList<ConnectorFilterModel> filters = <ConnectorFilterModel>[].obs;
+  RxMap<String, dynamic> selectedFilters = <String, dynamic>{}.obs;
+  Map<String, Rx<RangeValues>> rangeValues = {};
+  Map<String, RxList<String>> multiSelectValues = {};
+  RxBool isLoad = false.obs;
+
+  void initFilterControllers() {
+    for (final filter in allFilters) {
+      if (filter.filterType == 'number') {
+        rangeValues[filter.filterName ?? ''] = RangeValues(
+          double.parse(filter.minValue ?? "0"),
+          double.parse(filter.maxValue ?? "0"),
+        ).obs;
+      } else if (filter.filterType == 'dropdown_multiple') {
+        multiSelectValues[filter.filterName ?? ''] = <String>[].obs;
+      } else if (filter.filterType == 'dropdown') {
+        selectedFilters[filter.filterName ?? ''] = ''.obs;
+      } else {
+        selectedFilters[filter.filterName ?? ''] = ''.obs;
+      }
+    }
+  }
+
+  RxList<String> expandedSection = <String>[].obs;
+
+  Map<String, dynamic> getFinalFilterData() {
+    final filtersMap = <String, dynamic>{};
+
+    for (final filter in allFilters) {
+      final name = filter.filterName ?? '';
+
+      switch (filter.filterType) {
+        case 'number':
+          final range = rangeValues[name]?.value;
+          if (range != null) {
+            filtersMap[name] = {
+              "type": "range",
+              "filter_type": "number",
+              "min": range.start,
+              "max": range.end,
+            };
+          }
+
+        case 'dropdown_multiple':
+          final list = multiSelectValues[name]?.toList() ?? [];
+          filtersMap[name] = {
+            "type": "list",
+            "filter_type": "dropdown_multiple",
+            "list": list,
+          };
+
+        case 'dropdown':
+          final selectedValue = selectedFilters[name]?.value;
+          if (selectedValue != null && selectedValue.isNotEmpty == true) {
+            filtersMap[name] = {
+              "type": "list",
+              "filter_type": "dropdown",
+              "list": [selectedValue],
+            };
+          }
+
+        default:
+          final selected = selectedFilters[name]?.value ?? '';
+          if (selected.isNotEmpty == true) {
+            filtersMap[name] = {
+              "type": "list",
+              "filter_type": filter.filterType ?? 'dropdown',
+              "list": [selected],
+            };
+          }
+      }
+    }
+    return filtersMap;
+  }
+
+  List<dynamic> get rightPanelItems {
+    switch (navigationIndex.value) {
+      case 0:
+        return subCategories;
+      case 1:
+        return products; // local categories (not API)
+      case 2:
+        return productSubCategories.isNotEmpty
+            ? productSubCategories
+            : (productListModel.value?.data?.products ?? []);
+      case 3:
+        return productListModel.value?.data?.products ?? [];
+      case 4:
+        return productListModel.value?.data?.products ?? [];
+      default:
+        return [];
+    }
+  }
+
+  void openSelectAddressBottomSheet({
+    required Future<void> Function() onAddressChanged,
+  }) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        child: SingleChildScrollView(
+        child: SafeArea(
+          top: false,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: Container(
-                  width: 50,
-                  height: 5,
+                  height: 4,
+                  width: 40,
+                  margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: Colors.grey.shade400,
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
               ),
+              Text(
+                "Select Address",
+                style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
+              ),
               const SizedBox(height: 16),
 
-              const SizedBox(height: 16),
-              Text(
-                "REVIEW/FEEDBACK",
-                style: MyTexts.bold18.copyWith(color: MyColors.primary),
-              ),
-              const Gap(16),
-              Center(
-                child: Obx(() {
-                  return Text(
-                    rating.value.toString(),
-                    style: MyTexts.bold20.copyWith(
-                      color: MyColors.primary,
-                      fontSize: 24.sp,
+              Obx(() {
+                final addresses =
+                    homeController.profileData.value.data?.siteLocations ?? [];
+
+                if (addresses.isEmpty) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Text("No saved addresses found."),
                     ),
                   );
-                }),
-              ),
+                }
 
-              Obx(
-                () => Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: Icon(
-                          Icons.star,
-                          color: index < rating.value ? Colors.orangeAccent : Colors.grey,
-                          size: 32,
-                        ),
-                        onPressed: () {
-                          rating.value = index + 1;
-                        },
-                      );
-                    }),
-                  ),
-                ),
-              ),
-
-              const Gap(20),
-
-              CommonTextField(
-                controller: suggestionController,
-                hintText: "Write your feedback",
-                headerText: "Feedback",
-                maxLine: 5,
-              ),
-              const Gap(24),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      onPressed: () {
-                        suggestionController.text = "";
-                        rating.value = 0;
+                return CommonAddressList(
+                  isBack: true,
+                  addresses: addresses,
+                  onEdit: homeController.editAddress,
+                  onDelete: homeController.deleteAddress,
+                  onSetDefault: (addressId) async {
+                    await homeController.setDefaultAddress(
+                      addressId,
+                      onSuccess: () async {
                         Get.back();
+                        await onAddressChanged();
                       },
-                      child: const Text("CANCEL", style: TextStyle(color: Colors.white)),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: MyColors.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      onPressed: () {
-                        addFeedBack();
-                        // SnackBars.successSnackBar(content: "Feedback sent successfully");
-                      },
-                      child: Text("Submit", style: TextStyle(color: MyColors.white)),
-                    ),
-                  ),
-                ],
-              ),
+                    );
+                  },
+                );
+              }),
+              const SizedBox(height: 16),
             ],
           ),
         ),
       ),
+      isScrollControlled: true,
     );
   }
 }

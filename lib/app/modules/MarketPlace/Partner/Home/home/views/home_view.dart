@@ -117,47 +117,77 @@ class HomeView extends StatelessWidget {
                               // SizedBox(height: 2.h),
                               // Main Categories ListView
                               Obx(() {
-                                if (controller
-                                            .categoryHierarchyData
-                                            .value
-                                            .data ==
-                                        null ||
-                                    controller
-                                        .categoryHierarchyData
-                                        .value
-                                        .data!
-                                        .isEmpty) {
-                                  return const SizedBox.shrink();
+                                // Pick which data to show based on selected tab
+                                final selectedCategoryData =
+                                    controller.marketPlace.value == 0
+                                    ? controller
+                                          .categoryHierarchyData
+                                          .value
+                                          .data
+                                    : controller.marketPlace.value == 1
+                                    ? controller
+                                          .categoryHierarchyDataCM
+                                          .value
+                                          .data
+                                    : controller
+                                          .categoryHierarchyData2
+                                          .value
+                                          .data;
+
+                                if (selectedCategoryData == null ||
+                                    selectedCategoryData.isEmpty) {
+                                  return Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        top:
+                                            MediaQuery.of(context).size.height /
+                                            3.5,
+                                      ),
+                                      // child: const Text("No data found"),
+                                      child: const Text("Coming soon"),
+                                    ),
+                                  );
                                 }
 
                                 return ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: controller
-                                      .categoryHierarchyData
-                                      .value
-                                      .data!
-                                      .length,
+                                  itemCount: selectedCategoryData.length,
                                   itemBuilder: (context, mainIndex) {
-                                    final mainCategory = controller
-                                        .categoryHierarchyData
-                                        .value
-                                        .data![mainIndex];
+                                    final mainCategory =
+                                        selectedCategoryData[mainIndex];
+
                                     return Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            if (myPref.role.val ==
-                                                "connector") {
-                                              if ((controller
-                                                          .profileData
-                                                          .value
-                                                          .data
-                                                          ?.siteLocations ??
-                                                      [])
-                                                  .isNotEmpty) {
+                                            if (controller.marketPlace.value ==
+                                                0) {
+                                              if (myPref.role.val ==
+                                                  "connector") {
+                                                if ((controller
+                                                            .profileData
+                                                            .value
+                                                            .data
+                                                            ?.siteLocations ??
+                                                        [])
+                                                    .isNotEmpty) {
+                                                  Get.toNamed(
+                                                    Routes.SELECT_PRODUCT,
+                                                    arguments: {
+                                                      "mainCategoryId":
+                                                          mainCategory.id ?? 0,
+                                                      "mainCategoryName":
+                                                          mainCategory.name ??
+                                                          '',
+                                                    },
+                                                  );
+                                                } else {
+                                                  _showAddAddressDialog();
+                                                }
+                                              } else {
                                                 Get.toNamed(
                                                   Routes.SELECT_PRODUCT,
                                                   arguments: {
@@ -167,78 +197,45 @@ class HomeView extends StatelessWidget {
                                                         mainCategory.name ?? '',
                                                   },
                                                 );
+                                              }
+                                            } else if (controller
+                                                    .marketPlace
+                                                    .value ==
+                                                1) {
+                                              if (myPref.role.val ==
+                                                  "connector") {
+                                                if ((controller
+                                                            .profileData
+                                                            .value
+                                                            .data
+                                                            ?.siteLocations ??
+                                                        [])
+                                                    .isNotEmpty) {
+                                                  Get.toNamed(
+                                                    Routes.SELECT_PRODUCT,
+                                                    arguments: {
+                                                      "mainCategoryId":
+                                                          mainCategory.id ?? 0,
+                                                      "mainCategoryName":
+                                                          mainCategory.name ??
+                                                          '',
+                                                    },
+                                                  );
+                                                } else {
+                                                  _showAddAddressDialog();
+                                                }
                                               } else {
-                                                Get.dialog(
-                                                  AlertDialog(
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            16,
-                                                          ),
-                                                    ),
-                                                    title: const Text(
-                                                      "Add Your Address",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                                    content: const Text(
-                                                      "To view a product, please add your address first.",
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () =>
-                                                            Get.back(),
-                                                        child: const Text(
-                                                          "Cancel",
-                                                          style: TextStyle(
-                                                            color: Colors.grey,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      ElevatedButton(
-                                                        onPressed: () {
-                                                          Get.back();
-                                                          Get.toNamed(
-                                                            Routes
-                                                                .DELIVERY_LOCATION,
-                                                          );
-                                                        },
-                                                        style: ElevatedButton.styleFrom(
-                                                          backgroundColor:
-                                                              Colors.blue,
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                  8,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                        child: const Text(
-                                                          "Add Address",
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  barrierDismissible: false,
+                                                Get.toNamed(
+                                                  Routes.SELECT_PRODUCT,
+                                                  arguments: {
+                                                    "mainCategoryId":
+                                                        mainCategory.id ?? 0,
+                                                    "mainCategoryName":
+                                                        mainCategory.name ?? '',
+                                                  },
                                                 );
                                               }
-                                            } else {
-                                              Get.toNamed(
-                                                Routes.SELECT_PRODUCT,
-                                                arguments: {
-                                                  "mainCategoryId":
-                                                      mainCategory.id ?? 0,
-                                                  "mainCategoryName":
-                                                      mainCategory.name ?? '',
-                                                },
-                                              );
-                                            }
+                                            } else {}
                                           },
                                           child: Row(
                                             mainAxisAlignment:
@@ -256,6 +253,8 @@ class HomeView extends StatelessWidget {
                                           ),
                                         ),
                                         SizedBox(height: 2.h),
+
+                                        // Subcategory Grid
                                         if (mainCategory.subCategories !=
                                                 null &&
                                             mainCategory
@@ -281,15 +280,40 @@ class HomeView extends StatelessWidget {
                                                   .subCategories![subIndex];
                                               return GestureDetector(
                                                 onTap: () {
-                                                  if (myPref.role.val ==
-                                                      "connector") {
-                                                    if ((controller
-                                                                .profileData
-                                                                .value
-                                                                .data
-                                                                ?.siteLocations ??
-                                                            [])
-                                                        .isNotEmpty) {
+                                                  if (controller
+                                                          .marketPlace
+                                                          .value ==
+                                                      0) {
+                                                    if (myPref.role.val ==
+                                                        "connector") {
+                                                      if ((controller
+                                                                  .profileData
+                                                                  .value
+                                                                  .data
+                                                                  ?.siteLocations ??
+                                                              [])
+                                                          .isNotEmpty) {
+                                                        Get.toNamed(
+                                                          Routes.SELECT_PRODUCT,
+                                                          arguments: {
+                                                            "selectedSubCategoryId":
+                                                                subCategory
+                                                                    .id ??
+                                                                0,
+                                                            "mainCategoryId":
+                                                                mainCategory
+                                                                    .id ??
+                                                                0,
+                                                            "mainCategoryName":
+                                                                mainCategory
+                                                                    .name ??
+                                                                '',
+                                                          },
+                                                        );
+                                                      } else {
+                                                        _showAddAddressDialog();
+                                                      }
+                                                    } else {
                                                       Get.toNamed(
                                                         Routes.SELECT_PRODUCT,
                                                         arguments: {
@@ -305,85 +329,58 @@ class HomeView extends StatelessWidget {
                                                               '',
                                                         },
                                                       );
+                                                    }
+                                                  } else if (controller
+                                                          .marketPlace
+                                                          .value ==
+                                                      1) {
+                                                    if (myPref.role.val ==
+                                                        "connector") {
+                                                      if ((controller
+                                                                  .profileData
+                                                                  .value
+                                                                  .data
+                                                                  ?.siteLocations ??
+                                                              [])
+                                                          .isNotEmpty) {
+                                                        Get.toNamed(
+                                                          Routes.SELECT_PRODUCT,
+                                                          arguments: {
+                                                            "selectedSubCategoryId":
+                                                                subCategory
+                                                                    .id ??
+                                                                0,
+                                                            "mainCategoryId":
+                                                                mainCategory
+                                                                    .id ??
+                                                                0,
+                                                            "mainCategoryName":
+                                                                mainCategory
+                                                                    .name ??
+                                                                '',
+                                                          },
+                                                        );
+                                                      } else {
+                                                        _showAddAddressDialog();
+                                                      }
                                                     } else {
-                                                      Get.dialog(
-                                                        AlertDialog(
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                  16,
-                                                                ),
-                                                          ),
-                                                          title: const Text(
-                                                            "Add Your Address",
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 18,
-                                                            ),
-                                                          ),
-                                                          content: const Text(
-                                                            "To view a product, please add your address first.",
-                                                            style: TextStyle(
-                                                              fontSize: 14,
-                                                            ),
-                                                          ),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () =>
-                                                                  Get.back(),
-                                                              child: const Text(
-                                                                "Cancel",
-                                                                style: TextStyle(
-                                                                  color: Colors
-                                                                      .grey,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            ElevatedButton(
-                                                              onPressed: () {
-                                                                Get.back();
-                                                                Get.toNamed(
-                                                                  Routes
-                                                                      .DELIVERY_LOCATION,
-                                                                );
-                                                              },
-                                                              style: ElevatedButton.styleFrom(
-                                                                backgroundColor:
-                                                                    Colors.blue,
-                                                                shape: RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                        8,
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                              child: const Text(
-                                                                "Add Address",
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        barrierDismissible:
-                                                            false,
+                                                      Get.toNamed(
+                                                        Routes.SELECT_PRODUCT,
+                                                        arguments: {
+                                                          "selectedSubCategoryId":
+                                                              subCategory.id ??
+                                                              0,
+                                                          "mainCategoryId":
+                                                              mainCategory.id ??
+                                                              0,
+                                                          "mainCategoryName":
+                                                              mainCategory
+                                                                  .name ??
+                                                              '',
+                                                        },
                                                       );
                                                     }
-                                                  } else {
-                                                    Get.toNamed(
-                                                      Routes.SELECT_PRODUCT,
-                                                      arguments: {
-                                                        "selectedSubCategoryId":
-                                                            subCategory.id ?? 0,
-                                                        "mainCategoryId":
-                                                            mainCategory.id ??
-                                                            0,
-                                                        "mainCategoryName":
-                                                            mainCategory.name ??
-                                                            '',
-                                                      },
-                                                    );
-                                                  }
+                                                  } else {}
                                                 },
                                                 child: Column(
                                                   mainAxisAlignment:
@@ -411,50 +408,41 @@ class HomeView extends StatelessWidget {
                                                             ],
                                                           ),
                                                         ),
-                                                        child: Stack(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets.symmetric(
-                                                                    horizontal:
-                                                                        10.0,
-                                                                  ),
-                                                              child: CachedNetworkImage(
-                                                                imageUrl:
-                                                                    APIConstants
-                                                                        .bucketUrl +
-                                                                    (subCategory
-                                                                            .image ??
-                                                                        ''),
-                                                                width: double
-                                                                    .infinity,
-                                                                fit:
-                                                                    BoxFit.fill,
-                                                                placeholder:
-                                                                    (
-                                                                      context,
-                                                                      url,
-                                                                    ) => const Center(
-                                                                      child:
-                                                                          CircularProgressIndicator(),
-                                                                    ),
-                                                                errorWidget:
-                                                                    (
-                                                                      context,
-                                                                      url,
-                                                                      error,
-                                                                    ) => const Icon(
-                                                                      Icons
-                                                                          .category,
-                                                                      color: MyColors
-                                                                          .primary,
-                                                                      size: 24,
-                                                                    ),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal:
+                                                                    10.0,
                                                               ),
-                                                            ),
-                                                          ],
+                                                          child: CachedNetworkImage(
+                                                            imageUrl:
+                                                                APIConstants
+                                                                    .bucketUrl +
+                                                                (subCategory
+                                                                        .image ??
+                                                                    ''),
+                                                            fit: BoxFit.fill,
+                                                            placeholder:
+                                                                (
+                                                                  context,
+                                                                  url,
+                                                                ) => const Center(
+                                                                  child:
+                                                                      CircularProgressIndicator(),
+                                                                ),
+                                                            errorWidget:
+                                                                (
+                                                                  context,
+                                                                  url,
+                                                                  error,
+                                                                ) => const Icon(
+                                                                  Icons
+                                                                      .category,
+                                                                  color: MyColors
+                                                                      .primary,
+                                                                  size: 24,
+                                                                ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -575,6 +563,42 @@ class HomeView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showAddAddressDialog() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          "Add Your Address",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        content: const Text(
+          "To view a product, please add your address first.",
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              Get.toNamed(Routes.DELIVERY_LOCATION);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text("Add Address"),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
     );
   }
 

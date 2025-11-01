@@ -33,8 +33,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/views/connector_main_tab.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/bindings/connector_connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/views/connector_connection_inbox_vies.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/bindings/connector_filter_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorFilters/views/connector_filters_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
@@ -331,11 +329,7 @@ class AppPages {
       page: () => const ConnectorProductDetailsView(),
       binding: ConnectorProductDetailsBindings(),
     ),
-    GetPage(
-      name: Routes.CONNECTOR_FILTER,
-      page: () => const ConnectorFiltersView(),
-      binding: ConnectorFilterBinding(),
-    ),
+
     GetPage(
       name: Routes.CONNECTOR_CONNECTION_INBOX,
       page: () => ConnectorConnectionInboxVies(),
