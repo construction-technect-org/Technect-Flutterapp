@@ -5,6 +5,7 @@ import 'package:construction_technect/app/modules/Authentication/login/models/Us
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/model/connectionModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/models/notification_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FAQ/model/faq_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/models/news_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
@@ -56,6 +57,10 @@ class AppSharedPreference {
   final subCategoryData = <String, dynamic>{}.val('subCategoryData');
   final categoryHierarchyData = <String, dynamic>{}.val(
     'categoryHierarchyData',
+  );
+
+  final categoryServiceHierarchyData = <String, dynamic>{}.val(
+    'categoryServiceHierarchyData',
   );
 
   void setToken(String authToken) {
@@ -663,5 +668,29 @@ class AppSharedPreference {
 
   void clearCategoryHierarchyData() {
     categoryHierarchyData.val = {};
+  }
+
+  void setServiceCategoryHierarchyModel(ServiceCategoryModel categoryModel) {
+    try {
+      categoryServiceHierarchyData.val = categoryModel.toJson();
+    } catch (e) {
+      log('Error saving category hierarchy model: $e');
+    }
+  }
+
+  ServiceCategoryModel? getServiceCategoryHierarchyModel() {
+    try {
+      final data = categoryServiceHierarchyData.val;
+      if (data.isNotEmpty) {
+        return ServiceCategoryModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting category hierarchy model: $e');
+    }
+    return null;
+  }
+
+  void clearServiceCategoryHierarchyData() {
+    categoryServiceHierarchyData.val = {};
   }
 }

@@ -126,7 +126,7 @@ class HomeView extends StatelessWidget {
                                           .data
                                     : controller.marketPlace.value == 1
                                     ? controller
-                                          .categoryHierarchyDataCM
+                                          .categoryHierarchyData
                                           .value
                                           .data
                                     : controller
@@ -198,7 +198,8 @@ class HomeView extends StatelessWidget {
                                                   },
                                                 );
                                               }
-                                            } else if (controller
+                                            }
+                                            else if (controller
                                                     .marketPlace
                                                     .value ==
                                                 1) {
@@ -212,7 +213,7 @@ class HomeView extends StatelessWidget {
                                                         [])
                                                     .isNotEmpty) {
                                                   Get.toNamed(
-                                                    Routes.SELECT_PRODUCT,
+                                                    Routes.SELECT_SERVICE,
                                                     arguments: {
                                                       "mainCategoryId":
                                                           mainCategory.id ?? 0,
@@ -226,7 +227,7 @@ class HomeView extends StatelessWidget {
                                                 }
                                               } else {
                                                 Get.toNamed(
-                                                  Routes.SELECT_PRODUCT,
+                                                  Routes.SELECT_SERVICE,
                                                   arguments: {
                                                     "mainCategoryId":
                                                         mainCategory.id ?? 0,
@@ -344,7 +345,7 @@ class HomeView extends StatelessWidget {
                                                               [])
                                                           .isNotEmpty) {
                                                         Get.toNamed(
-                                                          Routes.SELECT_PRODUCT,
+                                                          Routes.SELECT_SERVICE,
                                                           arguments: {
                                                             "selectedSubCategoryId":
                                                                 subCategory
@@ -365,7 +366,7 @@ class HomeView extends StatelessWidget {
                                                       }
                                                     } else {
                                                       Get.toNamed(
-                                                        Routes.SELECT_PRODUCT,
+                                                        Routes.SELECT_SERVICE,
                                                         arguments: {
                                                           "selectedSubCategoryId":
                                                               subCategory.id ??
@@ -420,7 +421,7 @@ class HomeView extends StatelessWidget {
                                                                     .bucketUrl +
                                                                 (subCategory
                                                                         .image ??
-                                                                    ''),
+                                                                    'category-images/FineAggregate.png'),
                                                             fit: BoxFit.fill,
                                                             placeholder:
                                                                 (

@@ -2,15 +2,16 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/controllers/construction_service_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
 
-class SelectedProductView extends StatelessWidget {
-  final controller = Get.put(ConnectorSelectedProductController());
+class ConstructionServiceView extends StatelessWidget {
+  final controller = Get.put(ConstructionServiceController());
 
   // Constants
   static const double _leftPanelWidth = 0.27;
@@ -45,7 +46,7 @@ class SelectedProductView extends StatelessWidget {
       title: Obx(() {
         final isProducts = controller.navigationIndex.value >= 3;
         return Text(
-          isProducts ? 'Products' : (controller.mainCategoryName ?? ''),
+          isProducts ? 'Services' : (controller.mainCategoryName ?? ''),
           style: MyTexts.regular18,
         );
       }),
@@ -78,7 +79,7 @@ class SelectedProductView extends StatelessWidget {
             ),
           ),
         GestureDetector(
-          onTap: () => Get.toNamed(Routes.SEARCH_PRODUCT),
+          onTap: () => Get.toNamed(Routes.SEARCH_SERVICE),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SvgPicture.asset(
@@ -119,7 +120,7 @@ class SelectedProductView extends StatelessWidget {
 
   // Left Panel Views
   Widget _index0LeftView(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return _buildLeftSidebar(
       context: context,
       items: controller.subCategories,
@@ -127,43 +128,43 @@ class SelectedProductView extends StatelessWidget {
           controller.selectedSubCategoryId.value ==
           controller.subCategories[index].id,
       onTap: (index) => controller.lestSide0LeftView(index),
-      getImageUrl: (item) => item.image ?? '',
+      getImageUrl: (item) => item.image ?? 'category-images/FineAggregate.png',
       getName: (item) => item.name ?? '',
     );
   }
 
   Widget _index1LeftView(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
-    final products = controller.productCategories.value.products ?? [];
+    final controller = Get.find<ConstructionServiceController>();
+    final products = controller.productCategories.value.serviceCategories ?? [];
     return _buildLeftSidebar(
       context: context,
       items: products,
       isSelected: (index) =>
           controller.selectedProductCategoryIndex.value == index,
       onTap: (index) => controller.selectProductCategory(index),
-      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? '',
+      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? 'category-images/FineAggregate.png',
       getName: (item) => item.name ?? '',
       useObxForSelection: true,
     );
   }
 
   Widget _index2LeftView(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
-    final products = controller.productCategories.value.products ?? [];
+    final controller = Get.find<ConstructionServiceController>();
+    final products = controller.productCategories.value.serviceCategories ?? [];
     return _buildLeftSidebar(
       context: context,
       items: products,
       isSelected: (index) =>
           controller.selectedProductCategoryIndex.value == index,
       onTap: (index) => controller.leftSide2LeftView(index),
-      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? '',
+      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? 'category-images/FineAggregate.png',
       getName: (item) => item.name ?? '',
       useObxForSelection: true,
     );
   }
 
   Widget _index3LeftView(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     final products = controller.productSubCategories;
     return _buildLeftSidebar(
       context: context,
@@ -171,7 +172,7 @@ class SelectedProductView extends StatelessWidget {
       isSelected: (index) =>
           controller.selectedSubProductCategoryIndex.value == index,
       onTap: (index) => controller.selectProductSubCategory(index),
-      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? '',
+      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? 'category-images/FineAggregate.png',
       getName: (item) => item.name ?? '',
       useObxForSelection: true,
     );
@@ -326,7 +327,7 @@ class SelectedProductView extends StatelessWidget {
 
   // Right Panel Views
   Widget _index0RightView(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -358,7 +359,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _index2RightView(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,7 +393,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildFilterButtons(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -438,7 +439,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildSortChip() {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return Obx(
       () => controller.navigationIndex.value == 2
           ? const SizedBox.shrink()
@@ -482,7 +483,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildProductContent(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return Obx(() {
       if (controller.navigationIndex.value == 2) {
         return _buildSubProductCategoriesGrid(controller.productSubCategories);
@@ -508,8 +509,8 @@ class SelectedProductView extends StatelessWidget {
     });
   }
 
-  Widget _buildProductCategoriesGrid(List<ProductCategory> products) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+  Widget _buildProductCategoriesGrid(List<ServiceCategories> products) {
+    final controller = Get.find<ConstructionServiceController>();
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: (products.length / _itemsPerRow).ceil(),
@@ -543,7 +544,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildSubProductCategoriesList(List<ProductSubCategory> products) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: (products.length / _itemsPerRow).ceil(),
@@ -580,7 +581,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildSubProductCategoriesGrid(List<ProductSubCategory> items) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     if (items.isEmpty) {
       return const Center(
         child: Text(
@@ -629,7 +630,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildProductsGrid(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -691,7 +692,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildProductsList(BuildContext context) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: controller.productListModel.value?.data?.products.length ?? 0,
@@ -707,7 +708,7 @@ class SelectedProductView extends StatelessWidget {
   Widget _buildProductListItem(
     BuildContext context,
     Product item,
-    ConnectorSelectedProductController controller,
+    ConstructionServiceController controller,
   ) {
     final String? imageUrl = ProductUtils.getFirstImageUrl(item);
 
@@ -990,11 +991,11 @@ class SelectedProductView extends StatelessWidget {
 
   // Circular Category Tiles
   Widget _buildCircularCategoryTile({
-    required ProductCategory product,
+    required ServiceCategories product,
     required int index,
     required VoidCallback onTap,
   }) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -1029,7 +1030,7 @@ class SelectedProductView extends StatelessWidget {
     required int index,
     required VoidCallback onTap,
   }) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -1060,7 +1061,7 @@ class SelectedProductView extends StatelessWidget {
   }
 
   Widget _buildCircularImageContainer(String imageUrl) {
-    final controller = Get.find<ConnectorSelectedProductController>();
+    final controller = Get.find<ConstructionServiceController>();
     final hasImage =
         imageUrl.isNotEmpty &&
         controller.selectedSubCategory.value?.image != null &&
