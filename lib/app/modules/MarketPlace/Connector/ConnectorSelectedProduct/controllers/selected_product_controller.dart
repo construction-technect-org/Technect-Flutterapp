@@ -23,6 +23,7 @@ class SelectedProductController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool moreThenHundred = false.obs;
   RxBool showSubCategoryOptions = false.obs;
+  RxBool isGridView = true.obs;
 
   // Product categories (from CategoryData model) and main products from API
   Rx<SubCategory> productCategories = SubCategory().obs;
