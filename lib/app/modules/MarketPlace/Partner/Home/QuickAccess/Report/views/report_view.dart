@@ -216,11 +216,19 @@ class ReportView extends GetView<ReportController> {
         Expanded(
           child: GestureDetector(
             onTap: () async {
+              final DateTime nowMonth = DateTime(
+                DateTime.now().year,
+                DateTime.now().month,
+              );
+              final DateTime startInitial =
+                  controller.startMonth.value ?? nowMonth;
               final picked = await showMonthPicker(
                 context: context,
-                initialDate: controller.startMonth.value ?? DateTime.now(),
+                initialDate: startInitial.isAfter(nowMonth)
+                    ? nowMonth
+                    : startInitial,
                 firstDate: DateTime(2000),
-                lastDate: DateTime(2050),
+                lastDate: nowMonth,
                 monthPickerDialogSettings: const MonthPickerDialogSettings(
                   dialogSettings: PickerDialogSettings(
                     dialogRoundedCornersRadius: 20,
@@ -231,7 +239,29 @@ class ReportView extends GetView<ReportController> {
                   ),
                 ),
               );
-              if (picked != null) controller.startMonth.value = picked;
+              if (picked != null) {
+                controller.startMonth.value = DateTime(
+                  picked.year,
+                  picked.month,
+                );
+                // If previously selected end month is out of the 3-month window, reset it
+                if (controller.endMonth.value != null) {
+                  final end = DateTime(
+                    controller.endMonth.value!.year,
+                    controller.endMonth.value!.month,
+                  );
+                  final span = controller.inclusiveMonthSpan(
+                    controller.startMonth.value!,
+                    end,
+                  );
+                  final bool endInFuture = end.isAfter(nowMonth);
+                  if (span > 12 ||
+                      end.isBefore(controller.startMonth.value!) ||
+                      endInFuture) {
+                    controller.endMonth.value = null;
+                  }
+                }
+              }
             },
             child: Container(
               padding: const EdgeInsets.all(12),
@@ -267,17 +297,34 @@ class ReportView extends GetView<ReportController> {
                 );
                 return;
               }
+              final DateTime start = DateTime(
+                controller.startMonth.value!.year,
+                controller.startMonth.value!.month,
+              );
+              final DateTime nowMonth = DateTime(
+                DateTime.now().year,
+                DateTime.now().month,
+              );
+              final DateTime lastAllowedRaw = controller.lastAllowedEndMonth(
+                start,
+              );
+              final DateTime lastAllowed = lastAllowedRaw.isAfter(nowMonth)
+                  ? nowMonth
+                  : lastAllowedRaw;
+              final DateTime initial = controller.endMonth.value != null
+                  ? DateTime(
+                      controller.endMonth.value!.year,
+                      controller.endMonth.value!.month,
+                    )
+                  : start;
               final picked = await showMonthPicker(
                 context: context,
                 initialDate:
-                    controller.endMonth.value ??
-                    controller.startMonth.value!.add(const Duration(days: 30)),
-                firstDate: controller.startMonth.value!.add(
-                  const Duration(days: 30),
-                ),
-                lastDate: controller.startMonth.value!.add(
-                  const Duration(days: 90),
-                ),
+                    initial.isBefore(start) || initial.isAfter(lastAllowed)
+                    ? start
+                    : initial,
+                firstDate: start,
+                lastDate: lastAllowed,
                 monthPickerDialogSettings: const MonthPickerDialogSettings(
                   dialogSettings: PickerDialogSettings(
                     dialogRoundedCornersRadius: 20,
@@ -289,7 +336,7 @@ class ReportView extends GetView<ReportController> {
                 ),
               );
               if (picked != null) {
-                controller.endMonth.value = picked;
+                controller.endMonth.value = DateTime(picked.year, picked.month);
                 controller.onApplyReport();
               }
             },
@@ -362,7 +409,9 @@ class ReportView extends GetView<ReportController> {
   }
 
   Widget _buildCharts() {
-    print(myPref.role.val);
+    if (kDebugMode) {
+      print(myPref.role.val);
+    }
     return Obx(() {
       if (!controller.isReport.value) {
         final analysis = controller.analysisModel.value;
