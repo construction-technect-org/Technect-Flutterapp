@@ -20,6 +20,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    print("controller.product.status");
+    print(controller.product.status);
     return LoaderWrapper(
       isLoading: (controller.isFromConnector.value == true)
           ? false.obs
@@ -788,6 +790,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           ),
                                         ),
                                       const Gap(8),
+                                      if(controller.product.status=="" || controller.product.status==null)
                                       GestureDetector(
                                         onTap: () {
                                           Get.toNamed(Routes.DELIVERY_LOCATION)?.then((val){
