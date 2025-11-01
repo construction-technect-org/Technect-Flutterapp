@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/certifications_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/info_metrics_component.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/point_of_contact.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:gap/gap.dart';
@@ -218,7 +219,6 @@ class ProfileView extends GetView<ProfileController> {
   Widget _buildTabContent() {
     return Obx(() {
       final index = controller.selectedTabIndex.value;
-      // final hasMarketplaceTab = controller.profileCompletionPercentage > 90;
       Widget content;
 
       if (index == 0) {
@@ -226,27 +226,50 @@ class ProfileView extends GetView<ProfileController> {
       } else if (index == 1) {
         content = const CertificationsComponent(isDelete: true);
       }
-      // else if (index == 2 && hasMarketplaceTab) {
-      //   content = const MarketplacePerformanceComponent();
-      // }
       else {
-        content = const Metrics();
+        content =  Metrics();
       }
 
       return SingleChildScrollView(child: content);
     });
   }
+
 }
 
 class Metrics extends StatelessWidget {
-  const Metrics({super.key});
+   Metrics({super.key});
 
+  final controller = Get.find<ProfileController>();
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 1.h),
+        Row(
+          children: [
+            Text(
+              'Point of contact',
+              style: MyTexts.medium16.copyWith(
+                color: MyColors.fontBlack,
+                fontFamily: MyTexts.SpaceGrotesk,
+              ),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: ()  {
+                Get.to(()=>PointOfContentScreen());
+              },
+              behavior: HitTestBehavior.translucent,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: SvgPicture.asset(Asset.edit),
+              ),
+            ),
+          ],
+        ),
+        _buildPointOfViewContent(),
+        SizedBox(height: 2.h),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -274,8 +297,8 @@ class Metrics extends StatelessWidget {
           if (Get.find<HomeController>().teamList.isEmpty) {
             return Center(
               child: Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 4,
+                padding: const EdgeInsets.only(
+                  top: 50,
                 ),
                 child: Text(
                   'No team members found',
@@ -301,6 +324,115 @@ class Metrics extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildPointOfViewContent() {
+    return Obx(() {
+      if ((controller.businessModel.value.gstinNumber ?? "").isEmpty) {
+        return GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.EDIT_PROFILE);
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: MyColors.white,
+              border: Border.all(color: MyColors.grayEA),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                " + Add Point of contact",
+                style: MyTexts.bold16.copyWith(color: MyColors.grey),
+              ),
+            ),
+          ),
+        );
+      } else {
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: MyColors.white,
+            border: Border.all(color: MyColors.grayEA),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              Obx(() {
+                return buildRow(
+                  title: "Name",
+                  data:
+                  (controller.businessModel.value.businessName ??
+                      "")
+                      .isEmpty
+                      ? "-"
+                      : controller.businessModel.value.businessName,
+                );
+              }),
+              const Gap(6),
+              Obx(() {
+                return buildRow(
+                  title: "Designation",
+                  data: (controller.businessModel.value.website ?? "").isEmpty
+                      ? "-"
+                      : controller.businessModel.value.website,
+                );
+              }),
+              const Gap(6),
+              Obx(() {
+                return buildRow(
+                  title: "Phone number",
+                  data: (controller.businessModel.value.businessContactNumber ?? "").isEmpty
+                      ? "-"
+                      : controller.businessModel.value.businessContactNumber,
+                );
+              }),
+              const Gap(6),
+              Obx(() {
+                return buildRow(
+                  title: "Alternative number",
+                  data: (controller.businessModel.value.businessContactNumber ?? "").isEmpty
+                      ? "-"
+                      : controller.businessModel.value.businessContactNumber,
+                );
+              }),
+              const Gap(6),
+              Obx(() {
+                return buildRow(
+                  title: "Email id",
+                  data: (controller.businessModel.value.businessEmail ?? "").isEmpty
+                      ? "-"
+                      : controller.businessModel.value.businessEmail,
+                );
+              }),
+              const Gap(6),
+            ],
+          ),
+        );
+      }
+    });
+  }
+   Widget buildRow({String? data, required String title}) {
+     return Row(
+       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+       crossAxisAlignment: CrossAxisAlignment.start,
+       children: [
+         Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
+         const SizedBox(width: 20),
+         Flexible(
+           child: Text(
+             data ?? "",
+             textAlign: TextAlign.right,
+             overflow: TextOverflow.ellipsis,
+             style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+           ),
+         ),
+       ],
+     );
+   }
 
   Widget _buildTeamCard(TeamListData user, BuildContext context) {
     return Container(
