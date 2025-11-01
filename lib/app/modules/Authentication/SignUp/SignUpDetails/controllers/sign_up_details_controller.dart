@@ -227,11 +227,13 @@ class SignUpDetailsController extends GetxController {
         );
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
-  void openPhoneNumberBottomSheet(BuildContext context) {
+  void openPhoneNumberBottomSheet() {
     final formKey = GlobalKey<FormState>();
     isValid.value = -1;
 

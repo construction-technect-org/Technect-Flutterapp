@@ -416,7 +416,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                   return;
                 }
                 if (controller.isVerified.value) {
-                  controller.openPhoneNumberBottomSheet(context);
+                  controller.openPhoneNumberBottomSheet();
                 } else {
                   final String text =
                       Get.find<SignUpRoleController>().selectedRoleName.value ==
