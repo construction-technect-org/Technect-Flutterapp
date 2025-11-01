@@ -790,16 +790,21 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           ),
                                         ),
                                       const Gap(8),
-                                      if(controller.product.status=="" || controller.product.status==null)
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(Routes.DELIVERY_LOCATION)?.then((val){
-                                            controller.productDetails(controller.product.id ?? 0);
-                                            controller.onApiCall?.call();
-                                          });
-                                        },
-                                        child: SvgPicture.asset(Asset.edit),
-                                      ),
+                                      if (controller.product.status == "" ||
+                                          controller.product.status == null)
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(
+                                              Routes.DELIVERY_LOCATION,
+                                            )?.then((val) {
+                                              controller.productDetails(
+                                                controller.product.id ?? 0,
+                                              );
+                                              controller.onApiCall?.call();
+                                            });
+                                          },
+                                          child: SvgPicture.asset(Asset.edit),
+                                        ),
                                     ],
                                   ),
                                 )
@@ -1259,11 +1264,17 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       {'label': 'Brand Name', 'value': product.brand.toString()},
       {'label': 'Category', 'value': product.categoryProductName.toString()},
       {'label': 'Sub category', 'value': product.subCategoryName.toString()},
-      {'label': 'Warehouse type', 'value': product.warehouseType??"-"},
-      if((product.stockYardAddress??"").isNotEmpty)
-      {'label': 'Stock yard address', 'value': product.stockYardAddress.toString()},
-      if((product.productSubCategoryName??"").isNotEmpty)
-      {'label': 'Product type', 'value': product.productSubCategoryName.toString()},
+      {'label': 'Warehouse type', 'value': product.warehouseType ?? "-"},
+      if ((product.stockYardAddress ?? "").isNotEmpty)
+        {
+          'label': 'Stock yard address',
+          'value': product.stockYardAddress.toString(),
+        },
+      if ((product.productSubCategoryName ?? "").isNotEmpty)
+        {
+          'label': 'Product type',
+          'value': product.productSubCategoryName.toString(),
+        },
       {'label': 'Stock Quantity', 'value': product.stockQty.toString()},
     ];
 
@@ -1383,7 +1394,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     child: Align(
                       alignment: AlignmentDirectional.topEnd,
                       child: Text(
-                        spec['value']!,
+                        spec['value']?.toUpperCase() ?? '',
                         style: MyTexts.medium15.copyWith(color: MyColors.black),
                         textAlign: TextAlign.end,
                       ),
@@ -1424,6 +1435,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       ),
     );
   }
+
   String _formatDistance(dynamic distance) {
     if (distance == null) return "0";
     try {
@@ -1433,5 +1445,4 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       return "0";
     }
   }
-
 }
