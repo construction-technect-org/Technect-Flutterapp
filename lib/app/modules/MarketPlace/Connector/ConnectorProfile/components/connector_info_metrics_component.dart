@@ -119,6 +119,8 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
               ),
               const Gap(6),
               buildRow(title: "Email ID", data: userData?.email ?? "-"),
+              const Gap(6),
+              buildRow(title: "Role", data: userData?.roleName ?? "-"),
               SizedBox(height: 0.5.h),
             ],
           );

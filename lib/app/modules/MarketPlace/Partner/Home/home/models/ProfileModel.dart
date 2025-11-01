@@ -491,6 +491,7 @@ class SiteLocation {
   bool? isActive;
   String? createdAt;
   String? updatedAt;
+  String? siteCode;
 
   SiteLocation({
     this.id,
@@ -499,6 +500,7 @@ class SiteLocation {
     this.landmark,
     this.latitude,
     this.longitude,
+    this.siteCode,
     this.isDefault,
     this.isActive,
     this.createdAt,
@@ -508,6 +510,7 @@ class SiteLocation {
   factory SiteLocation.fromJson(Map<String, dynamic> json) => SiteLocation(
     id: json["id"],
     siteName: json["siteName"],
+    siteCode: json["siteCode"],
     fullAddress: json["fullAddress"],
     landmark: json["landmark"],
     latitude: json["latitude"],
@@ -528,6 +531,7 @@ class SiteLocation {
     "isDefault": isDefault,
     "isActive": isActive,
     "createdAt": createdAt,
+    "siteCode": siteCode,
     "updatedAt": updatedAt,
   };
 }
