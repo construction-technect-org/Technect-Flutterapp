@@ -61,7 +61,7 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
-        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
+        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() ==
             "partner") {
           myPref.setRole("partner");
         } else {
