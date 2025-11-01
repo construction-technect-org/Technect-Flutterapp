@@ -21,7 +21,10 @@ class _AddKycViewState extends State<AddKycView> {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          appBar: CommonAppBar(isCenter: false, title: Text("ADD PROFILE".toUpperCase())),
+          appBar: CommonAppBar(
+            isCenter: false,
+            title: Text("ADD PROFILE".toUpperCase()),
+          ),
           backgroundColor: MyColors.white,
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
@@ -134,7 +137,7 @@ class _AddKycViewState extends State<AddKycView> {
                   child: Text(
                     file?.name ?? "Upload Image or drag here",
                     style: MyTexts.regular16.copyWith(
-                      color: MyColors.primary.withOpacity(0.5),
+                      color: MyColors.primary.withValues(alpha: 0.5),
                       fontFamily: MyTexts.SpaceGrotesk,
                     ),
                   ),

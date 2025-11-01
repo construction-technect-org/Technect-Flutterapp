@@ -113,8 +113,8 @@ class CommonPhoneField extends StatelessWidget {
                 color: MyColors.primary.withValues(alpha: 0.5),
                 fontFamily: MyTexts.SpaceGrotesk,
               ),
-              errorStyle:  MyTexts.medium13.copyWith(
-                color:MyColors.red33,
+              errorStyle: MyTexts.medium13.copyWith(
+                color: MyColors.red33,
                 fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
@@ -137,7 +137,7 @@ class CommonPhoneField extends StatelessWidget {
                 isDense: true,
                 counterText: "",
                 filled: true,
-                fillColor: MyColors.textFieldDivider.withOpacity(0.1),
+                fillColor: MyColors.textFieldDivider.withValues(alpha: 0.1),
                 hintText: "Search Country",
                 prefixIcon: const Icon(
                   CupertinoIcons.search,
@@ -180,7 +180,7 @@ class CommonPhoneField extends StatelessWidget {
                     ? "Please enter your phone number"
                     : "Invalid mobile number",
                 style: MyTexts.medium13.copyWith(
-                  color:MyColors.red33,
+                  color: MyColors.red33,
                   fontFamily: MyTexts.SpaceGrotesk,
                 ),
               ),

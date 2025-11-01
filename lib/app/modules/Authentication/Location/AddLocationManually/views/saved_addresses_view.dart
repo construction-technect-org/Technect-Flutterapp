@@ -47,7 +47,7 @@
 //                 borderRadius: BorderRadius.circular(20),
 //                 boxShadow: [
 //                   BoxShadow(
-//                     color: Colors.black.withOpacity(0.05),
+//                     color: Colors.black.withValues(alpha: 0.05),
 //                     blurRadius: 8,
 //                     offset: const Offset(0, 3),
 //                   ),
@@ -158,7 +158,7 @@
 //                                 fontWeight: FontWeight.w500,
 //                                 color: Color(
 //                                   0xFF007AFF,
-//                                 ),  
+//                                 ),
 //                               ),
 //                             ),
 //                           ),
@@ -175,8 +175,6 @@
 //     );
 //   }
 // }
-
-
 
 // saved_addresses_view.dart
 import 'package:construction_technect/app/core/utils/colors.dart';
@@ -196,12 +194,7 @@ class SavedAddressesView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CommonAppBar(
-        title: const Text(
-          "Saved Addresses",
-        ),
-
-      ),
+      appBar: CommonAppBar(title: const Text("Saved Addresses")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         child: Obx(() {
@@ -235,7 +228,7 @@ class SavedAddressesView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 6,
                       offset: const Offset(0, 3),
                     ),
@@ -252,7 +245,11 @@ class SavedAddressesView extends StatelessWidget {
                         color: const Color(0xFFF4F4F6),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(typeIcon, size: 26, color: MyColors.fontBlack),
+                      child: Icon(
+                        typeIcon,
+                        size: 26,
+                        color: MyColors.fontBlack,
+                      ),
                     ),
                     const SizedBox(width: 12),
 
@@ -312,7 +309,10 @@ class SavedAddressesView extends StatelessWidget {
                         );
                       },
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 8.0),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 6.0,
+                          horizontal: 8.0,
+                        ),
                         child: Text(
                           'Edit',
                           style: TextStyle(

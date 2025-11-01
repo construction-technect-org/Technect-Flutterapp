@@ -317,7 +317,7 @@ class _PillButton extends StatelessWidget {
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: selected
-                    ? selectedBorder.withOpacity(0.12)
+                    ? selectedBorder.withValues(alpha: 0.12)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(6),
               ),

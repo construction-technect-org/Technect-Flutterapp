@@ -919,7 +919,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                     boxShadow: [
                                                       BoxShadow(
                                                         color: Colors.grey
-                                                            .withOpacity(0.08),
+                                                            .withValues(
+                                                              alpha: 0.08,
+                                                            ),
                                                         blurRadius: 6,
                                                         offset: const Offset(
                                                           0,
@@ -1018,8 +1020,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                             radius: 16,
                                                             backgroundColor:
                                                                 MyColors.primary
-                                                                    .withOpacity(
-                                                                      0.1,
+                                                                    .withValues(
+                                                                      alpha:
+                                                                          0.1,
                                                                     ),
                                                             child: Text(
                                                               review.isAnonymous ??
