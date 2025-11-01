@@ -393,52 +393,48 @@ class SelectedProductView extends StatelessWidget {
 
   Widget _buildFilterButtons(BuildContext context) {
     final controller = Get.find<SelectedProductController>();
-    return Obx(() {
-      final showViewToggle = controller.navigationIndex.value >= 3;
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildFilterButton(
-            label: 'Sort',
-            iconPath: Asset.sort,
-            onTap: () => controller.showSortBottomSheet(context),
-          ),
-          _buildFilterButton(
-            label: 'Location',
-            iconPath: Asset.location,
-            onTap: () => controller.showLocationBottomSheet(context),
-          ),
-          _buildFilterButton(
-            label: 'Filter',
-            iconPath: Asset.filter,
-            onTap: () => controller.showFilterBottomSheet(context),
-          ),
-          if (showViewToggle)
-            Obx(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildFilterButton(
+          label: 'Sort',
+          iconPath: Asset.sort,
+          onTap: () => controller.showSortBottomSheet(context),
+        ),
+        _buildFilterButton(
+          label: 'Location',
+          iconPath: Asset.location,
+          onTap: () => controller.showLocationBottomSheet(context),
+        ),
+        _buildFilterButton(
+          label: 'Filter',
+          iconPath: Asset.filter,
+          onTap: () => controller.showFilterBottomSheet(context),
+        ),
+        Obx(
               () => GestureDetector(
-                onTap: () =>
-                    controller.isGridView.value = !controller.isGridView.value,
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.grey[300]!),
-                  ),
-                  child: Icon(
-                    controller.isGridView.value ? Icons.list : Icons.grid_view,
-                    size: 20,
-                    color: MyColors.custom('2E2E2E'),
-                  ),
-                ),
+            onTap: () =>
+            controller.isGridView.value = !controller.isGridView.value,
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 6,
+                vertical: 6,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.grey[300]!),
+              ),
+              child: Icon(
+                controller.isGridView.value ? Icons.list : Icons.grid_view,
+                size: 20,
+                color: MyColors.custom('2E2E2E'),
               ),
             ),
-        ],
-      );
-    });
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildSortChip() {
@@ -925,33 +921,27 @@ class SelectedProductView extends StatelessWidget {
                         vertical: 6,
                         horizontal: 8,
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child:     Row(
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Ex factory price ',
-                                style: MyTexts.medium12.copyWith(
-                                  color: MyColors.custom('545454'),
-                                ),
-                              ),
-
-                              Text(
-                                item.price ?? 'N/A',
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.custom('0B1429'),
-                                ),
-                              ),
-                              Text(
-                                '/ unit',
-                                style: MyTexts.medium12.copyWith(
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ],
+                          Text(
+                            'Ex factory price ',
+                            style: MyTexts.medium10.copyWith(
+                              color: MyColors.custom('545454'),
+                            ),
                           ),
-                          const SizedBox(height: 2),
+
+                          Text(
+                            item.price ?? 'N/A',
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.custom('0B1429'),
+                            ),
+                          ),
+                          Text(
+                            '/ unit',
+                            style: MyTexts.medium12.copyWith(
+                              color: Colors.grey[600],
+                            ),
+                          ),
                         ],
                       ),
                     ),
