@@ -7,7 +7,14 @@ void showSwitchAccountBottomSheet() {
   final controller = Get.find<SwitchAccountController>();
   controller.currentRole.value = myPref.role.val;
   controller.hasPartnerAccount.value =
-      (Get.find<HomeController>().profileData.value.data?.merchantProfile?.businessEmail??"").isNotEmpty;
+      (Get.find<HomeController>()
+                  .profileData
+                  .value
+                  .data
+                  ?.merchantProfile
+                  ?.businessEmail ??
+              "")
+          .isNotEmpty;
   controller.hasConnectorAccount.value =
       Get.find<HomeController>().profileData.value.data?.connectorProfile !=
       null;
@@ -57,7 +64,9 @@ void showSwitchAccountBottomSheet() {
           }
         }
 
-        final emoji = title.toLowerCase() == 'merchant' ? Asset.role1 : Asset.contractor;
+        final emoji = title.toLowerCase() == 'merchant'
+            ? Asset.role1
+            : Asset.contractor;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -94,7 +103,7 @@ void showSwitchAccountBottomSheet() {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.05),
+                      color: Colors.grey.withValues(alpha: 0.05),
                       blurRadius: 5,
                       offset: const Offset(0, 3),
                     ),
@@ -110,12 +119,16 @@ void showSwitchAccountBottomSheet() {
                         children: [
                           Text(
                             title,
-                            style: MyTexts.bold16.copyWith(color: MyColors.primary),
+                            style: MyTexts.bold16.copyWith(
+                              color: MyColors.primary,
+                            ),
                           ),
                           const Gap(4),
                           Text(
                             subtitle,
-                            style: MyTexts.medium14.copyWith(color: MyColors.black),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.black,
+                            ),
                           ),
                         ],
                       ),

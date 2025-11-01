@@ -83,7 +83,7 @@ class SettingView extends GetView<SettingController> {
                                     controller.isNotification.value = val;
                                     controller.notificationToggle(
                                       isNotification:
-                                      controller.isNotification.value,
+                                          controller.isNotification.value,
                                     );
                                   },
                                 );
@@ -94,7 +94,7 @@ class SettingView extends GetView<SettingController> {
                       ),
                     ),
                     const Gap(24),
-                    HeaderText(text: "Account"),
+                    const HeaderText(text: "Account"),
                     const Gap(16),
                     _buildSettingAction(
                       context,
@@ -165,7 +165,7 @@ class SettingView extends GetView<SettingController> {
                         children: [
                           const Divider(),
                           const Gap(5),
-                          HeaderText(text: "Theme"),
+                          const HeaderText(text: "Theme"),
                           const Gap(3),
                           Row(
                             children: [

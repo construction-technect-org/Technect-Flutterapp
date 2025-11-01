@@ -143,6 +143,7 @@ class AddRoleView extends GetView<AddRoleController> {
       ),
     );
   }
+
   Widget _buildChip({
     required String label,
     required String assetImage,
@@ -164,11 +165,13 @@ class AddRoleView extends GetView<AddRoleController> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
             color: isSelected
-                ? (isEditMode ? color.withOpacity(0.05) : color.withOpacity(0.1))
+                ? (isEditMode
+                      ? color.withValues(alpha: 0.05)
+                      : color.withValues(alpha: 0.1))
                 : Colors.transparent,
             border: Border.all(
               color: isSelected
-                  ? (isEditMode ? color.withOpacity(0.5) : color)
+                  ? (isEditMode ? color.withValues(alpha: 0.5) : color)
                   : defaultColor,
             ),
             borderRadius: BorderRadius.circular(30),
@@ -196,5 +199,4 @@ class AddRoleView extends GetView<AddRoleController> {
       );
     });
   }
-
 }

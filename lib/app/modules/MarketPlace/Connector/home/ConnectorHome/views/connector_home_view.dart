@@ -59,10 +59,7 @@ class ConnectorHomeView extends StatelessWidget {
             SizedBox(height: 5.h),
 
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18.0,
-                vertical: 0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: Row(
                 children: [
                   Obx(() {
@@ -335,8 +332,8 @@ class ConnectorHomeView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 1.h),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16.0),
                         child: HeaderText(text: "Features"),
                       ),
                       SizedBox(height: 1.h),
@@ -421,7 +418,7 @@ class ConnectorHomeView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 2.h),
-                            HearderText(text: "Statics"),
+                            const HearderText(text: "Statics"),
                             const Gap(14),
                             Obx(
                               () => Row(
@@ -477,7 +474,7 @@ class ConnectorHomeView extends StatelessWidget {
                               ),
                             ),
                             const Gap(14),
-                            HeaderText(text: "Quick Access"),
+                            const HeaderText(text: "Quick Access"),
                             const Gap(14),
                             Container(
                               padding: const EdgeInsets.symmetric(
@@ -575,7 +572,7 @@ class ConnectorHomeView extends StatelessWidget {
                             const Gap(14),
                             Row(
                               children: [
-                                HearderText(text: "Merchant Store"),
+                                const HearderText(text: "Merchant Store"),
                                 const Spacer(),
                                 GestureDetector(
                                   onTap: () {
@@ -827,10 +824,10 @@ class ConnectorHomeView extends StatelessWidget {
 }
 
 class HearderText extends StatelessWidget {
-  String text;
-  TextStyle? textStyle;
+  final String text;
+  final TextStyle? textStyle;
 
-  HearderText({super.key, required this.text, this.textStyle});
+  const HearderText({super.key, required this.text, this.textStyle});
 
   @override
   Widget build(BuildContext context) {

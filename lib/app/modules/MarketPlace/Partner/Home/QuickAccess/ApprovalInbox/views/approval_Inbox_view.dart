@@ -138,7 +138,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(12),
-                          HeaderText(text: "Statistics"),
+                          const HeaderText(text: "Statistics"),
                           const Gap(24),
                           Obx(() {
                             return IntrinsicHeight(
@@ -150,14 +150,14 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                       image: Asset.totalProduct,
                                       title: "Total Products",
                                       data:
-                                      (controller
-                                          .approvalInboxList
-                                          .value
-                                          .data
-                                          ?.productStatistics
-                                          ?.totalProducts ??
-                                          0)
-                                          .toString(),
+                                          (controller
+                                                      .approvalInboxList
+                                                      .value
+                                                      .data
+                                                      ?.productStatistics
+                                                      ?.totalProducts ??
+                                                  0)
+                                              .toString(),
                                       filter: ApprovalFilter.all,
                                     ),
                                   ),
@@ -167,14 +167,14 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                       image: Asset.totalProduct,
                                       title: "Approved Products",
                                       data:
-                                      (controller
-                                          .approvalInboxList
-                                          .value
-                                          .data
-                                          ?.productStatistics
-                                          ?.approvedProducts ??
-                                          0)
-                                          .toString(),
+                                          (controller
+                                                      .approvalInboxList
+                                                      .value
+                                                      .data
+                                                      ?.productStatistics
+                                                      ?.approvedProducts ??
+                                                  0)
+                                              .toString(),
                                       filter: ApprovalFilter.approved,
                                     ),
                                   ),
@@ -184,14 +184,14 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                       image: Asset.totalProduct,
                                       title: "Rejected Products",
                                       data:
-                                      (controller
-                                          .approvalInboxList
-                                          .value
-                                          .data
-                                          ?.productStatistics
-                                          ?.rejectedProducts ??
-                                          0)
-                                          .toString(),
+                                          (controller
+                                                      .approvalInboxList
+                                                      .value
+                                                      .data
+                                                      ?.productStatistics
+                                                      ?.rejectedProducts ??
+                                                  0)
+                                              .toString(),
                                       filter: ApprovalFilter.rejected,
                                     ),
                                   ),
@@ -200,16 +200,13 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                             );
                           }),
                           const Gap(32),
-                          HeaderText(text: "Inbox"),
+                          const HeaderText(text: "Inbox"),
                           Obx(() {
                             final list = controller.filteredInbox;
                             if (list.isEmpty) {
                               return Padding(
                                 padding: EdgeInsets.only(
-                                  top: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height / 4,
+                                  top: MediaQuery.of(context).size.height / 4,
                                 ),
                                 child: Center(
                                   child: Text(

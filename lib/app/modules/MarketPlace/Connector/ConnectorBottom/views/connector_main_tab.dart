@@ -45,10 +45,12 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
                   currentIndex: controller.currentIndex.value,
                   onTap: controller.changeTab,
                   selectedItemColor: MyColors.white,
-                  unselectedItemColor: MyColors.white.withOpacity(0.25),
-                  selectedLabelStyle: MyTexts.medium13.copyWith(color: MyColors.white),
+                  unselectedItemColor: MyColors.white.withValues(alpha: 0.25),
+                  selectedLabelStyle: MyTexts.medium13.copyWith(
+                    color: MyColors.white,
+                  ),
                   unselectedLabelStyle: MyTexts.medium13.copyWith(
-                    color: MyColors.white.withOpacity(0.25),
+                    color: MyColors.white.withValues(alpha: 0.25),
                   ),
                   items: [
                     BottomNavigationBarItem(
@@ -59,7 +61,7 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
                         colorFilter: ColorFilter.mode(
                           controller.currentIndex.value == 0
                               ? MyColors.white
-                              : MyColors.white.withOpacity(0.25),
+                              : MyColors.white.withValues(alpha: 0.25),
                           BlendMode.srcIn,
                         ),
                       ),
@@ -73,7 +75,7 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
                         colorFilter: ColorFilter.mode(
                           controller.currentIndex.value == 1
                               ? MyColors.white
-                              : MyColors.white.withOpacity(0.25),
+                              : MyColors.white.withValues(alpha: 0.25),
                           BlendMode.srcIn,
                         ),
                       ),
@@ -87,7 +89,7 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
                         colorFilter: ColorFilter.mode(
                           controller.currentIndex.value == 2
                               ? MyColors.white
-                              : MyColors.white.withOpacity(0.25),
+                              : MyColors.white.withValues(alpha: 0.25),
                           BlendMode.srcIn,
                         ),
                       ),
@@ -101,7 +103,7 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
                         colorFilter: ColorFilter.mode(
                           controller.currentIndex.value == 3
                               ? MyColors.white
-                              : MyColors.white.withOpacity(0.25),
+                              : MyColors.white.withValues(alpha: 0.25),
                           BlendMode.srcIn,
                         ),
                       ),
@@ -115,7 +117,7 @@ class ConnectorBottom extends GetView<ConnectorBottomController> {
                         colorFilter: ColorFilter.mode(
                           controller.currentIndex.value == 4
                               ? MyColors.white
-                              : MyColors.white.withOpacity(0.25),
+                              : MyColors.white.withValues(alpha: 0.25),
                           BlendMode.srcIn,
                         ),
                       ),

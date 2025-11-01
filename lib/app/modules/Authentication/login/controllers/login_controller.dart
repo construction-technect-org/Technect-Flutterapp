@@ -16,6 +16,7 @@ class LoginController extends GetxController {
   FocusNode passwordFocusNode = FocusNode();
   final rememberMe = false.obs;
   final RxString loginError = "".obs;
+  final RxString mobileValidationError = "".obs;
   RxInt isValid = (-1).obs;
   RxString countryCode = "+91".obs;
   HomeService homeService = HomeService();
@@ -46,6 +47,10 @@ class LoginController extends GetxController {
     mobileController.addListener(() {
       if (loginError.value.isNotEmpty) {
         loginError.value = "";
+      }
+      if (mobileValidationError.value.isNotEmpty) {
+        mobileValidationError.value = "";
+        isValid.value = -1;
       }
     });
 

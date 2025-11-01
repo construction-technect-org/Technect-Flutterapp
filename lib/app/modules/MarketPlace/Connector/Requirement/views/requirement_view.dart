@@ -85,7 +85,7 @@ class RequirementView extends StatelessWidget {
       decoration: BoxDecoration(
         color: MyColors.white,
         borderRadius: BorderRadius.circular(12),
-        border:  Border.all(color: MyColors.grayEA),
+        border: Border.all(color: MyColors.grayEA),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -125,7 +125,7 @@ class RequirementView extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.1),
+                        color: statusColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -141,7 +141,7 @@ class RequirementView extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: MyColors.primary.withOpacity(0.1),
+                          color: MyColors.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: const Icon(
@@ -160,7 +160,7 @@ class RequirementView extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.1),
+                          color: Colors.red.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: const Icon(
@@ -188,7 +188,11 @@ class RequirementView extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.location_on_rounded, size: 16, color: MyColors.grey),
+                  const Icon(
+                    Icons.location_on_rounded,
+                    size: 16,
+                    color: MyColors.grey,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -196,7 +200,11 @@ class RequirementView extends StatelessWidget {
                       children: [
                         if (requirement?.siteAddress?.siteName != null)
                           Text(
-                            requirement!.siteAddress!.siteName!.capitalizeFirst??"",
+                            requirement!
+                                    .siteAddress!
+                                    .siteName!
+                                    .capitalizeFirst ??
+                                "",
                             style: MyTexts.medium14.copyWith(
                               color: MyColors.fontBlack,
                             ),

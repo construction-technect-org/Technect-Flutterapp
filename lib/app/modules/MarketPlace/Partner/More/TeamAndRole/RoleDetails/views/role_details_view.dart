@@ -25,9 +25,14 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                   children: [
                     InkWell(
                       onTap: () {
-                        DeleteRoleDialog.showDeleteRoleDialog(context, () async {
-                          await controller.deleteRole(controller.roleId.value);
-                        });
+                        DeleteRoleDialog.showDeleteRoleDialog(
+                          context,
+                          () async {
+                            await controller.deleteRole(
+                              controller.roleId.value,
+                            );
+                          },
+                        );
                       },
                       borderRadius: BorderRadius.circular(8),
                       child: Container(
@@ -37,13 +42,17 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: [
                             BoxShadow(
-                              color: MyColors.primary.withOpacity(0.2),
+                              color: MyColors.primary.withValues(alpha: 0.2),
                               blurRadius: 6,
                               offset: const Offset(0, 3),
                             ),
                           ],
                         ),
-                        child: const Icon(Icons.delete, color: Colors.white, size: 18),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ),
                     ),
                     const Gap(10),
@@ -65,13 +74,17 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: [
                             BoxShadow(
-                              color: MyColors.primary.withOpacity(0.2),
+                              color: MyColors.primary.withValues(alpha: 0.2),
                               blurRadius: 6,
                               offset: const Offset(0, 3),
                             ),
                           ],
                         ),
-                        child: const Icon(Icons.edit, color: Colors.white, size: 18),
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ),
                     ),
                   ],
@@ -86,7 +99,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                     border: Border.all(color: MyColors.grayD4),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -103,11 +116,17 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: MyColors.paleBluecolor.withOpacity(0.2),
+                              color: MyColors.paleBluecolor.withValues(
+                                alpha: 0.2,
+                              ),
                               shape: BoxShape.circle,
                             ),
                             child: Center(
-                              child: SvgPicture.asset(Asset.Admin, width: 18, height: 18),
+                              child: SvgPicture.asset(
+                                Asset.Admin,
+                                width: 18,
+                                height: 18,
+                              ),
                             ),
                           ),
                           SizedBox(width: 4.w),
@@ -135,7 +154,9 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                       SizedBox(height: 0.5.h),
                       Text(
                         controller.roleDescription.value,
-                        style: MyTexts.regular14.copyWith(color: MyColors.gray32),
+                        style: MyTexts.regular14.copyWith(
+                          color: MyColors.gray32,
+                        ),
                       ),
                       SizedBox(height: 2.h),
 
@@ -154,13 +175,20 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.sp),
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.h),
-                          backgroundColor: MyColors.green.withOpacity(0.05),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 5.w,
+                            vertical: 1.h,
+                          ),
+                          backgroundColor: MyColors.green.withValues(
+                            alpha: 0.05,
+                          ),
                         ),
                         onPressed: () {},
                         child: Text(
                           controller.functionalities.toString(),
-                          style: MyTexts.regular16.copyWith(color: MyColors.green),
+                          style: MyTexts.regular16.copyWith(
+                            color: MyColors.green,
+                          ),
                         ),
                       ),
 
@@ -169,7 +197,10 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                         child: Column(
                           children: [
                             SizedBox(height: 2.h),
-                            const Divider(thickness: 1.2, color: MyColors.grayD4),
+                            const Divider(
+                              thickness: 1.2,
+                              color: MyColors.grayD4,
+                            ),
                             SizedBox(height: 2.h),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,7 +218,9 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                     SizedBox(height: 0.5.h),
                                     Switch(
                                       activeColor: MyColors.green,
-                                      value: controller.roleStatus.value == 'Active',
+                                      value:
+                                          controller.roleStatus.value ==
+                                          'Active',
                                       onChanged: (value) {
                                         controller.roleStatus.value = value
                                             ? 'Active'
@@ -205,13 +238,16 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                     vertical: 1.h,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: controller.roleStatus.value == 'Active'
+                                    color:
+                                        controller.roleStatus.value == 'Active'
                                         ? MyColors.green
                                         : MyColors.red,
                                     borderRadius: BorderRadius.circular(30),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
+                                        color: Colors.black.withValues(
+                                          alpha: 0.05,
+                                        ),
                                         blurRadius: 8,
                                       ),
                                     ],

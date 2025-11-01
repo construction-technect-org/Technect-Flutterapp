@@ -13,6 +13,51 @@ class ValidationUtils {
     return null;
   }
 
+  /// Validates mobile number format with strict rules
+  /// Returns error message if invalid, null if valid
+  /// Checks for:
+  /// - Empty or null values (returns null, handled separately)
+  /// - Length (must be 10 digits)
+  /// - All identical digits (e.g., 1111111111, 2222222222)
+  /// - All zeros after first digit (e.g., 6000000000, 7000000000)
+  /// - Valid Indian mobile number format (starts with 6, 7, 8, or 9)
+  static String? validateMobileNumber(String? mobileNumber) {
+    if (mobileNumber == null || mobileNumber.trim().isEmpty) {
+      return null; // Empty validation is handled separately
+    }
+
+    final digits = mobileNumber.trim();
+
+    // Check length (should be 10 digits for Indian numbers)
+    if (digits.length != 10) {
+      return "Enter a valid mobile number.";
+    }
+
+    // Check if all digits are identical (e.g., 1111111111, 2222222222)
+    if (digits.length > 1) {
+      final firstDigit = digits[0];
+      final allSame = digits.split('').every((digit) => digit == firstDigit);
+      if (allSame) {
+        return "Enter a valid mobile number.";
+      }
+    }
+
+    // Check if all zeros after first digit (e.g., 6000000000, 7000000000)
+    if (digits.length > 1) {
+      final restDigits = digits.substring(1);
+      if (restDigits == '0' * restDigits.length) {
+        return "Enter a valid mobile number.";
+      }
+    }
+
+    // Check if it's a valid Indian mobile number (starts with 6, 7, 8, or 9)
+    if (!RegExp(r'^[6-9]\d{9}$').hasMatch(digits)) {
+      return "Enter a valid mobile number.";
+    }
+
+    return null; // Valid
+  }
+
   // Business Contact Number Validation (same as mobile but with different message)
   static String? validateBusinessContactNumber(String? value) {
     if (value == null || value.trim().isEmpty) {

@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/google_sign_in_service.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
@@ -87,6 +88,7 @@ class LoginView extends GetView<LoginController> {
                           },
                         ),
                         const Gap(16),
+                        //Password
                         Obx(() {
                           return CommonTextField(
                             textInputAction: TextInputAction.done,
@@ -169,25 +171,38 @@ class LoginView extends GetView<LoginController> {
                             onTap: controller.isLoading.value
                                 ? null
                                 : () {
+                                    // Clear previous errors
+                                    controller.loginError.value = "";
+                                    controller.mobileValidationError.value = "";
                                     controller.isValid.value = -1;
-                                    if (controller
+
+                                    // Validate mobile number
+                                    final mobileNumber = controller
                                         .mobileController
                                         .text
-                                        .isEmpty) {
+                                        .trim();
+                                    if (mobileNumber.isEmpty) {
                                       controller.isValid.value = 0;
+                                      return;
                                     }
+
+                                    final mobileError =
+                                        ValidationUtils.validateMobileNumber(
+                                          mobileNumber,
+                                        );
+                                    if (mobileError != null) {
+                                      controller.mobileValidationError.value =
+                                          mobileError;
+                                      controller.isValid.value = 1;
+                                      return;
+                                    }
+
+                                    // Validate password
                                     if (controller.formKey.currentState
                                             ?.validate() ??
                                         false) {
-                                      if (controller
-                                          .mobileController
-                                          .text
-                                          .isEmpty) {
-                                        controller.isValid.value = 0;
-                                      } else {
-                                        hideKeyboard();
-                                        controller.login();
-                                      }
+                                      hideKeyboard();
+                                      controller.login();
                                     }
                                   },
                           ),

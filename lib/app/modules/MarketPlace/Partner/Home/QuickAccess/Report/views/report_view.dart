@@ -168,7 +168,9 @@ class ReportView extends GetView<ReportController> {
 
                           const Gap(20),
 
-                          HeaderText(text: "Select month and download report"),
+                          const HeaderText(
+                            text: "Select month and download report",
+                          ),
                           const Gap(20),
 
                           _buildMonthFilter(context),

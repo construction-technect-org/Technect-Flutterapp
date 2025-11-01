@@ -412,15 +412,12 @@ class SelectedProductView extends StatelessWidget {
           onTap: () => controller.showFilterBottomSheet(context),
         ),
         Obx(
-              () => GestureDetector(
+          () => GestureDetector(
             onTap: () =>
-            controller.isGridView.value = !controller.isGridView.value,
+                controller.isGridView.value = !controller.isGridView.value,
             behavior: HitTestBehavior.translucent,
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 6,
-                vertical: 6,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: Colors.grey[300]!),
@@ -921,7 +918,7 @@ class SelectedProductView extends StatelessWidget {
                         vertical: 6,
                         horizontal: 8,
                       ),
-                      child:     Row(
+                      child: Row(
                         children: [
                           Text(
                             'Ex factory price ',
