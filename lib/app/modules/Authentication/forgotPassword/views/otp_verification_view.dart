@@ -6,16 +6,16 @@ import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
 class OtpVerificationView extends StatelessWidget {
-  RxBool isLoading;
-  bool? isBackToLogin;
-  RxBool isResendVisible;
-  TextEditingController otpController;
-  Function(String)? onCompleted;
-  Function()? onTap;
-  Function? onFinished;
-  CountdownController countdownController;
+  final RxBool isLoading;
+  final bool? isBackToLogin;
+  final RxBool isResendVisible;
+  final TextEditingController otpController;
+  final Function(String)? onCompleted;
+  final Function()? onTap;
+  final Function? onFinished;
+  final CountdownController countdownController;
 
-  OtpVerificationView({
+  const OtpVerificationView({
     super.key,
     required this.isLoading,
     required this.isResendVisible,
