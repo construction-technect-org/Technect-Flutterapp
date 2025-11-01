@@ -178,7 +178,7 @@ class CommonTextField extends StatelessWidget {
     this.suffixPadding,
     this.bgColor,
     this.isBorder = true,
-    this.isRed = true,
+    this.isRed = false,
     this.maxLength,
     this.onTap,
     this.hintText = "",
@@ -212,11 +212,11 @@ class CommonTextField extends StatelessWidget {
                     headerText ?? "",
                     style: MyTexts.medium14.copyWith(color: MyColors.gra54),
                   ),
-                  // if (isRed == true)
-                  //   Text(
-                  //     '*',
-                  //     style: MyTexts.medium14.copyWith(color: MyColors.red33),
-                  //   ),
+                  if (isRed == true)
+                    Text(
+                      '*',
+                      style: MyTexts.medium14.copyWith(color: MyColors.red33),
+                    ),
                 ],
               ),
               const Gap(5),

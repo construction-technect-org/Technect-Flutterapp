@@ -71,6 +71,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                             ),
                             SizedBox(height: 2.5.h),
                             CommonTextField(
+                              isRed: true,
                               headerText: "First Name",
                               hintText: "Enter your first name",
                               controller: controller.firstNameController,
@@ -87,6 +88,8 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
 
                             CommonTextField(
                               headerText: "Last Name",
+                              isRed: true,
+
                               hintText: "Enter your last name",
                               controller: controller.lastNameController,
                               autofillHints: const [AutofillHints.familyName],
@@ -111,6 +114,8 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                   CommonTextField(
                                     headerText: "Email ID",
                                     hintText: "Enter your email address",
+                                    isRed: true,
+
                                     controller: controller.emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     autofillHints: const [AutofillHints.email],
@@ -234,6 +239,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                 headerText: "GSTIN",
                                 hintText: "Enter your GSTIN number",
                                 controller: controller.gstController,
+                                isRed: true,
                                 suffixPadding: 0,
                                 suffixIcon: GestureDetector(
                                   onTap: () async => await controller
