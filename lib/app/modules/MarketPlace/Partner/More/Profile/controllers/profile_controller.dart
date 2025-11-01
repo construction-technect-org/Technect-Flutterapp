@@ -35,7 +35,9 @@ class ProfileController extends GetxController {
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website ?? "";
       businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
-      businessModel.value.year = merchantProfile?.yearsInBusiness!=null? merchantProfile?.yearsInBusiness.toString() :"";
+      businessModel.value.year = merchantProfile?.yearsInBusiness != null
+          ? merchantProfile?.yearsInBusiness.toString()
+          : "";
       businessModel.value.businessContactNumber =
           merchantProfile?.businessContactNumber ?? "";
       businessModel.value.alternativeBusinessEmail =
@@ -196,7 +198,7 @@ class ProfileController extends GetxController {
 
   final certificates = <CertificateModel>[
     CertificateModel(title: "GST Certificate", isDefault: true),
-    CertificateModel(title: "Udyam Certificate", isDefault: true),
+    CertificateModel(title: "MSME/Udyam Certificate", isDefault: true),
     CertificateModel(title: "Pan Certificate", isDefault: true),
   ].obs;
 
