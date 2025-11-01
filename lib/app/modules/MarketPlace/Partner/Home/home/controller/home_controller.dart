@@ -7,6 +7,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
@@ -33,13 +34,14 @@ class HomeController extends GetxController {
   // AddressModel addressData = AddressModel();
   RxList<TeamListData> teamList = <TeamListData>[].obs;
   Rx<CategoryModel> categoryHierarchyData = CategoryModel().obs;
-  Rx<CategoryModel> categoryHierarchyDataCM = CategoryModel().obs;
+  Rx<ServiceCategoryModel> categoryHierarchyDataCM = ServiceCategoryModel().obs;
   Rx<CategoryModel> categoryHierarchyData2 = CategoryModel().obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchCategoryHierarchy();
+    fetchCategoryServiceHierarchy();
     _initializeHomeData();
   }
 
@@ -253,13 +255,11 @@ class HomeController extends GetxController {
       final cachedCategoryHierarchy = myPref.getCategoryHierarchyModel();
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyData.value = cachedCategoryHierarchy;
-        categoryHierarchyDataCM.value = cachedCategoryHierarchy;
       }
 
       // Fetch fresh data from API
       final apiCategoryHierarchy = await homeService.getCategoryHierarchy();
       categoryHierarchyData.value = apiCategoryHierarchy;
-      categoryHierarchyDataCM.value = apiCategoryHierarchy;
 
       // Store in local storage
       myPref.setCategoryHierarchyModel(apiCategoryHierarchy);
@@ -268,6 +268,32 @@ class HomeController extends GetxController {
       final cachedCategoryHierarchy = myPref.getCategoryHierarchyModel();
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyData.value = cachedCategoryHierarchy;
+      }
+      Get.printError(info: 'Error fetching category hierarchy: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> fetchCategoryServiceHierarchy() async {
+    try {
+      isLoading(true);
+      // Load cached data first
+      final cachedCategoryHierarchy = myPref.getServiceCategoryHierarchyModel();
+      if (cachedCategoryHierarchy != null) {
+        categoryHierarchyDataCM.value = cachedCategoryHierarchy;
+      }
+
+      // Fetch fresh data from API
+      final apiCategoryHierarchy = await homeService.getCategoryServiceHierarchy();
+      categoryHierarchyDataCM.value = apiCategoryHierarchy;
+
+      // Store in local storage
+      myPref.setServiceCategoryHierarchyModel(apiCategoryHierarchy);
+    } catch (e) {
+      // Fallback to cached data if API fails
+      final cachedCategoryHierarchy = myPref.getServiceCategoryHierarchyModel();
+      if (cachedCategoryHierarchy != null) {
         categoryHierarchyDataCM.value = cachedCategoryHierarchy;
       }
       Get.printError(info: 'Error fetching category hierarchy: $e');

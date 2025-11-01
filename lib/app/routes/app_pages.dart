@@ -60,6 +60,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/n
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/view/new_launches_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/views/construction_service_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/binding/account_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/view/account_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/bindings/add_delivery_address_binding.dart';
@@ -106,6 +107,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/bindings/product_detail_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/views/product_detail_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/bindings/search_service_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/views/search_service_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/bindings/create_new_ticket_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/creat_new_ticket.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/RequestDemo/bindings/request_demo_binding.dart';
@@ -427,6 +430,11 @@ class AppPages {
       // binding: OnBoardingBinding(),
     ),
     GetPage(
+      name: Routes.SELECT_SERVICE,
+      page: () => ConstructionServiceView(),
+      // binding: OnBoardingBinding(),
+    ),
+    GetPage(
       name: Routes.DELIVERY_LOCATION,
       page: () => DeliveryLocationView(),
       binding: DeliveryLocationBinding(),
@@ -455,6 +463,11 @@ class AppPages {
       name: Routes.SEARCH_PRODUCT,
       page: () => SearchProductView(),
       binding: SearchProductBinding(),
+    ),
+    GetPage(
+      name: Routes.SEARCH_SERVICE,
+      page: () => SearchServiceView(),
+      binding: SearchServiceBinding(),
     ),
   ];
 }

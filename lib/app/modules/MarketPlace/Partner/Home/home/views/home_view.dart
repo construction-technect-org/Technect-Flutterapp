@@ -69,6 +69,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                 ),
+                const Gap(16),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -83,9 +84,7 @@ class HomeView extends StatelessWidget {
                                 begin: AlignmentGeometry.topCenter,
                                 end: AlignmentGeometry.bottomCenter,
                                 colors: [
-                                  MyColors.custom(
-                                    'FFF9BD',
-                                  ).withValues(alpha: 0.1),
+                                  MyColors.custom('FFF9BD').withOpacity(0.1),
                                   MyColors.white,
                                 ],
                               ),
@@ -94,390 +93,52 @@ class HomeView extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // const Gap(24),
-                              // Text(
-                              //   "All Category",
-                              //   style: MyTexts.bold20.copyWith(color: MyColors.primary),
-                              // ),
-                              // Container(
-                              //   width: double.infinity,
-                              //   height: 100,
-                              //   decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.circular(24),
-                              //     border: Border.all(
-                              //       color: MyColors.custom('EAEAEA'),
-                              //       width: 2,
-                              //     ),
-                              //   ),
-                              //   child: Center(
-                              //     child: Text(
-                              //       'Waiting for banner content',
-                              //       style: MyTexts.medium16,
-                              //     ),
-                              //   ),
-                              // ),
-                              // SizedBox(height: 2.h),
-                              // Main Categories ListView
                               Obx(() {
-                                // Pick which data to show based on selected tab
-                                final selectedCategoryData =
-                                    controller.marketPlace.value == 0
-                                    ? controller
-                                          .categoryHierarchyData
-                                          .value
-                                          .data
-                                    : controller.marketPlace.value == 1
-                                    ? controller
-                                          .categoryHierarchyDataCM
-                                          .value
-                                          .data
-                                    : controller
-                                          .categoryHierarchyData2
-                                          .value
-                                          .data;
+                                if (controller.marketPlace.value == 0) {
+                                  /// ------------------- MATERIAL MARKETPLACE -------------------
+                                  final materialList = controller
+                                      .categoryHierarchyData
+                                      .value
+                                      .data;
 
-                                if (selectedCategoryData == null ||
-                                    selectedCategoryData.isEmpty) {
-                                  return Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                        top:
-                                            MediaQuery.of(context).size.height /
-                                            3.5,
-                                      ),
-                                      // child: const Text("No data found"),
-                                      child: const Text("Coming soon"),
-                                    ),
+                                  if (materialList == null ||
+                                      materialList.isEmpty) {
+                                    return _buildComingSoon(context);
+                                  }
+
+                                  return _buildMaterialList(
+                                    context,
+                                    materialList,
                                   );
+                                } else if (controller.marketPlace.value == 1) {
+                                  /// ------------------- CONSTRUCTION MARKETPLACE -------------------
+                                  final serviceList = controller
+                                      .categoryHierarchyDataCM
+                                      .value
+                                      .data;
+
+                                  if (serviceList == null ||
+                                      serviceList.isEmpty) {
+                                    return _buildComingSoon(context);
+                                  }
+
+                                  return _buildServiceList(
+                                    context,
+                                    serviceList,
+                                  );
+                                } else {
+                                  /// ------------------- TOOLS MARKETPLACE -------------------
+                                  final toolsList = controller
+                                      .categoryHierarchyData2
+                                      .value
+                                      .data;
+
+                                  if (toolsList == null || toolsList.isEmpty) {
+                                    return _buildComingSoon(context);
+                                  }
+
+                                  return _buildToolsList(context, toolsList);
                                 }
-
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: selectedCategoryData.length,
-                                  itemBuilder: (context, mainIndex) {
-                                    final mainCategory =
-                                        selectedCategoryData[mainIndex];
-
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            if (controller.marketPlace.value ==
-                                                0) {
-                                              if (myPref.role.val ==
-                                                  "connector") {
-                                                if ((controller
-                                                            .profileData
-                                                            .value
-                                                            .data
-                                                            ?.siteLocations ??
-                                                        [])
-                                                    .isNotEmpty) {
-                                                  Get.toNamed(
-                                                    Routes.SELECT_PRODUCT,
-                                                    arguments: {
-                                                      "mainCategoryId":
-                                                          mainCategory.id ?? 0,
-                                                      "mainCategoryName":
-                                                          mainCategory.name ??
-                                                          '',
-                                                    },
-                                                  );
-                                                } else {
-                                                  _showAddAddressDialog();
-                                                }
-                                              } else {
-                                                Get.toNamed(
-                                                  Routes.SELECT_PRODUCT,
-                                                  arguments: {
-                                                    "mainCategoryId":
-                                                        mainCategory.id ?? 0,
-                                                    "mainCategoryName":
-                                                        mainCategory.name ?? '',
-                                                  },
-                                                );
-                                              }
-                                            } else if (controller
-                                                    .marketPlace
-                                                    .value ==
-                                                1) {
-                                              if (myPref.role.val ==
-                                                  "connector") {
-                                                if ((controller
-                                                            .profileData
-                                                            .value
-                                                            .data
-                                                            ?.siteLocations ??
-                                                        [])
-                                                    .isNotEmpty) {
-                                                  Get.toNamed(
-                                                    Routes.SELECT_PRODUCT,
-                                                    arguments: {
-                                                      "mainCategoryId":
-                                                          mainCategory.id ?? 0,
-                                                      "mainCategoryName":
-                                                          mainCategory.name ??
-                                                          '',
-                                                    },
-                                                  );
-                                                } else {
-                                                  _showAddAddressDialog();
-                                                }
-                                              } else {
-                                                Get.toNamed(
-                                                  Routes.SELECT_PRODUCT,
-                                                  arguments: {
-                                                    "mainCategoryId":
-                                                        mainCategory.id ?? 0,
-                                                    "mainCategoryName":
-                                                        mainCategory.name ?? '',
-                                                  },
-                                                );
-                                              }
-                                            } else {}
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                '${mainCategory.name ?? ''}  ',
-                                                style: MyTexts.bold18,
-                                              ),
-                                              const Icon(
-                                                Icons.arrow_forward_ios,
-                                                size: 20,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: 2.h),
-
-                                        // Subcategory Grid
-                                        if (mainCategory.subCategories !=
-                                                null &&
-                                            mainCategory
-                                                .subCategories!
-                                                .isNotEmpty)
-                                          GridView.builder(
-                                            padding: EdgeInsets.zero,
-                                            shrinkWrap: true,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 3,
-                                                  crossAxisSpacing: 12,
-                                                  mainAxisSpacing: 6,
-                                                  childAspectRatio: 0.8,
-                                                ),
-                                            itemCount: mainCategory
-                                                .subCategories!
-                                                .length,
-                                            itemBuilder: (context, subIndex) {
-                                              final subCategory = mainCategory
-                                                  .subCategories![subIndex];
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  if (controller
-                                                          .marketPlace
-                                                          .value ==
-                                                      0) {
-                                                    if (myPref.role.val ==
-                                                        "connector") {
-                                                      if ((controller
-                                                                  .profileData
-                                                                  .value
-                                                                  .data
-                                                                  ?.siteLocations ??
-                                                              [])
-                                                          .isNotEmpty) {
-                                                        Get.toNamed(
-                                                          Routes.SELECT_PRODUCT,
-                                                          arguments: {
-                                                            "selectedSubCategoryId":
-                                                                subCategory
-                                                                    .id ??
-                                                                0,
-                                                            "mainCategoryId":
-                                                                mainCategory
-                                                                    .id ??
-                                                                0,
-                                                            "mainCategoryName":
-                                                                mainCategory
-                                                                    .name ??
-                                                                '',
-                                                          },
-                                                        );
-                                                      } else {
-                                                        _showAddAddressDialog();
-                                                      }
-                                                    } else {
-                                                      Get.toNamed(
-                                                        Routes.SELECT_PRODUCT,
-                                                        arguments: {
-                                                          "selectedSubCategoryId":
-                                                              subCategory.id ??
-                                                              0,
-                                                          "mainCategoryId":
-                                                              mainCategory.id ??
-                                                              0,
-                                                          "mainCategoryName":
-                                                              mainCategory
-                                                                  .name ??
-                                                              '',
-                                                        },
-                                                      );
-                                                    }
-                                                  } else if (controller
-                                                          .marketPlace
-                                                          .value ==
-                                                      1) {
-                                                    if (myPref.role.val ==
-                                                        "connector") {
-                                                      if ((controller
-                                                                  .profileData
-                                                                  .value
-                                                                  .data
-                                                                  ?.siteLocations ??
-                                                              [])
-                                                          .isNotEmpty) {
-                                                        Get.toNamed(
-                                                          Routes.SELECT_PRODUCT,
-                                                          arguments: {
-                                                            "selectedSubCategoryId":
-                                                                subCategory
-                                                                    .id ??
-                                                                0,
-                                                            "mainCategoryId":
-                                                                mainCategory
-                                                                    .id ??
-                                                                0,
-                                                            "mainCategoryName":
-                                                                mainCategory
-                                                                    .name ??
-                                                                '',
-                                                          },
-                                                        );
-                                                      } else {
-                                                        _showAddAddressDialog();
-                                                      }
-                                                    } else {
-                                                      Get.toNamed(
-                                                        Routes.SELECT_PRODUCT,
-                                                        arguments: {
-                                                          "selectedSubCategoryId":
-                                                              subCategory.id ??
-                                                              0,
-                                                          "mainCategoryId":
-                                                              mainCategory.id ??
-                                                              0,
-                                                          "mainCategoryName":
-                                                              mainCategory
-                                                                  .name ??
-                                                              '',
-                                                        },
-                                                      );
-                                                    }
-                                                  } else {}
-                                                },
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                8,
-                                                              ),
-                                                          gradient: LinearGradient(
-                                                            end: Alignment
-                                                                .bottomCenter,
-                                                            begin: Alignment
-                                                                .topCenter,
-                                                            colors: [
-                                                              MyColors.custom(
-                                                                'EAEAEA',
-                                                              ).withValues(
-                                                                alpha: 0,
-                                                              ),
-                                                              MyColors.custom(
-                                                                'EAEAEA',
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets.symmetric(
-                                                                horizontal:
-                                                                    10.0,
-                                                              ),
-                                                          child: CachedNetworkImage(
-                                                            imageUrl:
-                                                                APIConstants
-                                                                    .bucketUrl +
-                                                                (subCategory
-                                                                        .image ??
-                                                                    ''),
-                                                            fit: BoxFit.fill,
-                                                            placeholder:
-                                                                (
-                                                                  context,
-                                                                  url,
-                                                                ) => const Center(
-                                                                  child:
-                                                                      CircularProgressIndicator(),
-                                                                ),
-                                                            errorWidget:
-                                                                (
-                                                                  context,
-                                                                  url,
-                                                                  error,
-                                                                ) => const Icon(
-                                                                  Icons
-                                                                      .category,
-                                                                  color: MyColors
-                                                                      .primary,
-                                                                  size: 24,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              horizontal: 4,
-                                                            ),
-                                                        child: Text(
-                                                          subCategory.name ??
-                                                              '',
-                                                          style:
-                                                              MyTexts.medium14,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        SizedBox(height: 2.h),
-                                      ],
-                                    );
-                                  },
-                                );
                               }),
                             ],
                           ),
@@ -491,6 +152,186 @@ class HomeView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildComingSoon(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 3.5),
+        child: const Text("Coming soon"),
+      ),
+    );
+  }
+
+  /// ============================
+  /// MATERIAL MARKETPLACE VIEW
+  /// ============================
+  Widget _buildMaterialList(BuildContext context, List<dynamic> data) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: data.length,
+      itemBuilder: (context, mainIndex) {
+        final mainCategory = data[mainIndex];
+
+        return _buildCategorySection(
+          context,
+          mainCategory,
+          route: Routes.SELECT_PRODUCT,
+        );
+      },
+    );
+  }
+
+  /// ============================
+  /// CONSTRUCTION MARKETPLACE VIEW
+  /// ============================
+  Widget _buildServiceList(BuildContext context, List<dynamic> data) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: data.length,
+      itemBuilder: (context, mainIndex) {
+        final mainCategory = data[mainIndex];
+        return _buildCategorySection(
+          context,
+          mainCategory,
+          route: Routes.SELECT_SERVICE,
+        );
+      },
+    );
+  }
+
+  /// ============================
+  /// TOOLS & EQUIPMENT MARKETPLACE VIEW
+  /// ============================
+  Widget _buildToolsList(BuildContext context, List<dynamic> data) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: data.length,
+      itemBuilder: (context, mainIndex) {
+        final mainCategory = data[mainIndex];
+        return _buildCategorySection(
+          context,
+          mainCategory,
+          route: Routes.SEARCH_SERVICE, // create this route if not already
+        );
+      },
+    );
+  }
+
+  /// ============================
+  /// COMMON CATEGORY SECTION BUILDER
+  /// ============================
+  Widget _buildCategorySection(
+    BuildContext context,
+    dynamic mainCategory, {
+    required String route,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (myPref.role.val == "connector") {
+              if ((controller.profileData.value.data?.siteLocations ?? [])
+                  .isEmpty) {
+                _showAddAddressDialog();
+                return;
+              }
+            }
+
+            Get.toNamed(
+              route,
+              arguments: {
+                "mainCategoryId": mainCategory.id ?? 0,
+                "mainCategoryName": mainCategory.name ?? '',
+              },
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(mainCategory.name ?? '', style: MyTexts.bold18),
+              const Icon(Icons.arrow_forward_ios, size: 20),
+            ],
+          ),
+        ),
+        SizedBox(height: 2.h),
+
+        if (mainCategory.subCategories != null)
+          GridView.builder(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 6,
+              childAspectRatio: 0.8,
+            ),
+            itemCount: mainCategory.subCategories!.length,
+            itemBuilder: (context, subIndex) {
+              final subCategory = mainCategory.subCategories![subIndex];
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 24.0),
+                child: GestureDetector(
+                  onTap: () {
+                    if (myPref.role.val == "connector") {
+                      if ((controller.profileData.value.data?.siteLocations ?? [])
+                          .isEmpty) {
+                        _showAddAddressDialog();
+                        return;
+                      }
+                    }
+
+                    Get.toNamed(
+                      route,
+                      arguments: {
+                        "selectedSubCategoryId": subCategory.id ?? 0,
+                        "mainCategoryId": mainCategory.id ?? 0,
+                        "mainCategoryName": mainCategory.name ?? '',
+                      },
+                    );
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                APIConstants.bucketUrl +
+                                (subCategory.image ??
+                                    'category-images/FineAggregate.png'),
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) =>
+                                const Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.category,
+                              color: MyColors.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        subCategory.name ?? '',
+                        style: MyTexts.medium14,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        SizedBox(height: 2.h),
+      ],
     );
   }
 
@@ -688,13 +529,13 @@ class HomeView extends StatelessWidget {
 }
 
 class StaticsCard extends StatefulWidget {
-  final String? icon;
-  final String? title;
-  final String? value;
-  final Color? color;
-  final Color? bColor;
+  String? icon;
+  String? title;
+  String? value;
+  Color? color;
+  Color? bColor;
 
-  const StaticsCard({
+  StaticsCard({
     super.key,
     this.icon,
     this.title,
@@ -753,20 +594,15 @@ class _StaticsCardState extends State<StaticsCard> {
   }
 }
 
-class HeaderText extends StatefulWidget {
-  final String text;
+class HeaderText extends StatelessWidget {
+  String text;
 
-  const HeaderText({super.key, required this.text});
+  HeaderText({super.key, required this.text});
 
-  @override
-  State<HeaderText> createState() => _HeaderTextState();
-}
-
-class _HeaderTextState extends State<HeaderText> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      widget.text,
+      text,
       style: MyTexts.medium17.copyWith(
         color: MyColors.black,
         fontFamily: MyTexts.SpaceGrotesk,

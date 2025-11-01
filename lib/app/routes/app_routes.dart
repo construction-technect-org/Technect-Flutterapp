@@ -57,6 +57,7 @@ abstract class Routes {
   static const WISH_LIST = _Paths.WISH_LIST;
   static const ON_BOARDING = _Paths.ON_BOARDING;
   static const SELECT_PRODUCT = _Paths.SELECT_PRODUCT;
+  static const SELECT_SERVICE = _Paths.SELECT_SERVICE;
   static const REQUEST_DEMO = _Paths.REQUEST_DEMO;
   static const CONNECTOR_SUPPORT_REQUEST = _Paths.CONNECTOR_SUPPORT_REQUEST;
   static const CONNECTOR_CREATE_NEW_TICKET = _Paths.CONNECTOR_CREATE_NEW_TICKET;
@@ -75,6 +76,7 @@ abstract class Routes {
   static const MANUFACTURER_ADDRESS = _Paths.MANUFACTURER_ADDRESS;
   static const ADD_MANUFACTURER_ADDRESS = _Paths.ADD_MANUFACTURER_ADDRESS;
   static const SEARCH_PRODUCT = _Paths.SEARCH_PRODUCT;
+  static const SEARCH_SERVICE = _Paths.SEARCH_SERVICE;
   static const OTP_Verification = _Paths.OTP_VERIFICATION_SCREEN;
   static const ADD_REQUIREMENT = _Paths.ADD_REQUIREMENT;
   static const REQUIREMENT = _Paths.REQUIREMENT;
@@ -125,6 +127,7 @@ abstract class _Paths {
   static const NOTIFICATIONS = '/notifications';
   static const REQUEST_DEMO = '/request-demo';
   static const SELECT_PRODUCT = '/select-product';
+  static const SELECT_SERVICE = '/select-service';
 
   // Connector
   static const CONNECTOR_MAIN_TAB = '/connector-bottom-tab';
@@ -155,6 +158,7 @@ abstract class _Paths {
   static const MANUFACTURER_ADDRESS = '/manufacturer-address';
   static const ADD_MANUFACTURER_ADDRESS = '/add-manufacturer-address';
   static const SEARCH_PRODUCT = '/search-product';
+  static const SEARCH_SERVICE = '/search-service';
   static const ADD_REQUIREMENT = '/connector-add-requirement';
   static const REQUIREMENT = '/requirement';
 }

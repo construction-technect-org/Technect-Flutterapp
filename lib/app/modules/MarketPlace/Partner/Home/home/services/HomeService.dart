@@ -5,6 +5,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 
 class HomeService {
   final ApiManager _apiManager = ApiManager();
@@ -55,6 +56,15 @@ class HomeService {
     try {
       final response = await _apiManager.get(url: 'merchant/hierarchy');
       return CategoryModel.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ServiceCategoryModel> getCategoryServiceHierarchy() async {
+    try {
+      final response = await _apiManager.get(url: 'service-categories/hierarchy');
+      return ServiceCategoryModel.fromJson(response);
     } catch (e) {
       rethrow;
     }

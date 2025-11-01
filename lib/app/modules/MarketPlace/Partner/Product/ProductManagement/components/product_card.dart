@@ -1,6 +1,6 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:construction_technect/app/core/utils/imports.dart';
-// import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
+// import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/construction_service_controller.dart';
 // import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 // import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 // import 'package:flutter/cupertino.dart';

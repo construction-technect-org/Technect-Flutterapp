@@ -94,7 +94,7 @@ class SettingView extends GetView<SettingController> {
                       ),
                     ),
                     const Gap(24),
-                    const HeaderText(text: "Account"),
+                     HeaderText(text: "Account"),
                     const Gap(16),
                     _buildSettingAction(
                       context,
@@ -165,7 +165,7 @@ class SettingView extends GetView<SettingController> {
                         children: [
                           const Divider(),
                           const Gap(5),
-                          const HeaderText(text: "Theme"),
+                           HeaderText(text: "Theme"),
                           const Gap(3),
                           Row(
                             children: [

@@ -138,7 +138,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(12),
-                          const HeaderText(text: "Statistics"),
+                           HeaderText(text: "Statistics"),
                           const Gap(24),
                           Obx(() {
                             return IntrinsicHeight(
@@ -200,7 +200,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                             );
                           }),
                           const Gap(32),
-                          const HeaderText(text: "Inbox"),
+                           HeaderText(text: "Inbox"),
                           Obx(() {
                             final list = controller.filteredInbox;
                             if (list.isEmpty) {
