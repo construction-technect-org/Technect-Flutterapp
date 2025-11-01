@@ -16,6 +16,7 @@ class CommonPhoneField extends StatelessWidget {
   final Color? bgColor;
   final double? borderRadius;
   final Widget? suffix;
+  final RxString? customErrorMessage;
 
   const CommonPhoneField({
     super.key,
@@ -30,6 +31,7 @@ class CommonPhoneField extends StatelessWidget {
     this.showDivider = false,
     this.bgColor,
     this.borderRadius,
+    this.customErrorMessage,
   });
 
   @override
@@ -166,6 +168,10 @@ class CommonPhoneField extends StatelessWidget {
                 isValid.value = 0;
               } else {
                 isValid.value = -1;
+                // Clear custom error message when user types
+                if (customErrorMessage?.value.isNotEmpty == true) {
+                  customErrorMessage!.value = "";
+                }
               }
               if (onCountryCodeChanged != null) {
                 onCountryCodeChanged!(phone.countryCode);
@@ -178,7 +184,9 @@ class CommonPhoneField extends StatelessWidget {
               child: Text(
                 isValid.value == 0
                     ? "Please enter your phone number"
-                    : "Invalid mobile number",
+                    : (customErrorMessage?.value.isNotEmpty == true
+                          ? customErrorMessage!.value
+                          : "Invalid mobile number"),
                 style: MyTexts.medium13.copyWith(
                   color: MyColors.red33,
                   fontFamily: MyTexts.SpaceGrotesk,

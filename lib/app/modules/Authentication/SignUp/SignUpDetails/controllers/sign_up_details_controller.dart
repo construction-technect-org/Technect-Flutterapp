@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
+import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
@@ -27,6 +28,7 @@ class SignUpDetailsController extends GetxController {
 
   RxInt isValid = (-1).obs;
   RxString countryCode = "".obs;
+  final RxString mobileValidationError = "".obs;
 
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
@@ -236,6 +238,7 @@ class SignUpDetailsController extends GetxController {
   void openPhoneNumberBottomSheet() {
     final formKey = GlobalKey<FormState>();
     isValid.value = -1;
+    mobileValidationError.value = "";
 
     Get.bottomSheet(
       Padding(
@@ -267,6 +270,7 @@ class SignUpDetailsController extends GetxController {
                 controller: mobileNumberController,
                 focusNode: FocusNode(),
                 isValid: isValid,
+                customErrorMessage: mobileValidationError,
                 onCountryCodeChanged: (code) {
                   countryCode.value = code;
                 },
@@ -275,11 +279,26 @@ class SignUpDetailsController extends GetxController {
               RoundedButton(
                 buttonName: "Continue",
                 onTap: () async {
+                  // Clear previous errors
                   isValid.value = -1;
-                  if (mobileNumberController.text.isEmpty) {
+                  mobileValidationError.value = "";
+
+                  // Validate mobile number
+                  final mobileNumber = mobileNumberController.text.trim();
+                  if (mobileNumber.isEmpty) {
                     isValid.value = 0;
                     return;
                   }
+
+                  final mobileError = ValidationUtils.validateMobileNumber(
+                    mobileNumber,
+                  );
+                  if (mobileError != null) {
+                    mobileValidationError.value = mobileError;
+                    isValid.value = 1;
+                    return;
+                  }
+
                   if (formKey.currentState!.validate()) {
                     hideKeyboard();
 
