@@ -6,11 +6,11 @@ import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 
-class PointOfContentScreen extends StatelessWidget {
-  PointOfContentScreen({super.key});
+class ConnectorTeamMemberScreen extends StatelessWidget {
+  ConnectorTeamMemberScreen({super.key});
 
-  final eController = Get.put<PointOfContactController>(
-    PointOfContactController(),
+  final eController = Get.put<ConnectorTeamMemberController>(
+    ConnectorTeamMemberController(),
   );
   final formKey = GlobalKey<FormState>();
 
@@ -38,7 +38,7 @@ class PointOfContentScreen extends StatelessWidget {
                 children: [
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
-                    title: const Text('Point of contact'),
+                    title: const Text('Members'),
                     isCenter: false,
                     leading: GestureDetector(
                       onTap: () {
@@ -65,45 +65,43 @@ class PointOfContentScreen extends StatelessWidget {
                             children: [
                               const Gap(16),
                               CommonTextField(
-                                hintText: "Enter your first name",
-                                headerText: "First Name",
-                                controller: eController.fNameController,
-                                autofillHints: const [AutofillHints.givenName],
+                                hintText: "Enter name",
+                                headerText: "Name",
+                                controller: eController.nameController,
+                                autofillHints: const [AutofillHints.name],
                                 inputFormatters: [
                                   LengthLimitingTextInputFormatter(30),
                                   NameInputFormatter(),
                                 ],
-                                validator: (value) => validateName(
-                                  value,
-                                  fieldName: "first name",
-                                ),
+                                validator: (value) =>
+                                    validateName(value, fieldName: "name"),
                               ),
                               Gap(2.h),
                               CommonTextField(
-                                hintText: "Enter your designation",
-                                headerText: "Designation",
-                                controller: eController.designationController,
+                                hintText: "Enter number of members",
+                                headerText: "Number of Members",
+                                controller:
+                                    eController.numberOfMembersController,
+                                keyboardType: TextInputType.number,
                                 inputFormatters: [
-                                  LengthLimitingTextInputFormatter(30),
-                                  NameInputFormatter(),
+                                  FilteringTextInputFormatter.digitsOnly,
                                 ],
-                                validator: (value) => validateName(
-                                  value,
-                                  fieldName: "designation",
-                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Number of members is required";
+                                  }
+                                  final number = int.tryParse(value);
+                                  if (number == null || number <= 0) {
+                                    return "Enter a valid number";
+                                  }
+                                  return null;
+                                },
                               ),
                               Gap(2.h),
-                              CommonTextField(
-                                hintText: "Enter your email address",
-                                headerText: "Email",
-                                controller: eController.emailController,
-                              ),
-                              Gap(2.h),
-
                               CommonTextField(
                                 hintText: "9292929929",
-                                headerText: "Business Contact Number",
-                                controller: eController.numberController,
+                                headerText: "Phone Number",
+                                controller: eController.phoneNumberController,
                                 keyboardType: TextInputType.phone,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
@@ -111,20 +109,6 @@ class PointOfContentScreen extends StatelessWidget {
                                 ],
                                 validator: ValidationUtils
                                     .validateBusinessContactNumber,
-                              ),
-                              Gap(2.h),
-
-                              CommonTextField(
-                                hintText: "9292929929",
-                                headerText:
-                                    "Alternative Contact Number (Optional)",
-                                controller:
-                                    eController.alternativeNumberController,
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(10),
-                                ],
                               ),
                               Gap(2.h),
                             ],
@@ -143,7 +127,7 @@ class PointOfContentScreen extends StatelessWidget {
               buttonName: "Save",
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  eController.updatePointOfContact();
+                  eController.updateTeamMember();
                 }
               },
             ),
@@ -154,43 +138,38 @@ class PointOfContentScreen extends StatelessWidget {
   }
 }
 
-class PointOfContactController extends GetxController {
-  final fNameController = TextEditingController();
-  final emailController = TextEditingController();
-  final designationController = TextEditingController();
-  final numberController = TextEditingController();
-  final alternativeNumberController = TextEditingController();
+class ConnectorTeamMemberController extends GetxController {
+  final nameController = TextEditingController();
+  final numberOfMembersController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final HomeController homeController = Get.find<HomeController>();
+
   @override
   void onInit() {
     super.onInit();
-    final pointOfContact =
-        homeController.profileData.value.data?.merchantProfile?.pointOfContact;
-    fNameController.text = pointOfContact?.name ?? "";
-    emailController.text = pointOfContact?.email ?? "";
-    designationController.text = pointOfContact?.relation ?? "";
-    numberController.text = pointOfContact?.phoneNumber ?? "";
-    alternativeNumberController.text =
-        pointOfContact?.alternativePhoneNumber ?? "";
+    final teamMembers =
+        homeController.profileData.value.data?.connectorProfile?.teamMembers;
+    nameController.text = teamMembers?.name ?? "";
+    numberOfMembersController.text =
+        teamMembers?.numberOfMembers?.toString() ?? "";
+    phoneNumberController.text = teamMembers?.phoneNumber ?? "";
   }
 
   ApiManager apiManager = ApiManager();
   RxBool isLoading = false.obs;
 
-  Future<void> updatePointOfContact() async {
+  Future<void> updateTeamMember() async {
     isLoading.value = true;
 
     try {
       final Map<String, dynamic> requestBody = {
-        'name': fNameController.text.trim(),
-        'relation': designationController.text.trim(),
-        'phone_number': numberController.text.trim(),
-        'alternative_phone_number': alternativeNumberController.text.trim(),
-        'email': emailController.text.trim(),
+        'name': nameController.text.trim(),
+        'number_of_members': int.parse(numberOfMembersController.text.trim()),
+        'phone_number': phoneNumberController.text.trim(),
       };
 
       await apiManager.postObject(
-        url: APIConstants.pointOfContactMerchant,
+        url: APIConstants.connectorTeamMember,
         body: requestBody,
       );
 
@@ -203,5 +182,13 @@ class PointOfContactController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    nameController.dispose();
+    numberOfMembersController.dispose();
+    phoneNumberController.dispose();
+    super.onClose();
   }
 }

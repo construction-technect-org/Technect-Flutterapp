@@ -10,7 +10,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:gap/gap.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  const ProfileView({super.key});
+  final HomeController homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -225,21 +225,20 @@ class ProfileView extends GetView<ProfileController> {
         content = const InfoMetricsComponent();
       } else if (index == 1) {
         content = const CertificationsComponent(isDelete: true);
-      }
-      else {
-        content =  Metrics();
+      } else {
+        content = Metrics();
       }
 
       return SingleChildScrollView(child: content);
     });
   }
-
 }
 
 class Metrics extends StatelessWidget {
-   Metrics({super.key});
+  Metrics({super.key});
 
   final controller = Get.find<ProfileController>();
+  final HomeController homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -257,8 +256,8 @@ class Metrics extends StatelessWidget {
             ),
             const Spacer(),
             GestureDetector(
-              onTap: ()  {
-                Get.to(()=>PointOfContentScreen());
+              onTap: () {
+                Get.to(() => PointOfContentScreen());
               },
               behavior: HitTestBehavior.translucent,
               child: Padding(
@@ -294,12 +293,10 @@ class Metrics extends StatelessWidget {
           ],
         ),
         Obx(() {
-          if (Get.find<HomeController>().teamList.isEmpty) {
+          if (homeController.teamList.isEmpty) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 50,
-                ),
+                padding: const EdgeInsets.only(top: 50),
                 child: Text(
                   'No team members found',
                   style: MyTexts.medium15.copyWith(color: MyColors.gra54),
@@ -311,9 +308,9 @@ class Metrics extends StatelessWidget {
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: Get.find<HomeController>().teamList.length,
+            itemCount: homeController.teamList.length,
             itemBuilder: (context, index) {
-              final team = Get.find<HomeController>().teamList[index];
+              final team = homeController.teamList[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: _buildTeamCard(team, context),
@@ -327,10 +324,16 @@ class Metrics extends StatelessWidget {
 
   Widget _buildPointOfViewContent() {
     return Obx(() {
-      if ((controller.businessModel.value.gstinNumber ?? "").isEmpty) {
+      final pointOfContact = homeController
+          .profileData
+          .value
+          .data
+          ?.merchantProfile
+          ?.pointOfContact;
+      if (pointOfContact?.name?.isEmpty ?? true) {
         return GestureDetector(
           onTap: () {
-            Get.toNamed(Routes.EDIT_PROFILE);
+            Get.to(() => PointOfContentScreen());
           },
           child: Container(
             width: double.infinity,
@@ -360,54 +363,24 @@ class Metrics extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              Obx(() {
-                return buildRow(
-                  title: "Name",
-                  data:
-                  (controller.businessModel.value.businessName ??
-                      "")
-                      .isEmpty
-                      ? "-"
-                      : controller.businessModel.value.businessName,
-                );
-              }),
+              buildRow(title: "Name", data: pointOfContact?.name ?? "-"),
               const Gap(6),
-              Obx(() {
-                return buildRow(
-                  title: "Designation",
-                  data: (controller.businessModel.value.website ?? "").isEmpty
-                      ? "-"
-                      : controller.businessModel.value.website,
-                );
-              }),
+              buildRow(
+                title: "Designation",
+                data: pointOfContact?.relation ?? "-",
+              ),
               const Gap(6),
-              Obx(() {
-                return buildRow(
-                  title: "Phone number",
-                  data: (controller.businessModel.value.businessContactNumber ?? "").isEmpty
-                      ? "-"
-                      : controller.businessModel.value.businessContactNumber,
-                );
-              }),
+              buildRow(
+                title: "Phone number",
+                data: pointOfContact?.phoneNumber ?? "-",
+              ),
               const Gap(6),
-              Obx(() {
-                return buildRow(
-                  title: "Alternative number",
-                  data: (controller.businessModel.value.businessContactNumber ?? "").isEmpty
-                      ? "-"
-                      : controller.businessModel.value.businessContactNumber,
-                );
-              }),
+              buildRow(
+                title: "Alternative number",
+                data: pointOfContact?.alternativePhoneNumber ?? "-",
+              ),
               const Gap(6),
-              Obx(() {
-                return buildRow(
-                  title: "Email id",
-                  data: (controller.businessModel.value.businessEmail ?? "").isEmpty
-                      ? "-"
-                      : controller.businessModel.value.businessEmail,
-                );
-              }),
+              buildRow(title: "Email id", data: pointOfContact?.email ?? "-"),
               const Gap(6),
             ],
           ),
@@ -415,24 +388,25 @@ class Metrics extends StatelessWidget {
       }
     });
   }
-   Widget buildRow({String? data, required String title}) {
-     return Row(
-       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-       crossAxisAlignment: CrossAxisAlignment.start,
-       children: [
-         Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
-         const SizedBox(width: 20),
-         Flexible(
-           child: Text(
-             data ?? "",
-             textAlign: TextAlign.right,
-             overflow: TextOverflow.ellipsis,
-             style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-           ),
-         ),
-       ],
-     );
-   }
+
+  Widget buildRow({String? data, required String title}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
+        const SizedBox(width: 20),
+        Flexible(
+          child: Text(
+            data ?? "",
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+            style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildTeamCard(TeamListData user, BuildContext context) {
     return Container(

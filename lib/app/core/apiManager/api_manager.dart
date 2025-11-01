@@ -56,7 +56,9 @@ class ApiManager {
     try {
       // Build full URL with query parameters
       final uri = Uri.parse(baseUrl + url).replace(
-        queryParameters: params?.map((key, value) => MapEntry(key, value.toString())),
+        queryParameters: params?.map(
+          (key, value) => MapEntry(key, value.toString()),
+        ),
       );
 
       final headers = {
@@ -172,6 +174,7 @@ class ApiManager {
       throw FetchDataException('Unexpected error: $e');
     }
   }
+
   Future<dynamic> putObject({required String url, required Object body}) async {
     try {
       final headers = {
@@ -418,6 +421,7 @@ class ApiManager {
       throw FetchDataException('Unexpected error: $e');
     }
   }
+
   Future<dynamic> deleteObject({
     required String url,
     required Object body,
@@ -534,6 +538,11 @@ class ApiManager {
           ErrorModel.fromJson(json.decode(responseString)).message ??
               'Conflict Error',
         );
+      case 502:
+        SnackBars.errorSnackBar(
+          content: 'Server is down. Please try again later.',
+        );
+        throw BadRequestException('Server is down. Please try again later.');
 
       case 500:
       default:

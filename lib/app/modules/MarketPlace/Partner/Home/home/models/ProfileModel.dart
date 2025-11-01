@@ -30,7 +30,7 @@ class Data {
     this.referral,
     this.siteLocations,
     this.addresses,
-    this.statistics
+    this.statistics,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -57,7 +57,6 @@ class Data {
     statistics: json["statistics"] == null
         ? null
         : StatisticsMC.fromJson(json["statistics"]),
-
   );
 
   Map<String, dynamic> toJson() => {
@@ -72,7 +71,6 @@ class Data {
         ? []
         : List<dynamic>.from(addresses!.map((x) => x.toJson())),
     "statistics": statistics?.toJson(),
-
   };
 }
 
@@ -154,6 +152,7 @@ class MerchantProfile {
   String? memberSince;
   List<BusinessHours>? businessHours;
   List<Documents>? documents;
+  PointOfContact? pointOfContact;
   String? createdAt;
   String? updatedAt;
 
@@ -180,6 +179,7 @@ class MerchantProfile {
     this.memberSince,
     this.businessHours,
     this.documents,
+    this.pointOfContact,
     this.createdAt,
     this.updatedAt,
   });
@@ -198,7 +198,8 @@ class MerchantProfile {
         projectsCompleted: json["projectsCompleted"],
         profileCompletionPercentage: json["profileCompletionPercentage"],
         isProfileComplete: json["isProfileComplete"],
-        alternativeBusinessContactNumber: json["alternativeBusinessContactNumber"],
+        alternativeBusinessContactNumber:
+            json["alternativeBusinessContactNumber"],
         identityVerified: json["identityVerified"],
         businessLicense: json["businessLicense"],
         qualityAssurance: json["qualityAssurance"],
@@ -218,6 +219,9 @@ class MerchantProfile {
             : List<Documents>.from(
                 json["documents"]!.map((x) => Documents.fromJson(x)),
               ),
+        pointOfContact: json["pointOfContact"] == null
+            ? null
+            : PointOfContact.fromJson(json["pointOfContact"]),
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
       );
@@ -249,6 +253,7 @@ class MerchantProfile {
     "documents": documents == null
         ? []
         : List<dynamic>.from(documents!.map((x) => x.toJson())),
+    "pointOfContact": pointOfContact?.toJson(),
     "createdAt": createdAt,
     "updatedAt": updatedAt,
   };
@@ -326,6 +331,8 @@ class ConnectorProfile {
   String? marketplaceTier;
   String? memberSince;
   List<Documents>? documents;
+  PointOfContact? pointOfContact;
+  TeamMember? teamMembers;
   String? createdAt;
   String? updatedAt;
 
@@ -340,6 +347,8 @@ class ConnectorProfile {
     this.marketplaceTier,
     this.memberSince,
     this.documents,
+    this.pointOfContact,
+    this.teamMembers,
     this.createdAt,
     this.updatedAt,
   });
@@ -360,6 +369,12 @@ class ConnectorProfile {
         documents!.add(Documents.fromJson(v));
       });
     }
+    pointOfContact = json['pointOfContact'] == null
+        ? null
+        : PointOfContact.fromJson(json['pointOfContact']);
+    teamMembers = json['teamMembers'] == null
+        ? null
+        : TeamMember.fromJson(json['teamMembers']);
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -377,6 +392,12 @@ class ConnectorProfile {
     data['memberSince'] = memberSince;
     if (documents != null) {
       data['documents'] = documents!.map((v) => v.toJson()).toList();
+    }
+    if (pointOfContact != null) {
+      data['pointOfContact'] = pointOfContact!.toJson();
+    }
+    if (teamMembers != null) {
+      data['teamMembers'] = teamMembers!.toJson();
     }
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
@@ -602,5 +623,85 @@ class StatisticsMC {
   Map<String, dynamic> toJson() => {
     "totalMerchantProfilesCreated": totalMerchantProfilesCreated,
     "totalConnectorProfilesCreated": totalConnectorProfilesCreated,
+  };
+}
+
+class PointOfContact {
+  int? id;
+  String? name;
+  String? relation;
+  String? phoneNumber;
+  String? alternativePhoneNumber;
+  String? email;
+  String? createdAt;
+  String? updatedAt;
+
+  PointOfContact({
+    this.id,
+    this.name,
+    this.relation,
+    this.phoneNumber,
+    this.alternativePhoneNumber,
+    this.email,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory PointOfContact.fromJson(Map<String, dynamic> json) => PointOfContact(
+    id: json["id"],
+    name: json["name"],
+    relation: json["relation"],
+    phoneNumber: json["phoneNumber"],
+    alternativePhoneNumber: json["alternativePhoneNumber"],
+    email: json["email"],
+    createdAt: json["createdAt"],
+    updatedAt: json["updatedAt"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "relation": relation,
+    "phoneNumber": phoneNumber,
+    "alternativePhoneNumber": alternativePhoneNumber,
+    "email": email,
+    "createdAt": createdAt,
+    "updatedAt": updatedAt,
+  };
+}
+
+class TeamMember {
+  int? id;
+  int? numberOfMembers;
+  String? name;
+  String? phoneNumber;
+  String? createdAt;
+  String? updatedAt;
+
+  TeamMember({
+    this.id,
+    this.numberOfMembers,
+    this.name,
+    this.phoneNumber,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory TeamMember.fromJson(Map<String, dynamic> json) => TeamMember(
+    id: json["id"],
+    numberOfMembers: json["numberOfMembers"],
+    name: json["name"],
+    phoneNumber: json["phoneNumber"],
+    createdAt: json["createdAt"],
+    updatedAt: json["updatedAt"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "numberOfMembers": numberOfMembers,
+    "name": name,
+    "phoneNumber": phoneNumber,
+    "createdAt": createdAt,
+    "updatedAt": updatedAt,
   };
 }

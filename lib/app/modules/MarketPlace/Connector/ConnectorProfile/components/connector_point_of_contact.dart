@@ -6,11 +6,11 @@ import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 
-class PointOfContentScreen extends StatelessWidget {
-  PointOfContentScreen({super.key});
+class ConnectorPointOfContactScreen extends StatelessWidget {
+  ConnectorPointOfContactScreen({super.key});
 
-  final eController = Get.put<PointOfContactController>(
-    PointOfContactController(),
+  final eController = Get.put<ConnectorPointOfContactController>(
+    ConnectorPointOfContactController(),
   );
   final formKey = GlobalKey<FormState>();
 
@@ -99,7 +99,6 @@ class PointOfContentScreen extends StatelessWidget {
                                 controller: eController.emailController,
                               ),
                               Gap(2.h),
-
                               CommonTextField(
                                 hintText: "9292929929",
                                 headerText: "Business Contact Number",
@@ -113,7 +112,6 @@ class PointOfContentScreen extends StatelessWidget {
                                     .validateBusinessContactNumber,
                               ),
                               Gap(2.h),
-
                               CommonTextField(
                                 hintText: "9292929929",
                                 headerText:
@@ -154,18 +152,19 @@ class PointOfContentScreen extends StatelessWidget {
   }
 }
 
-class PointOfContactController extends GetxController {
+class ConnectorPointOfContactController extends GetxController {
   final fNameController = TextEditingController();
   final emailController = TextEditingController();
   final designationController = TextEditingController();
   final numberController = TextEditingController();
   final alternativeNumberController = TextEditingController();
   final HomeController homeController = Get.find<HomeController>();
+
   @override
   void onInit() {
     super.onInit();
     final pointOfContact =
-        homeController.profileData.value.data?.merchantProfile?.pointOfContact;
+        homeController.profileData.value.data?.connectorProfile?.pointOfContact;
     fNameController.text = pointOfContact?.name ?? "";
     emailController.text = pointOfContact?.email ?? "";
     designationController.text = pointOfContact?.relation ?? "";
@@ -190,7 +189,7 @@ class PointOfContactController extends GetxController {
       };
 
       await apiManager.postObject(
-        url: APIConstants.pointOfContactMerchant,
+        url: APIConstants.pointOfContactConnector,
         body: requestBody,
       );
 
@@ -203,5 +202,15 @@ class PointOfContactController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    fNameController.dispose();
+    emailController.dispose();
+    designationController.dispose();
+    numberController.dispose();
+    alternativeNumberController.dispose();
+    super.onClose();
   }
 }
