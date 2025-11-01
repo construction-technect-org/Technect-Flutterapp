@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/SubCategoryModel.dart';
@@ -31,6 +32,10 @@ class AddProductController extends GetxController {
   RxList<String?> imageSlots = List<String?>.filled(5, null).obs;
   Map<String, String> removedImages = {};
 
+  RxList<ManufacturerAddress> siteLocations = <ManufacturerAddress>[].obs;
+  RxInt selectedSiteAddressId = 0.obs;
+  RxString selectedSiteAddressName = ''.obs;
+  Rxn<ManufacturerAddress> selectedSiteAddress = Rxn<ManufacturerAddress>();
   RxBool isOutStock = true.obs;
   final productCodeController = TextEditingController();
   final noteStockController = TextEditingController();
@@ -44,6 +49,8 @@ class AddProductController extends GetxController {
   final gstPriceController = TextEditingController();
   final termsController = TextEditingController();
   final brandNameController = TextEditingController();
+  final stockYardAddressController = TextEditingController();
+
 
   // ---------------- DropDown Data ----------------
   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
@@ -57,6 +64,7 @@ class AddProductController extends GetxController {
   RxList<String> subCategoryNames = <String>[].obs;
   RxList<String> productNames = <String>[].obs;
   RxList<String> subProductNames = <String>[].obs;
+  Rxn<String> selectedWareHouseType = Rxn<String>();
 
   RxList<String> gstList = <String>["5%", "12%", "18%", "28%"].obs;
 
@@ -83,6 +91,38 @@ class AddProductController extends GetxController {
       ? Get.arguments['onApiCall']
       : () {};
 
+  Future<void> _fetchSiteAddresses() async {
+    siteLocations.value =
+        Get.find<HomeController>().profileData.value.data?.addresses ?? [];
+    // Sync selected site address after loading
+    _syncSelectedSiteAddress();
+  }
+  void _syncSelectedSiteAddress() {
+    if (selectedSiteAddressId.value > 0) {
+      final site = siteLocations.firstWhereOrNull(
+            (s) => s.id == selectedSiteAddressId.value,
+      );
+      selectedSiteAddress.value = site;
+      if (site != null) {
+        selectedSiteAddressName.value = site.addressName ?? '';
+      }
+    } else {
+      selectedSiteAddress.value = null;
+      selectedSiteAddressName.value = '';
+    }
+  }
+  void selectSiteAddress(ManufacturerAddress? site) {
+    if (site != null) {
+      selectedSiteAddress.value = site;
+      selectedSiteAddressId.value = site.id ?? 0;
+      selectedSiteAddressName.value = site.addressName ?? '';
+    } else {
+      selectedSiteAddress.value = null;
+      selectedSiteAddressId.value = 0;
+      selectedSiteAddressName.value = '';
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -104,6 +144,7 @@ class AddProductController extends GetxController {
 
       _initializeEditMode();
     }
+    _fetchSiteAddresses();
     initCalled();
   }
 
@@ -137,9 +178,14 @@ class AddProductController extends GetxController {
       selectedGST.value = "${product.gstPercentage?.split(".").first}%";
       print(selectedGST.value);
     }
+    if ((product.stockYardAddress ?? "").isNotEmpty) {
+      stockYardAddressController.text = product.stockYardAddress??"";
+    }
     gstPriceController.text = product.gstAmount ?? '';
     termsController.text = product.termsAndConditions ?? '';
     brandNameController.text = product.brand ?? '';
+    selectedWareHouseType.value = product.warehouseType ?? '';
+
     if ((product.images ?? []).isNotEmpty) {
       for (final image in product.images!) {
         pickedFilePathList.add("${APIConstants.bucketUrl}${image.s3Key!}");
@@ -678,6 +724,8 @@ class AddProductController extends GetxController {
               ?.merchantProfile
               ?.gstinNumber ??
           '',
+      stockYardAddress:selectedSiteAddress.value?.fullAddress,
+      warehouseType:  selectedWareHouseType.value,
       mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
       productSubCategoryName: selectedSubProduct.value,
@@ -745,6 +793,8 @@ class AddProductController extends GetxController {
 
     fields.addAll({
       "price": priceController.text,
+      "warehouse_type": selectedWareHouseType.value,
+      "stock_yard_address": selectedSiteAddress.value?.fullAddress,
       "total_amount": amountController.text,
       "product_note": noteController.text,
       "gst_percentage": (selectedGST.value ?? "").replaceAll("%", ""),
@@ -833,6 +883,8 @@ class AddProductController extends GetxController {
       "product_note": noteController.text,
       "outofstock": !isOutStock.value,
       "outofstock_note": noteStockController.text,
+      "warehouse_type": selectedWareHouseType.value,
+      "stock_yard_address": stockYardAddressController.text
     });
 
     try {

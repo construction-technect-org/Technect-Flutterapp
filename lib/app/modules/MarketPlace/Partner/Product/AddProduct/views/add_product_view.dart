@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
@@ -344,6 +345,77 @@ class AddProductView extends GetView<AddProductController> {
                             controller: controller.productCodeController,
                           ),
                         if (controller.isEdit) SizedBox(height: 2.h),
+
+                        CommonDropdown<String>(
+                          headerText: 'Details of warehouse',
+                          validator: (val) {
+                            if (val == null || val.isEmpty) {
+                              return "Please select a details of warehouse";
+                            }
+                            return null;
+                          },
+                          hintText: "Select the detail of warehouse",
+                          items: const [
+                            "Manufacture unit",
+                            "Stock yard",
+                            "Ware-house",
+                          ],
+                          selectedValue: controller.selectedWareHouseType,
+                          itemLabel: (item) => item,
+                          onChanged: controller.isEdit
+                              ? null
+                              : (value) {
+                                  controller.selectedWareHouseType.value =
+                                      value;
+                                },
+                          enabled: !controller.isEdit,
+                        ),
+                        Obx(() {
+                          return controller.selectedWareHouseType.value ==
+                                  "Stock yard"
+                              ? controller.isEdit
+                                    ? Column(
+                                        children: [
+                                          SizedBox(height: 2.h),
+                                          CommonTextField(
+                                            readOnly: true,
+                                            bgColor: Colors.grey.shade100,
+
+                                            headerText: 'Stock yard Address',
+                                            controller: controller
+                                                .stockYardAddressController,
+                                          ),
+                                        ],
+                                      )
+                                    : Column(
+                                        children: [
+                                          SizedBox(height: 2.h),
+                                          CommonDropdown<ManufacturerAddress>(
+                                            headerText:
+                                                'Select Stock yard Address',
+                                            validator: (val) {
+                                              if (val == null) {
+                                                return "Please select stock yard address";
+                                              }
+                                              return null;
+                                            },
+                                            hintText:
+                                                "Select stock yard address",
+                                            items: controller.siteLocations,
+                                            selectedValue:
+                                                controller.selectedSiteAddress,
+                                            itemLabel: (item) =>
+                                                item.fullAddress ??
+                                                'No address name',
+                                            onChanged: (val) {
+                                              controller.selectSiteAddress(val);
+                                            },
+                                          ),
+                                        ],
+                                      )
+                              : const SizedBox();
+                        }),
+                        SizedBox(height: 2.h),
                         CommonDropdown<String>(
                           headerText: 'Main Category',
                           validator: (val) {
@@ -404,8 +476,8 @@ class AddProductView extends GetView<AddProductController> {
                                   onChanged: controller.isEdit
                                       ? null
                                       : (val) {
-                                    controller.onProductSelected(val);
-                                  },
+                                          controller.onProductSelected(val);
+                                        },
                                   enabled: !controller.isEdit,
                                 ),
                                 SizedBox(height: 2.h),
@@ -435,8 +507,8 @@ class AddProductView extends GetView<AddProductController> {
                                   onChanged: controller.isEdit
                                       ? null
                                       : (val) {
-                                    controller.onSubProductSelected(val);
-                                  },
+                                          controller.onSubProductSelected(val);
+                                        },
                                   enabled: !controller.isEdit,
                                 ),
                                 SizedBox(height: 2.h),

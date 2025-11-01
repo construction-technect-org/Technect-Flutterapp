@@ -129,6 +129,8 @@ class Product {
   final String? merchantEmail;
   final String? merchantPhone;
   final String? merchantWebsite;
+  final String? warehouseType;
+  final String? stockYardAddress;
   List<BusinessHours>? businessHours;
 
 
@@ -185,6 +187,8 @@ class Product {
     this.productVideo,
     this.filterValues,
     this.images,
+    this.stockYardAddress,
+    this.warehouseType,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -237,6 +241,8 @@ class Product {
       merchantWebsite: json["merchant_website"],
       merchantEmail: json["merchant_email"],
       merchantGstNumber: json["merchant_gst_number"],
+      warehouseType: json["warehouse_type"],
+      stockYardAddress: json["stock_yard_address"],
       merchantPhone: json["merchant_phone"],
       businessHours: json["business_hours"] == null
           ? []
@@ -266,6 +272,8 @@ class Product {
     "category_product_id": categoryProductId,
     "merchant_logo":  merchantLogo,
     "brand": brand,
+    "stock_yard_address": stockYardAddress,
+    "warehouse_type": warehouseType,
     "merchant_phone": merchantPhone,
     "uom": uom,
     "package_type": packageType,

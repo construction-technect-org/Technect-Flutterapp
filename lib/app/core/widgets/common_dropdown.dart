@@ -122,6 +122,9 @@ class CommonDropdown<T> extends StatelessWidget {
                         color: MyColors.primary,
                         fontFamily: MyTexts.SpaceGrotesk,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
                     );
                   }).toList();
                 },
