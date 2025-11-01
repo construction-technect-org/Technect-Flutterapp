@@ -4,9 +4,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/home/Con
 import 'package:gap/gap.dart';
 
 class MerchantCard extends StatelessWidget {
-  Stores data;
+  final Stores data;
 
-  MerchantCard({super.key, required this.data});
+  const MerchantCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

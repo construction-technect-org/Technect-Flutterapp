@@ -83,7 +83,9 @@ class HomeView extends StatelessWidget {
                                 begin: AlignmentGeometry.topCenter,
                                 end: AlignmentGeometry.bottomCenter,
                                 colors: [
-                                  MyColors.custom('FFF9BD').withOpacity(0.1),
+                                  MyColors.custom(
+                                    'FFF9BD',
+                                  ).withValues(alpha: 0.1),
                                   MyColors.white,
                                 ],
                               ),
@@ -401,7 +403,9 @@ class HomeView extends StatelessWidget {
                                                             colors: [
                                                               MyColors.custom(
                                                                 'EAEAEA',
-                                                              ).withOpacity(0),
+                                                              ).withValues(
+                                                                alpha: 0,
+                                                              ),
                                                               MyColors.custom(
                                                                 'EAEAEA',
                                                               ),
@@ -684,13 +688,13 @@ class HomeView extends StatelessWidget {
 }
 
 class StaticsCard extends StatefulWidget {
-  String? icon;
-  String? title;
-  String? value;
-  Color? color;
-  Color? bColor;
+  final String? icon;
+  final String? title;
+  final String? value;
+  final Color? color;
+  final Color? bColor;
 
-  StaticsCard({
+  const StaticsCard({
     super.key,
     this.icon,
     this.title,
@@ -750,9 +754,9 @@ class _StaticsCardState extends State<StaticsCard> {
 }
 
 class HeaderText extends StatefulWidget {
-  String text;
+  final String text;
 
-  HeaderText({super.key, required this.text});
+  const HeaderText({super.key, required this.text});
 
   @override
   State<HeaderText> createState() => _HeaderTextState();

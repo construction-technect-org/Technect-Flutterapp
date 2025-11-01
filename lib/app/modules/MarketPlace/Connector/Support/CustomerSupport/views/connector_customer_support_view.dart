@@ -41,7 +41,11 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                 //   height: 20,
                 //   width: 20,
                 // ),
-                prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                prefixIcon: SvgPicture.asset(
+                  Asset.searchIcon,
+                  height: 16,
+                  width: 16,
+                ),
               ),
             ),
             SizedBox(height: 1.h),
@@ -62,7 +66,7 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            HearderText(text: "Customer Support Ticket"),
+                            const HearderText(text: "Customer Support Ticket"),
                             SizedBox(height: 2.h),
                             Row(
                               children: [
@@ -83,7 +87,9 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                         height: 20,
                                         width: 20,
                                       ),
-                                      iconBackground: MyColors.red.withValues(alpha: 0.2),
+                                      iconBackground: MyColors.red.withValues(
+                                        alpha: 0.2,
+                                      ),
                                     );
                                   }),
                                 ),
@@ -105,9 +111,8 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                         size: 30,
                                         color: MyColors.warning,
                                       ),
-                                      iconBackground: MyColors.warning.withValues(
-                                        alpha: 0.2,
-                                      ),
+                                      iconBackground: MyColors.warning
+                                          .withValues(alpha: 0.2),
                                     );
                                   }),
                                 ),
@@ -157,9 +162,8 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                         size: 30,
                                         color: MyColors.primary,
                                       ),
-                                      iconBackground: MyColors.lightBlue.withValues(
-                                        alpha: 0.2,
-                                      ),
+                                      iconBackground: MyColors.lightBlue
+                                          .withValues(alpha: 0.2),
                                     );
                                   }),
                                 ),
@@ -171,10 +175,14 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                 Expanded(
                                   child: OutlinedButton(
                                     onPressed: () {
-                                      Get.toNamed(Routes.CONNECTOR_REQUEST_DEMO);
+                                      Get.toNamed(
+                                        Routes.CONNECTOR_REQUEST_DEMO,
+                                      );
                                     },
                                     style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(color: MyColors.primary),
+                                      side: const BorderSide(
+                                        color: MyColors.primary,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                           12,
@@ -195,7 +203,9 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                   child: Center(
                                     child: RoundedButton(
                                       onTap: () {
-                                        Get.toNamed(Routes.CONNECTOR_CREATE_NEW_TICKET);
+                                        Get.toNamed(
+                                          Routes.CONNECTOR_CREATE_NEW_TICKET,
+                                        );
                                       },
                                       buttonName: '',
                                       borderRadius: 12,
@@ -220,14 +230,21 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                         ),
                       ),
                       Obx(() {
-                        if (controller.supportMyTickets.value.data?.tickets?.isEmpty ??
+                        if (controller
+                                .supportMyTickets
+                                .value
+                                .data
+                                ?.tickets
+                                ?.isEmpty ??
                             true) {
                           return Padding(
                             padding: const EdgeInsets.only(top: 80),
                             child: Center(
                               child: Text(
                                 "No tickets found !!",
-                                style: MyTexts.regular16.copyWith(color: Colors.black),
+                                style: MyTexts.regular16.copyWith(
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           );
@@ -268,7 +285,8 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                 padding: const EdgeInsets.all(16),
                                 itemCount: controller.filteredTickets.length,
                                 itemBuilder: (context, index) {
-                                  final ticket = controller.filteredTickets[index];
+                                  final ticket =
+                                      controller.filteredTickets[index];
 
                                   return Card(
                                     color: MyColors.white,
@@ -282,7 +300,8 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                     child: Padding(
                                       padding: const EdgeInsets.all(16),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
@@ -290,7 +309,8 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                                 ticket.ticketNumber ?? "",
                                                 MyColors.white,
                                                 MyColors.black,
-                                                borderColor: MyColors.americanSilver,
+                                                borderColor:
+                                                    MyColors.americanSilver,
                                               ),
                                               SizedBox(width: 2.w),
                                               _buildChip(
@@ -321,7 +341,9 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                           ),
                                           SizedBox(height: 1.h),
                                           Text(
-                                            (ticket.subject ?? "").capitalizeFirst ?? "-",
+                                            (ticket.subject ?? "")
+                                                    .capitalizeFirst ??
+                                                "-",
                                             style: MyTexts.medium16.copyWith(
                                               color: MyColors.fontBlack,
                                               fontFamily: MyTexts.SpaceGrotesk,
@@ -338,10 +360,12 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                               SizedBox(width: 0.4.w),
                                               Text(
                                                 ticket.userMobile ?? "",
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.SpaceGrotesk,
-                                                ),
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.darkGray,
+                                                      fontFamily:
+                                                          MyTexts.SpaceGrotesk,
+                                                    ),
                                               ),
                                               SizedBox(width: 3.w),
                                               const Icon(
@@ -352,10 +376,12 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                               SizedBox(width: 1.w),
                                               Text(
                                                 ticket.categoryName ?? "",
-                                                style: MyTexts.regular14.copyWith(
-                                                  color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.SpaceGrotesk,
-                                                ),
+                                                style: MyTexts.regular14
+                                                    .copyWith(
+                                                      color: MyColors.darkGray,
+                                                      fontFamily:
+                                                          MyTexts.SpaceGrotesk,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -374,7 +400,8 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                                 "Created: ${ticket.createdAt?.toLocal().toString().split(' ')[0] ?? ""}",
                                                 style: MyTexts.bold14.copyWith(
                                                   color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.SpaceGrotesk,
+                                                  fontFamily:
+                                                      MyTexts.SpaceGrotesk,
                                                 ),
                                               ),
                                               const Spacer(),
@@ -382,7 +409,8 @@ class ConnectorCustomerSupportView extends StatelessWidget {
                                                 "  ●  Updated: ${ticket.updatedAt?.toLocal().toString().split(' ')[0] ?? ""}",
                                                 style: MyTexts.bold14.copyWith(
                                                   color: MyColors.darkGray,
-                                                  fontFamily: MyTexts.SpaceGrotesk,
+                                                  fontFamily:
+                                                      MyTexts.SpaceGrotesk,
                                                 ),
                                               ),
                                             ],
