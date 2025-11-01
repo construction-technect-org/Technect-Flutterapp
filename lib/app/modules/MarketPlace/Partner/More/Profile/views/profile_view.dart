@@ -1,9 +1,11 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/certifications_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/info_metrics_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:gap/gap.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -61,14 +63,14 @@ class ProfileView extends GetView<ProfileController> {
                             children: [
                               GestureDetector(
                                 onTap: () =>
-                                controller.selectedTabIndex.value = 0,
+                                    controller.selectedTabIndex.value = 0,
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 250),
                                   curve: Curves.easeInOut,
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(
                                       alpha:
-                                      controller.selectedTabIndex.value == 0
+                                          controller.selectedTabIndex.value == 0
                                           ? 1
                                           : 0,
                                     ),
@@ -81,7 +83,7 @@ class ProfileView extends GetView<ProfileController> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        "Info & Metrics",
+                                        "Info",
                                         style: MyTexts.medium15.copyWith(
                                           color: MyColors.gray2E,
                                         ),
@@ -93,14 +95,14 @@ class ProfileView extends GetView<ProfileController> {
                               const Gap(10),
                               GestureDetector(
                                 onTap: () =>
-                                controller.selectedTabIndex.value = 1,
+                                    controller.selectedTabIndex.value = 1,
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 250),
                                   curve: Curves.easeInOut,
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(
                                       alpha:
-                                      controller.selectedTabIndex.value == 1
+                                          controller.selectedTabIndex.value == 1
                                           ? 1
                                           : 0,
                                     ),
@@ -122,52 +124,38 @@ class ProfileView extends GetView<ProfileController> {
                                   ),
                                 ),
                               ),
-                              // const Gap(10),
-                              // Obx(() {
-                              //   return controller.profileCompletionPercentage >
-                              //           90
-                              //       ? GestureDetector(
-                              //           onTap: () =>
-                              //               controller.selectedTabIndex.value =
-                              //                   2,
-                              //           child: AnimatedContainer(
-                              //             duration: const Duration(
-                              //               milliseconds: 250,
-                              //             ),
-                              //             curve: Curves.easeInOut,
-                              //             decoration: BoxDecoration(
-                              //               color: Colors.white.withValues(
-                              //                 alpha:
-                              //                     controller
-                              //                             .selectedTabIndex
-                              //                             .value ==
-                              //                         2
-                              //                     ? 1
-                              //                     : 0,
-                              //               ),
-                              //               borderRadius: BorderRadius.circular(
-                              //                 24,
-                              //               ),
-                              //             ),
-                              //             child: Padding(
-                              //               padding: const EdgeInsets.symmetric(
-                              //                 vertical: 4,
-                              //                 horizontal: 16,
-                              //               ),
-                              //               child: Center(
-                              //                 child: Text(
-                              //                   "Marketplace Performance",
-                              //                   style: MyTexts.medium15
-                              //                       .copyWith(
-                              //                         color: MyColors.gray2E,
-                              //                       ),
-                              //                 ),
-                              //               ),
-                              //             ),
-                              //           ),
-                              //         )
-                              //       : const SizedBox();
-                              // }),
+                              const Gap(10),
+                              GestureDetector(
+                                onTap: () =>
+                                    controller.selectedTabIndex.value = 2,
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 250),
+                                  curve: Curves.easeInOut,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(
+                                      alpha:
+                                          controller.selectedTabIndex.value == 2
+                                          ? 1
+                                          : 0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 4,
+                                      horizontal: 16,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Metrics",
+                                        style: MyTexts.medium15.copyWith(
+                                          color: MyColors.gray2E,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         );
@@ -203,7 +191,8 @@ class ProfileView extends GetView<ProfileController> {
                   );
                 } else if (controller.businessHoursData.isEmpty) {
                   SnackBars.errorSnackBar(
-                      content: "Please fill business hours");
+                    content: "Please fill business hours",
+                  );
                 } else {
                   controller.selectedTabIndex.value = 1;
                 }
@@ -241,10 +230,169 @@ class ProfileView extends GetView<ProfileController> {
       //   content = const MarketplacePerformanceComponent();
       // }
       else {
-        content = const InfoMetricsComponent();
+        content = const Metrics();
       }
 
       return SingleChildScrollView(child: content);
     });
+  }
+}
+
+class Metrics extends StatelessWidget {
+  const Metrics({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 1.h),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Team members',
+              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(
+                  Routes.ROLE_MANAGEMENT,
+                  arguments: {"isRole": false},
+                );
+              },
+              behavior: HitTestBehavior.translucent,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: SvgPicture.asset(Asset.edit),
+              ),
+            ),
+          ],
+        ),
+        Obx(() {
+          if (Get.find<HomeController>().teamList.isEmpty) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height / 4,
+                ),
+                child: Text(
+                  'No team members found',
+                  style: MyTexts.medium15.copyWith(color: MyColors.gra54),
+                ),
+              ),
+            );
+          }
+          return ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: Get.find<HomeController>().teamList.length,
+            itemBuilder: (context, index) {
+              final team = Get.find<HomeController>().teamList[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: _buildTeamCard(team, context),
+              );
+            },
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildTeamCard(TeamListData user, BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: MyColors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: MyColors.grayEA.withValues(alpha: 0.32),
+            blurRadius: 4,
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          const Gap(16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 24,
+                  backgroundImage: (user.profilePhotoUrl ?? "").isNotEmpty
+                      ? NetworkImage(user.profilePhotoUrl!)
+                      : const AssetImage(Asset.aTeam) as ImageProvider,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${user.firstName ?? ''} ${user.lastName ?? ''}",
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.gray2E,
+                        ),
+                      ),
+                      const Gap(4),
+                      Text(
+                        user.emailId ?? '',
+                        style: MyTexts.medium14.copyWith(
+                          color: MyColors.gray54,
+                        ),
+                      ),
+                      const Gap(4),
+                      Text(
+                        user.mobileNumber ?? '',
+                        style: MyTexts.medium14.copyWith(
+                          color: MyColors.gray54,
+                        ),
+                      ),
+                      const Gap(4),
+                      Text(
+                        user.roleTitle ?? '',
+                        style: MyTexts.medium14.copyWith(
+                          color: MyColors.gray54,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (user.isActive == true)
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 13,
+                  vertical: 8,
+                ),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE6F5E6),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(32),
+                    bottomRight: Radius.circular(32),
+                    bottomLeft: Radius.circular(32),
+                  ),
+                ),
+                child: Text(
+                  "Active",
+                  style: MyTexts.medium14.copyWith(
+                    color: MyColors.gray2E,
+                    fontFamily: MyTexts.SpaceGrotesk,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
