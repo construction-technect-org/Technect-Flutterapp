@@ -69,6 +69,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                 ),
+                const Gap(16),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -593,20 +594,15 @@ class _StaticsCardState extends State<StaticsCard> {
   }
 }
 
-class HeaderText extends StatefulWidget {
+class HeaderText extends StatelessWidget {
   String text;
 
   HeaderText({super.key, required this.text});
 
   @override
-  State<HeaderText> createState() => _HeaderTextState();
-}
-
-class _HeaderTextState extends State<HeaderText> {
-  @override
   Widget build(BuildContext context) {
     return Text(
-      widget.text,
+      text,
       style: MyTexts.medium17.copyWith(
         color: MyColors.black,
         fontFamily: MyTexts.SpaceGrotesk,

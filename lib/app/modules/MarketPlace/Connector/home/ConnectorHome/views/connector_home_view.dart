@@ -332,8 +332,8 @@ class ConnectorHomeView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 1.h),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 16.0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
                         child: HeaderText(text: "Features"),
                       ),
                       SizedBox(height: 1.h),
@@ -474,7 +474,7 @@ class ConnectorHomeView extends StatelessWidget {
                               ),
                             ),
                             const Gap(14),
-                            const HeaderText(text: "Quick Access"),
+                             HeaderText(text: "Quick Access"),
                             const Gap(14),
                             Container(
                               padding: const EdgeInsets.symmetric(
