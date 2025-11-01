@@ -118,7 +118,7 @@ class ApiManager {
       Get.printInfo(info: '   Status: ${response.statusCode}');
       Get.printInfo(info: '   Headers: ${response.headers}');
 
-      final map = _returnResponse(response);
+      final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       _checkTokenValidity(map);
@@ -157,7 +157,7 @@ class ApiManager {
       Get.printInfo(info: '   Status: ${response.statusCode}');
       Get.printInfo(info: '   Headers: ${response.headers}');
 
-      final map = _returnResponse(response);
+      final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       _checkTokenValidity(map);
@@ -197,7 +197,7 @@ class ApiManager {
       Get.printInfo(info: '   Status: ${response.statusCode}');
       Get.printInfo(info: '   Headers: ${response.headers}');
 
-      final map = _returnResponse(response);
+      final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       _checkTokenValidity(map);
@@ -281,7 +281,7 @@ class ApiManager {
       Get.printInfo(info: '   Status: ${response.statusCode}');
       Get.printInfo(info: '   Headers: ${response.headers}');
 
-      final map = _returnResponse(response);
+      final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       _checkTokenValidity(map);
@@ -365,7 +365,7 @@ class ApiManager {
       Get.printInfo(info: '   Status: ${response.statusCode}');
       Get.printInfo(info: '   Headers: ${response.headers}');
 
-      final map = _returnResponse(response);
+      final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       _checkTokenValidity(map);
@@ -404,7 +404,7 @@ class ApiManager {
       Get.printInfo(info: '   Status: ${response.statusCode}');
       Get.printInfo(info: '   Headers: ${response.headers}');
 
-      final map = _returnResponse(response);
+      final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       _checkTokenValidity(map);
@@ -447,7 +447,7 @@ class ApiManager {
       Get.printInfo(info: '   Status: ${response.statusCode}');
       Get.printInfo(info: '   Headers: ${response.headers}');
 
-      final map = _returnResponse(response);
+      final map = await _returnResponse(response);
 
       // Check for invalid/expired token in response body
       _checkTokenValidity(map);
@@ -466,7 +466,7 @@ class ApiManager {
   }
 
   /// Handle HTTP response and return parsed data
-  dynamic _returnResponse(http.StreamedResponse response) async {
+  Future<dynamic> _returnResponse(http.StreamedResponse response) async {
     final responseString = await response.stream.bytesToString();
 
     Get.printInfo(info: '📋 Raw Response Body: $responseString');
@@ -503,8 +503,13 @@ class ApiManager {
           return responseJson; // Return response but don't throw exception
         }
 
+        // For non-token-expiry 401 errors (like login failures), return the response
+        // so the caller can handle it (e.g., show specific error messages)
+        Get.printInfo(
+          info: '⚠️ 401 Unauthorized - Authentication Error: $message',
+        );
         SnackBars.errorSnackBar(content: message ?? 'Unauthorized');
-        throw BadRequestException(message ?? 'Unauthorized');
+        return responseJson; // Return response instead of throwing
 
       case 403:
         SnackBars.errorSnackBar(

@@ -18,7 +18,19 @@ class LoginService {
           "password": password,
         },
       );
-      return LoginModel.fromJson(response);
+
+      final result = LoginModel.fromJson(response);
+
+      if (result.success == true) {
+        return result;
+      } else {
+        // Return generic error message for all login failures
+        return LoginModel(
+          success: false,
+          message: "Invalid mobile number or password",
+          code: result.code,
+        );
+      }
     } catch (e, st) {
       throw Exception('Error in login: $e , $st');
     }
@@ -44,11 +56,14 @@ class LoginService {
         'roleName': roleName,
       };
 
-      final response = await apiManager.postObject(url: 'auth/social-login', body: body);
+      final response = await apiManager.postObject(
+        url: 'auth/social-login',
+        body: body,
+      );
 
       return LoginModel.fromJson(response);
     } catch (e, st) {
-      throw Exception('Social login failed: $e');
+      throw Exception('Social login failed: $e $st');
     }
   }
 

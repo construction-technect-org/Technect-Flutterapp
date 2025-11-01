@@ -40,7 +40,7 @@ class SwitchAccountController extends GetxController {
         files: files,
       );
     } catch (e, st) {
-      SnackBars.errorSnackBar(content: "Update failed: $e");
+      SnackBars.errorSnackBar(content: "Update failed: $e $st");
     } finally {}
   }
 }

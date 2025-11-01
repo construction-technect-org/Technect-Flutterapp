@@ -35,7 +35,11 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                 },
                 borderRadius: 22,
                 hintText: 'Search',
-                prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
+                prefixIcon: SvgPicture.asset(
+                  Asset.searchIcon,
+                  height: 16,
+                  width: 16,
+                ),
               ),
             ),
             SizedBox(height: 1.h),
@@ -52,12 +56,15 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                       "cancelled": Colors.red,
                     };
 
-                    final selectedColor = colorMap[controller.selectedStatus.value]!;
+                    final selectedColor =
+                        colorMap[controller.selectedStatus.value]!;
 
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: const BoxDecoration(
-                        border: Border(bottom: BorderSide(color: Colors.black, width: 1)),
+                        border: Border(
+                          bottom: BorderSide(color: Colors.black, width: 1),
+                        ),
                       ),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
@@ -185,7 +192,8 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                       itemCount: controller.filteredConnections.length,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemBuilder: (context, index) {
-                        final connection = controller.filteredConnections[index];
+                        final connection =
+                            controller.filteredConnections[index];
                         return InkWell(
                           onTap: () {
                             Get.toNamed(Routes.CONNECTION_INBOX);
@@ -203,7 +211,10 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                                 ),
                               ],
                               border: const Border(
-                                left: BorderSide(color: MyColors.green, width: 2),
+                                left: BorderSide(
+                                  color: MyColors.green,
+                                  width: 2,
+                                ),
                               ),
                             ),
                             child: Padding(
@@ -212,12 +223,16 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       CircleAvatar(
                                         radius: 22,
                                         backgroundColor: MyColors.grey,
-                                        child: connection.connectorProfileImageUrl != null
+                                        child:
+                                            connection
+                                                    .connectorProfileImageUrl !=
+                                                null
                                             ? ClipOval(
                                                 child: CachedNetworkImage(
                                                   imageUrl:
@@ -229,39 +244,48 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                                                   fit: BoxFit.cover,
                                                   placeholder: (context, url) =>
                                                       const ColoredBox(
-                                                        color: MyColors.lightGray,
+                                                        color:
+                                                            MyColors.lightGray,
                                                         child: Center(
                                                           child:
                                                               CircularProgressIndicator(),
                                                         ),
                                                       ),
-                                                  errorWidget: (context, url, error) =>
-                                                      Icon(
-                                                        Icons.person,
-                                                        color: MyColors.white,
-                                                      ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(
+                                                            Icons.person,
+                                                            color:
+                                                                MyColors.white,
+                                                          ),
                                                 ),
                                               )
-                                            : Icon(Icons.person, color: MyColors.white),
+                                            : Icon(
+                                                Icons.person,
+                                                color: MyColors.white,
+                                              ),
                                       ),
                                       SizedBox(width: 2.w),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "${connection.connectorName ?? 'Unknown'} wants to connect with you",
                                               style: MyTexts.medium16.copyWith(
                                                 color: MyColors.fontBlack,
-                                                fontFamily: MyTexts.SpaceGrotesk,
+                                                fontFamily:
+                                                    MyTexts.SpaceGrotesk,
                                               ),
                                             ),
                                             const Gap(4),
                                             Text(
-                                              "User   •   ${connection.createdAt.toString().split(' ')[0] ?? 'Unknown date'}",
+                                              "User   •   ${connection.createdAt.toString().split(' ')[0]}",
                                               style: MyTexts.regular14.copyWith(
                                                 color: MyColors.fontBlack,
-                                                fontFamily: MyTexts.SpaceGrotesk,
+                                                fontFamily:
+                                                    MyTexts.SpaceGrotesk,
                                               ),
                                             ),
                                           ],
@@ -319,7 +343,8 @@ class ConnectorConnectionInboxVies extends StatelessWidget {
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: MyColors.red,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30),
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
                                             ),
                                             padding: const EdgeInsets.symmetric(
                                               horizontal: 20,

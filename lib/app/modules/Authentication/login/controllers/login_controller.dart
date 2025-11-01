@@ -15,6 +15,7 @@ class LoginController extends GetxController {
   FocusNode mobileFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
   final rememberMe = false.obs;
+  final RxString loginError = "".obs;
   RxInt isValid = (-1).obs;
   RxString countryCode = "+91".obs;
   HomeService homeService = HomeService();
@@ -40,10 +41,33 @@ class LoginController extends GetxController {
         rememberMe.value = true;
       }
     }
+
+    // Clear error when user starts typing
+    mobileController.addListener(() {
+      if (loginError.value.isNotEmpty) {
+        loginError.value = "";
+      }
+    });
+
+    passwordController.addListener(() {
+      if (loginError.value.isNotEmpty) {
+        loginError.value = "";
+      }
+    });
+  }
+
+  @override
+  void onClose() {
+    mobileController.dispose();
+    passwordController.dispose();
+    mobileFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.onClose();
   }
 
   Future<void> login() async {
     isLoading.value = true;
+    loginError.value = ""; // Clear previous errors
 
     try {
       final loginResponse = await loginService.login(
@@ -53,6 +77,7 @@ class LoginController extends GetxController {
       );
 
       if (loginResponse.success == true) {
+        loginError.value = ""; // Clear error on success
         if (loginResponse.data?.token != null) {
           myPref.setToken(loginResponse.data?.token ?? '');
         }
@@ -85,12 +110,11 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(
-          content: loginResponse.message ?? 'Login failed',
-        );
+        loginError.value =
+            loginResponse.message ?? 'Invalid mobile number or password';
       }
     } catch (e) {
-      // Error is already shown by ApiManager
+      loginError.value = "Invalid mobile number or password";
     } finally {
       isLoading.value = false;
     }
@@ -144,12 +168,10 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(
-          content: loginResponse.message ?? 'Login failed',
-        );
+        loginError.value = loginResponse.message ?? 'Login failed';
       }
     } catch (e) {
-      // No Error
+      loginError.value = "Something went wrong";
     }
   }
 }

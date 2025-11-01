@@ -3,9 +3,9 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/google_sign_in_service.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:gap/gap.dart';
-import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -114,6 +114,28 @@ class LoginView extends GetView<LoginController> {
                               ),
                             ),
                           );
+                        }),
+                        Obx(() {
+                          if (controller.loginError.value.isNotEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      controller.loginError.value,
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
                         }),
                         const Gap(8),
                         Row(
