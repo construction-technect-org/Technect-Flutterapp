@@ -63,7 +63,7 @@ class LoginService {
 
       return LoginModel.fromJson(response);
     } catch (e, st) {
-      throw Exception('Social login failed: $e');
+      throw Exception('Social login failed: $e $st');
     }
   }
 

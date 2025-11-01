@@ -348,7 +348,7 @@ class EditProfileView extends GetView<EditProfileController> {
                             },
                             children: List<Widget>.generate(
                               currentYear - 1900 + 1,
-                                  (int index) {
+                              (int index) {
                                 final year = 1900 + index;
                                 return Center(
                                   child: Text(
@@ -368,10 +368,11 @@ class EditProfileView extends GetView<EditProfileController> {
             },
             hintText: "2025",
             readOnly: true,
-            validator: (val){
-              if((val??"").isEmpty){
+            validator: (val) {
+              if ((val ?? "").isEmpty) {
                 return "Please select year of establish";
               }
+              return null;
             },
             headerText: "Years of Establish",
             controller: controller.yearsInBusinessController,
