@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
@@ -142,7 +143,9 @@ class ConstructionServiceView extends StatelessWidget {
       isSelected: (index) =>
           controller.selectedProductCategoryIndex.value == index,
       onTap: (index) => controller.selectProductCategory(index),
-      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? 'category-images/FineAggregate.png',
+      getImageUrl: (_) =>
+          controller.selectedSubCategory.value?.image ??
+          'category-images/FineAggregate.png',
       getName: (item) => item.name ?? '',
       useObxForSelection: true,
     );
@@ -157,7 +160,9 @@ class ConstructionServiceView extends StatelessWidget {
       isSelected: (index) =>
           controller.selectedProductCategoryIndex.value == index,
       onTap: (index) => controller.leftSide2LeftView(index),
-      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? 'category-images/FineAggregate.png',
+      getImageUrl: (_) =>
+          controller.selectedSubCategory.value?.image ??
+          'category-images/FineAggregate.png',
       getName: (item) => item.name ?? '',
       useObxForSelection: true,
     );
@@ -172,7 +177,9 @@ class ConstructionServiceView extends StatelessWidget {
       isSelected: (index) =>
           controller.selectedSubProductCategoryIndex.value == index,
       onTap: (index) => controller.selectProductSubCategory(index),
-      getImageUrl: (_) => controller.selectedSubCategory.value?.image ?? 'category-images/FineAggregate.png',
+      getImageUrl: (_) =>
+          controller.selectedSubCategory.value?.image ??
+          'category-images/FineAggregate.png',
       getName: (item) => item.name ?? '',
       useObxForSelection: true,
     );
@@ -413,15 +420,12 @@ class ConstructionServiceView extends StatelessWidget {
           onTap: () => controller.showFilterBottomSheet(context),
         ),
         Obx(
-              () => GestureDetector(
+          () => GestureDetector(
             onTap: () =>
-            controller.isGridView.value = !controller.isGridView.value,
+                controller.isGridView.value = !controller.isGridView.value,
             behavior: HitTestBehavior.translucent,
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 6,
-                vertical: 6,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: Colors.grey[300]!),
@@ -608,7 +612,8 @@ class ConstructionServiceView extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildCircularImageContainer(
-                  controller.selectedSubCategory.value?.image ?? '',
+                  controller.selectedSubCategory.value?.image ??
+                      'category-images/FineAggregate.png',
                 ),
               ),
               const SizedBox(height: _itemSpacing),
@@ -922,7 +927,7 @@ class ConstructionServiceView extends StatelessWidget {
                         vertical: 6,
                         horizontal: 8,
                       ),
-                      child:     Row(
+                      child: Row(
                         children: [
                           Text(
                             'Ex factory price ',
@@ -1005,7 +1010,8 @@ class ConstructionServiceView extends StatelessWidget {
           children: [
             Expanded(
               child: _buildCircularImageContainer(
-                controller.selectedSubCategory.value?.image ?? '',
+                controller.selectedSubCategory.value?.image ??
+                    'category-images/FineAggregate.png',
               ),
             ),
             const SizedBox(height: _itemSpacing),
@@ -1040,7 +1046,8 @@ class ConstructionServiceView extends StatelessWidget {
           children: [
             Expanded(
               child: _buildCircularImageContainer(
-                controller.selectedSubCategory.value?.image ?? '',
+                controller.selectedSubCategory.value?.image ??
+                    'category-images/FineAggregate.png',
               ),
             ),
             const SizedBox(height: _itemSpacing),
@@ -1086,11 +1093,14 @@ class ConstructionServiceView extends StatelessWidget {
                     fit: BoxFit.fill,
                     onError: (exception, stackTrace) {},
                   )
-                : null,
+                : DecorationImage(
+              image: const NetworkImage(
+                '${APIConstants.bucketUrl}category-images/FineAggregate.png',
+              ),
+              fit: BoxFit.fill,
+              onError: (exception, stackTrace) {},
+            ),
           ),
-          child: !hasImage
-              ? const Icon(Icons.inventory_2, color: MyColors.primary, size: 24)
-              : null,
         ),
       ),
     );
