@@ -28,6 +28,9 @@ class RoleManagementController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if (Get.arguments != null) {
+      showRoles.value = Get.arguments["isRole"] ?? true;
+    }
     loadRoles();
   }
 

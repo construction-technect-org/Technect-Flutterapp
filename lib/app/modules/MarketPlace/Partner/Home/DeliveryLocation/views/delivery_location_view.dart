@@ -94,13 +94,18 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
                           ),
                           const Gap(16),
                           // Saved Addresses List
-                          Obx(() => CommonAddressList(
-                            addresses: homeController.profileData.value.data?.siteLocations,
-                            onEdit: homeController.editAddress,
-                            onDelete: homeController.deleteAddress,
-                            onSetDefault: homeController.setDefaultAddress,
-                          )),
-
+                          Obx(
+                            () => CommonAddressList(
+                              addresses: homeController
+                                  .profileData
+                                  .value
+                                  .data
+                                  ?.siteLocations,
+                              onEdit: homeController.editAddress,
+                              onDelete: homeController.deleteAddress,
+                              onSetDefault: homeController.setDefaultAddress,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -115,8 +120,6 @@ class DeliveryLocationView extends GetView<DeliveryLocationController> {
   }
 }
 
-
-
 class CommonAddressList extends StatelessWidget {
   final List<dynamic>? addresses;
   final Function(String id)? onEdit;
@@ -130,22 +133,18 @@ class CommonAddressList extends StatelessWidget {
     this.onEdit,
     this.onDelete,
     this.onSetDefault,
-    this.isBack=false,
+    this.isBack = false,
   });
 
   @override
   Widget build(BuildContext context) {
     if (addresses == null || addresses!.isEmpty) {
       return Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height / 3,
-        ),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 3),
         child: Center(
           child: Text(
             'No Address Found',
-            style: MyTexts.medium16.copyWith(
-              color: MyColors.gray2E,
-            ),
+            style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
           ),
         ),
       );
@@ -182,17 +181,15 @@ class CommonAddressList extends StatelessWidget {
                     : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 border: address.isDefault == true
-                    ? Border.all(
-                  color: MyColors.verypaleBlue,
-                  width: 1.2,
-                )
+                    ? Border.all(color: MyColors.verypaleBlue, width: 1.2)
                     : null,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
@@ -258,8 +255,22 @@ class CommonAddressList extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(16),
+                        topRight: Radius.circular(12),
+                      ),
+                      color: address.isDefault == true? Colors.white : MyColors.gra54EA,
+                    ),
+                    child: Text(
+                      "Site Code: ${address.siteCode ?? '-'}",
+                      style: MyTexts.medium14.copyWith(color: MyColors.black),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -44,15 +44,6 @@ class EditProfileView extends GetView<EditProfileController> {
                   await controller.validateEmailAvailability();
                   if (formKey.currentState!.validate() &&
                       controller.emailError.value == '') {
-                    if (Get.find<ProfileController>().image.value.isEmpty) {
-                      if (Get.find<ProfileController>().selectedImage.value ==
-                          null) {
-                        SnackBars.errorSnackBar(
-                          content: "Please upload business logo",
-                        );
-                        return;
-                      }
-                    }
                     controller.updateProfile();
                   }
                 },
@@ -278,7 +269,7 @@ class EditProfileView extends GetView<EditProfileController> {
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(10),
               ],
-              validator: ValidationUtils.validateBusinessContactNumber,
+              validator: ValidationUtils.validateIndianMobileNumber,
             ),
           ),
           SizedBox(height: 2.h),
