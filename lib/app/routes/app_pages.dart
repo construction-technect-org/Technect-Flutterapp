@@ -15,10 +15,6 @@ import 'package:construction_technect/app/modules/Authentication/login/bindings/
 import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
-import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/bindings/dashboard_binding.dart';
-import 'package:construction_technect/app/modules/FeatureDashBoard/Dashboard/views/dashboard_view.dart';
-import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMarketPlace/bindings/market_place_binding.dart';
-import 'package:construction_technect/app/modules/FeatureDashBoard/DashboardMarketPlace/views/market_place_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/bindings/add_kyc_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/views/add_kyc_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/bindings/add_requirement_binding.dart';
@@ -290,16 +286,6 @@ class AppPages {
       name: _Paths.ADD_KYC,
       page: () => const AddKycView(),
       binding: AddKycBinding(),
-    ),
-    GetPage(
-      name: Routes.DASHBOARD,
-      page: () => DashboardView(),
-      binding: DashboardBinding(),
-    ),
-    GetPage(
-      name: Routes.DASHABORD_MARKET_PLACE,
-      page: () => const DashboardMarketPlaceView(),
-      binding: DashboardMarketPlaceBinding(),
     ),
 
     GetPage(
