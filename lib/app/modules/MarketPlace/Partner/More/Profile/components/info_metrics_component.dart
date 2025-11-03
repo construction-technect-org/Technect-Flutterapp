@@ -55,9 +55,8 @@ class InfoMetricsComponent extends StatelessWidget {
               style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
             ),
             GestureDetector(
-              onTap: () {
-                Get.to(() => EditProfile());
-              },
+              onTap: () => Get.to(() => EditProfile()),
+
               behavior: HitTestBehavior.translucent,
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
