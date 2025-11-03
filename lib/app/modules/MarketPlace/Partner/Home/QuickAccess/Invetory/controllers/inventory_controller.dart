@@ -1,7 +1,9 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/services/InventoryService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/service/product_management_service.dart';
-
 
 class InventoryController extends GetxController {
   final ProductManagementService _productService = ProductManagementService();
@@ -9,7 +11,19 @@ class InventoryController extends GetxController {
   RxBool isLoading = false.obs;
   Rx<ProductListModel> productListModel = ProductListModel().obs;
   RxList<Product> filteredProducts = <Product>[].obs;
+
+  Rx<AllServiceModel> serviceListModel = AllServiceModel().obs;
+  RxList<Service> filteredService = <Service>[].obs;
   RxString searchQuery = ''.obs;
+
+  RxString selectedStatus =(Get
+      .find<HomeController>()
+      .marketPlace
+      .value == 0
+      ? "product"
+      : "service").obs;
+
+  TextEditingController searchController = TextEditingController();
 
   @override
   void onInit() {
@@ -29,15 +43,23 @@ class InventoryController extends GetxController {
   Future<void> fetchProducts() async {
     try {
       isLoading.value = true;
-      final result = await _productService.getProductList();
-      if (result.success == true) {
-        productListModel.value = result;
-        filteredProducts.assignAll(result.data?.products ?? []);
-        // Cache the complete model
-        myPref.setProductListModel(result);
+      if (selectedStatus.value == "product") {
+        final result = await _productService.getProductList();
+        if (result.success == true) {
+          productListModel.value = result;
+          filteredProducts.assignAll(result.data?.products ?? []);
+          // Cache the complete model
+          myPref.setProductListModel(result);
+        } else {
+          // Fallback to cached data if API fails
+          await _loadProductsFromStorage();
+        }
       } else {
-        // Fallback to cached data if API fails
-        await _loadProductsFromStorage();
+        final result = await InventoryService().getServiceList();
+        if (result.success == true) {
+          serviceListModel.value = result;
+          filteredService.assignAll(result.data ?? []);
+        }
       }
     } catch (e) {
       // Fallback to cached data if API fails
@@ -49,40 +71,64 @@ class InventoryController extends GetxController {
 
   void searchProducts(String? value) {
     searchQuery.value = value ?? '';
-    if (value == null || value.isEmpty) {
-      filteredProducts.assignAll(productListModel.value.data?.products ?? []);
+    if (selectedStatus.value == "product") {
+      if (value == null || value.isEmpty) {
+        filteredProducts.assignAll(productListModel.value.data?.products ?? []);
+      } else {
+        filteredProducts.assignAll(
+          (productListModel.value.data?.products ?? [])
+              .where(
+                (product) =>
+                    (product.productName?.toLowerCase().contains(
+                          value.toLowerCase(),
+                        ) ??
+                        false) ||
+                    (product.mainCategoryName?.toLowerCase().contains(
+                          value.toLowerCase(),
+                        ) ??
+                        false) ||
+                    (product.subCategoryName?.toLowerCase().contains(
+                          value.toLowerCase(),
+                        ) ??
+                        false) ||
+                    (product.categoryProductName?.toLowerCase().contains(
+                          value.toLowerCase(),
+                        ) ??
+                        false) ||
+                    (product.address?.toLowerCase().contains(
+                          value.toLowerCase(),
+                        ) ??
+                        false) ||
+                    (product.brand?.toLowerCase().contains(
+                          value.toLowerCase(),
+                        ) ??
+                        false),
+              )
+              .toList(),
+        );
+      }
     } else {
-      filteredProducts.assignAll(
-        (productListModel.value.data?.products ?? [])
-            .where(
-              (product) =>
-                  (product.productName?.toLowerCase().contains(
-                        value.toLowerCase(),
-                      ) ??
-                      false) ||
-                  (product.mainCategoryName?.toLowerCase().contains(
-                        value.toLowerCase(),
-                      ) ??
-                      false) ||
-                  (product.subCategoryName?.toLowerCase().contains(
-                        value.toLowerCase(),
-                      ) ??
-                      false)
-                      ||
-                      (product.categoryProductName?.toLowerCase().contains(value.toLowerCase()) ??
-                          false)
-                      ||
-                      (product.address?.toLowerCase().contains(value.toLowerCase()) ??
-                          false)
-                      ||
-                  (product.brand?.toLowerCase().contains(value.toLowerCase()) ??
-                      false),
-
-            )
-            .toList(),
-      );
+      if (value == null || value.isEmpty) {
+        filteredService.assignAll(serviceListModel.value.data ?? []);
+      } else {
+        filteredService.assignAll(
+          (serviceListModel.value.data ?? []).where(
+            (s) =>
+                (s.mainCategoryName?.toLowerCase().contains(
+                      value.toLowerCase(),
+                    ) ??
+                    false) ||
+                (s.subCategoryName?.toLowerCase().contains(
+                      value.toLowerCase(),
+                    ) ??
+                    false) ||
+                (s.serviceCategoryName?.toLowerCase().contains(
+                      value.toLowerCase(),
+                    ) ??
+                    false),
+          ),
+        );
+      }
     }
   }
-
-
 }

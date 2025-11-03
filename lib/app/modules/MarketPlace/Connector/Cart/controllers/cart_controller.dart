@@ -71,14 +71,6 @@ class CartListController extends GetxController {
 
   RxString selectedStatus = 'All'.obs;
 
-  final List<String> statusOptions = [
-    'All',
-    'Pending',
-    'Accepted',
-    'Rejected',
-    'Cancelled',
-  ];
-
 
   @override
   void onInit() {

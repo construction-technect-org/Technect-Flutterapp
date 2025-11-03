@@ -80,6 +80,7 @@ abstract class Routes {
   static const OTP_Verification = _Paths.OTP_VERIFICATION_SCREEN;
   static const ADD_REQUIREMENT = _Paths.ADD_REQUIREMENT;
   static const REQUIREMENT = _Paths.REQUIREMENT;
+  static const ADD_SERVICES = _Paths.ADD_SERVICES;
 }
 
 abstract class _Paths {
@@ -161,4 +162,5 @@ abstract class _Paths {
   static const SEARCH_SERVICE = '/search-service';
   static const ADD_REQUIREMENT = '/connector-add-requirement';
   static const REQUIREMENT = '/requirement';
+  static const ADD_SERVICES = '/add-services';
 }

@@ -302,7 +302,7 @@ class BottomBarView extends GetView<BottomController> {
                                   ),
                                   onTap: () {
                                     Get.back();
-                                    Get.toNamed(Routes.ADD_PRODUCT);
+                                    Get.toNamed(Routes.ADD_SERVICES);
                                   },
                                 ),
                                 const Divider(),

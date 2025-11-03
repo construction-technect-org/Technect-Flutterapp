@@ -60,6 +60,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/n
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/view/new_launches_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/binding/add_service_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/binding/service_detail_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/view/service_detail_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/views/construction_service_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/binding/account_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/view/account_screen.dart';
@@ -119,10 +123,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/bin
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/views/bottom_view.dart';
 import 'package:construction_technect/app/modules/OnBoarding/bindings/on_boarding_binding.dart';
 import 'package:construction_technect/app/modules/OnBoarding/view/on_boarding_screen.dart';
-import 'package:construction_technect/app/modules/ServiceDetail/bindings/service_detail_binding.dart';
-import 'package:construction_technect/app/modules/ServiceDetail/views/service_detail_view.dart';
-import 'package:construction_technect/app/modules/ServiceManagement/controllers/service_management_controller.dart';
-import 'package:construction_technect/app/modules/ServiceManagement/views/service_management_view.dart';
 import 'package:construction_technect/app/modules/splash/bindings/splash_binding.dart';
 import 'package:construction_technect/app/modules/splash/views/splash_view.dart';
 import 'package:get/get.dart';
@@ -243,21 +243,11 @@ class AppPages {
       binding: TeamDetailsBinding(),
     ),
 
-    GetPage(
-      name: _Paths.SERVICE_MANAGEMENT,
-      page: () => ServiceManagementView(),
-      binding: BindingsBuilder(() {
-        Get.lazyPut<ServiceManagementController>(
-          () => ServiceManagementController(),
-        );
-      }),
-    ),
-
-    GetPage(
-      name: _Paths.SERVICE_DETAILS,
-      page: () => ServiceDetailsView(),
-      binding: ServiceDetailBinding(),
-    ),
+    // GetPage(
+    //   name: _Paths.SERVICE_DETAILS,
+    //   page: () => ServiceDetailsView(),
+    //   binding: ServiceDetailBinding(),
+    // ),
     GetPage(
       name: _Paths.CHAT_SYSTEM,
       page: () => const ChatSystemView(),
@@ -468,6 +458,16 @@ class AppPages {
       name: Routes.SEARCH_SERVICE,
       page: () => SearchServiceView(),
       binding: SearchServiceBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_SERVICES,
+      page: () =>   AddServiceScreen(),
+      binding: AddServiceBinding(),
+    ),
+    GetPage(
+      name: Routes.SERVICE_DETAILS,
+      page: () =>   const ServiceDetailScreen(),
+      binding: ServiceDetailBinding(),
     ),
   ];
 }

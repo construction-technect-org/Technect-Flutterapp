@@ -20,8 +20,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
   @override
   Widget build(BuildContext context) {
-    print("controller.product.status");
-    print(controller.product.status);
+
     return LoaderWrapper(
       isLoading: (controller.isFromConnector.value == true)
           ? false.obs

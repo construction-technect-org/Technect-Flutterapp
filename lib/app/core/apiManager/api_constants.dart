@@ -62,9 +62,9 @@ class APIConstants {
   static const String connectorReport = "connector/analytics/pdf";
 
   // Service Management APIs
-  static const String getServiceList = "service/merchant/list";
+  // static const String getServiceList = "service/merchant/list";
   static const String createService = "service/create";
-  static const String updateService = "service/merchant/";
+  // static const String updateService = "service/merchant/";
 
   static const String deleteService = "service/merchant/";
   static const String getServiceTypes = "service/types";
@@ -134,4 +134,7 @@ class APIConstants {
   static const String pointOfContactMerchant = "point-of-contact/merchant";
   static const String pointOfContactConnector = "point-of-contact/connector";
   static const String connectorTeamMember = "connector/team-member";
+  static const String addService = "merchant/service/create";
+  static const String updateService = "merchant/service/";
+  static const String getServiceList = "merchant/service/list";
 }
