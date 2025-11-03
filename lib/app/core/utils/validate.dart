@@ -231,11 +231,15 @@ class Validate {
     if (value.trim().length < 2) {
       return "$fieldName must be at least 2 characters long";
     }
-    // Allow CamelCase segments separated by optional space/underscore, each segment starts uppercase and may contain letters or numbers (e.g., Studio52, Build4U, Tech2Win)
-    if (!RegExp(
-      r'^[A-Z][a-zA-Z0-9]*(?:[ _]?[A-Z][a-zA-Z0-9]*)*$',
-    ).hasMatch(value.trim())) {
-      return "$fieldName must have each word start uppercase and contain letters or numbers";
+    // Allow words starting uppercase; words may include letters, numbers, and &, -, . between alphanumerics.
+    // Examples accepted: "H&M Constructions", "Pro-Tech Builders", "A&B Traders", "Tech2Win", "Studio52".
+    // Disallow names made of only special characters and disallow specials at start/end of a word or repeated.
+    final pattern = RegExp(
+      '^[A-Z](?:[a-zA-Z0-9]*(?:[&.-][a-zA-Z0-9]+)*)' // first word
+      r'(?:[ _]?[A-Z](?:[a-zA-Z0-9]*(?:[&.-][a-zA-Z0-9]+)*))*$', // subsequent words
+    );
+    if (!pattern.hasMatch(value.trim())) {
+      return "$fieldName must start each word uppercase and may include letters, numbers, &, -, . between characters";
     }
     return null;
   }
