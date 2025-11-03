@@ -92,21 +92,26 @@ class EditProfileController extends GetxController {
   }
 
   void nextStep() {
-    ProfileController.to.businessModel.value = BusinessModel(
-      businessContactNumber: businessContactController.text.trim(),
-      businessEmail: businessEmailController.text.trim(),
-      businessName: businessNameController.text.trim(),
-      year: yearsInBusinessController.text.trim(),
-      alternativeBusinessEmail: alternativeContactController.text.trim(),
-      gstinNumber: gstNumberController.text.trim(),
-      website: businessWebsiteController.text.trim(),
-      address: addressContoller.text.trim(),
-      image: ProfileController.to.selectedImage.value != null
-          ? ProfileController.to.selectedImage.value?.path
-          : ProfileController.to.image.value,
-    );
-    ProfileController.to.businessModel.refresh();
-    Get.back();
+    if (ProfileController.to.selectedImage.value != null ||
+        ProfileController.to.image.value.isNotEmpty) {
+      ProfileController.to.businessModel.value = BusinessModel(
+        businessContactNumber: businessContactController.text.trim(),
+        businessEmail: businessEmailController.text.trim(),
+        businessName: businessNameController.text.trim(),
+        year: yearsInBusinessController.text.trim(),
+        alternativeBusinessEmail: alternativeContactController.text.trim(),
+        gstinNumber: gstNumberController.text.trim(),
+        website: businessWebsiteController.text.trim(),
+        address: addressContoller.text.trim(),
+        image: ProfileController.to.selectedImage.value != null
+            ? ProfileController.to.selectedImage.value?.path
+            : ProfileController.to.image.value,
+      );
+      ProfileController.to.businessModel.refresh();
+      Get.back();
+    } else {
+      SnackBars.errorSnackBar(content: "Please add the Business Logo");
+    }
   }
 
   void updateProfile() {
