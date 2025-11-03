@@ -254,23 +254,16 @@ class EditProfileView extends GetView<EditProfileController> {
             validator: ValidationUtils.validateGSTINNumber,
           ),
           SizedBox(height: 2.h),
-          Focus(
-            onFocusChange: (hasFocus) {
-              if (!hasFocus) {
-                controller.validateEmailAvailability();
-              }
-            },
-            child: CommonTextField(
-              hintText: "9292929929",
-              headerText: "Business Contact Number",
-              controller: controller.businessContactController,
-              keyboardType: TextInputType.phone,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
-              ],
-              validator: ValidationUtils.validateIndianMobileNumber,
-            ),
+          CommonTextField(
+            hintText: "9292929929",
+            headerText: "Business Contact Number",
+            controller: controller.businessContactController,
+            keyboardType: TextInputType.phone,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(10),
+            ],
+            validator: (val) => Validate.validateMobileNumber(val),
           ),
           SizedBox(height: 2.h),
           CommonTextField(
@@ -282,6 +275,7 @@ class EditProfileView extends GetView<EditProfileController> {
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(10),
             ],
+            validator: (val) => Validate.validateMobileNumber(val),
           ),
           SizedBox(height: 2.h),
           CommonTextField(
