@@ -180,9 +180,9 @@ class ProfileView extends GetView<ProfileController> {
         padding: const EdgeInsets.all(24.0),
         child: Obx(() {
           return RoundedButton(
-            buttonName: controller.selectedTabIndex.value == 0
-                ? "Continue"
-                : "Save",
+            buttonName: controller.selectedTabIndex.value == 2
+                ? "Save"
+                : "Continue",
             onTap: () {
               if (controller.selectedTabIndex.value == 0) {
                 if ((controller.businessModel.value.businessEmail ?? "")
@@ -197,7 +197,7 @@ class ProfileView extends GetView<ProfileController> {
                 } else {
                   controller.selectedTabIndex.value = 1;
                 }
-              } else {
+              } else if (controller.selectedTabIndex.value == 1) {
                 for (final cert in controller.certificates) {
                   if (cert.isDefault &&
                       (cert.filePath == null || cert.filePath!.isEmpty)) {
@@ -205,8 +205,11 @@ class ProfileView extends GetView<ProfileController> {
                       content: "Please upload all relevant certificates",
                     );
                     return;
+                  } else {
+                    controller.selectedTabIndex.value = 2;
                   }
                 }
+              } else {
                 controller.handleMerchantData();
               }
             },
