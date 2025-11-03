@@ -12,11 +12,14 @@ class Validate {
   }
 
   static String? validateMail(String? mail) {
-    if (!isValidEmail(mail)) {
-      return "Please enter a valid email address";
-    } else {
-      return "";
+    final value = mail?.trim() ?? '';
+    if (value.isEmpty) {
+      return "Please enter email";
     }
+    if (!Validate.isValidEmail(value)) {
+      return "Please enter a valid email address";
+    }
+    return null;
   }
 
   /// Validates email domain to check for invalid or non-existent domains
