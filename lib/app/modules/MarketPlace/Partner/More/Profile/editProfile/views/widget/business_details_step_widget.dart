@@ -32,8 +32,10 @@ class BusinessDetailsStep extends StatelessWidget {
               LengthLimitingTextInputFormatter(30),
               // NameInputFormatter(),
             ],
-            validator: (value) =>
-                Validate().validateName(value, fieldName: "company name"),
+            validator: (value) => Validate().validateBusinessName(
+              value,
+              fieldName: "company name",
+            ),
           ),
           SizedBox(height: 2.h),
           CommonTextField(

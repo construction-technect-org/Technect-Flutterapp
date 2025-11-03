@@ -224,6 +224,22 @@ class Validate {
     return null;
   }
 
+  String? validateBusinessName(String? value, {String fieldName = "Name"}) {
+    if (value == null || value.trim().isEmpty) {
+      return "Please enter $fieldName";
+    }
+    if (value.trim().length < 2) {
+      return "$fieldName must be at least 2 characters long";
+    }
+    // Allow CamelCase segments separated by optional space/underscore, each segment starts uppercase and may contain letters or numbers (e.g., Studio52, Build4U, Tech2Win)
+    if (!RegExp(
+      r'^[A-Z][a-zA-Z0-9]*(?:[ _]?[A-Z][a-zA-Z0-9]*)*$',
+    ).hasMatch(value.trim())) {
+      return "$fieldName must have each word start uppercase and contain letters or numbers";
+    }
+    return null;
+  }
+
   Future<bool> validateGSTAvailability(String value) async {
     if (value.isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter GSTIN number");
