@@ -18,7 +18,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -47,7 +47,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
 
         // ---------- KYC Section ----------
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 0),
           child: Row(
             children: [
               Text(
@@ -86,7 +86,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
   // ------------------- USER INFO CARD -------------------
   Widget _buildInfoMetricsContent() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.zero,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(16),
@@ -146,7 +146,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
   // ------------------- KYC DISPLAY CARD -------------------
   Widget _buildExistingKycDetails(connectorProfile) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+      padding: EdgeInsets.zero,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(16),

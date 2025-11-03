@@ -408,3 +408,24 @@ class BottomBarView extends GetView<BottomController> {
     );
   }
 }
+
+
+class HearderText extends StatelessWidget {
+  final String text;
+  final TextStyle? textStyle;
+
+  const HearderText({super.key, required this.text, this.textStyle});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style:
+      textStyle ??
+          MyTexts.medium18.copyWith(
+            color: MyColors.black,
+            fontFamily: MyTexts.SpaceGrotesk,
+          ),
+    );
+  }
+}

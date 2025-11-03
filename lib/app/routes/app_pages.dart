@@ -15,39 +15,17 @@ import 'package:construction_technect/app/modules/Authentication/login/bindings/
 import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/bindings/add_kyc_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/views/add_kyc_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/bindings/add_requirement_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/views/add_requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/bindings/cart_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/views/cart_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocation/bindings/connector_add_location_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocation/views/connector_add_location_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocationManually/bindings/connector_add_location_manually_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorAddLocationManually/view/connector_add_location_manually_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/bindings/connector_main_tab_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorBottom/views/connector_main_tab.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/bindings/connector_connection_inbox_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorConnectionInbox/views/connector_connection_inbox_vies.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMarketplace/bindings/connector_market_place_binfing.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorMarketplace/views/connector_market_place_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProductDetails/bindings/connector_product_details_bindings.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProductDetails/views/connector_product_details_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/views/connector_profile_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/bindings/connector_select_location_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectLocation/views/connector_select_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/views/connector_selected_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/bindings/requirement_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/views/requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/bindings/search_product_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/views/search_product_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/AddSupportTickets/views/connector_create_new_ticket.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/CustomerSupport/bindings/connector_create_new_ticket_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/bindings/connector_request_demo_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/views/connector_request_demo_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/SuppoerRequestFilter/bindings/connector_support_request_bindings.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/SuppoerRequestFilter/views/connector_support_request_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/bindings/wish_list_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
@@ -265,55 +243,14 @@ class AppPages {
       page: () => EditProfileView(),
       binding: EditProfileBinding(),
     ),
-    // Connector
-    GetPage(
-      name: _Paths.CONNECTOR_MAIN_TAB,
-      page: () => const ConnectorBottom(),
-      binding: ConnectorMainTabBinding(),
-    ),
-    GetPage(
-      name: _Paths.CONNECTOR_MARKET_PLACE,
-      page: () => const ConnectorMarketPlaceView(),
-      binding: ConnectorMarketPlaceBinding(),
-    ),
 
     GetPage(
       name: _Paths.CONNECTOR_PROFILE,
       page: () => const ConnectorProfileView(),
       binding: ConnectorProfileBinding(),
     ),
-    GetPage(
-      name: _Paths.ADD_KYC,
-      page: () => const AddKycView(),
-      binding: AddKycBinding(),
-    ),
 
-    GetPage(
-      name: Routes.CONNECTOR_SELECT_LOCATION,
-      page: () => ConnectorSelectLocationView(),
-      binding: ConnectorSelectLocationBinding(),
-    ),
-    GetPage(
-      name: Routes.CONNECTOR_ADD_LOCATION,
-      page: () => const ConnectorAddLocationView(),
-      binding: ConnectorAddLocationBinding(),
-    ),
-    GetPage(
-      name: Routes.CONNECTOR_ADD_LOCATION_MANUALLY,
-      page: () => const ConnectorAddLocationManuallyView(),
-      binding: ConnectorAddLocationManuallyBinding(),
-    ),
-    GetPage(
-      name: Routes.CONNECTOR_PRODUCT_DETAILS,
-      page: () => const ConnectorProductDetailsView(),
-      binding: ConnectorProductDetailsBindings(),
-    ),
 
-    GetPage(
-      name: Routes.CONNECTOR_CONNECTION_INBOX,
-      page: () => ConnectorConnectionInboxVies(),
-      binding: ConnectorConnectionInboxBinding(),
-    ),
     GetPage(
       name: Routes.REQUEST_DEMO,
       page: () => RequestDemoView(),
@@ -351,16 +288,6 @@ class AppPages {
       binding: NotificationBinding(),
     ),
     GetPage(
-      name: Routes.CONNECTOR_CREATE_NEW_TICKET,
-      page: () => ConnectorCreateNewTicket(),
-      binding: ConnectorCreateNewTicketBinding(),
-    ),
-    GetPage(
-      name: Routes.CONNECTOR_SUPPORT_REQUEST,
-      page: () => ConnectorSupportRequestScreen(),
-      binding: ConnectorSupportRequestBindings(),
-    ),
-    GetPage(
       name: Routes.ADD_REQUIREMENT,
       page: () => AddRequirementView(),
       binding: AddRequirementBinding(),
@@ -369,11 +296,6 @@ class AppPages {
       name: Routes.REQUIREMENT,
       page: () => RequirementView(),
       binding: RequirementBinding(),
-    ),
-    GetPage(
-      name: Routes.CONNECTOR_REQUEST_DEMO,
-      page: () => ConnectorRequestDemoView(),
-      binding: ConnectorRequestDemoBinding(),
     ),
     GetPage(
       name: Routes.WISH_LIST,
