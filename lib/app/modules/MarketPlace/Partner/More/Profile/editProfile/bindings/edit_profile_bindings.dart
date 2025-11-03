@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 class EditProfileBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<EditProfileController>(() => EditProfileController());
+    // Recreate EditProfileController when needed without leaking
+    Get.lazyPut<EditProfileController>(() => EditProfileController(), fenix: true);
   }
 }

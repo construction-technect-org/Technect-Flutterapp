@@ -75,6 +75,9 @@ class ProfileController extends GetxController {
       if (merchantProfile?.documents != null) {
         loadCertificatesFromDocuments(merchantProfile!.documents!);
       }
+
+      // Ensure observers are notified after assigning individual fields
+      businessModel.refresh();
     }
   }
 
