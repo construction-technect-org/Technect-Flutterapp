@@ -29,7 +29,7 @@ class BusinessDetailsStep extends StatelessWidget {
             keyboardType: TextInputType.text,
             textCapitalization: TextCapitalization.words,
             inputFormatters: [
-              LengthLimitingTextInputFormatter(30),
+              LengthLimitingTextInputFormatter(100),
               // NameInputFormatter(),
             ],
             validator: (value) => Validate().validateBusinessName(
