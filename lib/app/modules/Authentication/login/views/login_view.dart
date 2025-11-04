@@ -78,6 +78,7 @@ class LoginView extends GetView<LoginController> {
                           controller: controller.mobileController,
                           focusNode: controller.mobileFocusNode,
                           isValid: controller.isValid,
+                          customErrorMessage: controller.mobileValidationError,
                           onCountryCodeChanged: (code) {
                             controller.countryCode.value = code;
                           },
