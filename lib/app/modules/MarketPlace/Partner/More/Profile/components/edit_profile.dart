@@ -43,9 +43,7 @@ class EditProfile extends StatelessWidget {
                     title: const Text('Edit profile information'),
                     isCenter: false,
                     leading: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
+                      onTap: () => Get.back(),
                       child: const Padding(
                         padding: EdgeInsets.zero,
                         child: Icon(

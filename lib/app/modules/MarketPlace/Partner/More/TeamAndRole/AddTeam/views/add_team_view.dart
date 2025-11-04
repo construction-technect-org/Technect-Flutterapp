@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/controllers/add_team_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/components/delete_team_dialog.dart';
@@ -230,16 +231,12 @@ class AddTeamView extends GetView<AddTeamController> {
                               headerText: 'Phone number',
                               controller: controller.phoneNumberController,
                               keyboardType: TextInputType.phone,
-                              maxLength: 10,
-                              validator: (val) {
-                                if ((val ?? "").isEmpty) {
-                                  return "Please enter phone number";
-                                }
-                                if (val!.length < 10) {
-                                  return "Phone number length should be 10";
-                                }
-                                return null;
-                              },
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                              validator: (val) =>
+                                  Validate.validateMobileNumber(val),
                             ),
 
                             SizedBox(height: 2.h),

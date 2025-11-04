@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
@@ -41,13 +42,13 @@ class EditProfileController extends GetxController {
 
       if (merchantProfile != null) {
         // Populate text fields
-        Get.find<ProfileController>().image.value =
-            merchantProfile.merchantLogo ?? "";
+        ProfileController.to.image.value = merchantProfile.merchantLogo ?? "";
         businessNameController.text = merchantProfile.businessName ?? '';
         gstNumberController.text = merchantProfile.gstinNumber ?? '';
         businessEmailController.text = merchantProfile.businessEmail ?? '';
         businessWebsiteController.text = merchantProfile.website ?? '';
-        alternativeContactController.text = merchantProfile.alternativeBusinessContactNumber ?? '';
+        alternativeContactController.text =
+            merchantProfile.alternativeBusinessContactNumber ?? '';
         businessContactController.text =
             merchantProfile.businessContactNumber ?? '';
         yearsInBusinessController.text =
@@ -84,6 +85,7 @@ class EditProfileController extends GetxController {
             cont.businessModel.value.businessContactNumber ?? "";
         alternativeContactController.text =
             cont.businessModel.value.alternativeBusinessEmail ?? "";
+        yearsInBusinessController.text = cont.businessModel.value.year ?? "";
       }
     } catch (e) {
       Get.printError(info: 'Error populating existing data: $e');
@@ -91,21 +93,29 @@ class EditProfileController extends GetxController {
   }
 
   void nextStep() {
-    Get.find<ProfileController>().businessModel.value = BusinessModel(
-      businessContactNumber: businessContactController.text,
-      businessEmail: businessEmailController.text,
-      businessName: businessNameController.text,
-      year: yearsInBusinessController.text,
-      alternativeBusinessEmail: alternativeContactController.text,
-      gstinNumber: gstNumberController.text,
-      website: businessWebsiteController.text,
-      address: addressContoller.text,
-      image: Get.find<ProfileController>().selectedImage.value != null
-          ? Get.find<ProfileController>().selectedImage.value?.path
-          : Get.find<ProfileController>().image.value,
-    );
-    Get.find<ProfileController>().businessModel.refresh();
-    Get.back();
+    if (ProfileController.to.selectedImage.value != null ||
+        ProfileController.to.image.value.isNotEmpty) {
+      ProfileController.to.businessModel.value = BusinessModel(
+        businessContactNumber: businessContactController.text.trim(),
+        businessEmail: businessEmailController.text.trim(),
+        businessName: businessNameController.text.trim(),
+        year: yearsInBusinessController.text.trim(),
+        alternativeBusinessEmail: alternativeContactController.text.trim(),
+        gstinNumber: gstNumberController.text.trim(),
+        website: businessWebsiteController.text.trim(),
+        address: addressContoller.text.trim(),
+        image: ProfileController.to.selectedImage.value != null
+            ? ProfileController.to.selectedImage.value?.path
+            : ProfileController.to.image.value,
+      );
+      log(
+        "AlternativeContactController : ${alternativeContactController.text}",
+      );
+      ProfileController.to.businessModel.refresh();
+      Get.back();
+    } else {
+      SnackBars.errorSnackBar(content: "Please add the Business Logo");
+    }
   }
 
   void updateProfile() {
@@ -150,18 +160,15 @@ class EditProfileController extends GetxController {
     );
   }
 
-
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await Get.find<ProfileController>().picker.pickImage(
+    final pickedFile = await ProfileController.to.picker.pickImage(
       source: source,
     );
     if (pickedFile == null) return;
     final compressedFile = await CommonConstant().compressImage(
       File(pickedFile.path),
     );
-    Get.find<ProfileController>().selectedImage.value = File(
-      compressedFile.path,
-    );
+    ProfileController.to.selectedImage.value = File(compressedFile.path);
   }
 
   Future<void> validateEmailAvailability() async {

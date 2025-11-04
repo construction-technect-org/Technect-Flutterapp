@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
 import 'package:gap/gap.dart';
@@ -123,6 +124,8 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                       LengthLimitingTextInputFormatter(254),
                                       EmailInputFormatter(),
                                     ],
+                                    validator: (value) =>
+                                        Validate.validateMail(value),
                                     onChange: (value) {
                                       if (controller
                                           .emailError
@@ -402,29 +405,30 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
             buttonName: 'Continue',
             onTap: () async {
               hideKeyboard();
-              if (formKey.currentState!.validate()) {
-                // Check email availability if not already validated
-                if (controller.emailController.text.isNotEmpty) {
-                  await controller.validateEmailAvailability(
-                    controller.emailController.text,
-                  );
-                }
+              if (!formKey.currentState!.validate()) return;
 
-                // Check if email has validation errors
-                if (controller.emailError.value.isNotEmpty) {
-                  SnackBars.errorSnackBar(content: controller.emailError.value);
-                  return;
-                }
-                if (controller.isVerified.value) {
-                  controller.openPhoneNumberBottomSheet();
-                } else {
-                  final String text =
-                      Get.find<SignUpRoleController>().selectedRoleName.value ==
-                          "House-Owner"
-                      ? "aadhaar number first"
-                      : "GSTIN number";
-                  SnackBars.errorSnackBar(content: "Please verify $text");
-                }
+              // Run async availability check when email is provided and format is valid
+              if (controller.emailController.text.trim().isNotEmpty) {
+                await controller.validateEmailAvailability(
+                  controller.emailController.text,
+                );
+              }
+
+              // Block on availability error
+              if (controller.emailError.value.isNotEmpty) {
+                SnackBars.errorSnackBar(content: controller.emailError.value);
+                return;
+              }
+
+              if (controller.isVerified.value) {
+                controller.openPhoneNumberBottomSheet();
+              } else {
+                final String text =
+                    Get.find<SignUpRoleController>().selectedRoleName.value ==
+                        "House-Owner"
+                    ? "aadhaar number first"
+                    : "GSTIN number";
+                SnackBars.errorSnackBar(content: "Please verify $text");
               }
             },
           ),

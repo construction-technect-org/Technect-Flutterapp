@@ -31,7 +31,7 @@ class ProfileController extends GetxController {
       isSwitch.value = true;
     }
     businessModel.value.gstinNumber =
-        Get.find<HomeController>().profileData.value.data?.user?.gst ?? "";
+        HomeController.to.profileData.value.data?.user?.gst ?? "";
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website ?? "";
       businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
@@ -75,11 +75,14 @@ class ProfileController extends GetxController {
       if (merchantProfile?.documents != null) {
         loadCertificatesFromDocuments(merchantProfile!.documents!);
       }
+
+      // Ensure observers are notified after assigning individual fields
+      businessModel.refresh();
     }
   }
 
   void loadCertificatesFromDocuments(List<Documents> documents) {
-    for (var doc in documents) {
+    for (final doc in documents) {
       final type = doc.documentType ?? "";
       final name = doc.documentName ?? "";
       final path = doc.filePath;
@@ -115,7 +118,7 @@ class ProfileController extends GetxController {
 
   final DocumentService _documentService = DocumentService();
 
-  HomeController get homeController => Get.find<HomeController>();
+  HomeController get homeController => HomeController.to;
 
   ProfileModel get profileData => homeController.profileData.value;
 
@@ -444,7 +447,7 @@ class ProfileController extends GetxController {
         // Check if it contains mostly printable ASCII characters
         if (bytes.isEmpty) return true;
         int printableCount = 0;
-        for (int byte in bytes) {
+        for (final int byte in bytes) {
           if (byte >= 32 && byte <= 126 ||
               byte == 9 ||
               byte == 10 ||
@@ -480,7 +483,7 @@ class ProfileController extends GetxController {
     try {
       isLoading.value = true;
 
-      final homeController = Get.find<HomeController>();
+      final homeController = HomeController.to;
       final merchantProfile =
           homeController.profileData.value.data?.merchantProfile;
       final bool isUpdate;
