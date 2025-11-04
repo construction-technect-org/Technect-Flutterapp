@@ -4,9 +4,9 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
-import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/widget/mobile_number_sp_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:timer_count_down/timer_controller.dart';
@@ -27,7 +27,7 @@ class SignUpDetailsController extends GetxController {
   RxBool isVerified = false.obs;
 
   RxInt isValid = (-1).obs;
-  RxString countryCode = "".obs;
+  RxString countryCode = "+91".obs;
   final RxString mobileValidationError = "".obs;
 
   final countdownController = CountdownController(autoStart: true);
@@ -65,6 +65,8 @@ class SignUpDetailsController extends GetxController {
 
   Future<bool> validateNumberAvailability(String number) async {
     try {
+      log("mobileNumber: $number,        countryCode: ${countryCode.value},");
+
       // Check if mobile number is available
       final isAvailable = await signUpService.checkAvailability(
         mobileNumber: number,
@@ -265,10 +267,20 @@ class SignUpDetailsController extends GetxController {
                 "Mobile Number",
                 style: MyTexts.medium20.copyWith(color: Colors.black),
               ),
-              const Gap(24),
-              CommonPhoneField(
-                controller: mobileNumberController,
-                focusNode: FocusNode(),
+              const Gap(5),
+              // CommonPhoneField(
+              //   controller: mobileNumberController,
+              //   focusNode: FocusNode(),
+              //   isValid: isValid,
+              //   customErrorMessage: mobileValidationError,
+              //   onCountryCodeChanged: (code) {
+              //     countryCode.value = code;
+              //   },
+              // ),
+              MobileNumberSpWidget(
+                number: mobileNumberController,
+                // focusNode: FocusNode(),
+                formKey: formKey,
                 isValid: isValid,
                 customErrorMessage: mobileValidationError,
                 onCountryCodeChanged: (code) {
