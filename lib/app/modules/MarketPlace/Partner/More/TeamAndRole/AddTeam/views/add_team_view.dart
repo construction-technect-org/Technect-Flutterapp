@@ -207,7 +207,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                   LengthLimitingTextInputFormatter(50),
                                   EmailInputFormatter(),
                                 ],
-                                validator: validateEmail,
+                                // validator: (val) => Validate.validateMail(val),
                               ),
                             ),
                             Obx(() {
@@ -274,6 +274,9 @@ class AddTeamView extends GetView<AddTeamController> {
               () => RoundedButton(
                 buttonName: controller.isEdit.value ? "Update" : 'Add',
                 onTap: () {
+                  controller.validateEmailAvailability(
+                    controller.emialIdController.text,
+                  );
                   if (formKey.currentState!.validate()) {
                     controller.filedValidation();
                   }

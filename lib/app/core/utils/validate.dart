@@ -197,6 +197,9 @@ class Validate {
 
   Future<String?> validateEmail(String? email) async {
     final value = email?.trim() ?? "";
+    if (email == null || email.isEmpty) {
+      return "Please enter email address";
+    }
 
     // First check basic email format
     if (!isValidEmail(value)) {
@@ -312,7 +315,7 @@ class Validate {
   /// - Valid Indian mobile number format (starts with 6, 7, 8, or 9)
   static String? validateMobileNumber(String? mobileNumber) {
     if (mobileNumber == null || mobileNumber.trim().isEmpty) {
-      return null; // Empty validation is handled separately
+      return "Please enter mobile number";
     }
 
     final digits = mobileNumber.trim();
