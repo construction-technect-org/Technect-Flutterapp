@@ -264,8 +264,8 @@ class Dashboard extends StatelessWidget {
                                                     .selectedIndex
                                                     .value ==
                                                 index) {
-                                              controller.selectedIndex.value =
-                                                  -1;
+                                              // controller.selectedIndex.value =
+                                              //     -1;
                                             } else {
                                               controller.selectedIndex.value =
                                                   index;

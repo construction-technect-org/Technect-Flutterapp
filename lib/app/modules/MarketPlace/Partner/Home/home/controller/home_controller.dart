@@ -21,7 +21,7 @@ class HomeController extends GetxController {
 
   CommonController commonController = Get.find();
 
-  final RxInt selectedIndex = (-1).obs;
+  final RxInt selectedIndex = 0.obs;
 
   HomeService homeService = HomeService();
   GetAllRoleService roleService = GetAllRoleService();

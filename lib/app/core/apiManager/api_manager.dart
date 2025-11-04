@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:construction_technect/app/core/apiManager/api_exception.dart';
 import 'package:construction_technect/app/core/apiManager/error_model.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/error_sheet.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
@@ -480,9 +481,8 @@ class ApiManager {
         final responseJson = json.decode(responseString);
         return responseJson;
       case 400:
-        SnackBars.errorSnackBar(
-          content:
-              ErrorModel.fromJson(json.decode(responseString)).message ??
+        showErrorSheet(
+          ErrorModel.fromJson(json.decode(responseString)).message ??
               'Bad Request',
         );
         throw BadRequestException(
@@ -508,13 +508,12 @@ class ApiManager {
         Get.printInfo(
           info: '⚠️ 401 Unauthorized - Authentication Error: $message',
         );
-        SnackBars.errorSnackBar(content: message ?? 'Unauthorized');
+        showErrorSheet(message ?? 'Unauthorized');
         return responseJson; // Return response instead of throwing
 
       case 403:
-        SnackBars.errorSnackBar(
-          content:
-              ErrorModel.fromJson(json.decode(responseString)).message ??
+        showErrorSheet(
+          ErrorModel.fromJson(json.decode(responseString)).message ??
               'Forbidden',
         );
         throw UnauthorisedException(
@@ -523,9 +522,8 @@ class ApiManager {
         );
 
       case 404:
-        SnackBars.errorSnackBar(
-          content:
-              ErrorModel.fromJson(json.decode(responseString)).message ??
+        showErrorSheet(
+          ErrorModel.fromJson(json.decode(responseString)).message ??
               'Not Found',
         );
         throw UnauthorisedException(
@@ -534,9 +532,8 @@ class ApiManager {
         );
 
       case 409:
-        SnackBars.errorSnackBar(
-          content:
-              ErrorModel.fromJson(json.decode(responseString)).message ??
+        showErrorSheet(
+          ErrorModel.fromJson(json.decode(responseString)).message ??
               'Conflict Error',
         );
         throw BadRequestException(
@@ -544,18 +541,16 @@ class ApiManager {
               'Conflict Error',
         );
       case 502:
-        SnackBars.errorSnackBar(
-          content: 'Server is down. Please try again later.',
-        );
+        showErrorSheet('Server is down. Please try again later.');
         throw BadRequestException('Server is down. Please try again later.');
 
       case 500:
       default:
-        SnackBars.errorSnackBar(
-          content:
-              ErrorModel.fromJson(json.decode(responseString)).message ??
+        showErrorSheet(
+          ErrorModel.fromJson(json.decode(responseString)).message ??
               'Conflict Error',
         );
+
         throw FetchDataException(
           'Error occurred while communicating with Server. Status Code: ${response.statusCode}',
         );
