@@ -69,7 +69,6 @@ class AddServiceController extends GetxController {
   RxList<String> oldServiceImages = <String>[].obs;
   RxString oldServiceVideo = ''.obs;
 
-  final ImagePicker _picker = ImagePicker();
 
   Future<void> pickImageEdit() async {
     try {
@@ -152,23 +151,26 @@ class AddServiceController extends GetxController {
     super.onInit();
     fetchCategoryServiceHierarchy();
     if (Get.arguments != null && Get.arguments["service"] != null) {
-      isEdit.value=true;
+      isEdit.value = true;
       final service = Get.arguments["service"];
       log("Editing Service ID: ${service.id}");
       _prefillServiceData(service);
     }
   }
+
   void _prefillServiceData(dynamic service) {
     try {
       /// --- Category Selections ---
       selectedMainCategory.value = mainCategories.firstWhereOrNull(
-            (e) => e.id == service.mainCategoryId,
+        (e) => e.id == service.mainCategoryId,
       );
 
       if (selectedMainCategory.value != null) {
-        subCategories.assignAll(selectedMainCategory.value?.subCategories ?? []);
+        subCategories.assignAll(
+          selectedMainCategory.value?.subCategories ?? [],
+        );
         selectedSubCategory.value = subCategories.firstWhereOrNull(
-              (e) => e.id == service.subCategoryId,
+          (e) => e.id == service.subCategoryId,
         );
 
         if (selectedSubCategory.value != null) {
@@ -176,7 +178,7 @@ class AddServiceController extends GetxController {
             selectedSubCategory.value?.serviceCategories ?? [],
           );
           selectedServiceCategory.value = serviceCategories.firstWhereOrNull(
-                (e) => e.id == service.serviceCategoryId,
+            (e) => e.id == service.serviceCategoryId,
           );
         }
       }
@@ -190,12 +192,10 @@ class AddServiceController extends GetxController {
       amountController.text = service.totalAmount ?? "";
       selectedGST.value = "${service.gstPercentage?.split(".").first}%";
       if (service.media != null) {
-        oldServiceImages.assignAll(
-          service.media!.whereType<String>().toList(),
-        );
+        oldServiceImages.assignAll(service.media!.whereType<String>().toList());
       }
 
-      if (service.references != null ) {
+      if (service.references != null) {
         referenceImages.assignAll(
           service.references!
               .whereType<String>()
@@ -231,10 +231,9 @@ class AddServiceController extends GetxController {
       final cachedCategoryHierarchy = myPref.getServiceCategoryHierarchyModel();
       if (cachedCategoryHierarchy != null) {
         categoryHierarchyDataCM.value = cachedCategoryHierarchy;
-      }
-      else{
-        final apiCategoryHierarchy =
-        await HomeService().getCategoryServiceHierarchy();
+      } else {
+        final apiCategoryHierarchy = await HomeService()
+            .getCategoryServiceHierarchy();
 
         categoryHierarchyDataCM.value = apiCategoryHierarchy;
       }
@@ -250,7 +249,7 @@ class AddServiceController extends GetxController {
   /// --- Dropdown Logic ---
   void onMainCategorySelected(String? value) {
     selectedMainCategory.value = mainCategories.firstWhereOrNull(
-          (e) => e.name == value,
+      (e) => e.name == value,
     );
 
     // ✅ use assignAll() instead of .value =
@@ -263,7 +262,7 @@ class AddServiceController extends GetxController {
 
   void onSubCategorySelected(String? value) {
     selectedSubCategory.value = subCategories.firstWhereOrNull(
-          (e) => e.name == value,
+      (e) => e.name == value,
     );
 
     // ✅ use assignAll() here too
@@ -274,50 +273,10 @@ class AddServiceController extends GetxController {
     selectedServiceCategory.value = null;
   }
 
-
   void onServiceCategorySelected(String? value) {
     selectedServiceCategory.value = serviceCategories.firstWhereOrNull(
       (e) => e.name == value,
     );
-  }
-
-  /// --- Pickers ---
-  Future<void> pickServiceImages() async {
-    final picked = await _picker.pickMultiImage();
-    if (picked.isNotEmpty) {
-      if (serviceImages.length + oldServiceImages.length + picked.length <= 5) {
-        serviceImages.addAll(picked);
-      } else {
-        Get.snackbar(
-          "Limit Exceeded",
-          "You can select up to 5 service images.",
-        );
-      }
-    }
-  }
-
-  Future<void> pickServiceVideo() async {
-    final picked = await _picker.pickVideo(source: ImageSource.gallery);
-    if (picked != null) serviceVideo.value = picked;
-  }
-
-  Future<void> pickReferenceImages() async {
-    final picked = await _picker.pickMultiImage();
-    if (picked.isNotEmpty) {
-      if (referenceImages.length + picked.length <= 5) {
-        referenceImages.addAll(picked);
-      } else {
-        Get.snackbar(
-          "Limit Exceeded",
-          "You can select up to 5 reference images.",
-        );
-      }
-    }
-  }
-
-  Future<void> pickReferenceVideo() async {
-    final picked = await _picker.pickVideo(source: ImageSource.gallery);
-    if (picked != null) referenceVideo.value = picked;
   }
 
   void gstCalculate() {
@@ -334,35 +293,6 @@ class AddServiceController extends GetxController {
     gstPriceController.text = amount.toStringAsFixed(2);
     amountController.text = (amount + double.parse(priceController.text))
         .toStringAsFixed(2);
-  }
-
-  /// --- Submit ---
-  void onSubmitService() {
-    if (selectedMainCategory.value == null ||
-        selectedSubCategory.value == null ||
-        selectedServiceCategory.value == null) {
-      Get.snackbar("Missing Fields", "Please select all categories.");
-      return;
-    }
-
-    if (unitController.text.isEmpty ||
-        priceController.text.isEmpty ||
-        gstController.text.isEmpty) {
-      Get.snackbar("Incomplete Form", "Please fill all required fields.");
-      return;
-    }
-
-    log("Submitting service...");
-    log("Main Category: ${selectedMainCategory.value?.name}");
-    log("Sub Category: ${selectedSubCategory.value?.name}");
-    log("Service Category: ${selectedServiceCategory.value?.name}");
-    log("Price: ${priceController.text}");
-    log("GST: ${gstController.text}");
-    log("Unit: ${unitController.text}");
-    log("Service Images: ${serviceImages.length}");
-    log("Reference Images: ${referenceImages.length}");
-
-    Get.snackbar("Success", "Service submitted successfully!");
   }
 
   Future<void> openVideoPickerBottomSheet(BuildContext context) {
@@ -438,8 +368,23 @@ class AddServiceController extends GetxController {
 
   Future<void> createService() async {
     isLoading.value = true;
+     Map<String, dynamic> fields = {};
 
-    final Map<String, dynamic> fields = {
+    final imageList = pickedFilePathList;
+    int index = 1;
+    final Map<String, String> selectedFiles = {};
+    for (final path in imageList) {
+      if (path.contains('http')) {
+        fields["image_$index"] = path;
+      } else {
+        selectedFiles["image_$index"] = path;
+      }
+      index++;
+    }
+
+    selectedFiles["video"] = selectedVideo.value?.path ?? "";
+
+    fields = {
       "main_category_id": selectedMainCategory.value?.id.toString(),
       "sub_category_id": selectedSubCategory.value?.id.toString(),
       "service_category_id": selectedServiceCategory.value?.id.toString(),
@@ -449,41 +394,19 @@ class AddServiceController extends GetxController {
       "description": descriptionController.text,
     };
 
-    final Map<String, String> files = {};
-    //
-    // // Service images (up to 5)
-    // for (int i = 0; i < serviceImages.length; i++) {
-    //   files["media"] = serviceImages[i].path;
-    // }
-
-    // // Service video (1)
-    // if (serviceVideo.value != null) {
-    //   files["media_video"] = serviceVideo.value!.path;
-    // }
-    //
-    // // Reference images (up to 5)
-    // for (int i = 0; i < referenceImages.length; i++) {
-    //   files["references"] = referenceImages[i].path;
-    // }
-    //
-    // // Reference video (1)
-    // if (referenceVideo.value != null) {
-    //   files["references_video"] = referenceVideo.value!.path;
-    // }
-
     try {
-      final res = await _service.createService(fields: fields, files: files);
+      final res = await _service.createService(fields: fields, files: selectedFiles);
       if (res.success) {
-        Get.to(
-          () => SuccessScreen(
-            title: "Success!",
-            header: "Service added successfully!",
-            onTap: () {
-              Get.back();
-              Get.back();
-            },
-          ),
-        );
+        // Get.to(
+        //   () => SuccessScreen(
+        //     title: "Success!",
+        //     header: "Service added successfully!",
+        //     onTap: () {
+        //       Get.back();
+        //       Get.back();
+        //     },
+        //   ),
+        // );
       } else {
         Get.snackbar("Error", res.message ?? "Failed to add service");
       }
@@ -497,6 +420,7 @@ class AddServiceController extends GetxController {
   /// Update existing product
   Future<void> updateService(int serviceId) async {
     isLoading.value = true;
+    final Map<String, String> selectedFiles = {};
 
     final Map<String, dynamic> fields = {
       "main_category_id": selectedMainCategory.value?.id.toString(),
@@ -507,44 +431,45 @@ class AddServiceController extends GetxController {
       "gst_percentage": selectedGST.value,
       "description": descriptionController.text,
     };
+    // 🟩 Step 1: Prepare a copy of remove map
+    final Map<String, String> tempRemoved = Map.from(removedImages);
 
-    final Map<String, String> files = {};
-    //
-    // // Existing (old) images — keep or remove
-    // for (final old in oldServiceImages) {
-    //   fields["existing_media[]"] = old;
-    // }
-    //
-    // // Newly added images
-    // for (final file in serviceImages) {
-    //   files["media"] = file.path;
-    // }
-    //
-    // // New video (if changed)
-    // if (serviceVideo.value != null &&
-    //     serviceVideo.value!.path.isNotEmpty &&
-    //     !serviceVideo.value!.path.startsWith('http')) {
-    //   files["media_video"] = serviceVideo.value!.path;
-    // }
-    //
-    // // Reference files
-    // for (final file in referenceImages) {
-    //   files["references"] = file.path;
-    // }
-    // if (referenceVideo.value != null) {
-    //   files["references_video"] = referenceVideo.value!.path;
-    // }
+    // 🟦 Step 2: Rebuild fields and remove flags properly
+    for (int i = 0; i < imageSlots.length; i++) {
+      final path = imageSlots[i];
+      final key = "image_${i + 1}";
+
+      if (path == null || path.trim().isEmpty) {
+        // slot is empty => keep/remove flag
+        tempRemoved["remove_image_${i + 1}"] = "remove";
+        continue;
+      }
+
+      // slot has an image, so ensure it's not marked removed
+      tempRemoved.remove("remove_image_${i + 1}");
+
+      if (path.contains('http')) {
+        fields[key] = path;
+      } else {
+        selectedFiles[key] = path;
+      }
+    }
+    if ((selectedVideo.value?.path ?? "") != "abc") {
+      selectedFiles["video"] = selectedVideo.value?.path ?? "";
+    }
+
+    fields.addAll(tempRemoved);
 
     try {
       final res = await _service.updateService(
         serviceId: serviceId,
         fields: fields,
-        files: files.isNotEmpty ? files : null,
+        files: selectedFiles.isNotEmpty ? selectedFiles : null,
       );
 
       if (res.success) {
         Get.to(
-              () => SuccessScreen(
+          () => SuccessScreen(
             title: "Success!",
             header: "Service updated successfully!",
             onTap: () {

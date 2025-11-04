@@ -624,7 +624,6 @@ class AddServiceScreen extends GetView<AddServiceController> {
                         ),
                       );
                     }),
-
                   const Gap(32),
                   RoundedButton(
                     buttonName: controller.isEdit.value

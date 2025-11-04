@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
 import 'package:construction_technect/app/core/widgets/common_service_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/controllers/inventory_controller.dart';
+import 'package:gap/gap.dart';
 
 class InventoryView extends GetView<InventoryController> {
   @override
@@ -18,68 +19,98 @@ class InventoryView extends GetView<InventoryController> {
           appBar: CommonAppBar(
             title: const Text('Inventory'),
             isCenter: false,
-            action: [
-              Obx(() {
-                return Container(
-                  margin: const EdgeInsets.all(8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 6),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Container(
+                  height: 48,
                   decoration: BoxDecoration(
                     color: MyColors.grayF7,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: controller.selectedStatus.value,
-                      dropdownColor: Colors.white,
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: 22,
-                        color: Colors.black,
-                      ),
-                      style: MyTexts.medium16.copyWith(
-                        color: Colors.black,
-                        fontFamily: MyTexts.SpaceGrotesk,
-                      ),
-                      items: [
-                        DropdownMenuItem(
-                          value: "product",
-                          child: Text(
-                            "Product",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.fontBlack,
-                              fontFamily: MyTexts.SpaceGrotesk,
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Obx(() {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // 🔸 Product toggle
+                        GestureDetector(
+                          onTap: () async {
+                            if (controller.selectedStatus.value != "product") {
+                              controller.selectedStatus.value = "product";
+                              controller.searchController.clear();
+                              controller.searchQuery.value = "";
+                              await controller.fetchProducts();
+                            }
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            curve: Curves.easeInOut,
+                            decoration: BoxDecoration(
+                              color: controller.selectedStatus.value == "product"
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 20),
+                              child: Center(
+                                child: Text(
+                                  "Product",
+                                  style: MyTexts.medium15.copyWith(
+                                    color: MyColors.gray2E,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                        DropdownMenuItem(
-                          value: "service",
-                          child: Text(
-                            "Service",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.fontBlack,
-                              fontFamily: MyTexts.SpaceGrotesk,
+                        const Gap(10),
+                        GestureDetector(
+                          onTap: () async {
+                            if (controller.selectedStatus.value != "service") {
+                              controller.selectedStatus.value = "service";
+                              controller.searchController.clear();
+                              controller.searchQuery.value = "";
+                              await controller.fetchProducts();
+                            }
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            curve: Curves.easeInOut,
+                            decoration: BoxDecoration(
+                              color: controller.selectedStatus.value == "service"
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 6, horizontal: 20),
+                              child: Center(
+                                child: Text(
+                                  "Service",
+                                  style: MyTexts.medium15.copyWith(
+                                    color: MyColors.gray2E,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ],
-                      onChanged: (value) async {
-                        if (value != null) {
-                          if (value != controller.selectedStatus.value) {
-                            controller.searchQuery.value="";
-                            controller.searchController.clear();
-                            controller.selectedStatus.value = value;
-                            await controller.fetchProducts();
-                          }
-                        }
-                      },
-                    ),
-                  ),
-                );
-              }),
-            ],
-          ),
-          body: Column(
-            children: [
+                    );
+                  }),
+                ),
+              ),
+              const SizedBox(height: 12),
+              //
+              // // 🔹 Search field
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: CommonTextField(
@@ -96,6 +127,8 @@ class InventoryView extends GetView<InventoryController> {
                   ),
                 ),
               ),
+
+              // 🔹 The rest of your Obx grid section remains unchanged
               Obx(() {
                 final isProduct = controller.selectedStatus.value == "product";
                 final isEmptyList = isProduct
@@ -126,13 +159,13 @@ class InventoryView extends GetView<InventoryController> {
                   );
                 }
 
-                // ✅ Now show the grid view based on selectedStatus
                 return Expanded(
                   child: Obx(() {
                     if (controller.selectedStatus.value == "product") {
                       return GridView.builder(
                         padding: const EdgeInsets.all(16),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 0.6,
                           crossAxisSpacing: 12,
@@ -150,7 +183,8 @@ class InventoryView extends GetView<InventoryController> {
                     } else {
                       return GridView.builder(
                         padding: const EdgeInsets.all(16),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 0.6,
                           crossAxisSpacing: 12,
@@ -162,9 +196,8 @@ class InventoryView extends GetView<InventoryController> {
                           return ServiceCard(
                             service: service,
                             onTap: () {
-                              Get.toNamed(Routes.SERVICE_DETAILS, arguments: {
-                                "service":service
-                              });
+                              Get.toNamed(Routes.SERVICE_DETAILS,
+                                  arguments: {"service": service});
                             },
                           );
                         },

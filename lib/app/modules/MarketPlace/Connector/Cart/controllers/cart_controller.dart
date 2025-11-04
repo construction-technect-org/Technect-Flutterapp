@@ -70,7 +70,8 @@ class CartListController extends GetxController {
   }
 
   RxString selectedStatus = 'All'.obs;
-
+  RxString selectedMainStatus = 'product'.obs;
+TextEditingController searchController = TextEditingController();
 
   @override
   void onInit() {

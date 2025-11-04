@@ -152,7 +152,148 @@ class CartListView extends GetView<CartListController> {
                                   horizontal: 16.0,
                                 ),
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    const SizedBox(height: 6),
+                                    Padding(
+                                      padding: EdgeInsets.zero,
+                                      child: Container(
+                                        height: 48,
+                                        decoration: BoxDecoration(
+                                          color: MyColors.grayF7,
+                                          borderRadius: BorderRadius.circular(
+                                            24,
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 8,
+                                          horizontal: 12,
+                                        ),
+                                        child: Obx(() {
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              // 🔸 Product toggle
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  if (controller
+                                                          .selectedMainStatus
+                                                          .value !=
+                                                      "product") {
+                                                    controller
+                                                            .selectedMainStatus
+                                                            .value =
+                                                        "product";
+                                                    controller.searchController
+                                                        .clear();
+                                                    controller
+                                                            .searchQuery
+                                                            .value =
+                                                        "";
+                                                    await controller
+                                                        .fetchCartList();
+                                                  }
+                                                },
+                                                child: AnimatedContainer(
+                                                  duration: const Duration(
+                                                    milliseconds: 250,
+                                                  ),
+                                                  curve: Curves.easeInOut,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        controller
+                                                                .selectedMainStatus
+                                                                .value ==
+                                                            "product"
+                                                        ? Colors.white
+                                                        : Colors.transparent,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          24,
+                                                        ),
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          vertical: 6,
+                                                          horizontal: 20,
+                                                        ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Product",
+                                                        style: MyTexts.medium15
+                                                            .copyWith(
+                                                              color: MyColors
+                                                                  .gray2E,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const Gap(10),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  if (controller
+                                                          .selectedMainStatus
+                                                          .value !=
+                                                      "service") {
+                                                    controller
+                                                            .selectedMainStatus
+                                                            .value =
+                                                        "service";
+                                                    controller.searchController
+                                                        .clear();
+                                                    controller
+                                                            .searchQuery
+                                                            .value =
+                                                        "";
+                                                    // await controller.fetchProducts();
+                                                  }
+                                                },
+                                                child: AnimatedContainer(
+                                                  duration: const Duration(
+                                                    milliseconds: 250,
+                                                  ),
+                                                  curve: Curves.easeInOut,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        controller
+                                                                .selectedMainStatus
+                                                                .value ==
+                                                            "service"
+                                                        ? Colors.white
+                                                        : Colors.transparent,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          24,
+                                                        ),
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          vertical: 6,
+                                                          horizontal: 20,
+                                                        ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Service",
+                                                        style: MyTexts.medium15
+                                                            .copyWith(
+                                                              color: MyColors
+                                                                  .gray2E,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
                                     CommonTextField(
                                       onChange: (value) {
                                         controller.searchProducts(value);
