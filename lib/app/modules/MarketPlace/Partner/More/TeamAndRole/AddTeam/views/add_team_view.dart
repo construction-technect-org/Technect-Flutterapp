@@ -204,7 +204,7 @@ class AddTeamView extends GetView<AddTeamController> {
                                 keyboardType: TextInputType.emailAddress,
                                 autofillHints: const [AutofillHints.email],
                                 inputFormatters: [
-                                  LengthLimitingTextInputFormatter(50),
+                                  LengthLimitingTextInputFormatter(150),
                                   EmailInputFormatter(),
                                 ],
                                 // validator: (val) => Validate.validateMail(val),
