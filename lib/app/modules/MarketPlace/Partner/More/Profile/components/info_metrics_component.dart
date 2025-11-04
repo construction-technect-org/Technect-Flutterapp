@@ -77,9 +77,7 @@ class InfoMetricsComponent extends StatelessWidget {
             ),
             const Spacer(),
             GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.EDIT_PROFILE);
-              },
+              onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
               behavior: HitTestBehavior.translucent,
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
@@ -110,7 +108,6 @@ class InfoMetricsComponent extends StatelessWidget {
                 );
                 if (result != null && result is List<Map<String, dynamic>>) {
                   controller.handleBusinessHoursData(result);
-                  print(controller.businessHoursData);
                 }
               },
               behavior: HitTestBehavior.translucent,
@@ -179,7 +176,7 @@ class InfoMetricsComponent extends StatelessWidget {
                           const Gap(6),
                           buildRow(
                             title: "Role",
-                            data: userData?.roleName??"-",
+                            data: userData?.roleName ?? "-",
                           ),
                           SizedBox(height: 0.5.h),
                         ],
@@ -197,11 +194,14 @@ class InfoMetricsComponent extends StatelessWidget {
 
   Widget _buildBusinessMetricsContent() {
     return Obx(() {
-      if ((controller.businessModel.value.gstinNumber ?? "").isEmpty) {
+      final home = Get.find<HomeController>();
+      final merchant = home.profileData.value.data?.merchantProfile;
+      final modelGstin = controller.businessModel.value.gstinNumber ?? '';
+      final merchantGstin = merchant?.gstinNumber ?? '';
+
+      if (modelGstin.isEmpty && merchantGstin.isEmpty) {
         return GestureDetector(
-          onTap: () {
-            Get.toNamed(Routes.EDIT_PROFILE);
-          },
+          onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -231,76 +231,77 @@ class InfoMetricsComponent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(() {
+                final name = controller.businessModel.value.businessName;
                 return buildRow(
                   title: "Company name",
-                  data:
-                      (controller.businessModel.value.businessName ?? "")
-                          .isEmpty
-                      ? "-"
-                      : controller.businessModel.value.businessName,
+                  data: (name != null && name.isNotEmpty)
+                      ? name
+                      : (merchant?.businessName ?? "-"),
                 );
               }),
               const Gap(6),
-              buildRow(
-                title: "GSTIN",
-                data:
-                    controller.userData?.gst ??
-                    controller.businessModel.value.gstinNumber ??
-                    '-',
-              ),
+              Obx(() {
+                final modelGstin =
+                    controller.businessModel.value.gstinNumber ?? '';
+                final userGstin = controller.userData?.gst ?? '-';
+                return buildRow(
+                  title: "GSTIN",
+                  data: modelGstin.isNotEmpty ? modelGstin : userGstin,
+                );
+              }),
               const Gap(6),
 
               Obx(() {
+                final contact =
+                    controller.businessModel.value.businessContactNumber ?? '';
                 return buildRow(
                   title: "Mobile Number",
-                  data:
-                      (controller.businessModel.value.businessContactNumber ??
-                              "")
-                          .isEmpty
-                      ? "-"
-                      : controller.businessModel.value.businessContactNumber,
+                  data: contact.isNotEmpty
+                      ? contact
+                      : (merchant?.businessContactNumber ?? "-"),
                 );
               }),
               const Gap(6),
               Obx(() {
+                final website = controller.businessModel.value.website ?? '';
                 return buildRow(
                   title: "Website",
-                  data: (controller.businessModel.value.website ?? "").isEmpty
-                      ? "-"
-                      : controller.businessModel.value.website,
+                  data: website.isNotEmpty
+                      ? website
+                      : (merchant?.website ?? "-"),
                 );
               }),
               const Gap(6),
               Obx(() {
+                final email =
+                    controller.businessModel.value.businessEmail ?? '';
                 return buildRow(
                   title: "Email id",
-                  data:
-                      (controller.businessModel.value.businessEmail ?? "")
-                          .isEmpty
-                      ? "-"
-                      : controller.businessModel.value.businessEmail,
+                  data: email.isNotEmpty
+                      ? email
+                      : (merchant?.businessEmail ?? "-"),
                 );
               }),
               const Gap(6),
               Obx(() {
+                final alt =
+                    controller.businessModel.value.alternativeBusinessEmail ??
+                    '';
                 return buildRow(
                   title: "Alternative number",
-                  data:
-                  (controller.businessModel.value.alternativeBusinessEmail ?? "")
-                      .isEmpty
-                      ? "-"
-                      : controller.businessModel.value.alternativeBusinessEmail,
+                  data: alt.isNotEmpty
+                      ? alt
+                      : (merchant?.alternativeBusinessContactNumber ?? "-"),
                 );
               }),
               const Gap(6),
               Obx(() {
+                final year = controller.businessModel.value.year ?? '';
                 return buildRow(
                   title: "Year of establish",
-                  data:
-                  (controller.businessModel.value.year ?? "")
-                      .isEmpty
-                      ? "-"
-                      : controller.businessModel.value.year,
+                  data: year.isNotEmpty
+                      ? year
+                      : (merchant?.yearsInBusiness?.toString() ?? "-"),
                 );
               }),
 
