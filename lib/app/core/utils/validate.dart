@@ -2,13 +2,24 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 
 class Validate {
-  bool isValidEmail(String? email) {
+  static bool isValidEmail(String? email) {
     if (email == null || email.isEmpty) return false;
     if (email.length > 254) return false;
     final regex = RegExp(
       r"^(?!.*\.\.)[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9-]+\.[A-Za-z]{2,63}$",
     );
     return regex.hasMatch(email);
+  }
+
+  static String? validateMail(String? mail) {
+    final value = mail?.trim() ?? '';
+    if (value.isEmpty) {
+      return "Please enter email";
+    }
+    if (!Validate.isValidEmail(value)) {
+      return "Please enter a valid email address";
+    }
+    return null;
   }
 
   /// Validates email domain to check for invalid or non-existent domains
