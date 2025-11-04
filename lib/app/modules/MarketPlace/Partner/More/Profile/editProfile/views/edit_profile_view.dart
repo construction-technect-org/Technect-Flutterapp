@@ -67,9 +67,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     title: const Text("Edit Business Metrics"),
                     isCenter: false,
                     leading: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
+                      onTap: () => Get.back(),
                       child: const Padding(
                         padding: EdgeInsets.zero,
                         child: Icon(
