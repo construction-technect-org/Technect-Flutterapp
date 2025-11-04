@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/services/ConstructionLineServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
@@ -388,6 +389,32 @@ class HomeController extends GetxController {
       if (res.success == true) {
         if (onSuccess != null) onSuccess();
         // SnackBars.successSnackBar(content: "Request sent successfully!");
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: "Unable to send connection request.");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> addServiceToConnectApi({
+    int? mID,
+    int? sID,
+    String? message,
+    VoidCallback? onSuccess,
+  }) async {
+    try {
+      isLoading.value = true;
+      final res = await ConstructionLineServices().addServiceToConnect(
+        mID: mID,
+        sID: sID,
+        message: message,
+      );
+      if (res.success == true) {
+        if (onSuccess != null) onSuccess();
+        SnackBars.successSnackBar(
+          content: "Connection request sent successfully!",
+        );
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Unable to send connection request.");

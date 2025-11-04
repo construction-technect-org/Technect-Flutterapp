@@ -41,6 +41,108 @@ class ConnectionInboxView extends StatelessWidget {
               ),
               Column(
                 children: [
+                  // Tab Bar
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 8.0,
+                      left: 18.0,
+                      right: 18.0,
+                    ),
+                    child: Obx(
+                      () => Container(
+                        decoration: BoxDecoration(
+                          color: MyColors.grayEA,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () => controller.onTabChanged(0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        controller.selectedTabIndex.value == 0
+                                        ? MyColors.primary
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    'All',
+                                    textAlign: TextAlign.center,
+                                    style: MyTexts.medium14.copyWith(
+                                      color:
+                                          controller.selectedTabIndex.value == 0
+                                          ? Colors.white
+                                          : MyColors.gray54,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () => controller.onTabChanged(1),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        controller.selectedTabIndex.value == 1
+                                        ? MyColors.primary
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    'Product',
+                                    textAlign: TextAlign.center,
+                                    style: MyTexts.medium14.copyWith(
+                                      color:
+                                          controller.selectedTabIndex.value == 1
+                                          ? Colors.white
+                                          : MyColors.gray54,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () => controller.onTabChanged(2),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        controller.selectedTabIndex.value == 2
+                                        ? MyColors.primary
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    'Services',
+                                    textAlign: TextAlign.center,
+                                    style: MyTexts.medium14.copyWith(
+                                      color:
+                                          controller.selectedTabIndex.value == 2
+                                          ? Colors.white
+                                          : MyColors.gray54,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 1.h),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
                     child: CommonTextField(
@@ -56,7 +158,7 @@ class ConnectionInboxView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(height: 1.h),
                   Expanded(
                     child: RefreshIndicator(
                       backgroundColor: MyColors.primary,
@@ -197,6 +299,7 @@ class ConnectionInboxView extends StatelessWidget {
                         ),
                         const Gap(2),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SvgPicture.asset(
                               Asset.location,
@@ -208,11 +311,16 @@ class ConnectionInboxView extends StatelessWidget {
                               width: 14,
                             ),
                             const Gap(4),
-                            Text(
-                              connection.merchantName ?? 'Unknown',
-                              style: MyTexts.medium13.copyWith(
-                                color: MyColors.gra54,
-                                fontFamily: MyTexts.SpaceGrotesk,
+                            Expanded(
+                              child: Text(
+                                connection.productName != null
+                                    ? connection.productName ?? 'Unknown'
+                                    : connection.serviceName ?? 'Unknown',
+                                maxLines: 2,
+                                style: MyTexts.medium13.copyWith(
+                                  color: MyColors.gra54,
+                                  fontFamily: MyTexts.SpaceGrotesk,
+                                ),
                               ),
                             ),
                           ],
@@ -282,6 +390,38 @@ class ConnectionInboxView extends StatelessWidget {
               SizedBox(height: 1.h),
             ],
           ),
+        ),
+        // Item Type Badge (top right) - only show when "All" tab is selected
+        Obx(
+          () => controller.selectedTabIndex.value == 0
+              ? Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: (connection.itemType?.toLowerCase() == 'service')
+                          ? MyColors.primary
+                          : MyColors.greenBtn,
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(6),
+                      ),
+                    ),
+                    child: Text(
+                      (connection.itemType?.toLowerCase() == 'service')
+                          ? 'Service'
+                          : 'Product',
+                      style: MyTexts.medium12.copyWith(
+                        color: Colors.white,
+                        fontFamily: MyTexts.SpaceGrotesk,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         if (connection.status?.toLowerCase() == "accepted")
           Container(
@@ -388,26 +528,31 @@ class ConnectionInboxView extends StatelessWidget {
                           ),
                         ),
                         const Gap(2),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              Asset.location,
-                              colorFilter: const ColorFilter.mode(
-                                MyColors.gra54,
-                                BlendMode.srcIn,
+                        Expanded(
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                Asset.location,
+                                colorFilter: const ColorFilter.mode(
+                                  MyColors.gra54,
+                                  BlendMode.srcIn,
+                                ),
+                                height: 14,
+                                width: 14,
                               ),
-                              height: 14,
-                              width: 14,
-                            ),
-                            const Gap(4),
-                            Text(
-                              connection.merchantName ?? 'Unknown',
-                              style: MyTexts.medium13.copyWith(
-                                color: MyColors.gra54,
-                                fontFamily: MyTexts.SpaceGrotesk,
+                              const Gap(4),
+                              Text(
+                                connection.productName != null
+                                    ? connection.productName ?? 'Unknown'
+                                    : connection.serviceName ?? 'Unknown',
+                                maxLines: 2,
+                                style: MyTexts.medium13.copyWith(
+                                  color: MyColors.gra54,
+                                  fontFamily: MyTexts.SpaceGrotesk,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const Gap(8),
                         if (connection.status == "pending") ...[
@@ -529,6 +674,38 @@ class ConnectionInboxView extends StatelessWidget {
               SizedBox(height: 1.h),
             ],
           ),
+        ),
+        // Item Type Badge (top right) - only show when "All" tab is selected
+        Obx(
+          () => controller.selectedTabIndex.value == 0
+              ? Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: (connection.itemType?.toLowerCase() == 'service')
+                          ? MyColors.primary
+                          : MyColors.greenBtn,
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(6),
+                      ),
+                    ),
+                    child: Text(
+                      (connection.itemType?.toLowerCase() == 'service')
+                          ? 'Service'
+                          : 'Product',
+                      style: MyTexts.medium12.copyWith(
+                        color: Colors.white,
+                        fontFamily: MyTexts.SpaceGrotesk,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         if (connection.status?.toLowerCase() == "accepted")
           Container(

@@ -30,47 +30,53 @@ class _BottomBarViewState extends State<BottomBarView> {
 
     return OfflineBuilder(
       child: _buildUpgradeAlert(context),
-      connectivityBuilder: (
-          BuildContext context,
-          List<ConnectivityResult> connectivity,
-          Widget child,
+      connectivityBuilder:
+          (
+            BuildContext context,
+            List<ConnectivityResult> connectivity,
+            Widget child,
           ) {
-        final bool connected = !connectivity.contains(ConnectivityResult.none);
+            final bool connected = !connectivity.contains(
+              ConnectivityResult.none,
+            );
 
-        if (!connected && !_isBottomSheetOpen) {
-          _isBottomSheetOpen = true;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            showModalBottomSheet(
-              context: context,
-              isDismissible: false,
-              enableDrag: false,
-              isScrollControlled: true,
-              backgroundColor: Colors.white,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-              ),
-              builder: (_) => WillPopScope(
-                onWillPop: () async => false,
-                child:  NoInternetBottomSheet(),
-              ),
-            ).whenComplete(() {
+            if (!connected && !_isBottomSheetOpen) {
+              _isBottomSheetOpen = true;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showModalBottomSheet(
+                  context: context,
+                  isDismissible: false,
+                  enableDrag: false,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16.0),
+                    ),
+                  ),
+                  builder: (_) => WillPopScope(
+                    onWillPop: () async => false,
+                    child: NoInternetBottomSheet(),
+                  ),
+                ).whenComplete(() {
+                  _isBottomSheetOpen = false;
+                });
+              });
+            } else if (connected && _isBottomSheetOpen) {
               _isBottomSheetOpen = false;
-            });
-          });
-        } else if (connected && _isBottomSheetOpen) {
-          _isBottomSheetOpen = false;
-          Get.back(); // close bottom sheet
+              Get.back(); // close bottom sheet
 
-          // 👉 optionally refresh API calls when network restored
-          WidgetsBinding.instance.addPostFrameCallback((val) async {
-            await Get.find<HomeController>().fetchProfileData();
-            await Get.find<HomeController>().fetchCategoryHierarchy();
-            await Get.find<HomeController>().fetchCategoryServiceHierarchy();
-          });
-        }
+              // 👉 optionally refresh API calls when network restored
+              WidgetsBinding.instance.addPostFrameCallback((val) async {
+                await Get.find<HomeController>().fetchProfileData();
+                await Get.find<HomeController>().fetchCategoryHierarchy();
+                await Get.find<HomeController>()
+                    .fetchCategoryServiceHierarchy();
+              });
+            }
 
-        return child;
-      },
+            return child;
+          },
     );
   }
 
@@ -80,9 +86,7 @@ class _BottomBarViewState extends State<BottomBarView> {
       dialogStyle: UpgradeDialogStyle.cupertino,
       shouldPopScope: () => true,
       barrierDismissible: true,
-      upgrader: Upgrader(
-        durationUntilAlertAgain: const Duration(days: 1),
-      ),
+      upgrader: Upgrader(durationUntilAlertAgain: const Duration(days: 1)),
       child: Obx(() {
         return Scaffold(
           backgroundColor: Colors.white,
@@ -129,22 +133,48 @@ class _BottomBarViewState extends State<BottomBarView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              bottomBar(Asset.home, Asset.home1, 'Home', onTap: () {
-                controller.currentIndex.value = 0;
-              }, index: 0),
-              bottomBar(Asset.category, Asset.category1, 'Product', onTap: () {
-                controller.currentIndex.value = 1;
-              }, index: 1),
-              bottomBar(Asset.add, Asset.add,
-                  myPref.role.val != "connector" ? "Sell" : 'Request',
-                  onTap: onSellTap),
-              bottomBar(Asset.connection, Asset.connection1, 'Connection',
-                  onTap: () {
-                    controller.currentIndex.value = 2;
-                  }, index: 2),
-              bottomBar(Asset.more, Asset.more1, 'More', onTap: () {
-                controller.currentIndex.value = 3;
-              }, index: 3),
+              bottomBar(
+                Asset.home,
+                Asset.home1,
+                'Home',
+                onTap: () {
+                  controller.currentIndex.value = 0;
+                },
+                index: 0,
+              ),
+              bottomBar(
+                Asset.category,
+                Asset.category1,
+                'Product',
+                onTap: () {
+                  controller.currentIndex.value = 1;
+                },
+                index: 1,
+              ),
+              bottomBar(
+                Asset.add,
+                Asset.add,
+                myPref.role.val != "connector" ? "Sell" : 'Request',
+                onTap: onSellTap,
+              ),
+              bottomBar(
+                Asset.connection,
+                Asset.connection1,
+                'Connection',
+                onTap: () {
+                  controller.currentIndex.value = 2;
+                },
+                index: 2,
+              ),
+              bottomBar(
+                Asset.more,
+                Asset.more1,
+                'More',
+                onTap: () {
+                  controller.currentIndex.value = 3;
+                },
+                index: 3,
+              ),
             ],
           ),
         ),
@@ -158,7 +188,13 @@ class _BottomBarViewState extends State<BottomBarView> {
       if (myPref.role.val != "connector") {
         if (!commonController.hasProfileComplete.value) {
           _showProfileIncompleteDialog();
-        } else if ((Get.find<HomeController>().profileData.value.data?.addresses ?? []).isEmpty) {
+        } else if ((Get.find<HomeController>()
+                    .profileData
+                    .value
+                    .data
+                    ?.addresses ??
+                [])
+            .isEmpty) {
           _showAddAddressDialog();
         } else {
           _showProductOptions();
@@ -179,8 +215,10 @@ class _BottomBarViewState extends State<BottomBarView> {
     Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text("Complete Your Profile",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text(
+          "Complete Your Profile",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         content: const Text(
           "To add a product, please complete your business profile first.",
           style: TextStyle(fontSize: 14),
@@ -197,7 +235,9 @@ class _BottomBarViewState extends State<BottomBarView> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: const Text("Complete Now"),
           ),
@@ -211,8 +251,10 @@ class _BottomBarViewState extends State<BottomBarView> {
     Get.dialog(
       AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text("Add Your Address",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text(
+          "Add Your Address",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         content: const Text(
           "To add a product, please add your address first.",
           style: TextStyle(fontSize: 14),
@@ -229,7 +271,9 @@ class _BottomBarViewState extends State<BottomBarView> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             child: const Text("Add Address"),
           ),
@@ -252,8 +296,10 @@ class _BottomBarViewState extends State<BottomBarView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _sheetHandle(),
-            const Text("Select an Option",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              "Select an Option",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
             ListTile(
               leading: SvgPicture.asset(Asset.add),
@@ -291,8 +337,10 @@ class _BottomBarViewState extends State<BottomBarView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _sheetHandle(),
-            const Text("Select an Option",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              "Select an Option",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 16),
             ListTile(
               leading: SvgPicture.asset(Asset.add),
@@ -356,19 +404,26 @@ class _BottomBarViewState extends State<BottomBarView> {
     );
   }
 
-  Widget bottomBar(String icon, String icon2, String name,
-      {void Function()? onTap, int? index}) {
+  Widget bottomBar(
+    String icon,
+    String icon2,
+    String name, {
+    void Function()? onTap,
+    int? index,
+  }) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Obx(() => SvgPicture.asset(
-            controller.currentIndex.value == index ? icon2 : icon,
-            height: 24,
-            width: 24,
-          )),
+          Obx(
+            () => SvgPicture.asset(
+              controller.currentIndex.value == index ? icon2 : icon,
+              height: 24,
+              width: 24,
+            ),
+          ),
           Text(name, style: MyTexts.medium14),
         ],
       ),
@@ -386,7 +441,8 @@ class HearderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: textStyle ??
+      style:
+          textStyle ??
           MyTexts.medium18.copyWith(
             color: MyColors.black,
             fontFamily: MyTexts.SpaceGrotesk,

@@ -128,7 +128,11 @@ class ConnectionDialogs {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.cancel_outlined, size: 60, color: MyColors.red),
+                const Icon(
+                  Icons.cancel_outlined,
+                  size: 60,
+                  color: MyColors.red,
+                ),
                 SizedBox(height: 2.h),
                 Text(
                   "Reject Connection",
@@ -370,6 +374,101 @@ class ConnectionDialogs {
     );
   }
 
+  static void showSendServiceConnectionDialog(
+    BuildContext context,
+    dynamic service, {
+    bool? isFromIn = false,
+    void Function(String message)? onTap,
+  }) {
+    final TextEditingController messageController = TextEditingController();
+    messageController.text =
+        "Hi, I would like to connect with you for business opportunities.";
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 120,
+                  child: Image.asset(Asset.connectToCrm, fit: BoxFit.contain),
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  "Connect to CRM!",
+                  style: MyTexts.extraBold20.copyWith(color: MyColors.primary),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 1.h),
+                Text(
+                  "To Proceed with your request, please connect to CRM.",
+                  style: MyTexts.regular16.copyWith(
+                    color: MyColors.dopelyColors,
+                    fontFamily: MyTexts.SpaceGrotesk,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 2.h),
+                CommonTextField(
+                  controller: messageController,
+                  hintText: "Enter your message",
+                  maxLine: 3,
+                ),
+                SizedBox(height: 2.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        buttonName: 'Cancel',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        fontColor: MyColors.primary,
+                        borderColor: MyColors.black,
+                        color: MyColors.white,
+                      ),
+                    ),
+                    SizedBox(width: 2.w),
+                    Expanded(
+                      child: RoundedButton(
+                        onTap: () {
+                          if (onTap != null) {
+                            onTap(messageController.text);
+                          }
+                          Navigator.of(context).pop();
+                        },
+                        buttonName: 'Connect',
+                        borderRadius: 12,
+                        verticalPadding: 0,
+                        height: 45,
+                        color: MyColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   /// ----------------------------------------------------------
   /// REMOVE CONNECTION DIALOG
   /// ----------------------------------------------------------
@@ -399,7 +498,9 @@ class ConnectionDialogs {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: getImageView(
-                        finalUrl: APIConstants.bucketUrl+( connection.merchantProfileImageUrl ?? ""),
+                        finalUrl:
+                            APIConstants.bucketUrl +
+                            (connection.merchantProfileImageUrl ?? ""),
                         height: 36,
                         width: 36,
                         fit: BoxFit.cover,
@@ -410,24 +511,31 @@ class ConnectionDialogs {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          connection.merchantName??"",
-                          style: MyTexts.medium14.copyWith(color: MyColors.black),
+                          connection.merchantName ?? "",
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.black,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         Row(
-                          children:  [
-                            const Icon(Icons.location_on_rounded,size: 14,color: MyColors.veryDarkGray,),
+                          children: [
+                            const Icon(
+                              Icons.location_on_rounded,
+                              size: 14,
+                              color: MyColors.veryDarkGray,
+                            ),
                             const Gap(4),
                             Text(
-                              connection.productName??"",
-                              style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              connection.productName ?? "",
+                              style: MyTexts.regular13.copyWith(
+                                color: MyColors.black,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
-                        )
+                        ),
                       ],
-                    )
-
+                    ),
                   ],
                 ),
                 SizedBox(height: 2.h),
@@ -510,7 +618,9 @@ class ConnectionDialogs {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: getImageView(
-                        finalUrl: APIConstants.bucketUrl+( connection.merchantProfileImageUrl ?? ""),
+                        finalUrl:
+                            APIConstants.bucketUrl +
+                            (connection.merchantProfileImageUrl ?? ""),
                         height: 36,
                         width: 36,
                         fit: BoxFit.cover,
@@ -521,24 +631,31 @@ class ConnectionDialogs {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          connection.merchantName??"",
-                          style: MyTexts.medium14.copyWith(color: MyColors.black),
+                          connection.merchantName ?? "",
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.black,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         Row(
-                          children:  [
-                            const Icon(Icons.location_on_rounded,size: 14,color: MyColors.veryDarkGray,),
+                          children: [
+                            const Icon(
+                              Icons.location_on_rounded,
+                              size: 14,
+                              color: MyColors.veryDarkGray,
+                            ),
                             const Gap(4),
                             Text(
-                              connection.productName??"",
-                              style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              connection.productName ?? "",
+                              style: MyTexts.regular13.copyWith(
+                                color: MyColors.black,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
-                        )
+                        ),
                       ],
-                    )
-
+                    ),
                   ],
                 ),
                 SizedBox(height: 2.h),

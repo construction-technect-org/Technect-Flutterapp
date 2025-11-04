@@ -1,48 +1,36 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/models/ConnectorServiceModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/services/ConstructionLineServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
-import 'package:gap/gap.dart';
 
 class ConstructionServiceController extends GetxController {
   HomeController homeController = Get.find<HomeController>();
   RxBool hasOpenedOnce = false.obs;
 
-  // Observable variables
-  RxInt selectedProductIndex = (-1).obs;
-
-  // Two-pane navigation index (0..4)
   RxInt navigationIndex = 0.obs;
 
-  // View state handled via navigationIndex only (0..4)
-  RxBool isLoadingProducts = false.obs;
+  RxBool isLoadingServices = false.obs;
   RxBool isLoading = false.obs;
   RxBool moreThenHundred = false.obs;
-  RxBool showSubCategoryOptions = false.obs;
   RxBool isGridView = true.obs;
 
-  // Product categories (from CategoryData model) and main products from API
-  Rx<ServicesSubCategories> productCategories = ServicesSubCategories().obs;
-  Rx<ConnectorSelectedProductModel?> productListModel =
-      Rx<ConnectorSelectedProductModel?>(null);
-  RxInt selectedProductCategoryIndex = 0.obs;
-  RxInt selectedSubProductCategoryIndex = 0.obs;
+  Rx<ServicesSubCategories> serviceCategories = ServicesSubCategories().obs;
+  Rx<ConnectorServiceModel> serviceListModel = ConnectorServiceModel().obs;
+  RxInt selectedServiceCategoryIndex = 0.obs;
 
-  // Variables for categories and products
-  Rx<ServiceCategoryData?> mainCategory = ServiceCategoryData().obs; // Main Category
-  RxList<ServicesSubCategories> subCategories = <ServicesSubCategories>[].obs; // Sub Category
-  Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(null);
-  RxList<ServiceCategories> products = <ServiceCategories>[].obs;
-  Rx<ServiceCategories?> selectedProduct = Rx<ServiceCategories?>(null);
-  RxList<ProductSubCategory> productSubCategories = <ProductSubCategory>[].obs;
-  Rx<ProductSubCategory?> selectedProductSubCategory = Rx<ProductSubCategory?>(
+  Rx<ServiceCategoryData?> mainCategory =
+      ServiceCategoryData().obs; // Main Category
+  RxList<ServicesSubCategories> subCategories =
+      <ServicesSubCategories>[].obs; // Sub Category
+  Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(
     null,
   );
+  RxList<ServiceCategories> serviceCategoryList = <ServiceCategories>[].obs;
+  Rx<ServiceCategories?> selectedServiceCategory = Rx<ServiceCategories?>(null);
 
   // Arguments from navigation
   int? mainCategoryId;
@@ -50,14 +38,12 @@ class ConstructionServiceController extends GetxController {
   RxInt selectedSubCategoryId = 0.obs;
   double radiusKm = 50000000;
 
-  // Service instance
-  final ConnectorSelectedProductServices services =
-      ConnectorSelectedProductServices();
+  final ConstructionLineServices constructionLineServices =
+      ConstructionLineServices();
 
   @override
   void onInit() {
     super.onInit();
-    // Get arguments passed from home page
     if (myPref.role.val == "connector") {
       ever(hasOpenedOnce, (opened) {
         if (!opened) {
@@ -68,26 +54,24 @@ class ConstructionServiceController extends GetxController {
       });
     }
 
-    hasOpenedOnce.value = false; // Reset each time screen is created
+    hasOpenedOnce.value = false;
     final arguments = Get.arguments as Map<String, dynamic>?;
     mainCategoryId = arguments?['mainCategoryId'] ?? 0;
-    mainCategoryName = arguments?['mainCategoryName'] ?? 'Select Product';
+    mainCategoryName = arguments?['mainCategoryName'] ?? 'Select Service';
     selectedSubCategoryId.value = arguments?['selectedSubCategoryId'] ?? 0;
-    _initializeProductCategories();
+    _initializeServiceCategories();
   }
 
   void openAddressSelection() {
     openSelectAddressBottomSheet(
       onAddressChanged: () async {
-        // When user selects an address
-        // isAddressSelected.value = true;
         hasOpenedOnce.value = true;
-        await fetchProductsFromApi(isLoading: true);
+        await fetchServicesFromApi(isLoading: true);
       },
     );
   }
 
-  void _initializeProductCategories() {
+  void _initializeServiceCategories() {
     if (mainCategoryId != null) {
       final categoryHierarchy = myPref.getServiceCategoryHierarchyModel();
 
@@ -95,7 +79,7 @@ class ConstructionServiceController extends GetxController {
           categoryHierarchy?.data!.firstWhere(
             (category) => category.id == mainCategoryId,
           ) ??
-              ServiceCategoryData();
+          ServiceCategoryData();
 
       subCategories.value =
           mainCategory.value?.subCategories ?? <ServicesSubCategories>[];
@@ -104,161 +88,109 @@ class ConstructionServiceController extends GetxController {
         selectedSubCategory.value = subCategories.firstWhere((element) {
           return selectedSubCategoryId.value == element.id;
         });
-        products.value =
-            selectedSubCategory.value?.serviceCategories ?? <ServiceCategories>[];
-        // productSubCategories.value =
-        //     selectedSubCategory.value?.serviceCategories ??
-        //     <ProductSubCategory>[];
+        serviceCategoryList.value =
+            selectedSubCategory.value?.serviceCategories ??
+            <ServiceCategories>[];
       }
     }
   }
 
-  // Explicitly (re)select the main category and refresh right-side subcategories
   void selectMainCategory() {
     final categoryHierarchy = myPref.getServiceCategoryHierarchyModel();
     if (mainCategoryId != null && categoryHierarchy != null) {
       mainCategory.value =
           categoryHierarchy.data?.firstWhere((c) => c.id == mainCategoryId) ??
-              ServiceCategoryData();
+          ServiceCategoryData();
       subCategories.value =
           mainCategory.value?.subCategories ?? <ServicesSubCategories>[];
     }
   }
 
-  // Methods
   void selectSubCategory(int index) {
     selectedSubCategoryId.value = subCategories[index].id ?? 0;
     selectedSubCategory.value = subCategories[index];
-    products.value = selectedSubCategory.value?.serviceCategories ?? <ServiceCategories>[];
-    // productSubCategories.value =
-    //     selectedSubCategory.value? ??
-    //     <ProductSubCategory>[];
-    selectedProductIndex.value = -1; // Reset product selection
+    serviceCategoryList.value =
+        selectedSubCategory.value?.serviceCategories ?? <ServiceCategories>[];
   }
 
   void lestSide0LeftView(int index) {
     navigationIndex.value = 0;
     selectedSubCategoryId.value = subCategories[index].id ?? 0;
     selectedSubCategory.value = subCategories[index];
-    products.value = selectedSubCategory.value?.serviceCategories ?? [];
-    // productSubCategories.value =
-    //     selectedSubCategory.value?.productSubCategories ??
-    //     <ProductSubCategory>[];
+    serviceCategoryList.value =
+        selectedSubCategory.value?.serviceCategories ?? [];
   }
 
   void rightSide0RightView(int index) {
-    selectProduct(index);
-    productCategories.value =
+    selectServiceCategory(index);
+    serviceCategories.value =
         mainCategory.value?.subCategories?.firstWhere((element) {
-          return element.id == products[index].id;
+          return element.id == serviceCategoryList[index].id;
         }) ??
-            ServicesSubCategories();
-    if (productCategories.value.serviceCategories?.isEmpty ?? true) {
+        ServicesSubCategories();
+    if (serviceCategories.value.serviceCategories?.isEmpty ?? true) {
       navigationIndex.value = 1;
     } else {
-      selectedProductCategoryIndex.value = index;
-      navigationIndex.value = 2;
+      selectedServiceCategoryIndex.value = index;
+      navigationIndex.value = 1;
     }
-    selectedProduct.value = products[index];
+    selectedServiceCategory.value = serviceCategoryList[index];
   }
 
   void leftSide1LeftView(int index) {
     navigationIndex.value = 1;
-    selectedProductCategoryIndex.value = index;
-    selectedProduct.value = products[index];
-    if (productSubCategories.isNotEmpty) {
-      return;
-    }
-    fetchProductsFromApi();
+    selectedServiceCategoryIndex.value = index;
+    selectedServiceCategory.value = serviceCategoryList[index];
+    fetchServicesFromApi();
   }
 
   void leftSide2LeftView(int index) {
-    selectedProductCategoryIndex.value = index;
-    selectedProduct.value =
-        productCategories.value.serviceCategories?[index] ?? ServiceCategories();
+    selectedServiceCategoryIndex.value = index;
+    selectedServiceCategory.value =
+        serviceCategories.value.serviceCategories?[index] ??
+        ServiceCategories();
   }
 
-  void rightSide2RightView(int index) {
-    selectedSubProductCategoryIndex.value = index;
-    selectedProductSubCategory.value = productSubCategories[index];
-    fetchProductsFromApi();
+  void selectServiceCategory(int index) {
+    selectedServiceCategory.value = serviceCategoryList[index];
+    navigationIndex.value = 1;
+    fetchServicesFromApi();
   }
 
-  void selectProduct(int index) {
-    selectedProductIndex.value = index;
-    selectedProduct.value = products[index];
-    if (productSubCategories.isNotEmpty) {
-      return;
-    }
-    fetchProductsFromApi();
+  // Select service category
+  void selectServiceCategoryFromGrid(int index) {
+    selectedServiceCategoryIndex.value = index;
+    selectedServiceCategory.value =
+        serviceCategories.value.serviceCategories?[index] ??
+        ServiceCategories();
+    fetchServicesFromApi();
   }
 
-  // Call API when product is clicked
-  Future<void> fetchProductsFromApi({
-    bool? isLoading,
-    Map<String, dynamic>? filtersData,
-  }) async {
-    if (selectedProduct.value == null || selectedSubCategory.value == null) {
+  Future<void> fetchServicesFromApi({bool? isLoading}) async {
+    if (selectedServiceCategory.value == null ||
+        selectedSubCategory.value == null ||
+        mainCategoryId == null) {
       return;
     }
 
-    isLoadingProducts.value = isLoading ?? true;
+    isLoadingServices.value = isLoading ?? true;
 
-    final selectedAddress = homeController.profileData.value.data?.siteLocations
-        ?.where((element) => element.isDefault == true)
-        .first;
-
-    String latitude = '';
-    String longitude = '';
-
-    if (selectedAddress != null) {
-      final latitudeString = selectedAddress.latitude?.toString();
-      final longitudeString = selectedAddress.longitude?.toString();
-      if (latitudeString != null && longitudeString != null) {
-        latitude = latitudeString;
-        longitude = longitudeString;
-      }
-    }
-    if (latitude.isEmpty || longitude.isEmpty) {
-      SnackBars.errorSnackBar(
-        content: 'No address found. Please add an address first.',
-      );
-      return;
-    }
     try {
-      // Call the service
-      productListModel.value = await services.connectorProduct(
-        mainCategoryId: mainCategoryId.toString(),
-        subCategoryId: selectedSubCategory.value!.id.toString(),
-        categoryProductId: selectedProduct.value!.id.toString(),
-        productSubCategoryId: selectedProductSubCategory.value?.id?.toString(),
-        radius: radiusKm.toInt(),
-        filters: filtersData,
+      serviceListModel.value = await constructionLineServices.connectorServices(
+        mainCategoryId: mainCategoryId!,
+        subCategoryId: selectedSubCategory.value!.id ?? 0,
+        serviceCategoryId: selectedServiceCategory.value!.id ?? 0,
+        page: 1,
+        limit: 20,
+        radiusKm: radiusKm,
       );
-      showSubCategoryOptions.value = false;
-
-      if (allFilters.isEmpty) {
-        getFilter(selectedProduct.value!.id.toString());
-      }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch products: $e');
+      Get.snackbar('Error', 'Failed to fetch services: $e');
     } finally {
-      isLoadingProducts.value = false;
+      isLoadingServices.value = false;
     }
   }
 
-  // Select product category
-  void selectProductCategory(int index) {
-    selectedProductCategoryIndex.value = index;
-    selectedProduct.value =
-        productCategories.value.serviceCategories?[index] ?? ServiceCategories();
-    if (productSubCategories.isNotEmpty) {
-      return;
-    }
-    fetchProductsFromApi();
-  }
-
-  // Go back to category view
   void goBackToCategoryView() {
     if (navigationIndex.value == 0) {
       Get.back();
@@ -278,12 +210,11 @@ class ConstructionServiceController extends GetxController {
   }
 
   void selectProductSubCategory(int index) {
-    selectedSubProductCategoryIndex.value = index;
-    selectedProductSubCategory.value = productSubCategories[index];
-    fetchProductsFromApi();
+    selectedServiceCategoryIndex.value = index;
+    selectedServiceCategory.value = serviceCategoryList[index];
+    fetchServicesFromApi();
   }
 
-  // Inside SelectedProductController
   RxDouble selectedRadius = 50.0.obs;
   RxString selectedSort = 'Relevance'.obs;
 
@@ -293,41 +224,46 @@ class ConstructionServiceController extends GetxController {
 
   Future<void> applyRadius() async {
     radiusKm = selectedRadius.value;
-    await fetchProductsFromApi();
+    await fetchServicesFromApi();
   }
 
   void applySorting(String sortType) {
     selectedSort.value = sortType;
 
-    if (productListModel.value?.data?.products != null) {
-      final products = productListModel.value!.data!.products;
+    if (serviceListModel.value.data?.services != null) {
+      final services = List<ConnectorService>.from(
+        serviceListModel.value.data!.services ?? [],
+      );
       switch (sortType) {
         case 'Price (Low to High)':
-          products.sort(
+          services.sort(
             (a, b) => double.parse(
               a.price ?? '0',
             ).compareTo(double.parse(b.price ?? '0')),
           );
         case 'Price (High to Low)':
-          products.sort(
+          services.sort(
             (a, b) => double.parse(
               b.price ?? '0',
             ).compareTo(double.parse(a.price ?? '0')),
           );
-        case 'Ratings':
-          products.sort(
-            (a, b) => double.parse(
-              b.ratingCount.toString(),
-            ).compareTo(double.parse(a.ratingCount.toString())),
-          );
         case 'New Arrivals':
-          products.sort(
+          services.sort(
             (a, b) => (b.createdAt ?? '').compareTo(a.createdAt ?? ''),
           );
         default:
           break;
       }
-      productListModel.refresh();
+      serviceListModel.value = ConnectorServiceModel(
+        success: serviceListModel.value.success,
+        message: serviceListModel.value.message,
+        data: ConnectorServiceData(
+          services: services,
+          pagination:
+              serviceListModel.value.data?.pagination ?? ServicePagination(),
+        ),
+      );
+      serviceListModel.refresh();
     }
   }
 
@@ -433,7 +369,7 @@ class ConstructionServiceController extends GetxController {
 
                     if (moreThenHundred.value == true) {
                       radiusKm = 10000000000;
-                      await fetchProductsFromApi();
+                      await fetchServicesFromApi();
                     } else {
                       await applyRadius();
                     }
@@ -517,335 +453,13 @@ class ConstructionServiceController extends GetxController {
     );
   }
 
-  void showFilterBottomSheet(BuildContext context) {
-    final otherFilters = allFilters;
-    if (filters.isEmpty) {
-      filters.assignAll(
-        otherFilters.map(
-          (f) => ConnectorFilterModel(
-            filterName: f.filterName,
-            filterType: f.filterType,
-            min: double.tryParse(f.minValue ?? '0'),
-            max: double.tryParse(f.maxValue ?? '100'),
-            options: f.dropdownList,
-            label: f.filterLabel,
-          ),
-        ),
-      );
-      initFilterControllers();
-    }
-
-    Get.bottomSheet(
-      StatefulBuilder(
-        builder: (context, setState) {
-          return Container(
-            height: MediaQuery.of(context).size.height / 1.2,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Select Filter',
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.veryDarkGray,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => Get.back(),
-                      ),
-                    ],
-                  ),
-                ),
-
-                /// FILTER LIST
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: filters.length,
-                    itemBuilder: (context, index) {
-                      final filter = filters[index];
-                      final isExpanded = expandedSection.contains(
-                        filter.filterName,
-                      );
-                      return AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        // margin: const EdgeInsets.only(bottom: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: !isExpanded
-                              ? null
-                              : const Border(
-                                  bottom: BorderSide(color: MyColors.grayEA),
-                                ),
-                        ),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text(
-                                filter.label ?? '',
-                                style: MyTexts.bold16.copyWith(
-                                  color: MyColors.fontBlack,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                              trailing: Icon(
-                                isExpanded
-                                    ? Icons.keyboard_arrow_up_rounded
-                                    : Icons.keyboard_arrow_down_rounded,
-                                color: MyColors.black,
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  if (isExpanded) {
-                                    expandedSection.remove(
-                                      filter.filterName ?? '',
-                                    );
-                                  } else {
-                                    expandedSection.add(
-                                      filter.filterName ?? '',
-                                    );
-                                  }
-                                });
-                              },
-                            ),
-
-                            AnimatedCrossFade(
-                              duration: const Duration(milliseconds: 250),
-                              crossFadeState: isExpanded
-                                  ? CrossFadeState.showFirst
-                                  : CrossFadeState.showSecond,
-                              firstChild: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  16,
-                                  0,
-                                  16,
-                                  16,
-                                ),
-                                child: Builder(
-                                  builder: (context) {
-                                    switch (filter.filterType) {
-                                      case 'number':
-                                        final range =
-                                            rangeValues[filter.filterName]!;
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            RangeSlider(
-                                              values: range.value,
-                                              min: filter.min ?? 0,
-                                              max: filter.max ?? 100,
-                                              divisions: 10,
-                                              activeColor: MyColors.primary,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  range.value = val;
-                                                });
-                                              },
-                                            ),
-                                            Text(
-                                              "From ${range.value.start.toStringAsFixed(1)} to ${range.value.end.toStringAsFixed(1)}",
-                                              style: MyTexts.regular14.copyWith(
-                                                color: MyColors.grey,
-                                              ),
-                                            ),
-                                          ],
-                                        );
-
-                                      case 'dropdown':
-                                        return Align(
-                                          alignment: AlignmentGeometry.topLeft,
-                                          child: Wrap(
-                                            spacing: 8,
-                                            runSpacing: 8,
-                                            children:
-                                                filter.options?.map((opt) {
-                                                  final selected =
-                                                      selectedFilters[filter
-                                                              .filterName]
-                                                          ?.value ==
-                                                      opt;
-                                                  return FilterChip(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 14,
-                                                          vertical: 10,
-                                                        ),
-                                                    label: Text(
-                                                      opt,
-                                                      style: MyTexts.medium16
-                                                          .copyWith(
-                                                            color: selected
-                                                                ? Colors.white
-                                                                : MyColors
-                                                                      .gra54,
-                                                          ),
-                                                    ),
-                                                    selected: selected,
-                                                    backgroundColor:
-                                                        const Color(0xFFFAFBFF),
-                                                    selectedColor:
-                                                        MyColors.primary,
-                                                    surfaceTintColor:
-                                                        Colors.transparent,
-                                                    checkmarkColor:
-                                                        Colors.white,
-                                                    onSelected: (val) {
-                                                      setState(() {
-                                                        if (val) {
-                                                          selectedFilters[filter
-                                                                      .filterName]
-                                                                  ?.value =
-                                                              opt;
-                                                        } else {
-                                                          selectedFilters[filter
-                                                                      .filterName]
-                                                                  ?.value =
-                                                              '';
-                                                        }
-                                                      });
-                                                    },
-                                                  );
-                                                }).toList() ??
-                                                [],
-                                          ),
-                                        );
-
-                                      case 'dropdown_multiple':
-                                        return Align(
-                                          alignment: AlignmentGeometry.topLeft,
-                                          child: Wrap(
-                                            spacing: 8,
-                                            runSpacing: 8,
-                                            children:
-                                                filter.options?.map((opt) {
-                                                  final list =
-                                                      multiSelectValues[filter
-                                                          .filterName]!;
-                                                  final selected = list
-                                                      .contains(opt);
-                                                  return FilterChip(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 14,
-                                                          vertical: 10,
-                                                        ),
-                                                    label: Text(
-                                                      opt,
-                                                      style: MyTexts.medium16
-                                                          .copyWith(
-                                                            color: selected
-                                                                ? Colors.white
-                                                                : MyColors
-                                                                      .gra54,
-                                                          ),
-                                                    ),
-                                                    selected: selected,
-                                                    backgroundColor:
-                                                        const Color(0xFFFAFBFF),
-                                                    selectedColor:
-                                                        MyColors.primary,
-                                                    checkmarkColor:
-                                                        Colors.white,
-                                                    surfaceTintColor:
-                                                        Colors.transparent,
-                                                    onSelected: (val) {
-                                                      setState(() {
-                                                        if (val) {
-                                                          list.add(opt);
-                                                        } else {
-                                                          list.remove(opt);
-                                                        }
-                                                      });
-                                                    },
-                                                  );
-                                                }).toList() ??
-                                                [],
-                                          ),
-                                        );
-
-                                      default:
-                                        return const SizedBox();
-                                    }
-                                  },
-                                ),
-                              ),
-                              secondChild: const SizedBox.shrink(),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: RoundedButton(
-                          color: Colors.white,
-                          borderColor: MyColors.primary,
-                          style: MyTexts.bold16.copyWith(
-                            color: MyColors.primary,
-                          ),
-                          buttonName: "Clear All",
-                          onTap: () {
-                            setState(() async {
-                              selectedFilters.clear();
-                              multiSelectValues.clear();
-                              initFilterControllers();
-                              expandedSection.clear();
-                              await fetchProductsFromApi();
-                              Get.back();
-                            });
-                          },
-                        ),
-                      ),
-                      const Gap(16),
-                      Expanded(
-                        child: RoundedButton(
-                          buttonName: "Apply",
-                          onTap: () async {
-                            final filtersData = getFinalFilterData();
-                            await fetchProductsFromApi(
-                              filtersData: filtersData,
-                            );
-                            Get.back();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          );
-        },
-      ),
-      isScrollControlled: true,
-    );
-  }
-
   RxList<FilterData> allFilters = <FilterData>[].obs;
 
-  Future<void> getFilter(String subCategoryId) async {
+  Future<void> getFilter(String serviceCategoryId) async {
     try {
       isLoading(true);
       final result = await AddProductService().getFilter(
-        int.parse(subCategoryId),
+        int.parse(serviceCategoryId),
       );
 
       if (result.success == true) {
@@ -869,23 +483,6 @@ class ConstructionServiceController extends GetxController {
   Map<String, Rx<RangeValues>> rangeValues = {};
   Map<String, RxList<String>> multiSelectValues = {};
   RxBool isLoad = false.obs;
-
-  void initFilterControllers() {
-    for (final filter in allFilters) {
-      if (filter.filterType == 'number') {
-        rangeValues[filter.filterName ?? ''] = RangeValues(
-          double.parse(filter.minValue ?? "0"),
-          double.parse(filter.maxValue ?? "0"),
-        ).obs;
-      } else if (filter.filterType == 'dropdown_multiple') {
-        multiSelectValues[filter.filterName ?? ''] = <String>[].obs;
-      } else if (filter.filterType == 'dropdown') {
-        selectedFilters[filter.filterName ?? ''] = ''.obs;
-      } else {
-        selectedFilters[filter.filterName ?? ''] = ''.obs;
-      }
-    }
-  }
 
   RxList<String> expandedSection = <String>[].obs;
 
@@ -944,17 +541,29 @@ class ConstructionServiceController extends GetxController {
       case 0:
         return subCategories;
       case 1:
-        return products; // local categories (not API)
-      case 2:
-        return productSubCategories.isNotEmpty
-            ? productSubCategories
-            : (productListModel.value?.data?.products ?? []);
-      case 3:
-        return productListModel.value?.data?.products ?? [];
-      case 4:
-        return productListModel.value?.data?.products ?? [];
+        return serviceCategoryList;
       default:
         return [];
+    }
+  }
+
+  Future<void> addServiceToConnect({
+    int? merchantProfileId,
+    int? serviceId,
+    String? message,
+    VoidCallback? onSuccess,
+  }) async {
+    try {
+      isLoading(true);
+      await constructionLineServices.addServiceToConnect(
+        mID: merchantProfileId,
+        sID: serviceId,
+        message: message,
+      );
+      await fetchServicesFromApi(isLoading: false);
+    } catch (e) {
+    } finally {
+      isLoading(false);
     }
   }
 

@@ -6,21 +6,26 @@ class ConnectionModel {
 
   ConnectionModel({this.success, this.message, this.data, this.statistics});
 
-  factory ConnectionModel.fromJson(Map<String, dynamic> json) => ConnectionModel(
-    success: json["success"],
-    message: json["message"],
-    data: json["data"] == null
-        ? []
-        : List<Connection>.from(json["data"]!.map((x) => Connection.fromJson(x))),
-    statistics: json["statistics"] == null
-        ? null
-        : Statistics.fromJson(json["statistics"]),
-  );
+  factory ConnectionModel.fromJson(Map<String, dynamic> json) =>
+      ConnectionModel(
+        success: json["success"],
+        message: json["message"],
+        data: json["data"] == null
+            ? []
+            : List<Connection>.from(
+                json["data"]!.map((x) => Connection.fromJson(x)),
+              ),
+        statistics: json["statistics"] == null
+            ? null
+            : Statistics.fromJson(json["statistics"]),
+      );
 
   Map<String, dynamic> toJson() => {
     "success": success,
     "message": message,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
     "statistics": statistics?.toJson(),
   };
 }
@@ -39,6 +44,9 @@ class Connection {
   String? merchantName;
   String? merchantProfileImageUrl;
   String? productName;
+  int? serviceId;
+  String? serviceName;
+  String? itemType;
   DateTime? createdAt;
   DateTime? updatedAt;
   ConnectionStatistics? statistics;
@@ -57,6 +65,9 @@ class Connection {
     this.merchantName,
     this.merchantProfileImageUrl,
     this.productName,
+    this.serviceId,
+    this.serviceName,
+    this.itemType,
     this.createdAt,
     this.updatedAt,
     this.statistics,
@@ -78,6 +89,9 @@ class Connection {
     merchantName: json["merchant_name"],
     merchantProfileImageUrl: json["merchant_profile_image_url"],
     productName: json["product_name"],
+    serviceId: json["service_id"],
+    serviceName: json["service_name"],
+    itemType: json["item_type"],
     createdAt: json["created_at"] == null
         ? null
         : DateTime.tryParse(json["created_at"]),
@@ -103,6 +117,9 @@ class Connection {
     "merchant_name": merchantName,
     "merchant_profile_image_url": merchantProfileImageUrl,
     "product_name": productName,
+    "service_id": serviceId,
+    "service_name": serviceName,
+    "item_type": itemType,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
     if (statistics != null) "statistics": statistics!.toJson(), // ✅ optional
