@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/service/add_constrcution_Service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -186,6 +187,7 @@ class AddServiceController extends GetxController {
       /// --- Text Controllers ---
       unitController.text = service.units ?? "";
       priceController.text = service.price ?? "";
+      // referenceFileUrl.value = service.referenceFile ?? '';
       gstController.text = service.gstPercentage ?? "";
       descriptionController.text = service.description ?? "";
       gstPriceController.text = service.gstAmount ?? "";
@@ -381,6 +383,9 @@ class AddServiceController extends GetxController {
       }
       index++;
     }
+    if (referenceFile.value != null) {
+      selectedFiles['reference'] = referenceFile.value!.path;
+    }
 
     selectedFiles["video"] = selectedVideo.value?.path ?? "";
 
@@ -397,16 +402,16 @@ class AddServiceController extends GetxController {
     try {
       final res = await _service.createService(fields: fields, files: selectedFiles);
       if (res.success) {
-        // Get.to(
-        //   () => SuccessScreen(
-        //     title: "Success!",
-        //     header: "Service added successfully!",
-        //     onTap: () {
-        //       Get.back();
-        //       Get.back();
-        //     },
-        //   ),
-        // );
+        Get.to(
+          () => SuccessScreen(
+            title: "Success!",
+            header: "Service added successfully!",
+            onTap: () {
+              Get.back();
+              Get.back();
+            },
+          ),
+        );
       } else {
         Get.snackbar("Error", res.message ?? "Failed to add service");
       }
@@ -487,4 +492,30 @@ class AddServiceController extends GetxController {
       isLoading.value = false;
     }
   }
+  Rx<File?> referenceFile = Rx<File?>(null);
+  RxString referenceFileUrl = ''.obs; // for edit mode
+
+  Future<void> pickReferenceFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4', 'pdf', 'doc', 'docx'],
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        referenceFile.value = File(result.files.first.path!);
+        referenceFileUrl.value = ''; // new local file replaces old URL
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: "Failed to pick file: $e", time: 3);
+    }
+  }
+
+  void removeReferenceFile() {
+    referenceFile.value = null;
+    referenceFileUrl.value = '';
+  }
+
+  bool get hasReferenceFile =>
+      referenceFile.value != null || referenceFileUrl.value.isNotEmpty;
 }

@@ -41,7 +41,7 @@ class Service {
   String? description;
   bool? isActive;
   String? approvalStatus;
-  String? approvedBy;
+  int? approvedBy;
   String? approvedAt;
   String? rejectionReason;
   String? createdAt;
@@ -49,33 +49,34 @@ class Service {
   String? mainCategoryName;
   String? subCategoryName;
   String? serviceCategoryName;
-  List<Null>? media;
-  List<Null>? references;
+  List<Media>? media;
+  Reference? reference;
 
-  Service(
-      {this.id,
-        this.merchantProfileId,
-        this.mainCategoryId,
-        this.subCategoryId,
-        this.serviceCategoryId,
-        this.units,
-        this.price,
-        this.gstPercentage,
-        this.gstAmount,
-        this.totalAmount,
-        this.description,
-        this.isActive,
-        this.approvalStatus,
-        this.approvedBy,
-        this.approvedAt,
-        this.rejectionReason,
-        this.createdAt,
-        this.updatedAt,
-        this.mainCategoryName,
-        this.subCategoryName,
-        this.serviceCategoryName,
-        this.media,
-        this.references});
+  Service({
+    this.id,
+    this.merchantProfileId,
+    this.mainCategoryId,
+    this.subCategoryId,
+    this.serviceCategoryId,
+    this.units,
+    this.price,
+    this.gstPercentage,
+    this.gstAmount,
+    this.totalAmount,
+    this.description,
+    this.isActive,
+    this.approvalStatus,
+    this.approvedBy,
+    this.approvedAt,
+    this.rejectionReason,
+    this.createdAt,
+    this.updatedAt,
+    this.mainCategoryName,
+    this.subCategoryName,
+    this.serviceCategoryName,
+    this.media,
+    this.reference,
+  });
 
   Service.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -84,10 +85,10 @@ class Service {
     subCategoryId = json['sub_category_id'];
     serviceCategoryId = json['service_category_id'];
     units = json['units'];
-    price = json['price'];
-    gstPercentage = json['gst_percentage'];
-    gstAmount = json['gst_amount'];
-    totalAmount = json['total_amount'];
+    price = json['price']?.toString();
+    gstPercentage = json['gst_percentage']?.toString();
+    gstAmount = json['gst_amount']?.toString();
+    totalAmount = json['total_amount']?.toString();
     description = json['description'];
     isActive = json['is_active'];
     approvalStatus = json['approval_status'];
@@ -99,18 +100,17 @@ class Service {
     mainCategoryName = json['main_category_name'];
     subCategoryName = json['sub_category_name'];
     serviceCategoryName = json['service_category_name'];
-    // if (json['media'] != null) {
-    //   media = <Null>[];
-    //   json['media'].forEach((v) {
-    //     media!.add(Null.fromJson(v));
-    //   });
-    // }
-    // if (json['references'] != null) {
-    //   references = <Null>[];
-    //   json['references'].forEach((v) {
-    //     references!.add(Null.fromJson(v));
-    //   });
-    // }
+
+    if (json['media'] != null) {
+      media = <Media>[];
+      json['media'].forEach((v) {
+        media!.add(Media.fromJson(v));
+      });
+    }
+
+    reference = json['reference'] != null
+        ? Reference.fromJson(json['reference'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -136,12 +136,107 @@ class Service {
     data['main_category_name'] = mainCategoryName;
     data['sub_category_name'] = subCategoryName;
     data['service_category_name'] = serviceCategoryName;
-    // if (media != null) {
-    //   data['media'] = media!.map((v) => v.toJson()).toList();
-    // }
-    // if (references != null) {
-    //   data['references'] = references!.map((v) => v.toJson()).toList();
-    // }
+
+    if (media != null) {
+      data['media'] = media!.map((v) => v.toJson()).toList();
+    }
+
+    if (reference != null) {
+      data['reference'] = reference!.toJson();
+    }
+
+    return data;
+  }
+}
+
+class Media {
+  int? id;
+  int? merchantServiceId;
+  String? mediaType;
+  String? mediaUrl;
+  String? mediaS3Key;
+  int? sortOrder;
+  String? createdAt;
+
+  Media({
+    this.id,
+    this.merchantServiceId,
+    this.mediaType,
+    this.mediaUrl,
+    this.mediaS3Key,
+    this.sortOrder,
+    this.createdAt,
+  });
+
+  Media.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    merchantServiceId = json['merchant_service_id'];
+    mediaType = json['media_type'];
+    mediaUrl = json['media_url'];
+    mediaS3Key = json['media_s3_key'];
+    sortOrder = json['sort_order'];
+    createdAt = json['created_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['merchant_service_id'] = merchantServiceId;
+    data['media_type'] = mediaType;
+    data['media_url'] = mediaUrl;
+    data['media_s3_key'] = mediaS3Key;
+    data['sort_order'] = sortOrder;
+    data['created_at'] = createdAt;
+    return data;
+  }
+}
+
+class Reference {
+  int? id;
+  int? merchantServiceId;
+  String? referenceType;
+  String? referenceUrl;
+  String? referenceS3Key;
+  String? title;
+  String? description;
+  int? sortOrder;
+  String? createdAt;
+
+  Reference({
+    this.id,
+    this.merchantServiceId,
+    this.referenceType,
+    this.referenceUrl,
+    this.referenceS3Key,
+    this.title,
+    this.description,
+    this.sortOrder,
+    this.createdAt,
+  });
+
+  Reference.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    merchantServiceId = json['merchant_service_id'];
+    referenceType = json['reference_type'];
+    referenceUrl = json['reference_url'];
+    referenceS3Key = json['reference_s3_key'];
+    title = json['title'];
+    description = json['description'];
+    sortOrder = json['sort_order'];
+    createdAt = json['created_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['merchant_service_id'] = merchantServiceId;
+    data['reference_type'] = referenceType;
+    data['reference_url'] = referenceUrl;
+    data['reference_s3_key'] = referenceS3Key;
+    data['title'] = title;
+    data['description'] = description;
+    data['sort_order'] = sortOrder;
+    data['created_at'] = createdAt;
     return data;
   }
 }
