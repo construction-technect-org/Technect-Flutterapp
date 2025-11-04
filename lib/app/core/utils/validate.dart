@@ -6,7 +6,7 @@ class Validate {
     if (email == null || email.isEmpty) return false;
     if (email.length > 254) return false;
     final regex = RegExp(
-      r"^(?!.*\.\.)[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9-]+\.[A-Za-z]{2,63}$",
+      r"^(?!.*\.\.)[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,63}$",
     );
     return regex.hasMatch(email);
   }
