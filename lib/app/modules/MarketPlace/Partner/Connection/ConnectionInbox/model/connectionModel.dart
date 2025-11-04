@@ -8,17 +8,17 @@ class ConnectionModel {
 
   factory ConnectionModel.fromJson(Map<String, dynamic> json) =>
       ConnectionModel(
-        success: json["success"],
-        message: json["message"],
-        data: json["data"] == null
-            ? []
+    success: json["success"],
+    message: json["message"],
+    data: json["data"] == null
+        ? []
             : List<Connection>.from(
                 json["data"]!.map((x) => Connection.fromJson(x)),
               ),
-        statistics: json["statistics"] == null
-            ? null
-            : Statistics.fromJson(json["statistics"]),
-      );
+    statistics: json["statistics"] == null
+        ? null
+        : Statistics.fromJson(json["statistics"]),
+  );
 
   Map<String, dynamic> toJson() => {
     "success": success,

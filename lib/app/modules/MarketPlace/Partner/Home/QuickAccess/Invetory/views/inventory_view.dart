@@ -16,10 +16,7 @@ class InventoryView extends GetView<InventoryController> {
         onTap: hideKeyboard,
         child: Scaffold(
           backgroundColor: MyColors.white,
-          appBar: CommonAppBar(
-            title: const Text('Inventory'),
-            isCenter: false,
-          ),
+          appBar: CommonAppBar(title: const Text('Inventory'), isCenter: false),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -32,7 +29,10 @@ class InventoryView extends GetView<InventoryController> {
                     color: MyColors.grayF7,
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 12,
+                  ),
                   child: Obx(() {
                     return Row(
                       mainAxisSize: MainAxisSize.min,
@@ -51,14 +51,17 @@ class InventoryView extends GetView<InventoryController> {
                             duration: const Duration(milliseconds: 250),
                             curve: Curves.easeInOut,
                             decoration: BoxDecoration(
-                              color: controller.selectedStatus.value == "product"
+                              color:
+                                  controller.selectedStatus.value == "product"
                                   ? Colors.white
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(24),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 6, horizontal: 20),
+                                vertical: 6,
+                                horizontal: 20,
+                              ),
                               child: Center(
                                 child: Text(
                                   "Product",
@@ -84,14 +87,17 @@ class InventoryView extends GetView<InventoryController> {
                             duration: const Duration(milliseconds: 250),
                             curve: Curves.easeInOut,
                             decoration: BoxDecoration(
-                              color: controller.selectedStatus.value == "service"
+                              color:
+                                  controller.selectedStatus.value == "service"
                                   ? Colors.white
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(24),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 6, horizontal: 20),
+                                vertical: 6,
+                                horizontal: 20,
+                              ),
                               child: Center(
                                 child: Text(
                                   "Service",
@@ -165,12 +171,12 @@ class InventoryView extends GetView<InventoryController> {
                       return GridView.builder(
                         padding: const EdgeInsets.all(16),
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.6,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.6,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                            ),
                         itemCount: controller.filteredProducts.length,
                         itemBuilder: (context, index) {
                           final item = controller.filteredProducts[index];
@@ -184,20 +190,22 @@ class InventoryView extends GetView<InventoryController> {
                       return GridView.builder(
                         padding: const EdgeInsets.all(16),
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.6,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.6,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                            ),
                         itemCount: controller.filteredService.length,
                         itemBuilder: (context, index) {
                           final service = controller.filteredService[index];
                           return ServiceCard(
                             service: service,
                             onTap: () {
-                              Get.toNamed(Routes.SERVICE_DETAILS,
-                                  arguments: {"service": service});
+                              Get.toNamed(
+                                Routes.SERVICE_DETAILS,
+                                arguments: {"service": service},
+                              );
                             },
                           );
                         },

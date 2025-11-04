@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/controllers/construction_service_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/models/ConnectorServiceModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:gap/gap.dart';
@@ -641,175 +640,179 @@ class ConstructionServiceView extends StatelessWidget {
         }
         final service = services[index];
 
-        final firstImage = service.media?.firstWhere(
-          (m) => m.mediaType == 'image',
-          orElse: () => ServiceMedia(),
-        );
-        final imageUrl = firstImage?.mediaUrl;
-        log('service.distanceKm: ${service.distanceKm ?? ''}');
-        return Container(
-          decoration: BoxDecoration(
-            color: MyColors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: MyColors.grayEA),
+        final imageUrl =
+            APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? '');
+        return GestureDetector(
+          onTap: () => Get.toNamed(
+            Routes.SERVICE_DETAILS,
+            arguments: {'service': service},
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Image
-              Expanded(
-                flex: 3,
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(12),
-                      ),
-                      child: imageUrl != null
-                          ? CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) => Container(
+          child: Container(
+            decoration: BoxDecoration(
+              color: MyColors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: MyColors.grayEA),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Image
+                Expanded(
+                  flex: 3,
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                        child: imageUrl.isNotEmpty
+                            ? CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(Icons.build, size: 40),
+                                ),
+                              )
+                            : Container(
                                 color: Colors.grey[200],
                                 child: const Icon(Icons.build, size: 40),
                               ),
-                            )
-                          : Container(
-                              color: Colors.grey[200],
-                              child: const Icon(Icons.build, size: 40),
-                            ),
-                    ),
-                    // Location distance overlay (top left)
-                    if (myPref.role.val == "connector")
-                      if ((service.distanceKm ?? "").isNotEmpty)
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 6,
-                            ),
-                            color: Colors.white,
-                            child: Text(
-                              "${double.parse(service.distanceKm ?? '0').toStringAsFixed(1)} km",
-                              style: MyTexts.light12,
+                      ),
+                      // Location distance overlay (top left)
+                      if (myPref.role.val == "connector")
+                        if ((service.distanceKm ?? 0) > 0)
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              color: Colors.white,
+                              child: Text(
+                                "${service.distanceKm?.toStringAsFixed(1)} km",
+                                style: MyTexts.light12,
+                              ),
                             ),
                           ),
-                        ),
-                  ],
-                ),
-              ),
-              // Details
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        service.serviceCategoryName ?? 'Service',
-                        style: MyTexts.medium14,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Gap(4),
-                      Text(
-                        service.merchantName ?? '',
-                        style: MyTexts.regular12.copyWith(color: Colors.grey),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Spacer(),
-                      Text(
-                        '₹${service.price ?? '0'}/${service.units ?? ''}',
-                        style: MyTexts.bold14.copyWith(color: MyColors.primary),
-                      ),
-                      if (myPref.role.val == "connector")
-                        () {
-                          final connectionStatus =
-                              service.connectionRequestStatus ?? '';
-                          if (connectionStatus.isEmpty) {
-                            return RoundedButton(
-                              buttonName: 'Connect',
-                              color: MyColors.primary,
-                              fontColor: Colors.white,
-                              onTap: () {
-                                ConnectionDialogs.showSendServiceConnectionDialog(
-                                  context,
-                                  service,
-                                  isFromIn: true,
-                                  onTap: (message) async {
-                                    await controller.addServiceToConnect(
-                                      merchantProfileId:
-                                          service.merchantProfileId ?? 0,
-                                      serviceId: service.id ?? 0,
-                                      message: message,
-                                      onSuccess: () async {
-                                        await controller.fetchServicesFromApi(
-                                          isLoading: false,
-                                        );
-                                      },
-                                    );
-                                  },
-                                );
-                              },
-                              height: 28,
-                              borderRadius: 6,
-                              verticalPadding: 0,
-                              style: MyTexts.medium12.copyWith(
-                                color: Colors.white,
-                              ),
-                            );
-                          } else if (connectionStatus == 'pending') {
-                            return RoundedButton(
-                              color: MyColors.pendingBtn,
-                              buttonName: 'Pending',
-                              height: 28,
-                              horizontalPadding: 20,
-                              borderRadius: 6,
-                              verticalPadding: 0,
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
-                              ),
-                            );
-                          } else if (connectionStatus == 'accepted') {
-                            return RoundedButton(
-                              color: MyColors.grayEA,
-                              buttonName: 'Connected',
-                              height: 28,
-                              borderRadius: 6,
-                              verticalPadding: 0,
-                              horizontalPadding: 20,
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
-                              ),
-                            );
-                          } else if (connectionStatus == 'rejected') {
-                            return RoundedButton(
-                              color: MyColors.rejectBtn,
-                              buttonName: 'Rejected',
-                              height: 28,
-                              borderRadius: 6,
-                              verticalPadding: 0,
-                              horizontalPadding: 20,
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
-                              ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        }(),
                     ],
                   ),
                 ),
-              ),
-            ],
+                // Details
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          service.serviceCategoryName ?? 'Service',
+                          style: MyTexts.medium14,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Gap(4),
+                        Text(
+                          service.merchantName ?? '',
+                          style: MyTexts.regular12.copyWith(color: Colors.grey),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Spacer(),
+                        Text(
+                          '₹${service.price ?? '0'}/${service.units ?? ''}',
+                          style: MyTexts.bold14.copyWith(
+                            color: MyColors.primary,
+                          ),
+                        ),
+                        if (myPref.role.val == "connector")
+                          () {
+                            final connectionStatus =
+                                service.connectionRequestStatus ?? '';
+                            if (connectionStatus.isEmpty) {
+                              return RoundedButton(
+                                buttonName: 'Connect',
+                                color: MyColors.primary,
+                                fontColor: Colors.white,
+                                onTap: () {
+                                  ConnectionDialogs.showSendServiceConnectionDialog(
+                                    context,
+                                    service,
+                                    isFromIn: true,
+                                    onTap: (message) async {
+                                      await controller.addServiceToConnect(
+                                        merchantProfileId:
+                                            service.merchantProfileId ?? 0,
+                                        serviceId: service.id ?? 0,
+                                        message: message,
+                                        onSuccess: () async {
+                                          await controller.fetchServicesFromApi(
+                                            isLoading: false,
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                                height: 28,
+                                borderRadius: 6,
+                                verticalPadding: 0,
+                                style: MyTexts.medium12.copyWith(
+                                  color: Colors.white,
+                                ),
+                              );
+                            } else if (connectionStatus == 'pending') {
+                              return RoundedButton(
+                                color: MyColors.pendingBtn,
+                                buttonName: 'Pending',
+                                height: 28,
+                                horizontalPadding: 20,
+                                borderRadius: 6,
+                                verticalPadding: 0,
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.gray54,
+                                ),
+                              );
+                            } else if (connectionStatus == 'accepted') {
+                              return RoundedButton(
+                                color: MyColors.grayEA,
+                                buttonName: 'Connected',
+                                height: 28,
+                                borderRadius: 6,
+                                verticalPadding: 0,
+                                horizontalPadding: 20,
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.gray54,
+                                ),
+                              );
+                            } else if (connectionStatus == 'rejected') {
+                              return RoundedButton(
+                                color: MyColors.rejectBtn,
+                                buttonName: 'Rejected',
+                                height: 28,
+                                borderRadius: 6,
+                                verticalPadding: 0,
+                                horizontalPadding: 20,
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.gray54,
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          }(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -828,11 +831,8 @@ class ConstructionServiceView extends StatelessWidget {
         }
         final service = services[index];
 
-        final firstImage = service.media?.firstWhere(
-          (m) => m.mediaType == 'image',
-          orElse: () => ServiceMedia(),
-        );
-        final imageUrl = firstImage?.mediaUrl;
+        final imageUrl =
+            APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? '');
         return Container(
           margin: const EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
@@ -849,7 +849,7 @@ class ConstructionServiceView extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: imageUrl != null
+                      child: imageUrl.isNotEmpty
                           ? CachedNetworkImage(
                               imageUrl: imageUrl,
                               width: 100,
@@ -878,7 +878,7 @@ class ConstructionServiceView extends StatelessWidget {
                     ),
                     // Location distance overlay (top left)
                     if (myPref.role.val == "connector")
-                      if ((service.distanceKm ?? "").isNotEmpty)
+                      if ((service.distanceKm ?? 0) > 0)
                         Positioned(
                           top: 0,
                           left: 0,
@@ -889,7 +889,7 @@ class ConstructionServiceView extends StatelessWidget {
                             ),
                             color: Colors.white,
                             child: Text(
-                              "${double.parse(service.distanceKm ?? '0').toStringAsFixed(1)} km",
+                              "${service.distanceKm?.toStringAsFixed(1)} km",
                               style: MyTexts.light12,
                             ),
                           ),

@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/controller/service_detail_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:video_player/video_player.dart';
 
@@ -11,94 +13,287 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      final service = controller.service;
-      final isEdit = controller.isFromAdd.value;
+    return LoaderWrapper(
+      isLoading: controller.isLoading,
+      child: Scaffold(
+        backgroundColor: MyColors.white,
+        appBar: CommonAppBar(
+          title: const Text("Service Details"),
+          isCenter: false,
+        ),
+        bottomNavigationBar: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Gap(16),
+            if (myPref.role.val == "connector")
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Get.offAllNamed(Routes.MAIN);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Explore More!",
+                        style: MyTexts.medium14.copyWith(
+                          color: MyColors.grayA5,
+                        ),
+                      ),
+                      const Gap(8),
+                      Text(
+                        "View Categories >",
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.gray54,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            if (myPref.role.val == "connector")
+              _buildConnectionButton(context, controller),
+          ],
+        ),
 
-      return LoaderWrapper(
-        isLoading: controller.isLoading,
-        child: Scaffold(
-          backgroundColor: MyColors.white,
-          appBar: CommonAppBar(
-            title: Text(isEdit ? "Edit Service" : "Service Details"),
-            isCenter: false,
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Gap(16),
-                Obx(() {
-                  final service = controller.service;
-                  final isEdit = controller.isFromAdd.value;
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Gap(16),
+              Obx(() {
+                final service = controller.service.value;
 
-                  // 🟩 Prepare media list
-                  final List<Map<String, dynamic>> mediaList = [];
+                // 🟩 Prepare media list - images first, then video at the end
+                final List<Map<String, dynamic>> mediaList = [];
 
-                  if (service.media != null && service.media!.isNotEmpty) {
-                    for (var m in service.media!) {
-                      // `mediaType` can be 'image' or 'video'
-                      final type = m.mediaType ?? '';
-                      final url = m.mediaUrl ??
-                          ''; // when editing, network path
-
-                      if (url.isNotEmpty) {
-                        mediaList.add({'type': type, 'path': url});
-                      }
+                // Add all images first
+                if (service.images != null && service.images!.isNotEmpty) {
+                  for (var image in service.images!) {
+                    if (image.mediaUrl != null && image.mediaUrl!.isNotEmpty) {
+                      mediaList.add({'type': 'image', 'path': image.mediaUrl!});
                     }
                   }
+                }
 
-                  // 🟪 If nothing to show
-                  if (mediaList.isEmpty) {
-                    return Container(
+                // Add video at the end if available
+                if (service.video != null && service.video!.mediaUrl != null) {
+                  final url = service.video?.mediaUrl ?? '';
+                  if (url.isNotEmpty) {
+                    mediaList.add({'type': 'video', 'path': url});
+                  }
+                }
+
+                // 🟪 If nothing to show
+                if (mediaList.isEmpty) {
+                  return Container(
+                    height: 35.h,
+                    width: 360.w,
+                    color: MyColors.grayF2,
+                    alignment: Alignment.center,
+                    child: const Icon(
+                      Icons.image_not_supported,
+                      size: 60,
+                      color: Colors.grey,
+                    ),
+                  );
+                }
+
+                // 🧭 PageView (handles both images & videos)
+                return Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    SizedBox(
                       height: 35.h,
                       width: 360.w,
-                      color: MyColors.grayF2,
-                      alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.image_not_supported,
-                        size: 60,
-                        color: Colors.grey,
-                      ),
-                    );
-                  }
+                      child: PageView.builder(
+                        itemCount: mediaList.length,
+                        controller: PageController(viewportFraction: 1),
+                        onPageChanged: (index) {
+                          controller.currentIndex.value = index;
+                          // Auto-play video if the new page is a video
+                          final media = mediaList[index];
+                          if (media['type'] == 'video') {
+                            if (controller.videoPlayerController != null &&
+                                controller
+                                    .videoPlayerController!
+                                    .value
+                                    .isInitialized) {
+                              controller.videoPlayerController!.play();
+                            }
+                          } else {
+                            // Pause video when switching to image page
+                            if (controller.videoPlayerController != null &&
+                                controller
+                                    .videoPlayerController!
+                                    .value
+                                    .isInitialized) {
+                              controller.videoPlayerController!.pause();
+                            }
+                          }
+                        },
+                        itemBuilder: (context, index) {
+                          final media = mediaList[index];
+                          final path = media['path'] as String;
+                          final isHttp = path.startsWith('http');
 
-                  // 🧭 PageView (handles both images & videos)
-                  return Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      SizedBox(
-                        height: 35.h,
-                        width: 360.w,
-                        child: PageView.builder(
-                          itemCount: mediaList.length,
-                          controller: PageController(viewportFraction: 1),
-                          onPageChanged: (index) =>
-                          controller.currentIndex.value = index,
-                          itemBuilder: (context, index) {
-                            final media = mediaList[index];
-                            final path = media['path'] as String;
-                            final isHttp = path.startsWith('http');
+                          if (media['type'] == 'video') {
+                            final videoController =
+                                controller.videoPlayerController;
+                            final isPlaying =
+                                videoController != null &&
+                                videoController.value.isInitialized &&
+                                videoController.value.isPlaying;
+                            final hasError =
+                                videoController != null &&
+                                videoController.value.hasError;
 
-                            if (media['type'] == 'video') {
-                              return GestureDetector(
-                                onTap: () =>
-                                    controller.openVideoDialog(
-                                      context,
-                                      path,
-                                      isHttp,
+                            return GestureDetector(
+                              onTap: () {
+                                if (hasError) {
+                                  // If error, try to open in browser
+                                  final videoPath =
+                                      controller
+                                          .service
+                                          .value
+                                          .video
+                                          ?.mediaS3Key ??
+                                      controller
+                                          .service
+                                          .value
+                                          .video
+                                          ?.mediaUrl ??
+                                      "";
+                                  if (videoPath.isNotEmpty) {
+                                    final videoUrl =
+                                        videoPath.startsWith('http')
+                                        ? videoPath
+                                        : APIConstants.bucketUrl + videoPath;
+                                    controller.openReferenceUrl(videoUrl);
+                                  }
+                                } else if (videoController != null &&
+                                    videoController.value.isInitialized) {
+                                  if (isPlaying) {
+                                    videoController.pause();
+                                  } else {
+                                    videoController.play();
+                                  }
+                                }
+                              },
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  ColoredBox(
+                                    color: Colors.black,
+                                    child: AspectRatio(
+                                      aspectRatio: 16 / 9,
+                                      child:
+                                          videoController != null &&
+                                              videoController
+                                                  .value
+                                                  .isInitialized
+                                          ? VideoPlayer(videoController)
+                                          : videoController != null &&
+                                                videoController.value.hasError
+                                          ? Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.error_outline,
+                                                    color: Colors.white,
+                                                    size: 48,
+                                                  ),
+                                                  const SizedBox(height: 16),
+                                                  Text(
+                                                    'Failed to load video',
+                                                    style: MyTexts.medium14
+                                                        .copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Text(
+                                                    'Video codec may not be supported on this device',
+                                                    style: MyTexts.medium12
+                                                        .copyWith(
+                                                          color: Colors.white70,
+                                                        ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  const SizedBox(height: 16),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          // Retry video loading
+                                                          controller
+                                                              .retryVideoInitialization();
+                                                        },
+                                                        child: const Text(
+                                                          'Retry',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 16),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          // Open video in external player/browser
+                                                          final videoPath =
+                                                              controller
+                                                                  .service
+                                                                  .value
+                                                                  .video
+                                                                  ?.mediaS3Key ??
+                                                              controller
+                                                                  .service
+                                                                  .value
+                                                                  .video
+                                                                  ?.mediaUrl ??
+                                                              "";
+                                                          if (videoPath
+                                                              .isNotEmpty) {
+                                                            final videoUrl =
+                                                                videoPath
+                                                                    .startsWith(
+                                                                      'http',
+                                                                    )
+                                                                ? videoPath
+                                                                : APIConstants
+                                                                          .bucketUrl +
+                                                                      videoPath;
+                                                            controller
+                                                                .openReferenceUrl(
+                                                                  videoUrl,
+                                                                );
+                                                          }
+                                                        },
+                                                        child: const Text(
+                                                          'Open in Browser',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : const Center(
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                     ),
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    ColoredBox(
-                                      color: Colors.black12,
-                                      child: AspectRatio(
-                                        aspectRatio: 16 / 9,
-                                        child:
-                                        VideoPlayer(
-                                            controller.videoPlayerController!),
-                                      ),
-                                    ),
+                                  ),
+                                  if (!isPlaying)
                                     Container(
                                       width: 60,
                                       height: 60,
@@ -112,269 +307,480 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                         size: 40,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              );
-                            }
+                                  // Video progress indicator
+                                  if (videoController != null &&
+                                      videoController.value.isInitialized)
+                                    Positioned(
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: VideoProgressIndicator(
+                                        videoController,
+                                        allowScrubbing: true,
+                                        colors: const VideoProgressColors(
+                                          backgroundColor: Colors.black26,
+                                          playedColor: Colors.white,
+                                          bufferedColor: Colors.white38,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          }
 
-                            // 🖼️ Image
-                            return GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) =>
-                                      Dialog(
-                                        insetPadding: const EdgeInsets.all(16),
-                                        child: InteractiveViewer(
-                                          child: isHttp
-                                              ? Image.network(
+                          // 🖼️ Image
+                          return GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => Dialog(
+                                  insetPadding: const EdgeInsets.all(16),
+                                  child: InteractiveViewer(
+                                    child: isHttp
+                                        ? Image.network(
                                             path,
                                             width: 360.w,
                                             fit: BoxFit.contain,
                                             errorBuilder: (_, __, ___) =>
+                                                const Icon(
+                                                  Icons.broken_image,
+                                                  size: 60,
+                                                  color: Colors.grey,
+                                                ),
+                                          )
+                                        : Image.file(
+                                            File(path),
+                                            fit: BoxFit.contain,
+                                          ),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4.0,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(0),
+                                child: isHttp
+                                    ? Image.network(
+                                        path,
+                                        fit: BoxFit.cover,
+                                        height: 35.h,
+                                        width: 360.w,
+                                      )
+                                    : Image.file(
+                                        File(path),
+                                        fit: BoxFit.cover,
+                                        height: 35.h,
+                                        width: 360.w,
+                                      ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 8,
+                      child: Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                            mediaList.length,
+                            (index) => AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              height: controller.currentIndex.value == index
+                                  ? 14
+                                  : 9,
+                              width: controller.currentIndex.value == index
+                                  ? 14
+                                  : 9,
+                              decoration: BoxDecoration(
+                                color: controller.currentIndex.value == index
+                                    ? MyColors.primary
+                                    : MyColors.primary.withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //image/video
+                    // 🟦 IMAGE / VIDEO SECTION
+
+                    /// =============== SERVICE INFO SECTION ===============
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          controller
+                                  .service
+                                  .value
+                                  .serviceCategoryName
+                                  ?.capitalizeFirst ??
+                              '-',
+                          style: MyTexts.medium18.copyWith(
+                            color: MyColors.fontBlack,
+                            fontFamily: MyTexts.SpaceGrotesk,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            controller.onEditService();
+                          },
+                          icon: SvgPicture.asset(
+                            Asset.editIcon,
+                            width: 16,
+                            height: 16,
+                            colorFilter: const ColorFilter.mode(
+                              MyColors.primary,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          label: Text(
+                            "Edit",
+                            style: MyTexts.regular16.copyWith(
+                              color: MyColors.primary,
+                              fontFamily: MyTexts.SpaceGrotesk,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(6),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xFFFFF9BD),
+                            const Color(0xFFFFF9BD).withValues(alpha: 0.0),
+                          ],
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          rowText(
+                            '₹ ${controller.service.value.price ?? 0}',
+
+                            'Ex factory rate',
+                          ),
+                          const Gap(4),
+                          rowText(
+                            '₹ ${controller.service.value.gstPercentage?.split(".").first ?? 0}% - (₹${controller.service.value.gstAmount ?? 0})',
+                            'Gst',
+                          ),
+                          Divider(color: MyColors.white),
+                          rowText(
+                            "₹ ${controller.service.value.price ?? "0"}",
+                            'Ex Factory Amount',
+                            isBold: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(20),
+                    _buildSpecificationsTable(),
+                    const Gap(20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEF7E8),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: const Color(0xFFFDEBC8)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Description",
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.grayA5,
+                            ),
+                          ),
+                          const Gap(8),
+                          Text(
+                            controller.service.value.description ?? "-",
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(20),
+                    Obx(() {
+                      final reference = controller.service.value.reference;
+                      if (reference == null) {
+                        return const SizedBox();
+                      }
+
+                      final referenceType =
+                          reference.referenceType?.toLowerCase() ?? '';
+                      final referenceUrl =
+                          APIConstants.bucketUrl +
+                          (reference.referenceS3Key ?? '');
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Reference ${referenceType.toUpperCase()}",
+                            style: MyTexts.bold16.copyWith(
+                              color: MyColors.fontBlack,
+                            ),
+                          ),
+                          const Gap(10),
+                          // Video reference
+                          if (referenceType == 'video')
+                            controller.videoPlayerController != null &&
+                                    controller
+                                        .videoPlayerController!
+                                        .value
+                                        .isInitialized
+                                ? GestureDetector(
+                                    onTap: () => controller.openVideoDialog(
+                                      context,
+                                      referenceUrl,
+                                      true,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: AspectRatio(
+                                        aspectRatio: controller
+                                            .videoPlayerController!
+                                            .value
+                                            .aspectRatio,
+                                        child: VideoPlayer(
+                                          controller.videoPlayerController!,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : controller.videoPlayerController != null &&
+                                      controller
+                                          .videoPlayerController!
+                                          .value
+                                          .hasError
+                                ? Container(
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      color: MyColors.grayEA,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.error_outline,
+                                            size: 48,
+                                            color: MyColors.gray54,
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Failed to load video',
+                                            style: MyTexts.medium14,
+                                          ),
+                                          const SizedBox(height: 8),
+                                          TextButton(
+                                            onPressed: () {
+                                              controller
+                                                  .retryReferenceVideoInitialization();
+                                            },
+                                            child: const Text('Retry'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      color: MyColors.grayEA,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                          // Image reference
+                          else if (referenceType == 'image')
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => Dialog(
+                                    insetPadding: const EdgeInsets.all(16),
+                                    child: InteractiveViewer(
+                                      child: Image.network(
+                                        referenceUrl,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (_, __, ___) =>
                                             const Icon(
                                               Icons.broken_image,
                                               size: 60,
                                               color: Colors.grey,
                                             ),
-                                          )
-                                              : Image.file(
-                                            File(path),
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
                                       ),
+                                    ),
+                                  ),
                                 );
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 4.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(0),
-                                  child: isHttp
-                                      ? Image.network(
-                                    path,
-                                    fit: BoxFit.cover,
-                                    height: 35.h,
-                                    width: 360.w,
-                                  )
-                                      : Image.file(
-                                    File(path),
-                                    fit: BoxFit.cover,
-                                    height: 35.h,
-                                    width: 360.w,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 8,
-                        child: Obx(
-                              () => Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              (controller.service.media ?? []).length,
-                                  (index) => AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                margin: const EdgeInsets.symmetric(horizontal: 4),
-                                height: controller.currentIndex.value == index
-                                    ? 14
-                                    : 9,
-                                width: controller.currentIndex.value == index
-                                    ? 14
-                                    : 9,
-                                decoration: BoxDecoration(
-                                  color: controller.currentIndex.value == index
-                                      ? MyColors.primary
-                                      : MyColors.primary.withValues(alpha: 0.5),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  );
-                }),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      //image/video
-                      // 🟦 IMAGE / VIDEO SECTION
-
-
-                      /// =============== SERVICE INFO SECTION ===============
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            controller.service.serviceCategoryName
-                                ?.capitalizeFirst ??
-                                '-',
-                            style: MyTexts.medium18.copyWith(
-                              color: MyColors.fontBlack,
-                              fontFamily: MyTexts.SpaceGrotesk,
-                            ),
-                          ),
-                          TextButton.icon(
-                            onPressed: () {
-                              controller.onEditService();
-                            },
-                            icon: SvgPicture.asset(
-                              Asset.editIcon,
-                              width: 16,
-                              height: 16,
-                              colorFilter: const ColorFilter.mode(
-                                MyColors.primary,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            label: Text(
-                              "Edit",
-                              style: MyTexts.regular16.copyWith(
-                                color: MyColors.primary,
-                                fontFamily: MyTexts.SpaceGrotesk,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Gap(20),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(6),
-                          gradient: LinearGradient(
-                            colors: [
-                              const Color(0xFFFFF9BD),
-                              const Color(0xFFFFF9BD).withValues(alpha: 0.0),
-                            ],
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            rowText(
-                              '₹ ${controller.service.price ?? 0}',
-
-                              'Ex factory rate',
-                            ),
-                            const Gap(4),
-                            rowText(
-                              '₹ ${controller.service.gstPercentage
-                                  ?.split(".")
-                                  .first ?? 0}% - (₹${controller.service
-                                  .gstAmount ?? 0})',
-                              'Gst',
-                            ),
-                            Divider(color: MyColors.white),
-                            rowText(
-                              "₹ ${controller.service.totalAmount ?? "0"}",
-                              'Ex Factory Amount',
-                              isBold: true,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Gap(20),
-                      _buildSpecificationsTable(),
-                      const Gap(20),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFEF7E8),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: const Color(0xFFFDEBC8)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Description",
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.grayA5,
-                              ),
-                            ),
-                            const Gap(8),
-                            Text(
-                              controller.service.description ?? "-",
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Gap(20),
-                      Obx(() {
-                        return controller.serviceDetailsModel.value.reference!=null? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Reference Video",
-                              style: MyTexts.bold16.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                            const Gap(10),
-                            GestureDetector(
-                              onTap: () =>
-                                  controller.openVideoDialog(
-                                    context,
-                                    APIConstants.bucketUrl +
-                                        (service.reference?.referenceUrl
-                                            ?.toString() ?? ""),
-                                    true,
-                                  ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
-                                child: AspectRatio(
-                                  aspectRatio: controller
-                                      .videoPlayerController!
-                                      .value
-                                      .aspectRatio,
-                                  child: VideoPlayer(
-                                    controller.videoPlayerController!,
+                                child: Image.network(
+                                  referenceUrl,
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Container(
+                                    height: 200,
+                                    color: MyColors.grayEA,
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.broken_image,
+                                        size: 60,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                   ),
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Container(
+                                          height: 200,
+                                          color: MyColors.grayEA,
+                                          child: const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      },
+                                ),
+                              ),
+                            )
+                          // PDF or DOC reference
+                          else if (referenceType == 'pdf' ||
+                              referenceType == 'doc')
+                            GestureDetector(
+                              onTap: () {
+                                // Open URL in external browser
+                                controller.openReferenceUrl(referenceUrl);
+                              },
+                              child: Container(
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  color: MyColors.grayEA,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: MyColors.grayD4),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      referenceType == 'pdf'
+                                          ? Icons.picture_as_pdf
+                                          : Icons.description,
+                                      size: 64,
+                                      color: MyColors.primary,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      reference.referenceType?.toUpperCase() ??
+                                          'Document',
+                                      style: MyTexts.medium16.copyWith(
+                                        color: MyColors.fontBlack,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Tap to open',
+                                      style: MyTexts.medium14.copyWith(
+                                        color: MyColors.gray54,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          // Unknown type
+                          else
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: MyColors.grayEA,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.insert_drive_file,
+                                      size: 64,
+                                      color: MyColors.gray54,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      reference.referenceType?.toUpperCase() ??
+                                          'Reference',
+                                      style: MyTexts.medium16,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
-                        ):const SizedBox();
-                      }),
-                    ],
-                  ),
+                        ],
+                      );
+                    }),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Widget _buildSpecificationsTable() {
     final product = controller.service;
     final specifications = [
-      {'label': 'Brand Name', 'value': product.mainCategoryName.toString()},
-      {'label': 'Category', 'value': product.subCategoryName.toString()},
-      {'label': 'Sub category', 'value': product.subCategoryName.toString()},
-      {'label': 'Unit', 'value': product.units.toString()},
+      {
+        'label': 'Brand Name',
+        'value': product.value.mainCategoryName.toString(),
+      },
+      {'label': 'Category', 'value': product.value.subCategoryName.toString()},
+      {
+        'label': 'Sub category',
+        'value': product.value.subCategoryName.toString(),
+      },
+      {'label': 'Unit', 'value': product.value.units.toString()},
     ];
 
     return _buildSpecificationTable(specifications);
@@ -413,31 +819,28 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
               ],
             ),
             ...specifications.map(
-                  (spec) =>
-                  TableRow(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          spec['label']!,
-                          style: MyTexts.medium15.copyWith(
-                              color: MyColors.gray54),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Align(
-                          alignment: AlignmentDirectional.topEnd,
-                          child: Text(
-                            spec['value']?.capitalizeFirst ?? '',
-                            style: MyTexts.medium15.copyWith(color: MyColors
-                                .black),
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
-                      ),
-                    ],
+              (spec) => TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      spec['label']!,
+                      style: MyTexts.medium15.copyWith(color: MyColors.gray54),
+                    ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Align(
+                      alignment: AlignmentDirectional.topEnd,
+                      child: Text(
+                        spec['value']?.capitalizeFirst ?? '',
+                        style: MyTexts.medium15.copyWith(color: MyColors.black),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -472,4 +875,85 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
     );
   }
 
+  Widget _buildConnectionButton(
+    BuildContext context,
+    ServiceDetailController controller,
+  ) {
+    final service = controller.service.value;
+    final String? connectionStatus = service.connectionRequestStatus;
+
+    if ((connectionStatus ?? "").isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: RoundedButton(
+          horizontalPadding: 20,
+          buttonName: 'Connect',
+          color: MyColors.primary,
+          style: MyTexts.medium16.copyWith(color: Colors.white),
+          onTap: () {
+            ConnectionDialogs.showSendServiceConnectionDialog(
+              context,
+              service,
+              isFromIn: true,
+              onTap: (message) async {
+                Get.back();
+                await Get.find<HomeController>().addServiceToConnectApi(
+                  mID: service.merchantProfileId ?? 0,
+                  message: message,
+                  sID: service.id ?? 0,
+                  onSuccess: () {
+                    controller.onApiCall?.call();
+                    Get.back();
+                  },
+                );
+              },
+            );
+          },
+        ),
+      );
+    } else if (connectionStatus == 'pending') {
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: RoundedButton(
+          color: MyColors.pendingBtn,
+          horizontalPadding: 20,
+          buttonName: 'Pending',
+          style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+        ),
+      );
+    } else if (connectionStatus == 'accepted') {
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: RoundedButton(
+          horizontalPadding: 20,
+          color: MyColors.grayEA,
+          buttonName: 'Connected',
+          borderRadius: 8,
+          style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+        ),
+      );
+    } else if (connectionStatus == 'rejected') {
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: RoundedButton(
+          horizontalPadding: 20,
+          color: MyColors.rejectBtn,
+          buttonName: 'Rejected',
+          borderRadius: 8,
+          style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+        ),
+      );
+    } else {
+      // Default fallback (in case of any unknown status)
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: RoundedButton(
+          horizontalPadding: 20,
+          color: MyColors.grey,
+          buttonName: connectionStatus ?? '',
+          fontColor: Colors.white,
+        ),
+      );
+    }
+  }
 }
