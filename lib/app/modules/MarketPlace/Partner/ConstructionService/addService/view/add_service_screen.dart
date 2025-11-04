@@ -624,6 +624,75 @@ class AddServiceScreen extends GetView<AddServiceController> {
                         ),
                       );
                     }),
+                  const Gap(24),
+                  Text(
+                    "Reference File (Optional)",
+                    style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
+                  ),
+                  const Gap(12),
+                  Obx(() {
+                    final file = controller.referenceFile.value;
+                    final url = controller.referenceFileUrl.value;
+
+                    Widget? preview;
+
+                    if (file != null) {
+                      final ext = file.path.split('.').last.toLowerCase();
+                      preview = _buildReferencePreview(ext, file.path, isNetwork: false);
+                    } else if (url.isNotEmpty) {
+                      final ext = url.split('.').last.toLowerCase();
+                      preview = _buildReferencePreview(ext, url, isNetwork: true);
+                    }
+
+                    return Row(
+                      children: [
+                        if (preview != null)
+                          Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              GestureDetector(
+                                onTap: () => OpenFilex.open(file?.path ?? url),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: preview,
+                                ),
+                              ),
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: GestureDetector(
+                                  onTap: controller.removeReferenceFile,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: const EdgeInsets.all(3),
+                                    child: const Icon(Icons.close, size: 16, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        else
+                          GestureDetector(
+                            onTap: controller.pickReferenceFile,
+                            child: Container(
+                              width: 90,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: MyColors.grayCD, width: 1.2),
+                                borderRadius: BorderRadius.circular(12),
+                                color: MyColors.grayEA,
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.add, size: 28, color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  }),
                   const Gap(32),
                   RoundedButton(
                     buttonName: controller.isEdit.value
@@ -673,4 +742,33 @@ class AddServiceScreen extends GetView<AddServiceController> {
       ),
     );
   }
+  Widget _buildReferencePreview(String ext, String path, {bool isNetwork = false}) {
+    if (['jpg', 'jpeg', 'png'].contains(ext)) {
+      return isNetwork
+          ? Image.network(path, width: 90, height: 90, fit: BoxFit.cover)
+          : Image.file(File(path), width: 90, height: 90, fit: BoxFit.cover);
+    } else if (ext == 'mp4') {
+      return Container(
+        width: 90,
+        height: 90,
+        color: Colors.black12,
+        child: const Icon(Icons.videocam, color: MyColors.primary),
+      );
+    } else if (ext == 'pdf') {
+      return Container(
+        width: 90,
+        height: 90,
+        color: Colors.red.shade50,
+        child: const Icon(Icons.picture_as_pdf, color: Colors.red),
+      );
+    } else {
+      return Container(
+        width: 90,
+        height: 90,
+        color: Colors.blue.shade50,
+        child: const Icon(Icons.description, color: Colors.blue),
+      );
+    }
+  }
+
 }

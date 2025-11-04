@@ -62,8 +62,9 @@ class InventoryController extends GetxController {
         }
       }
     } catch (e) {
+      print(e);
       // Fallback to cached data if API fails
-      await _loadProductsFromStorage();
+      // await _loadProductsFromStorage();
     } finally {
       isLoading.value = false;
     }

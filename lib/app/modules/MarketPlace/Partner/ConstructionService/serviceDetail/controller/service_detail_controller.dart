@@ -1,4 +1,3 @@
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 import 'package:get/get.dart';
@@ -10,13 +9,16 @@ import 'package:video_player/video_player.dart';
 class ServiceDetailController extends GetxController {
   Service service = Service();
 
-  ProfileModel profileData = ProfileModel.fromJson(myPref.getProfileData() ?? {});
+  ProfileModel profileData = ProfileModel.fromJson(
+    myPref.getProfileData() ?? {},
+  );
   final RxBool isFromAdd = false.obs;
   final RxBool isLoading = false.obs;
   final RxBool isLiked = false.obs;
   final RxInt currentIndex = 0.obs;
 
   VideoPlayerController? videoPlayerController;
+
   // final VoidCallback? onApiCall = Get.arguments?['onApiCall'] ?? () {};
 
   Rx<Service> serviceDetailsModel = Service().obs;
@@ -32,10 +34,17 @@ class ServiceDetailController extends GetxController {
       // fetchServiceDetails(service.id ?? 0);
       WidgetsBinding.instance.addPostFrameCallback((val) async {
         if (service.media?.isNotEmpty == true) {
-          videoPlayerController = VideoPlayerController.networkUrl(
-            Uri.parse(APIConstants.bucketUrl + service.media!.first.toString()),
+          final Media? videoMedia = service.media!.firstWhereOrNull(
+            (m) => m.mediaType?.toLowerCase() == 'video',
           );
-          await videoPlayerController?.initialize();
+          if (videoMedia?.id != null) {
+            videoPlayerController = VideoPlayerController.networkUrl(
+              Uri.parse(
+                APIConstants.bucketUrl + (videoMedia?.mediaS3Key??""),
+              ),
+            );
+            await videoPlayerController?.initialize();
+          }
         }
       });
     }
@@ -58,7 +67,8 @@ class ServiceDetailController extends GetxController {
   void onEditService() {
     Get.toNamed(
       Routes.ADD_SERVICES,
-      arguments: {"isEdit": true, 'service': service,
+      arguments: {
+        "isEdit": true, 'service': service,
 
         // "onApiCall": onApiCall
       },
