@@ -137,4 +137,5 @@ class APIConstants {
   static const String addService = "merchant/service/create";
   static const String updateService = "merchant/service/";
   static const String getServiceList = "merchant/service/list";
+  static const String connectorServices = "connector/service/services";
 }

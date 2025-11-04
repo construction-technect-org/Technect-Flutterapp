@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/models/ConnectorServiceModel.dart';
 
 class ConstructionLineServices {
   ApiManager apiManager = ApiManager();
@@ -83,6 +84,63 @@ class ConstructionLineServices {
       debugPrint('Error: $e');
       debugPrint('StackTrace: $st');
       throw Exception('Error fetching products: $e');
+    }
+  }
+
+  Future<ConnectorServiceModel> connectorServices({
+    required int mainCategoryId,
+    required int subCategoryId,
+    required int serviceCategoryId,
+    int page = 1,
+    int limit = 20,
+    double radiusKm = 50,
+  }) async {
+    try {
+      const String url = APIConstants.connectorServices;
+      final Map<String, dynamic> body = {
+        "main_category_id": mainCategoryId,
+        "sub_category_id": subCategoryId,
+        "service_category_id": serviceCategoryId,
+        "page": page,
+        "limit": limit,
+        "radius_km": radiusKm,
+      };
+
+      debugPrint('Calling API: $url');
+      debugPrint('Request Body: $body');
+      final response = await apiManager.postObject(url: url, body: body);
+      debugPrint('Response: $response');
+
+      return ConnectorServiceModel.fromJson(response);
+    } catch (e, st) {
+      debugPrint('Error: $e');
+      debugPrint('StackTrace: $st');
+      throw Exception('Error fetching services: $e');
+    }
+  }
+
+  Future<ConnectorServiceModel> addServiceToConnect({
+    int? mID,
+    int? sID,
+    String? message,
+  }) async {
+    try {
+      const String url = APIConstants.addToConnect;
+      final Map<String, dynamic> body = {
+        "merchant_profile_id": mID,
+        "service_id": sID,
+        "request_message": message ?? "",
+      };
+      debugPrint('Calling API: $url');
+      debugPrint('Request Body: $body');
+      final response = await apiManager.postObject(url: url, body: body);
+      debugPrint('Response: $response');
+
+      return ConnectorServiceModel.fromJson(response);
+    } catch (e, st) {
+      debugPrint('Error: $e');
+      debugPrint('StackTrace: $st');
+      throw Exception('Error sending service connection request: $e');
     }
   }
 }

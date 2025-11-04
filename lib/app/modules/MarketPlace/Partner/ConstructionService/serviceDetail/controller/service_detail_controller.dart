@@ -34,13 +34,13 @@ class ServiceDetailController extends GetxController {
       // fetchServiceDetails(service.id ?? 0);
       WidgetsBinding.instance.addPostFrameCallback((val) async {
         if (service.media?.isNotEmpty == true) {
-          final Media? videoMedia = service.media!.firstWhereOrNull(
+          final ServiceMediaItem? videoMedia = service.media!.firstWhereOrNull(
             (m) => m.mediaType?.toLowerCase() == 'video',
           );
           if (videoMedia?.id != null) {
             videoPlayerController = VideoPlayerController.networkUrl(
               Uri.parse(
-                APIConstants.bucketUrl + (videoMedia?.mediaS3Key??""),
+                APIConstants.bucketUrl + (videoMedia?.mediaS3Key ?? ""),
               ),
             );
             await videoPlayerController?.initialize();

@@ -1,13 +1,12 @@
 import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/common_product_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/controllers/construction_service_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/models/ConnectorServiceModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:gap/gap.dart';
 
 class ConstructionServiceView extends StatelessWidget {
@@ -15,7 +14,7 @@ class ConstructionServiceView extends StatelessWidget {
 
   // Constants
   static const double _leftPanelWidth = 0.27;
-  static const double _itemHeight = 140.0;
+  static const double _itemHeight = 170.0;
   static const double _imageHeight = 80.0;
   static const double _selectionBarWidth = 5.0;
   static const double _textHeight = 40.0;
@@ -65,7 +64,7 @@ class ConstructionServiceView extends StatelessWidget {
           GestureDetector(
             onTap: () => controller.openSelectAddressBottomSheet(
               onAddressChanged: () async {
-                await controller.fetchProductsFromApi(isLoading: true);
+                await controller.fetchServicesFromApi(isLoading: true);
               },
             ),
             child: SvgPicture.asset(
@@ -111,10 +110,8 @@ class ConstructionServiceView extends StatelessWidget {
         return [_index0LeftView(context), _index0RightView(context)];
       case 1:
         return [_index1LeftView(context), _index1RightView(context)];
-      case 2:
-        return [_index2LeftView(context), _index2RightView(context)];
       default:
-        return [_index3LeftView(context), _index1RightView(context)];
+        return [_index1LeftView(context), _index1RightView(context)];
     }
   }
 
@@ -135,47 +132,13 @@ class ConstructionServiceView extends StatelessWidget {
 
   Widget _index1LeftView(BuildContext context) {
     final controller = Get.find<ConstructionServiceController>();
-    final products = controller.productCategories.value.serviceCategories ?? [];
+    final services = controller.serviceCategories.value.serviceCategories ?? [];
     return _buildLeftSidebar(
       context: context,
-      items: products,
+      items: services,
       isSelected: (index) =>
-          controller.selectedProductCategoryIndex.value == index,
-      onTap: (index) => controller.selectProductCategory(index),
-      getImageUrl: (_) =>
-          controller.selectedSubCategory.value?.image ??
-          'category-images/FineAggregate.png',
-      getName: (item) => item.name ?? '',
-      useObxForSelection: true,
-    );
-  }
-
-  Widget _index2LeftView(BuildContext context) {
-    final controller = Get.find<ConstructionServiceController>();
-    final products = controller.productCategories.value.serviceCategories ?? [];
-    return _buildLeftSidebar(
-      context: context,
-      items: products,
-      isSelected: (index) =>
-          controller.selectedProductCategoryIndex.value == index,
-      onTap: (index) => controller.leftSide2LeftView(index),
-      getImageUrl: (_) =>
-          controller.selectedSubCategory.value?.image ??
-          'category-images/FineAggregate.png',
-      getName: (item) => item.name ?? '',
-      useObxForSelection: true,
-    );
-  }
-
-  Widget _index3LeftView(BuildContext context) {
-    final controller = Get.find<ConstructionServiceController>();
-    final products = controller.productSubCategories;
-    return _buildLeftSidebar(
-      context: context,
-      items: products,
-      isSelected: (index) =>
-          controller.selectedSubProductCategoryIndex.value == index,
-      onTap: (index) => controller.selectProductSubCategory(index),
+          controller.selectedServiceCategoryIndex.value == index,
+      onTap: (index) => controller.selectServiceCategoryFromGrid(index),
       getImageUrl: (_) =>
           controller.selectedSubCategory.value?.image ??
           'category-images/FineAggregate.png',
@@ -343,7 +306,9 @@ class ConstructionServiceView extends StatelessWidget {
                 controller.selectedSubCategory.value?.name ??
                 'Select a category',
           ),
-          Expanded(child: _buildProductCategoriesGrid(controller.products)),
+          Expanded(
+            child: _buildProductCategoriesGrid(controller.serviceCategoryList),
+          ),
         ],
       ),
     );
@@ -359,26 +324,6 @@ class ConstructionServiceView extends StatelessWidget {
           _buildSortChip(),
           const SizedBox(height: 10),
           Expanded(child: _buildProductContent(context)),
-        ],
-      ),
-    );
-  }
-
-  Widget _index2RightView(BuildContext context) {
-    final controller = Get.find<ConstructionServiceController>();
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(
-            title:
-                controller.selectedProduct.value?.name ?? 'Select a category',
-          ),
-          Expanded(
-            child: _buildSubProductCategoriesList(
-              controller.productSubCategories,
-            ),
-          ),
         ],
       ),
     );
@@ -413,11 +358,6 @@ class ConstructionServiceView extends StatelessWidget {
           iconPath: Asset.location,
           onTap: () => controller.showLocationBottomSheet(context),
         ),
-        _buildFilterButton(
-          label: 'Filter',
-          iconPath: Asset.filter,
-          onTap: () => controller.showFilterBottomSheet(context),
-        ),
         Obx(
           () => GestureDetector(
             onTap: () =>
@@ -444,70 +384,64 @@ class ConstructionServiceView extends StatelessWidget {
   Widget _buildSortChip() {
     final controller = Get.find<ConstructionServiceController>();
     return Obx(
-      () => controller.navigationIndex.value == 2
-          ? const SizedBox.shrink()
-          : (controller.selectedSort.value == "Relevance"
-                ? const SizedBox()
-                : Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
+      () => (controller.selectedSort.value == "Relevance"
+          ? const SizedBox()
+          : Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFAFBFF),
+                borderRadius: BorderRadius.circular(53),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    controller.selectedSort.value,
+                    style: MyTexts.medium13.copyWith(color: MyColors.gray2E),
+                  ),
+                  const Gap(8),
+                  GestureDetector(
+                    onTap: () {
+                      controller.selectedSort.value = "Relevance";
+                      controller.applySorting("Relevance");
+                    },
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.black,
+                      size: 13,
                     ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFAFBFF),
-                      borderRadius: BorderRadius.circular(53),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          controller.selectedSort.value,
-                          style: MyTexts.medium13.copyWith(
-                            color: MyColors.gray2E,
-                          ),
-                        ),
-                        const Gap(8),
-                        GestureDetector(
-                          onTap: () {
-                            controller.selectedSort.value = "Relevance";
-                            controller.applySorting("Relevance");
-                          },
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.black,
-                            size: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
+                  ),
+                ],
+              ),
+            )),
     );
   }
 
   Widget _buildProductContent(BuildContext context) {
     final controller = Get.find<ConstructionServiceController>();
     return Obx(() {
-      if (controller.navigationIndex.value == 2) {
-        return _buildSubProductCategoriesGrid(controller.productSubCategories);
-      }
-      if (controller.isLoadingProducts.value) {
+      if (controller.isLoadingServices.value) {
         return const Center(child: CircularProgressIndicator());
       }
-      final hasProducts =
-          !(controller.productListModel.value?.data?.products.isEmpty ?? true);
-      if (!hasProducts) {
+
+      // Check if we have services data
+      final hasServices =
+          !(controller.serviceListModel.value.data?.services?.isEmpty ?? true);
+      if (!hasServices) {
         return const Center(
           child: Text(
-            'No products available',
+            'No services available',
             style: TextStyle(color: Colors.grey, fontSize: 16),
           ),
         );
       }
+
+      // Always show services in grid or list view
       return Obx(
         () => controller.isGridView.value
-            ? _buildProductsGrid(context)
-            : _buildProductsList(context),
+            ? _buildServicesGrid(context)
+            : _buildServicesList(context),
       );
     });
   }
@@ -543,453 +477,6 @@ class ConstructionServiceView extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildSubProductCategoriesList(List<ProductSubCategory> products) {
-    final controller = Get.find<ConstructionServiceController>();
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: (products.length / _itemsPerRow).ceil(),
-      itemBuilder: (context, rowIndex) {
-        final startIndex = rowIndex * _itemsPerRow;
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            children: List.generate(_itemsPerRow, (colIndex) {
-              final index = startIndex + colIndex;
-              if (index >= products.length) {
-                return const Expanded(child: SizedBox());
-              }
-              return Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: colIndex < _itemsPerRow - 1 ? _itemSpacing : 0,
-                  ),
-                  child: _buildCircularSubProductTile(
-                    product: products[index],
-                    index: index,
-                    onTap: () {
-                      controller.selectProductSubCategory(index);
-                      controller.navigationIndex.value = 3;
-                    },
-                  ),
-                ),
-              );
-            }),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSubProductCategoriesGrid(List<ProductSubCategory> items) {
-    final controller = Get.find<ConstructionServiceController>();
-    if (items.isEmpty) {
-      return const Center(
-        child: Text(
-          'No sub categories available',
-          style: TextStyle(color: Colors.grey, fontSize: 16),
-        ),
-      );
-    }
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 0.5,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return GestureDetector(
-          onTap: () => controller.selectProductSubCategory(index),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: _buildCircularImageContainer(
-                  controller.selectedSubCategory.value?.image ??
-                      'category-images/FineAggregate.png',
-                ),
-              ),
-              const SizedBox(height: _itemSpacing),
-              SizedBox(
-                height: _textHeight,
-                child: Text(
-                  item.name ?? '',
-                  style: MyTexts.medium14,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildProductsGrid(BuildContext context) {
-    final controller = Get.find<ConstructionServiceController>();
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.5,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: controller.productListModel.value?.data?.products.length ?? 0,
-      itemBuilder: (context, index) {
-        final item =
-            controller.productListModel.value?.data?.products[index] ??
-            Product();
-        return ProductCard(
-          isFromAdd: false,
-          isFromConnector: true,
-          product: item,
-          onApiCall: () async {
-            await controller.fetchProductsFromApi(isLoading: false);
-          },
-          onWishlistTap: () async {
-            await Get.find<HomeController>().wishListApi(
-              status: item.isInWishList == true ? "remove" : "add",
-              mID: item.id ?? 0,
-              onSuccess: () async {
-                await controller.fetchProductsFromApi(isLoading: false);
-              },
-            );
-          },
-          onNotifyTap: () async {
-            await Get.find<HomeController>().notifyMeApi(
-              mID: item.id ?? 0,
-              onSuccess: () async {
-                await controller.fetchProductsFromApi(isLoading: false);
-              },
-            );
-          },
-          onConnectTap: () {
-            ConnectionDialogs.showSendConnectionDialog(
-              context,
-              item,
-              isFromIn: true,
-              onTap: () async {
-                Get.back();
-                await Get.find<HomeController>().addToConnectApi(
-                  mID: item.merchantProfileId ?? 0,
-                  message: '',
-                  pID: item.id ?? 0,
-                  onSuccess: () async {
-                    await controller.fetchProductsFromApi(isLoading: false);
-                  },
-                );
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildProductsList(BuildContext context) {
-    final controller = Get.find<ConstructionServiceController>();
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: controller.productListModel.value?.data?.products.length ?? 0,
-      itemBuilder: (context, index) {
-        final item =
-            controller.productListModel.value?.data?.products[index] ??
-            Product();
-        return _buildProductListItem(context, item, controller);
-      },
-    );
-  }
-
-  Widget _buildProductListItem(
-    BuildContext context,
-    Product item,
-    ConstructionServiceController controller,
-  ) {
-    final String? imageUrl = ProductUtils.getFirstImageUrl(item);
-
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(
-          Routes.PRODUCT_DETAILS,
-          arguments: {
-            "product": item,
-            "isFromAdd": false,
-            "isFromConnector": true,
-            "onApiCall": () async {
-              await controller.fetchProductsFromApi(isLoading: false);
-            },
-          },
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          color: MyColors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: EdgeInsets.zero,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Left side - Image with wishlist button overlay
-              SizedBox(
-                width: 100,
-                height: 140,
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: imageUrl != null
-                          ? CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              width: 100,
-                              height: 140,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => const SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                width: 100,
-                                height: 140,
-                                color: Colors.grey[200],
-                                child: const Icon(
-                                  Icons.inventory_2,
-                                  size: 40,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            )
-                          : Container(
-                              width: 100,
-                              height: 140,
-                              color: Colors.grey[200],
-                              child: const Icon(
-                                Icons.inventory_2,
-                                size: 40,
-                                color: Colors.grey,
-                              ),
-                            ),
-                    ),
-                    // Location distance overlay (top left)
-                    if (myPref.role.val == "connector")
-                      if ((item.distanceKm ?? "").isNotEmpty)
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 6,
-                            ),
-                            color: Colors.white,
-                            child: Text(
-                              "${double.parse(item.distanceKm ?? '0').toStringAsFixed(1)} km",
-                              style: MyTexts.light12,
-                            ),
-                          ),
-                        ),
-                    if (myPref.role.val == "connector")
-                      Positioned(
-                        top: 4,
-                        right: 4,
-                        child: GestureDetector(
-                          onTap: () async {
-                            await Get.find<HomeController>().wishListApi(
-                              status: item.isInWishList == true
-                                  ? "remove"
-                                  : "add",
-                              mID: item.id ?? 0,
-                              onSuccess: () async {
-                                await controller.fetchProductsFromApi(
-                                  isLoading: false,
-                                );
-                              },
-                            );
-                          },
-                          child: Icon(
-                            item.isInWishList == true
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            size: 18,
-                            color: item.isInWishList == true
-                                ? MyColors.custom('E53D26')
-                                : MyColors.gray54,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              // Right side - Details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Product name
-                    Text(
-                      item.categoryProductName ?? 'Unknown Product',
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.custom('2E2E2E'),
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6),
-                    // Brand
-                    Row(
-                      children: [
-                        if (item.merchantLogo != null)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  APIConstants.bucketUrl +
-                                  (item.merchantLogo ?? ""),
-                              fit: BoxFit.cover,
-                              height: 20,
-                              width: 20,
-                              placeholder: (context, url) => Container(
-                                height: 20,
-                                width: 20,
-                                color: Colors.grey[300],
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                height: 20,
-                                width: 20,
-                                color: Colors.grey[300],
-                              ),
-                            ),
-                          ),
-                        if (item.merchantLogo != null) const Gap(4),
-                        Expanded(
-                          child: Text(
-                            item.brand ?? 'Unknown Brand',
-                            style: MyTexts.medium12.copyWith(
-                              color: MyColors.custom('545454'),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    // Location
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 12,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            item.address ?? 'Unknown Address',
-                            style: MyTexts.regular12.copyWith(
-                              color: MyColors.custom('545454'),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    // Price
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        gradient: LinearGradient(
-                          colors: [
-                            MyColors.custom('FFF9BD'),
-                            MyColors.custom('FFF9BD').withValues(alpha: 0.1),
-                          ],
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 6,
-                        horizontal: 8,
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Ex factory price ',
-                            style: MyTexts.medium10.copyWith(
-                              color: MyColors.custom('545454'),
-                            ),
-                          ),
-
-                          Text(
-                            item.price ?? 'N/A',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.custom('0B1429'),
-                            ),
-                          ),
-                          Text(
-                            '/ unit',
-                            style: MyTexts.medium12.copyWith(
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Action buttons (for connector)
-                    if (myPref.role.val == "connector") ...[
-                      const SizedBox(height: 8),
-                      RoundedButton(
-                        buttonName: 'Connect',
-                        color: MyColors.primary,
-                        fontColor: Colors.white,
-                        onTap: () {
-                          ConnectionDialogs.showSendConnectionDialog(
-                            context,
-                            item,
-                            isFromIn: true,
-                            onTap: () async {
-                              Get.back();
-                              await Get.find<HomeController>().addToConnectApi(
-                                mID: item.merchantProfileId ?? 0,
-                                message: '',
-                                pID: item.id ?? 0,
-                                onSuccess: () async {
-                                  await controller.fetchProductsFromApi(
-                                    isLoading: false,
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                        height: 32,
-                        borderRadius: 8,
-                        verticalPadding: 0,
-                        style: MyTexts.medium14.copyWith(color: Colors.white),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -1093,12 +580,12 @@ class ConstructionServiceView extends StatelessWidget {
                     onError: (exception, stackTrace) {},
                   )
                 : DecorationImage(
-              image: const NetworkImage(
-                '${APIConstants.bucketUrl}category-images/FineAggregate.png',
-              ),
-              fit: BoxFit.fill,
-              onError: (exception, stackTrace) {},
-            ),
+                    image: const NetworkImage(
+                      '${APIConstants.bucketUrl}category-images/FineAggregate.png',
+                    ),
+                    fit: BoxFit.fill,
+                    onError: (exception, stackTrace) {},
+                  ),
           ),
         ),
       ),
@@ -1133,6 +620,403 @@ class ConstructionServiceView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildServicesGrid(BuildContext context) {
+    final controller = Get.find<ConstructionServiceController>();
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.47,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      itemCount: controller.serviceListModel.value.data?.services?.length ?? 0,
+      itemBuilder: (context, index) {
+        final services = controller.serviceListModel.value.data?.services;
+        if (services == null || index >= services.length) {
+          return const SizedBox.shrink();
+        }
+        final service = services[index];
+
+        final firstImage = service.media?.firstWhere(
+          (m) => m.mediaType == 'image',
+          orElse: () => ServiceMedia(),
+        );
+        final imageUrl = firstImage?.mediaUrl;
+        log('service.distanceKm: ${service.distanceKm ?? ''}');
+        return Container(
+          decoration: BoxDecoration(
+            color: MyColors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: MyColors.grayEA),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image
+              Expanded(
+                flex: 3,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(12),
+                      ),
+                      child: imageUrl != null
+                          ? CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: Colors.grey[200],
+                                child: const Icon(Icons.build, size: 40),
+                              ),
+                            )
+                          : Container(
+                              color: Colors.grey[200],
+                              child: const Icon(Icons.build, size: 40),
+                            ),
+                    ),
+                    // Location distance overlay (top left)
+                    if (myPref.role.val == "connector")
+                      if ((service.distanceKm ?? "").isNotEmpty)
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            color: Colors.white,
+                            child: Text(
+                              "${double.parse(service.distanceKm ?? '0').toStringAsFixed(1)} km",
+                              style: MyTexts.light12,
+                            ),
+                          ),
+                        ),
+                  ],
+                ),
+              ),
+              // Details
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        service.serviceCategoryName ?? 'Service',
+                        style: MyTexts.medium14,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Gap(4),
+                      Text(
+                        service.merchantName ?? '',
+                        style: MyTexts.regular12.copyWith(color: Colors.grey),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Spacer(),
+                      Text(
+                        '₹${service.price ?? '0'}/${service.units ?? ''}',
+                        style: MyTexts.bold14.copyWith(color: MyColors.primary),
+                      ),
+                      if (myPref.role.val == "connector")
+                        () {
+                          final connectionStatus =
+                              service.connectionRequestStatus ?? '';
+                          if (connectionStatus.isEmpty) {
+                            return RoundedButton(
+                              buttonName: 'Connect',
+                              color: MyColors.primary,
+                              fontColor: Colors.white,
+                              onTap: () {
+                                ConnectionDialogs.showSendServiceConnectionDialog(
+                                  context,
+                                  service,
+                                  isFromIn: true,
+                                  onTap: (message) async {
+                                    await controller.addServiceToConnect(
+                                      merchantProfileId:
+                                          service.merchantProfileId ?? 0,
+                                      serviceId: service.id ?? 0,
+                                      message: message,
+                                      onSuccess: () async {
+                                        await controller.fetchServicesFromApi(
+                                          isLoading: false,
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                              height: 28,
+                              borderRadius: 6,
+                              verticalPadding: 0,
+                              style: MyTexts.medium12.copyWith(
+                                color: Colors.white,
+                              ),
+                            );
+                          } else if (connectionStatus == 'pending') {
+                            return RoundedButton(
+                              color: MyColors.pendingBtn,
+                              buttonName: 'Pending',
+                              height: 28,
+                              horizontalPadding: 20,
+                              borderRadius: 6,
+                              verticalPadding: 0,
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
+                              ),
+                            );
+                          } else if (connectionStatus == 'accepted') {
+                            return RoundedButton(
+                              color: MyColors.grayEA,
+                              buttonName: 'Connected',
+                              height: 28,
+                              borderRadius: 6,
+                              verticalPadding: 0,
+                              horizontalPadding: 20,
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
+                              ),
+                            );
+                          } else if (connectionStatus == 'rejected') {
+                            return RoundedButton(
+                              color: MyColors.rejectBtn,
+                              buttonName: 'Rejected',
+                              height: 28,
+                              borderRadius: 6,
+                              verticalPadding: 0,
+                              horizontalPadding: 20,
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        }(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildServicesList(BuildContext context) {
+    final controller = Get.find<ConstructionServiceController>();
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: controller.serviceListModel.value.data?.services?.length ?? 0,
+      itemBuilder: (context, index) {
+        final services = controller.serviceListModel.value.data?.services;
+        if (services == null || index >= services.length) {
+          return const SizedBox.shrink();
+        }
+        final service = services[index];
+
+        final firstImage = service.media?.firstWhere(
+          (m) => m.mediaType == 'image',
+          orElse: () => ServiceMedia(),
+        );
+        final imageUrl = firstImage?.mediaUrl;
+        return Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          decoration: BoxDecoration(
+            color: MyColors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Left side - Image
+              SizedBox(
+                height: 120,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: imageUrl != null
+                          ? CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                width: 100,
+                                height: 100,
+                                color: Colors.grey[200],
+                                child: const Icon(Icons.build, size: 40),
+                              ),
+                            )
+                          : Container(
+                              width: 100,
+                              height: 100,
+                              color: Colors.grey[200],
+                              child: const Icon(Icons.build, size: 40),
+                            ),
+                    ),
+                    // Location distance overlay (top left)
+                    if (myPref.role.val == "connector")
+                      if ((service.distanceKm ?? "").isNotEmpty)
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            color: Colors.white,
+                            child: Text(
+                              "${double.parse(service.distanceKm ?? '0').toStringAsFixed(1)} km",
+                              style: MyTexts.light12,
+                            ),
+                          ),
+                        ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Right side - Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      service.serviceCategoryName ?? 'Service',
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.custom('2E2E2E'),
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      service.merchantName ?? '',
+                      style: MyTexts.regular12.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    if (service.description != null)
+                      Text(
+                        service.description!,
+                        style: MyTexts.regular12.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '₹${service.price ?? '0'}/${service.units ?? ''}',
+                      style: MyTexts.bold14.copyWith(color: MyColors.primary),
+                    ),
+                    if (myPref.role.val == "connector")
+                      () {
+                        final connectionStatus =
+                            service.connectionRequestStatus ?? '';
+                        if (connectionStatus.isEmpty) {
+                          return RoundedButton(
+                            buttonName: 'Connect',
+                            color: MyColors.primary,
+                            fontColor: Colors.white,
+                            onTap: () {
+                              ConnectionDialogs.showSendServiceConnectionDialog(
+                                context,
+                                service,
+                                isFromIn: true,
+                                onTap: (message) async {
+                                  await controller.addServiceToConnect(
+                                    merchantProfileId:
+                                        service.merchantProfileId ?? 0,
+                                    serviceId: service.id ?? 0,
+                                    message: message,
+                                    onSuccess: () async {
+                                      await controller.fetchServicesFromApi(
+                                        isLoading: false,
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            height: 28,
+                            borderRadius: 6,
+                            verticalPadding: 0,
+                            style: MyTexts.medium12.copyWith(
+                              color: Colors.white,
+                            ),
+                          );
+                        } else if (connectionStatus == 'pending') {
+                          return RoundedButton(
+                            color: MyColors.pendingBtn,
+                            buttonName: 'Pending',
+                            height: 28,
+                            horizontalPadding: 20,
+                            borderRadius: 6,
+                            verticalPadding: 0,
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          );
+                        } else if (connectionStatus == 'accepted') {
+                          return RoundedButton(
+                            color: MyColors.grayEA,
+                            buttonName: 'Connected',
+                            height: 28,
+                            borderRadius: 6,
+                            verticalPadding: 0,
+                            horizontalPadding: 20,
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          );
+                        } else if (connectionStatus == 'rejected') {
+                          return RoundedButton(
+                            color: MyColors.rejectBtn,
+                            buttonName: 'Rejected',
+                            height: 28,
+                            borderRadius: 6,
+                            verticalPadding: 0,
+                            horizontalPadding: 20,
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      }(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

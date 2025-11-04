@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class AllCartModel {
@@ -26,15 +27,22 @@ class AllCartModel {
 
 class Cart {
   List<Product>? products;
+  List<Service>? services;
   Pagination? pagination;
 
-  Cart({this.products, this.pagination});
+  Cart({this.products, this.services, this.pagination});
 
   Cart.fromJson(Map<String, dynamic> json) {
     if (json['products'] != null) {
       products = <Product>[];
       json['products'].forEach((v) {
         products!.add(Product.fromJson(v));
+      });
+    }
+    if (json['services'] != null) {
+      services = <Service>[];
+      json['services'].forEach((v) {
+        services!.add(Service.fromJson(v));
       });
     }
     pagination = json['pagination'] != null
@@ -46,6 +54,9 @@ class Cart {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (products != null) {
       data['products'] = products!.map((v) => v.toJson()).toList();
+    }
+    if (services != null) {
+      data['services'] = services!.map((v) => v.toJson()).toList();
     }
     if (pagination != null) {
       data['pagination'] = pagination!.toJson();
