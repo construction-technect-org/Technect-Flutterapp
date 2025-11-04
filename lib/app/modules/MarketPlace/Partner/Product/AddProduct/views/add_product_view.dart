@@ -101,13 +101,13 @@ class AddProductView extends GetView<AddProductController> {
                                                       finalUrl: path,
                                                       width: 80,
                                                       height: 80,
-                                                      fit: BoxFit.cover,
+                                                      fit: BoxFit.contain,
                                                     )
                                                   : Image.file(
                                                       File(path),
                                                       width: 80,
                                                       height: 80,
-                                                      fit: BoxFit.cover,
+                                                      fit: BoxFit.contain,
                                                     ),
                                             ),
                                           ),
@@ -253,13 +253,13 @@ class AddProductView extends GetView<AddProductController> {
                                                       finalUrl: path,
                                                       width: 78,
                                                       height: 78,
-                                                      fit: BoxFit.cover,
+                                                      fit: BoxFit.contain,
                                                     )
                                                   : Image.file(
                                                       File(path),
                                                       width: 78,
                                                       height: 78,
-                                                      fit: BoxFit.cover,
+                                                      fit: BoxFit.contain,
                                                     ),
                                             ),
                                           ),

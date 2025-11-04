@@ -20,7 +20,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
   @override
   Widget build(BuildContext context) {
-
     return LoaderWrapper(
       isLoading: (controller.isFromConnector.value == true)
           ? false.obs
@@ -450,7 +449,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                             )
                                           : Image.file(
                                               File(path),
-                                              fit: BoxFit.cover,
+                                              fit: BoxFit.contain,
                                               height: 35.h,
                                               width: 360.w,
                                             ),
