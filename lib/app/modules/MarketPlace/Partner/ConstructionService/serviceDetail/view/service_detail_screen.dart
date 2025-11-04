@@ -63,109 +63,142 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                   }
 
                   // 🧭 PageView (handles both images & videos)
-                  return SizedBox(
-                    height: 35.h,
-                    width: 360.w,
-                    child: PageView.builder(
-                      itemCount: mediaList.length,
-                      controller: PageController(viewportFraction: 1),
-                      onPageChanged: (index) =>
-                      controller.currentIndex.value = index,
-                      itemBuilder: (context, index) {
-                        final media = mediaList[index];
-                        final path = media['path'] as String;
-                        final isHttp = path.startsWith('http');
+                  return Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      SizedBox(
+                        height: 35.h,
+                        width: 360.w,
+                        child: PageView.builder(
+                          itemCount: mediaList.length,
+                          controller: PageController(viewportFraction: 1),
+                          onPageChanged: (index) =>
+                          controller.currentIndex.value = index,
+                          itemBuilder: (context, index) {
+                            final media = mediaList[index];
+                            final path = media['path'] as String;
+                            final isHttp = path.startsWith('http');
 
-                        if (media['type'] == 'video') {
-                          return GestureDetector(
-                            onTap: () =>
-                                controller.openVideoDialog(
-                                  context,
-                                  path,
-                                  isHttp,
-                                ),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                ColoredBox(
-                                  color: Colors.black12,
-                                  child: AspectRatio(
-                                    aspectRatio: 16 / 9,
-                                    child:
-                                    VideoPlayer(
-                                        controller.videoPlayerController!),
-                                  ),
-                                ),
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black45,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.play_arrow,
-                                    color: Colors.white,
-                                    size: 40,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-
-                        // 🖼️ Image
-                        return GestureDetector(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) =>
-                                  Dialog(
-                                    insetPadding: const EdgeInsets.all(16),
-                                    child: InteractiveViewer(
-                                      child: isHttp
-                                          ? Image.network(
-                                        path,
-                                        width: 360.w,
-                                        fit: BoxFit.contain,
-                                        errorBuilder: (_, __, ___) =>
-                                        const Icon(
-                                          Icons.broken_image,
-                                          size: 60,
-                                          color: Colors.grey,
-                                        ),
-                                      )
-                                          : Image.file(
-                                        File(path),
-                                        fit: BoxFit.contain,
+                            if (media['type'] == 'video') {
+                              return GestureDetector(
+                                onTap: () =>
+                                    controller.openVideoDialog(
+                                      context,
+                                      path,
+                                      isHttp,
+                                    ),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    ColoredBox(
+                                      color: Colors.black12,
+                                      child: AspectRatio(
+                                        aspectRatio: 16 / 9,
+                                        child:
+                                        VideoPlayer(
+                                            controller.videoPlayerController!),
                                       ),
                                     ),
+                                    Container(
+                                      width: 60,
+                                      height: 60,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.black45,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.play_arrow,
+                                        color: Colors.white,
+                                        size: 40,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+
+                            // 🖼️ Image
+                            return GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                      Dialog(
+                                        insetPadding: const EdgeInsets.all(16),
+                                        child: InteractiveViewer(
+                                          child: isHttp
+                                              ? Image.network(
+                                            path,
+                                            width: 360.w,
+                                            fit: BoxFit.contain,
+                                            errorBuilder: (_, __, ___) =>
+                                            const Icon(
+                                              Icons.broken_image,
+                                              size: 60,
+                                              color: Colors.grey,
+                                            ),
+                                          )
+                                              : Image.file(
+                                            File(path),
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(0),
+                                  child: isHttp
+                                      ? Image.network(
+                                    path,
+                                    fit: BoxFit.cover,
+                                    height: 35.h,
+                                    width: 360.w,
+                                  )
+                                      : Image.file(
+                                    File(path),
+                                    fit: BoxFit.cover,
+                                    height: 35.h,
+                                    width: 360.w,
                                   ),
+                                ),
+                              ),
                             );
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(0),
-                              child: isHttp
-                                  ? Image.network(
-                                path,
-                                fit: BoxFit.cover,
-                                height: 35.h,
-                                width: 360.w,
-                              )
-                                  : Image.file(
-                                File(path),
-                                fit: BoxFit.cover,
-                                height: 35.h,
-                                width: 360.w,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 8,
+                        child: Obx(
+                              () => Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                              (controller.service.media ?? []).length,
+                                  (index) => AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                margin: const EdgeInsets.symmetric(horizontal: 4),
+                                height: controller.currentIndex.value == index
+                                    ? 14
+                                    : 9,
+                                width: controller.currentIndex.value == index
+                                    ? 14
+                                    : 9,
+                                decoration: BoxDecoration(
+                                  color: controller.currentIndex.value == index
+                                      ? MyColors.primary
+                                      : MyColors.primary.withValues(alpha: 0.5),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+
+                    ],
                   );
                 }),
                 Padding(
