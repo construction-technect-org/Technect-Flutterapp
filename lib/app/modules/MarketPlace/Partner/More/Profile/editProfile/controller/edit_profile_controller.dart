@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
@@ -106,6 +107,9 @@ class EditProfileController extends GetxController {
         image: ProfileController.to.selectedImage.value != null
             ? ProfileController.to.selectedImage.value?.path
             : ProfileController.to.image.value,
+      );
+      log(
+        "AlternativeContactController : ${alternativeContactController.text}",
       );
       ProfileController.to.businessModel.refresh();
       Get.back();
