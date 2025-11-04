@@ -424,18 +424,21 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          controller
-                                  .service
-                                  .value
-                                  .serviceCategoryName
-                                  ?.capitalizeFirst ??
-                              '-',
-                          style: MyTexts.medium18.copyWith(
-                            color: MyColors.fontBlack,
-                            fontFamily: MyTexts.SpaceGrotesk,
+                        Expanded(
+                          child: Text(
+                            controller
+                                    .service
+                                    .value
+                                    .serviceCategoryName
+                                    ?.capitalizeFirst ??
+                                '-',
+                            style: MyTexts.medium18.copyWith(
+                              color: MyColors.fontBlack,
+                              fontFamily: MyTexts.SpaceGrotesk,
+                            ),
                           ),
                         ),
+                        const Gap(16),
                         TextButton.icon(
                           onPressed: () {
                             controller.onEditService();
@@ -686,7 +689,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                             )
                           // PDF or DOC reference
                           else if (referenceType == 'pdf' ||
-                              referenceType == 'doc')
+                              referenceType == 'document')
                             GestureDetector(
                               onTap: () {
                                 // Open URL in external browser
@@ -694,6 +697,8 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                               },
                               child: Container(
                                 height: 200,
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   color: MyColors.grayEA,
                                   borderRadius: BorderRadius.circular(12),
