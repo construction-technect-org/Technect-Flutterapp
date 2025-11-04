@@ -7,18 +7,72 @@ import 'package:construction_technect/app/core/widgets/google_sign_in_service.da
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:gap/gap.dart';
+import 'package:upgrader/upgrader.dart';
+import 'package:flutter_offline/flutter_offline.dart';
+import 'package:construction_technect/app/core/widgets/no_network.dart';
 
 class LoginView extends GetView<LoginController> {
-  const LoginView({super.key});
+   LoginView({super.key});
+  bool _isBottomSheetOpen = false;
 
   @override
   Widget build(BuildContext context) {
+    return OfflineBuilder(
+      child: _buildUpgradeAlert(context),
+      connectivityBuilder: (context, connectivity, child) {
+        final bool connected = !connectivity.contains(ConnectivityResult.none);
+
+        // show full-screen "No Internet" bottom sheet if offline
+        if (!connected && !_isBottomSheetOpen) {
+          _isBottomSheetOpen = true;
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (Get.isBottomSheetOpen == false) {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                isDismissible: false,
+                enableDrag: false,
+                backgroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                builder: (_) => WillPopScope(
+                  onWillPop: () async => false,
+                  child: NoInternetBottomSheet(),
+                ),
+              ).whenComplete(() {
+                _isBottomSheetOpen = false;
+              });
+            }
+          });
+        } else if (connected && _isBottomSheetOpen)  {
+          _isBottomSheetOpen = false;
+          Get.back();
+        }
+
+        return child;
+      },
+    );
+  }
+
+  /// ✅ Wrap the main UI inside Upgrader alert
+  Widget _buildUpgradeAlert(BuildContext context) {
+    return UpgradeAlert(
+      dialogStyle: UpgradeDialogStyle.cupertino,
+      shouldPopScope: () => true,
+      barrierDismissible: true,
+      upgrader: Upgrader(durationUntilAlertAgain: const Duration(days: 1)),
+      child: _buildMainLoginBody(context),
+    );
+  }
+
+  /// ✅ Login Body UI (unchanged)
+  Widget _buildMainLoginBody(BuildContext context) {
     return LoaderWrapper(
       isLoading: controller.isLoading,
       child: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
           backgroundColor: Colors.white,
           body: Stack(
@@ -56,23 +110,21 @@ class LoginView extends GetView<LoginController> {
                         Center(
                           child: Text(
                             'India’s Fastest Growing\nConstruction Network',
-                            style: MyTexts.medium18.copyWith(
-                              color: Colors.black,
-                            ),
+                            style: MyTexts.medium18.copyWith(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                         ),
                         const Gap(24),
                         Align(
-                          alignment: AlignmentGeometry.topLeft,
+                          alignment: Alignment.topLeft,
                           child: Text(
                             'Login',
-                            style: MyTexts.medium20.copyWith(
-                              color: Colors.black,
-                            ),
+                            style: MyTexts.medium20.copyWith(color: Colors.black),
                           ),
                         ),
                         const Gap(16),
+
+                        /// 📱 Phone Field
                         CommonPhoneField(
                           headerText: "Mobile Number",
                           controller: controller.mobileController,
@@ -82,13 +134,13 @@ class LoginView extends GetView<LoginController> {
                             controller.countryCode.value = code;
                           },
                           onSubmitted: (val) {
-                            FocusScope.of(
-                              context,
-                            ).requestFocus(controller.passwordFocusNode);
+                            FocusScope.of(context)
+                                .requestFocus(controller.passwordFocusNode);
                           },
                         ),
                         const Gap(16),
-                        //Password
+
+                        /// 🔒 Password
                         Obx(() {
                           return CommonTextField(
                             textInputAction: TextInputAction.done,
@@ -96,7 +148,6 @@ class LoginView extends GetView<LoginController> {
                             focusNode: controller.passwordFocusNode,
                             controller: controller.passwordController,
                             obscureText: !controller.isPasswordVisible.value,
-                            // controlled from your controller
                             hintText: "Password",
                             validator: (val) {
                               if ((val ?? "").isEmpty) {
@@ -106,8 +157,7 @@ class LoginView extends GetView<LoginController> {
                             },
                             showDivider: true,
                             suffixIcon: GestureDetector(
-                              onTap: () =>
-                                  controller.togglePasswordVisibility(),
+                              onTap: () => controller.togglePasswordVisibility(),
                               child: Icon(
                                 controller.isPasswordVisible.value
                                     ? Icons.visibility
@@ -117,6 +167,8 @@ class LoginView extends GetView<LoginController> {
                             ),
                           );
                         }),
+
+                        /// ❌ Login Error
                         Obx(() {
                           if (controller.loginError.value.isNotEmpty) {
                             return Padding(
@@ -127,9 +179,7 @@ class LoginView extends GetView<LoginController> {
                                     child: Text(
                                       controller.loginError.value,
                                       style: const TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 12,
-                                      ),
+                                          color: Colors.red, fontSize: 12),
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
@@ -139,17 +189,18 @@ class LoginView extends GetView<LoginController> {
                           }
                           return const SizedBox.shrink();
                         }),
+
                         const Gap(8),
+
+                        /// 💾 Remember Me + Forgot Password
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            //Remember Me
                             SavePassWidget(
                               state: controller.rememberMe,
                               onChanged: (val) =>
-                                  controller.rememberMe.value = val,
+                              controller.rememberMe.value = val,
                             ),
-                            //Forgot Password
                             TextButton(
                               onPressed: () =>
                                   Get.toNamed(Routes.FORGOT_PASSWORD),
@@ -164,50 +215,50 @@ class LoginView extends GetView<LoginController> {
                             ),
                           ],
                         ),
+
                         const Gap(24),
+
+                        /// 🔘 Login Button
                         Obx(
-                          () => RoundedButton(
+                              () => RoundedButton(
                             buttonName: 'Login',
                             onTap: controller.isLoading.value
                                 ? null
                                 : () {
-                                    // Clear previous errors
-                                    controller.loginError.value = "";
-                                    controller.mobileValidationError.value = "";
-                                    controller.isValid.value = -1;
+                              controller.loginError.value = "";
+                              controller.mobileValidationError.value = "";
+                              controller.isValid.value = -1;
 
-                                    // Validate mobile number
-                                    final mobileNumber = controller
-                                        .mobileController
-                                        .text
-                                        .trim();
-                                    if (mobileNumber.isEmpty) {
-                                      controller.isValid.value = 0;
-                                      return;
-                                    }
+                              final mobileNumber =
+                              controller.mobileController.text.trim();
+                              if (mobileNumber.isEmpty) {
+                                controller.isValid.value = 0;
+                                return;
+                              }
 
-                                    final mobileError =
-                                        ValidationUtils.validateMobileNumber(
-                                          mobileNumber,
-                                        );
-                                    if (mobileError != null) {
-                                      controller.mobileValidationError.value =
-                                          mobileError;
-                                      controller.isValid.value = 1;
-                                      return;
-                                    }
+                              final mobileError =
+                              ValidationUtils.validateMobileNumber(
+                                  mobileNumber);
+                              if (mobileError != null) {
+                                controller.mobileValidationError.value =
+                                    mobileError;
+                                controller.isValid.value = 1;
+                                return;
+                              }
 
-                                    // Validate password
-                                    if (controller.formKey.currentState
-                                            ?.validate() ??
-                                        false) {
-                                      hideKeyboard();
-                                      controller.login();
-                                    }
-                                  },
+                              if (controller.formKey.currentState
+                                  ?.validate() ??
+                                  false) {
+                                hideKeyboard();
+                                controller.login();
+                              }
+                            },
                           ),
                         ),
+
                         const Gap(24),
+
+                        /// 🔸 Or Divider
                         Row(
                           children: [
                             Expanded(
@@ -236,7 +287,10 @@ class LoginView extends GetView<LoginController> {
                             ),
                           ],
                         ),
+
                         const Gap(24),
+
+                        /// 🔹 Google + Facebook Sign-in
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -244,7 +298,8 @@ class LoginView extends GetView<LoginController> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: MyColors.grayD4),
+                                  border:
+                                  Border.all(color: MyColors.grayD4),
                                 ),
                                 height: 4.sh,
                                 child: Padding(
@@ -255,19 +310,17 @@ class LoginView extends GetView<LoginController> {
                               onTap: () async {
                                 try {
                                   final user =
-                                      await GoogleSignInService.signInWithGoogle();
+                                  await GoogleSignInService.signInWithGoogle();
                                   if (user != null) {
                                     await controller.callSocialLoginAPI(user);
                                   } else {
                                     SnackBars.errorSnackBar(
-                                      content:
-                                          'Google Sign-In was cancelled by user',
-                                    );
+                                        content:
+                                        'Google Sign-In was cancelled by user');
                                   }
                                 } catch (e) {
                                   SnackBars.errorSnackBar(
-                                    content: 'Google Sign-In failed: $e',
-                                  );
+                                      content: 'Google Sign-In failed: $e');
                                 }
                               },
                             ),
@@ -276,7 +329,8 @@ class LoginView extends GetView<LoginController> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: MyColors.grayD4),
+                                  border:
+                                  Border.all(color: MyColors.grayD4),
                                 ),
                                 height: 4.sh,
                                 child: Padding(
@@ -288,7 +342,10 @@ class LoginView extends GetView<LoginController> {
                             ),
                           ],
                         ),
+
                         const Gap(24),
+
+                        /// 🧾 Signup Redirect
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.SIGN_UP_ROLE);

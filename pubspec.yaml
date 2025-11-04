@@ -47,6 +47,9 @@ dependencies:
   firebase_core: ^4.2.0
   google_sign_in: ^7.2.0
   firebase_auth: ^6.1.1
+  upgrader: ^11.5.0
+  app_settings: ^6.1.1
+  flutter_offline: ^6.0.0
 
 
 
