@@ -12,7 +12,9 @@ class DeleteTeamDialog {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -25,17 +27,18 @@ class DeleteTeamDialog {
                 SizedBox(height: 1.h),
                 Container(
                   decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xFFF9D0CB)),
-                      color: const Color(0xFFFCECE9),
-                      borderRadius: BorderRadius.circular(8)
+                    border: Border.all(color: const Color(0xFFF9D0CB)),
+                    color: const Color(0xFFFCECE9),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
                   child: Center(
                     child: Text(
                       "Delete Team Member",
-                      style: MyTexts.medium15.copyWith(
-                        color: MyColors.gray2E,
-                      ),
+                      style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -43,9 +46,7 @@ class DeleteTeamDialog {
                 SizedBox(height: 2.h),
                 Text(
                   "Are you sure you want to delete ${teamMember.firstName ?? ''} ${teamMember.lastName ?? ''}?",
-                  style: MyTexts.medium14.copyWith(
-                    color: MyColors.gray54,
-                  ),
+                  style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 3.h),
@@ -89,13 +90,18 @@ class DeleteTeamDialog {
 }
 
 class DeleteRoleDialog {
-  static void showDeleteRoleDialog(BuildContext context, VoidCallback onConfirm) {
+  static void showDeleteRoleDialog(
+    BuildContext context,
+    VoidCallback onConfirm,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -105,16 +111,22 @@ class DeleteRoleDialog {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.warning_amber_rounded, size: 64, color: Colors.orange),
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  size: 64,
+                  color: Colors.orange,
+                ),
                 SizedBox(height: 2.h),
                 Text(
-                  "Delete Team Member",
-                  style: MyTexts.extraBold20.copyWith(color: MyColors.fontBlack),
+                  "Delete Role",
+                  style: MyTexts.extraBold20.copyWith(
+                    color: MyColors.fontBlack,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 1.h),
                 Text(
-                  "Are you sure you want to delete role?",
+                  "Are you sure you want to delete this role?",
                   style: MyTexts.regular16.copyWith(
                     color: MyColors.darkGray,
                     fontFamily: MyTexts.SpaceGrotesk,

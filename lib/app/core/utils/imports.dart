@@ -14,6 +14,7 @@ export 'package:flutter/foundation.dart';
 export 'package:flutter/material.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter_svg/svg.dart';
+export 'package:gap/gap.dart';
 export 'package:get/get.dart' hide ScreenType;
 export 'package:responsive_sizer/responsive_sizer.dart';
 export 'package:url_launcher/url_launcher.dart';
