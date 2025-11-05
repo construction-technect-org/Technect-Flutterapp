@@ -203,7 +203,23 @@ class _BottomBarViewState extends State<BottomBarView> {
         Get.toNamed(Routes.ADD_REQUIREMENT);
       }
     } else if (Get.find<HomeController>().marketPlace.value == 1) {
-      _showServiceOptions();
+      if (myPref.role.val != "connector") {
+        if (!commonController.hasProfileComplete.value) {
+          _showProfileIncompleteDialog();
+        } else if ((Get.find<HomeController>()
+                    .profileData
+                    .value
+                    .data
+                    ?.addresses ??
+                [])
+            .isEmpty) {
+          _showAddAddressDialog();
+        } else {
+          _showServiceOptions();
+        }
+      } else {
+        Get.toNamed(Routes.ADD_SERVICE_REQUIREMENT);
+      }
     } else {
       _showComingSoonSheet();
     }

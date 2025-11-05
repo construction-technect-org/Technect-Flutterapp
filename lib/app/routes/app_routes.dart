@@ -81,6 +81,7 @@ abstract class Routes {
   static const ADD_REQUIREMENT = _Paths.ADD_REQUIREMENT;
   static const REQUIREMENT = _Paths.REQUIREMENT;
   static const ADD_SERVICES = _Paths.ADD_SERVICES;
+  static const ADD_SERVICE_REQUIREMENT = _Paths.ADD_SERVICE_REQUIREMENT;
 }
 
 abstract class _Paths {
@@ -163,4 +164,5 @@ abstract class _Paths {
   static const ADD_REQUIREMENT = '/connector-add-requirement';
   static const REQUIREMENT = '/requirement';
   static const ADD_SERVICES = '/add-services';
+  static const ADD_SERVICE_REQUIREMENT = '/add-service-requirement';
 }

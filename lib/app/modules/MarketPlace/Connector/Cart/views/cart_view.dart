@@ -386,7 +386,10 @@ class CartListView extends GetView<CartListController> {
                                     return ServiceCard(
                                       service: service,
                                       onTap: () {
-                                        // TODO: Navigate to service details if needed
+                                        Get.toNamed(
+                                          Routes.SERVICE_DETAILS,
+                                          arguments: {'service': service},
+                                        );
                                       },
                                       onConnectTap: () {
                                         ConnectionDialogs.showSendServiceConnectionDialog(

@@ -68,7 +68,6 @@ class Service {
   String? connectionUpdatedAt;
   String? connectionRequestStatus;
   double? distanceKm;
-  List<ServiceMediaItem>? media;
   List<ServiceMediaItem>? images;
   ServiceMediaItem? video;
   ServiceReferenceItem? reference;
@@ -116,7 +115,6 @@ class Service {
     this.connectionUpdatedAt,
     this.connectionRequestStatus,
     this.distanceKm,
-    this.media,
     this.images,
     this.video,
     this.reference,
@@ -169,13 +167,6 @@ class Service {
               ? json['distance_km'].toDouble()
               : double.tryParse(json['distance_km'].toString()))
         : null;
-
-    if (json['media'] != null) {
-      media = <ServiceMediaItem>[];
-      json['media'].forEach((v) {
-        media!.add(ServiceMediaItem.fromJson(v));
-      });
-    }
 
     if (json['images'] != null) {
       images = <ServiceMediaItem>[];
@@ -248,9 +239,6 @@ class Service {
     data['connection_updated_at'] = connectionUpdatedAt;
     data['connection_request_status'] = connectionRequestStatus;
     data['distance_km'] = distanceKm;
-    if (media != null) {
-      data['media'] = media!.map((v) => v.toJson()).toList();
-    }
     if (images != null) {
       data['images'] = images!.map((v) => v.toJson()).toList();
     }

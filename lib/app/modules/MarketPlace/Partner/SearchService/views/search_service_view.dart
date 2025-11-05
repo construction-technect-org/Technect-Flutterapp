@@ -2,7 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/core/widgets/common_product_card.dart';
+import 'package:construction_technect/app/core/widgets/common_service_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/controller/search_service_controller.dart';
@@ -105,15 +105,15 @@ class SearchServiceView extends GetView<SearchServiceController> {
                     );
                   }
 
-                  final products =
-                      controller.productListModel.value?.data?.products ?? [];
+                  final services =
+                      controller.serviceListModel.value?.data?.services ?? [];
                   if (controller.isLoading.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  if (products.isEmpty) {
+                  if (services.isEmpty) {
                     return const Center(
                       child: Text(
-                        'No service available',
+                        'No services available',
                         style: TextStyle(color: Colors.grey, fontSize: 16),
                       ),
                     );
@@ -128,66 +128,39 @@ class SearchServiceView extends GetView<SearchServiceController> {
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                         ),
-                    itemCount: products.length,
+                    itemCount: services.length,
                     itemBuilder: (context, index) {
-                      final item = products[index];
-                      return ProductCard(
-                        isFromAdd: false,
-                        isFromConnector: myPref.role.val == "connector",
-                        product: item,
-                        onApiCall: () async {
-                          await controller.performSearch(
-                            controller.searchQuery.value,
-                            isLoad: false,
+                      final service = services[index];
+                      return ServiceCard(
+                        service: service,
+                        onTap: () {
+                          Get.toNamed(
+                            Routes.SERVICE_DETAILS,
+                            arguments: {"service": service},
                           );
                         },
-                        onWishlistTap: () async {
-                          await homeController.wishListApi(
-                            status: item.isInWishList == true
-                                ? "remove"
-                                : "add",
-                            mID: item.id ?? 0,
-                            onSuccess: () async {
-                              await controller.performSearch(
-                                controller.searchQuery.value,
-                                isLoad: false,
-                              );
-                            },
-                          );
-                        },
-                        onNotifyTap: () async {
-                          await homeController.notifyMeApi(
-                            mID: item.id ?? 0,
-                            onSuccess: () async {
-                              await controller.performSearch(
-                                controller.searchQuery.value,
-                                isLoad: false,
-                              );
-                            },
-                          );
-                        },
-                        onConnectTap: () {
-                          ConnectionDialogs.showSendConnectionDialog(
-                            context,
-                            item,
-                            isFromIn: true,
-
-                            onTap: () async {
-                              Get.back();
-                              await homeController.addToConnectApi(
-                                mID: item.merchantProfileId ?? 0,
-                                message: '',
-                                pID: item.id ?? 0,
-                                onSuccess: () async {
-                                  await controller.performSearch(
-                                    controller.searchQuery.value,
-                                    isLoad: false,
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
+                        onConnectTap: myPref.role.val == "connector"
+                            ? () {
+                                ConnectionDialogs.showSendServiceConnectionDialog(
+                                  context,
+                                  service,
+                                  isFromIn: true,
+                                  onTap: (message) async {
+                                    await homeController.addServiceToConnectApi(
+                                      mID: service.merchantProfileId ?? 0,
+                                      message: message,
+                                      sID: service.id ?? 0,
+                                      onSuccess: () async {
+                                        await controller.performSearch(
+                                          controller.searchQuery.value,
+                                          isLoad: false,
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              }
+                            : null,
                       );
                     },
                   );

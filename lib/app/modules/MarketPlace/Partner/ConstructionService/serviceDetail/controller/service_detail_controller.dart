@@ -1,78 +1,278 @@
-import 'package:construction_technect/app/core/utils/imports.dart';
-
-import 'package:get/get.dart';
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class ServiceDetailController extends GetxController {
-  Service service = Service();
+  Rx<Service> service = Service().obs;
 
   ProfileModel profileData = ProfileModel.fromJson(
     myPref.getProfileData() ?? {},
   );
-  final RxBool isFromAdd = false.obs;
   final RxBool isLoading = false.obs;
   final RxBool isLiked = false.obs;
   final RxInt currentIndex = 0.obs;
+  VoidCallback? onApiCall;
 
   VideoPlayerController? videoPlayerController;
-
-  // final VoidCallback? onApiCall = Get.arguments?['onApiCall'] ?? () {};
-
-  Rx<Service> serviceDetailsModel = Service().obs;
 
   @override
   void onInit() {
     super.onInit();
     final argument = Get.arguments as Map?;
-    service = argument?['service'] ?? Service();
-    isFromAdd.value = argument?['isFromAdd'] ?? false;
+    service.value = argument?['service'] ?? Service();
+    onApiCall = argument?["onApiCall"];
 
-    if (!isFromAdd.value) {
-      // fetchServiceDetails(service.id ?? 0);
-      WidgetsBinding.instance.addPostFrameCallback((val) async {
-        if (service.media?.isNotEmpty == true) {
-          final ServiceMediaItem? videoMedia = service.media!.firstWhereOrNull(
-            (m) => m.mediaType?.toLowerCase() == 'video',
-          );
-          if (videoMedia?.id != null) {
+    // fetchServiceDetails(service.id ?? 0);
+    WidgetsBinding.instance.addPostFrameCallback((val) async {
+      // Initialize video from reference if reference type is video
+      if (service.value.reference != null &&
+          service.value.reference?.referenceType?.toLowerCase() == 'video') {
+        // Try referenceS3Key first, fallback to referenceUrl
+        final referencePath =
+            service.value.reference?.referenceS3Key ??
+            service.value.reference?.referenceUrl ??
+            "";
+
+        if (referencePath.isNotEmpty) {
+          // If path doesn't start with http, prepend bucket URL
+          final referenceVideoUrl = referencePath.startsWith('http')
+              ? referencePath
+              : APIConstants.bucketUrl + referencePath;
+          log('Reference video path: $referencePath');
+          log('Reference video URL: $referenceVideoUrl');
+
+          try {
             videoPlayerController = VideoPlayerController.networkUrl(
-              Uri.parse(
-                APIConstants.bucketUrl + (videoMedia?.mediaS3Key ?? ""),
-              ),
+              Uri.parse(referenceVideoUrl),
+              httpHeaders: {
+                'Range': 'bytes=0-',
+                'Accept': 'video/*',
+                'User-Agent': 'Mozilla/5.0',
+              },
+              videoPlayerOptions: VideoPlayerOptions(),
             );
-            await videoPlayerController?.initialize();
+
+            await videoPlayerController?.initialize().timeout(
+              const Duration(seconds: 30),
+              onTimeout: () {
+                log('Reference video initialization timeout');
+                throw TimeoutException('Video initialization took too long');
+              },
+            );
+
+            log('Reference video initialized successfully');
+            update(); // Notify listeners to rebuild
+          } catch (e) {
+            log('Error initializing reference video: $e');
+            if (kDebugMode) {
+              print('Reference video initialization failed: $e');
+            }
           }
         }
-      });
-    }
-  }
+      }
 
-  // Future<void> fetchServiceDetails(int id) async {
-  //   try {
-  //     isLoading.value = true;
-  //     final result = await _service.getServiceDetails(id: id.toString());
-  //     if (result != null && result.success == true) {
-  //       serviceDetailsModel.value = result.data ?? Service();
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) print(e);
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
+      // Initialize video controllers for video in media list (only if reference is not video)
+      if (service.value.reference?.referenceType?.toLowerCase() != 'video' &&
+          service.value.video != null) {
+        // Try mediaS3Key first, fallback to mediaUrl
+        final videoPath =
+            service.value.video?.mediaS3Key ??
+            service.value.video?.mediaUrl ??
+            "";
+
+        if (videoPath.isNotEmpty) {
+          // If path doesn't start with http, prepend bucket URL
+          final videoUrl = videoPath.startsWith('http')
+              ? videoPath
+              : APIConstants.bucketUrl + videoPath;
+          log('Main video path: $videoPath');
+          log('Full main video URL: $videoUrl');
+
+          try {
+            videoPlayerController = VideoPlayerController.networkUrl(
+              Uri.parse(videoUrl),
+              httpHeaders: {
+                'Range': 'bytes=0-',
+                'Accept': 'video/*',
+                'User-Agent': 'Mozilla/5.0',
+              },
+              videoPlayerOptions: VideoPlayerOptions(),
+            );
+
+            // Add timeout for initialization
+            await videoPlayerController?.initialize().timeout(
+              const Duration(seconds: 30),
+              onTimeout: () {
+                log('Video initialization timeout');
+                throw TimeoutException('Video initialization took too long');
+              },
+            );
+
+            log('Video initialized successfully');
+            update(); // Notify listeners to rebuild
+          } catch (e) {
+            log('Error initializing video: $e');
+            // Show error to user or provide fallback
+            if (kDebugMode) {
+              print('Video initialization failed: $e');
+            }
+          }
+        }
+      }
+    });
+  }
 
   void onEditService() {
     Get.toNamed(
       Routes.ADD_SERVICES,
       arguments: {
-        "isEdit": true, 'service': service,
+        "isEdit": true, 'service': service.value,
 
         // "onApiCall": onApiCall
       },
     );
+  }
+
+  @override
+  void onClose() {
+    // Dispose video controller
+    videoPlayerController?.dispose();
+    super.onClose();
+  }
+
+  Future<void> retryVideoInitialization() async {
+    if (service.value.video != null) {
+      // Dispose old controller
+      videoPlayerController?.dispose();
+      videoPlayerController = null;
+      update();
+
+      // Try mediaS3Key first, fallback to mediaUrl
+      final videoPath = service.value.video?.mediaS3Key ?? "";
+
+      if (videoPath.isEmpty) {
+        log('No main video path available for retry');
+        update();
+        return;
+      }
+
+      // If path doesn't start with http, prepend bucket URL
+      final videoUrl = videoPath.startsWith('http')
+          ? videoPath
+          : APIConstants.bucketUrl + videoPath;
+      log('Retrying main video - path: $videoPath');
+      log('Retrying main video - URL: $videoUrl');
+
+      try {
+        videoPlayerController = VideoPlayerController.networkUrl(
+          Uri.parse(videoUrl),
+          httpHeaders: {
+            'Range': 'bytes=0-',
+            'Accept': 'video/*',
+            'User-Agent': 'Mozilla/5.0',
+          },
+          videoPlayerOptions: VideoPlayerOptions(),
+        );
+
+        await videoPlayerController?.initialize().timeout(
+          const Duration(seconds: 30),
+          onTimeout: () {
+            log('Video initialization timeout on retry');
+            throw TimeoutException('Video initialization took too long');
+          },
+        );
+
+        log('Video retry successful');
+        update();
+      } catch (e) {
+        log('Error retrying video initialization: $e');
+        // Show error message to user
+        if (kDebugMode) {
+          print('Video retry failed: $e');
+        }
+        update();
+      }
+    }
+  }
+
+  Future<void> retryReferenceVideoInitialization() async {
+    // Retry reference video (only if reference type is video)
+    if (service.value.reference != null &&
+        service.value.reference?.referenceType?.toLowerCase() == 'video') {
+      // Dispose old controller
+      videoPlayerController?.dispose();
+      videoPlayerController = null;
+      update();
+
+      // Try referenceS3Key first, fallback to referenceUrl
+      final referencePath =
+          service.value.reference?.referenceS3Key ??
+          service.value.reference?.referenceUrl ??
+          "";
+
+      if (referencePath.isEmpty) {
+        log('No reference video path available for retry');
+        update();
+        return;
+      }
+
+      // If path doesn't start with http, prepend bucket URL
+      final referenceVideoUrl = referencePath.startsWith('http')
+          ? referencePath
+          : APIConstants.bucketUrl + referencePath;
+      log('Retrying reference video - path: $referencePath');
+      log('Retrying reference video - URL: $referenceVideoUrl');
+
+      try {
+        videoPlayerController = VideoPlayerController.networkUrl(
+          Uri.parse(referenceVideoUrl),
+          httpHeaders: {
+            'Range': 'bytes=0-',
+            'Accept': 'video/*',
+            'User-Agent': 'Mozilla/5.0',
+          },
+          videoPlayerOptions: VideoPlayerOptions(),
+        );
+
+        await videoPlayerController?.initialize().timeout(
+          const Duration(seconds: 30),
+          onTimeout: () {
+            log('Reference video initialization timeout on retry');
+            throw TimeoutException('Video initialization took too long');
+          },
+        );
+
+        log('Reference video retry successful');
+        update();
+      } catch (e) {
+        log('Error retrying reference video initialization: $e');
+        if (kDebugMode) {
+          print('Reference video retry failed: $e');
+        }
+        update();
+      }
+    }
+  }
+
+  Future<void> openReferenceUrl(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (kDebugMode) {
+          print('Could not launch $url');
+        }
+      }
+    } catch (e) {
+      log('Error opening reference URL: $e');
+    }
   }
 
   void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {

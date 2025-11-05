@@ -17,9 +17,11 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = (service.media != null && service.media!.isNotEmpty)
-        ? (service.media!.first.mediaUrl ?? "")
-        : null;
+    String? imageUrl;
+    if (service.images != null && service.images!.isNotEmpty) {
+      imageUrl =
+          APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? '');
+    }
     return GestureDetector(
       onTap: onTap,
       child: Column(
