@@ -204,10 +204,10 @@ class AddTeamView extends GetView<AddTeamController> {
                                 keyboardType: TextInputType.emailAddress,
                                 autofillHints: const [AutofillHints.email],
                                 inputFormatters: [
-                                  LengthLimitingTextInputFormatter(50),
+                                  LengthLimitingTextInputFormatter(150),
                                   EmailInputFormatter(),
                                 ],
-                                validator: validateEmail,
+                                // validator: (val) => Validate.validateMail(val),
                               ),
                             ),
                             Obx(() {
@@ -274,6 +274,9 @@ class AddTeamView extends GetView<AddTeamController> {
               () => RoundedButton(
                 buttonName: controller.isEdit.value ? "Update" : 'Add',
                 onTap: () {
+                  controller.validateEmailAvailability(
+                    controller.emialIdController.text,
+                  );
                   if (formKey.currentState!.validate()) {
                     controller.filedValidation();
                   }

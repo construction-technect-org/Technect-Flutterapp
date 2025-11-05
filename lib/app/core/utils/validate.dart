@@ -197,6 +197,9 @@ class Validate {
 
   Future<String?> validateEmail(String? email) async {
     final value = email?.trim() ?? "";
+    if (email == null || email.isEmpty) {
+      return "Please enter email address";
+    }
 
     // First check basic email format
     if (!isValidEmail(value)) {
@@ -242,15 +245,21 @@ class Validate {
     if (value.trim().length < 2) {
       return "$fieldName must be at least 2 characters long";
     }
-    // Allow words starting uppercase; words may include letters, numbers, and &, -, . between alphanumerics.
-    // Examples accepted: "H&M Constructions", "Pro-Tech Builders", "A&B Traders", "Tech2Win", "Studio52".
-    // Disallow names made of only special characters and disallow specials at start/end of a word or repeated.
+    // Allow words starting uppercase or common lowercase connectors (of, and, the, ...);
+    // words may include letters, numbers, and &, -, . between alphanumerics; optional trailing hyphen allowed.
+    // Examples accepted: "H&M Constructions", "Pro-Tech Builders", "A&B Traders", "Tech2Win", "Studio52",
+    // "The International Association of Engineers and Technologists Research and Development Solutions Private Limited-".
     final pattern = RegExp(
-      '^[A-Z](?:[a-zA-Z0-9]*(?:[&.-][a-zA-Z0-9]+)*)' // first word
-      r'(?:[ _]?[A-Z](?:[a-zA-Z0-9]*(?:[&.-][a-zA-Z0-9]+)*))*$', // subsequent words
+      '^(?:'
+      r'(?:[A-Z][a-zA-Z0-9]*(?:[&.\-][A-Za-z0-9]+)*)'
+      '|(?:of|and|the|for|in|on|at|by|with|to|from)'
+      ')'
+      '(?:[ _]'
+      r'(?:[A-Z][a-zA-Z0-9]*(?:[&.\-][A-Za-z0-9]+)*|(?:of|and|the|for|in|on|at|by|with|to|from))'
+      r')*-?$',
     );
     if (!pattern.hasMatch(value.trim())) {
-      return "$fieldName must start each word uppercase and may include letters, numbers, &, -, . between characters";
+      return "Enter a valid $fieldName (letters/numbers/space/&/.-, common lowercase connectors allowed, optional trailing -)";
     }
     return null;
   }
@@ -306,7 +315,7 @@ class Validate {
   /// - Valid Indian mobile number format (starts with 6, 7, 8, or 9)
   static String? validateMobileNumber(String? mobileNumber) {
     if (mobileNumber == null || mobileNumber.trim().isEmpty) {
-      return null; // Empty validation is handled separately
+      return "Please enter mobile number";
     }
 
     final digits = mobileNumber.trim();
