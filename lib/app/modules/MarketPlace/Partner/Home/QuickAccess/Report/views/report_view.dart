@@ -168,9 +168,7 @@ class ReportView extends GetView<ReportController> {
 
                           const Gap(20),
 
-                           HeaderText(
-                            text: "Select month and download report",
-                          ),
+                          HeaderText(text: "Select month and download report"),
                           const Gap(20),
 
                           _buildMonthFilter(context),
@@ -449,6 +447,35 @@ class ReportView extends GetView<ReportController> {
                       ],
                     ),
                   const Gap(10),
+                  if (analysis.serviceAnalytics != null)
+                    ReportGraph(
+                      title: "Services Analysis",
+                      labels: analysis.serviceAnalytics!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.serviceAnalytics!.monthlyBreakdown!
+                            .map((e) => e.servicesAdded ?? 0)
+                            .toList(),
+                        analysis.serviceAnalytics!.monthlyBreakdown!
+                            .map((e) => e.activeServices ?? 0)
+                            .toList(),
+                        analysis.serviceAnalytics!.monthlyBreakdown!
+                            .map((e) => e.rejectedServices ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [
+                        MyColors.primary,
+                        MyColors.green,
+                        Colors.red,
+                      ],
+                      legends: const [
+                        "Services Added",
+                        "Active Services",
+                        "Rejected Services",
+                      ],
+                    ),
+                  const Gap(10),
                   if (analysis.teamAnalytics != null)
                     ReportGraph(
                       title: "Team Analysis",
@@ -534,39 +561,124 @@ class ReportView extends GetView<ReportController> {
                       legends: const ["Item Added"],
                     ),
                   const Gap(10),
-                  if (analysis.connections != null)
+                  if (analysis.productConnections != null)
                     ReportGraph(
-                      title: "Connection Analysis",
-                      labels: analysis.connections!.monthlyBreakdown!
+                      title: "Product Connections Analysis",
+                      labels: analysis.productConnections!.monthlyBreakdown!
                           .map((e) => e.monthName!)
                           .toList(),
                       values: [
-                        analysis.connections!.monthlyBreakdown!
+                        analysis.productConnections!.monthlyBreakdown!
                             .map((e) => e.connectionsCreated ?? 0)
                             .toList(),
                       ],
-                      colors: const [MyColors.primary, MyColors.green],
-                      legends: const ["Created Connection"],
+                      colors: const [MyColors.primary],
+                      legends: const ["Product Connections Created"],
                     ),
                   const Gap(10),
-                  if (analysis.supportTicketAnalytics != null)
+                  if (analysis.serviceConnections != null)
                     ReportGraph(
-                      title: "Support Ticket Analysis",
-                      labels: analysis.supportTicketAnalytics!.monthlyBreakdown!
+                      title: "Service Connections Analysis",
+                      labels: analysis.serviceConnections!.monthlyBreakdown!
                           .map((e) => e.monthName!)
                           .toList(),
                       values: [
-                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                        analysis.serviceConnections!.monthlyBreakdown!
+                            .map((e) => e.serviceConnectionsCreated ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [MyColors.green],
+                      legends: const ["Service Connections Created"],
+                    ),
+                  const Gap(10),
+                  if (analysis.serviceRequirements != null)
+                    ReportGraph(
+                      title: "Service Requirements Analysis",
+                      labels: analysis.serviceRequirements!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.serviceRequirements!.monthlyBreakdown!
+                            .map((e) => e.requirementsCreated ?? 0)
+                            .toList(),
+                        analysis.serviceRequirements!.monthlyBreakdown!
+                            .map((e) => e.pendingRequirements ?? 0)
+                            .toList(),
+                        analysis.serviceRequirements!.monthlyBreakdown!
+                            .map((e) => e.fulfilledRequirements ?? 0)
+                            .toList(),
+                        analysis.serviceRequirements!.monthlyBreakdown!
+                            .map((e) => e.cancelledRequirements ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [
+                        MyColors.primary,
+                        Colors.orange,
+                        MyColors.green,
+                        Colors.red,
+                      ],
+                      legends: const [
+                        "Requirements Created",
+                        "Pending Requirements",
+                        "Fulfilled Requirements",
+                        "Cancelled Requirements",
+                      ],
+                    ),
+                  const Gap(10),
+                  if (analysis.productRequirements != null)
+                    ReportGraph(
+                      title: "Product Requirements Analysis",
+                      labels: analysis.productRequirements!.monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.productRequirements!.monthlyBreakdown!
+                            .map((e) => e.requirementsCreated ?? 0)
+                            .toList(),
+                        analysis.productRequirements!.monthlyBreakdown!
+                            .map((e) => e.pendingRequirements ?? 0)
+                            .toList(),
+                        analysis.productRequirements!.monthlyBreakdown!
+                            .map((e) => e.fulfilledRequirements ?? 0)
+                            .toList(),
+                        analysis.productRequirements!.monthlyBreakdown!
+                            .map((e) => e.cancelledRequirements ?? 0)
+                            .toList(),
+                      ],
+                      colors: const [
+                        MyColors.primary,
+                        Colors.orange,
+                        MyColors.green,
+                        Colors.red,
+                      ],
+                      legends: const [
+                        "Requirements Created",
+                        "Pending Requirements",
+                        "Fulfilled Requirements",
+                        "Cancelled Requirements",
+                      ],
+                    ),
+                  const Gap(10),
+                  if (analysis.connectorSupportTickets != null)
+                    ReportGraph(
+                      title: "Support Ticket Analysis",
+                      labels: analysis
+                          .connectorSupportTickets!
+                          .monthlyBreakdown!
+                          .map((e) => e.monthName!)
+                          .toList(),
+                      values: [
+                        analysis.connectorSupportTickets!.monthlyBreakdown!
                             .map((e) => e.openTickets ?? 0)
                             .toList(),
-                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                        analysis.connectorSupportTickets!.monthlyBreakdown!
                             .map((e) => e.closedTickets ?? 0)
                             .toList(),
-                        analysis.supportTicketAnalytics!.monthlyBreakdown!
+                        analysis.connectorSupportTickets!.monthlyBreakdown!
                             .map((e) => e.resolvedTickets ?? 0)
                             .toList(),
                       ],
-                      colors: const [MyColors.primary, MyColors.green],
+                      colors: const [Colors.orange, Colors.red, MyColors.green],
                       legends: const [
                         "Open Tickets",
                         "Closed Tickets",
