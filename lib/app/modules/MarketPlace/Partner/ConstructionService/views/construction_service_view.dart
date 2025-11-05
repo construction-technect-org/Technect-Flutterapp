@@ -6,7 +6,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/controllers/construction_service_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
-import 'package:gap/gap.dart';
 
 class ConstructionServiceView extends StatelessWidget {
   final controller = Get.put(ConstructionServiceController());
@@ -136,7 +135,7 @@ class ConstructionServiceView extends StatelessWidget {
       context: context,
       items: services,
       isSelected: (index) =>
-          controller.selectedServiceCategoryIndex.value == index,
+          controller.selectedServiceCategory.value?.id == services[index].id,
       onTap: (index) => controller.selectServiceCategoryFromGrid(index),
       getImageUrl: (_) =>
           controller.selectedSubCategory.value?.image ??
