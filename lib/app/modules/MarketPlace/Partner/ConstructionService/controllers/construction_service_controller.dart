@@ -124,18 +124,6 @@ class ConstructionServiceController extends GetxController {
 
   void rightSide0RightView(int index) {
     selectServiceCategory(index);
-    serviceCategories.value =
-        mainCategory.value?.subCategories?.firstWhere((element) {
-          return element.id == serviceCategoryList[index].id;
-        }) ??
-        ServicesSubCategories();
-    if (serviceCategories.value.serviceCategories?.isEmpty ?? true) {
-      navigationIndex.value = 1;
-    } else {
-      selectedServiceCategoryIndex.value = index;
-      navigationIndex.value = 1;
-    }
-    selectedServiceCategory.value = serviceCategoryList[index];
   }
 
   void leftSide1LeftView(int index) {
@@ -181,8 +169,6 @@ class ConstructionServiceController extends GetxController {
         mainCategoryId: mainCategoryId!,
         subCategoryId: selectedSubCategory.value!.id ?? 0,
         serviceCategoryId: selectedServiceCategory.value!.id ?? 0,
-        page: 1,
-        limit: 20,
         radiusKm: radiusKm,
       );
     } catch (e) {
