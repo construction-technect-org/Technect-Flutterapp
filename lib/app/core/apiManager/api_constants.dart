@@ -134,6 +134,14 @@ class APIConstants {
   static const String connectorUpdateRequirement = "connector/requirement";
   static const String connectorGetRequirement =
       "connector/requirement/list/all";
+
+  // Connector Service Requirement API
+  static const String connectorCreateServiceRequirement =
+      "connector/service-requirement";
+  static const String connectorUpdateServiceRequirement =
+      "connector/service-requirement";
+  static const String connectorGetServiceRequirementList =
+      "connector/service-requirement/list";
   static const String pointOfContactMerchant = "point-of-contact/merchant";
   static const String pointOfContactConnector = "point-of-contact/connector";
   static const String connectorTeamMember = "connector/team-member";

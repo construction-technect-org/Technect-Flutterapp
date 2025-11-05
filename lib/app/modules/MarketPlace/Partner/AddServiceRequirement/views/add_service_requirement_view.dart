@@ -3,13 +3,13 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/controllers/add_requirement_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/controllers/add_service_requirement_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
-class AddRequirementView extends StatelessWidget {
-  AddRequirementView({super.key});
+class AddServiceRequirementView extends StatelessWidget {
+  AddServiceRequirementView({super.key});
 
-  final controller = Get.put(AddRequirementController());
+  final controller = Get.put(AddServiceRequirementController());
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,9 @@ class AddRequirementView extends StatelessWidget {
           backgroundColor: MyColors.white,
           appBar: CommonAppBar(
             title: Text(
-              controller.requirementId != null
-                  ? "Edit product requirement"
-                  : "Add product requirement",
+              controller.serviceRequirementId != null
+                  ? "Edit Service Requirement"
+                  : "Add Service Requirement",
             ),
           ),
           bottomNavigationBar: Column(
@@ -35,12 +35,12 @@ class AddRequirementView extends StatelessWidget {
                   vertical: 16,
                 ),
                 child: RoundedButton(
-                  buttonName: controller.requirementId != null
+                  buttonName: controller.serviceRequirementId != null
                       ? 'Update'
                       : 'Submit',
                   onTap: () {
                     if (controller.formKey.currentState!.validate()) {
-                      controller.submitRequirement();
+                      controller.submitServiceRequirement();
                     } else {
                       SnackBars.errorSnackBar(
                         content: "Please fill all required fields properly",
@@ -67,7 +67,7 @@ class AddRequirementView extends StatelessWidget {
                       }
                       return null;
                     },
-                    hintText: "Select product main category",
+                    hintText: "Select service main category",
                     items: controller.mainCategoryNames,
                     selectedValue: controller.selectedMainCategory,
                     itemLabel: (item) => item,
@@ -84,7 +84,7 @@ class AddRequirementView extends StatelessWidget {
                       }
                       return null;
                     },
-                    hintText: "Select product sub-category",
+                    hintText: "Select service sub-category",
                     items: controller.subCategoryNames,
                     selectedValue: controller.selectedSubCategory,
                     itemLabel: (item) => item,
@@ -94,53 +94,24 @@ class AddRequirementView extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Obx(() {
-                    if (controller.productCategoryNames.isNotEmpty) {
+                    if (controller.serviceCategoryNames.isNotEmpty) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CommonDropdown<String>(
-                            headerText: 'Product Category',
+                            headerText: 'Service Category',
                             validator: (val) {
                               if (val == null || val.isEmpty) {
-                                return "Please select product category";
+                                return "Please select service category";
                               }
                               return null;
                             },
-                            hintText: "Select Product Category",
-                            items: controller.productCategoryNames,
-                            selectedValue: controller.selectedProductCategory,
+                            hintText: "Select Service Category",
+                            items: controller.serviceCategoryNames,
+                            selectedValue: controller.selectedServiceCategory,
                             itemLabel: (item) => item,
                             onChanged: (val) {
-                              controller.onProductCategorySelected(val);
-                            },
-                          ),
-                          SizedBox(height: 2.h),
-                        ],
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  }),
-                  Obx(() {
-                    if (controller.subProductCategoryNames.isNotEmpty) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CommonDropdown<String>(
-                            headerText: 'Sub Product Category',
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return "Please select sub product category";
-                              }
-                              return null;
-                            },
-                            hintText: "Select Sub Product Category",
-                            items: controller.subProductCategoryNames,
-                            selectedValue:
-                                controller.selectedSubProductCategory,
-                            itemLabel: (item) => item,
-                            onChanged: (val) {
-                              controller.onSubProductCategorySelected(val);
+                              controller.onServiceCategorySelected(val);
                             },
                           ),
                           SizedBox(height: 2.h),
@@ -168,63 +139,14 @@ class AddRequirementView extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   CommonTextField(
-                    headerText: 'Quantity',
-                    hintText: "Enter quantity",
-                    controller: controller.quantityController,
-                    keyboardType: TextInputType.number,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return "Please enter quantity";
-                      }
-                      if (double.tryParse(val) == null) {
-                        return "Enter valid number";
-                      }
-                      if (int.tryParse(val) == 0) {
-                        return "Quantity can not be zero";
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 2.h),
-                  Obx(() {
-                    if (controller.uomOptions.isNotEmpty) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CommonDropdown<String>(
-                            headerText:
-                                controller.uomFilter?.filterLabel ?? 'UOM',
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return "Please select ${controller.uomFilter?.filterLabel ?? 'UOM'}";
-                              }
-                              return null;
-                            },
-                            hintText:
-                                "Select ${controller.uomFilter?.filterLabel ?? 'UOM'}",
-                            items: controller.uomOptions,
-                            selectedValue: controller.selectedUOM,
-                            itemLabel: (item) => item,
-                            onChanged: (val) {
-                              controller.selectedUOM.value = val;
-                            },
-                          ),
-                          SizedBox(height: 2.h),
-                        ],
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  }),
-                  CommonTextField(
-                    headerText: 'Estimate Delivery Date',
-                    hintText: "Select estimate delivery date",
-                    controller: controller.estimateDeliveryDateController,
+                    headerText: 'Estimate Start Date',
+                    hintText: "Select estimate start date",
+                    controller: controller.estimateStartDateController,
                     readOnly: true,
-                    onTap: () => controller.selectEstimateDeliveryDate(context),
+                    onTap: () => controller.selectEstimateStartDate(context),
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return "Please select estimate delivery date";
+                        return "Please select estimate start date";
                       }
                       return null;
                     },

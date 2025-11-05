@@ -30,6 +30,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/views/add_manufacturer_address_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/bindings/add_service_requirement_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/views/add_service_requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/binding/new_launch_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/view/new_launches_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
@@ -116,7 +118,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LOGIN,
-      page: () =>  LoginView(),
+      page: () => LoginView(),
       binding: LoginBinding(),
     ),
     GetPage(
@@ -250,7 +252,6 @@ class AppPages {
       binding: ConnectorProfileBinding(),
     ),
 
-
     GetPage(
       name: Routes.REQUEST_DEMO,
       page: () => RequestDemoView(),
@@ -296,6 +297,11 @@ class AppPages {
       name: Routes.REQUIREMENT,
       page: () => RequirementView(),
       binding: RequirementBinding(),
+    ),
+    GetPage(
+      name: Routes.ADD_SERVICE_REQUIREMENT,
+      page: () => AddServiceRequirementView(),
+      binding: AddServiceRequirementBinding(),
     ),
     GetPage(
       name: Routes.WISH_LIST,
@@ -369,12 +375,12 @@ class AppPages {
     ),
     GetPage(
       name: Routes.ADD_SERVICES,
-      page: () =>   AddServiceScreen(),
+      page: () => AddServiceScreen(),
       binding: AddServiceBinding(),
     ),
     GetPage(
       name: Routes.SERVICE_DETAILS,
-      page: () =>   const ServiceDetailScreen(),
+      page: () => const ServiceDetailScreen(),
       binding: ServiceDetailBinding(),
     ),
   ];

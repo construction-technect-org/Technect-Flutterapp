@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/models/GetRequirementModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/models/get_service_requirement_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/model/connectionModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Notifications/models/notification_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
@@ -61,6 +63,11 @@ class AppSharedPreference {
 
   final categoryServiceHierarchyData = <String, dynamic>{}.val(
     'categoryServiceHierarchyData',
+  );
+
+  final requirementListData = <String, dynamic>{}.val('requirementListData');
+  final serviceRequirementListData = <String, dynamic>{}.val(
+    'serviceRequirementListData',
   );
 
   void setToken(String authToken) {
@@ -692,5 +699,57 @@ class AppSharedPreference {
 
   void clearServiceCategoryHierarchyData() {
     categoryServiceHierarchyData.val = {};
+  }
+
+  // Requirement List Storage Methods
+  void setRequirementListModel(GetRequirementListModel requirementListModel) {
+    try {
+      requirementListData.val = requirementListModel.toJson();
+    } catch (e) {
+      log('Error saving requirement list model: $e');
+    }
+  }
+
+  GetRequirementListModel? getRequirementListModel() {
+    try {
+      final data = requirementListData.val;
+      if (data.isNotEmpty) {
+        return GetRequirementListModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting requirement list model: $e');
+    }
+    return null;
+  }
+
+  void clearRequirementListData() {
+    requirementListData.val = {};
+  }
+
+  // Service Requirement List Storage Methods
+  void setServiceRequirementListModel(
+    GetServiceRequirementListModel serviceRequirementListModel,
+  ) {
+    try {
+      serviceRequirementListData.val = serviceRequirementListModel.toJson();
+    } catch (e) {
+      log('Error saving service requirement list model: $e');
+    }
+  }
+
+  GetServiceRequirementListModel? getServiceRequirementListModel() {
+    try {
+      final data = serviceRequirementListData.val;
+      if (data.isNotEmpty) {
+        return GetServiceRequirementListModel.fromJson(data);
+      }
+    } catch (e) {
+      log('Error getting service requirement list model: $e');
+    }
+    return null;
+  }
+
+  void clearServiceRequirementListData() {
+    serviceRequirementListData.val = {};
   }
 }

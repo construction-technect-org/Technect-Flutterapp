@@ -4,18 +4,10 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Constructi
 class SearchServiceServices {
   final ApiManager _apiManager = ApiManager();
 
-  Future<ConnectorServiceModel> searchServices({
-    required String query,
-    int page = 1,
-    int limit = 20,
-  }) async {
+  Future<ConnectorServiceModel> searchServices({required String query}) async {
     try {
       const String url = APIConstants.searchService;
-      final Map<String, dynamic> body = {
-        'search_text': query,
-        'page': page,
-        'limit': limit,
-      };
+      final Map<String, dynamic> body = {'search_text': query};
 
       final response = await _apiManager.postObject(url: url, body: body);
 
