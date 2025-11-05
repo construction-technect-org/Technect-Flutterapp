@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleDetails/controllers/role_details_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/components/delete_team_dialog.dart';
-import 'package:gap/gap.dart';
 
 class RoleDetailsView extends GetView<RoleDetailsController> {
   const RoleDetailsView({super.key});

@@ -175,7 +175,7 @@ class EditProfileController extends GetxController {
     final email = businessEmailController.text;
 
     isEmailValidating.value = true;
-    emailError.value = await Validate().validateEmail(email) ?? "";
+    emailError.value = await Validate.validateEmailAsync(email) ?? "";
     isEmailValidating.value = false;
   }
 }

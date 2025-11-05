@@ -193,13 +193,9 @@ class AddTeamController extends GetxController {
     }
   }
 
-  bool _isValidEmail(String email) {
-    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\$').hasMatch(email);
-  }
-
   Future<void> validateEmailAvailability(String email) async {
     isEmailValidating.value = true;
-    emailError.value = await Validate().validateEmail(email) ?? "";
+    emailError.value = await Validate.validateEmailAsync(email) ?? "";
     isEmailValidating.value = false;
   }
 }

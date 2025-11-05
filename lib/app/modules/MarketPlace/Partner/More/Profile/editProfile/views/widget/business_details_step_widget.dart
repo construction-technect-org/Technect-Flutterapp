@@ -32,10 +32,8 @@ class BusinessDetailsStep extends StatelessWidget {
               LengthLimitingTextInputFormatter(150),
               // NameInputFormatter(),
             ],
-            validator: (value) => Validate().validateBusinessName(
-              value,
-              fieldName: "company name",
-            ),
+            validator: (value) =>
+                Validate.validateBusinessName(value, fieldName: "company name"),
           ),
           SizedBox(height: 2.h),
           CommonTextField(
@@ -58,7 +56,10 @@ class BusinessDetailsStep extends StatelessWidget {
               hintText: "adc12@business.com",
               controller: controller.businessEmailController,
               keyboardType: TextInputType.emailAddress,
-              // validator: ValidationUtils.validateBusinessEmail,
+              validator: (value) => Validate.validateEmail(value),
+              onChange: (value) {
+                controller.emailError.value = "";
+              },
             ),
           ),
           Obx(() {
@@ -108,7 +109,8 @@ class BusinessDetailsStep extends StatelessWidget {
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(10),
             ],
-            validator: (val) => Validate.validateMobileNumber(val),
+            validator: (val) =>
+                Validate.validateMobileNumber(val, isOptional: true),
           ),
           SizedBox(height: 2.h),
           CommonTextField(

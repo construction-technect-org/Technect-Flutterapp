@@ -38,11 +38,13 @@ class EditProfileView extends GetView<EditProfileController> {
               RoundedButton(
                 buttonName: 'Update',
                 onTap: () async {
+                  if (!formKey.currentState!.validate()) return;
+
                   await controller.validateEmailAvailability();
-                  if (formKey.currentState!.validate() &&
-                      controller.emailError.value == '') {
-                    controller.updateProfile();
+                  if (controller.emailError.value != '') {
+                    return;
                   }
+                  controller.updateProfile();
                 },
               ).paddingOnly(bottom: 30, right: 20, left: 20),
             ],
