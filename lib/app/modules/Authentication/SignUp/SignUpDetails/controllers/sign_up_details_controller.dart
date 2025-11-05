@@ -48,18 +48,14 @@ class SignUpDetailsController extends GetxController {
     isResendVisible.value = true;
   }
 
-  bool isValidEmail(String email) {
-    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
-  }
-
   Future<void> validateGSTAvailability() async {
     final value = gstController.text.trim();
-    isVerified.value = await Validate().validateGSTAvailability(value);
+    isVerified.value = await Validate.validateGSTAvailability(value);
   }
 
   Future<void> validateEmailAvailability(String email) async {
     isEmailValidating.value = true;
-    emailError.value = await Validate().validateEmail(email) ?? "";
+    emailError.value = await Validate.validateEmailAsync(email) ?? "";
     isEmailValidating.value = false;
   }
 
@@ -171,26 +167,6 @@ class SignUpDetailsController extends GetxController {
   Future<void> proceedToPassword() async {
     await verifyOtp();
   }
-
-  // Future<bool> checkEmail() async {
-  //   try {
-  //     final isAvailable = await signUpService.checkAvailability(
-  //       email: emailController.text,
-  //     );
-
-  //     if (!isAvailable) {
-  //       SnackBars.errorSnackBar(content: "This email is already registered");
-  //       return false;
-  //     }
-
-  //     return true;
-  //   } catch (e) {
-  //     SnackBars.errorSnackBar(
-  //       content: "Error verifying email. Please try again",
-  //     );
-  //     return false;
-  //   }
-  // }
 
   // Verify OTP method
   Future<void> verifyOtp() async {

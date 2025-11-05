@@ -1,18 +1,3 @@
-
-
-String? validateEmail(String? value) {
-  if (value == null || value.isEmpty) {
-    return "Please enter email";
-  }
-  final emailRegExp = RegExp(
-    r'^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-  );
-  if (!emailRegExp.hasMatch(value)) {
-    return "Please enter valid email";
-  }
-  return null;
-}
-
 String? validateConfirmPassword(String? value, String? originalPassword) {
   if (value == null || value.isEmpty) {
     return "Please confirm password";

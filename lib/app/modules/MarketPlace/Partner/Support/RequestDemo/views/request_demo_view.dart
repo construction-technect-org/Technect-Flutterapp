@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
@@ -154,7 +155,8 @@ class RequestDemoView extends StatelessWidget {
                                 LengthLimitingTextInputFormatter(50),
                                 EmailInputFormatter(),
                               ],
-                              validator: validateEmail,
+                              validator: (value) =>
+                                  Validate.validateEmail(value),
                               controller: controller.emilaController,
                               headerText: 'Email',
                               hintText: "Enter your email address",

@@ -2,9 +2,9 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
-import 'package:gap/gap.dart';
 
 class PointOfContentScreen extends StatelessWidget {
   PointOfContentScreen({super.key});
@@ -97,6 +97,8 @@ class PointOfContentScreen extends StatelessWidget {
                                 hintText: "Enter your email address",
                                 headerText: "Email",
                                 controller: eController.emailController,
+                                validator: (value) =>
+                                    Validate.validateEmail(value),
                               ),
                               Gap(2.h),
 

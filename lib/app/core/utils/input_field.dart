@@ -1,22 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:gap/gap.dart';
-
-bool isValidEmail(String? email) {
-  if (email == null || email.isEmpty) return false;
-  return RegExp(
-    r'^[A-Za-z0-9._%+-]*[A-Za-z]+[A-Za-z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-  ).hasMatch(email);
-}
-
-String? validateEmail(String? value) {
-  if (value == null || value.trim().isEmpty) {
-    return "Please enter email";
-  }
-  if (!isValidEmail(value.trim())) {
-    return "Please enter a valid email address";
-  }
-  return null;
-}
 
 String? validateName(String? value, {String fieldName = "Name"}) {
   if (value == null || value.trim().isEmpty) {

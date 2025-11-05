@@ -1,230 +1,56 @@
+import 'package:construction_technect/app/core/utils/email_validation.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 
+/// Main validation utility class
+/// Provides validation methods for various input types including email, mobile, name, etc.
 class Validate {
-  static bool isValidEmail(String? email) {
-    if (email == null || email.isEmpty) return false;
-    if (email.length > 254) return false;
-    final regex = RegExp(
-      r"^(?!.*\.\.)[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,63}$",
-    );
-    return regex.hasMatch(email);
-  }
+  // ==================== Email Validation ====================
 
-  static String? validateMail(String? mail) {
-    final value = mail?.trim() ?? '';
-    if (value.isEmpty) {
-      return "Please enter email";
-    }
-    if (!Validate.isValidEmail(value)) {
-      return "Please enter a valid email address";
-    }
-    return null;
-  }
-
-  /// Validates email domain to check for invalid or non-existent domains
+  /// Non-future email validation for TextField validators
   /// Returns error message if invalid, null if valid
-  String? validateEmailDomain(String? email) {
-    if (email == null || email.isEmpty) {
-      return "Please enter a valid email address";
-    }
-
-    final value = email.trim().toLowerCase();
-
-    // Extract domain part
-    if (!value.contains('@')) {
-      return "Please enter a valid email address";
-    }
-
-    final parts = value.split('@');
-    if (parts.length != 2 || parts[1].isEmpty) {
-      return "Please enter a valid email address";
-    }
-
-    final domain = parts[1];
-
-    // Check for trailing dots or invalid characters in domain
-    if (domain.endsWith('.') || domain.startsWith('.')) {
-      return "Please enter a valid email address. Invalid domain format (trailing or leading dot)";
-    }
-
-    // Check for consecutive dots
-    if (domain.contains('..')) {
-      return "Please enter a valid email address with a valid domain";
-    }
-
-    // Extract domain parts
-    final domainParts = domain.split('.');
-
-    // Filter out empty parts (which could happen with trailing dots)
-    domainParts.removeWhere((part) => part.isEmpty);
-
-    if (domainParts.length < 2) {
-      return "Please enter a valid email address with a valid domain";
-    }
-
-    // Common two-part TLDs (e.g., co.uk, com.au, co.in)
-    final twoPartTlds = [
-      'co.uk',
-      'com.au',
-      'co.in',
-      'com.br',
-      'co.za',
-      'com.mx',
-      'co.jp',
-      'com.cn',
-    ];
-
-    String tld;
-    String? secondLevelDomain;
-    String mainDomainName;
-
-    // Check if it's a two-part TLD
-    if (domainParts.length >= 3) {
-      final lastTwoParts =
-          '${domainParts[domainParts.length - 2]}.${domainParts.last}';
-      if (twoPartTlds.contains(lastTwoParts)) {
-        tld = lastTwoParts;
-        secondLevelDomain = domainParts[domainParts.length - 3];
-        mainDomainName = domainParts.length >= 4
-            ? domainParts[domainParts.length - 4]
-            : domainParts[domainParts.length - 3];
-      } else {
-        tld = domainParts.last;
-        secondLevelDomain = domainParts.length >= 2
-            ? domainParts[domainParts.length - 2]
-            : null;
-        mainDomainName = secondLevelDomain ?? domainParts.first;
-      }
-    } else {
-      tld = domainParts.last;
-      mainDomainName = domainParts[domainParts.length - 2];
-    }
-
-    // Validate TLD format - must be at least 2 characters and only letters (or dot for two-part TLDs)
-    if (tld.length < 2) {
-      return "Please enter a valid email address with a valid domain";
-    }
-
-    // For two-part TLDs, validate both parts
-    if (tld.contains('.')) {
-      final tldParts = tld.split('.');
-      for (final part in tldParts) {
-        if (!RegExp(r'^[a-z]{2,63}$').hasMatch(part)) {
-          return "Please enter a valid email address with a valid domain";
-        }
-      }
-    } else {
-      if (!RegExp(r'^[a-z]{2,63}$').hasMatch(tld)) {
-        return "Please enter a valid email address with a valid domain";
-      }
-    }
-
-    // List of known invalid TLD typos (commonly mistyped)
-    final invalidTlds = [
-      'con', // typo of .com
-      'coom', // typo of .com
-      'coon', // typo of .com
-      'comn', // typo of .com
-      'c0m', // typo of .com (zero instead of 'o')
-    ];
-
-    // Check for known invalid TLDs (typos) - only for single-part TLDs
-    if (!tld.contains('.') && invalidTlds.contains(tld)) {
-      return "Please enter a valid email address. The domain extension appears to be invalid or a typo";
-    }
-
-    // Common email providers
-    final commonEmailProviders = [
-      'gmail',
-      'yahoo',
-      'outlook',
-      'hotmail',
-      'icloud',
-      'protonmail',
-      'aol',
-      'mail',
-      'live',
-      'msn',
-    ];
-
-    // Extract the actual provider name (handle subdomains like mail.gmail.com -> gmail)
-    final providerName = secondLevelDomain ?? mainDomainName;
-
-    // If it's a common email provider, validate the TLD
-    if (commonEmailProviders.contains(providerName.toLowerCase())) {
-      // Block obvious typos: .con (should be .com), .cm (should be .com)
-      final singleTld = tld.contains('.') ? tld.split('.').last : tld;
-      if (singleTld == 'con' || singleTld == 'cm') {
-        return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
-      }
-      // For gmail specifically, .io is almost certainly a typo since Gmail uses .com
-      if (providerName.toLowerCase() == 'gmail' && singleTld == 'io') {
-        return "Please enter a valid email address. Gmail uses .com domain extension";
-      }
-      // For yahoo and outlook with .io or .cm, block as likely typos
-      if ((providerName.toLowerCase() == 'yahoo' ||
-              providerName.toLowerCase() == 'outlook') &&
-          (singleTld == 'io' || singleTld == 'cm')) {
-        return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
-      }
-    }
-
-    // Additional validation: Validate each domain part
-    // For two-part TLDs, we validate all parts except the last two
-    // For single-part TLDs, we validate all parts except the last one
-    final partsToValidate = tld.contains('.')
-        ? domainParts.sublist(0, domainParts.length - 2)
-        : domainParts.sublist(0, domainParts.length - 1);
-
-    // Validate each domain part
-    for (final part in partsToValidate) {
-      if (part.isEmpty) {
-        return "Please enter a valid email address with a valid domain";
-      }
-      // Validate domain name segments don't start or end with hyphen
-      if (part.startsWith('-') || part.endsWith('-')) {
-        return "Please enter a valid email address with a valid domain";
-      }
-      // Validate domain name segments contain only valid characters
-      if (!RegExp(r'^[a-z0-9-]+$').hasMatch(part)) {
-        return "Please enter a valid email address with a valid domain";
-      }
-    }
-
-    return null; // Domain appears valid
+  /// Does NOT check email availability (no API call)
+  static String? validateEmail(String? email) {
+    return EmailValidation.validateEmail(email);
   }
 
-  Future<String?> validateEmail(String? email) async {
+  /// Future email validation for button actions
+  /// Includes format validation AND availability check (API call)
+  /// Returns error message if invalid, empty string if valid and available
+  static Future<String?> validateEmailAsync(String? email) async {
+    // First validate email format using the non-future method
+    final formatError = EmailValidation.validateEmailFormat(email);
+    if (formatError != null) {
+      return formatError;
+    }
+
     final value = email?.trim() ?? "";
-    if (email == null || email.isEmpty) {
-      return "Please enter email address";
-    }
 
-    // First check basic email format
-    if (!isValidEmail(value)) {
-      return "Please enter a valid email address";
-    }
-
-    // Then validate domain
-    final domainError = validateEmailDomain(value);
+    // Additional domain validation
+    final domainError = EmailValidation.validateEmailDomain(value);
     if (domainError != null) {
       return domainError;
     }
 
+    // Check email availability via API
     try {
       final isAvailable = await SignUpService().checkAvailability(email: value);
       if (!isAvailable) {
         return "This email is already registered";
       } else {
-        return "";
+        return ""; // Empty string means valid and available
       }
     } catch (e) {
       return "Error checking email availability";
-    } finally {}
+    }
   }
 
-  String? validateName(String? value, {String fieldName = "Name"}) {
+  // ==================== Name Validation ====================
+
+  /// Validates name format
+  /// Allows CamelCase and optional spaces/underscores between words
+  /// Each segment must start with uppercase and contain only letters
+  static String? validateName(String? value, {String fieldName = "Name"}) {
     if (value == null || value.trim().isEmpty) {
       return "Please enter $fieldName";
     }
@@ -238,7 +64,14 @@ class Validate {
     return null;
   }
 
-  String? validateBusinessName(String? value, {String fieldName = "Name"}) {
+  /// Validates business name format
+  /// Allows words starting uppercase or common lowercase connectors (of, and, the, ...)
+  /// Words may include letters, numbers, and &, -, . between alphanumerics
+  /// Optional trailing hyphen allowed
+  static String? validateBusinessName(
+    String? value, {
+    String fieldName = "Name",
+  }) {
     if (value == null || value.trim().isEmpty) {
       return "Please enter $fieldName";
     }
@@ -264,34 +97,10 @@ class Validate {
     return null;
   }
 
-  Future<bool> validateGSTAvailability(String value) async {
-    if (value.isEmpty) {
-      SnackBars.errorSnackBar(content: "Please enter GSTIN number");
-      return false;
-    } else if (value.length != 15) {
-      SnackBars.errorSnackBar(content: "GSTIN must be exactly 15 characters");
-      return false;
-    } else if (!RegExp(
-      r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
-    ).hasMatch(value)) {
-      SnackBars.errorSnackBar(content: "Invalid GSTIN format");
-      return false;
-    }
-    final isAvailable = await SignUpService().checkAvailability(
-      gstNumber: value,
-    );
-    if (isAvailable) {
-      SnackBars.successSnackBar(content: "GSTIN verified successfully!");
-      return true;
-    } else {
-      SnackBars.errorSnackBar(
-        content: "User with this GST number already exists",
-      );
-      return false;
-    }
-  }
+  // ==================== Mobile Number Validation ====================
 
-  // Indian Mobile Number Validation
+  /// Validates Indian mobile number format
+  /// Must be exactly 10 digits starting with 6, 7, 8, or 9
   static String? validateIndianMobileNumber(String? value) {
     if (value == null || value.trim().isEmpty) {
       return "Please enter mobile number";
@@ -308,7 +117,7 @@ class Validate {
   /// Validates mobile number format with strict rules
   /// Returns error message if invalid, null if valid
   /// Checks for:
-  /// - Empty or null values (returns null, handled separately)
+  /// - Empty or null values
   /// - Length (must be 10 digits)
   /// - All identical digits (e.g., 1111111111, 2222222222)
   /// - All zeros after first digit (e.g., 6000000000, 7000000000)
@@ -348,5 +157,37 @@ class Validate {
     }
 
     return null; // Valid
+  }
+
+  // ==================== GST Validation ====================
+
+  /// Validates GSTIN number format and availability
+  /// Returns true if valid and available, false otherwise
+  /// Shows snackbar messages for user feedback
+  static Future<bool> validateGSTAvailability(String value) async {
+    if (value.isEmpty) {
+      SnackBars.errorSnackBar(content: "Please enter GSTIN number");
+      return false;
+    } else if (value.length != 15) {
+      SnackBars.errorSnackBar(content: "GSTIN must be exactly 15 characters");
+      return false;
+    } else if (!RegExp(
+      r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
+    ).hasMatch(value)) {
+      SnackBars.errorSnackBar(content: "Invalid GSTIN format");
+      return false;
+    }
+    final isAvailable = await SignUpService().checkAvailability(
+      gstNumber: value,
+    );
+    if (isAvailable) {
+      SnackBars.successSnackBar(content: "GSTIN verified successfully!");
+      return true;
+    } else {
+      SnackBars.errorSnackBar(
+        content: "User with this GST number already exists",
+      );
+      return false;
+    }
   }
 }

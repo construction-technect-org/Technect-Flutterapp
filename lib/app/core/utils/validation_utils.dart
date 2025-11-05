@@ -72,28 +72,6 @@ class ValidationUtils {
     return null;
   }
 
-  // Email Validation
-  static String? validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return "Please enter email address";
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
-      return "Please enter a valid email address";
-    }
-    return null;
-  }
-
-  // Business Email Validation
-  static String? validateBusinessEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return "Please enter business email";
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
-      return "Please enter a valid email address";
-    }
-    return null;
-  }
-
   // Website URL Validation
   static String? validateWebsiteUrl(String? value) {
     if (value == null || value.trim().isEmpty) {

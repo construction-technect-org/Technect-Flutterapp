@@ -207,7 +207,8 @@ class AddTeamView extends GetView<AddTeamController> {
                                   LengthLimitingTextInputFormatter(150),
                                   EmailInputFormatter(),
                                 ],
-                                // validator: (val) => Validate.validateMail(val),
+                                validator: (value) =>
+                                    Validate.validateEmail(value),
                               ),
                             ),
                             Obx(() {
