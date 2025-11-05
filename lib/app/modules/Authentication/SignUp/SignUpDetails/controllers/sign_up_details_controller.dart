@@ -3,12 +3,10 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
-import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/widget/mobile_number_sp_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
-import 'package:gap/gap.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
@@ -28,7 +26,7 @@ class SignUpDetailsController extends GetxController {
 
   RxInt isValid = (-1).obs;
   RxString countryCode = "+91".obs;
-  final RxString mobileValidationError = "".obs;
+  // final RxString mobileValidationError = "".obs;
 
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
@@ -37,6 +35,7 @@ class SignUpDetailsController extends GetxController {
 
   // Email validation state
   RxString emailError = "".obs;
+  RxString numberError = "".obs;
   RxBool isEmailValidating = false.obs;
 
   void startTimer() {
@@ -59,7 +58,7 @@ class SignUpDetailsController extends GetxController {
     isEmailValidating.value = false;
   }
 
-  Future<bool> validateNumberAvailability(String number) async {
+  Future<String?> validateNumberAvailability(String number) async {
     try {
       log("mobileNumber: $number,        countryCode: ${countryCode.value},");
 
@@ -71,30 +70,27 @@ class SignUpDetailsController extends GetxController {
 
       if (!isAvailable) {
         log("This mobile number is already registered:$isAvailable ");
-        SnackBars.errorSnackBar(
-          content: 'This mobile number is already registered',
-        );
-        return false;
+        return "This mobile number is already registered";
       } else {
         log("This mobile number is Not registered:$isAvailable ");
-        return true;
+        return null; // Number is available
       }
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error verifying mobile number: $e');
       log("validateNumberAvailability: $e");
-      return false;
+      return "Error verifying mobile number. Please try again.";
     }
   }
 
   Future<bool> verifyMobileNumber() async {
     try {
       // First check if mobile number is available
-      final isNumberAvailable = await validateNumberAvailability(
+      final availabilityError = await validateNumberAvailability(
         mobileNumberController.text,
       );
 
-      // If number is not available, stop here
-      if (!isNumberAvailable) {
+      // If number is not available, return error message
+      if (availabilityError != null) {
+        numberError.value = availabilityError;
         return false;
       }
 
@@ -216,7 +212,7 @@ class SignUpDetailsController extends GetxController {
   void openPhoneNumberBottomSheet() {
     final formKey = GlobalKey<FormState>();
     isValid.value = -1;
-    mobileValidationError.value = "";
+    numberError.value = "";
 
     Get.bottomSheet(
       Padding(
@@ -248,7 +244,7 @@ class SignUpDetailsController extends GetxController {
               //   controller: mobileNumberController,
               //   focusNode: FocusNode(),
               //   isValid: isValid,
-              //   customErrorMessage: mobileValidationError,
+              //   customErrorMessage: numberError,
               //   onCountryCodeChanged: (code) {
               //     countryCode.value = code;
               //   },
@@ -258,31 +254,27 @@ class SignUpDetailsController extends GetxController {
                 // focusNode: FocusNode(),
                 formKey: formKey,
                 isValid: isValid,
-                customErrorMessage: mobileValidationError,
+                customErrorMessage: numberError,
                 onCountryCodeChanged: (code) {
                   countryCode.value = code;
                 },
               ),
+
               const Gap(30),
               RoundedButton(
                 buttonName: "Continue",
                 onTap: () async {
                   // Clear previous errors
                   isValid.value = -1;
-                  mobileValidationError.value = "";
+                  numberError.value = "";
 
-                  // Validate mobile number
+                  // Validate mobile number (required field)
                   final mobileNumber = mobileNumberController.text.trim();
-                  if (mobileNumber.isEmpty) {
-                    isValid.value = 0;
-                    return;
-                  }
-
-                  final mobileError = ValidationUtils.validateMobileNumber(
+                  final mobileError = Validate.validateMobileNumber(
                     mobileNumber,
                   );
                   if (mobileError != null) {
-                    mobileValidationError.value = mobileError;
+                    numberError.value = mobileError;
                     isValid.value = 1;
                     return;
                   }

@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gap/gap.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -42,127 +41,141 @@ class MobileNumberSpWidget extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: IntlPhoneField(
-                      initialCountryCode: initialCountryCode,
-                      flagsButtonMargin: const EdgeInsets.all(8),
-                      focusNode: FocusNode(),
-                      readOnly: true,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      cursorColor: MyColors.lightBlue,
-                      dropdownIcon: const Icon(
-                        Icons.arrow_drop_down,
-                        color: MyColors.primary,
-                      ),
-                      dropdownIconPosition: IconPosition.trailing,
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.primary,
-                        fontFamily: MyTexts.SpaceGrotesk,
-                      ),
+                    child: Obx(
+                      () => IntlPhoneField(
+                        initialCountryCode: initialCountryCode,
+                        flagsButtonMargin: const EdgeInsets.all(8),
+                        focusNode: FocusNode(),
+                        readOnly: true,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
+                        cursorColor: MyColors.lightBlue,
+                        dropdownIcon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: MyColors.primary,
+                        ),
+                        dropdownIconPosition: IconPosition.trailing,
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.primary,
+                          fontFamily: MyTexts.SpaceGrotesk,
+                        ),
 
-                      decoration: InputDecoration(
-                        // suffixIcon: suffix,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: isValid.value == 0
-                                ? Colors.red
-                                : MyColors.textFieldBorder,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: MyColors.black),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: MyColors.red33),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: MyColors.red33),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        isDense: true,
-                        counterText: "",
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                        hintText: "Enter your phone number",
-                        hintStyle: MyTexts.medium13.copyWith(
-                          color: MyColors.primary.withValues(alpha: 0.5),
-                          fontFamily: MyTexts.SpaceGrotesk,
-                        ),
-                        errorStyle: MyTexts.medium13.copyWith(
-                          color: MyColors.red33,
-                          fontFamily: MyTexts.SpaceGrotesk,
-                        ),
-                      ),
-                      // onSubmitted: onSubmitted,
-                      pickerDialogStyle: PickerDialogStyle(
-                        searchFieldCursorColor: MyColors.primary,
-                        backgroundColor: Colors.white,
-                        countryNameStyle: MyTexts.medium14.copyWith(
-                          color: Colors.black,
-                          fontFamily: MyTexts.SpaceGrotesk,
-                        ),
-                        countryCodeStyle: MyTexts.medium14.copyWith(
-                          color: Colors.black,
-
-                          fontFamily: MyTexts.SpaceGrotesk,
-                        ),
-                        listTilePadding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
-                        searchFieldPadding: const EdgeInsets.all(10),
-                        searchFieldInputDecoration: InputDecoration(
-                          isDense: true,
-                          counterText: "",
-                          filled: true,
-                          fillColor: MyColors.textFieldDivider.withValues(
-                            alpha: 0.1,
-                          ),
-                          hintText: "Search Country",
-                          prefixIcon: const Icon(
-                            CupertinoIcons.search,
-                            color: MyColors.primary,
-                          ),
-                          hintStyle: MyTexts.medium14.copyWith(
-                            color: MyColors.textFieldDivider,
-                            fontFamily: MyTexts.SpaceGrotesk,
-                          ),
+                        decoration: InputDecoration(
+                          errorText: customErrorMessage?.value.isEmpty == false
+                              ? customErrorMessage!.value
+                              : null,
                           enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: MyColors.textFieldBorder,
+                            borderSide: BorderSide(
+                              color:
+                                  (isValid.value == 0 ||
+                                      (customErrorMessage?.value.isNotEmpty ==
+                                          true))
+                                  ? Colors.red
+                                  : MyColors.textFieldBorder,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: MyColors.primary,
+                            borderSide: BorderSide(
+                              color:
+                                  (customErrorMessage?.value.isNotEmpty == true)
+                                  ? Colors.red
+                                  : MyColors.black,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.red),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: MyColors.red33),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: MyColors.red33),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          isDense: true,
+                          counterText: "",
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 12,
+                          ),
+                          hintText: "Enter your phone number",
+                          hintStyle: MyTexts.medium13.copyWith(
+                            color: MyColors.primary.withValues(alpha: 0.5),
+                            fontFamily: MyTexts.SpaceGrotesk,
+                          ),
+                          errorStyle: MyTexts.medium13.copyWith(
+                            color: MyColors.red33,
+                            fontFamily: MyTexts.SpaceGrotesk,
+                          ),
                         ),
-                      ),
-                      controller: number,
-                      onChanged: (phone) {
-                        if (phone.number.isEmpty) {
-                          isValid.value = 0;
-                        } else {
+                        // onSubmitted: onSubmitted,
+                        pickerDialogStyle: PickerDialogStyle(
+                          searchFieldCursorColor: MyColors.primary,
+                          backgroundColor: Colors.white,
+                          countryNameStyle: MyTexts.medium14.copyWith(
+                            color: Colors.black,
+                            fontFamily: MyTexts.SpaceGrotesk,
+                          ),
+                          countryCodeStyle: MyTexts.medium14.copyWith(
+                            color: Colors.black,
+
+                            fontFamily: MyTexts.SpaceGrotesk,
+                          ),
+                          listTilePadding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
+                          searchFieldPadding: const EdgeInsets.all(10),
+                          searchFieldInputDecoration: InputDecoration(
+                            isDense: true,
+                            counterText: "",
+                            filled: true,
+                            fillColor: MyColors.textFieldDivider.withValues(
+                              alpha: 0.1,
+                            ),
+                            hintText: "Search Country",
+                            prefixIcon: const Icon(
+                              CupertinoIcons.search,
+                              color: MyColors.primary,
+                            ),
+                            hintStyle: MyTexts.medium14.copyWith(
+                              color: MyColors.textFieldDivider,
+                              fontFamily: MyTexts.SpaceGrotesk,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: MyColors.textFieldBorder,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: MyColors.primary,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                        controller: number,
+                        onChanged: (phone) {
+                          // Clear error message when user types
+                          customErrorMessage?.value = "";
                           isValid.value = -1;
-                          // Clear custom error message when user types
-                          if (customErrorMessage?.value.isNotEmpty == true) {
-                            customErrorMessage!.value = "";
+
+                          if (phone.number.isEmpty) {
+                            isValid.value = 0;
                           }
-                        }
-                        if (onCountryCodeChanged != null) {
-                          onCountryCodeChanged!(phone.countryCode);
-                        }
-                      },
+
+                          if (onCountryCodeChanged != null) {
+                            onCountryCodeChanged!(phone.countryCode);
+                          }
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -175,17 +188,52 @@ class MobileNumberSpWidget extends StatelessWidget {
             StatefulBuilder(
               builder: (context, setState) {
                 void appendDigit(String d) {
-                  if (number.text.length >= 10) return;
-                  number.text += d;
+                  final currentText = number.text;
+                  if (currentText.length >= 10) return;
+
+                  // Get cursor position if available
+                  final selection = number.selection;
+                  final cursorPosition = selection.isValid
+                      ? selection.baseOffset
+                      : currentText.length;
+
+                  // Insert digit at cursor position
+                  final newText =
+                      currentText.substring(0, cursorPosition) +
+                      d +
+                      currentText.substring(cursorPosition);
+                  number.text = newText;
+
+                  // Set cursor position after inserted digit
+                  number.selection = TextSelection.collapsed(
+                    offset: cursorPosition + 1,
+                  );
                   setState(() {});
                 }
 
                 void backspace() {
-                  final t = number.text;
-                  if (t.isNotEmpty) {
-                    number.text = t.substring(0, t.length - 1);
-                    setState(() {});
+                  final currentText = number.text;
+                  if (currentText.isEmpty) return;
+
+                  // Get cursor position
+                  final selection = number.selection;
+                  final cursorPosition = selection.isValid
+                      ? selection.baseOffset
+                      : currentText.length;
+
+                  if (cursorPosition > 0) {
+                    // Delete character before cursor
+                    final newText =
+                        currentText.substring(0, cursorPosition - 1) +
+                        currentText.substring(cursorPosition);
+                    number.text = newText;
+
+                    // Set cursor position after deleted character
+                    number.selection = TextSelection.collapsed(
+                      offset: cursorPosition - 1,
+                    );
                   }
+                  setState(() {});
                 }
 
                 Future<void> doContinue() async {
@@ -193,10 +241,8 @@ class MobileNumberSpWidget extends StatelessWidget {
                   customErrorMessage?.value = "";
 
                   final mobileNumber = number.text.trim();
-                  if (mobileNumber.isEmpty) {
-                    isValid.value = 0;
-                    return;
-                  }
+
+                  // Validate mobile number (required field)
                   final mobileError = Validate.validateMobileNumber(
                     mobileNumber,
                   );
