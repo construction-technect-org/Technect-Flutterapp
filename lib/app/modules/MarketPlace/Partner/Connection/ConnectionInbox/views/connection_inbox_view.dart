@@ -528,20 +528,20 @@ class ConnectionInboxView extends StatelessWidget {
                           ),
                         ),
                         const Gap(2),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                Asset.location,
-                                colorFilter: const ColorFilter.mode(
-                                  MyColors.gra54,
-                                  BlendMode.srcIn,
-                                ),
-                                height: 14,
-                                width: 14,
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              Asset.location,
+                              colorFilter: const ColorFilter.mode(
+                                MyColors.gra54,
+                                BlendMode.srcIn,
                               ),
-                              const Gap(4),
-                              Text(
+                              height: 14,
+                              width: 14,
+                            ),
+                            const Gap(4),
+                            Expanded(
+                              child: Text(
                                 connection.productName != null
                                     ? connection.productName ?? 'Unknown'
                                     : connection.serviceName ?? 'Unknown',
@@ -551,8 +551,8 @@ class ConnectionInboxView extends StatelessWidget {
                                   fontFamily: MyTexts.SpaceGrotesk,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         const Gap(8),
                         if (connection.status == "pending") ...[
