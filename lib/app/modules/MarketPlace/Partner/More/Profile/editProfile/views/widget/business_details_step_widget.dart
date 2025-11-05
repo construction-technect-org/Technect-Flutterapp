@@ -106,7 +106,8 @@ class BusinessDetailsStep extends StatelessWidget {
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(10),
             ],
-            validator: (val) => Validate.validateMobileNumber(val),
+            validator: (val) =>
+                Validate.validateMobileNumber(val, isOptional: true),
           ),
           SizedBox(height: 2.h),
           CommonTextField(
