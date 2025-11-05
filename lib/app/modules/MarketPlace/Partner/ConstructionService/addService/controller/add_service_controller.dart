@@ -22,7 +22,6 @@ class AddServiceController extends GetxController {
 
   VoidCallback? onApiCall;
 
-
   /// API data
   Rx<ServiceCategoryModel> categoryHierarchyDataCM = ServiceCategoryModel().obs;
 
@@ -151,12 +150,13 @@ class AddServiceController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCategoryServiceHierarchy();
-    onApiCall = Get.arguments?["onApiCall"]??(){};
-    isEdit.value =  Get.arguments?["isEdit"]??false;
+    onApiCall = Get.arguments?["onApiCall"] ?? () {};
+    isEdit.value = Get.arguments?["isEdit"] ?? false;
     if (Get.arguments != null && Get.arguments["service"] != null) {
       final s = Get.arguments["service"];
       serviceId.value = s.id;
-      if (s.reference!=null) {
+      if (s.reference != null) {
+        referenceDeleted.value = false;
         serviceRef.value = s.reference;
         if (serviceRef.value.referenceType == "video") {
           refVideoPlayerController?.dispose();
@@ -411,6 +411,7 @@ class AddServiceController extends GetxController {
       "price": priceController.text,
       "gst_percentage": selectedGST.value,
       "description": descriptionController.text,
+      if (referenceFile.value != null) 'reference_type': referenceFileUrl.value,
     };
 
     try {
@@ -456,6 +457,7 @@ class AddServiceController extends GetxController {
       "price": priceController.text,
       "gst_percentage": selectedGST.value,
       "description": descriptionController.text,
+      if (referenceFile.value != null) 'reference_type': referenceFileUrl.value,
     };
     if (referenceDeleted.value == true) {
       fields["remove_reference"] = "remove";
@@ -517,18 +519,32 @@ class AddServiceController extends GetxController {
   }
 
   Rx<File?> referenceFile = Rx<File?>(null);
-  RxString referenceFileUrl = ''.obs; // for edit mode
+  RxString referenceFileUrl = ''.obs;
+  RxString referenceFileType = ''.obs;
 
   Future<void> pickReferenceFile() async {
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4', 'pdf', 'doc', 'docx'],
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'pdf', 'doc', 'docx'],
       );
 
       if (result != null && result.files.isNotEmpty) {
-        referenceFile.value = File(result.files.first.path!);
-        referenceFileUrl.value = ''; // new local file replaces old URL
+        final pickedFile = File(result.files.first.path!);
+        referenceFile.value = pickedFile;
+        referenceFileUrl.value = '';
+
+        final extension = pickedFile.path.split('.').last.toLowerCase();
+
+        if (['jpg', 'jpeg', 'png'].contains(extension)) {
+          referenceFileType.value = 'image';
+        } else if (extension == 'mp4') {
+          referenceFileType.value = 'video';
+        } else if (['pdf', 'doc', 'docx'].contains(extension)) {
+          referenceFileType.value = 'doc';
+        } else {
+          referenceFileType.value = 'doc';
+        }
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Failed to pick file: $e", time: 3);
@@ -543,7 +559,7 @@ class AddServiceController extends GetxController {
   bool get hasReferenceFile =>
       referenceFile.value != null || referenceFileUrl.value.isNotEmpty;
 
-  RxBool referenceDeleted = false.obs;
+  RxBool referenceDeleted = true.obs;
 
   void deleteReferenceFile() {
     referenceDeleted.value = true;

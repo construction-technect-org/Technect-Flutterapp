@@ -16,6 +16,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
 
   @override
   Widget build(BuildContext context) {
+    print("controller.referenceDeleted.value");
+    print(controller.referenceDeleted.value);
     return LoaderWrapper(
       isLoading: controller.isLoading,
       child: GestureDetector(
@@ -905,6 +907,14 @@ class AddServiceScreen extends GetView<AddServiceController> {
                           !controller.isEdit.value) {
                         SnackBars.errorSnackBar(
                           content: 'Please upload at least one image',
+                        );
+                        return;
+                      }
+
+                      if (controller.videoPlayerController==null &&
+                          !controller.isEdit.value) {
+                        SnackBars.errorSnackBar(
+                          content: 'Please upload service demo video',
                         );
                         return;
                       }
