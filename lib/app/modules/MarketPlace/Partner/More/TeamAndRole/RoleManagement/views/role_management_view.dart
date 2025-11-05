@@ -6,12 +6,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/widget/roles_view_widget.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/widget/teams_view_widget.dart';
 
-class RoleManagementView extends StatelessWidget {
+class RoleManagementView extends GetView<RoleManagementController> {
   RoleManagementView({super.key});
 
-  final RoleManagementController controller = Get.put(
-    RoleManagementController(),
-  );
   final homeController = HomeController.to;
 
   @override
