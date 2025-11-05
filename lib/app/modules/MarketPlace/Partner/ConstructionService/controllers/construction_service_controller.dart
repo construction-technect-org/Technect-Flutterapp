@@ -122,8 +122,16 @@ class ConstructionServiceController extends GetxController {
         selectedSubCategory.value?.serviceCategories ?? [];
   }
 
+  /// GOPAL
   void rightSide0RightView(int index) {
-    selectServiceCategory(index);
+    selectedServiceCategory.value = serviceCategoryList[index];
+    serviceCategories.value =
+        mainCategory.value?.subCategories?.firstWhere((element) {
+          return element.id == selectedSubCategoryId.value;
+        }) ??
+        ServicesSubCategories();
+    navigationIndex.value = 1;
+    fetchServicesFromApi();
   }
 
   void leftSide1LeftView(int index) {
@@ -138,12 +146,6 @@ class ConstructionServiceController extends GetxController {
     selectedServiceCategory.value =
         serviceCategories.value.serviceCategories?[index] ??
         ServiceCategories();
-  }
-
-  void selectServiceCategory(int index) {
-    selectedServiceCategory.value = serviceCategoryList[index];
-    navigationIndex.value = 1;
-    fetchServicesFromApi();
   }
 
   // Select service category
