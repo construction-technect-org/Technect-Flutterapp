@@ -22,7 +22,9 @@ class AddServiceScreen extends GetView<AddServiceController> {
         onTap: hideKeyboard,
         child: Scaffold(
           appBar: CommonAppBar(
-              title: const Text("Add Service"), isCenter: false),
+            title: const Text("Add Service"),
+            isCenter: false,
+          ),
           backgroundColor: MyColors.white,
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -33,99 +35,96 @@ class AddServiceScreen extends GetView<AddServiceController> {
                 children: [
                   if (controller.isEdit.value)
                     Obx(
-                          () =>
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: List.generate(5, (index) {
-                                final path = controller.imageSlots[index];
+                      () => SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(5, (index) {
+                            final path = controller.imageSlots[index];
 
-                                if (path != null) {
-                                  return Stack(
-                                    alignment: Alignment.topRight,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          right: 8.0,
-                                          top: 8,
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              12),
-                                          child: GestureDetector(
-                                            // onTap: () => controller.showFullImage(path),
-                                            child: path.contains('http')
-                                                ? getImageView(
-                                              finalUrl: path,
-                                              width: 80,
-                                              height: 80,
-                                              fit: BoxFit.cover,
-                                            )
-                                                : Image.file(
-                                              File(path),
-                                              width: 80,
-                                              height: 80,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 4,
-                                        right: 4,
-                                        child: GestureDetector(
-                                          onTap: () =>
-                                              controller.removeImageAt(index),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              color: Colors.red,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            padding: const EdgeInsets.all(3),
-                                            child: const Icon(
-                                              Icons.close,
-                                              size: 16,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                } else {
-                                  return Padding(
+                            if (path != null) {
+                              return Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  Padding(
                                     padding: const EdgeInsets.only(
                                       right: 8.0,
                                       top: 8,
                                     ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: GestureDetector(
+                                        // onTap: () => controller.showFullImage(path),
+                                        child: path.contains('http')
+                                            ? getImageView(
+                                                finalUrl: path,
+                                                width: 80,
+                                                height: 80,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.file(
+                                                File(path),
+                                                width: 80,
+                                                height: 80,
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 4,
+                                    right: 4,
                                     child: GestureDetector(
-                                      onTap: controller.pickImageEdit,
+                                      onTap: () =>
+                                          controller.removeImageAt(index),
                                       child: Container(
-                                        width: 78,
-                                        height: 78,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: MyColors.grayCD,
-                                            width: 1.2,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                              40),
-                                          color: MyColors.grayEA,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
                                         ),
-                                        child: Center(
-                                          child: SvgPicture.asset(
-                                            Asset.add,
-                                            height: 24,
-                                            width: 24,
-                                          ),
+                                        padding: const EdgeInsets.all(3),
+                                        child: const Icon(
+                                          Icons.close,
+                                          size: 16,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
-                                  );
-                                }
-                              }),
-                            ),
-                          ),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  right: 8.0,
+                                  top: 8,
+                                ),
+                                child: GestureDetector(
+                                  onTap: controller.pickImageEdit,
+                                  child: Container(
+                                    width: 78,
+                                    height: 78,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: MyColors.grayCD,
+                                        width: 1.2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: MyColors.grayEA,
+                                    ),
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        Asset.add,
+                                        height: 24,
+                                        width: 24,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          }),
+                        ),
+                      ),
                     ),
                   if (!controller.isEdit.value)
                     Obx(() {
@@ -134,108 +133,102 @@ class AddServiceScreen extends GetView<AddServiceController> {
                         child: Row(
                           children: [
                             ...controller.pickedFilePathList.map(
-                                  (path) =>
-                                  Stack(
-                                    alignment: Alignment.topRight,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          right: 8.0,
-                                          top: 8,
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              53),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              Get.dialog(
-                                                Dialog(
-                                                  backgroundColor: Colors.white,
-                                                  insetPadding:
+                              (path) => Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: 8.0,
+                                      top: 8,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(53),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.dialog(
+                                            Dialog(
+                                              backgroundColor: Colors.white,
+                                              insetPadding:
                                                   const EdgeInsets.all(20),
-                                                  child: Stack(
-                                                    alignment: Alignment
-                                                        .topRight,
-                                                    children: [
-                                                      InteractiveViewer(
-                                                        child: path.contains(
-                                                            'http')
-                                                            ? Image.network(
-                                                          path,
-                                                          fit: BoxFit.contain,
-                                                          width:
-                                                          double.infinity,
-                                                          height:
-                                                          double.infinity,
-                                                        )
-                                                            : Image.file(
-                                                          File(path),
-                                                          fit: BoxFit.contain,
-                                                          width:
-                                                          double.infinity,
-                                                          height:
-                                                          double.infinity,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
+                                              child: Stack(
+                                                alignment: Alignment.topRight,
+                                                children: [
+                                                  InteractiveViewer(
+                                                    child: path.contains('http')
+                                                        ? Image.network(
+                                                            path,
+                                                            fit: BoxFit.contain,
+                                                            width:
+                                                                double.infinity,
+                                                            height:
+                                                                double.infinity,
+                                                          )
+                                                        : Image.file(
+                                                            File(path),
+                                                            fit: BoxFit.contain,
+                                                            width:
+                                                                double.infinity,
+                                                            height:
+                                                                double.infinity,
+                                                          ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
                                                         const EdgeInsets.all(
                                                           16.0,
                                                         ),
-                                                        child: GestureDetector(
-                                                          onTap: () =>
-                                                              Get.back(),
-                                                          child: const Icon(
-                                                            Icons.close,
-                                                            color: Colors.black,
-                                                            size: 30,
-                                                          ),
-                                                        ),
+                                                    child: GestureDetector(
+                                                      onTap: () => Get.back(),
+                                                      child: const Icon(
+                                                        Icons.close,
+                                                        color: Colors.black,
+                                                        size: 30,
                                                       ),
-                                                    ],
+                                                    ),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                            child: path.contains('http')
-                                                ? getImageView(
-                                              finalUrl: path,
-                                              width: 78,
-                                              height: 78,
-                                              fit: BoxFit.cover,
-                                            )
-                                                : Image.file(
-                                              File(path),
-                                              width: 78,
-                                              height: 78,
-                                              fit: BoxFit.cover,
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ),
+                                          );
+                                        },
+                                        child: path.contains('http')
+                                            ? getImageView(
+                                                finalUrl: path,
+                                                width: 78,
+                                                height: 78,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.file(
+                                                File(path),
+                                                width: 78,
+                                                height: 78,
+                                                fit: BoxFit.cover,
+                                              ),
                                       ),
-                                      Positioned(
-                                        top: 4,
-                                        right: 4,
-                                        child: GestureDetector(
-                                          onTap: () =>
-                                              controller.pickedFilePathList
-                                                  .remove(path),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              color: Colors.red,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            padding: const EdgeInsets.all(3),
-                                            child: const Icon(
-                                              Icons.close,
-                                              size: 16,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
+                                  Positioned(
+                                    top: 4,
+                                    right: 4,
+                                    child: GestureDetector(
+                                      onTap: () => controller.pickedFilePathList
+                                          .remove(path),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        padding: const EdgeInsets.all(3),
+                                        child: const Icon(
+                                          Icons.close,
+                                          size: 16,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             if (controller.pickedFilePathList.length < 5)
                               Padding(
@@ -276,8 +269,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   Obx(() {
                     return CommonDropdown<String>(
                       headerText: 'Main Category',
-                      validator: (val) =>
-                      val == null || val.isEmpty
+                      validator: (val) => val == null || val.isEmpty
                           ? "Please select a main category"
                           : null,
                       hintText: "Select Main Category",
@@ -285,7 +277,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
                           .map((e) => e.name ?? "")
                           .toList(),
                       selectedValue:
-                      (controller.selectedMainCategory.value?.name ?? "").obs,
+                          (controller.selectedMainCategory.value?.name ?? "")
+                              .obs,
                       itemLabel: (item) => item,
                       onChanged: controller.isEdit.value
                           ? null
@@ -298,8 +291,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   Obx(() {
                     return CommonDropdown<String>(
                       headerText: 'Sub Category',
-                      validator: (val) =>
-                      val == null || val.isEmpty
+                      validator: (val) => val == null || val.isEmpty
                           ? "Please select a sub category"
                           : null,
                       hintText: "Select Sub Category",
@@ -307,7 +299,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
                           .map((e) => e.name ?? "")
                           .toList(),
                       selectedValue:
-                      (controller.selectedSubCategory.value?.name ?? "").obs,
+                          (controller.selectedSubCategory.value?.name ?? "")
+                              .obs,
                       itemLabel: (item) => item,
                       onChanged: controller.isEdit.value
                           ? null
@@ -320,8 +313,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   Obx(() {
                     return CommonDropdown<String>(
                       headerText: 'Service Category',
-                      validator: (val) =>
-                      val == null || val.isEmpty
+                      validator: (val) => val == null || val.isEmpty
                           ? "Please select a service category"
                           : null,
                       hintText: "Select Service Category",
@@ -329,8 +321,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
                           .map((e) => e.name ?? "")
                           .toList(),
                       selectedValue:
-                      (controller.selectedServiceCategory.value?.name ?? "")
-                          .obs,
+                          (controller.selectedServiceCategory.value?.name ?? "")
+                              .obs,
                       itemLabel: (item) => item,
                       onChanged: controller.isEdit.value
                           ? null
@@ -488,7 +480,11 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          // OpenFilex.open(video.path);
+                                          // controller.openVideoDialog(
+                                          //   context,
+                                          //   c,
+                                          //   true,
+                                          // );
                                         },
                                         child: Container(
                                           decoration: const BoxDecoration(
@@ -515,10 +511,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               )
                             else
                               GestureDetector(
-                                onTap: () =>
-                                    controller
-                                        .openVideoPickerBottomSheet(
-                                        Get.context!),
+                                onTap: () => controller
+                                    .openVideoPickerBottomSheet(Get.context!),
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -598,10 +592,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               )
                             else
                               GestureDetector(
-                                onTap: () =>
-                                    controller
-                                        .openVideoPickerBottomSheet(
-                                        Get.context!),
+                                onTap: () => controller
+                                    .openVideoPickerBottomSheet(Get.context!),
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -630,100 +622,319 @@ class AddServiceScreen extends GetView<AddServiceController> {
                     style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                   ),
                   const Gap(12),
+
                   Obx(() {
-                    final file = controller.referenceFile.value;
-                    final url = controller.referenceFileUrl.value;
+                    if (!controller.referenceDeleted.value) {
+                      final reference = controller.serviceRef.value;
+                      final hasReference =
+                          reference.referenceS3Key?.isNotEmpty ?? false;
 
-                    Widget? preview;
+                      // If reference deleted manually, show add UI again
+                      if (controller.referenceDeleted.value || !hasReference) {
+                        return GestureDetector(
+                          onTap: controller.pickReferenceFile,
+                          // your existing picker
+                          child: Container(
+                            height: 180,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: MyColors.grayEA,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: MyColors.grayD4),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.add_circle_outline,
+                                  size: 40,
+                                  color: MyColors.primary,
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  "Add Reference File",
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.gray54,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
 
-                    if (file != null) {
-                      final ext = file.path.split('.').last.toLowerCase();
-                      preview = _buildReferencePreview(ext, file.path, isNetwork: false);
-                    } else if (url.isNotEmpty) {
-                      final ext = url.split('.').last.toLowerCase();
-                      preview = _buildReferencePreview(ext, url, isNetwork: true);
-                    }
+                      final referenceType =
+                          reference.referenceType?.toLowerCase() ?? '';
+                      final referenceUrl =
+                          APIConstants.bucketUrl +
+                          (reference.referenceS3Key ?? '');
 
-                    return Row(
-                      children: [
-                        if (preview != null)
-                          Stack(
-                            alignment: Alignment.topRight,
-                            children: [
+                      Widget referenceWidget;
+
+                      // --- VIDEO ---
+                      if (referenceType == 'video') {
+                        referenceWidget =
                               GestureDetector(
-                                onTap: () => OpenFilex.open(file?.path ?? url),
+                                onTap: () => controller.openVideoDialog(
+                                  context,
+                                  referenceUrl,
+                                  true,
+                                ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: preview,
+                                borderRadius: BorderRadius.circular(12),
+                                child: AspectRatio(
+                                  aspectRatio: 16/9,
+                                  child: VideoPlayer(
+                                    controller.refVideoPlayerController!,
+                                  ),
+                                ),
+                                                            ),
+                              );
+                      }
+                      // --- IMAGE ---
+                      else if (referenceType == 'image') {
+                        referenceWidget = ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            referenceUrl,
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(
+                              height: 200,
+                              color: MyColors.grayEA,
+                              child: const Center(
+                                child: Icon(
+                                  Icons.broken_image,
+                                  size: 60,
+                                  color: Colors.grey,
                                 ),
                               ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: GestureDetector(
-                                  onTap: controller.removeReferenceFile,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
+                            ),
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                height: 200,
+                                color: MyColors.grayEA,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                      // --- DOCUMENT / PDF ---
+                      else if (referenceType == 'pdf' ||
+                          referenceType == 'document') {
+                        referenceWidget = GestureDetector(
+                          onTap: () =>
+                              controller.openReferenceUrl(referenceUrl),
+                          child: Container(
+                            height: 200,
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: MyColors.grayEA,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: MyColors.grayD4),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  referenceType == 'pdf'
+                                      ? Icons.picture_as_pdf
+                                      : Icons.description,
+                                  size: 64,
+                                  color: MyColors.primary,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  reference.referenceType?.toUpperCase() ??
+                                      'Document',
+                                  style: MyTexts.medium16.copyWith(
+                                    color: MyColors.fontBlack,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Tap to open',
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.gray54,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      // --- UNKNOWN ---
+                      else {
+                        referenceWidget = Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: MyColors.grayEA,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.insert_drive_file,
+                              size: 64,
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        );
+                      }
+
+                      // --- Return full UI with delete button ---
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Reference ${referenceType.toUpperCase()}",
+                                style: MyTexts.bold16.copyWith(
+                                  color: MyColors.fontBlack,
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () {
+                                  controller.deleteReferenceFile();
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          referenceWidget,
+                        ],
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  }),
+                  Obx(() {
+                    if (controller.referenceDeleted.value) {
+                      final file = controller.referenceFile.value;
+                      final url = controller.referenceFileUrl.value;
+
+                      Widget? preview;
+
+                      if (file != null) {
+                        final ext = file.path.split('.').last.toLowerCase();
+                        preview = _buildReferencePreview(
+                          ext,
+                          file.path,
+                          isNetwork: false,
+                        );
+                      } else if (url.isNotEmpty) {
+                        final ext = url.split('.').last.toLowerCase();
+                        preview = _buildReferencePreview(
+                          ext,
+                          url,
+                          isNetwork: true,
+                        );
+                      }
+
+                      return Row(
+                        children: [
+                          if (preview != null)
+                            Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                GestureDetector(
+                                  onTap: () =>
+                                      OpenFilex.open(file?.path ?? url),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: preview,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: GestureDetector(
+                                    onTap: controller.removeReferenceFile,
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.red,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      padding: const EdgeInsets.all(3),
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 16,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                    padding: const EdgeInsets.all(3),
-                                    child: const Icon(Icons.close, size: 16, color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            )
+                          else
+                            GestureDetector(
+                              onTap: controller.pickReferenceFile,
+                              child: Container(
+                                width: 90,
+                                height: 90,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: MyColors.grayCD,
+                                    width: 1.2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: MyColors.grayEA,
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 28,
+                                    color: Colors.grey,
                                   ),
                                 ),
                               ),
-                            ],
-                          )
-                        else
-                          GestureDetector(
-                            onTap: controller.pickReferenceFile,
-                            child: Container(
-                              width: 90,
-                              height: 90,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: MyColors.grayCD, width: 1.2),
-                                borderRadius: BorderRadius.circular(12),
-                                color: MyColors.grayEA,
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.add, size: 28, color: Colors.grey),
-                              ),
                             ),
-                          ),
-                      ],
-                    );
+                        ],
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
                   }),
+
                   const Gap(32),
                   RoundedButton(
                     buttonName: controller.isEdit.value
                         ? "Update Service"
                         : "Add Service",
                     onTap: () async {
-                      // if (controller.pickedFilePathList.isEmpty &&
-                      //     !controller.isEdit.value) {
-                      //   SnackBars.errorSnackBar(
-                      //     content: 'Please upload at least one image',
-                      //   );
-                      //   return;
-                      // }
-                      // if (controller.isEdit.value) {
-                      //   final hasImage = controller.imageSlots.any(
-                      //         (path) =>
-                      //     path != null && path
-                      //         .toString()
-                      //         .trim()
-                      //         .isNotEmpty,
-                      //   );
-                      //   if (!hasImage) {
-                      //     SnackBars.errorSnackBar(
-                      //       content: 'Please upload at least one image',
-                      //     );
-                      //     return;
-                      //   }
-                      // }
+                      if (controller.pickedFilePathList.isEmpty &&
+                          !controller.isEdit.value) {
+                        SnackBars.errorSnackBar(
+                          content: 'Please upload at least one image',
+                        );
+                        return;
+                      }
+                      if (controller.isEdit.value) {
+                        final hasImage = controller.imageSlots.any(
+                          (path) =>
+                              path != null && path.toString().trim().isNotEmpty,
+                        );
+                        if (!hasImage) {
+                          SnackBars.errorSnackBar(
+                            content: 'Please upload at least one image',
+                          );
+                          return;
+                        }
+                      }
                       if (formKey1.currentState!.validate()) {
                         if (controller.isEdit.value) {
-                          controller.updateService(1);
+                          controller.updateService(controller.serviceId.value);
                         } else {
                           controller.createService();
                         }
@@ -742,7 +953,12 @@ class AddServiceScreen extends GetView<AddServiceController> {
       ),
     );
   }
-  Widget _buildReferencePreview(String ext, String path, {bool isNetwork = false}) {
+
+  Widget _buildReferencePreview(
+    String ext,
+    String path, {
+    bool isNetwork = false,
+  }) {
     if (['jpg', 'jpeg', 'png'].contains(ext)) {
       return isNetwork
           ? Image.network(path, width: 90, height: 90, fit: BoxFit.cover)
@@ -770,5 +986,4 @@ class AddServiceScreen extends GetView<AddServiceController> {
       );
     }
   }
-
 }

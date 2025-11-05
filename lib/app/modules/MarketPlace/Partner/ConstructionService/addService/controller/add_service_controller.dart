@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/service/add_constrcution_Service.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:file_picker/file_picker.dart';
@@ -62,14 +63,7 @@ class AddServiceController extends GetxController {
 
   final Rx<File?> selectedVideo = Rx<File?>(null);
   VideoPlayerController? videoPlayerController;
-
-  RxList<XFile> referenceImages = <XFile>[].obs;
-  Rx<XFile?> referenceVideo = Rx<XFile?>(null);
-
-  /// For Edit Mode (Existing Media)
-  RxList<String> oldServiceImages = <String>[].obs;
-  RxString oldServiceVideo = ''.obs;
-
+  VideoPlayerController? refVideoPlayerController;
 
   Future<void> pickImageEdit() async {
     try {
@@ -147,15 +141,35 @@ class AddServiceController extends GetxController {
     }
   }
 
+  RxInt serviceId = 0.obs;
+  Rx<ServiceReferenceItem> serviceRef = ServiceReferenceItem().obs;
+
   @override
   void onInit() {
     super.onInit();
     fetchCategoryServiceHierarchy();
     if (Get.arguments != null && Get.arguments["service"] != null) {
       isEdit.value = true;
-      final service = Get.arguments["service"];
-      log("Editing Service ID: ${service.id}");
-      _prefillServiceData(service);
+      final s = Get.arguments["service"];
+      serviceId.value = s.id;
+      if (s.reference!=null) {
+        serviceRef.value = s.reference;
+        if (serviceRef.value.referenceType == "video") {
+          refVideoPlayerController?.dispose();
+          refVideoPlayerController = VideoPlayerController.networkUrl(
+            Uri.parse(
+              APIConstants.bucketUrl + (serviceRef.value.referenceS3Key ?? ""),
+            ),
+          );
+          WidgetsBinding.instance.addPostFrameCallback((val) async {
+            await refVideoPlayerController!.initialize();
+            refVideoPlayerController!.setLooping(false);
+          });
+        }
+      } else {
+        referenceDeleted.value = true;
+      }
+      _prefillServiceData(s);
     }
   }
 
@@ -193,31 +207,27 @@ class AddServiceController extends GetxController {
       gstPriceController.text = service.gstAmount ?? "";
       amountController.text = service.totalAmount ?? "";
       selectedGST.value = "${service.gstPercentage?.split(".").first}%";
-      if (service.media != null) {
-        oldServiceImages.assignAll(service.media!.whereType<String>().toList());
-      }
 
-      if (service.references != null) {
-        referenceImages.assignAll(
-          service.references!
-              .whereType<String>()
-              .map((path) => XFile(path))
-              .toList(),
-        );
+      imageSlots.value = List<String?>.filled(5, null);
+      final existingImages = service.images ?? [];
+      for (int i = 0; i < existingImages.length && i < 5; i++) {
+        imageSlots[i] =
+            "${APIConstants.bucketUrl}${existingImages[i].mediaS3Key!}";
       }
+      final existingVideo = service.video ?? ServiceMediaItem();
 
-      if (service.media != null &&
-          service.media!.first.toString().endsWith(".mp4")) {
-        oldServiceVideo.value = service.media!.first.toString();
-      }
-
-      /// --- Initialize old video preview ---
-      if (oldServiceVideo.value.isNotEmpty) {
-        videoPlayerController = VideoPlayerController.network(
-          APIConstants.bucketUrl + oldServiceVideo.value,
-        );
-        videoPlayerController!.initialize();
-        videoPlayerController!.setLooping(false);
+      if (existingVideo != null) {
+        WidgetsBinding.instance.addPostFrameCallback((val) async {
+          selectedVideo.value = File("abc");
+          videoPlayerController?.dispose();
+          videoPlayerController = VideoPlayerController.networkUrl(
+            Uri.parse(
+              APIConstants.bucketUrl + existingVideo.mediaS3Key.toString(),
+            ),
+          );
+          await videoPlayerController!.initialize();
+          videoPlayerController!.setLooping(false);
+        });
       }
 
       log("✅ Prefilled service edit data");
@@ -360,17 +370,17 @@ class AddServiceController extends GetxController {
     }
   }
 
-  final AddServiceService _service = AddServiceService();
-
   void removeVideo() {
     selectedVideo.value = null;
     videoPlayerController?.dispose();
     videoPlayerController = null;
   }
 
+  final AddServiceService _service = AddServiceService();
+
   Future<void> createService() async {
     isLoading.value = true;
-     Map<String, dynamic> fields = {};
+    Map<String, dynamic> fields = {};
 
     final imageList = pickedFilePathList;
     int index = 1;
@@ -400,7 +410,10 @@ class AddServiceController extends GetxController {
     };
 
     try {
-      final res = await _service.createService(fields: fields, files: selectedFiles);
+      final res = await _service.createService(
+        fields: fields,
+        files: selectedFiles,
+      );
       if (res.success) {
         Get.to(
           () => SuccessScreen(
@@ -427,6 +440,10 @@ class AddServiceController extends GetxController {
     isLoading.value = true;
     final Map<String, String> selectedFiles = {};
 
+    if (referenceFile.value != null && referenceDeleted.value == true) {
+      selectedFiles['reference'] = referenceFile.value!.path;
+    }
+
     final Map<String, dynamic> fields = {
       "main_category_id": selectedMainCategory.value?.id.toString(),
       "sub_category_id": selectedSubCategory.value?.id.toString(),
@@ -436,6 +453,9 @@ class AddServiceController extends GetxController {
       "gst_percentage": selectedGST.value,
       "description": descriptionController.text,
     };
+    if (referenceDeleted.value == true) {
+      fields["remove_reference"] = "remove";
+    }
     // 🟩 Step 1: Prepare a copy of remove map
     final Map<String, String> tempRemoved = Map.from(removedImages);
 
@@ -492,6 +512,7 @@ class AddServiceController extends GetxController {
       isLoading.value = false;
     }
   }
+
   Rx<File?> referenceFile = Rx<File?>(null);
   RxString referenceFileUrl = ''.obs; // for edit mode
 
@@ -518,4 +539,82 @@ class AddServiceController extends GetxController {
 
   bool get hasReferenceFile =>
       referenceFile.value != null || referenceFileUrl.value.isNotEmpty;
+
+  RxBool referenceDeleted = false.obs;
+
+  void deleteReferenceFile() {
+    referenceDeleted.value = true;
+    referenceFileUrl.value = "";
+    referenceFile.value = null;
+  }
+
+  Future<void> openReferenceUrl(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (kDebugMode) {
+          print('Could not launch $url');
+        }
+      }
+    } catch (e) {
+      log('Error opening reference URL: $e');
+    }
+  }
+
+  void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
+    final playerController = isNetwork
+        ? VideoPlayerController.network(videoPath)
+        : VideoPlayerController.file(File(videoPath));
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(16),
+          child: FutureBuilder(
+            future: playerController.initialize(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                playerController.play();
+                return AspectRatio(
+                  aspectRatio: playerController.value.aspectRatio,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      VideoPlayer(playerController),
+                      VideoProgressIndicator(
+                        playerController,
+                        allowScrubbing: true,
+                        colors: const VideoProgressColors(
+                          backgroundColor: MyColors.grayEA,
+                          playedColor: MyColors.primary,
+                          bufferedColor: MyColors.grayEA,
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          onPressed: () {
+                            playerController.pause();
+                            playerController.dispose();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
 }

@@ -20,6 +20,7 @@ class ServiceDetailController extends GetxController {
   VoidCallback? onApiCall;
 
   VideoPlayerController? videoPlayerController;
+  VideoPlayerController? refVideoPlayerController;
 
   @override
   void onInit() {
@@ -48,7 +49,7 @@ class ServiceDetailController extends GetxController {
           log('Reference video URL: $referenceVideoUrl');
 
           try {
-            videoPlayerController = VideoPlayerController.networkUrl(
+            refVideoPlayerController = VideoPlayerController.networkUrl(
               Uri.parse(referenceVideoUrl),
               httpHeaders: {
                 'Range': 'bytes=0-',
@@ -58,7 +59,7 @@ class ServiceDetailController extends GetxController {
               videoPlayerOptions: VideoPlayerOptions(),
             );
 
-            await videoPlayerController?.initialize().timeout(
+            await refVideoPlayerController?.initialize().timeout(
               const Duration(seconds: 30),
               onTimeout: () {
                 log('Reference video initialization timeout');
@@ -259,22 +260,6 @@ class ServiceDetailController extends GetxController {
       }
     }
   }
-
-  Future<void> openReferenceUrl(String url) async {
-    try {
-      final uri = Uri.parse(url);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        if (kDebugMode) {
-          print('Could not launch $url');
-        }
-      }
-    } catch (e) {
-      log('Error opening reference URL: $e');
-    }
-  }
-
   void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
     final playerController = isNetwork
         ? VideoPlayerController.network(videoPath)
@@ -329,4 +314,21 @@ class ServiceDetailController extends GetxController {
       },
     );
   }
+
+
+  Future<void> openReferenceUrl(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (kDebugMode) {
+          print('Could not launch $url');
+        }
+      }
+    } catch (e) {
+      log('Error opening reference URL: $e');
+    }
+  }
+
 }

@@ -145,8 +145,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                 videoController.value.isInitialized &&
                                 videoController.value.isPlaying;
                             final hasError =
-                                videoController != null &&
-                                videoController.value.hasError;
+                                videoController != null;
 
                             return GestureDetector(
                               onTap: () {
@@ -169,7 +168,12 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                         videoPath.startsWith('http')
                                         ? videoPath
                                         : APIConstants.bucketUrl + videoPath;
-                                    controller.openReferenceUrl(videoUrl);
+                                    controller.openVideoDialog(
+                                      context,
+                                      videoUrl,
+                                      true,
+                                    );
+                                    // controller.openReferenceUrl(videoUrl);
                                   }
                                 } else if (videoController != null &&
                                     videoController.value.isInitialized) {
@@ -558,9 +562,9 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           const Gap(10),
                           // Video reference
                           if (referenceType == 'video')
-                            controller.videoPlayerController != null &&
+                            controller.refVideoPlayerController != null &&
                                     controller
-                                        .videoPlayerController!
+                                        .refVideoPlayerController!
                                         .value
                                         .isInitialized
                                 ? GestureDetector(
@@ -572,19 +576,16 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: AspectRatio(
-                                        aspectRatio: controller
-                                            .videoPlayerController!
-                                            .value
-                                            .aspectRatio,
+                                        aspectRatio: 16/9,
                                         child: VideoPlayer(
-                                          controller.videoPlayerController!,
+                                          controller.refVideoPlayerController!,
                                         ),
                                       ),
                                     ),
                                   )
-                                : controller.videoPlayerController != null &&
+                                : controller.refVideoPlayerController != null &&
                                       controller
-                                          .videoPlayerController!
+                                          .refVideoPlayerController!
                                           .value
                                           .hasError
                                 ? Container(
