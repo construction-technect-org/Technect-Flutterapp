@@ -122,20 +122,16 @@ class ConstructionServiceController extends GetxController {
         selectedSubCategory.value?.serviceCategories ?? [];
   }
 
+  /// GOPAL
   void rightSide0RightView(int index) {
-    selectServiceCategory(index);
+    selectedServiceCategory.value = serviceCategoryList[index];
     serviceCategories.value =
         mainCategory.value?.subCategories?.firstWhere((element) {
-          return element.id == serviceCategoryList[index].id;
+          return element.id == selectedSubCategoryId.value;
         }) ??
         ServicesSubCategories();
-    if (serviceCategories.value.serviceCategories?.isEmpty ?? true) {
-      navigationIndex.value = 1;
-    } else {
-      selectedServiceCategoryIndex.value = index;
-      navigationIndex.value = 1;
-    }
-    selectedServiceCategory.value = serviceCategoryList[index];
+    navigationIndex.value = 1;
+    fetchServicesFromApi();
   }
 
   void leftSide1LeftView(int index) {
@@ -150,12 +146,6 @@ class ConstructionServiceController extends GetxController {
     selectedServiceCategory.value =
         serviceCategories.value.serviceCategories?[index] ??
         ServiceCategories();
-  }
-
-  void selectServiceCategory(int index) {
-    selectedServiceCategory.value = serviceCategoryList[index];
-    navigationIndex.value = 1;
-    fetchServicesFromApi();
   }
 
   // Select service category
@@ -181,8 +171,6 @@ class ConstructionServiceController extends GetxController {
         mainCategoryId: mainCategoryId!,
         subCategoryId: selectedSubCategory.value!.id ?? 0,
         serviceCategoryId: selectedServiceCategory.value!.id ?? 0,
-        page: 1,
-        limit: 20,
         radiusKm: radiusKm,
       );
     } catch (e) {
