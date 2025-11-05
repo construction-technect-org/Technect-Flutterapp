@@ -284,7 +284,6 @@ class ConstructionServiceController extends GetxController {
                 'New Arrivals',
                 'Price (High to Low)',
                 'Price (Low to High)',
-                'Ratings',
               ].map((sortType) {
                 return RadioListTile<String>(
                   dense: true,
