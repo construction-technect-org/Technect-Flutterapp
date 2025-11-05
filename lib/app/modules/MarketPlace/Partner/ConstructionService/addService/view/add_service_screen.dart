@@ -788,31 +788,19 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       }
 
                       // --- Return full UI with delete button ---
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      return Stack(
+                        alignment: AlignmentGeometry.topRight,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Reference ${referenceType.toUpperCase()}",
-                                style: MyTexts.bold16.copyWith(
-                                  color: MyColors.fontBlack,
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () {
-                                  controller.deleteReferenceFile();
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
                           referenceWidget,
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              controller.deleteReferenceFile();
+                            },
+                          ),
                         ],
                       );
                     } else {

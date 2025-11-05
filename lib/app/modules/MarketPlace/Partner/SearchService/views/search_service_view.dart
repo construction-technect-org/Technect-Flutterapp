@@ -136,7 +136,29 @@ class SearchServiceView extends GetView<SearchServiceController> {
                         onTap: () {
                           Get.toNamed(
                             Routes.SERVICE_DETAILS,
-                            arguments: {"service": service},
+                            arguments: {"service": service,
+                              "onConnectTap":(){
+                                ConnectionDialogs.showSendServiceConnectionDialog(
+                                  context,
+                                  service,
+                                  isFromIn: true,
+                                  onTap: (message) async {
+                                    await homeController.addServiceToConnectApi(
+                                      mID: service.merchantProfileId ?? 0,
+                                      message: message,
+                                      sID: service.id ?? 0,
+                                      onSuccess: () async {
+                                        Get.back();
+                                        await controller.performSearch(
+                                          controller.searchQuery.value,
+                                          isLoad: false,
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            },
                           );
                         },
                         onConnectTap: myPref.role.val == "connector"

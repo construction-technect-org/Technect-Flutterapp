@@ -20,6 +20,9 @@ class AddServiceController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isEdit = false.obs;
 
+  VoidCallback? onApiCall;
+
+
   /// API data
   Rx<ServiceCategoryModel> categoryHierarchyDataCM = ServiceCategoryModel().obs;
 
@@ -148,8 +151,9 @@ class AddServiceController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCategoryServiceHierarchy();
+    onApiCall = Get.arguments?["onApiCall"]??(){};
+    isEdit.value =  Get.arguments?["isEdit"]??false;
     if (Get.arguments != null && Get.arguments["service"] != null) {
-      isEdit.value = true;
       final s = Get.arguments["service"];
       serviceId.value = s.id;
       if (s.reference!=null) {
@@ -498,8 +502,7 @@ class AddServiceController extends GetxController {
             title: "Success!",
             header: "Service updated successfully!",
             onTap: () {
-              Get.back();
-              Get.back();
+              onApiCall?.call();
             },
           ),
         );

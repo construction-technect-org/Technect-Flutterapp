@@ -31,8 +31,8 @@ class ProductDetailsController extends GetxController {
     final argument = Get.arguments as Map;
     product = argument['product'] ?? Product();
     isLiked.value = product.isInWishList ?? false;
-    isFromAdd.value = argument["isFromAdd"];
-    isFromConnector.value = argument["isFromConnector"];
+    isFromAdd.value = argument["isFromAdd"]??false;
+    isFromConnector.value = argument["isFromConnector"]??false;
     if (isFromAdd.value == false) {
       fetchReview(product.id ?? 0, isFromConnector.value);
       if (!(isFromAdd.value == false && isFromConnector.value == false)) {

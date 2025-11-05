@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/controllers/construction_service_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 
@@ -644,7 +645,44 @@ class ConstructionServiceView extends StatelessWidget {
         return GestureDetector(
           onTap: () => Get.toNamed(
             Routes.SERVICE_DETAILS,
-            arguments: {'service': service},
+            arguments: {'service': service,
+
+              "onConnectTap":(){
+                ConnectionDialogs.showSendServiceConnectionDialog(
+                  context,
+                  service,
+                  isFromIn: true,
+                  onTap: (message) async {
+                    await Get.find<HomeController>().addServiceToConnectApi(
+                      mID: service.merchantProfileId ?? 0,
+                      message: message,
+                      sID: service.id ?? 0,
+                      onSuccess: () async {
+                        Get.back();
+                        ConnectionDialogs.showSendServiceConnectionDialog(
+                          context,
+                          service,
+                          isFromIn: true,
+                          onTap: (message) async {
+                            await controller.addServiceToConnect(
+                              merchantProfileId:
+                              service.merchantProfileId ?? 0,
+                              serviceId: service.id ?? 0,
+                              message: message,
+                              onSuccess: () async {
+                                await controller.fetchServicesFromApi(
+                                  isLoading: false,
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            },
           ),
           child: Container(
             decoration: BoxDecoration(

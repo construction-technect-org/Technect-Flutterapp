@@ -5,7 +5,6 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
 import 'package:construction_technect/app/core/widgets/common_service_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/controllers/inventory_controller.dart';
-import 'package:gap/gap.dart';
 
 class InventoryView extends GetView<InventoryController> {
   @override
@@ -204,7 +203,18 @@ class InventoryView extends GetView<InventoryController> {
                             onTap: () {
                               Get.toNamed(
                                 Routes.SERVICE_DETAILS,
-                                arguments: {"service": service},
+                                arguments: {"service": service,
+                                  "isEdit":true,
+                                "onApiCall":() async {
+                                  Get.back();
+                                  Get.back();
+                                  Get.back();
+                                  controller.selectedStatus.value = "service";
+                                  controller.searchController.clear();
+                                  controller.searchQuery.value = "";
+                                  await controller.fetchProducts();
+                                }
+                                },
                               );
                             },
                           );

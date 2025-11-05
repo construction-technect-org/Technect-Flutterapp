@@ -1,10 +1,7 @@
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/controller/service_detail_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:video_player/video_player.dart';
 
@@ -144,8 +141,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                 videoController != null &&
                                 videoController.value.isInitialized &&
                                 videoController.value.isPlaying;
-                            final hasError =
-                                videoController != null;
+                            final hasError = videoController != null;
 
                             return GestureDetector(
                               onTap: () {
@@ -443,27 +439,32 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           ),
                         ),
                         const Gap(16),
-                        TextButton.icon(
-                          onPressed: () {
-                            controller.onEditService();
-                          },
-                          icon: SvgPicture.asset(
-                            Asset.editIcon,
-                            width: 16,
-                            height: 16,
-                            colorFilter: const ColorFilter.mode(
-                              MyColors.primary,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          label: Text(
-                            "Edit",
-                            style: MyTexts.regular16.copyWith(
-                              color: MyColors.primary,
-                              fontFamily: MyTexts.SpaceGrotesk,
-                            ),
-                          ),
-                        ),
+
+                        Obx(() {
+                          return controller.isEdit.value
+                              ? TextButton.icon(
+                                  onPressed: () {
+                                    controller.onEditService();
+                                  },
+                                  icon: SvgPicture.asset(
+                                    Asset.editIcon,
+                                    width: 16,
+                                    height: 16,
+                                    colorFilter: const ColorFilter.mode(
+                                      MyColors.primary,
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  label: Text(
+                                    "Edit",
+                                    style: MyTexts.regular16.copyWith(
+                                      color: MyColors.primary,
+                                      fontFamily: MyTexts.SpaceGrotesk,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox();
+                        }),
                       ],
                     ),
                     const Gap(20),
@@ -576,7 +577,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: AspectRatio(
-                                        aspectRatio: 16/9,
+                                        aspectRatio: 16 / 9,
                                         child: VideoPlayer(
                                           controller.refVideoPlayerController!,
                                         ),
@@ -897,23 +898,25 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
           color: MyColors.primary,
           style: MyTexts.medium16.copyWith(color: Colors.white),
           onTap: () {
-            ConnectionDialogs.showSendServiceConnectionDialog(
-              context,
-              service,
-              isFromIn: true,
-              onTap: (message) async {
-                Get.back();
-                await Get.find<HomeController>().addServiceToConnectApi(
-                  mID: service.merchantProfileId ?? 0,
-                  message: message,
-                  sID: service.id ?? 0,
-                  onSuccess: () {
-                    controller.onApiCall?.call();
-                    Get.back();
-                  },
-                );
-              },
-            );
+            Get.arguments["onConnectTap"]?.call();
+            // ConnectionDialogs.showSendServiceConnectionDialog(
+            //   context,
+            //   service,
+            //   isFromIn: true,
+            //   onTap: (message) async {
+            //     Get.back();
+            //     await Get.find<HomeController>().addServiceToConnectApi(
+            //       mID: service.merchantProfileId ?? 0,
+            //       message: message,
+            //       sID: service.id ?? 0,
+            //       onSuccess: () {
+            //         Get.arguments["onConnectTap"]?.call();
+            //         Get.back();
+            //         // controller.onApiCall?.call();
+            //       },
+            //     );
+            //   },
+            // );
           },
         ),
       );

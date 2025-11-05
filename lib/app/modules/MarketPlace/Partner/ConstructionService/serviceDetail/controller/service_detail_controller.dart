@@ -16,6 +16,7 @@ class ServiceDetailController extends GetxController {
   );
   final RxBool isLoading = false.obs;
   final RxBool isLiked = false.obs;
+  final RxBool isEdit = false.obs;
   final RxInt currentIndex = 0.obs;
   VoidCallback? onApiCall;
 
@@ -28,6 +29,7 @@ class ServiceDetailController extends GetxController {
     final argument = Get.arguments as Map?;
     service.value = argument?['service'] ?? Service();
     onApiCall = argument?["onApiCall"];
+    isEdit.value = argument?["isEdit"] ?? false;
 
     // fetchServiceDetails(service.id ?? 0);
     WidgetsBinding.instance.addPostFrameCallback((val) async {
@@ -133,9 +135,9 @@ class ServiceDetailController extends GetxController {
     Get.toNamed(
       Routes.ADD_SERVICES,
       arguments: {
-        "isEdit": true, 'service': service.value,
-
-        // "onApiCall": onApiCall
+        "isEdit": isEdit.value,
+        'service': service.value,
+        "onApiCall": onApiCall,
       },
     );
   }
@@ -260,6 +262,7 @@ class ServiceDetailController extends GetxController {
       }
     }
   }
+
   void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
     final playerController = isNetwork
         ? VideoPlayerController.network(videoPath)
@@ -315,7 +318,6 @@ class ServiceDetailController extends GetxController {
     );
   }
 
-
   Future<void> openReferenceUrl(String url) async {
     try {
       final uri = Uri.parse(url);
@@ -330,5 +332,4 @@ class ServiceDetailController extends GetxController {
       log('Error opening reference URL: $e');
     }
   }
-
 }
