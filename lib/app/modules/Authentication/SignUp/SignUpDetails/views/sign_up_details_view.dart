@@ -127,12 +127,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     validator: (value) =>
                                         Validate.validateEmail(value),
                                     onChange: (value) {
-                                      if (controller
-                                          .emailError
-                                          .value
-                                          .isNotEmpty) {
-                                        controller.emailError.value = "";
-                                      }
+                                      controller.emailError.value = "";
                                     },
                                     onFieldSubmitted: (value) {
                                       if (value != null) {

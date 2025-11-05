@@ -57,6 +57,9 @@ class BusinessDetailsStep extends StatelessWidget {
               controller: controller.businessEmailController,
               keyboardType: TextInputType.emailAddress,
               validator: (value) => Validate.validateEmail(value),
+              onChange: (value) {
+                controller.emailError.value = "";
+              },
             ),
           ),
           Obx(() {
