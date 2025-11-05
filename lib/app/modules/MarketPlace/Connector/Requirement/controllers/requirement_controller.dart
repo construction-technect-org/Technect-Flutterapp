@@ -31,7 +31,8 @@ class RequirementController extends GetxController {
 
   void _loadRequirementsFromStorage() {
     final cachedRequirementList = myPref.getRequirementListModel();
-    if (cachedRequirementList?.data?.isNotEmpty ?? true) {
+    if ((cachedRequirementList?.data?.isNotEmpty ?? false) ||
+        cachedRequirementList != null) {
       requirementListModel.value =
           cachedRequirementList ?? GetRequirementListModel();
     } else {
@@ -42,7 +43,8 @@ class RequirementController extends GetxController {
   void _loadServiceRequirementsFromStorage() {
     final cachedServiceRequirementList = myPref
         .getServiceRequirementListModel();
-    if (cachedServiceRequirementList?.data?.isNotEmpty ?? true) {
+    if ((cachedServiceRequirementList?.data?.isNotEmpty ?? false) ||
+        cachedServiceRequirementList != null) {
       serviceRequirementListModel.value =
           cachedServiceRequirementList ?? GetServiceRequirementListModel();
     } else {
