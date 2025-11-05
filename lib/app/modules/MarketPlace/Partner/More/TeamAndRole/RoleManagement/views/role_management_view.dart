@@ -133,7 +133,14 @@ class RoleManagementView extends StatelessWidget {
                             if (controller.showRoles.value) {
                               Get.toNamed(Routes.ADD_ROLE);
                             } else {
-                              Get.toNamed(Routes.ADD_TEAM);
+                              if (controller.roles.isEmpty) {
+                                SnackBars.errorSnackBar(
+                                  content:
+                                      "Please create a role before adding a team",
+                                );
+                              } else {
+                                Get.toNamed(Routes.ADD_TEAM);
+                              }
                             }
                           },
                           behavior: HitTestBehavior.translucent,
