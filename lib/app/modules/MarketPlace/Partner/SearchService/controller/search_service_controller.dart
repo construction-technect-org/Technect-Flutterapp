@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/services/search_product_services.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/models/ConnectorServiceModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/services/search_product_services.dart';
 
 class SearchServiceController extends GetxController {
   RxBool isLoading = false.obs;
   RxString searchQuery = ''.obs;
   RxBool hasSearched = false.obs;
 
-  Rx<ConnectorSelectedProductModel?> productListModel =
-      Rx<ConnectorSelectedProductModel?>(null);
+  Rx<ConnectorServiceModel?> serviceListModel = Rx<ConnectorServiceModel?>(
+    null,
+  );
 
   Timer? _debounceTimer;
   final TextEditingController searchController = TextEditingController();
@@ -23,7 +24,7 @@ class SearchServiceController extends GetxController {
 
     if (trimmed.isEmpty) {
       hasSearched.value = false;
-      productListModel.value = null;
+      serviceListModel.value = null;
       return;
     }
 
@@ -37,11 +38,11 @@ class SearchServiceController extends GetxController {
     try {
       hasSearched.value = true;
       isLoading.value = isLoad ?? false;
-      productListModel.value = await SearchProductServices().searchProducts(
+      serviceListModel.value = await SearchServiceServices().searchServices(
         query: query,
       );
     } catch (e) {
-      Get.snackbar('Error', 'Failed to search products: $e');
+      Get.snackbar('Error', 'Failed to search services: $e');
     } finally {
       isLoading.value = false;
     }
@@ -52,7 +53,7 @@ class SearchServiceController extends GetxController {
     searchController.clear();
     searchQuery.value = '';
     hasSearched.value = false;
-    productListModel.value = null;
+    serviceListModel.value = null;
   }
 
   @override
