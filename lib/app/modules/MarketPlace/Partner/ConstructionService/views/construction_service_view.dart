@@ -626,9 +626,9 @@ class ConstructionServiceView extends StatelessWidget {
     final controller = Get.find<ConstructionServiceController>();
     return GridView.builder(
       padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.45,
+        childAspectRatio:myPref.role.val=="connector"? 0.45:0.6,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),

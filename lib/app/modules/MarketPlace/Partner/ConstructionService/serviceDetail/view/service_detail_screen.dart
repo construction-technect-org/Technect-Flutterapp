@@ -294,19 +294,8 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     ),
                                   ),
                                   if (!isPlaying)
-                                    Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.black45,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const Icon(
-                                        Icons.play_arrow,
-                                        color: Colors.white,
-                                        size: 40,
-                                      ),
-                                    ),
+                                    const VideoPlay(),
+
                                   // Video progress indicator
                                   if (videoController != null &&
                                       videoController.value.isInitialized)

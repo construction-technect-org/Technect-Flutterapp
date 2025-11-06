@@ -202,28 +202,6 @@ class ConnectorSelectedProductController extends GetxController {
     }
 
     isLoadingProducts.value = isLoading ?? true;
-
-    final selectedAddress = homeController.profileData.value.data?.siteLocations
-        ?.where((element) => element.isDefault == true)
-        .first;
-
-    String latitude = '';
-    String longitude = '';
-
-    if (selectedAddress != null) {
-      final latitudeString = selectedAddress.latitude?.toString();
-      final longitudeString = selectedAddress.longitude?.toString();
-      if (latitudeString != null && longitudeString != null) {
-        latitude = latitudeString;
-        longitude = longitudeString;
-      }
-    }
-    if (latitude.isEmpty || longitude.isEmpty) {
-      SnackBars.errorSnackBar(
-        content: 'No address found. Please add an address first.',
-      );
-      return;
-    }
     try {
       // Call the service
       productListModel.value = await services.connectorProduct(

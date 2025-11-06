@@ -470,7 +470,7 @@ class AccountActionScreen extends StatelessWidget {
 }
 
 class SuccessAction extends StatelessWidget {
-  final String actionType;
+   final String actionType;
 
   const SuccessAction({super.key, required this.actionType});
 
@@ -503,7 +503,7 @@ class SuccessAction extends StatelessWidget {
               border: Border.all(color: const Color(0xffF9D0CB)),
             ),
             child: Text(
-              "Your account is $actionType",
+              "Your account is ${actionType}ed",
               style: MyTexts.bold18.copyWith(color: Colors.black),
               textAlign: TextAlign.center,
             ),
