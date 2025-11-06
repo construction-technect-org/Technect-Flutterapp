@@ -53,8 +53,21 @@ class SignUpDetailsController extends GetxController {
   }
 
   Future<void> validateEmailAvailability(String email) async {
+    // First check format validation - if format is invalid, don't check API
+    final formatError = Validate.validateEmail(email);
+    if (formatError != null) {
+      // Format error - clear API error, format error will be shown by validator
+      emailError.value = "";
+      isEmailValidating.value = false;
+      return;
+    }
+
+    // Format is valid, now check availability via API
+    // validateEmailAsync already checks format first, but we check here to avoid API call
     isEmailValidating.value = true;
-    emailError.value = await Validate.validateEmailAsync(email) ?? "";
+    final apiError = await Validate.validateEmailAsync(email);
+    // apiError will be null if format is invalid (handled above), or error message if API fails
+    emailError.value = apiError ?? "";
     isEmailValidating.value = false;
   }
 
