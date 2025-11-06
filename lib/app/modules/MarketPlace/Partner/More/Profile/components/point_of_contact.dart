@@ -187,6 +187,7 @@ class PointOfContactController extends GetxController {
         'name': fNameController.text.trim(),
         'relation': designationController.text.trim(),
         'phone_number': numberController.text.trim(),
+        if(alternativeNumberController.text.isNotEmpty)
         'alternative_phone_number': alternativeNumberController.text.trim(),
         'email': emailController.text.trim(),
       };
