@@ -324,6 +324,8 @@ class SignUpDetailsController extends GetxController {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-    );
+    ).whenComplete(() {
+      FocusManager.instance.primaryFocus?.unfocus();
+    });
   }
 }

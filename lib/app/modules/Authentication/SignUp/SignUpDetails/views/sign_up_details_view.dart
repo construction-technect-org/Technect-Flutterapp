@@ -405,6 +405,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
               }
 
               if (controller.isVerified.value) {
+                FocusManager.instance.primaryFocus?.unfocus();
                 controller.openPhoneNumberBottomSheet();
               } else {
                 final String text =
