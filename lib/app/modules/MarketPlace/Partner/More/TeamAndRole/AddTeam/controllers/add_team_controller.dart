@@ -50,6 +50,7 @@ class AddTeamController extends GetxController {
     super.onInit();
   }
 
+
   Future<void> pickImageBottomSheet(BuildContext context) {
     return Get.bottomSheet(
       Container(

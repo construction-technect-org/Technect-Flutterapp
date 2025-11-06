@@ -124,7 +124,6 @@ class SettingController extends GetxController {
 
       if (otpResponse.success == true) {
         myPref.clear();
-        Get.offAllNamed(Routes.LOGIN);
         Get.offAll(() => SuccessAction(actionType: actionType ?? ""));
       } else {
         SnackBars.errorSnackBar(

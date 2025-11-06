@@ -207,7 +207,7 @@ class ProfileView extends GetView<ProfileController> {
                 }
               } else {
                 controller.handleMerchantData();
-                controller.selectedTabIndex.value = 0;
+                // controller.selectedTabIndex.value = 0;
               }
             },
           );
