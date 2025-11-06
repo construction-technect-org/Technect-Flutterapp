@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
-import 'package:gap/gap.dart';
 
 class AddKycScreen extends StatelessWidget {
   AddKycScreen({super.key});
@@ -22,7 +21,6 @@ class AddKycScreen extends StatelessWidget {
             buttonName: 'Update',
             onTap: () {
               if (controller.isVerified.value) {
-
                 controller.proceedKyc();
               }
             },
@@ -85,7 +83,9 @@ class AddKycScreen extends StatelessWidget {
                               suffixPadding: 0,
                               suffixIcon: GestureDetector(
                                 onTap: () {
-                                  final value = controller.aadhaarController.text
+                                  final value = controller
+                                      .aadhaarController
+                                      .text
                                       .trim();
                                   if (value.isEmpty) {
                                     SnackBars.errorSnackBar(

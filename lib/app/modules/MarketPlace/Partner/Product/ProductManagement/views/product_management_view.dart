@@ -3,8 +3,7 @@
 // import 'package:construction_technect/app/core/utils/input_field.dart';
 // import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/product_card.dart';
 // import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/controllers/product_management_controller.dart';
-// import 'package:gap/gap.dart';
-//
+// //
 // class ProductManagementView extends StatelessWidget {
 //   final ProductManagementController controller = Get.put(
 //     ProductManagementController(),

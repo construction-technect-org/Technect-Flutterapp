@@ -6,7 +6,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/info_metrics_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/metrics_screen.dart';
-import 'package:gap/gap.dart';
 
 class ProfileView extends GetView<ProfileController> {
   final homeController = HomeController.to;

@@ -65,7 +65,6 @@ import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/splash/controllers/splash_controller.dart';
-import 'package:gap/gap.dart';
 
 class SplashView extends GetView<SplashController> {
   const SplashView({super.key});

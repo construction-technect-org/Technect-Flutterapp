@@ -43,33 +43,33 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: leadingWidth ?? 40,
       leading: automaticallyImplyLeading
           ? leading ??
-          GestureDetector(
-            onTap: onTap ??
-                    () {
-                  Get.back();
-                },
-            behavior: HitTestBehavior.translucent,
-            child: const Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child:Icon(
-                Icons.arrow_back_ios_new_sharp,
-                color: Colors.black,
-                size: 24,
-              ),
-            ),
-          )
+                GestureDetector(
+                  onTap:
+                      onTap ??
+                      () {
+                        Get.back();
+                      },
+                  behavior: HitTestBehavior.translucent,
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Icon(
+                      Icons.arrow_back_ios_new_sharp,
+                      color: Colors.black,
+                      size: 24,
+                    ),
+                  ),
+                )
           : Container(),
       backgroundColor: backgroundColor ?? MyColors.white,
       elevation: 0,
       iconTheme: IconThemeData(color: MyColors.black, size: 24),
       centerTitle: isCenter ?? true,
-      titleTextStyle: textStyle ?? MyTexts.medium18.copyWith(
-          color: MyColors.gray2E,),
+      titleTextStyle:
+          textStyle ?? MyTexts.medium18.copyWith(color: MyColors.gray2E),
       title: title,
     );
   }
 
   @override
   Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
-
 }

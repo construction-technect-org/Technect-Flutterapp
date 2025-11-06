@@ -7,7 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gap/gap.dart';
 
 class SettingView extends GetView<SettingController> {
   const SettingView({super.key});
@@ -94,7 +93,7 @@ class SettingView extends GetView<SettingController> {
                       ),
                     ),
                     const Gap(24),
-                     HeaderText(text: "Account"),
+                    HeaderText(text: "Account"),
                     const Gap(16),
                     _buildSettingAction(
                       context,
@@ -165,7 +164,7 @@ class SettingView extends GetView<SettingController> {
                         children: [
                           const Divider(),
                           const Gap(5),
-                           HeaderText(text: "Theme"),
+                          HeaderText(text: "Theme"),
                           const Gap(3),
                           Row(
                             children: [

@@ -1,5 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:gap/gap.dart';
 import 'package:path/path.dart' as path;
 
 class FileIconWidget extends StatelessWidget {

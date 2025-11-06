@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/FeedBack/controller/feedback_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
-import 'package:gap/gap.dart';
 
 class FeedbackViewScreen extends GetView<FeedBackController> {
   const FeedbackViewScreen({super.key});
@@ -17,31 +16,22 @@ class FeedbackViewScreen extends GetView<FeedBackController> {
         isLoading: controller.isLoading,
         child: Scaffold(
           backgroundColor: Colors.white,
-          bottomNavigationBar:   Padding(
-            padding: const EdgeInsets.all(
-              24
-            ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(24),
             child: Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      side: const BorderSide(
-
-                      ),
+                      side: const BorderSide(),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          30,
-                        ),
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
-                      controller.suggestionController.text =
-                      "";
+                      controller.suggestionController.text = "";
                       controller.rating.value = 0;
                     },
                     child: const Text(
@@ -56,13 +46,9 @@ class FeedbackViewScreen extends GetView<FeedBackController> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyColors.primary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          30,
-                        ),
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 14,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
                       controller.addFeedBack();

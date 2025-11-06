@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/OnBoarding/controller/on_boarding_controller.dart';
-import 'package:gap/gap.dart';
 
 class OnBoardingScreen extends GetView<OnBoardingController> {
   const OnBoardingScreen({super.key});

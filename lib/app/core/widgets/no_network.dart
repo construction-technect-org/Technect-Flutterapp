@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:gap/gap.dart';
 
 class NoInternetBottomSheet extends StatelessWidget {
   @override
@@ -17,7 +16,7 @@ class NoInternetBottomSheet extends StatelessWidget {
           topRight: Radius.circular(16),
         ),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 10),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10),
         ],
       ),
       child: Column(

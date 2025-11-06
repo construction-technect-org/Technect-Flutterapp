@@ -1,5 +1,3 @@
-import 'package:construction_technect/app/core/apiManager/api_constants.dart';
-import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/model/demo_requet_create_model.dart';
 
@@ -13,7 +11,9 @@ class RequestDemoService {
   }) async {
     try {
       final response = await _apiManager.postObject(
-        url: myPref.role.val=="connector" ? APIConstants.connectorDemoRequestCreate : APIConstants.demoRequest,
+        url: myPref.role.val == "connector"
+            ? APIConstants.connectorDemoRequestCreate
+            : APIConstants.demoRequest,
         body: {"demo_for": demoFor, "phone_number": phone, "email": email},
       );
 

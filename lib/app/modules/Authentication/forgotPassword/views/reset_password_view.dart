@@ -5,7 +5,6 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validators.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/controllers/forgot_password_controller.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
-import 'package:gap/gap.dart';
 
 class ResetPasswordView extends StatelessWidget {
   ResetPasswordView({super.key});

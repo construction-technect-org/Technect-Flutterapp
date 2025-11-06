@@ -5,7 +5,6 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
-import 'package:gap/gap.dart';
 
 class SignUpDetailsView extends GetView<SignUpDetailsController> {
   SignUpDetailsView({super.key});

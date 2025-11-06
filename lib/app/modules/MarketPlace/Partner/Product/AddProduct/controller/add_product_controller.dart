@@ -12,7 +12,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
@@ -50,7 +49,6 @@ class AddProductController extends GetxController {
   final termsController = TextEditingController();
   final brandNameController = TextEditingController();
   final stockYardAddressController = TextEditingController();
-
 
   // ---------------- DropDown Data ----------------
   RxList<MainCategory> mainCategories = <MainCategory>[].obs;
@@ -97,10 +95,11 @@ class AddProductController extends GetxController {
     // Sync selected site address after loading
     _syncSelectedSiteAddress();
   }
+
   void _syncSelectedSiteAddress() {
     if (selectedSiteAddressId.value > 0) {
       final site = siteLocations.firstWhereOrNull(
-            (s) => s.id == selectedSiteAddressId.value,
+        (s) => s.id == selectedSiteAddressId.value,
       );
       selectedSiteAddress.value = site;
       if (site != null) {
@@ -111,6 +110,7 @@ class AddProductController extends GetxController {
       selectedSiteAddressName.value = '';
     }
   }
+
   void selectSiteAddress(ManufacturerAddress? site) {
     if (site != null) {
       selectedSiteAddress.value = site;
@@ -162,7 +162,8 @@ class AddProductController extends GetxController {
       selectedMainCategoryId.value = (product.mainCategoryId ?? 0).toString();
       selectedSubCategoryId.value = (product.subCategoryId ?? 0).toString();
       selectedProductId.value = (product.categoryProductId ?? 0).toString();
-      selectedSubProductId.value = (product.productSubCategoryId ?? 0).toString();
+      selectedSubProductId.value = (product.productSubCategoryId ?? 0)
+          .toString();
     }
   }
 
@@ -179,7 +180,7 @@ class AddProductController extends GetxController {
       print(selectedGST.value);
     }
     if ((product.stockYardAddress ?? "").isNotEmpty) {
-      stockYardAddressController.text = product.stockYardAddress??"";
+      stockYardAddressController.text = product.stockYardAddress ?? "";
     }
     gstPriceController.text = product.gstAmount ?? '';
     termsController.text = product.termsAndConditions ?? '';
@@ -287,7 +288,7 @@ class AddProductController extends GetxController {
                 .toList() ??
             [];
         if ((result.data ?? []).isNotEmpty) {
-          subProductsList.value = result.data?.first.productSubCategories??[];
+          subProductsList.value = result.data?.first.productSubCategories ?? [];
           final firstProduct = result.data!.first;
           subProductNames.value =
               firstProduct.productSubCategories
@@ -431,7 +432,7 @@ class AddProductController extends GetxController {
       (s) => s.name == productName,
     );
     selectedSubProductId.value = '${selectedCategorySub?.id ?? 0}';
-    print(  selectedSubProductId.value);
+    print(selectedSubProductId.value);
   }
 
   // ---------------- API Calls ----------------
@@ -724,8 +725,8 @@ class AddProductController extends GetxController {
               ?.merchantProfile
               ?.gstinNumber ??
           '',
-      stockYardAddress:selectedSiteAddress.value?.fullAddress,
-      warehouseType:  selectedWareHouseType.value,
+      stockYardAddress: selectedSiteAddress.value?.fullAddress,
+      warehouseType: selectedWareHouseType.value,
       mainCategoryName: selectedMainCategory.value,
       subCategoryName: selectedSubCategory.value,
       productSubCategoryName: selectedSubProduct.value,
@@ -884,7 +885,7 @@ class AddProductController extends GetxController {
       "outofstock": !isOutStock.value,
       "outofstock_note": noteStockController.text,
       "warehouse_type": selectedWareHouseType.value,
-      "stock_yard_address": stockYardAddressController.text
+      "stock_yard_address": stockYardAddressController.text,
     });
 
     try {

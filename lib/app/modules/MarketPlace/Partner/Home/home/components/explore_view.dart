@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:gap/gap.dart';
 
 class ExploreView extends StatelessWidget {
   const ExploreView({super.key});
@@ -96,7 +95,9 @@ class ExploreView extends StatelessWidget {
                                         height: 316,
                                         decoration: const BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20),
+                                          ),
                                         ),
                                         padding: const EdgeInsets.all(16),
                                         child: Center(

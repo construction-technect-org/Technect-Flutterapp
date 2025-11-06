@@ -1,6 +1,5 @@
- import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:gap/gap.dart';
 
 class DottedLinePainter extends CustomPainter {
   final Color color;
@@ -97,7 +96,9 @@ class StepperWidgetAddProduct extends StatelessWidget {
             const SizedBox(width: 10),
             // Dotted line
             _buildDottedLine(
-              currentStep > 0 ? const Color(0xFF3DA741) : const Color(0xFF1B2F62),
+              currentStep > 0
+                  ? const Color(0xFF3DA741)
+                  : const Color(0xFF1B2F62),
             ),
             const SizedBox(width: 10),
             // Step 2 - Basic Details

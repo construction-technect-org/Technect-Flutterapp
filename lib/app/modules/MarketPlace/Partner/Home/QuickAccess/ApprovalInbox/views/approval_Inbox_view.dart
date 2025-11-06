@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/ApprovalInbox/controllers/approval_Inbox_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
-import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 class ApprovalInboxView extends GetView<ApprovalInboxController> {
@@ -138,7 +137,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(12),
-                           HeaderText(text: "Statistics"),
+                          HeaderText(text: "Statistics"),
                           const Gap(24),
                           Obx(() {
                             return IntrinsicHeight(
@@ -200,7 +199,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                             );
                           }),
                           const Gap(32),
-                           HeaderText(text: "Inbox"),
+                          HeaderText(text: "Inbox"),
                           Obx(() {
                             final list = controller.filteredInbox;
                             if (list.isEmpty) {

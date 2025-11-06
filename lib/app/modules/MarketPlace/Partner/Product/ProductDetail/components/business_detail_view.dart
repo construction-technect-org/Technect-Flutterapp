@@ -2,11 +2,9 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/controllers/product_detail_controller.dart';
-import 'package:gap/gap.dart';
 
 class BusinessDetailView extends StatelessWidget {
-
-   BusinessDetailView({super.key});
+  BusinessDetailView({super.key});
 
   final controller = Get.find<ProductDetailsController>();
   @override
@@ -41,13 +39,14 @@ class BusinessDetailView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
                       children: [
-
                         SizedBox(height: 2.h),
                         Row(
                           children: [
                             Text(
                               'Business Metrics',
-                              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
+                              style: MyTexts.bold16.copyWith(
+                                color: MyColors.gray2E,
+                              ),
                             ),
                           ],
                         ),
@@ -71,13 +70,12 @@ class BusinessDetailView extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
-
   }
 
   Widget _buildBusinessMetricsContent() {
@@ -94,28 +92,28 @@ class BusinessDetailView extends StatelessWidget {
         children: [
           buildRow(
             title: "Business name",
-            data: controller.product.merchantName??"-",
+            data: controller.product.merchantName ?? "-",
           ),
           const Gap(6),
           buildRow(
             title: "GSTIN",
-            data: controller.product.merchantGstNumber??"-",
+            data: controller.product.merchantGstNumber ?? "-",
           ),
           const Gap(6),
 
           buildRow(
             title: "Mobile Number",
-            data: controller.product.merchantPhone??"-",
+            data: controller.product.merchantPhone ?? "-",
           ),
           const Gap(6),
           buildRow(
             title: "Website",
-            data: controller.product.merchantWebsite??"-",
+            data: controller.product.merchantWebsite ?? "-",
           ),
           const Gap(6),
           buildRow(
             title: "Email id",
-            data: controller.product.merchantEmail??"-",
+            data: controller.product.merchantEmail ?? "-",
           ),
           // const Gap(6),
           // Obx(() {
@@ -143,7 +141,7 @@ class BusinessDetailView extends StatelessWidget {
         );
       }
       data.sort(
-            (a, b) => (a['day_of_week'] as int).compareTo(b['day_of_week'] as int),
+        (a, b) => (a['day_of_week'] as int).compareTo(b['day_of_week'] as int),
       );
 
       final openDays = data.where((d) => d['is_open'] == true).toList();
@@ -181,9 +179,9 @@ class BusinessDetailView extends StatelessWidget {
   }
 
   Widget _buildBusinessHourItem(
-      List<Map<String, dynamic>> days, {
-        required bool isOpen,
-      }) {
+    List<Map<String, dynamic>> days, {
+    required bool isOpen,
+  }) {
     String dayLabel = "";
     if (days.length == 1) {
       dayLabel = days.first['day_name'];
@@ -247,6 +245,7 @@ class BusinessDetailView extends StatelessWidget {
       ),
     );
   }
+
   Widget buildRow({String? data, required String title}) {
     return Row(
       children: [

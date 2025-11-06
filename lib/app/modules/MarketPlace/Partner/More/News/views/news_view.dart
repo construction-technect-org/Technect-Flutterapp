@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/controllers/news_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/models/news_model.dart';
-import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
@@ -53,7 +52,9 @@ class NewsView extends GetView<NewsController> {
                           if (controller.newsModel.value.data?.news?.isEmpty ??
                               true) {
                             return Padding(
-                              padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height/2.3),
+                              padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height / 2.3,
+                              ),
                               child: Center(
                                 child: Text(
                                   'No news available',

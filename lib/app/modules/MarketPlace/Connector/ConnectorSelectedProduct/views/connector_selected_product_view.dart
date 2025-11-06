@@ -7,7 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
-import 'package:gap/gap.dart';
 
 class SelectedProductView extends StatelessWidget {
   final controller = Get.put(ConnectorSelectedProductController());

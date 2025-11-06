@@ -8,7 +8,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/con
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
-import 'package:gap/gap.dart';
 
 class CartListView extends GetView<CartListController> {
   @override
@@ -456,7 +455,7 @@ class CartListView extends GetView<CartListController> {
         border: Border.all(color: MyColors.grayEA, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -639,7 +638,7 @@ class CartListView extends GetView<CartListController> {
         Icon(
           icon,
           size: 16,
-          color: isSelected ? color : color.withOpacity(0.6),
+          color: isSelected ? color : color.withValues(alpha: 0.6),
         ),
         const SizedBox(width: 4),
         Flexible(
@@ -648,7 +647,7 @@ class CartListView extends GetView<CartListController> {
                 ? "All"
                 : value.substring(0, 1).toUpperCase() + value.substring(1),
             style: MyTexts.medium14.copyWith(
-              color: isSelected ? color : color.withOpacity(0.6),
+              color: isSelected ? color : color.withValues(alpha: 0.6),
               fontFamily: MyTexts.SpaceGrotesk,
             ),
             overflow: TextOverflow.ellipsis,

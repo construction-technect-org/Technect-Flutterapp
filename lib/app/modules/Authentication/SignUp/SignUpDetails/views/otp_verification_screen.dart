@@ -1,10 +1,6 @@
-import 'package:construction_technect/app/core/utils/colors.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
-import 'package:construction_technect/app/core/utils/text_theme.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/controllers/sign_up_details_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 

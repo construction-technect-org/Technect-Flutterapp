@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/controller/edit_profile_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gap/gap.dart';
 
 class BusinessDetailsStep extends StatelessWidget {
   final EditProfileController controller;

@@ -4,8 +4,7 @@
 // import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
 // import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 // import 'package:flutter/cupertino.dart';
-// import 'package:gap/gap.dart';
-//
+// //
 // class ProductCard extends StatelessWidget {
 //   const ProductCard({super.key, required this.product, this.isPartner = true});
 //

@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/stat_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/controller/customer_support_controller.dart';
-import 'package:gap/gap.dart';
 
 class CustomerSupportView extends StatelessWidget {
   final CustomerSupportController controller = Get.put(
@@ -92,8 +91,9 @@ class CustomerSupportView extends StatelessWidget {
                                           value:
                                               "${controller.supportMyTickets.value.data?.statistics?.openTickets ?? 0}",
                                           icon: SvgPicture.asset(
-                                            Asset.info
-                                            ,height: 24,width: 24,
+                                            Asset.info,
+                                            height: 24,
+                                            width: 24,
                                           ),
                                           iconBackground: const Color(
                                             0xFFE53D26,
@@ -144,7 +144,11 @@ class CustomerSupportView extends StatelessWidget {
                                           title: 'Resolved',
                                           value:
                                               "${controller.supportMyTickets.value.data?.statistics?.resolvedTickets ?? 0}",
-                                          icon: SvgPicture.asset(Asset.check,height: 24,width: 24,),
+                                          icon: SvgPicture.asset(
+                                            Asset.check,
+                                            height: 24,
+                                            width: 24,
+                                          ),
                                           iconBackground: const Color(
                                             0xFF069900,
                                           ),

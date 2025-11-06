@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 class MarketplacePerformanceComponent extends StatelessWidget {
@@ -65,7 +64,10 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                 Obx(() {
                   return CupertinoSwitch(
                     value:
-                        controller.merchantProfile?.verificationStatus?.businessLicense ??
+                        controller
+                            .merchantProfile
+                            ?.verificationStatus
+                            ?.businessLicense ??
                         false,
                     onChanged: (val) {},
                   );
@@ -127,7 +129,8 @@ class MarketplacePerformanceComponent extends StatelessWidget {
             ),
             SizedBox(height: 1.5.h),
             Obx(() {
-              final completionPercentage = controller.profileCompletionPercentage;
+              final completionPercentage =
+                  controller.profileCompletionPercentage;
               final progressValue = completionPercentage / 100.0;
 
               return Column(
@@ -213,7 +216,9 @@ class MarketplacePerformanceComponent extends StatelessWidget {
                   return Text(
                     controller.merchantProfile?.memberSince != null
                         ? DateFormat('dd/MM/yyyy').format(
-                            DateTime.parse(controller.merchantProfile!.memberSince!),
+                            DateTime.parse(
+                              controller.merchantProfile!.memberSince!,
+                            ),
                           )
                         : 'Unknown',
                     style: MyTexts.bold14.copyWith(
@@ -260,7 +265,11 @@ class MarketplacePerformanceComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildPerformanceMetricItem(String label, String value, Color valueColor) {
+  Widget _buildPerformanceMetricItem(
+    String label,
+    String value,
+    Color valueColor,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(

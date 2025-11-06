@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/controllers/report_controller.dart';
-import 'package:gap/gap.dart';
 
 class ReportTextWidget extends StatelessWidget {
   final ReportController controller;

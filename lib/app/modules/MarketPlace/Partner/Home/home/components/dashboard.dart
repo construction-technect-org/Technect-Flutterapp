@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
-import 'package:gap/gap.dart';
 
 class Dashboard extends StatelessWidget {
   final HomeController controller = Get.put<HomeController>(HomeController());
@@ -293,8 +292,13 @@ class Dashboard extends StatelessWidget {
                                   child: Obx(() {
                                     return _buildStatCard(
                                       "Merchant",
-                                      controller.profileData.value.data?.statistics?.totalMerchantProfilesCreated
-                                          ?.toString() ??
+                                      controller
+                                              .profileData
+                                              .value
+                                              .data
+                                              ?.statistics
+                                              ?.totalMerchantProfilesCreated
+                                              ?.toString() ??
                                           "0",
                                       Asset.role1,
                                     );
@@ -305,8 +309,13 @@ class Dashboard extends StatelessWidget {
                                   child: Obx(() {
                                     return _buildStatCard(
                                       "Connectors",
-                                      controller.profileData.value.data?.statistics?.totalConnectorProfilesCreated
-                                          ?.toString() ??
+                                      controller
+                                              .profileData
+                                              .value
+                                              .data
+                                              ?.statistics
+                                              ?.totalConnectorProfilesCreated
+                                              ?.toString() ??
                                           "0",
                                       Asset.contractor,
                                     );

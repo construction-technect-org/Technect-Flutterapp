@@ -6,13 +6,12 @@ import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/google_sign_in_service.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
-import 'package:gap/gap.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 
 class LoginView extends GetView<LoginController> {
-   LoginView({super.key});
+  LoginView({super.key});
   bool _isBottomSheetOpen = false;
 
   @override
@@ -46,7 +45,7 @@ class LoginView extends GetView<LoginController> {
               });
             }
           });
-        } else if (connected && _isBottomSheetOpen)  {
+        } else if (connected && _isBottomSheetOpen) {
           _isBottomSheetOpen = false;
           Get.back();
         }
@@ -110,7 +109,9 @@ class LoginView extends GetView<LoginController> {
                         Center(
                           child: Text(
                             'India’s Fastest Growing\nConstruction Network',
-                            style: MyTexts.medium18.copyWith(color: Colors.black),
+                            style: MyTexts.medium18.copyWith(
+                              color: Colors.black,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -119,7 +120,9 @@ class LoginView extends GetView<LoginController> {
                           alignment: Alignment.topLeft,
                           child: Text(
                             'Login',
-                            style: MyTexts.medium20.copyWith(color: Colors.black),
+                            style: MyTexts.medium20.copyWith(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         const Gap(16),
@@ -135,8 +138,9 @@ class LoginView extends GetView<LoginController> {
                             controller.countryCode.value = code;
                           },
                           onSubmitted: (val) {
-                            FocusScope.of(context)
-                                .requestFocus(controller.passwordFocusNode);
+                            FocusScope.of(
+                              context,
+                            ).requestFocus(controller.passwordFocusNode);
                           },
                         ),
                         const Gap(16),
@@ -158,7 +162,8 @@ class LoginView extends GetView<LoginController> {
                             },
                             showDivider: true,
                             suffixIcon: GestureDetector(
-                              onTap: () => controller.togglePasswordVisibility(),
+                              onTap: () =>
+                                  controller.togglePasswordVisibility(),
                               child: Icon(
                                 controller.isPasswordVisible.value
                                     ? Icons.visibility
@@ -180,7 +185,9 @@ class LoginView extends GetView<LoginController> {
                                     child: Text(
                                       controller.loginError.value,
                                       style: const TextStyle(
-                                          color: Colors.red, fontSize: 12),
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
@@ -200,7 +207,7 @@ class LoginView extends GetView<LoginController> {
                             SavePassWidget(
                               state: controller.rememberMe,
                               onChanged: (val) =>
-                              controller.rememberMe.value = val,
+                                  controller.rememberMe.value = val,
                             ),
                             TextButton(
                               onPressed: () =>
@@ -221,39 +228,42 @@ class LoginView extends GetView<LoginController> {
 
                         /// 🔘 Login Button
                         Obx(
-                              () => RoundedButton(
+                          () => RoundedButton(
                             buttonName: 'Login',
                             onTap: controller.isLoading.value
                                 ? null
                                 : () {
-                              controller.loginError.value = "";
-                              controller.mobileValidationError.value = "";
-                              controller.isValid.value = -1;
+                                    controller.loginError.value = "";
+                                    controller.mobileValidationError.value = "";
+                                    controller.isValid.value = -1;
 
-                              final mobileNumber =
-                              controller.mobileController.text.trim();
-                              if (mobileNumber.isEmpty) {
-                                controller.isValid.value = 0;
-                                return;
-                              }
+                                    final mobileNumber = controller
+                                        .mobileController
+                                        .text
+                                        .trim();
+                                    if (mobileNumber.isEmpty) {
+                                      controller.isValid.value = 0;
+                                      return;
+                                    }
 
-                              final mobileError =
-                              ValidationUtils.validateMobileNumber(
-                                  mobileNumber);
-                              if (mobileError != null) {
-                                controller.mobileValidationError.value =
-                                    mobileError;
-                                controller.isValid.value = 1;
-                                return;
-                              }
+                                    final mobileError =
+                                        ValidationUtils.validateMobileNumber(
+                                          mobileNumber,
+                                        );
+                                    if (mobileError != null) {
+                                      controller.mobileValidationError.value =
+                                          mobileError;
+                                      controller.isValid.value = 1;
+                                      return;
+                                    }
 
-                              if (controller.formKey.currentState
-                                  ?.validate() ??
-                                  false) {
-                                hideKeyboard();
-                                controller.login();
-                              }
-                            },
+                                    if (controller.formKey.currentState
+                                            ?.validate() ??
+                                        false) {
+                                      hideKeyboard();
+                                      controller.login();
+                                    }
+                                  },
                           ),
                         ),
 
@@ -299,8 +309,7 @@ class LoginView extends GetView<LoginController> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border:
-                                  Border.all(color: MyColors.grayD4),
+                                  border: Border.all(color: MyColors.grayD4),
                                 ),
                                 height: 4.sh,
                                 child: Padding(
@@ -311,17 +320,19 @@ class LoginView extends GetView<LoginController> {
                               onTap: () async {
                                 try {
                                   final user =
-                                  await GoogleSignInService.signInWithGoogle();
+                                      await GoogleSignInService.signInWithGoogle();
                                   if (user != null) {
                                     await controller.callSocialLoginAPI(user);
                                   } else {
                                     SnackBars.errorSnackBar(
-                                        content:
-                                        'Google Sign-In was cancelled by user');
+                                      content:
+                                          'Google Sign-In was cancelled by user',
+                                    );
                                   }
                                 } catch (e) {
                                   SnackBars.errorSnackBar(
-                                      content: 'Google Sign-In failed: $e');
+                                    content: 'Google Sign-In failed: $e',
+                                  );
                                 }
                               },
                             ),
@@ -330,8 +341,7 @@ class LoginView extends GetView<LoginController> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border:
-                                  Border.all(color: MyColors.grayD4),
+                                  border: Border.all(color: MyColors.grayD4),
                                 ),
                                 height: 4.sh,
                                 child: Padding(

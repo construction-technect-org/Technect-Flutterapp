@@ -5,7 +5,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/Connecto
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/connector_team_member.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
-import 'package:gap/gap.dart';
 
 class ConnectorProfileView extends GetView<ConnectorProfileController> {
   const ConnectorProfileView({super.key});

@@ -11,7 +11,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Pr
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/controllers/product_detail_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/views/bottom_view.dart';
-import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 

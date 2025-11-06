@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/add_kyc_screen.dart';
-import 'package:gap/gap.dart';
 
 class ConnectorInfoMetricsComponent extends StatelessWidget {
   const ConnectorInfoMetricsComponent({super.key});
@@ -64,14 +63,14 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
           _buildExistingKycDetails(connectorProfile),
         ] else ...[
           GestureDetector(
-            onTap: (){
-              Get.to(()=> AddKycScreen());
+            onTap: () {
+              Get.to(() => AddKycScreen());
             },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 border: Border.all(color: MyColors.grayEA),
-                borderRadius: BorderRadius.circular(8)
+                borderRadius: BorderRadius.circular(8),
               ),
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Center(child: Text("+ Add Kyc", style: MyTexts.bold16)),
@@ -125,7 +124,6 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
             ],
           );
         }),
-
       ),
     );
   }

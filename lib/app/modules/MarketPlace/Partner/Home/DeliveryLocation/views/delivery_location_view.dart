@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/controller/delivery_location_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
-import 'package:gap/gap.dart';
 
 class DeliveryLocationView extends GetView<DeliveryLocationController> {
   DeliveryLocationView({super.key});
@@ -257,13 +256,18 @@ class CommonAddressList extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(16),
                         topRight: Radius.circular(12),
                       ),
-                      color: address.isDefault == true? Colors.white : MyColors.gra54EA,
+                      color: address.isDefault == true
+                          ? Colors.white
+                          : MyColors.gra54EA,
                     ),
                     child: Text(
                       "Site Code: ${address.siteCode ?? '-'}",

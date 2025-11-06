@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/controllers/forgot_password_controller.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
-import 'package:gap/gap.dart';
 
 class ForgotPasswordView extends GetView<ForgotPasswordController> {
   ForgotPasswordView({super.key});
@@ -108,24 +107,25 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                     controller.isValid.value = 0;
                   } else {
                     await controller.sendOtp().then((val) {
-                      Get.to(()=> OtpVerificationView(
-                        isLoading: controller.isLoading,
-                        onTap:  () async {
-                          await controller.sendOtp().then((val) {
-                            controller.startTimer();
-                          });
-                        },
-                        countdownController: controller.countdownController,
-                        isResendVisible: controller.isResendVisible,
-                        otpController: controller.otpController,
-                        onCompleted: (value) {
-                          controller.verifyOtp();
-
-                        },
-                        onFinished: () {
-                          controller.onCountdownFinish();
-                        },
-                      ));
+                      Get.to(
+                        () => OtpVerificationView(
+                          isLoading: controller.isLoading,
+                          onTap: () async {
+                            await controller.sendOtp().then((val) {
+                              controller.startTimer();
+                            });
+                          },
+                          countdownController: controller.countdownController,
+                          isResendVisible: controller.isResendVisible,
+                          otpController: controller.otpController,
+                          onCompleted: (value) {
+                            controller.verifyOtp();
+                          },
+                          onFinished: () {
+                            controller.onCountdownFinish();
+                          },
+                        ),
+                      );
                       controller.startTimer();
                     });
                   }

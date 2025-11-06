@@ -5,7 +5,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Accou
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/customer_support_view.dart';
-import 'package:gap/gap.dart';
 
 class AccountScreen extends GetView<AccountController> {
   const AccountScreen({super.key});

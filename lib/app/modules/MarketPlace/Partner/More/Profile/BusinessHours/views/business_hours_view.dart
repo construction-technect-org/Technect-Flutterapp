@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/custom_switch.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/controller/business_hours_controller.dart';
-import 'package:gap/gap.dart';
 
 class BusinessHoursView extends GetView<BusinessHoursController> {
   @override
@@ -228,8 +227,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   borderSide: const BorderSide(
-                                                    color: MyColors
-                                                        .grayCD,
+                                                    color: MyColors.grayCD,
                                                   ),
                                                 ),
                                                 enabledBorder:
@@ -240,8 +238,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                           ),
                                                       borderSide:
                                                           const BorderSide(
-                                                            color: MyColors
-                                                                .grayCD,
+                                                            color:
+                                                                MyColors.grayCD,
                                                           ),
                                                     ),
                                                 focusedBorder:
@@ -252,8 +250,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                           ),
                                                       borderSide:
                                                           const BorderSide(
-                                                            color: MyColors
-                                                                .grayCD,
+                                                            color:
+                                                                MyColors.grayCD,
                                                           ),
                                                     ),
 
@@ -261,8 +259,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   borderSide: const BorderSide(
-                                                    color: MyColors
-                                                        .grayCD,
+                                                    color: MyColors.grayCD,
                                                   ),
                                                 ),
                                                 focusedErrorBorder:
@@ -273,8 +270,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                           ),
                                                       borderSide:
                                                           const BorderSide(
-                                                            color: MyColors
-                                                                .grayCD,
+                                                            color:
+                                                                MyColors.grayCD,
                                                           ),
                                                     ),
                                               ),
@@ -305,7 +302,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                     e,
                                                     style: MyTexts.medium13
                                                         .copyWith(
-                                                          color: MyColors.gray2E,
+                                                          color:
+                                                              MyColors.gray2E,
                                                         ),
                                                   ),
                                                 );
@@ -349,8 +347,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   borderSide: const BorderSide(
-                                                    color: MyColors
-                                                        .grayCD,
+                                                    color: MyColors.grayCD,
                                                   ),
                                                 ),
 
@@ -362,8 +359,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                           ),
                                                       borderSide:
                                                           const BorderSide(
-                                                            color: MyColors
-                                                                .grayCD,
+                                                            color:
+                                                                MyColors.grayCD,
                                                           ),
                                                     ),
                                                 focusedBorder:
@@ -374,16 +371,15 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                           ),
                                                       borderSide:
                                                           const BorderSide(
-                                                            color: MyColors
-                                                                .grayCD,
+                                                            color:
+                                                                MyColors.grayCD,
                                                           ),
                                                     ),
                                                 errorBorder: OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   borderSide: const BorderSide(
-                                                    color: MyColors
-                                                        .grayCD,
+                                                    color: MyColors.grayCD,
                                                   ),
                                                 ),
                                                 focusedErrorBorder:
@@ -394,8 +390,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                           ),
                                                       borderSide:
                                                           const BorderSide(
-                                                            color: MyColors
-                                                                .grayCD,
+                                                            color:
+                                                                MyColors.grayCD,
                                                           ),
                                                     ),
                                               ),
@@ -428,7 +424,8 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                                     e,
                                                     style: MyTexts.medium13
                                                         .copyWith(
-                                                          color: MyColors.gray2E,
+                                                          color:
+                                                              MyColors.gray2E,
                                                         ),
                                                   ),
                                                 );
@@ -444,7 +441,7 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                                             decoration: BoxDecoration(
                                               color: const Color(0xFFFCECE9),
                                               border: Border.all(
-                                                color: const Color(0xFFF9D0CB)
+                                                color: const Color(0xFFF9D0CB),
                                               ),
                                               borderRadius:
                                                   BorderRadius.circular(12),

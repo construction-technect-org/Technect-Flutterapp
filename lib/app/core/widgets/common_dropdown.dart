@@ -1,5 +1,4 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:gap/gap.dart';
 
 class CommonDropdown<T> extends StatelessWidget {
   final String hintText;

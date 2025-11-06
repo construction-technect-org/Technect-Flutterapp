@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/explore_view.dart';
-import 'package:gap/gap.dart';
 
 class MenuView extends StatelessWidget {
   const MenuView({super.key});

@@ -4,7 +4,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/controller/edit_profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/views/widget/business_details_step_widget.dart';
-import 'package:gap/gap.dart';
 
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override

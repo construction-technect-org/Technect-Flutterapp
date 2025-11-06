@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
-import 'package:gap/gap.dart';
 
 class HomeView extends StatelessWidget {
   final CommonController commonController = Get.find();
@@ -84,7 +83,9 @@ class HomeView extends StatelessWidget {
                                 begin: AlignmentGeometry.topCenter,
                                 end: AlignmentGeometry.bottomCenter,
                                 colors: [
-                                  MyColors.custom('FFF9BD').withOpacity(0.1),
+                                  MyColors.custom(
+                                    'FFF9BD',
+                                  ).withValues(alpha: 0.1),
                                   MyColors.white,
                                 ],
                               ),
@@ -281,7 +282,8 @@ class HomeView extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     if (myPref.role.val == "connector") {
-                      if ((controller.profileData.value.data?.siteLocations ?? [])
+                      if ((controller.profileData.value.data?.siteLocations ??
+                              [])
                           .isEmpty) {
                         _showAddAddressDialog();
                         return;
@@ -309,8 +311,9 @@ class HomeView extends StatelessWidget {
                                 (subCategory.image ??
                                     'category-images/FineAggregate.png'),
                             fit: BoxFit.fill,
-                            placeholder: (context, url) =>
-                                const Center(child: CircularProgressIndicator()),
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                             errorWidget: (context, url, error) => const Icon(
                               Icons.category,
                               color: MyColors.primary,

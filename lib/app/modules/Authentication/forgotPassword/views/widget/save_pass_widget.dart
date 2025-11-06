@@ -1,8 +1,4 @@
-import 'package:construction_technect/app/core/utils/colors.dart';
-import 'package:construction_technect/app/core/utils/text_theme.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 
 class SavePassWidget extends StatelessWidget {
   const SavePassWidget({
