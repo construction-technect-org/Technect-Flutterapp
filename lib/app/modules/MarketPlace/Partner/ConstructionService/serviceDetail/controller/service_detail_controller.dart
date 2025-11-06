@@ -17,6 +17,7 @@ class ServiceDetailController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isLiked = false.obs;
   final RxBool isEdit = false.obs;
+  final RxBool isRefVideo = false.obs;
   final RxInt currentIndex = 0.obs;
   VoidCallback? onApiCall;
 
@@ -67,8 +68,11 @@ class ServiceDetailController extends GetxController {
                 log('Reference video initialization timeout');
                 throw TimeoutException('Video initialization took too long');
               },
-            );
 
+            ).then((val){
+              isRefVideo.value=true;
+
+            });
             log('Reference video initialized successfully');
             update(); // Notify listeners to rebuild
           } catch (e) {
@@ -118,7 +122,6 @@ class ServiceDetailController extends GetxController {
             );
 
             log('Video initialized successfully');
-            update(); // Notify listeners to rebuild
           } catch (e) {
             log('Error initializing video: $e');
             // Show error to user or provide fallback

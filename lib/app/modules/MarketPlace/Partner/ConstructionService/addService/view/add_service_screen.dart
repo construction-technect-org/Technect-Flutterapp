@@ -55,7 +55,32 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: GestureDetector(
-                                        // onTap: () => controller.showFullImage(path),
+                                     onTap: (){
+                                       showDialog(
+                                         context: context,
+                                         builder: (_) => Dialog(
+                                           insetPadding: const EdgeInsets.all(16),
+                                           child: InteractiveViewer(
+                                             child: path.contains('http')
+                                                 ? Image.network(
+                                               path,
+                                               width: 360.w,
+                                               fit: BoxFit.contain,
+                                               errorBuilder: (_, __, ___) =>
+                                               const Icon(
+                                                 Icons.broken_image,
+                                                 size: 60,
+                                                 color: Colors.grey,
+                                               ),
+                                             )
+                                                 : Image.file(
+                                               File(path),
+                                               fit: BoxFit.contain,
+                                             ),
+                                           ),
+                                         ),
+                                       );
+                                     },
                                         child: path.contains('http')
                                             ? getImageView(
                                                 finalUrl: path,
@@ -468,39 +493,29 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               Stack(
                                 alignment: AlignmentGeometry.topRight,
                                 children: [
-                                  Stack(
-                                    alignment: AlignmentGeometry.center,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: AspectRatio(
-                                          aspectRatio: 16 / 9,
-                                          child: VideoPlayer(
-                                            controller.videoPlayerController!,
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.openVideoDialog(
+                                        context,
+                                        controller.serviceVid.value.mediaUrl??"",
+                                        true,
+                                      );
+                                    },
+                                    child: Stack(
+                                      alignment: AlignmentGeometry.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: AspectRatio(
+                                            aspectRatio: 16 / 9,
+                                            child: VideoPlayer(
+                                              controller.videoPlayerController!,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          // controller.openVideoDialog(
-                                          //   context,
-                                          //   c,
-                                          //   true,
-                                          // );
-                                        },
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: MyColors.primary,
-                                          ),
-                                          padding: const EdgeInsets.all(12),
-                                          child: const Icon(
-                                            Icons.video_camera_back_outlined,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                        const VideoPlay(),
+                                      ],
+                                    ),
                                   ),
                                   GestureDetector(
                                     onTap: controller.removeVideo,
@@ -682,47 +697,76 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                   referenceUrl,
                                   true,
                                 ),
-                                child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: AspectRatio(
-                                  aspectRatio: 16/9,
-                                  child: VideoPlayer(
-                                    controller.refVideoPlayerController!,
-                                  ),
+                                child: Stack(
+                                  alignment: AlignmentGeometry.center,
+                                  children: [
+                                    ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: AspectRatio(
+                                      aspectRatio: 16/9,
+                                      child: VideoPlayer(
+                                        controller.refVideoPlayerController!,
+                                      ),
+                                    ),
+                                                                ),
+                                    const VideoPlay(),
+                                  ],
                                 ),
-                                                            ),
                               );
                       }
                       // --- IMAGE ---
                       else if (referenceType == 'image') {
-                        referenceWidget = ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            referenceUrl,
-                            height: 200,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(
-                              height: 200,
-                              color: MyColors.grayEA,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.broken_image,
-                                  size: 60,
-                                  color: Colors.grey,
+                        referenceWidget = GestureDetector(
+                          onTap: (){
+                            showDialog(
+                              context: context,
+                              builder: (_) => Dialog(
+                                insetPadding: const EdgeInsets.all(16),
+                                child: InteractiveViewer(
+                                  child: Image.network(
+                                    referenceUrl,
+                                    width: 360.w,
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (_, __, ___) =>
+                                    const Icon(
+                                      Icons.broken_image,
+                                      size: 60,
+                                      color: Colors.grey,
+                                    ),
+                                  )
                                 ),
                               ),
-                            ),
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
+                            );
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              referenceUrl,
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(
                                 height: 200,
                                 color: MyColors.grayEA,
                                 child: const Center(
-                                  child: CircularProgressIndicator(),
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    size: 60,
+                                    color: Colors.grey,
+                                  ),
                                 ),
-                              );
-                            },
+                              ),
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Container(
+                                  height: 200,
+                                  color: MyColors.grayEA,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         );
                       }
@@ -983,5 +1027,28 @@ class AddServiceScreen extends GetView<AddServiceController> {
         child: const Icon(Icons.description, color: Colors.blue),
       );
     }
+  }
+}
+
+class VideoPlay extends StatelessWidget {
+  const VideoPlay({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: const BoxDecoration(
+        color: MyColors.primary,
+        shape: BoxShape.circle,
+      ),
+      child: const Icon(
+        Icons.play_arrow,
+        color: Colors.white,
+        size: 24,
+      ),
+    );
   }
 }

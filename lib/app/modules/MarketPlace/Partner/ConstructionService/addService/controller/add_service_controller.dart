@@ -145,6 +145,8 @@ class AddServiceController extends GetxController {
 
   RxInt serviceId = 0.obs;
   Rx<ServiceReferenceItem> serviceRef = ServiceReferenceItem().obs;
+  Rx<ServiceMediaItem> serviceVid = ServiceMediaItem().obs;
+  RxList<ServiceMediaItem> serviceImg = <ServiceMediaItem>[].obs;
 
   @override
   void onInit() {
@@ -155,6 +157,9 @@ class AddServiceController extends GetxController {
     if (Get.arguments != null && Get.arguments["service"] != null) {
       final s = Get.arguments["service"];
       serviceId.value = s.id;
+      serviceVid.value = s.video;
+      serviceImg.addAll(s.images);
+
       if (s.reference != null) {
         referenceDeleted.value = false;
         serviceRef.value = s.reference;
