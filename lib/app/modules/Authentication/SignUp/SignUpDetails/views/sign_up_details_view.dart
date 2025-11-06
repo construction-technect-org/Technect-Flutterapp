@@ -147,10 +147,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         ),
                                         child: Text(
                                           controller.emailError.value,
-                                          style: const TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 12,
-                                          ),
+                                       style: MyTexts.medium13.copyWith(color: MyColors.red33),
                                         ),
                                       );
                                     }
@@ -400,13 +397,6 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
             onTap: () async {
               hideKeyboard();
               if (!formKey.currentState!.validate()) return;
-
-              // Run async availability check when email is provided and format is valid
-              if (controller.emailController.text.trim().isNotEmpty) {
-                await controller.validateEmailAvailability(
-                  controller.emailController.text,
-                );
-              }
 
               // Block on availability error
               if (controller.emailError.value.isNotEmpty) {
