@@ -105,7 +105,16 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                               onFocusChange: (hasFocus) {
                                 if (!hasFocus) {
                                   final email = controller.emailController.text;
-                                  controller.validateEmailAvailability(email);
+                                  // Only validate availability if format is valid
+                                  final formatError = Validate.validateEmail(
+                                    email,
+                                  );
+                                  if (formatError == null) {
+                                    controller.validateEmailAvailability(email);
+                                  } else {
+                                    // Format error - clear API error, validator will show format error
+                                    controller.emailError.value = "";
+                                  }
                                 }
                               },
                               child: Column(
@@ -130,9 +139,17 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     },
                                     onFieldSubmitted: (value) {
                                       if (value != null) {
-                                        controller.validateEmailAvailability(
-                                          value,
-                                        );
+                                        // Only validate availability if format is valid
+                                        final formatError =
+                                            Validate.validateEmail(value);
+                                        if (formatError == null) {
+                                          controller.validateEmailAvailability(
+                                            value,
+                                          );
+                                        } else {
+                                          // Format error - clear API error, validator will show format error
+                                          controller.emailError.value = "";
+                                        }
                                       }
                                     },
                                   ),
@@ -147,7 +164,9 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         ),
                                         child: Text(
                                           controller.emailError.value,
-                                       style: MyTexts.medium13.copyWith(color: MyColors.red33),
+                                          style: MyTexts.medium13.copyWith(
+                                            color: MyColors.red33,
+                                          ),
                                         ),
                                       );
                                     }
@@ -395,14 +414,22 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
           child: RoundedButton(
             buttonName: 'Continue',
             onTap: () async {
-              hideKeyboard();
+              // First validate form (format validation)
               if (!formKey.currentState!.validate()) return;
 
-              // Block on availability error
+              // Format validation passed, now validate email availability (async)
+              // validateEmailAvailability will only check API if format is valid
+              await controller.validateEmailAvailability(
+                controller.emailController.text,
+              );
+
+              // Block on email API error (format errors are already shown by validator)
               if (controller.emailError.value.isNotEmpty) {
                 SnackBars.errorSnackBar(content: controller.emailError.value);
                 return;
               }
+
+              hideKeyboard();
 
               if (controller.isVerified.value) {
                 FocusManager.instance.primaryFocus?.unfocus();

@@ -192,6 +192,15 @@ class SignUpPasswordController extends GetxController {
           myPref.setUserModel(signUpResponse.data!.user!);
         }
 
+        if (rememberMe.value) {
+          myPref.saveCredentials(
+            userData!.mobileNumber,
+            passwordController.text,
+          );
+        } else {
+          myPref.clearCredentials();
+        }
+
         Get.to(
           () => SuccessScreen(
             title: "Success!",

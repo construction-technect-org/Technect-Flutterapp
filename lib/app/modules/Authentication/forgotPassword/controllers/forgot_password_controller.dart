@@ -147,6 +147,16 @@ class ForgotPasswordController extends GetxController {
       );
 
       if (resetResponse.success == true) {
+        //Remember me
+        if (rememberMe.value) {
+          myPref.saveCredentials(
+            phoneEmailController.text,
+            newPasswordController.text,
+          );
+        } else {
+          myPref.clearCredentials();
+        }
+        //Navigation
         Get.offAll(
           () => SuccessScreen(
             title: "Success!",
