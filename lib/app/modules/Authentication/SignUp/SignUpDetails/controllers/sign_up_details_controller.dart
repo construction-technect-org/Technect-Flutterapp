@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
+import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
-import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/widget/mobile_number_sp_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRole/controllers/sign_up_role_controller.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
@@ -240,26 +240,15 @@ class SignUpDetailsController extends GetxController {
                 style: MyTexts.medium20.copyWith(color: Colors.black),
               ),
               const Gap(5),
-              // CommonPhoneField(
-              //   controller: mobileNumberController,
-              //   focusNode: FocusNode(),
-              //   isValid: isValid,
-              //   customErrorMessage: numberError,
-              //   onCountryCodeChanged: (code) {
-              //     countryCode.value = code;
-              //   },
-              // ),
-              MobileNumberSpWidget(
-                number: mobileNumberController,
-                // focusNode: FocusNode(),
-                formKey: formKey,
+              CommonPhoneField(
+                controller: mobileNumberController,
+                focusNode: FocusNode(),
                 isValid: isValid,
                 customErrorMessage: numberError,
                 onCountryCodeChanged: (code) {
                   countryCode.value = code;
                 },
               ),
-
               const Gap(30),
               RoundedButton(
                 buttonName: "Continue",
