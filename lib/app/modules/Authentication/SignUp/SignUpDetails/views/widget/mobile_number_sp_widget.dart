@@ -46,7 +46,7 @@ class MobileNumberSpWidget extends StatelessWidget {
                         initialCountryCode: initialCountryCode,
                         flagsButtonMargin: const EdgeInsets.all(8),
                         focusNode: FocusNode(),
-                        readOnly: true,
+                        keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(10),
@@ -63,7 +63,8 @@ class MobileNumberSpWidget extends StatelessWidget {
                         ),
 
                         decoration: InputDecoration(
-                          errorText: customErrorMessage?.value.isEmpty == false
+                          errorText:
+                              (customErrorMessage?.value.isNotEmpty == true)
                               ? customErrorMessage!.value
                               : null,
                           enabledBorder: OutlineInputBorder(
@@ -163,16 +164,28 @@ class MobileNumberSpWidget extends StatelessWidget {
                         ),
                         controller: number,
                         onChanged: (phone) {
-                          // Clear error message when user types
-                          customErrorMessage?.value = "";
-                          isValid.value = -1;
+                          // Clear error message when user types/changes number
+                          if (customErrorMessage?.value.isNotEmpty == true) {
+                            customErrorMessage?.value = "";
+                          }
+                          if (isValid.value != -1) {
+                            isValid.value = -1;
+                          }
 
                           if (phone.number.isEmpty) {
                             isValid.value = 0;
+                          } else {
+                            isValid.value = -1; // Reset validation state
                           }
 
                           if (onCountryCodeChanged != null) {
                             onCountryCodeChanged!(phone.countryCode);
+                          }
+                        },
+                        onTap: () {
+                          // Clear error when user taps to edit
+                          if (customErrorMessage?.value.isNotEmpty == true) {
+                            customErrorMessage?.value = "";
                           }
                         },
                       ),
@@ -190,6 +203,14 @@ class MobileNumberSpWidget extends StatelessWidget {
                 void appendDigit(String d) {
                   final currentText = number.text;
                   if (currentText.length >= 10) return;
+
+                  // Clear error message when adding digit
+                  if (customErrorMessage?.value.isNotEmpty == true) {
+                    customErrorMessage?.value = "";
+                  }
+                  if (isValid.value != -1) {
+                    isValid.value = -1;
+                  }
 
                   // Get cursor position if available
                   final selection = number.selection;
@@ -214,6 +235,14 @@ class MobileNumberSpWidget extends StatelessWidget {
                 void backspace() {
                   final currentText = number.text;
                   if (currentText.isEmpty) return;
+
+                  // Clear error message when deleting
+                  if (customErrorMessage?.value.isNotEmpty == true) {
+                    customErrorMessage?.value = "";
+                  }
+                  if (isValid.value != -1) {
+                    isValid.value = -1;
+                  }
 
                   // Get cursor position
                   final selection = number.selection;

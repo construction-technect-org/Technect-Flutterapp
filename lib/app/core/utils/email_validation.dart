@@ -1,6 +1,219 @@
 /// Comprehensive email validation class following RFC 5322 standards
 /// This class provides robust email validation similar to Google's validation
 class EmailValidation {
+  // Comprehensive list of valid Top-Level Domains (TLDs)
+  // Includes gTLDs, ccTLDs, and new gTLDs
+  static const Set<String> _validTlds = {
+    // Original gTLDs
+    'com', 'org', 'net', 'edu', 'gov', 'mil', 'int', 'info', 'biz', 'name',
+    'pro', 'museum', 'coop', 'aero', 'jobs', 'mobi', 'travel', 'tel', 'asia',
+    'cat', 'xxx', 'post', 'geo',
+
+    // New gTLDs (popular ones)
+    // Note: 'io' and 'ai' are also valid ccTLDs, so they're included in the ccTLD section
+    'app', 'dev', 'tech', 'cloud', 'online', 'site', 'website',
+    'store', 'shop', 'blog', 'xyz', 'space', 'design', 'art', 'music', 'photo',
+    'video', 'news', 'media', 'email', 'services', 'solutions', 'consulting',
+    'company', 'network', 'systems', 'agency', 'marketing', 'business',
+    'enterprises',
+    'international',
+    'global',
+    'world',
+    'group',
+    'team',
+    'social',
+    'community', 'support', 'help', 'center', 'guide', 'wiki', 'today', 'live',
+    'life', 'fun', 'games', 'win', 'bet', 'casino', 'poker', 'golf', 'tennis',
+    'football', 'basketball', 'soccer', 'cricket', 'baseball', 'hockey',
+    'fitness', 'health', 'medical', 'hospital', 'clinic', 'doctor', 'dentist',
+    'law', 'legal', 'attorney', 'finance', 'bank', 'money', 'insurance',
+    'investments',
+    'trading',
+    'cryptocurrency',
+    'crypto',
+    'blockchain',
+    'bitcoin',
+    'ethereum', 'nft', 'web3', 'metaverse', 'vr', 'data', 'analytics',
+    // Note: 'ar' and 'ml' are valid ccTLDs (Argentina, Mali), included in ccTLD section
+    'software', 'code', 'programming', 'developer', 'coding', 'engineer',
+    'engineering', 'science', 'research', 'academy', 'education', 'school',
+    'university',
+    'college',
+    'learn',
+    'study',
+    'courses',
+    'training',
+    'workshop',
+    'seminar',
+    'conference',
+    'event',
+    'meetup',
+    'link',
+    'web',
+    'page',
+    'landing',
+    'home',
+    'house',
+    'realestate',
+    'property',
+    'estate',
+    'build',
+    'construction',
+    'architect', 'architecture', 'interior', 'furniture', 'decor', 'garden',
+    'landscaping', 'outdoor', 'nature', 'environment', 'green', 'eco',
+    'sustainable', 'renewable', 'energy', 'solar', 'wind', 'hydro', 'electric',
+    'car', 'auto', 'motor', 'vehicle', 'transport', 'trip', 'vacation',
+    'holiday',
+    'hotel',
+    'booking',
+    'reservation',
+    'flight',
+    'airline',
+    'airport',
+    'train', 'bus', 'taxi', 'ride', 'food', 'restaurant', 'cafe', 'bar', 'pub',
+    'club', 'entertainment', 'party', 'celebration', 'festival', 'concert',
+    'show', 'movie', 'film', 'cinema', 'theater', 'drama', 'comedy', 'action',
+    'horror',
+    'thriller',
+    'romance',
+    'sci-fi',
+    'fantasy',
+    'animation',
+    'cartoon',
+    'kids', 'family', 'children', 'baby', 'toddler', 'teen', 'youth', 'adult',
+    'senior', 'elderly', 'retirement', 'pension',
+
+    // Country Code TLDs (ccTLDs) - All country codes
+    'ac', 'ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'ao', 'aq', 'ar', 'as',
+    'at', 'au', 'aw', 'ax', 'az', 'ba', 'bb', 'bd', 'be', 'bf', 'bg', 'bh',
+    'bi', 'bj', 'bl', 'bm', 'bn', 'bo', 'bq', 'br', 'bs', 'bt', 'bv', 'bw',
+    'by', 'bz', 'ca', 'cc', 'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm',
+    'cn', 'co', 'cr', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz', 'de', 'dj', 'dk',
+    'dm', 'do', 'dz', 'ec', 'ee', 'eg', 'eh', 'er', 'es', 'et', 'fi', 'fj',
+    'fk', 'fm', 'fo', 'fr', 'ga', 'gb', 'gd', 'ge', 'gf', 'gg', 'gh', 'gi',
+    'gl', 'gm', 'gn', 'gp', 'gq', 'gr', 'gs', 'gt', 'gu', 'gw', 'gy', 'hk',
+    'hm', 'hn', 'hr', 'ht', 'hu', 'id', 'ie', 'il', 'im', 'in', 'io', 'iq',
+    'ir', 'is', 'it', 'je', 'jm', 'jo', 'jp', 'ke', 'kg', 'kh', 'ki', 'km',
+    'kn', 'kp', 'kr', 'kw', 'ky', 'kz', 'la', 'lb', 'lc', 'li', 'lk', 'lr',
+    'ls', 'lt', 'lu', 'lv', 'ly', 'ma', 'mc', 'md', 'me', 'mf', 'mg', 'mh',
+    'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms', 'mt', 'mu', 'mv',
+    'mw', 'mx', 'my', 'mz', 'na', 'nc', 'ne', 'nf', 'ng', 'ni', 'nl', 'no',
+    'np', 'nr', 'nu', 'nz', 'om', 'pa', 'pe', 'pf', 'pg', 'ph', 'pk', 'pl',
+    'pm', 'pn', 'pr', 'ps', 'pt', 'pw', 'py', 'qa', 're', 'ro', 'rs', 'ru',
+    'rw', 'sa', 'sb', 'sc', 'sd', 'se', 'sg', 'sh', 'si', 'sj', 'sk', 'sl',
+    'sm', 'sn', 'so', 'sr', 'ss', 'st', 'su', 'sv', 'sx', 'sy', 'sz', 'tc',
+    'td', 'tf', 'tg', 'th', 'tj', 'tk', 'tl', 'tm', 'tn', 'to', 'tr', 'tt',
+    'tv', 'tw', 'tz', 'ua', 'ug', 'uk', 'um', 'us', 'uy', 'uz', 'va', 'vc',
+    've', 'vg', 'vi', 'vn', 'vu', 'wf', 'ws', 'ye', 'yt', 'za', 'zm', 'zw',
+  };
+
+  // Common two-part TLDs (e.g., co.uk, com.au)
+  static const Set<String> _validTwoPartTlds = {
+    'co.uk',
+    'com.au',
+    'co.in',
+    'com.br',
+    'co.za',
+    'com.mx',
+    'co.jp',
+    'com.cn',
+    'com.ar',
+    'com.co',
+    'com.pe',
+    'com.ve',
+    'com.ec',
+    'com.uy',
+    'com.py',
+    'com.bo',
+    'com.cr',
+    'com.pa',
+    'com.gt',
+    'com.hn',
+    'com.sv',
+    'com.ni',
+    'com.do',
+    'com.cu',
+    'com.jm',
+    'com.tt',
+    'com.bb',
+    'com.gd',
+    'com.lc',
+    'com.vc',
+    'com.ag',
+    'com.bs',
+    'com.bz',
+    'com.sr',
+    'com.gy',
+    'com.fk',
+    'co.nz',
+    'co.id',
+    'co.th',
+    'co.my',
+    'co.sg',
+    'co.ph',
+    'co.vn',
+    'co.kr',
+    'com.tw',
+    'com.hk',
+    'com.sg',
+    'com.my',
+    'com.th',
+    'com.id',
+    'com.ph',
+    'com.vn',
+    'com.kr',
+    'net.au',
+    'net.uk',
+    'net.in',
+    'org.uk',
+    'org.au',
+    'org.in',
+    'edu.au',
+    'edu.in',
+    'gov.au',
+    'gov.in',
+    'gov.uk',
+    'ac.uk',
+    'ac.in',
+    'ac.nz',
+    'ac.za',
+    'ac.jp',
+    'ac.kr',
+    'ac.cn',
+    'ac.tw',
+    'ac.hk',
+    'sch.uk',
+    'sch.in',
+    'sch.au',
+    'sch.nz',
+    'sch.za',
+    'sch.jp',
+    'sch.kr',
+  };
+
+  /// Validates if a TLD is valid
+  /// Returns true if TLD is valid, false otherwise
+  /// Strict validation: only known TLDs are accepted
+  static bool isValidTld(String? tld) {
+    if (tld == null || tld.isEmpty) return false;
+
+    final normalizedTld = tld.toLowerCase().trim();
+
+    // Check single-part TLDs
+    if (_validTlds.contains(normalizedTld)) {
+      return true;
+    }
+
+    // Check two-part TLDs
+    if (_validTwoPartTlds.contains(normalizedTld)) {
+      return true;
+    }
+
+    // Strict validation: only known TLDs are accepted
+    // This prevents fake/made-up TLDs like "hhfn", "xyz123", etc.
+    return false;
+  }
+
   /// Comprehensive email validation following RFC 5322 standards
   /// Returns true if email is valid, false otherwise
   static bool isValidEmail(String? email) {
@@ -133,17 +346,14 @@ class EmailValidation {
     // TLD cannot exceed 63 characters
     if (tld.length > 63) return false;
 
-    // TLD should only contain letters (some TLDs have numbers, but we'll be strict)
-    if (!RegExp(r'^[a-z]{2,63}$').hasMatch(tld)) {
-      // Allow numeric TLDs for edge cases like .123 or .123domain
-      if (!RegExp(r'^[a-z0-9]{2,63}$').hasMatch(tld)) {
-        return false;
-      }
-    }
-
-    // Check for invalid TLD typos
+    // Check for invalid TLD typos first
     final invalidTlds = ['con', 'coom', 'coon', 'comn', 'c0m'];
     if (invalidTlds.contains(tld)) return false;
+
+    // Validate TLD using comprehensive TLD list
+    if (!isValidTld(tld)) {
+      return false;
+    }
 
     // Additional validation: Check for common email provider typos
     final domainLower = domain.toLowerCase();
@@ -312,27 +522,15 @@ class EmailValidation {
       return "Please enter a valid email address with a valid domain";
     }
 
-    // Common two-part TLDs (e.g., co.uk, com.au, co.in)
-    final twoPartTlds = [
-      'co.uk',
-      'com.au',
-      'co.in',
-      'com.br',
-      'co.za',
-      'com.mx',
-      'co.jp',
-      'com.cn',
-    ];
-
     String tld;
     String? secondLevelDomain;
     String mainDomainName;
 
-    // Check if it's a two-part TLD
+    // Check if it's a two-part TLD (e.g., co.uk, com.au)
     if (domainParts.length >= 3) {
       final lastTwoParts =
           '${domainParts[domainParts.length - 2]}.${domainParts.last}';
-      if (twoPartTlds.contains(lastTwoParts)) {
+      if (_validTwoPartTlds.contains(lastTwoParts)) {
         tld = lastTwoParts;
         secondLevelDomain = domainParts[domainParts.length - 3];
         mainDomainName = domainParts.length >= 4
@@ -350,37 +548,20 @@ class EmailValidation {
       mainDomainName = domainParts[domainParts.length - 2];
     }
 
-    // Validate TLD format - must be at least 2 characters and only letters (or dot for two-part TLDs)
+    // Validate TLD format - must be at least 2 characters
     if (tld.length < 2) {
       return "Please enter a valid email address with a valid domain";
     }
 
-    // For two-part TLDs, validate both parts
-    if (tld.contains('.')) {
-      final tldParts = tld.split('.');
-      for (final part in tldParts) {
-        if (!RegExp(r'^[a-z]{2,63}$').hasMatch(part)) {
-          return "Please enter a valid email address with a valid domain";
-        }
+    // Use comprehensive TLD validation
+    if (!isValidTld(tld)) {
+      // Check for common typos first
+      final invalidTlds = ['con', 'coom', 'coon', 'comn', 'c0m'];
+      final singleTld = tld.contains('.') ? tld.split('.').last : tld;
+      if (invalidTlds.contains(singleTld)) {
+        return "Please enter a valid email address. The domain extension appears to be invalid or a typo";
       }
-    } else {
-      if (!RegExp(r'^[a-z]{2,63}$').hasMatch(tld)) {
-        return "Please enter a valid email address with a valid domain";
-      }
-    }
-
-    // List of known invalid TLD typos (commonly mistyped)
-    final invalidTlds = [
-      'con', // typo of .com
-      'coom', // typo of .com
-      'coon', // typo of .com
-      'comn', // typo of .com
-      'c0m', // typo of .com (zero instead of 'o')
-    ];
-
-    // Check for known invalid TLDs (typos) - only for single-part TLDs
-    if (!tld.contains('.') && invalidTlds.contains(tld)) {
-      return "Please enter a valid email address. The domain extension appears to be invalid or a typo";
+      return "Please enter a valid email address with a valid domain extension";
     }
 
     // Common email providers
