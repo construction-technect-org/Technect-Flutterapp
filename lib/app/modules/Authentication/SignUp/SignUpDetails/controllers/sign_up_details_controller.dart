@@ -249,7 +249,30 @@ class SignUpDetailsController extends GetxController {
                   countryCode.value = code;
                 },
               ),
-              const Gap(30),
+              const Gap(15),
+              Obx(() {
+                if (numberError.value.isNotEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            numberError.value,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
+              const Gap(10),
               RoundedButton(
                 buttonName: "Continue",
                 onTap: () async {
@@ -291,7 +314,7 @@ class SignUpDetailsController extends GetxController {
                   }
                 },
               ),
-              const Gap(16),
+              const Gap(10),
             ],
           ),
         ),
