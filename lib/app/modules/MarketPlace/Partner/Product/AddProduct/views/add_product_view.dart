@@ -252,13 +252,13 @@ class AddProductView extends GetView<AddProductController> {
                                                       finalUrl: path,
                                                       width: 78,
                                                       height: 78,
-                                                      fit: BoxFit.contain,
+                                                      fit: BoxFit.cover,
                                                     )
                                                   : Image.file(
                                                       File(path),
                                                       width: 78,
                                                       height: 78,
-                                                      fit: BoxFit.contain,
+                                                      fit: BoxFit.cover,
                                                     ),
                                             ),
                                           ),

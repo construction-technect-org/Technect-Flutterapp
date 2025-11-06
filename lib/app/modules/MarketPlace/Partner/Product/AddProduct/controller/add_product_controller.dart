@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
@@ -818,8 +819,17 @@ class AddProductController extends GetxController {
       if (addTeamResponse.success == true) {
         // await controller.fetchProducts();
         isLoading.value = false;
-        Get.back();
-        Get.back();
+        Get.to(
+              () => SuccessScreen(
+            title: "Success!",
+            header: "Product added successfully!",
+            onTap: () {
+              Get.back();
+              Get.back();
+              Get.back();
+            },
+          ),
+        );
       } else {
         isLoading.value = false;
         SnackBars.errorSnackBar(

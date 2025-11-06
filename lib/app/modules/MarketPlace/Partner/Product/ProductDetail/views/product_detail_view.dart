@@ -47,211 +47,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           //   ),
           // ],
         ),
-        bottomNavigationBar: Obx(() {
-          return (controller.isFromAdd.value == false &&
-                  controller.isFromConnector.value == false)
-              ? const SizedBox()
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    if (myPref.role.val == "connector")
-                      if (!(controller.isFromAdd.value == true &&
-                          controller.isFromConnector.value == false))
-                        const Gap(16),
-                    if (myPref.role.val == "connector")
-                      if (!(controller.isFromAdd.value == true &&
-                          controller.isFromConnector.value == false))
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.offAllNamed(Routes.MAIN);
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Explore More!",
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.grayA5,
-                                  ),
-                                ),
-                                const Gap(8),
-                                Text(
-                                  "View Categories >",
-                                  style: MyTexts.medium16.copyWith(
-                                    color: MyColors.gray54,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                    Obx(() {
-                      final product = controller.product;
-                      if (controller.isFromAdd.value == true &&
-                          controller.isFromConnector.value == false) {
-                        if (myPref.role.val == "partner") {
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              width: MediaQuery.of(context).size.width / 1.15,
-                              horizontalPadding: 20,
-                              buttonName: 'Submit',
-                              onTap:
-                                  Get.find<AddProductController>()
-                                      .isLoading
-                                      .value
-                                  ? null
-                                  : Get.find<AddProductController>()
-                                        .createProduct,
-                            ),
-                          );
-                        }
-                      }
-                      if (myPref.role.val == "connector") {
-                        if (product.outOfStock == true ||
-                            (product.stockQty ?? 0) <= 0) {
-                          if (product.isNotify == true) {
-                            return Padding(
-                              padding: const EdgeInsets.all(24.0),
-                              child: RoundedButton(
-                                horizontalPadding: 20,
-                                buttonName: 'Notified',
-                                color: Colors.grey[400],
-                                fontColor: Colors.white,
-                                borderRadius: 8,
-                                fontSize: 16.sp,
-                                style: MyTexts.medium16.copyWith(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Padding(
-                              padding: const EdgeInsets.all(24.0),
-                              child: RoundedButton(
-                                horizontalPadding: 20,
-                                buttonName: 'Notify Me',
-                                color: MyColors.primary,
-                                fontColor: Colors.white,
-                                borderRadius: 8,
-                                style: MyTexts.medium16.copyWith(
-                                  color: Colors.white,
-                                ),
-                                onTap: () async {
-                                  await Get.find<HomeController>().notifyMeApi(
-                                    mID: product.id ?? 0,
-                                    onSuccess: () {
-                                      controller.onApiCall?.call();
-                                    },
-                                  );
-                                  Get.back();
-                                },
-                              ),
-                            );
-                          }
-                        }
-
-                        // CASE 3: Handle Connection Status Logic
-                        final String? connectionStatus = product.status;
-
-                        print(connectionStatus);
-                        if ((connectionStatus ?? "").isEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              horizontalPadding: 20,
-                              buttonName: 'Connect',
-                              color: MyColors.primary,
-                              style: MyTexts.medium16.copyWith(
-                                color: Colors.white,
-                              ),
-                              onTap: () {
-                                ConnectionDialogs.showSendConnectionDialog(
-                                  context,
-                                  controller.product,
-                                  isFromIn: true,
-                                  onTap: () async {
-                                    Get.back();
-                                    await Get.find<HomeController>()
-                                        .addToConnectApi(
-                                          mID:
-                                              controller
-                                                  .product
-                                                  .merchantProfileId ??
-                                              0,
-                                          message: '',
-                                          pID: controller.product.id ?? 0,
-                                          onSuccess: () {
-                                            controller.onApiCall?.call();
-                                            Get.back();
-                                            // Get.back();
-                                          },
-                                        );
-                                  },
-                                );
-                              },
-                            ),
-                          );
-                        } else if (connectionStatus == 'pending') {
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              color: MyColors.pendingBtn,
-                              horizontalPadding: 20,
-                              buttonName: 'Pending',
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
-                              ),
-                            ),
-                          );
-                        } else if (connectionStatus == 'accepted') {
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              horizontalPadding: 20,
-                              color: MyColors.grayEA,
-                              buttonName: 'Connected',
-                              borderRadius: 8,
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
-                              ),
-                            ),
-                          );
-                        } else if (connectionStatus == 'rejected') {
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              horizontalPadding: 20,
-                              color: MyColors.rejectBtn,
-                              buttonName: 'Rejected',
-                              borderRadius: 8,
-                              style: MyTexts.medium16.copyWith(
-                                color: MyColors.gray54,
-                              ),
-                            ),
-                          );
-                        } else {
-                          // Default fallback (in case of any unknown status)
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              horizontalPadding: 20,
-                              color: MyColors.grey,
-                              buttonName: connectionStatus ?? '',
-                              fontColor: Colors.white,
-                            ),
-                          );
-                        }
-                      } else {
-                        return const SizedBox();
-                      }
-                    }),
-                  ],
-                );
-        }),
+        bottomNavigationBar: buildBottom(context),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,9 +141,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           ];
 
                           // 🧭 PageView (images + video)
-                          return SizedBox(
+                          return Container(
                             height: 35.h,
                             width: 360.w,
+                            color: MyColors.white,
                             child: PageView.builder(
                               itemCount: mediaList.length,
                               controller: PageController(viewportFraction: 1),
@@ -436,7 +233,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                       child: isHttp
                                           ? Image.network(
                                               path,
-                                              fit: BoxFit.cover,
+                                              fit: BoxFit.fitHeight,
                                               height: 35.h,
                                               width: 360.w,
                                               errorBuilder: (_, __, ___) =>
@@ -1225,6 +1022,214 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     );
   }
 
+  Obx buildBottom(BuildContext context) {
+    return Obx(() {
+        return (controller.isFromAdd.value == false &&
+                controller.isFromConnector.value == false)
+            ? const SizedBox()
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  if (myPref.role.val == "connector")
+                    if (!(controller.isFromAdd.value == true &&
+                        controller.isFromConnector.value == false))
+                      const Gap(16),
+                  if (myPref.role.val == "connector")
+                    if (!(controller.isFromAdd.value == true &&
+                        controller.isFromConnector.value == false))
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.offAllNamed(Routes.MAIN);
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Explore More!",
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.grayA5,
+                                ),
+                              ),
+                              const Gap(8),
+                              Text(
+                                "View Categories >",
+                                style: MyTexts.medium16.copyWith(
+                                  color: MyColors.gray54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                  Obx(() {
+                    final product = controller.product;
+                    if (controller.isFromAdd.value == true &&
+                        controller.isFromConnector.value == false) {
+                      if (myPref.role.val == "partner") {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            width: MediaQuery.of(context).size.width / 1.15,
+                            horizontalPadding: 20,
+                            buttonName: 'Submit',
+                            onTap:
+                                Get.find<AddProductController>()
+                                    .isLoading
+                                    .value
+                                ? null
+                                : Get.find<AddProductController>()
+                                      .createProduct,
+                          ),
+                        );
+                      }
+                    }
+                    if (myPref.role.val == "connector") {
+                      if (product.outOfStock == true ||
+                          (product.stockQty ?? 0) <= 0) {
+                        if (product.isNotify == true) {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              horizontalPadding: 20,
+                              buttonName: 'Notified',
+                              color: Colors.grey[400],
+                              fontColor: Colors.white,
+                              borderRadius: 8,
+                              fontSize: 16.sp,
+                              style: MyTexts.medium16.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: RoundedButton(
+                              horizontalPadding: 20,
+                              buttonName: 'Notify Me',
+                              color: MyColors.primary,
+                              fontColor: Colors.white,
+                              borderRadius: 8,
+                              style: MyTexts.medium16.copyWith(
+                                color: Colors.white,
+                              ),
+                              onTap: () async {
+                                await Get.find<HomeController>().notifyMeApi(
+                                  mID: product.id ?? 0,
+                                  onSuccess: () {
+                                    controller.onApiCall?.call();
+                                  },
+                                );
+                                Get.back();
+                              },
+                            ),
+                          );
+                        }
+                      }
+
+                      // CASE 3: Handle Connection Status Logic
+                      final String? connectionStatus = product.status;
+
+                      print(connectionStatus);
+                      if ((connectionStatus ?? "").isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            horizontalPadding: 20,
+                            buttonName: 'Connect',
+                            color: MyColors.primary,
+                            style: MyTexts.medium16.copyWith(
+                              color: Colors.white,
+                            ),
+                            onTap: () {
+                              ConnectionDialogs.showSendConnectionDialog(
+                                context,
+                                controller.product,
+                                isFromIn: true,
+                                onTap: () async {
+                                  Get.back();
+                                  await Get.find<HomeController>()
+                                      .addToConnectApi(
+                                        mID:
+                                            controller
+                                                .product
+                                                .merchantProfileId ??
+                                            0,
+                                        message: '',
+                                        pID: controller.product.id ?? 0,
+                                        onSuccess: () {
+                                          controller.onApiCall?.call();
+                                          Get.back();
+                                          // Get.back();
+                                        },
+                                      );
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      } else if (connectionStatus == 'pending') {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            color: MyColors.pendingBtn,
+                            horizontalPadding: 20,
+                            buttonName: 'Pending',
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        );
+                      } else if (connectionStatus == 'accepted') {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            horizontalPadding: 20,
+                            color: MyColors.grayEA,
+                            buttonName: 'Connected',
+                            borderRadius: 8,
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        );
+                      } else if (connectionStatus == 'rejected') {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            horizontalPadding: 20,
+                            color: MyColors.rejectBtn,
+                            buttonName: 'Rejected',
+                            borderRadius: 8,
+                            style: MyTexts.medium16.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        );
+                      } else {
+                        // Default fallback (in case of any unknown status)
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: RoundedButton(
+                            horizontalPadding: 20,
+                            color: MyColors.grey,
+                            buttonName: connectionStatus ?? '',
+                            fontColor: Colors.white,
+                          ),
+                        );
+                      }
+                    } else {
+                      return const SizedBox();
+                    }
+                  }),
+                ],
+              );
+      });
+  }
+
   Widget buildRatingRow(Product product) {
     final double averageRating =
         double.tryParse(product.averageRating ?? '0') ?? 0.0;
@@ -1446,3 +1451,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     }
   }
 }
+
+//Fouzi@2025
+//7559972845
