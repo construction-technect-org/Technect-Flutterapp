@@ -59,26 +59,11 @@ class SignUpDetailsController extends GetxController {
   }
 
   Future<String?> validateNumberAvailability(String number) async {
-    try {
-      log("mobileNumber: $number,        countryCode: ${countryCode.value},");
-
-      // Check if mobile number is available
-      final isAvailable = await signUpService.checkAvailability(
-        mobileNumber: number,
-        countryCode: countryCode.value,
-      );
-
-      if (!isAvailable) {
-        log("This mobile number is already registered:$isAvailable ");
-        return "This mobile number is already registered";
-      } else {
-        log("This mobile number is Not registered:$isAvailable ");
-        return null; // Number is available
-      }
-    } catch (e) {
-      log("validateNumberAvailability: $e");
-      return "Error verifying mobile number. Please try again.";
-    }
+    // Use the new async validation that checks format first, then availability
+    return await Validate.validateMobileNumberAsync(
+      number,
+      countryCode: countryCode.value,
+    );
   }
 
   Future<bool> verifyMobileNumber() async {
@@ -89,7 +74,8 @@ class SignUpDetailsController extends GetxController {
       );
 
       // If number is not available, return error message
-      if (availabilityError != null) {
+      // Empty string means valid, null also means valid (shouldn't happen with async)
+      if (availabilityError != null && availabilityError.isNotEmpty) {
         numberError.value = availabilityError;
         return false;
       }
@@ -250,29 +236,6 @@ class SignUpDetailsController extends GetxController {
                 },
               ),
               const Gap(15),
-              Obx(() {
-                if (numberError.value.isNotEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            numberError.value,
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                            ),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              }),
-              const Gap(10),
               RoundedButton(
                 buttonName: "Continue",
                 onTap: () async {
@@ -280,37 +243,48 @@ class SignUpDetailsController extends GetxController {
                   isValid.value = -1;
                   numberError.value = "";
 
-                  // Validate mobile number (required field)
+                  // First validate form (format validation)
+                  if (!formKey.currentState!.validate()) return;
+
+                  // Then validate email availability first (async)
+                  await validateEmailAvailability(emailController.text);
+                  if (emailError.value.isNotEmpty) {
+                    // Email error - don't proceed with mobile validation
+                    return;
+                  }
+
+                  // Then validate mobile number format and availability (async)
                   final mobileNumber = mobileNumberController.text.trim();
-                  final mobileError = Validate.validateMobileNumber(
+                  final mobileError = await Validate.validateMobileNumberAsync(
                     mobileNumber,
+                    countryCode: countryCode.value,
                   );
-                  if (mobileError != null) {
+
+                  if (mobileError != null && mobileError.isNotEmpty) {
                     numberError.value = mobileError;
                     isValid.value = 1;
                     return;
                   }
 
-                  if (formKey.currentState!.validate()) {
-                    hideKeyboard();
+                  // If validation passes, proceed to OTP
+                  hideKeyboard();
 
-                    if (isNavigatingToOtp.value) return;
-                    if (Get.currentRoute == Routes.OTP_Verification) return;
-                    isNavigatingToOtp.value = true;
-                    try {
-                      resetOtpState();
-                      final sent = await verifyMobileNumber();
-                      if (!sent) return;
+                  if (isNavigatingToOtp.value) return;
+                  if (Get.currentRoute == Routes.OTP_Verification) return;
+                  isNavigatingToOtp.value = true;
+                  try {
+                    resetOtpState();
+                    final sent = await verifyMobileNumber();
+                    if (!sent) return;
 
-                      if (Get.isBottomSheetOpen == true) {
-                        Get.back();
-                      }
-                      // Use named route to avoid duplicates
-                      resetOtpState();
-                      await Get.toNamed(Routes.OTP_Verification);
-                    } finally {
-                      isNavigatingToOtp.value = false;
+                    if (Get.isBottomSheetOpen == true) {
+                      Get.back();
                     }
+                    // Use named route to avoid duplicates
+                    resetOtpState();
+                    await Get.toNamed(Routes.OTP_Verification);
+                  } finally {
+                    isNavigatingToOtp.value = false;
                   }
                 },
               ),

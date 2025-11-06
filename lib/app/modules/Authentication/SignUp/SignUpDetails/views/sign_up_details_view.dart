@@ -147,7 +147,9 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         ),
                                         child: Text(
                                           controller.emailError.value,
-                                       style: MyTexts.medium13.copyWith(color: MyColors.red33),
+                                          style: MyTexts.medium13.copyWith(
+                                            color: MyColors.red33,
+                                          ),
                                         ),
                                       );
                                     }
@@ -395,14 +397,21 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
           child: RoundedButton(
             buttonName: 'Continue',
             onTap: () async {
-              hideKeyboard();
+              // First validate form (format validation)
               if (!formKey.currentState!.validate()) return;
 
-              // Block on availability error
+              // Then validate email availability (async)
+              await controller.validateEmailAvailability(
+                controller.emailController.text,
+              );
+
+              // Block on email error
               if (controller.emailError.value.isNotEmpty) {
                 SnackBars.errorSnackBar(content: controller.emailError.value);
                 return;
               }
+
+              hideKeyboard();
 
               if (controller.isVerified.value) {
                 controller.openPhoneNumberBottomSheet();

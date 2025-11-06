@@ -83,6 +83,8 @@ class CommonPhoneField extends StatelessWidget {
 
             decoration: InputDecoration(
               suffixIcon: suffix,
+              errorText:
+                  null, // Prevent built-in error display, we use custom error below
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: isValid.value == 0
@@ -119,6 +121,9 @@ class CommonPhoneField extends StatelessWidget {
                 fontFamily: MyTexts.SpaceGrotesk,
               ),
             ),
+            validator: (phone) {
+              return null;
+            },
             onSubmitted: onSubmitted,
             pickerDialogStyle: PickerDialogStyle(
               searchFieldCursorColor: MyColors.primary,

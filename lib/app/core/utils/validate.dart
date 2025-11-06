@@ -170,6 +170,39 @@ class Validate {
     return null; // Valid
   }
 
+  /// Future mobile number validation for button actions
+  /// Includes format validation AND availability check (API call)
+  /// Returns error message if invalid, empty string if valid and available
+  /// Only checks availability if format validation passes
+  ///
+  /// [mobileNumber] - The mobile number to validate
+  /// [countryCode] - The country code (e.g., "+91")
+  static Future<String?> validateMobileNumberAsync(
+    String? mobileNumber, {
+    String? countryCode,
+  }) async {
+    // First validate mobile number format using the non-future method
+    final formatError = validateMobileNumber(mobileNumber);
+    if (formatError != null) {
+      return formatError; // Return format error immediately
+    }
+
+    // Only check availability if format is valid
+    try {
+      final isAvailable = await SignUpService().checkAvailability(
+        mobileNumber: mobileNumber?.trim(),
+        countryCode: countryCode,
+      );
+      if (!isAvailable) {
+        return "This mobile number is already registered";
+      } else {
+        return ""; // Empty string means valid and available
+      }
+    } catch (e) {
+      return "Error checking mobile number availability";
+    }
+  }
+
   // ==================== GST Validation ====================
 
   /// Validates GSTIN number format and availability
