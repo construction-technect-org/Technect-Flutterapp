@@ -211,6 +211,10 @@ class LoginView extends GetView<LoginController> {
                                     controller.loginError.value = "";
                                     controller.mobileValidationError.value = "";
                                     controller.isValid.value = -1;
+                                    if (!controller.formKey.currentState!
+                                        .validate()) {
+                                      return;
+                                    }
 
                                     final mobileNumber = controller
                                         .mobileController

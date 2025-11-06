@@ -201,6 +201,8 @@ class CommonPhoneField extends StatelessWidget {
                   color: MyColors.red33,
                   fontFamily: MyTexts.SpaceGrotesk,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
         ],
