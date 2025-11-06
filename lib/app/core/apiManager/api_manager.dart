@@ -88,7 +88,7 @@ class ApiManager {
       throw FetchDataException('No Internet connection');
     } catch (e) {
       Get.printInfo(info: '❌ Unexpected Error: $e');
-      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
   }
@@ -132,7 +132,7 @@ class ApiManager {
       throw FetchDataException('No Internet connection');
     } catch (e) {
       Get.printInfo(info: '❌ Unexpected Error: $e');
-      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
   }
@@ -171,7 +171,7 @@ class ApiManager {
       throw FetchDataException('No Internet connection');
     } catch (e) {
       Get.printInfo(info: '❌ Unexpected Error: $e');
-      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
   }
@@ -211,7 +211,7 @@ class ApiManager {
       throw FetchDataException('No Internet connection');
     } catch (e) {
       Get.printInfo(info: '❌ Unexpected Error: $e');
-      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
   }
@@ -295,7 +295,7 @@ class ApiManager {
       throw FetchDataException('No Internet connection');
     } catch (e) {
       Get.printInfo(info: '❌ Unexpected Error: $e');
-      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
   }
@@ -379,7 +379,7 @@ class ApiManager {
       throw FetchDataException('No Internet connection');
     } catch (e) {
       Get.printInfo(info: '❌ Unexpected Error: $e');
-      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
   }
@@ -418,7 +418,7 @@ class ApiManager {
       throw FetchDataException('No Internet connection');
     } catch (e) {
       Get.printInfo(info: '❌ Unexpected Error: $e');
-      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
   }
@@ -461,7 +461,7 @@ class ApiManager {
       throw FetchDataException('No Internet connection');
     } catch (e) {
       Get.printInfo(info: '❌ Unexpected Error: $e');
-      SnackBars.errorSnackBar(content: 'Unexpected error occurred');
+      //SnackBars.errorSnackBar(content: 'Unexpected error occurred');
       throw FetchDataException('Unexpected error: $e');
     }
   }

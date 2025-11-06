@@ -18,23 +18,23 @@ class Validate {
   /// Includes format validation AND availability check (API call)
   /// Returns error message if invalid, empty string if valid and available
   static Future<String?> validateEmailAsync(String? email) async {
-    // First validate email format using the non-future method
-    final formatError = EmailValidation.validateEmailFormat(email);
-    if (formatError != null) {
-      return formatError;
-    }
-
-    final value = email?.trim() ?? "";
-
-    // Additional domain validation
-    final domainError = EmailValidation.validateEmailDomain(value);
-    if (domainError != null) {
-      return domainError;
-    }
+    // // First validate email format using the non-future method
+    // final formatError = EmailValidation.validateEmailFormat(email);
+    // if (formatError != null) {
+    //   return formatError;
+    // }
+    //
+    // final value = email?.trim() ?? "";
+    //
+    // // Additional domain validation
+    // final domainError = EmailValidation.validateEmailDomain(value);
+    // if (domainError != null) {
+    //   return domainError;
+    // }
 
     // Check email availability via API
     try {
-      final isAvailable = await SignUpService().checkAvailability(email: value);
+      final isAvailable = await SignUpService().checkAvailability(email: email);
       if (!isAvailable) {
         return "This email is already registered";
       } else {
