@@ -240,25 +240,15 @@ class SignUpDetailsController extends GetxController {
                 style: MyTexts.medium20.copyWith(color: Colors.black),
               ),
               const Gap(5),
-              Focus(
-                onKey: (node, event) {
-                  if (event is RawKeyDownEvent &&
-                      HardwareKeyboard.instance.isPhysicalKeyPressed(event.physicalKey)) {
-                    return KeyEventResult.handled;
-                  }
-                  return KeyEventResult.ignored;
+              CommonPhoneField(
+                controller: mobileNumberController,
+                focusNode: FocusNode(),
+                isValid: isValid,
+                customErrorMessage: numberError,
+                onCountryCodeChanged: (code) {
+                  countryCode.value = code;
                 },
-                child: CommonPhoneField(
-                  controller: mobileNumberController,
-                  focusNode: FocusNode(),
-                  isValid: isValid,
-                  customErrorMessage: numberError,
-                  onCountryCodeChanged: (code) {
-                    countryCode.value = code;
-                  },
-                ),
               ),
-
               const Gap(15),
               Obx(() {
                 if (numberError.value.isNotEmpty) {
@@ -290,8 +280,11 @@ class SignUpDetailsController extends GetxController {
                   isValid.value = -1;
                   numberError.value = "";
 
+                  // Validate mobile number (required field)
                   final mobileNumber = mobileNumberController.text.trim();
-                  final mobileError = Validate.validateMobileNumber(mobileNumber);
+                  final mobileError = Validate.validateMobileNumber(
+                    mobileNumber,
+                  );
                   if (mobileError != null) {
                     numberError.value = mobileError;
                     isValid.value = 1;
@@ -302,8 +295,8 @@ class SignUpDetailsController extends GetxController {
                     hideKeyboard();
 
                     if (isNavigatingToOtp.value) return;
+                    if (Get.currentRoute == Routes.OTP_Verification) return;
                     isNavigatingToOtp.value = true;
-
                     try {
                       resetOtpState();
                       final sent = await verifyMobileNumber();
@@ -312,16 +305,14 @@ class SignUpDetailsController extends GetxController {
                       if (Get.isBottomSheetOpen == true) {
                         Get.back();
                       }
-
-                      // Navigate and wait for OTP screen to pop
+                      // Use named route to avoid duplicates
+                      resetOtpState();
                       await Get.toNamed(Routes.OTP_Verification);
                     } finally {
-                      // ✅ always reset after returning
                       isNavigatingToOtp.value = false;
                     }
                   }
                 },
-
               ),
               const Gap(10),
             ],
