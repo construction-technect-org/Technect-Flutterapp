@@ -162,16 +162,27 @@ class CommonPhoneField extends StatelessWidget {
                 ),
               ),
             ),
+            onTap: () {
+              // Clear error when user taps to edit
+              if (customErrorMessage?.value.isNotEmpty == true) {
+                customErrorMessage?.value = "";
+              }
+            },
             onChanged: (phone) {
+              // Clear error message when user types/changes number
+              if (customErrorMessage?.value.isNotEmpty == true) {
+                customErrorMessage?.value = "";
+              }
+              if (isValid.value != -1) {
+                isValid.value = -1;
+              }
+
               if (phone.number.isEmpty) {
                 isValid.value = 0;
               } else {
-                isValid.value = -1;
-                // Clear custom error message when user types
-                if (customErrorMessage?.value.isNotEmpty == true) {
-                  customErrorMessage!.value = "";
-                }
+                isValid.value = -1; // Reset validation state
               }
+
               if (onCountryCodeChanged != null) {
                 onCountryCodeChanged!(phone.countryCode);
               }
