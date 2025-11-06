@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
@@ -26,7 +27,7 @@ class ProfileController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-
+    selectedTabIndex.value=0;
     if (Get.arguments != null) {
       isSwitch.value = true;
     }
@@ -144,10 +145,6 @@ class ProfileController extends GetxController {
       return '${currentAddress.fullAddress ?? ''}, ${currentAddress.landmark ?? ''}';
     }
     return null;
-  }
-
-  void changeTab(int index) {
-    selectedTabIndex.value = index;
   }
 
   String getDocumentDisplayName(String? documentType) {
@@ -566,17 +563,34 @@ class ProfileController extends GetxController {
           Get.find<CommonController>().hasProfileComplete.value = true;
           if (isUpdate) {
             await homeController.fetchProfileData();
-            Get.back();
-            SnackBars.successSnackBar(content: "Profile update successfully");
+            Get.to(
+                  () => SuccessScreen(
+                title: "Success!",
+                header: "Profile update successfully!",
+                onTap: () {
+                  Get.back();
+                  Get.back();
+                },
+              ),
+            );
           } else {
             if (isSwitch.value) {
               Get.find<SwitchAccountController>().updateRole(role: "partner");
               myPref.role.val = "partner";
+
               Get.offAllNamed(Routes.MAIN);
             } else {
               await homeController.fetchProfileData();
-              Get.back();
-              SnackBars.successSnackBar(content: "Profile update successfully");
+              Get.to(
+                    () => SuccessScreen(
+                  title: "Success!",
+                  header: "Profile added successfully!",
+                  onTap: () {
+                    Get.back();
+                    Get.back();
+                  },
+                ),
+              );
             }
           }
         } catch (e) {

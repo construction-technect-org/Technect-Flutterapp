@@ -88,8 +88,10 @@ class AddTeamView extends GetView<AddTeamController> {
                               alignment: Alignment.bottomRight,
                               children: [
                                 GestureDetector(
-                                  onTap: () =>
-                                      controller.pickImageBottomSheet(context),
+                                  onTap: () {
+                                    hideKeyboard();
+                                    controller.pickImageBottomSheet(context);
+                                  },
                                   child: Obx(() {
                                     if (controller.selectedImage.value !=
                                         null) {
@@ -140,8 +142,10 @@ class AddTeamView extends GetView<AddTeamController> {
                                   bottom: 0,
                                   right: 0,
                                   child: GestureDetector(
-                                    onTap: () => controller
-                                        .pickImageBottomSheet(context),
+                                    onTap: () {
+                                      hideKeyboard();
+                                      controller.pickImageBottomSheet(context);
+                                    },
                                     child: Container(
                                       height: 32,
                                       width: 32,
