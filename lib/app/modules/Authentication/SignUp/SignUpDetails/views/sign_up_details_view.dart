@@ -432,6 +432,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
               hideKeyboard();
 
               if (controller.isVerified.value) {
+                FocusManager.instance.primaryFocus?.unfocus();
                 controller.openPhoneNumberBottomSheet();
               } else {
                 final String text =

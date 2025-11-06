@@ -5,6 +5,6 @@ import 'package:get/get.dart';
 class RoleDetailsBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<RoleDetailsController>(RoleDetailsController(), permanent: true);
+    Get.put<RoleDetailsController>(RoleDetailsController(),);
   }
 }
