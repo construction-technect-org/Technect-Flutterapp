@@ -362,7 +362,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               ? TextButton.icon(
                                   onPressed: controller.onEditProduct,
                                   icon: SvgPicture.asset(
-                                    Asset.editIcon,
+                                    Asset.edit,
                                     width: 16,
                                     height: 16,
                                     colorFilter: const ColorFilter.mode(

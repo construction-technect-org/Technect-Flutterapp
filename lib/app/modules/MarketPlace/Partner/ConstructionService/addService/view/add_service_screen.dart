@@ -60,7 +60,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                                         path,
                                                         width: 360.w,
                                                         fit: BoxFit.contain,
-                                                        errorBuilder: (_) =>
+                                                        errorBuilder: (_,_,_) =>
                                                             const Icon(
                                                               Icons
                                                                   .broken_image,
