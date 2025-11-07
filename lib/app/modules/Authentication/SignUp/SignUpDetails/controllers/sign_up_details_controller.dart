@@ -29,7 +29,6 @@ class SignUpDetailsController extends GetxController {
   final countdownController = CountdownController(autoStart: true);
   RxBool isResendVisible = false.obs;
   RxBool isLoading = false.obs;
-  RxBool isNavigatingToOtp = false.obs;
 
   // Email validation state
   RxString emailError = "".obs;
@@ -250,21 +249,11 @@ class SignUpDetailsController extends GetxController {
               RoundedButton(
                 buttonName: "Continue",
                 onTap: () async {
-                  // Clear previous errors
                   isValid.value = -1;
                   numberError.value = "";
 
-                  // First validate form (format validation)
                   if (!formKey.currentState!.validate()) return;
 
-                  // Then validate email availability first (async)
-                  await validateEmailAvailability(emailController.text);
-                  if (emailError.value.isNotEmpty) {
-                    // Email error - don't proceed with mobile validation
-                    return;
-                  }
-
-                  // Then validate mobile number format and availability (async)
                   final mobileNumber = mobileNumberController.text.trim();
                   final mobileError = await Validate.validateMobileNumberAsync(
                     mobileNumber,
@@ -277,12 +266,8 @@ class SignUpDetailsController extends GetxController {
                     return;
                   }
 
-                  // If validation passes, proceed to OTP
                   hideKeyboard();
 
-                  if (isNavigatingToOtp.value) return;
-                  if (Get.currentRoute == Routes.OTP_Verification) return;
-                  isNavigatingToOtp.value = true;
                   try {
                     resetOtpState();
                     final sent = await verifyMobileNumber();
@@ -291,12 +276,11 @@ class SignUpDetailsController extends GetxController {
                     if (Get.isBottomSheetOpen == true) {
                       Get.back();
                     }
+
                     // Use named route to avoid duplicates
                     resetOtpState();
-                    await Get.toNamed(Routes.OTP_Verification);
-                  } finally {
-                    isNavigatingToOtp.value = false;
-                  }
+                    await Get.offNamed(Routes.OTP_Verification);
+                  } finally {}
                 },
               ),
               const Gap(10),
