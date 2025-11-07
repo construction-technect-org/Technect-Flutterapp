@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/AddKyc/services/AddKycService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/services/AddKycService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
@@ -28,7 +28,7 @@ class ConnectorProfileController extends GetxController {
   Future<void> proceedKyc() async {
     isLoading.value = true;
     try {
-      final response = await AddkycService().connectorAddKYC(aadhaar: aadhaarController.text.trim());
+      final response = await AddKycService().connectorAddKYC(aadhaar: aadhaarController.text.trim());
       if (response.success) {
         myPref.role.val = "connector";
         Get.find<SwitchAccountController>().updateRole(role: "connector");

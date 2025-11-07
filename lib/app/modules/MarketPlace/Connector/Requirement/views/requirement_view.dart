@@ -2,8 +2,8 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/models/GetRequirementModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/models/get_service_requirement_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/controllers/requirement_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/models/get_service_requirement_model.dart';
 import 'package:intl/intl.dart';
 
 class RequirementView extends StatelessWidget {

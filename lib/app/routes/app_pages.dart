@@ -17,6 +17,8 @@ import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/bindings/add_requirement_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/views/add_requirement_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/bindings/add_service_requirement_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/views/add_service_requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/bindings/cart_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/views/cart_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
@@ -30,8 +32,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/views/add_manufacturer_address_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/bindings/add_service_requirement_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/views/add_service_requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/binding/new_launch_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/view/new_launches_product.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';

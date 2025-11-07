@@ -1,7 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/add_kyc_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/controllers/connector_profile_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 
 class ConnectorInfoMetricsComponent extends StatelessWidget {
   const ConnectorInfoMetricsComponent({super.key});
@@ -17,7 +18,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -46,7 +47,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
 
         // ---------- KYC Section ----------
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
+          padding: EdgeInsets.zero,
           child: Row(
             children: [
               Text(
@@ -142,7 +143,7 @@ class ConnectorInfoMetricsComponent extends StatelessWidget {
   }
 
   // ------------------- KYC DISPLAY CARD -------------------
-  Widget _buildExistingKycDetails(connectorProfile) {
+  Widget _buildExistingKycDetails( ConnectorProfile connectorProfile) {
     return Padding(
       padding: EdgeInsets.zero,
       child: Container(

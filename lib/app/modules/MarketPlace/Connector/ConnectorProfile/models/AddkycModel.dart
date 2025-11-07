@@ -1,22 +1,22 @@
 
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
-class AddkycModel {
+class AddKycModel {
   bool success;
   String message;
-  Addkyc data;
+  AddKyc data;
 
-  AddkycModel({
+  AddKycModel({
     required this.success,
     required this.message,
     required this.data,
   });
 
-  factory AddkycModel.fromJson(Map<String, dynamic> json) {
-    return AddkycModel(
+  factory AddKycModel.fromJson(Map<String, dynamic> json) {
+    return AddKycModel(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
-      data: Addkyc.fromJson(json['data']),
+      data: AddKyc.fromJson(json['data']),
     );
   }
 
@@ -29,7 +29,7 @@ class AddkycModel {
   }
 }
 
-class Addkyc {
+class AddKyc {
   int id;
   int userId;
   String aadhaarNumber;
@@ -48,7 +48,7 @@ class Addkyc {
   String? panFront;
   String? panBack;
 
-  Addkyc({
+  AddKyc({
     required this.id,
     required this.userId,
     required this.aadhaarNumber,
@@ -68,8 +68,8 @@ class Addkyc {
     this.panBack,
   });
 
-  factory Addkyc.fromJson(Map<String, dynamic> json) {
-    return Addkyc(
+  factory AddKyc.fromJson(Map<String, dynamic> json) {
+    return AddKyc(
       id: json['id'],
       userId: json['user_id'],
       aadhaarNumber: json['aadhaar_number'] ?? '',

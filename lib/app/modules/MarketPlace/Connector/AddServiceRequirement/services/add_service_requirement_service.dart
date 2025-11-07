@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/models/create_service_requirement_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/models/create_service_requirement_model.dart';
 
 class AddServiceRequirementService {
   ApiManager apiManager = ApiManager();

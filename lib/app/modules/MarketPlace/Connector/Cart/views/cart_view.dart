@@ -452,7 +452,7 @@ class CartListView extends GetView<CartListController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: MyColors.grayEA, width: 1),
+        border: Border.all(color: MyColors.grayEA),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
