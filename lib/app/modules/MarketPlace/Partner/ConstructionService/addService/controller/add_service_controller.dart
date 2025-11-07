@@ -7,24 +7,17 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Quick
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
-/// ===============================
-/// CONTROLLER
-/// ===============================
 class AddServiceController extends GetxController {
-  /// Loading state
+  final formKey = GlobalKey<FormState>();
+
   RxBool isLoading = false.obs;
   RxBool isEdit = false.obs;
 
   VoidCallback? onApiCall;
 
-  /// API data
-  Rx<ServiceCategoryModel> categoryHierarchyDataCM = ServiceCategoryModel().obs;
-
-  /// Category lists
   RxList<ServiceCategoryData> mainCategories = <ServiceCategoryData>[].obs;
   Rx<ServiceCategoryData?> selectedMainCategory = Rx<ServiceCategoryData?>(
     null,
@@ -38,7 +31,6 @@ class AddServiceController extends GetxController {
 
   RxList<ServiceCategories> serviceCategories = <ServiceCategories>[].obs;
   Rx<ServiceCategories?> selectedServiceCategory = Rx<ServiceCategories?>(null);
-  RxList<String> gstList = <String>["5%", "12%", "18%", "28%"].obs;
   Rxn<String> selectedGST = Rxn<String>();
 
   void removeImageAt(int index) {
@@ -48,7 +40,6 @@ class AddServiceController extends GetxController {
     }
   }
 
-  /// Form controllers
   final unitController = TextEditingController();
   final priceController = TextEditingController();
   final gstController = TextEditingController();
@@ -58,30 +49,23 @@ class AddServiceController extends GetxController {
   RxList<String?> imageSlots = List<String?>.filled(5, null).obs;
   Map<String, String> removedImages = {};
 
-  /// Media
-  RxList<XFile> serviceImages = <XFile>[].obs;
-  Rx<XFile?> serviceVideo = Rx<XFile?>(null);
-
   final Rx<File?> selectedVideo = Rx<File?>(null);
   VideoPlayerController? videoPlayerController;
   VideoPlayerController? refVideoPlayerController;
 
   Future<void> pickImageEdit() async {
     try {
-      // Count how many slots are still empty
       final emptySlots = imageSlots.where((e) => e == null).length;
       if (emptySlots <= 0) {
         SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
         return;
       }
 
-      // Pick multiple images but only up to the available empty slots
       final List<XFile>? pickedFiles = await ImagePicker().pickMultiImage(
         limit: emptySlots == 1 ? null : emptySlots,
       );
 
       if (pickedFiles != null && pickedFiles.isNotEmpty) {
-        // Remove stale removal flags
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
@@ -145,7 +129,6 @@ class AddServiceController extends GetxController {
   RxInt serviceId = 0.obs;
   Rx<ServiceReferenceItem> serviceRef = ServiceReferenceItem().obs;
   Rx<ServiceMediaItem> serviceVid = ServiceMediaItem().obs;
-  RxList<ServiceMediaItem> serviceImg = <ServiceMediaItem>[].obs;
 
   @override
   void onInit() {
@@ -157,7 +140,6 @@ class AddServiceController extends GetxController {
       final s = Get.arguments["service"];
       serviceId.value = s.id;
       serviceVid.value = s.video;
-      serviceImg.addAll(s.images);
 
       if (s.reference != null) {
         referenceDeleted.value = false;
@@ -249,16 +231,10 @@ class AddServiceController extends GetxController {
       isLoading(true);
 
       final cachedCategoryHierarchy = myPref.getServiceCategoryHierarchyModel();
-      if (cachedCategoryHierarchy != null) {
-        categoryHierarchyDataCM.value = cachedCategoryHierarchy;
-      } else {
-        final apiCategoryHierarchy = await HomeService()
-            .getCategoryServiceHierarchy();
+      final categoryHierarchy = cachedCategoryHierarchy ??
+          await HomeService().getCategoryServiceHierarchy();
 
-        categoryHierarchyDataCM.value = apiCategoryHierarchy;
-      }
-
-      mainCategories.assignAll(categoryHierarchyDataCM.value.data ?? []);
+      mainCategories.assignAll(categoryHierarchy.data ?? []);
     } catch (e) {
       log("Error fetching categories: $e");
     } finally {
@@ -559,9 +535,6 @@ class AddServiceController extends GetxController {
     referenceFile.value = null;
     referenceFileUrl.value = '';
   }
-
-  bool get hasReferenceFile =>
-      referenceFile.value != null || referenceFileUrl.value.isNotEmpty;
 
   RxBool referenceDeleted = true.obs;
 

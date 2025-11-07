@@ -9,14 +9,8 @@ import 'package:open_filex/open_filex.dart';
 import 'package:video_player/video_player.dart';
 
 class AddServiceScreen extends GetView<AddServiceController> {
-  AddServiceScreen({super.key});
-
-  final formKey1 = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
-    print("controller.referenceDeleted.value");
-    print(controller.referenceDeleted.value);
     return LoaderWrapper(
       isLoading: controller.isLoading,
       child: GestureDetector(
@@ -30,7 +24,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Form(
-              key: formKey1,
+              key: controller.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -66,12 +60,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                                         path,
                                                         width: 360.w,
                                                         fit: BoxFit.contain,
-                                                        errorBuilder:
-                                                            (
-                                                              _,
-                                                              __,
-                                                              ___,
-                                                            ) => const Icon(
+                                                        errorBuilder: (_) =>
+                                                            const Icon(
                                                               Icons
                                                                   .broken_image,
                                                               size: 60,
@@ -298,7 +288,6 @@ class AddServiceScreen extends GetView<AddServiceController> {
                     }),
                   SizedBox(height: 3.h),
 
-                  /// --- Dropdowns ---
                   Obx(() {
                     return CommonDropdown<String>(
                       headerText: 'Main Category',
@@ -371,7 +360,6 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   ),
                   const Gap(16),
 
-                  /// --- Text Fields ---
                   Row(
                     children: [
                       Expanded(
@@ -443,9 +431,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                           hintText: "ENTER AMOUNT",
                           controller: controller.amountController,
                           keyboardType: TextInputType.number,
-                          onChange: (p0) {
-                            // controller.gstCalculate();
-                          },
+                          onChange: (p0) {},
                           prefixIcon: Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
@@ -777,9 +763,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                             ),
                           ),
                         );
-                      }
-                      // --- DOCUMENT / PDF ---
-                      else if (referenceType == 'pdf' ||
+                      } else if (referenceType == 'pdf' ||
                           referenceType == 'document') {
                         referenceWidget = GestureDetector(
                           onTap: () =>
@@ -841,7 +825,6 @@ class AddServiceScreen extends GetView<AddServiceController> {
                         );
                       }
 
-                      // --- Return full UI with delete button ---
                       return Stack(
                         alignment: AlignmentGeometry.topRight,
                         children: [
@@ -867,11 +850,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
 
                       if (file != null) {
                         final ext = file.path.split('.').last.toLowerCase();
-                        preview = _buildReferencePreview(
-                          ext,
-                          file.path,
-                          isNetwork: false,
-                        );
+                        preview = _buildReferencePreview(ext, file.path);
                       } else if (url.isNotEmpty) {
                         final ext = url.split('.').last.toLowerCase();
                         preview = _buildReferencePreview(
@@ -979,7 +958,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
                           return;
                         }
                       }
-                      if (formKey1.currentState!.validate()) {
+                      if (controller.formKey.currentState?.validate() ??
+                          false) {
                         if (controller.isEdit.value) {
                           controller.updateService(controller.serviceId.value);
                         } else {

@@ -5,8 +5,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Deliv
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 
 class ConstructionServiceController extends GetxController {
   HomeController homeController = Get.find<HomeController>();
@@ -23,17 +21,14 @@ class ConstructionServiceController extends GetxController {
   Rx<ConnectorServiceModel> serviceListModel = ConnectorServiceModel().obs;
   RxInt selectedServiceCategoryIndex = 0.obs;
 
-  Rx<ServiceCategoryData?> mainCategory =
-      ServiceCategoryData().obs; // Main Category
-  RxList<ServicesSubCategories> subCategories =
-      <ServicesSubCategories>[].obs; // Sub Category
+  Rx<ServiceCategoryData?> mainCategory = ServiceCategoryData().obs;
+  RxList<ServicesSubCategories> subCategories = <ServicesSubCategories>[].obs;
   Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(
     null,
   );
   RxList<ServiceCategories> serviceCategoryList = <ServiceCategories>[].obs;
   Rx<ServiceCategories?> selectedServiceCategory = Rx<ServiceCategories?>(null);
 
-  // Arguments from navigation
   int? mainCategoryId;
   String? mainCategoryName;
   RxInt selectedSubCategoryId = 0.obs;
@@ -96,17 +91,6 @@ class ConstructionServiceController extends GetxController {
     }
   }
 
-  void selectMainCategory() {
-    final categoryHierarchy = myPref.getServiceCategoryHierarchyModel();
-    if (mainCategoryId != null && categoryHierarchy != null) {
-      mainCategory.value =
-          categoryHierarchy.data?.firstWhere((c) => c.id == mainCategoryId) ??
-          ServiceCategoryData();
-      subCategories.value =
-          mainCategory.value?.subCategories ?? <ServicesSubCategories>[];
-    }
-  }
-
   void selectSubCategory(int index) {
     selectedSubCategoryId.value = subCategories[index].id ?? 0;
     selectedSubCategory.value = subCategories[index];
@@ -122,7 +106,6 @@ class ConstructionServiceController extends GetxController {
         selectedSubCategory.value?.serviceCategories ?? [];
   }
 
-  /// GOPAL
   void rightSide0RightView(int index) {
     selectedServiceCategory.value = serviceCategoryList[index];
     serviceCategories.value =
@@ -141,14 +124,6 @@ class ConstructionServiceController extends GetxController {
     fetchServicesFromApi();
   }
 
-  void leftSide2LeftView(int index) {
-    selectedServiceCategoryIndex.value = index;
-    selectedServiceCategory.value =
-        serviceCategories.value.serviceCategories?[index] ??
-        ServiceCategories();
-  }
-
-  // Select service category
   void selectServiceCategoryFromGrid(int index) {
     selectedServiceCategoryIndex.value = index;
     selectedServiceCategory.value =
@@ -196,12 +171,6 @@ class ConstructionServiceController extends GetxController {
     } else {
       navigationIndex.value = 0;
     }
-  }
-
-  void selectProductSubCategory(int index) {
-    selectedServiceCategoryIndex.value = index;
-    selectedServiceCategory.value = serviceCategoryList[index];
-    fetchServicesFromApi();
   }
 
   RxDouble selectedRadius = 50.0.obs;
@@ -279,38 +248,47 @@ class ConstructionServiceController extends GetxController {
                 style: MyTexts.medium16.copyWith(color: MyColors.black),
               ),
               const SizedBox(height: 12),
-              ...[
-                'Relevance',
-                'New Arrivals',
-                'Price (High to Low)',
-                'Price (Low to High)',
-              ].map((sortType) {
-                return RadioListTile<String>(
-                  dense: true,
-                  controlAffinity: ListTileControlAffinity.trailing,
-                  selectedTileColor: MyColors.primary,
-
-                  fillColor: MaterialStateProperty.resolveWith<Color>((states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return MyColors.primary;
-                    }
-                    return Colors.grey;
-                  }),
-                  visualDensity: VisualDensity.compact,
-                  contentPadding: EdgeInsets.zero,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  title: Text(
-                    sortType,
-                    style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
-                  ),
-                  value: sortType,
-                  groupValue: selectedSort.value,
-                  onChanged: (value) {
-                    applySorting(value!);
-                    Get.back();
-                  },
-                );
-              }),
+              RadioGroup<String>(
+                groupValue: selectedSort.value,
+                onChanged: (value) {
+                  applySorting(value ?? '');
+                  Get.back();
+                },
+                child: Column(
+                  children:
+                      [
+                        'Relevance',
+                        'New Arrivals',
+                        'Price (High to Low)',
+                        'Price (Low to High)',
+                      ].map((sortType) {
+                        return RadioListTile<String>(
+                          dense: true,
+                          controlAffinity: ListTileControlAffinity.trailing,
+                          selectedTileColor: MyColors.primary,
+                          fillColor: MaterialStateProperty.resolveWith<Color>((
+                            states,
+                          ) {
+                            if (states.contains(MaterialState.selected)) {
+                              return MyColors.primary;
+                            }
+                            return Colors.grey;
+                          }),
+                          visualDensity: VisualDensity.compact,
+                          contentPadding: EdgeInsets.zero,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          title: Text(
+                            sortType,
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.gray2E,
+                            ),
+                          ),
+                          value: sortType,
+                        );
+                      }).toList(),
+                ),
+              ),
               const SizedBox(height: 10),
             ],
           ),
@@ -439,100 +417,6 @@ class ConstructionServiceController extends GetxController {
       ),
       isScrollControlled: true,
     );
-  }
-
-  RxList<FilterData> allFilters = <FilterData>[].obs;
-
-  Future<void> getFilter(String serviceCategoryId) async {
-    try {
-      isLoading(true);
-      final result = await AddProductService().getFilter(
-        int.parse(serviceCategoryId),
-      );
-
-      if (result.success == true) {
-        allFilters.value = (result.data as List<FilterData>)
-            .map((e) => e)
-            .toList();
-      } else {
-        allFilters.clear();
-      }
-      isLoading(false);
-    } catch (e) {
-      isLoading(false);
-      allFilters.clear();
-    } finally {
-      isLoading(false);
-    }
-  }
-
-  RxList<ConnectorFilterModel> filters = <ConnectorFilterModel>[].obs;
-  RxMap<String, dynamic> selectedFilters = <String, dynamic>{}.obs;
-  Map<String, Rx<RangeValues>> rangeValues = {};
-  Map<String, RxList<String>> multiSelectValues = {};
-  RxBool isLoad = false.obs;
-
-  RxList<String> expandedSection = <String>[].obs;
-
-  Map<String, dynamic> getFinalFilterData() {
-    final filtersMap = <String, dynamic>{};
-
-    for (final filter in allFilters) {
-      final name = filter.filterName ?? '';
-
-      switch (filter.filterType) {
-        case 'number':
-          final range = rangeValues[name]?.value;
-          if (range != null) {
-            filtersMap[name] = {
-              "type": "range",
-              "filter_type": "number",
-              "min": range.start,
-              "max": range.end,
-            };
-          }
-
-        case 'dropdown_multiple':
-          final list = multiSelectValues[name]?.toList() ?? [];
-          filtersMap[name] = {
-            "type": "list",
-            "filter_type": "dropdown_multiple",
-            "list": list,
-          };
-
-        case 'dropdown':
-          final selectedValue = selectedFilters[name]?.value;
-          if (selectedValue != null && selectedValue.isNotEmpty == true) {
-            filtersMap[name] = {
-              "type": "list",
-              "filter_type": "dropdown",
-              "list": [selectedValue],
-            };
-          }
-
-        default:
-          final selected = selectedFilters[name]?.value ?? '';
-          if (selected.isNotEmpty == true) {
-            filtersMap[name] = {
-              "type": "list",
-              "filter_type": filter.filterType ?? 'dropdown',
-              "list": [selected],
-            };
-          }
-      }
-    }
-    return filtersMap;
-  }
-
-  List<dynamic> get rightPanelItems {
-    switch (navigationIndex.value) {
-      case 0:
-        return subCategories;
-      case 1:
-        return serviceCategoryList;
-      default:
-        return [];
-    }
   }
 
   Future<void> addServiceToConnect({

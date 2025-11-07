@@ -1,10 +1,8 @@
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class AddServiceService {
   final ApiManager apiManager = ApiManager();
 
-  /// ✅ Create Service
   Future<ApiResponse> createService({
     required Map<String, dynamic> fields,
     Map<String, String>? files,
@@ -26,7 +24,6 @@ class AddServiceService {
     }
   }
 
-  /// ✅ Update Service
   Future<ApiResponse> updateService({
     required int serviceId,
     required Map<String, dynamic> fields,

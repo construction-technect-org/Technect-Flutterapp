@@ -8,10 +8,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 
-class ConstructionServiceView extends StatelessWidget {
-  final controller = Get.put(ConstructionServiceController());
-
-  // Constants
+class ConstructionServiceView extends GetView<ConstructionServiceController> {
   static const double _leftPanelWidth = 0.27;
   static const double _itemHeight = 170.0;
   static const double _imageHeight = 80.0;
@@ -114,7 +111,6 @@ class ConstructionServiceView extends StatelessWidget {
     }
   }
 
-  // Left Panel Views
   Widget _index0LeftView(BuildContext context) {
     final controller = Get.find<ConstructionServiceController>();
     return _buildLeftSidebar(
@@ -146,7 +142,6 @@ class ConstructionServiceView extends StatelessWidget {
     );
   }
 
-  // Reusable Left Sidebar Widget
   Widget _buildLeftSidebar<T>({
     required BuildContext context,
     required List<T> items,
@@ -293,7 +288,6 @@ class ConstructionServiceView extends StatelessWidget {
     );
   }
 
-  // Right Panel Views
   Widget _index0RightView(BuildContext context) {
     final controller = Get.find<ConstructionServiceController>();
     return Expanded(
@@ -680,7 +674,6 @@ class ConstructionServiceView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Image
                 Expanded(
                   flex: 3,
                   child: Stack(
@@ -707,7 +700,6 @@ class ConstructionServiceView extends StatelessWidget {
                                 child: const Icon(Icons.build, size: 40),
                               ),
                       ),
-                      // Location distance overlay (top left)
                       if (myPref.role.val == "connector")
                         if ((service.distanceKm ?? 0) > 0)
                           Positioned(
@@ -728,7 +720,6 @@ class ConstructionServiceView extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Details
                 Expanded(
                   flex: 2,
                   child: Padding(
@@ -896,7 +887,6 @@ class ConstructionServiceView extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Left side - Image
                 SizedBox(
                   height: 120,
                   child: Stack(
@@ -930,7 +920,6 @@ class ConstructionServiceView extends StatelessWidget {
                                 child: const Icon(Icons.build, size: 40),
                               ),
                       ),
-                      // Location distance overlay (top left)
                       if (myPref.role.val == "connector")
                         if ((service.distanceKm ?? 0) > 0)
                           Positioned(
@@ -952,7 +941,6 @@ class ConstructionServiceView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                // Right side - Details
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

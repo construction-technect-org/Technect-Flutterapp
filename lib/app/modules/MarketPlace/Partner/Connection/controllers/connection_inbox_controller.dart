@@ -8,7 +8,7 @@ class ConnectionInboxController extends GetxController {
   RxList<Connection> filteredConnections = <Connection>[].obs;
   RxString searchQuery = ''.obs;
   Rx<Statistics> statistics = Statistics().obs;
-  RxInt selectedTabIndex = 0.obs; // 0 = All, 1 = Product, 2 = Service
+  RxInt selectedTabIndex = 0.obs;
   final ApiManager apiManager = ApiManager();
 
   @override
@@ -29,7 +29,6 @@ class ConnectionInboxController extends GetxController {
       if (status != null) {
         params['status'] = status;
       }
-      // Always fetch all data, no type filtering
       final response = await apiManager.get(
         url: myPref.role.val == "connector"
             ? APIConstants.connectionConnectorInbox
@@ -38,7 +37,6 @@ class ConnectionInboxController extends GetxController {
       );
       final connectionModel = ConnectionModel.fromJson(response);
       connections.assignAll(connectionModel.data ?? []);
-      // Filter by item_type based on selected tab
       _filterByItemType();
       statistics.value = connectionModel.statistics ?? Statistics();
       isLoader.value = false;
@@ -46,7 +44,6 @@ class ConnectionInboxController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
-      // No need to show error
     } finally {
       isLoader.value = false;
     }
@@ -55,7 +52,6 @@ class ConnectionInboxController extends GetxController {
   void searchConnections(String value) {
     searchQuery.value = value;
 
-    // First filter by item_type based on selected tab
     List<Connection> typeFiltered = connections;
     if (selectedTabIndex.value == 1) {
       typeFiltered = connections.where((connection) {
@@ -94,13 +90,11 @@ class ConnectionInboxController extends GetxController {
 
   void onTabChanged(int index) {
     selectedTabIndex.value = index;
-    // Only filter locally, don't call API
     _filterByItemType();
   }
 
   void _filterByItemType() {
     if (selectedTabIndex.value == 0) {
-      // Show all - no filtering needed
       filteredConnections.clear();
       filteredConnections.addAll(connections);
     } else {
@@ -110,7 +104,6 @@ class ConnectionInboxController extends GetxController {
         return (connection.itemType?.toLowerCase() ?? 'unknown') == filterType;
       }).toList();
     }
-    // Apply search if there's a search query
     if (searchQuery.value.isNotEmpty) {
       searchConnections(searchQuery.value);
     }
@@ -134,7 +127,6 @@ class ConnectionInboxController extends GetxController {
 
       if (response['success'] == true) {
         SnackBars.successSnackBar(content: 'Connection accepted successfully');
-        // Fetch all data and then filter by current tab
         await fetchConnections();
       } else {
         SnackBars.errorSnackBar(
@@ -142,7 +134,7 @@ class ConnectionInboxController extends GetxController {
         );
       }
     } catch (e) {
-      // No need to show errorputObject
+      // No need to show error
     } finally {
       isLoading.value = false;
     }
@@ -161,7 +153,6 @@ class ConnectionInboxController extends GetxController {
 
       if (response['success'] == true) {
         SnackBars.successSnackBar(content: 'Connection rejected successfully');
-        // Fetch all data and then filter by current tab
         await fetchConnections();
       } else {
         SnackBars.errorSnackBar(

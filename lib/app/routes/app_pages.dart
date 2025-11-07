@@ -32,6 +32,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/binding/add_service_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/bindings/construction_service_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/binding/service_detail_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/view/service_detail_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/views/construction_service_view.dart';
@@ -306,7 +307,7 @@ class AppPages {
     GetPage(
       name: Routes.SELECT_SERVICE,
       page: () => ConstructionServiceView(),
-      // binding: OnBoardingBinding(),
+      binding: ConstructionServiceBinding(),
     ),
     GetPage(
       name: Routes.DELIVERY_LOCATION,

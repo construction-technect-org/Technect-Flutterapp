@@ -15,21 +15,19 @@ class ConnectorSelectedProductModel {
     return ConnectorSelectedProductModel(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
-      data: json['data'] != null ? ConnectorSelectedProductData.fromJson(json['data']) : null,
+      data: json['data'] != null
+          ? ConnectorSelectedProductData.fromJson(json['data'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      "success": success,
-      "message": message,
-      "data": data?.toJson(),
-    };
+    return {"success": success, "message": message, "data": data?.toJson()};
   }
 }
 
 class ConnectorSelectedProductData {
-   List<Product> products;
+  List<Product> products;
   final Pagination pagination;
   final Filters filters;
 
@@ -57,7 +55,6 @@ class ConnectorSelectedProductData {
     };
   }
 }
-
 
 class Pagination {
   final int currentPage;
@@ -153,10 +150,6 @@ class ConnectorCategory {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      "id": id,
-      "name": name,
-      "product_count": productCount,
-    };
+    return {"id": id, "name": name, "product_count": productCount};
   }
 }

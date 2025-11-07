@@ -8,17 +8,17 @@ class ConnectionModel {
 
   factory ConnectionModel.fromJson(Map<String, dynamic> json) =>
       ConnectionModel(
-    success: json["success"],
-    message: json["message"],
-    data: json["data"] == null
-        ? []
+        success: json["success"],
+        message: json["message"],
+        data: json["data"] == null
+            ? []
             : List<Connection>.from(
                 json["data"]!.map((x) => Connection.fromJson(x)),
               ),
-    statistics: json["statistics"] == null
-        ? null
-        : Statistics.fromJson(json["statistics"]),
-  );
+        statistics: json["statistics"] == null
+            ? null
+            : Statistics.fromJson(json["statistics"]),
+      );
 
   Map<String, dynamic> toJson() => {
     "success": success,
@@ -122,11 +122,10 @@ class Connection {
     "item_type": itemType,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
-    if (statistics != null) "statistics": statistics!.toJson(), // ✅ optional
+    if (statistics != null) "statistics": statistics!.toJson(),
   };
 }
 
-// ✅ Extra model for statistics (since your API response includes it)
 class ConnectionStatistics {
   int? totalRequests;
   int? pendingRequests;

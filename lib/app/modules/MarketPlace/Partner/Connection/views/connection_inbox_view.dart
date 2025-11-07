@@ -40,7 +40,6 @@ class ConnectionInboxView extends StatelessWidget {
               ),
               Column(
                 children: [
-                  // Tab Bar
                   Padding(
                     padding: const EdgeInsets.only(
                       top: 8.0,
@@ -213,9 +212,7 @@ class ConnectionInboxView extends StatelessWidget {
                               final connection =
                                   controller.filteredConnections[index];
                               return InkWell(
-                                onTap: () {
-                                  // Get.toNamed(Routes.CONNECTION_INBOX);
-                                },
+                                onTap: () {},
                                 child: Container(
                                   margin: const EdgeInsets.only(bottom: 12),
                                   decoration: BoxDecoration(
@@ -390,7 +387,6 @@ class ConnectionInboxView extends StatelessWidget {
             ],
           ),
         ),
-        // Item Type Badge (top right) - only show when "All" tab is selected
         Obx(
           () => controller.selectedTabIndex.value == 0
               ? Positioned(
@@ -671,7 +667,6 @@ class ConnectionInboxView extends StatelessWidget {
             ],
           ),
         ),
-        // Item Type Badge (top right) - only show when "All" tab is selected
         Obx(
           () => controller.selectedTabIndex.value == 0
               ? Positioned(
