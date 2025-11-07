@@ -5,10 +5,6 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/controllers/add_role_controller.dart';
 
 class AddRoleView extends GetView<AddRoleController> {
-  AddRoleView({super.key});
-
-  final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -55,7 +51,7 @@ class AddRoleView extends GetView<AddRoleController> {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Form(
-                        key: formKey,
+                        key: controller.formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -133,7 +129,7 @@ class AddRoleView extends GetView<AddRoleController> {
               onTap: controller.isLoading.value
                   ? null
                   : () {
-                      if (formKey.currentState!.validate()) {
+                      if (controller.formKey.currentState!.validate()) {
                         controller.saveRole();
                       }
                     },

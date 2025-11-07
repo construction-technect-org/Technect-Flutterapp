@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/certifications_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/info_metrics_component.dart';
@@ -8,8 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/metrics_screen.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  final homeController = Get.find<HomeController>();
-
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -228,9 +225,9 @@ class ProfileView extends GetView<ProfileController> {
       Widget content;
 
       if (index == 0) {
-        content = const InfoMetricsComponent();
+        content = InfoMetricsComponent();
       } else if (index == 1) {
-        content = const CertificationsComponent(isDelete: true);
+        content = CertificationsComponent();
       } else {
         content = MetricsScreen();
       }

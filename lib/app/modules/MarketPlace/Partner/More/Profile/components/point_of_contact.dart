@@ -7,12 +7,9 @@ import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 
 class PointOfContentScreen extends StatelessWidget {
-  PointOfContentScreen({super.key});
-
-  final eController = Get.put<PointOfContactController>(
+  final PointOfContactController eController = Get.put(
     PointOfContactController(),
   );
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +56,7 @@ class PointOfContentScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Form(
-                          key: formKey,
+                          key: eController.formKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -144,7 +141,7 @@ class PointOfContentScreen extends StatelessWidget {
             child: RoundedButton(
               buttonName: "Save",
               onTap: () {
-                if (formKey.currentState!.validate()) {
+                if (eController.formKey.currentState!.validate()) {
                   eController.updatePointOfContact();
                 }
               },
@@ -157,12 +154,15 @@ class PointOfContentScreen extends StatelessWidget {
 }
 
 class PointOfContactController extends GetxController {
+  final formKey = GlobalKey<FormState>();
+
   final fNameController = TextEditingController();
   final emailController = TextEditingController();
   final designationController = TextEditingController();
   final numberController = TextEditingController();
   final alternativeNumberController = TextEditingController();
   final HomeController homeController = Get.find<HomeController>();
+
   @override
   void onInit() {
     super.onInit();
@@ -187,8 +187,8 @@ class PointOfContactController extends GetxController {
         'name': fNameController.text.trim(),
         'relation': designationController.text.trim(),
         'phone_number': numberController.text.trim(),
-        if(alternativeNumberController.text.isNotEmpty)
-        'alternative_phone_number': alternativeNumberController.text.trim(),
+        if (alternativeNumberController.text.isNotEmpty)
+          'alternative_phone_number': alternativeNumberController.text.trim(),
         'email': emailController.text.trim(),
       };
 
@@ -202,7 +202,6 @@ class PointOfContactController extends GetxController {
       Get.back();
     } catch (e) {
       // ignore: avoid_print
-      print(e);
     } finally {
       isLoading.value = false;
     }

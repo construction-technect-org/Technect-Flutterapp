@@ -19,7 +19,6 @@ class RequestDemoController extends GetxController {
   bool isEdit = false;
   final RxBool showVideo = false.obs;
 
-  // ignore: non_constant_identifier_names
   final phoneNumberController = TextEditingController();
   final emilaController = TextEditingController();
 
@@ -61,7 +60,6 @@ class RequestDemoController extends GetxController {
     );
   }
 
-  // Handlers
   void onMainCategorySelected(String? value) {
     if (value != null) {
       selectedMainCategory.value = value;

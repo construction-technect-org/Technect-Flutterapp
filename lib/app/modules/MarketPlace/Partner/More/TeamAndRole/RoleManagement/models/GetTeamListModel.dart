@@ -1,17 +1,4 @@
-// To parse this JSON data, do
-//
-//     final teamListModel = teamListModelFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
-
-
-
-
-TeamListModel teamListModelFromJson(String str) => TeamListModel.fromJson(json.decode(str));
-
-String teamListModelToJson(TeamListModel data) => json.encode(data.toJson());
 
 class TeamListModel {
   final bool? success;
@@ -20,16 +7,15 @@ class TeamListModel {
 
   final int? count;
 
-  TeamListModel({
-    this.success,
-    this.data,
-    this.count,
-    this.statistics
-  });
+  TeamListModel({this.success, this.data, this.count, this.statistics});
 
   factory TeamListModel.fromJson(Map<String, dynamic> json) => TeamListModel(
     success: json["success"],
-    data: json["data"] == null ? [] : List<TeamListData>.from(json["data"]!.map((x) => TeamListData.fromJson(x))),
+    data: json["data"] == null
+        ? []
+        : List<TeamListData>.from(
+            json["data"]!.map((x) => TeamListData.fromJson(x)),
+          ),
     count: json["count"],
     statistics: json['statistics'] != null
         ? Statistics.fromJson(json['statistics'])
@@ -38,10 +24,11 @@ class TeamListModel {
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
     "count": count,
     'statistics': statistics?.toJson(),
-
   };
 }
 
@@ -91,22 +78,23 @@ class TeamListData {
   String? roleDescription;
   String? functionalities;
 
-  TeamListData(
-      {this.id,
-        this.merchantProfileId,
-        this.teamRoleId,
-        this.profilePhotoUrl,
-        this.profilePhotoS3Key,
-        this.firstName,
-        this.lastName,
-        this.emailId,
-        this.mobileNumber,
-        this.isActive,
-        this.createdAt,
-        this.updatedAt,
-        this.roleTitle,
-        this.roleDescription,
-        this.functionalities});
+  TeamListData({
+    this.id,
+    this.merchantProfileId,
+    this.teamRoleId,
+    this.profilePhotoUrl,
+    this.profilePhotoS3Key,
+    this.firstName,
+    this.lastName,
+    this.emailId,
+    this.mobileNumber,
+    this.isActive,
+    this.createdAt,
+    this.updatedAt,
+    this.roleTitle,
+    this.roleDescription,
+    this.functionalities,
+  });
 
   TeamListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -146,4 +134,3 @@ class TeamListData {
     return data;
   }
 }
-

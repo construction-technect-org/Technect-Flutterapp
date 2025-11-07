@@ -7,7 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 class AddProductService {
   ApiManager apiManager = ApiManager();
 
-  // MainCategory
   Future<MainCategoryModel> mainCategory() async {
     try {
       final response = await apiManager.get(
@@ -19,7 +18,6 @@ class AddProductService {
     }
   }
 
-  // SubCategory
   Future<SubCategoryModel> subCategory(int mainCategoryId) async {
     try {
       final response = await apiManager.get(
@@ -31,7 +29,6 @@ class AddProductService {
     }
   }
 
-  // ---------------- Products by SubCategory ----------------
   Future<ProductModel> productsBySubCategory(int subCategoryId) async {
     try {
       final response = await apiManager.get(
@@ -92,12 +89,11 @@ class AddProductService {
 
       return ApiResponse(success: success, message: message);
     } catch (e, st) {
-      debugPrint("❌ Error in updateProduct: $e");
-      debugPrint("$st");
-      return ApiResponse(success: false, message: e.toString());
+      throw Exception('Error in updateProduct: $e , $st');
     }
   }
 }
+
 class ApiResponse {
   final bool success;
   final String? message;

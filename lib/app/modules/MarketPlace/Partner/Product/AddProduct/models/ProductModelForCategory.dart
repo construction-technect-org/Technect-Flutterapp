@@ -11,7 +11,8 @@ class ProductModel {
     data: json['data'] == null
         ? []
         : List<CategoryProduct>.from(
-        json['data'].map((x) => CategoryProduct.fromJson(x))),
+            json['data'].map((x) => CategoryProduct.fromJson(x)),
+          ),
   );
 
   Map<String, dynamic> toJson() => {
@@ -61,8 +62,11 @@ class CategoryProduct {
         subCategoryName: json['sub_category_name'],
         productSubCategories: json['product_sub_categories'] == null
             ? []
-            : List<ProductSubCategory>.from(json['product_sub_categories']
-            .map((x) => ProductSubCategory.fromJson(x))),
+            : List<ProductSubCategory>.from(
+                json['product_sub_categories'].map(
+                  (x) => ProductSubCategory.fromJson(x),
+                ),
+              ),
       );
 
   Map<String, dynamic> toJson() => {

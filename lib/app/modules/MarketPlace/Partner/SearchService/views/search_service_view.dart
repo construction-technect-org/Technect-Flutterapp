@@ -8,7 +8,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/controller/search_service_controller.dart';
 
 class SearchServiceView extends GetView<SearchServiceController> {
-  SearchServiceView({super.key});
   final HomeController homeController = Get.find<HomeController>();
 
   @override

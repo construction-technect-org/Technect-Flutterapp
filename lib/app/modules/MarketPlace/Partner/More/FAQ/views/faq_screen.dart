@@ -65,7 +65,6 @@ class FaqScreen extends GetView<FAQController> {
                                     margin: const EdgeInsets.only(bottom: 16),
                                     child: InkWell(
                                       onTap: () {
-                                        // Toggle open/close
                                         if (controller.selectedIndex.contains(
                                           index,
                                         )) {

@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class MarketplacePerformanceComponent extends StatelessWidget {
-  const MarketplacePerformanceComponent({super.key});
-
-  ProfileController get controller => Get.find<ProfileController>();
+  final ProfileController controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {

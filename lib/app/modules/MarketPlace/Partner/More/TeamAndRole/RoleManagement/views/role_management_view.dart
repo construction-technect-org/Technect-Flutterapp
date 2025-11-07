@@ -185,8 +185,8 @@ class RoleManagementView extends GetView<RoleManagementController> {
                         },
                         child: Obx(() {
                           return controller.showRoles.value
-                              ? const RolesViewWidget()
-                              : const TeamsViewWidget();
+                              ? RolesViewWidget()
+                              : TeamsViewWidget();
                         }),
                       ),
                     ],

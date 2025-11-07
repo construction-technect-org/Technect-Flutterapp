@@ -9,6 +9,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileController extends GetxController {
+  final formKey = GlobalKey<FormState>();
+
   final businessNameController = TextEditingController();
   final businessWebsiteController = TextEditingController();
   final gstNumberController = TextEditingController();
@@ -22,7 +24,6 @@ class EditProfileController extends GetxController {
   final scrollController = ScrollController();
 
   final isLoading = false.obs;
-  // Email validation state
   RxString emailError = "".obs;
   RxBool isEmailValidating = false.obs;
 
@@ -41,7 +42,6 @@ class EditProfileController extends GetxController {
           homeController.profileData.value.data?.merchantProfile;
 
       if (merchantProfile != null) {
-        // Populate text fields
         Get.find<ProfileController>().image.value =
             merchantProfile.merchantLogo ?? "";
         businessNameController.text = merchantProfile.businessName ?? '';
@@ -57,7 +57,6 @@ class EditProfileController extends GetxController {
         projectsCompletedController.text =
             merchantProfile.projectsCompleted?.toString() ?? '';
 
-        // Populate business hours
         if (merchantProfile.businessHours?.isNotEmpty == true) {
           final hoursList = merchantProfile.businessHours!
               .map(
@@ -89,7 +88,7 @@ class EditProfileController extends GetxController {
         yearsInBusinessController.text = cont.businessModel.value.year ?? "";
       }
     } catch (e) {
-      Get.printError(info: 'Error populating existing data: $e');
+      // ignore: avoid_print
     }
   }
 

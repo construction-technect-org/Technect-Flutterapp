@@ -3,7 +3,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/services/SupportTicketCategoriesServices.dart';
 
 class CustomerSupportController extends GetxController {
-  final SupportTicketCategoriesServices _service = SupportTicketCategoriesServices();
+  final SupportTicketCategoriesServices _service =
+      SupportTicketCategoriesServices();
   RxString selectedMainCategory = "".obs;
   bool isEdit = false;
   RxString searchQuery = "".obs;
@@ -12,7 +13,6 @@ class CustomerSupportController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // _loadTicketsFromStorage();
     fetchMyTickets();
   }
 
@@ -42,7 +42,6 @@ class CustomerSupportController extends GetxController {
         await _loadTicketsFromStorage();
       }
     } catch (e) {
-      print(e);
       // No Error Show
     } finally {
       isLoading.value = false;
@@ -56,15 +55,25 @@ class CustomerSupportController extends GetxController {
       filteredTickets.addAll(supportMyTickets.value.data?.tickets ?? []);
     } else {
       filteredTickets.clear();
-      filteredTickets.value = (supportMyTickets.value.data?.tickets ?? []).where((
-        ticket,
-      ) {
-        return (ticket.subject ?? '').toLowerCase().contains(value.toLowerCase()) ||
-            (ticket.description ?? '').toLowerCase().contains(value.toLowerCase()) ||
-            (ticket.ticketNumber ?? '').toLowerCase().contains(value.toLowerCase()) ||
-            (ticket.categoryName ?? '').toLowerCase().contains(value.toLowerCase()) ||
-            (ticket.priorityName ?? '').toLowerCase().contains(value.toLowerCase());
-      }).toList();
+      filteredTickets.value = (supportMyTickets.value.data?.tickets ?? [])
+          .where((ticket) {
+            return (ticket.subject ?? '').toLowerCase().contains(
+                  value.toLowerCase(),
+                ) ||
+                (ticket.description ?? '').toLowerCase().contains(
+                  value.toLowerCase(),
+                ) ||
+                (ticket.ticketNumber ?? '').toLowerCase().contains(
+                  value.toLowerCase(),
+                ) ||
+                (ticket.categoryName ?? '').toLowerCase().contains(
+                  value.toLowerCase(),
+                ) ||
+                (ticket.priorityName ?? '').toLowerCase().contains(
+                  value.toLowerCase(),
+                );
+          })
+          .toList();
     }
   }
 

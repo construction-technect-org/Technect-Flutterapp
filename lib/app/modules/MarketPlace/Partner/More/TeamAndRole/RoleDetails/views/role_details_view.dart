@@ -4,8 +4,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/components/delete_team_dialog.dart';
 
 class RoleDetailsView extends GetView<RoleDetailsController> {
-  const RoleDetailsView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +16,6 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
             () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// Edit Button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -90,7 +87,6 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                 ),
                 SizedBox(height: 2.h),
 
-                /// Role Details Card
                 Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
@@ -108,7 +104,6 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// Role Icon + Title
                       Row(
                         children: [
                           Container(
@@ -142,7 +137,6 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                       ),
                       SizedBox(height: 2.h),
 
-                      /// Description Section
                       Text(
                         "Description",
                         style: MyTexts.medium16.copyWith(
@@ -159,7 +153,6 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                       ),
                       SizedBox(height: 2.h),
 
-                      /// Functionalities
                       Text(
                         "Functionalities",
                         style: MyTexts.medium16.copyWith(
@@ -204,7 +197,6 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                /// Toggle
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -229,7 +221,6 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                   ],
                                 ),
 
-                                /// Animated Status Badge
                                 AnimatedContainer(
                                   duration: const Duration(milliseconds: 300),
                                   padding: EdgeInsets.symmetric(

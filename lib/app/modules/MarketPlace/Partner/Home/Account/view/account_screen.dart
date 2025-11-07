@@ -3,7 +3,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/Account/controller/account_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/customer_support_view.dart';
 
 class AccountScreen extends GetView<AccountController> {

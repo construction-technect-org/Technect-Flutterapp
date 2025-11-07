@@ -2,7 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/components/stat_card.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/components/stat_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/controller/customer_support_controller.dart';
 
 class CustomerSupportView extends StatelessWidget {
@@ -326,63 +326,6 @@ class CustomerSupportView extends StatelessWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  // Row(
-                                                  //   children: [
-                                                  //     _buildChip(
-                                                  //       ticket.ticketNumber ??
-                                                  //           "",
-                                                  //       MyColors.white,
-                                                  //       MyColors.black,
-                                                  //       borderColor: MyColors
-                                                  //           .americanSilver,
-                                                  //     ),
-                                                  //     SizedBox(width: 2.w),
-                                                  //     _buildChip(
-                                                  //       ticket.statusName ??
-                                                  //           "",
-                                                  //       _getStatusBgColor(
-                                                  //         ticket.statusName ??
-                                                  //             "",
-                                                  //       ),
-                                                  //       MyColors.white,
-                                                  //       icon: _getStatusIcon(
-                                                  //         ticket.statusName ??
-                                                  //             "",
-                                                  //       ),
-                                                  //     ),
-                                                  //     SizedBox(width: 2.w),
-                                                  //     _buildChip(
-                                                  //       ticket.priorityName ??
-                                                  //           "",
-                                                  //       MyColors.white,
-                                                  //       _getPriorityColor(
-                                                  //         ticket.priorityName ??
-                                                  //             "",
-                                                  //       ),
-                                                  //       borderColor:
-                                                  //       _getPriorityColor(
-                                                  //         ticket.priorityName ??
-                                                  //             "",
-                                                  //       ),
-                                                  //       icon: _getPriorityIcon(
-                                                  //         ticket.priorityName ??
-                                                  //             "",
-                                                  //       ),
-                                                  //     ),
-                                                  //   ],
-                                                  // ),
-                                                  // Text(
-                                                  //   "Category - ${(ticket.categoryName ?? "")
-                                                  //       .capitalizeFirst ??
-                                                  //       "-"}"
-                                                  //   ,
-                                                  //   style: MyTexts.medium16
-                                                  //       .copyWith(
-                                                  //     color: MyColors
-                                                  //         .black,
-                                                  //
-                                                  //   ),
-                                                  // ),
                                                   SizedBox(height: 0.8.h),
                                                   Text(
                                                     (ticket.subject ?? "")
@@ -477,7 +420,6 @@ class CustomerSupportView extends StatelessWidget {
     );
   }
 
-  // Status color handling
   Color _getStatusBgColor(String status) {
     switch (status) {
       case "In Progress":
@@ -499,7 +441,6 @@ class CustomerSupportView extends StatelessWidget {
     }
   }
 
-  /// Priority color handling
   Color _getPriorityColor(String priority) {
     switch (priority) {
       case "Medium":
@@ -513,7 +454,6 @@ class CustomerSupportView extends StatelessWidget {
     }
   }
 
-  /// Get icon for status
   Widget? _getStatusIcon(String status) {
     switch (status) {
       case "In Progress":
@@ -530,7 +470,6 @@ class CustomerSupportView extends StatelessWidget {
     }
   }
 
-  /// Get icon for priority
   Widget? _getPriorityIcon(String priority) {
     switch (priority) {
       case "Medium":

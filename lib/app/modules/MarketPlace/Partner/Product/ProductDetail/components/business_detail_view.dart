@@ -115,13 +115,6 @@ class BusinessDetailView extends StatelessWidget {
             title: "Email id",
             data: controller.product.merchantEmail ?? "-",
           ),
-          // const Gap(6),
-          // Obx(() {
-          //   return buildRow(
-          //     title: "Address",
-          //     data: controller.businessModel.value.address,
-          //   );
-          // }),
           const Gap(6),
         ],
       ),

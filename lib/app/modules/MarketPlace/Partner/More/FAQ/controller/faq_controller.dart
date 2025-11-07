@@ -6,6 +6,7 @@ class FAQController extends GetxController {
   final isLoading = false.obs;
   final FAQService _service = FAQService();
   final RxList<FAQ> faqList = <FAQ>[].obs;
+  RxList selectedIndex = [].obs;
 
   Future<void> fetchFAQs() async {
     try {
@@ -16,8 +17,8 @@ class FAQController extends GetxController {
       }
 
       isLoading.value = true;
-      final result = await _service.fetchAllRoles();
-      if (result != null && result.success == true) {
+      final result = await _service.fetchAllFAQs();
+      if (result.success == true) {
         faqList.assignAll(result.data ?? []);
         myPref.setFAQData(result);
       }
@@ -30,8 +31,6 @@ class FAQController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  RxList selectedIndex = [].obs;
 
   @override
   void onInit() {

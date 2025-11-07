@@ -11,17 +11,11 @@ import 'package:open_filex/open_filex.dart';
 import 'package:video_player/video_player.dart';
 
 class AddProductView extends GetView<AddProductController> {
-  AddProductView({super.key});
-
-  final formKey1 = GlobalKey<FormState>();
-  final formKey2 = GlobalKey<FormState>();
-  final formKey3 = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           if (controller.pageController.page == 0) {
             Get.back();
@@ -62,11 +56,10 @@ class AddProductView extends GetView<AddProductController> {
               controller: controller.pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                // ------------------- PAGE 1 -------------------
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(
-                    key: formKey2,
+                    key: controller.formKey2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -94,7 +87,6 @@ class AddProductView extends GetView<AddProductController> {
                                               12,
                                             ),
                                             child: GestureDetector(
-                                              // onTap: () => controller.showFullImage(path),
                                               child: path.contains('http')
                                                   ? getImageView(
                                                       finalUrl: path,
@@ -588,7 +580,6 @@ class AddProductView extends GetView<AddProductController> {
                             if (val == null || val.trim().isEmpty) {
                               return "Please enter note";
                             }
-                            // Accept only if at least one letter or digit is present
                             if (!RegExp('[a-zA-Z0-9]').hasMatch(val.trim())) {
                               return "Note must contain at least one letter or number";
                             }
@@ -603,7 +594,6 @@ class AddProductView extends GetView<AddProductController> {
                             if (val == null || val.trim().isEmpty) {
                               return "Please enter terms & conditions";
                             }
-                            // Accept only if at least one letter or digit is present
                             if (!RegExp('[a-zA-Z]').hasMatch(val.trim())) {
                               return "Terms & Conditions must include at least one alphabet character";
                             }
@@ -616,7 +606,7 @@ class AddProductView extends GetView<AddProductController> {
                         Center(
                           child: RoundedButton(
                             buttonName: 'Continue',
-                            onTap: () async {
+                            onTap: () {
                               if (controller.pickedFilePathList.isEmpty &&
                                   !controller.isEdit) {
                                 SnackBars.errorSnackBar(
@@ -627,8 +617,7 @@ class AddProductView extends GetView<AddProductController> {
                               if (controller.isEdit) {
                                 final hasImage = controller.imageSlots.any(
                                   (path) =>
-                                      path != null &&
-                                      path.toString().trim().isNotEmpty,
+                                      path != null && path.trim().isNotEmpty,
                                 );
                                 if (!hasImage) {
                                   SnackBars.errorSnackBar(
@@ -637,7 +626,8 @@ class AddProductView extends GetView<AddProductController> {
                                   return;
                                 }
                               }
-                              if (formKey2.currentState!.validate()) {
+                              if (controller.formKey2.currentState!
+                                  .validate()) {
                                 controller.showExtraFields.value = true;
                                 controller.pageController.animateToPage(
                                   1,
@@ -658,11 +648,10 @@ class AddProductView extends GetView<AddProductController> {
                   ),
                 ),
 
-                // ------------------- PAGE 2 -------------------
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(
-                    key: formKey3,
+                    key: controller.formKey3,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -972,7 +961,8 @@ class AddProductView extends GetView<AddProductController> {
                             buttonName: 'Continue',
                             onTap: () {
                               hideKeyboard();
-                              if (formKey3.currentState!.validate()) {
+                              if (controller.formKey3.currentState!
+                                  .validate()) {
                                 if (controller.selectedVideo.value == null) {
                                   SnackBars.errorSnackBar(
                                     content: "Please upload a video",
@@ -994,11 +984,10 @@ class AddProductView extends GetView<AddProductController> {
                   ),
                 ),
 
-                // ------------------- PAGE 3 -------------------
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(
-                    key: formKey1,
+                    key: controller.formKey1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1014,7 +1003,6 @@ class AddProductView extends GetView<AddProductController> {
                               final controllerField = controller
                                   .dynamicControllers[filter.filterName];
 
-                              // 🔹 Single Dropdown
                               if (filter.filterType == 'dropdown') {
                                 controller.dropdownValues.putIfAbsent(
                                   filter.filterName!,
@@ -1055,7 +1043,6 @@ class AddProductView extends GetView<AddProductController> {
                                   () => <String>[].obs,
                                 );
 
-                                // RxString for showing validation error
                                 final RxString errorText = ''.obs;
 
                                 final selectedList = controller
@@ -1290,7 +1277,6 @@ class AddProductView extends GetView<AddProductController> {
                                         return "Enter a valid number";
                                       }
 
-                                      // If both min and max are same, require exact match
                                       if (min != null &&
                                           max != null &&
                                           min == max) {
@@ -1367,7 +1353,8 @@ class AddProductView extends GetView<AddProductController> {
                             onTap: () {
                               hideKeyboard();
 
-                              if (!formKey1.currentState!.validate()) {
+                              if (!controller.formKey1.currentState!
+                                  .validate()) {
                                 SnackBars.errorSnackBar(
                                   content:
                                       "Please fill all required fields properly",
@@ -1392,7 +1379,7 @@ class AddProductView extends GetView<AddProductController> {
 
                               if (!allValid) return;
 
-                              controller.submitProduct(formKey1);
+                              controller.submitProduct(controller.formKey1);
                             },
                           ),
                         ),

@@ -25,7 +25,9 @@ class RoleDetailsController extends GetxController {
     roleDetailsModel = arguments?['getRole'] ?? GetAllRole();
     roleId.value = (roleDetailsModel?.id ?? 0).toString();
     roleTitle.value = roleDetailsModel?.roleTitle ?? "Admin";
-    roleStatus.value = roleDetailsModel?.isActive == true ? "Active" : "InActive";
+    roleStatus.value = roleDetailsModel?.isActive == true
+        ? "Active"
+        : "InActive";
     roleDescription.value = roleDetailsModel?.roleDescription ?? '';
     functionalities.value = roleDetailsModel?.functionalities ?? '';
   }
@@ -33,16 +35,11 @@ class RoleDetailsController extends GetxController {
   Future<void> deleteRole(String id) async {
     try {
       isLoading.value = true;
-      final response = await roleService.deleteRole(id);
-
-      if (response['success'] == true) {
-        await roleManagementController.fetchRoles();
-      }
+      await roleService.deleteRole(id);
+      await roleManagementController.refreshRoles();
       Get.back();
     } catch (e) {
-      // No Error
-    } finally {
-      isLoading.value = false;
+      // ignore: avoid_print
     }
   }
 }

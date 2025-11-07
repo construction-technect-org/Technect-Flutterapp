@@ -6,29 +6,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/widget/file_icon_widget.dart';
 import 'package:path/path.dart';
 
-class AddCertificate extends StatefulWidget {
-  const AddCertificate({super.key});
-
-  @override
-  State<AddCertificate> createState() => _AddCertificateState();
-}
-
-class _AddCertificateState extends State<AddCertificate> {
-  final TextEditingController titleController = TextEditingController();
-  String? filePath;
-
-  final formKey = GlobalKey<FormState>();
-
-  ProfileController get controller => Get.find<ProfileController>();
-
-  Future<void> _pickFile() async {
-    final path = await controller.pickFile();
-    if (path != null) {
-      setState(() {
-        filePath = path;
-      });
-    }
-  }
+class AddCertificate extends StatelessWidget {
+  final ProfileController controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +43,13 @@ class _AddCertificateState extends State<AddCertificate> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Form(
-                        key: formKey,
+                        key: controller.formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Gap(16),
                             CommonTextField(
-                              controller: titleController,
+                              controller: controller.titleController,
                               headerText: "Certificate",
                               hintText: "Enter your certificate name",
                               textInputAction: TextInputAction.done,
@@ -92,7 +71,7 @@ class _AddCertificateState extends State<AddCertificate> {
                             ),
                             const Gap(10),
                             GestureDetector(
-                              onTap: _pickFile,
+                              onTap: controller.pickFile,
                               child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.all(20),
@@ -100,7 +79,7 @@ class _AddCertificateState extends State<AddCertificate> {
                                   border: Border.all(color: MyColors.grey),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: filePath == null
+                                child: controller.filePath == null
                                     ? Column(
                                         children: [
                                           Container(
@@ -134,7 +113,7 @@ class _AddCertificateState extends State<AddCertificate> {
                                         ],
                                       )
                                     : FileIconWidget(
-                                        fileName: filePath!,
+                                        fileName: controller.filePath!,
                                         showFileName: true,
                                       ),
                               ),
@@ -154,15 +133,15 @@ class _AddCertificateState extends State<AddCertificate> {
           child: RoundedButton(
             buttonName: "Add",
             onTap: () {
-              if (filePath == null) {
+              if (controller.filePath.value.isEmpty) {
                 SnackBars.errorSnackBar(content: "Please upload certificate");
               }
-              if (formKey.currentState!.validate()) {
-                if (filePath != null) {
+              if (controller.formKey.currentState!.validate()) {
+                if (controller.filePath.value.isNotEmpty) {
                   final cert = CertificateModel(
-                    title: titleController.text,
-                    filePath: filePath,
-                    name: basename(filePath ?? ""),
+                    title: controller.titleController.text,
+                    filePath: controller.filePath.value,
+                    name: basename(controller.filePath.value),
                   );
                   Get.back(result: cert);
                 }

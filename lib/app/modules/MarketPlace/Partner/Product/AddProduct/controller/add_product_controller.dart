@@ -12,17 +12,16 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
 class AddProductController extends GetxController {
+  final formKey1 = GlobalKey<FormState>();
+  final formKey2 = GlobalKey<FormState>();
+  final formKey3 = GlobalKey<FormState>();
+
   final pageController = PageController();
   Product product = Product();
-
-  // ProductManagementController controller = Get.find();
-
-  // ---------------- Form Controllers ----------------
 
   RxList addProduct = [
     "1.Basic Product Details",
@@ -178,7 +177,6 @@ class AddProductController extends GetxController {
     priceController.text = product.price ?? '';
     if ((product.gstPercentage ?? "").isNotEmpty) {
       selectedGST.value = "${product.gstPercentage?.split(".").first}%";
-      print(selectedGST.value);
     }
     if ((product.stockYardAddress ?? "").isNotEmpty) {
       stockYardAddressController.text = product.stockYardAddress ?? "";
@@ -193,10 +191,8 @@ class AddProductController extends GetxController {
         pickedFilePathList.add("${APIConstants.bucketUrl}${image.s3Key!}");
       }
     }
-    // 🟩 Always create 5 slots
     imageSlots.value = List<String?>.filled(5, null);
 
-    // 🟨 Fill existing images
     final existingImages = product.images ?? [];
     for (int i = 0; i < existingImages.length && i < 5; i++) {
       imageSlots[i] = "${APIConstants.bucketUrl}${existingImages[i].s3Key!}";
@@ -370,14 +366,12 @@ class AddProductController extends GetxController {
       filterValues.forEach((key, value) {
         dynamic actualValue;
 
-        // 🟩 If API sends structured object {label, value}
         if (value is Map<String, dynamic>) {
           actualValue = value['value'];
         } else {
           actualValue = value;
         }
 
-        // 🟦 If stored value is JSON string list → decode it
         if (actualValue is String &&
             actualValue.trim().startsWith('[') &&
             actualValue.trim().endsWith(']')) {
@@ -388,24 +382,19 @@ class AddProductController extends GetxController {
 
         if (actualValue == null) return;
 
-        // Text fields
         if (dynamicControllers.containsKey(key)) {
           if (actualValue is List) {
             dynamicControllers[key]!.text = actualValue.join(', ');
           } else {
             dynamicControllers[key]!.text = actualValue.toString();
           }
-        }
-        // Dropdown (single)
-        else if (dropdownValues.containsKey(key)) {
+        } else if (dropdownValues.containsKey(key)) {
           if (actualValue is String) {
             dropdownValues[key]!.value = actualValue;
           } else if (actualValue is List && actualValue.isNotEmpty) {
             dropdownValues[key]!.value = actualValue.first.toString();
           }
-        }
-        // Dropdown multiple (list)
-        else if (multiDropdownValues.containsKey(key)) {
+        } else if (multiDropdownValues.containsKey(key)) {
           final listValue = (actualValue is List)
               ? actualValue.map((e) => e.toString()).toList()
               : [actualValue.toString()];
@@ -433,10 +422,8 @@ class AddProductController extends GetxController {
       (s) => s.name == productName,
     );
     selectedSubProductId.value = '${selectedCategorySub?.id ?? 0}';
-    print(selectedSubProductId.value);
   }
 
-  // ---------------- API Calls ----------------
   Future<void> fetchMainCategories() async {
     try {
       isLoading(true);
@@ -543,20 +530,17 @@ class AddProductController extends GetxController {
 
   Future<void> pickImageEdit() async {
     try {
-      // Count how many slots are still empty
       final emptySlots = imageSlots.where((e) => e == null).length;
       if (emptySlots <= 0) {
         SnackBars.errorSnackBar(content: "Maximum 5 images allowed");
         return;
       }
 
-      // Pick multiple images but only up to the available empty slots
       final List<XFile>? pickedFiles = await ImagePicker().pickMultiImage(
         limit: emptySlots == 1 ? null : emptySlots,
       );
 
       if (pickedFiles != null && pickedFiles.isNotEmpty) {
-        // Remove stale removal flags
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
@@ -569,13 +553,11 @@ class AddProductController extends GetxController {
         for (final key in toRemove) {
           removedImages.remove(key);
         }
-        // int assignIndex = 0;
         for (var path in pickedFiles.map((e) => e.path)) {
           final emptyIndex = imageSlots.indexWhere((e) => e == null);
           if (emptyIndex != -1) {
             removedImages.remove("remove_image_${emptyIndex + 1}");
             imageSlots[emptyIndex] = path;
-            // assignIndex++;
           } else {
             break;
           }
@@ -609,7 +591,6 @@ class AddProductController extends GetxController {
       return;
     }
 
-    // If validation passes
     if (isEdit) {
       updateProduct();
     } else {
@@ -624,7 +605,6 @@ class AddProductController extends GetxController {
       final filterName = filter.filterName ?? '';
       if (filterName.isEmpty) continue;
 
-      // For dropdown filters
       if (filter.filterType == 'dropdown') {
         final selectedValue = dropdownValues[filterName]?.value;
         if (selectedValue != null && selectedValue.isNotEmpty) {
@@ -643,8 +623,6 @@ class AddProductController extends GetxController {
       }
     }
 
-    print(filterValues);
-
     return filterValues;
   }
 
@@ -657,7 +635,6 @@ class AddProductController extends GetxController {
 
       String? value;
 
-      // Dropdown filters
       if (filter.filterType == 'dropdown') {
         final selectedValue = dropdownValues[filterName]?.value;
         if (selectedValue != null && selectedValue.isNotEmpty) {
@@ -692,9 +669,6 @@ class AddProductController extends GetxController {
       }
     }
 
-    if (kDebugMode) {
-      print("Built filter values: $filterValues");
-    }
     return filterValues;
   }
 
@@ -820,7 +794,7 @@ class AddProductController extends GetxController {
         // await controller.fetchProducts();
         isLoading.value = false;
         Get.to(
-              () => SuccessScreen(
+          () => SuccessScreen(
             title: "Success!",
             header: "Product added successfully!",
             onTap: () {

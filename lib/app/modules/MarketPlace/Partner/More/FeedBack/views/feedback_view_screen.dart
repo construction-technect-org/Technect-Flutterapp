@@ -108,7 +108,6 @@ class FeedbackViewScreen extends GetView<FeedBackController> {
                                 );
                               }),
                             ),
-                            // const Gap(),
                             Obx(
                               () => Center(
                                 child: Row(

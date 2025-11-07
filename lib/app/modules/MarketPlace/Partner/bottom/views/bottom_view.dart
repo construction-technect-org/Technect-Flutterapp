@@ -7,7 +7,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';

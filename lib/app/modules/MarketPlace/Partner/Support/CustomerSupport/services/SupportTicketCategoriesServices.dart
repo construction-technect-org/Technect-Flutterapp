@@ -7,7 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
 class SupportTicketCategoriesServices {
   ApiManager apiManager = ApiManager();
 
-  /// Category
   Future<SupportTicketCategoriesModel> supportTicketCategories() async {
     try {
       final response = await apiManager.get(
@@ -19,7 +18,6 @@ class SupportTicketCategoriesServices {
     }
   }
 
-  /// Priorities
   Future<SupportTicketPrioritiesModel> supportTicketPriorities() async {
     try {
       final response = await apiManager.get(
@@ -31,7 +29,6 @@ class SupportTicketCategoriesServices {
     }
   }
 
-  /// Support Ticket Create
   Future<SupportTicketCreateModel> supportTicketCreate({
     required String categoryId,
     required String priorityId,
@@ -56,7 +53,6 @@ class SupportTicketCategoriesServices {
     }
   }
 
-  /// Support My Tickets
   Future<SupportMyTicketsModel> supportMyTicketsModel({String? filter}) async {
     try {
       final qp = {if ((filter ?? "").isNotEmpty) "status": filter};

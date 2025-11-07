@@ -19,10 +19,6 @@ class UpperCaseTextFormatter extends TextInputFormatter {
 }
 
 class EditProfileView extends GetView<EditProfileController> {
-  EditProfileView({super.key});
-
-  final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -37,7 +33,7 @@ class EditProfileView extends GetView<EditProfileController> {
               RoundedButton(
                 buttonName: 'Update',
                 onTap: () async {
-                  if (!formKey.currentState!.validate()) return;
+                  if (!controller.formKey.currentState!.validate()) return;
 
                   await controller.validateEmailAvailability();
                   if (controller.emailError.value != '') {
@@ -166,10 +162,9 @@ class EditProfileView extends GetView<EditProfileController> {
                           ),
                           Gap(3.h),
 
-                          /// Build Business Details Step
                           BusinessDetailsStep(
                             controller: controller,
-                            formKey: formKey,
+                            formKey: controller.formKey,
                           ),
                           SizedBox(height: 4.h),
                         ],

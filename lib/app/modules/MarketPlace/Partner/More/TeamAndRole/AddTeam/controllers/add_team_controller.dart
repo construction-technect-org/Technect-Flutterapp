@@ -5,25 +5,23 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/service/add_team_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddTeamController extends GetxController {
+  final formKey = GlobalKey<FormState>();
   final fNameController = TextEditingController();
   final lNameController = TextEditingController();
   final emialIdController = TextEditingController();
   final phoneNumberController = TextEditingController();
   AddTeamService addTeamService = AddTeamService();
-  RoleManagementController roleController = Get.find();
   HomeController homeController = Get.find();
   RxBool isLoading = false.obs;
   final Rx<TeamListData> teamDetailsModel = TeamListData().obs;
   RxBool isEdit = false.obs;
   RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<GetAllRole>? selectedRole = GetAllRole().obs;
-  // Email availability state
   RxString emailError = "".obs;
   RxBool isEmailValidating = false.obs;
 
@@ -49,7 +47,6 @@ class AddTeamController extends GetxController {
     }
     super.onInit();
   }
-
 
   Future<void> pickImageBottomSheet(BuildContext context) {
     return Get.bottomSheet(
@@ -151,36 +148,22 @@ class AddTeamController extends GetxController {
       } else {
         await addTeamService.addTeam(fields: fields, files: files);
         await homeController.refreshTeamList();
-        // await roleController.fetchTeamStatsOverview();
         isLoading.value = false;
         Get.back();
       }
     } catch (e) {
       isLoading.value = false;
-      // Error snackbar is already shown by ApiManager
     }
   }
-
-  Rxn<String> selectedCategory = Rxn<String>();
 
   Future<void> deleteTeamMember(int teamMemberId) async {
     try {
       isLoading.value = true;
-      final response = await addTeamService.deleteTeamMember(teamMemberId);
-
-      if (response['success'] == true) {
-        SnackBars.successSnackBar(content: 'Team member deleted successfully');
-        // Refresh team list in Home controller
-        await homeController.refreshTeamList();
-        // Also refresh the cached data
-        await homeController.fetchTeamList();
-      } else {
-        SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to delete team member',
-        );
-      }
+      await addTeamService.deleteTeamMember(teamMemberId);
+      await homeController.refreshTeamList();
+      await homeController.fetchTeamList();
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error deleting team member: $e');
+      // ignore: avoid_print
     } finally {
       isLoading.value = false;
     }

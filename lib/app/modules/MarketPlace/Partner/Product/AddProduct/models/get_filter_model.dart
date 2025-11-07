@@ -10,7 +10,8 @@ class GetFilterModel {
     data: json["data"] == null
         ? []
         : List<FilterData>.from(
-        json["data"].map((x) => FilterData.fromJson(x))),
+            json["data"].map((x) => FilterData.fromJson(x)),
+          ),
     message: json["message"],
   );
 
@@ -90,6 +91,7 @@ class FilterData {
     "main_category_name": mainCategoryName,
   };
 }
+
 class ConnectorFilterModel {
   String? filterName;
   String? label;
@@ -114,15 +116,13 @@ class ConnectorFilterModel {
       label: json['label'],
       min: (json['min'] ?? json['min_value']) != null
           ? double.tryParse(json['min'].toString()) ??
-          double.tryParse(json['min_value'].toString())
+                double.tryParse(json['min_value'].toString())
           : null,
       max: (json['max'] ?? json['max_value']) != null
           ? double.tryParse(json['max'].toString()) ??
-          double.tryParse(json['max_value'].toString())
+                double.tryParse(json['max_value'].toString())
           : null,
-      options: (json['options'] ??
-          json['dropdown_list'] ??
-          [])
+      options: (json['options'] ?? json['dropdown_list'] ?? [])
           .map<String>((e) => e.toString())
           .toList(),
     );

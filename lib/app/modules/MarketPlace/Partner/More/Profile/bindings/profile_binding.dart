@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 class ProfileBinding extends Bindings {
   @override
   void dependencies() {
-    // Keep ProfileController alive across routes to preserve reactive state
     Get.put<ProfileController>(ProfileController());
   }
 }

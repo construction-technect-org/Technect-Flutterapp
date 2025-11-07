@@ -1,14 +1,10 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/point_of_contact.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 
 class MetricsScreen extends StatelessWidget {
-  MetricsScreen({super.key});
-
-  final controller = Get.find<ProfileController>();
-  final homeController = Get.find<HomeController>();
+  final HomeController homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/models/ProductDetailsModel.dart';
@@ -17,14 +15,12 @@ class ProductDetailService {
         return ProductRatingModel.fromJson(response);
       }
     } catch (e) {
-      log("Error fetching roles: $e");
+      throw Exception('Error fetching roles: $e');
     }
     return null;
   }
 
-  Future<ProductDetailsModel> productDetails({
-    required String id,
-  }) async {
+  Future<ProductDetailsModel> productDetails({required String id}) async {
     try {
       final response = await _apiManager.get(
         url: "${APIConstants.productDetails}$id",
@@ -44,7 +40,7 @@ class ProductDetailService {
         return ProductRatingModel.fromJson(response);
       }
     } catch (e) {
-      log("Error fetching roles: $e");
+      throw Exception('Error fetching roles: $e');
     }
     return null;
   }

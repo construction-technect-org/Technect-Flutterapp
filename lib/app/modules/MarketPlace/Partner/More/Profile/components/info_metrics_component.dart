@@ -4,9 +4,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 
 class InfoMetricsComponent extends StatelessWidget {
-  const InfoMetricsComponent({super.key});
+  InfoMetricsComponent({super.key});
 
-  ProfileController get controller => Get.find<ProfileController>();
+  final ProfileController controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -14,38 +14,6 @@ class InfoMetricsComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 1.h),
-        // Center(
-        //   child: Stack(
-        //     children: [
-        //       Container(
-        //         margin: const EdgeInsets.only(bottom: 8, right: 8),
-        //         width: 90,
-        //         height: 90,
-        //         decoration: BoxDecoration(
-        //           color: MyColors.primary,
-        //           borderRadius: BorderRadius.circular(18),
-        //         ),
-        //         child: Padding(
-        //           padding: const EdgeInsets.all(16),
-        //           child: Image.asset(Asset.infoIcon),
-        //         ),
-        //       ),
-        //       Positioned(
-        //         bottom: 0,
-        //         right: 0,
-        //         child: Container(
-        //           width: 30,
-        //           height: 30,
-        //           decoration: BoxDecoration(
-        //             color: const Color(0xFFFFED29),
-        //             borderRadius: BorderRadius.circular(4),
-        //           ),
-        //           child: Icon(Icons.photo_camera, size: 20, color: MyColors.black),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

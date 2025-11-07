@@ -1,22 +1,16 @@
-import 'dart:developer';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/services/manufacturer_address_service.dart';
 
 class ManufacturerAddressController extends GetxController {
   HomeController homeController = Get.find();
-  // Observable variables
   RxBool isLoading = false.obs;
 
-  // Add new address
   void addAddress() {
     Get.toNamed(Routes.ADD_MANUFACTURER_ADDRESS);
   }
 
-  // Edit address
   void editAddress(String addressId) {
-    // Find the address to edit
     final address = homeController.profileData.value.data?.addresses
         ?.firstWhere((addr) => addr.id.toString() == addressId);
 
@@ -36,7 +30,6 @@ class ManufacturerAddressController extends GetxController {
     }
   }
 
-  // Delete address
   void deleteAddress(String addressId) {
     Get.dialog(
       AlertDialog(
@@ -107,7 +100,7 @@ class ManufacturerAddressController extends GetxController {
       await homeController.fetchProfileData();
       Get.back();
     } catch (e) {
-      log('Failed to delete manufacturer address: $e');
+      // ignore: avoid_print
     } finally {
       isLoading.value = false;
     }
@@ -122,7 +115,7 @@ class ManufacturerAddressController extends GetxController {
       });
       await homeController.fetchProfileData();
     } catch (e) {
-      log('Failed to update default manufacturer address: $e');
+      // ignore: avoid_print
     } finally {
       isLoading.value = false;
     }

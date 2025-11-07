@@ -155,27 +155,16 @@ class HomeController extends GetxController {
   Future<void> fetchTeamList() async {
     try {
       isLoading.value = true;
-      final TeamListModel? result = await roleService.fetchAllTeam();
-      if (result?.success == true) {
-        teamList.clear();
-        teamList.addAll(result?.data ?? []);
+      final TeamListModel result = await roleService.fetchAllTeam();
+      teamList.clear();
+      teamList.addAll(result.data ?? []);
 
-        if (result?.statistics != null) {
-          statistics.value = result!.statistics!;
-        }
-        // Store the complete model
-        myPref.setTeamModelData(result!);
+      if (result.statistics != null) {
+        statistics.value = result.statistics!;
       }
+      myPref.setTeamModelData(result);
     } catch (e) {
-      // Fallback to cached data if API fails
-      final cachedTeamModel = myPref.getTeamModelData();
-      if (cachedTeamModel != null && cachedTeamModel.data != null) {
-        teamList.assignAll(cachedTeamModel.data!);
-        if (cachedTeamModel.statistics != null) {
-          statistics.value = cachedTeamModel.statistics!;
-        }
-      }
-      Get.printError(info: 'Error fetching team list: $e');
+      // ignore: avoid_print
     } finally {
       isLoading.value = false;
     }
