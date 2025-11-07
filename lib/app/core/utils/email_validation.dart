@@ -357,9 +357,17 @@ class EmailValidation {
 
     // Additional validation: Check for common email provider typos
     final domainLower = domain.toLowerCase();
-    if (domainLower.contains('gmail') && (tld == 'io' || tld == 'cm')) {
-      return false;
+
+    // Gmail MUST use .com TLD only
+    if (domainLower.contains('gmail')) {
+      // Extract single-part TLD for comparison (handle two-part TLDs like co.uk)
+      final singleTld = tld.contains('.') ? tld.split('.').last : tld;
+      if (singleTld != 'com') {
+        return false; // Gmail only uses .com
+      }
     }
+
+    // Yahoo and Outlook validation for common typos
     if ((domainLower.contains('yahoo') || domainLower.contains('outlook')) &&
         (tld == 'io' || tld == 'cm' || tld == 'con')) {
       return false;
@@ -583,20 +591,24 @@ class EmailValidation {
 
     // If it's a common email provider, validate the TLD
     if (commonEmailProviders.contains(providerName.toLowerCase())) {
-      // Block obvious typos: .con (should be .com), .cm (should be .com)
       final singleTld = tld.contains('.') ? tld.split('.').last : tld;
-      if (singleTld == 'con' || singleTld == 'cm') {
-        return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
-      }
-      // For gmail specifically, .io is almost certainly a typo since Gmail uses .com
-      if (providerName.toLowerCase() == 'gmail' && singleTld == 'io') {
-        return "Please enter a valid email address. Gmail uses .com domain extension";
-      }
-      // For yahoo and outlook with .io or .cm, block as likely typos
-      if ((providerName.toLowerCase() == 'yahoo' ||
-              providerName.toLowerCase() == 'outlook') &&
-          (singleTld == 'io' || singleTld == 'cm')) {
-        return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
+
+      // Gmail MUST use .com TLD only
+      if (providerName.toLowerCase() == 'gmail') {
+        if (singleTld != 'com') {
+          return "Please enter a valid email address. Gmail only uses .com domain extension";
+        }
+      } else {
+        // For other providers, block obvious typos: .con (should be .com), .cm (should be .com)
+        if (singleTld == 'con' || singleTld == 'cm') {
+          return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
+        }
+        // For yahoo and outlook with .io or .cm, block as likely typos
+        if ((providerName.toLowerCase() == 'yahoo' ||
+                providerName.toLowerCase() == 'outlook') &&
+            (singleTld == 'io' || singleTld == 'cm')) {
+          return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
+        }
       }
     }
 
