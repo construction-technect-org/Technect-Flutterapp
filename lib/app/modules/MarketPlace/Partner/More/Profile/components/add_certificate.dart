@@ -30,11 +30,7 @@ class AddCertificate extends StatelessWidget {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -57,17 +53,13 @@ class AddCertificate extends StatelessWidget {
                                 LengthLimitingTextInputFormatter(30),
                                 NameInputFormatter(),
                               ],
-                              validator: (value) => validateName(
-                                value,
-                                fieldName: "certificate name",
-                              ),
+                              validator: (value) =>
+                                  validateName(value, fieldName: "certificate name"),
                             ),
                             const Gap(20),
                             Text(
                               "Add File",
-                              style: MyTexts.bold16.copyWith(
-                                color: MyColors.gray2E,
-                              ),
+                              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
                             ),
                             const Gap(10),
                             GestureDetector(
@@ -85,9 +77,7 @@ class AddCertificate extends StatelessWidget {
                                           Container(
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: MyColors.grey,
-                                              ),
+                                              border: Border.all(color: MyColors.grey),
                                             ),
                                             padding: const EdgeInsets.all(14),
                                             child: const Icon(
@@ -99,21 +89,17 @@ class AddCertificate extends StatelessWidget {
                                           const Gap(10),
                                           Text(
                                             "Select File you want to upload",
-                                            style: MyTexts.medium14.copyWith(
-                                              color: MyColors.grey,
-                                            ),
+                                            style: MyTexts.medium14.copyWith(color: MyColors.grey),
                                           ),
                                           const Gap(10),
                                           Text(
                                             "Upload Certification",
-                                            style: MyTexts.bold16.copyWith(
-                                              color: MyColors.black,
-                                            ),
+                                            style: MyTexts.bold16.copyWith(color: MyColors.black),
                                           ),
                                         ],
                                       )
                                     : FileIconWidget(
-                                        fileName: controller.filePath!,
+                                        fileName: controller.filePath.value!,
                                         showFileName: true,
                                       ),
                               ),
@@ -163,10 +149,7 @@ class CommonBgImage extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(Asset.moreIBg),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
       ),
     );
   }
