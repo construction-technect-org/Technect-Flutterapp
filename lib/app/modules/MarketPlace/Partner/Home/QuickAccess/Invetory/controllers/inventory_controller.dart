@@ -16,12 +16,11 @@ class InventoryController extends GetxController {
   RxList<Service> filteredService = <Service>[].obs;
   RxString searchQuery = ''.obs;
 
-  RxString selectedStatus =(Get
-      .find<HomeController>()
-      .marketPlace
-      .value == 0
-      ? "product"
-      : "service").obs;
+  RxString selectedStatus =
+      (Get.find<HomeController>().marketPlace.value == 0
+              ? "product"
+              : "service")
+          .obs;
 
   TextEditingController searchController = TextEditingController();
 
@@ -48,10 +47,8 @@ class InventoryController extends GetxController {
         if (result.success == true) {
           productListModel.value = result;
           filteredProducts.assignAll(result.data?.products ?? []);
-          // Cache the complete model
           myPref.setProductListModel(result);
         } else {
-          // Fallback to cached data if API fails
           await _loadProductsFromStorage();
         }
       } else {
@@ -62,9 +59,7 @@ class InventoryController extends GetxController {
         }
       }
     } catch (e) {
-      print(e);
-      // Fallback to cached data if API fails
-      // await _loadProductsFromStorage();
+      // ignore: avoid_print
     } finally {
       isLoading.value = false;
     }

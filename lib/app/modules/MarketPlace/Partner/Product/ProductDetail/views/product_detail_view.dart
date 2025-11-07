@@ -133,7 +133,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             color: MyColors.white,
                             child: PageView.builder(
                               itemCount: mediaList.length,
-                              controller: PageController(viewportFraction: 1),
+                              controller: PageController(),
                               onPageChanged: (index) =>
                                   controller.currentIndex.value = index,
                               itemBuilder: (context, index) {
@@ -221,12 +221,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               fit: BoxFit.fitHeight,
                                               height: 35.h,
                                               width: 360.w,
-                                              errorBuilder: (_, __, ___) =>
-                                                  const Icon(
-                                                    Icons.broken_image,
-                                                    size: 60,
-                                                    color: Colors.grey,
-                                                  ),
+                                              errorBuilder: (_) => const Icon(
+                                                Icons.broken_image,
+                                                size: 60,
+                                                color: Colors.grey,
+                                              ),
                                             )
                                           : Image.file(
                                               File(path),
@@ -1110,10 +1109,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       }
                     }
 
-                    // CASE 3: Handle Connection Status Logic
                     final String? connectionStatus = product.status;
 
-                    print(connectionStatus);
                     if ((connectionStatus ?? "").isEmpty) {
                       return Padding(
                         padding: const EdgeInsets.all(24.0),

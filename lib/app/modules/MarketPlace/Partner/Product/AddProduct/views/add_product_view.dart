@@ -1110,11 +1110,11 @@ class AddProductView extends GetView<AddProductController> {
                                                             title: Text(item),
                                                             value: isSelected,
                                                             fillColor:
-                                                                MaterialStateProperty.resolveWith<
+                                                                WidgetStateProperty.resolveWith<
                                                                   Color
                                                                 >((states) {
                                                                   if (states.contains(
-                                                                    MaterialState
+                                                                    WidgetState
                                                                         .selected,
                                                                   )) {
                                                                     return MyColors

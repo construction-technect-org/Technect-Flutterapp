@@ -16,8 +16,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
-          appBar: CommonAppBar(
-            title: const Text("Add Service"),
+          appBar: const CommonAppBar(
+            title: Text("Add Service"),
             isCenter: false,
           ),
           backgroundColor: MyColors.white,
@@ -60,8 +60,12 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                                         path,
                                                         width: 360.w,
                                                         fit: BoxFit.contain,
-                                                        errorBuilder: (_,_,_) =>
-                                                            const Icon(
+                                                        errorBuilder:
+                                                            (
+                                                              _,
+                                                              _,
+                                                              _,
+                                                            ) => const Icon(
                                                               Icons
                                                                   .broken_image,
                                                               size: 60,
@@ -721,7 +725,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                     referenceUrl,
                                     width: 360.w,
                                     fit: BoxFit.contain,
-                                    errorBuilder: (_, __, ___) => const Icon(
+                                    errorBuilder: (_) => const Icon(
                                       Icons.broken_image,
                                       size: 60,
                                       color: Colors.grey,
@@ -738,7 +742,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               height: 200,
                               width: double.infinity,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Container(
+                              errorBuilder: (_) => Container(
                                 height: 200,
                                 color: MyColors.grayEA,
                                 child: const Center(

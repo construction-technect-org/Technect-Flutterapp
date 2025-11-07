@@ -15,7 +15,6 @@ class AddDeliveryAddressController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController addressNameController = TextEditingController();
   final TextEditingController landmarkController = TextEditingController();
-  // DeliveryLocationController controller = Get.find();
   RxBool isEditMode = false.obs;
   RxString editAddressId = ''.obs;
 
@@ -72,7 +71,8 @@ class AddDeliveryAddressController extends GetxController {
       final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         SnackBars.errorSnackBar(
-          content: 'Location services are disabled. Please enable location services.',
+          content:
+              'Location services are disabled. Please enable location services.',
         );
         return;
       }
@@ -87,12 +87,16 @@ class AddDeliveryAddressController extends GetxController {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        SnackBars.errorSnackBar(content: 'Location permissions are permanently denied.');
+        SnackBars.errorSnackBar(
+          content: 'Location permissions are permanently denied.',
+        );
         return;
       }
 
       final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
 
       currentPosition.value = LatLng(position.latitude, position.longitude);
@@ -126,7 +130,10 @@ class AddDeliveryAddressController extends GetxController {
 
   Future<void> _getAddressFromCoordinates(double lat, double lng) async {
     try {
-      final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      final List<Placemark> placemarks = await placemarkFromCoordinates(
+        lat,
+        lng,
+      );
       if (placemarks.isNotEmpty) {
         final Placemark place = placemarks[0];
         final String address =

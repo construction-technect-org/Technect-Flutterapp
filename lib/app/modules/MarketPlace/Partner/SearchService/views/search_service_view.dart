@@ -17,7 +17,7 @@ class SearchServiceView extends GetView<SearchServiceController> {
       child: LoaderWrapper(
         isLoading: controller.isLoading,
         child: Scaffold(
-          appBar: CommonAppBar(title: const Text("Search Services")),
+          appBar: const CommonAppBar(title: Text("Search Services")),
           backgroundColor: Colors.white,
           body: Column(
             children: [

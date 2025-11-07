@@ -1,7 +1,5 @@
 import 'dart:developer';
-import 'dart:typed_data';
-import 'package:construction_technect/app/core/apiManager/api_constants.dart';
-import 'package:construction_technect/app/core/apiManager/api_manager.dart';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Report/model/analysis_model.dart';
 import 'package:http/http.dart' as http;
@@ -37,9 +35,7 @@ class AnalysisService {
     return null;
   }
 
-  Future<AnalysisModel?> fetchAllAnalysisByPeriod({
-    required String period,
-  }) async {
+  Future<AnalysisModel?> fetchAllAnalysisByPeriod({required String period}) async {
     try {
       final par = {"period": period};
       final response = await _apiManager.get(
@@ -83,10 +79,7 @@ class AnalysisService {
 
       final response = await http.get(
         uri,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
       );
 
       if (response.statusCode == 200) {

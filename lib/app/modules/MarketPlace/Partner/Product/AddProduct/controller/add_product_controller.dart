@@ -516,11 +516,11 @@ class AddProductController extends GetxController {
         return;
       }
 
-      final List<XFile>? results = await ImagePicker().pickMultiImage(
+      final List<XFile> results = await ImagePicker().pickMultiImage(
         limit: remainingSlots,
       );
 
-      if (results != null && results.isNotEmpty) {
+      if (results.isNotEmpty) {
         pickedFilePathList.addAll(results.map((e) => e.path));
       }
     } catch (e) {
@@ -536,11 +536,11 @@ class AddProductController extends GetxController {
         return;
       }
 
-      final List<XFile>? pickedFiles = await ImagePicker().pickMultiImage(
+      final List<XFile> pickedFiles = await ImagePicker().pickMultiImage(
         limit: emptySlots == 1 ? null : emptySlots,
       );
 
-      if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      if (pickedFiles.isNotEmpty) {
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
@@ -553,7 +553,7 @@ class AddProductController extends GetxController {
         for (final key in toRemove) {
           removedImages.remove(key);
         }
-        for (var path in pickedFiles.map((e) => e.path)) {
+        for (final path in pickedFiles.map((e) => e.path)) {
           final emptyIndex = imageSlots.indexWhere((e) => e == null);
           if (emptyIndex != -1) {
             removedImages.remove("remove_image_${emptyIndex + 1}");
@@ -562,11 +562,9 @@ class AddProductController extends GetxController {
             break;
           }
         }
-        final hasAnyImage = imageSlots.any(
-          (e) => e != null && e.toString().isNotEmpty,
-        );
+        final hasAnyImage = imageSlots.any((e) => e != null && e.isNotEmpty);
         if (hasAnyImage) {
-          removedImages.removeWhere((key, value) {
+          removedImages.removeWhere((key, _) {
             final index = int.parse(key.split('_').last) - 1;
             return index >= 0 &&
                 index < imageSlots.length &&
@@ -581,11 +579,6 @@ class AddProductController extends GetxController {
 
   void createProductValidation(GlobalKey<FormState> formKey) {
     final form = formKey.currentState;
-
-    // if (brandNameController.text.isEmpty) {
-    //   SnackBars.errorSnackBar(content: 'Brand name is required');
-    //   return;
-    // }
 
     if (form != null && !form.validate()) {
       return;

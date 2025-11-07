@@ -21,7 +21,11 @@ class ComingSoonDialog {
                   color: MyColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(40),
                 ),
-                child: const Icon(Icons.construction, size: 40, color: MyColors.primary),
+                child: const Icon(
+                  Icons.construction,
+                  size: 40,
+                  color: MyColors.primary,
+                ),
               ),
               const SizedBox(height: 20),
               Text(
@@ -57,7 +61,6 @@ class ComingSoonDialog {
           ),
         ),
       ),
-      barrierDismissible: true,
     );
   }
 }

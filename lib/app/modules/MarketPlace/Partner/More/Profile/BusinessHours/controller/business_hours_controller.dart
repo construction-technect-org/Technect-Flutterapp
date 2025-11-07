@@ -49,10 +49,7 @@ class BusinessHoursController extends GetxController {
         } else {
           toControllers[day]?.clear();
         }
-        SnackBars.errorSnackBar(
-          content: "Please enter valid time (0-12 hours)",
-          time: 2,
-        );
+        SnackBars.errorSnackBar(content: "Please enter valid time (0-12 hours)", time: 2);
       }
     }
   }
@@ -73,14 +70,12 @@ class BusinessHoursController extends GetxController {
 
           final openHour = openTime.replaceAll(':00', '');
           final closeHour = closeTime.replaceAll(':00', '');
-          String _removeAmPm(String time) {
-            return time
-                .replaceAll(RegExp(r'(AM|PM)', caseSensitive: false), "")
-                .trim();
+          String removeAmPm(String time) {
+            return time.replaceAll(RegExp('(AM|PM)', caseSensitive: false), "").trim();
           }
 
-          fromControllers[dayName]?.text = _removeAmPm(openHour);
-          toControllers[dayName]?.text = _removeAmPm(closeHour);
+          fromControllers[dayName]?.text = removeAmPm(openHour);
+          toControllers[dayName]?.text = removeAmPm(closeHour);
 
           Get.printInfo(info: '📅 Restored $dayName: $openHour - $closeHour');
         } else {
@@ -125,9 +120,7 @@ class BusinessHoursController extends GetxController {
     }
 
     if (!hasValidHours) {
-      SnackBars.errorSnackBar(
-        content: "Please set valid business hours for at least one day",
-      );
+      SnackBars.errorSnackBar(content: "Please set valid business hours for at least one day");
       return;
     }
 
@@ -154,8 +147,7 @@ class BusinessHoursController extends GetxController {
           "is_open": true,
           "open_time":
               "${fromControllers[day]?.text.padLeft(2, '0')}:00 ${fromPeriods[day]!.value}",
-          "close_time":
-              "${toControllers[day]?.text.padLeft(2, '0')}:00 ${toPeriods[day]!.value}",
+          "close_time": "${toControllers[day]?.text.padLeft(2, '0')}:00 ${toPeriods[day]!.value}",
         });
       } else {
         businessHoursData.add({

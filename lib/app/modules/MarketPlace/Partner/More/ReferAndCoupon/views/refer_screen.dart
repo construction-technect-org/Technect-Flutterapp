@@ -55,10 +55,7 @@ class ReferAndEarnScreen extends GetView<ReferController> {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: MyColors.grayEA,
-                              width: 1,
-                            ),
+                            border: Border.all(color: MyColors.grayEA),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(

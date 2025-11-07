@@ -434,6 +434,7 @@ class ConstructionServiceController extends GetxController {
       );
       await fetchServicesFromApi(isLoading: false);
     } catch (e) {
+      // ignore: avoid_print
     } finally {
       isLoading(false);
     }

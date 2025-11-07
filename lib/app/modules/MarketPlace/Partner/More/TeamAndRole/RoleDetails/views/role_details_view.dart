@@ -8,7 +8,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: CommonAppBar(title: const Text("Role Details"), isCenter: false),
+      appBar: const CommonAppBar(title: Text("Role Details"), isCenter: false),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(5.w),
@@ -208,7 +208,7 @@ class RoleDetailsView extends GetView<RoleDetailsController> {
                                     ),
                                     SizedBox(height: 0.5.h),
                                     Switch(
-                                      activeColor: MyColors.green,
+                                      activeThumbColor: MyColors.green,
                                       value:
                                           controller.roleStatus.value ==
                                           'Active',

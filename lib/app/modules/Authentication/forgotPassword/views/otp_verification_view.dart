@@ -32,8 +32,8 @@ class OtpVerificationView extends StatelessWidget {
       isLoading: isLoading,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: CommonAppBar(
-          title: const Text("OTP Verification"),
+        appBar: const CommonAppBar(
+          title: Text("OTP Verification"),
           isCenter: false,
         ),
         body: Padding(

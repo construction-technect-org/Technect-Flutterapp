@@ -10,6 +10,7 @@ void hideKeyboard() {
     }
   }
 }
+
 Future<void> makePhoneCall({required String phoneNumber}) async {
   final Uri uri = Uri(scheme: 'tel', path: phoneNumber);
 
@@ -20,7 +21,6 @@ Future<void> makePhoneCall({required String phoneNumber}) async {
   }
 }
 
-
 Future<void> openUrl({required String url}) async {
   final Uri uri = Uri.parse(url);
   if (await canLaunchUrl(uri)) {
@@ -30,13 +30,14 @@ Future<void> openUrl({required String url}) async {
   }
 }
 
-CachedNetworkImage getImageView(
-    {required String finalUrl,
-      double height = 40,
-      double width = 40,
-      Decoration? shape,
-      BoxFit? fit,
-      Color? color}) {
+CachedNetworkImage getImageView({
+  required String finalUrl,
+  double height = 40,
+  double width = 40,
+  Decoration? shape,
+  BoxFit? fit,
+  Color? color,
+}) {
   return CachedNetworkImage(
     imageUrl: finalUrl,
     fit: fit,
@@ -47,8 +48,8 @@ CachedNetworkImage getImageView(
       height: height,
       width: width,
       decoration: const BoxDecoration(
-          color: MyColors.grayD4,
-          shape: BoxShape.circle
+        color: MyColors.grayD4,
+        shape: BoxShape.circle,
       ),
       child: const Center(
         child: CircularProgressIndicator(
@@ -61,13 +62,14 @@ CachedNetworkImage getImageView(
       height: height,
       width: width,
       child: Container(
-          height: height,
-          width: width,
-          decoration: const BoxDecoration(
-            color: MyColors.grayD4,
-            shape: BoxShape.circle
-          ),
-          child: Icon(Icons.error,color: MyColors.black,)),
+        height: height,
+        width: width,
+        decoration: const BoxDecoration(
+          color: MyColors.grayD4,
+          shape: BoxShape.circle,
+        ),
+        child: Icon(Icons.error, color: MyColors.black),
+      ),
     ),
   );
 }

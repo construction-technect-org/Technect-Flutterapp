@@ -1,5 +1,3 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
-class AccountController extends GetxController{
-
-}
+class AccountController extends GetxController {}

@@ -64,9 +64,12 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                 final List<Map<String, dynamic>> mediaList = [];
 
                 if (service.images != null && service.images!.isNotEmpty) {
-                  for (var image in service.images!) {
+                  for (final image in service.images!) {
                     if (image.mediaUrl != null && image.mediaUrl!.isNotEmpty) {
-                      mediaList.add({'type': 'image', 'path': image.mediaUrl!});
+                      mediaList.add({
+                        'type': 'image',
+                        'path': image.mediaUrl ?? '',
+                      });
                     }
                   }
                 }
@@ -100,7 +103,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                       width: 360.w,
                       child: PageView.builder(
                         itemCount: mediaList.length,
-                        controller: PageController(viewportFraction: 1),
+                        controller: PageController(),
                         onPageChanged: (index) {
                           controller.currentIndex.value = index;
                           final media = mediaList[index];
@@ -317,12 +320,11 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                             path,
                                             width: 360.w,
                                             fit: BoxFit.contain,
-                                            errorBuilder: (_, __, ___) =>
-                                                const Icon(
-                                                  Icons.broken_image,
-                                                  size: 60,
-                                                  color: Colors.grey,
-                                                ),
+                                            errorBuilder: (_) => const Icon(
+                                              Icons.broken_image,
+                                              size: 60,
+                                              color: Colors.grey,
+                                            ),
                                           )
                                         : Image.file(
                                             File(path),
@@ -618,12 +620,11 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                       child: Image.network(
                                         referenceUrl,
                                         fit: BoxFit.contain,
-                                        errorBuilder: (_, __, ___) =>
-                                            const Icon(
-                                              Icons.broken_image,
-                                              size: 60,
-                                              color: Colors.grey,
-                                            ),
+                                        errorBuilder: (_) => const Icon(
+                                          Icons.broken_image,
+                                          size: 60,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -636,7 +637,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => Container(
+                                  errorBuilder: (_) => Container(
                                     height: 200,
                                     color: MyColors.grayEA,
                                     child: const Center(

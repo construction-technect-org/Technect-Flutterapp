@@ -18,7 +18,7 @@ class SearchProductView extends GetView<SearchProductController> {
       child: LoaderWrapper(
         isLoading: controller.isLoading,
         child: Scaffold(
-          appBar: CommonAppBar(title: const Text("Search Products")),
+          appBar: const CommonAppBar(title: Text("Search Products")),
           backgroundColor: Colors.white,
           body: Column(
             children: [

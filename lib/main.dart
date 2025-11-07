@@ -17,15 +17,12 @@ Future<void> initService() async {
 Future<void> main() async {
   await initService();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     ResponsiveSizer(
       builder: (context, orientation, screenType) {
         return SafeArea(
           top: false,
-          bottom: true,
           child: GetMaterialApp(
             title: "CONSTRUCTION TECHNECT",
             initialRoute: AppPages.INITIAL,

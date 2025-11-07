@@ -7,17 +7,14 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final List<Widget>? action;
   final bool automaticallyImplyLeading;
-  final bool isImageOrNot = true;
   final TextStyle? textStyle;
-  final bool deleteIcon;
   final bool? isCenter;
-  final bool showFilterIcon;
   final double? leadingWidth;
   final Callback? onTap;
   final Function()? onTapAction;
   final Callback? reloadOnTap;
 
-  CommonAppBar({
+  const CommonAppBar({
     super.key,
     this.title,
     this.onTap,
@@ -27,10 +24,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.leadingWidth,
     this.reloadOnTap,
-    this.showFilterIcon = true,
     this.automaticallyImplyLeading = true,
     this.onTapAction,
-    this.deleteIcon = false,
     this.textStyle,
   });
 

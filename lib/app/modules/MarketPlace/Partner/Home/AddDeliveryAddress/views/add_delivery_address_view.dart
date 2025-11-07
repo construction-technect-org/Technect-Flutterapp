@@ -19,8 +19,8 @@ class AddDeliveryAddressView extends GetView<AddDeliveryAddressController> {
         onTap: hideKeyboard,
         child: Scaffold(
           backgroundColor: MyColors.white,
-          appBar: CommonAppBar(
-            title: const Text("Add Delivery Address"),
+          appBar: const CommonAppBar(
+            title: Text("Add Delivery Address"),
             isCenter: false,
           ),
           body: Column(
@@ -39,7 +39,7 @@ class AddDeliveryAddressView extends GetView<AddDeliveryAddressController> {
                 child: GooglePlaceAutoCompleteTextField(
                   textEditingController: controller.searchController,
                   googleAPIKey: "AIzaSyAgyOP5KnUC1XJlmp2q7lVBsWpaF6ZsT9Q",
-                   focusNode: controller.googleFocusNode,
+                  focusNode: controller.googleFocusNode,
                   inputDecoration: InputDecoration(
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(left: 18, right: 8),
@@ -236,7 +236,9 @@ class AddDeliveryAddressView extends GetView<AddDeliveryAddressController> {
                 ),
                 child: Obx(
                   () => RoundedButton(
-                    buttonName: controller.isEditMode.value ? 'Update' : 'Submit',
+                    buttonName: controller.isEditMode.value
+                        ? 'Update'
+                        : 'Submit',
                     onTap: controller.submitDeliveryAddress,
                   ),
                 ),
