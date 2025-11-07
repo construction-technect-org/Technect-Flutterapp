@@ -41,8 +41,7 @@ class AddRoleController extends GetxController {
   }
 
   Future<void> saveRole() async {
-
-    if(selectedFunctionalities.value.isEmpty){
+    if (selectedFunctionalities.value.isEmpty) {
       Get.snackbar("Error", "Please select functionality");
       return;
     }
@@ -65,6 +64,7 @@ class AddRoleController extends GetxController {
         } else {
           Get.snackbar("Failed", result?.message ?? "Something went wrong");
         }
+        Get.back();
       } else {
         final result = await RoleService.createRole(
           roleTitle: roleController.text,

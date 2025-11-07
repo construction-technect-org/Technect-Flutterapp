@@ -41,7 +41,6 @@ class RoleManagementController extends GetxController {
       if (cachedRoleModel.statistics != null) {
         statistics.value = cachedRoleModel.statistics!;
       }
-      // Still fetch from API in background to ensure data is up-to-date
       fetchRoles();
     } else {
       await fetchRoles();
@@ -63,7 +62,6 @@ class RoleManagementController extends GetxController {
         }
         myPref.setRoleModelData(result);
       } else if (result != null && !result.success) {
-        // API returned error - use cache if available
         final cachedRoleModel = myPref.getRoleModelData();
         if (cachedRoleModel != null && cachedRoleModel.data.isNotEmpty) {
           roles.assignAll(cachedRoleModel.data);
@@ -72,7 +70,6 @@ class RoleManagementController extends GetxController {
           }
         }
       } else {
-        // Null response - use cache if available
         final cachedRoleModel = myPref.getRoleModelData();
         if (cachedRoleModel != null && cachedRoleModel.data.isNotEmpty) {
           roles.assignAll(cachedRoleModel.data);
@@ -123,15 +120,12 @@ class RoleManagementController extends GetxController {
       final response = await _service.deleteRole(roleId);
       if (response != null &&
           (response['success'] == true || response['status'] == true)) {
-        // Remove from local list immediately - create new list to trigger UI update
         final updatedRoles = roles.where((r) => r.id != roleId).toList();
 
-        // Update statistics - create new instance to trigger reactivity
         final currentStats = statistics.value;
         final currentTotal = int.tryParse(currentStats.totalRoles ?? '0') ?? 0;
         final newTotal = currentTotal > 0 ? currentTotal - 1 : 0;
 
-        // Create new Statistics instance to trigger observable update
         statistics.value = Statistics(
           totalRoles: newTotal.toString(),
           activeRoles: newTotal.toString(),
@@ -144,14 +138,10 @@ class RoleManagementController extends GetxController {
           avgResponse: currentStats.avgResponse,
         );
 
-        // CRITICAL: Update the roles list FIRST while loading is still true
-        // This ensures the list is updated before UI rebuilds
         roles.assignAll(updatedRoles);
 
-        // Set loading to false - this will trigger Obx to rebuild and show updated list
         isLoading.value = false;
 
-        // Update cache and storage in background (async)
         final updatedModel = GetAllRoleModel(
           success: true,
           data: updatedRoles,
@@ -162,9 +152,6 @@ class RoleManagementController extends GetxController {
         await _saveRolesToStorage();
 
         SnackBars.successSnackBar(content: 'Role deleted successfully');
-
-        // Don't refresh from API immediately - the local state is already correct
-        // The next manual refresh or screen reload will sync with server
       } else {
         final message = response != null
             ? (response['message'] ?? 'Failed to delete role')

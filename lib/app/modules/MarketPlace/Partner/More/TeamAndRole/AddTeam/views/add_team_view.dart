@@ -198,7 +198,14 @@ class AddTeamView extends GetView<AddTeamController> {
                                 if (!hasFocus) {
                                   final email =
                                       controller.emialIdController.text;
-                                  controller.validateEmailAvailability(email);
+                                  final formatError = Validate.validateEmail(
+                                    email,
+                                  );
+                                  if (formatError == null) {
+                                    controller.validateEmailAvailability(email);
+                                  } else {
+                                    controller.emailError.value = "";
+                                  }
                                 }
                               },
                               child: CommonTextField(
