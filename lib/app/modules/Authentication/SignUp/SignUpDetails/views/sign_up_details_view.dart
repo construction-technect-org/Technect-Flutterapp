@@ -105,7 +105,14 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                               onFocusChange: (hasFocus) {
                                 if (!hasFocus) {
                                   final email = controller.emailController.text;
-                                  controller.validateEmailAvailability(email);
+                                  final formatError = Validate.validateEmail(
+                                    email,
+                                  );
+                                  if (formatError == null) {
+                                    controller.validateEmailAvailability(email);
+                                  } else {
+                                    controller.emailError.value = "";
+                                  }
                                 }
                               },
                               child: Column(
@@ -130,9 +137,15 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     },
                                     onFieldSubmitted: (value) {
                                       if (value != null) {
-                                        controller.validateEmailAvailability(
-                                          value,
-                                        );
+                                        final formatError =
+                                            Validate.validateEmail(value);
+                                        if (formatError == null) {
+                                          controller.validateEmailAvailability(
+                                            value,
+                                          );
+                                        } else {
+                                          controller.emailError.value = "";
+                                        }
                                       }
                                     },
                                   ),
@@ -394,11 +407,10 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
           padding: const EdgeInsets.all(24.0),
           child: RoundedButton(
             buttonName: 'Continue',
-            onTap: () async {
+            onTap: () {
               hideKeyboard();
               if (!formKey.currentState!.validate()) return;
 
-              // Block on availability error
               if (controller.emailError.value.isNotEmpty) {
                 SnackBars.errorSnackBar(content: controller.emailError.value);
                 return;

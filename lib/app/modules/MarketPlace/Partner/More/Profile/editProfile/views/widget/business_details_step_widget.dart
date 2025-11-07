@@ -47,7 +47,13 @@ class BusinessDetailsStep extends StatelessWidget {
           Focus(
             onFocusChange: (hasFocus) {
               if (!hasFocus) {
-                controller.validateEmailAvailability();
+                final email = controller.businessEmailController.text;
+                final formatError = Validate.validateEmail(email);
+                if (formatError == null) {
+                  controller.validateEmailAvailability();
+                } else {
+                  controller.emailError.value = "";
+                }
               }
             },
             child: CommonTextField(
