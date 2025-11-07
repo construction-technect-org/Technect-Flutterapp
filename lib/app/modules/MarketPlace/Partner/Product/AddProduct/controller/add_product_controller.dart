@@ -942,8 +942,8 @@ class AddProductController extends GetxController {
     if (picked != null) {
       final file = File(picked.path);
       final sizeInMB = file.lengthSync() / (1024 * 1024);
-      if (sizeInMB > 24) {
-        SnackBars.errorSnackBar(content: "Video must be less than 24 MB");
+      if (sizeInMB > 10) {
+        SnackBars.errorSnackBar(content: "Video must be less than 10 MB");
         return;
       }
 
