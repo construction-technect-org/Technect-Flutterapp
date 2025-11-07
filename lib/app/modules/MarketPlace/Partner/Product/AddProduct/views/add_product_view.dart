@@ -797,7 +797,11 @@ class AddProductView extends GetView<AddProductController> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                OpenFilex.open(video.path);
+                                                controller.openVideoDialog(
+                                                  context,
+                                                  video.path,
+                                                  false,
+                                                );
                                               },
                                               child: Container(
                                                 decoration: const BoxDecoration(
