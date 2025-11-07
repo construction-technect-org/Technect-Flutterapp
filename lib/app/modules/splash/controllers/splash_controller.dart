@@ -40,7 +40,7 @@ class SplashController extends GetxController {
           TextButton(
             onPressed: () {
               Get.back();
-              _checkInternetAndNavigate(); // Retry
+              _checkInternetAndNavigate();
             },
             child: const Text('Retry'),
           ),

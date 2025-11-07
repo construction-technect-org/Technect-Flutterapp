@@ -3,8 +3,6 @@ import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-// import 'package:get/get_connect/http/src/utils/utils.dart';
-
 late AppSharedPreference myPref;
 
 Future<void> initService() async {
@@ -31,7 +29,6 @@ Future<void> main() async {
             debugShowCheckedModeBanner: false,
             defaultTransition: Transition.fadeIn,
             initialBinding: InitialBinding(),
-            // Web-specific configurations
             builder: (context, child) {
               return MediaQuery(
                 data: MediaQuery.of(
