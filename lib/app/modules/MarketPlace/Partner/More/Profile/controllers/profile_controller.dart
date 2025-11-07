@@ -15,8 +15,6 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 
 class ProfileController extends GetxController {
-  static final ProfileController to = Get.find();
-
   final isSwitch = false.obs;
   Rx<File?> selectedImage = Rx<File?>(null);
 
@@ -27,12 +25,12 @@ class ProfileController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    selectedTabIndex.value=0;
+    selectedTabIndex.value = 0;
     if (Get.arguments != null) {
       isSwitch.value = true;
     }
     businessModel.value.gstinNumber =
-        HomeController.to.profileData.value.data?.user?.gst ?? "";
+        Get.find<HomeController>().profileData.value.data?.user?.gst ?? "";
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website ?? "";
       businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
@@ -119,7 +117,7 @@ class ProfileController extends GetxController {
 
   final DocumentService _documentService = DocumentService();
 
-  HomeController get homeController => HomeController.to;
+  HomeController get homeController => Get.find<HomeController>();
 
   ProfileModel get profileData => homeController.profileData.value;
 
@@ -480,7 +478,7 @@ class ProfileController extends GetxController {
     try {
       isLoading.value = true;
 
-      final homeController = HomeController.to;
+      final homeController = Get.find<HomeController>();
       final merchantProfile =
           homeController.profileData.value.data?.merchantProfile;
       final bool isUpdate;
@@ -564,7 +562,7 @@ class ProfileController extends GetxController {
           if (isUpdate) {
             await homeController.fetchProfileData();
             Get.to(
-                  () => SuccessScreen(
+              () => SuccessScreen(
                 title: "Success!",
                 header: "Profile update successfully!",
                 onTap: () {
@@ -582,7 +580,7 @@ class ProfileController extends GetxController {
             } else {
               await homeController.fetchProfileData();
               Get.to(
-                    () => SuccessScreen(
+                () => SuccessScreen(
                   title: "Success!",
                   header: "Profile added successfully!",
                   onTap: () {

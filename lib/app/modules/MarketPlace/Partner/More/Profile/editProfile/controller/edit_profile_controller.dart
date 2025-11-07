@@ -42,7 +42,8 @@ class EditProfileController extends GetxController {
 
       if (merchantProfile != null) {
         // Populate text fields
-        ProfileController.to.image.value = merchantProfile.merchantLogo ?? "";
+        Get.find<ProfileController>().image.value =
+            merchantProfile.merchantLogo ?? "";
         businessNameController.text = merchantProfile.businessName ?? '';
         gstNumberController.text = merchantProfile.gstinNumber ?? '';
         businessEmailController.text = merchantProfile.businessEmail ?? '';
@@ -72,7 +73,7 @@ class EditProfileController extends GetxController {
           businessHoursData.value = hoursList;
         }
       }
-      final cont = ProfileController.to;
+      final cont = Get.find<ProfileController>();
 
       if ((cont.businessModel.value.gstinNumber ?? "").isNotEmpty) {
         businessNameController.text =
@@ -93,9 +94,9 @@ class EditProfileController extends GetxController {
   }
 
   void nextStep() {
-    if (ProfileController.to.selectedImage.value != null ||
-        ProfileController.to.image.value.isNotEmpty) {
-      ProfileController.to.businessModel.value = BusinessModel(
+    if (Get.find<ProfileController>().selectedImage.value != null ||
+        Get.find<ProfileController>().image.value.isNotEmpty) {
+      Get.find<ProfileController>().businessModel.value = BusinessModel(
         businessContactNumber: businessContactController.text.trim(),
         businessEmail: businessEmailController.text.trim(),
         businessName: businessNameController.text.trim(),
@@ -104,14 +105,14 @@ class EditProfileController extends GetxController {
         gstinNumber: gstNumberController.text.trim(),
         website: businessWebsiteController.text.trim(),
         address: addressContoller.text.trim(),
-        image: ProfileController.to.selectedImage.value != null
-            ? ProfileController.to.selectedImage.value?.path
-            : ProfileController.to.image.value,
+        image: Get.find<ProfileController>().selectedImage.value != null
+            ? Get.find<ProfileController>().selectedImage.value?.path
+            : Get.find<ProfileController>().image.value,
       );
       log(
         "AlternativeContactController : ${alternativeContactController.text}",
       );
-      ProfileController.to.businessModel.refresh();
+      Get.find<ProfileController>().businessModel.refresh();
       Get.back();
     } else {
       SnackBars.errorSnackBar(content: "Please add the Business Logo");
@@ -161,14 +162,16 @@ class EditProfileController extends GetxController {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ProfileController.to.picker.pickImage(
+    final pickedFile = await Get.find<ProfileController>().picker.pickImage(
       source: source,
     );
     if (pickedFile == null) return;
     final compressedFile = await CommonConstant().compressImage(
       File(pickedFile.path),
     );
-    ProfileController.to.selectedImage.value = File(compressedFile.path);
+    Get.find<ProfileController>().selectedImage.value = File(
+      compressedFile.path,
+    );
   }
 
   Future<void> validateEmailAvailability() async {

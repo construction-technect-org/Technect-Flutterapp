@@ -6,7 +6,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginController extends GetxController {
-  static final LoginController to = Get.find();
   final formKey = GlobalKey<FormState>();
 
   final mobileController = TextEditingController();
@@ -115,7 +114,6 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-
         loginError.value =
             loginResponse.message ?? 'Invalid mobile number or password';
       }

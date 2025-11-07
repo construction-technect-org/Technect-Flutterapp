@@ -7,8 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
 
 class RoleManagementController extends GetxController {
-  static final RoleManagementController to = Get.find();
-
   final RxList<GetAllRole> roles = <GetAllRole>[].obs;
   Rx<Statistics> statistics = Statistics().obs;
 

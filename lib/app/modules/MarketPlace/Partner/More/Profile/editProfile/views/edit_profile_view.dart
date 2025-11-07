@@ -94,15 +94,13 @@ class EditProfileView extends GetView<EditProfileController> {
                                 onTap: () =>
                                     controller.pickImageBottomSheet(context),
                                 child: Obx(() {
-                                  if (ProfileController
-                                          .to
+                                  if (Get.find<ProfileController>()
                                           .selectedImage
                                           .value !=
                                       null) {
                                     return ClipOval(
                                       child: Image.file(
-                                        ProfileController
-                                            .to
+                                        Get.find<ProfileController>()
                                             .selectedImage
                                             .value!,
                                         width: 78,
@@ -113,7 +111,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                   }
 
                                   final imagePath =
-                                      ProfileController.to.image.value;
+                                      Get.find<ProfileController>().image.value;
                                   final imageUrl = imagePath.isNotEmpty
                                       ? "${APIConstants.bucketUrl}$imagePath"
                                       : null;

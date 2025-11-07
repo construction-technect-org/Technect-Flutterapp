@@ -7,8 +7,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 class MetricsScreen extends StatelessWidget {
   MetricsScreen({super.key});
 
-  final controller = ProfileController.to;
-  final homeController = HomeController.to;
+  final controller = Get.find<ProfileController>();
+  final homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Column(

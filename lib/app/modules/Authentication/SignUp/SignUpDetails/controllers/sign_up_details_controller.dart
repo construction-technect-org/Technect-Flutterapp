@@ -10,8 +10,6 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpRo
 import 'package:timer_count_down/timer_controller.dart';
 
 class SignUpDetailsController extends GetxController {
-  static final SignUpDetailsController to = Get.find();
-
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final mobileNumberController = TextEditingController();
@@ -176,7 +174,7 @@ class SignUpDetailsController extends GetxController {
         if (otpResponse.data?.verified == true) {
           otpVerify.value = true;
           SnackBars.successSnackBar(content: 'OTP verified successfully!');
-          final cont = SignUpRoleController.to;
+          final cont = Get.find<SignUpRoleController>();
           final userData = UserDataModel(
             marketPlaceRole: cont.selectedFinalRole.value,
             roleName: cont.selectedRoleName.value,

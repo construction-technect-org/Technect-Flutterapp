@@ -147,7 +147,9 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         ),
                                         child: Text(
                                           controller.emailError.value,
-                                       style: MyTexts.medium13.copyWith(color: MyColors.red33),
+                                          style: MyTexts.medium13.copyWith(
+                                            color: MyColors.red33,
+                                          ),
                                         ),
                                       );
                                     }
@@ -306,8 +308,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                       child: Align(
                                         alignment: AlignmentGeometry.topLeft,
                                         child: Text(
-                                          SignUpRoleController
-                                                      .to
+                                          Get.find<SignUpRoleController>()
                                                       .selectedRoleName
                                                       .value ==
                                                   "House-Owner"
@@ -325,8 +326,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          if (SignUpRoleController
-                                                  .to
+                                          if (Get.find<SignUpRoleController>()
                                                   .selectedRoleName
                                                   .value ==
                                               "House-Owner") ...[
