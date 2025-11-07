@@ -82,7 +82,6 @@ class AddRoleController extends GetxController {
       }
     } catch (e) {
       Get.snackbar("Error", "An error occurred: $e");
-      Get.back();
     } finally {
       isLoading.value = false;
     }
