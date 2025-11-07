@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/controllers/construction_service_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
@@ -626,9 +626,9 @@ class ConstructionServiceView extends StatelessWidget {
     final controller = Get.find<ConstructionServiceController>();
     return GridView.builder(
       padding: const EdgeInsets.all(16),
-      gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio:myPref.role.val=="connector"? 0.45:0.6,
+        childAspectRatio: myPref.role.val == "connector" ? 0.45 : 0.6,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
@@ -639,18 +639,19 @@ class ConstructionServiceView extends StatelessWidget {
           return const SizedBox.shrink();
         }
         final service = services[index];
-         String imageUrl ="";
-        if((service.images??[]).isNotEmpty){
-           imageUrl =
+        String imageUrl = "";
+        if ((service.images ?? []).isNotEmpty) {
+          imageUrl =
               APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? "");
         }
 
         return GestureDetector(
           onTap: () => Get.toNamed(
             Routes.SERVICE_DETAILS,
-            arguments: {'service': service,
+            arguments: {
+              'service': service,
 
-              "onConnectTap":(){
+              "onConnectTap": () {
                 ConnectionDialogs.showSendServiceConnectionDialog(
                   context,
                   service,
@@ -662,9 +663,7 @@ class ConstructionServiceView extends StatelessWidget {
                       sID: service.id ?? 0,
                       onSuccess: () async {
                         Get.back();
-                        await controller.fetchServicesFromApi(
-                          isLoading: false,
-                        );
+                        await controller.fetchServicesFromApi(isLoading: false);
                       },
                     );
                   },
@@ -760,7 +759,6 @@ class ConstructionServiceView extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         if (myPref.role.val == "connector")
-
                           const SizedBox(height: 4),
                         if (myPref.role.val == "connector")
                           () {
@@ -866,9 +864,10 @@ class ConstructionServiceView extends StatelessWidget {
         return GestureDetector(
           onTap: () => Get.toNamed(
             Routes.SERVICE_DETAILS,
-            arguments: {'service': service,
+            arguments: {
+              'service': service,
 
-              "onConnectTap":(){
+              "onConnectTap": () {
                 ConnectionDialogs.showSendServiceConnectionDialog(
                   context,
                   service,
@@ -880,9 +879,7 @@ class ConstructionServiceView extends StatelessWidget {
                       sID: service.id ?? 0,
                       onSuccess: () async {
                         Get.back();
-                        await controller.fetchServicesFromApi(
-                          isLoading: false,
-                        );
+                        await controller.fetchServicesFromApi(isLoading: false);
                       },
                     );
                   },
@@ -993,8 +990,7 @@ class ConstructionServiceView extends StatelessWidget {
                         style: MyTexts.bold14.copyWith(color: MyColors.primary),
                       ),
                       if (myPref.role.val == "connector")
-
-                      const SizedBox(height: 8),
+                        const SizedBox(height: 8),
 
                       if (myPref.role.val == "connector")
                         () {

@@ -1,28 +1,19 @@
 import 'dart:developer';
-import 'package:construction_technect/app/core/widgets/no_network.dart';
-import 'package:flutter_offline/flutter_offline.dart';
-import 'package:upgrader/upgrader.dart';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/dashboard.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/views/home_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/views/menu_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
+import 'package:flutter_offline/flutter_offline.dart';
+import 'package:upgrader/upgrader.dart';
 
-class BottomBarView extends StatefulWidget {
-  const BottomBarView({super.key});
-
-  @override
-  State<BottomBarView> createState() => _BottomBarViewState();
-}
-
-class _BottomBarViewState extends State<BottomBarView> {
-  final BottomController controller = Get.put(BottomController());
+class BottomBarView extends GetView<BottomController> {
   final CommonController commonController = Get.put(CommonController());
-
-  bool _isBottomSheetOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +31,8 @@ class _BottomBarViewState extends State<BottomBarView> {
               ConnectivityResult.none,
             );
 
-            if (!connected && !_isBottomSheetOpen) {
-              _isBottomSheetOpen = true;
+            if (!connected && !controller.isBottomSheetOpen.value) {
+              controller.isBottomSheetOpen.value = true;
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 showModalBottomSheet(
                   context: context,
@@ -54,19 +45,16 @@ class _BottomBarViewState extends State<BottomBarView> {
                       top: Radius.circular(16.0),
                     ),
                   ),
-                  builder: (_) => WillPopScope(
-                    onWillPop: () async => false,
-                    child: NoInternetBottomSheet(),
-                  ),
+                  builder: (_) =>
+                      PopScope(canPop: false, child: NoInternetBottomSheet()),
                 ).whenComplete(() {
-                  _isBottomSheetOpen = false;
+                  controller.isBottomSheetOpen.value = false;
                 });
               });
-            } else if (connected && _isBottomSheetOpen) {
-              _isBottomSheetOpen = false;
-              Get.back(); // close bottom sheet
+            } else if (connected && controller.isBottomSheetOpen.value) {
+              controller.isBottomSheetOpen.value = false;
+              Get.back();
 
-              // 👉 optionally refresh API calls when network restored
               WidgetsBinding.instance.addPostFrameCallback((val) async {
                 await Get.find<HomeController>().fetchProfileData();
                 await Get.find<HomeController>().fetchCategoryHierarchy();
@@ -80,7 +68,6 @@ class _BottomBarViewState extends State<BottomBarView> {
     );
   }
 
-  /// ✅ Wrap UI with Upgrader
   Widget _buildUpgradeAlert(BuildContext context) {
     return UpgradeAlert(
       dialogStyle: UpgradeDialogStyle.cupertino,
@@ -182,7 +169,6 @@ class _BottomBarViewState extends State<BottomBarView> {
     );
   }
 
-  /// 🧠 Same logic from your original code for Sell/Request button
   void onSellTap() {
     if (Get.find<HomeController>().marketPlace.value == 0) {
       if (myPref.role.val != "connector") {
@@ -224,8 +210,6 @@ class _BottomBarViewState extends State<BottomBarView> {
       _showComingSoonSheet();
     }
   }
-
-  /// ——— Original helper functions below ———
 
   void _showProfileIncompleteDialog() {
     Get.dialog(

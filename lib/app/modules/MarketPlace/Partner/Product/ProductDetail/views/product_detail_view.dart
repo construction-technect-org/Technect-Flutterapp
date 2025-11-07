@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/components/business_detail_view.dart';
@@ -1024,210 +1024,205 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
   Obx buildBottom(BuildContext context) {
     return Obx(() {
-        return (controller.isFromAdd.value == false &&
-                controller.isFromConnector.value == false)
-            ? const SizedBox()
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (myPref.role.val == "connector")
-                    if (!(controller.isFromAdd.value == true &&
-                        controller.isFromConnector.value == false))
-                      const Gap(16),
-                  if (myPref.role.val == "connector")
-                    if (!(controller.isFromAdd.value == true &&
-                        controller.isFromConnector.value == false))
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.offAllNamed(Routes.MAIN);
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Explore More!",
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.grayA5,
-                                ),
+      return (controller.isFromAdd.value == false &&
+              controller.isFromConnector.value == false)
+          ? const SizedBox()
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                if (myPref.role.val == "connector")
+                  if (!(controller.isFromAdd.value == true &&
+                      controller.isFromConnector.value == false))
+                    const Gap(16),
+                if (myPref.role.val == "connector")
+                  if (!(controller.isFromAdd.value == true &&
+                      controller.isFromConnector.value == false))
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.offAllNamed(Routes.MAIN);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Explore More!",
+                              style: MyTexts.medium14.copyWith(
+                                color: MyColors.grayA5,
                               ),
-                              const Gap(8),
-                              Text(
-                                "View Categories >",
-                                style: MyTexts.medium16.copyWith(
-                                  color: MyColors.gray54,
-                                ),
+                            ),
+                            const Gap(8),
+                            Text(
+                              "View Categories >",
+                              style: MyTexts.medium16.copyWith(
+                                color: MyColors.gray54,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
+                    ),
 
-                  Obx(() {
-                    final product = controller.product;
-                    if (controller.isFromAdd.value == true &&
-                        controller.isFromConnector.value == false) {
-                      if (myPref.role.val == "partner") {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            width: MediaQuery.of(context).size.width / 1.15,
-                            horizontalPadding: 20,
-                            buttonName: 'Submit',
-                            onTap:
-                                Get.find<AddProductController>()
-                                    .isLoading
-                                    .value
-                                ? null
-                                : Get.find<AddProductController>()
-                                      .createProduct,
-                          ),
-                        );
-                      }
+                Obx(() {
+                  final product = controller.product;
+                  if (controller.isFromAdd.value == true &&
+                      controller.isFromConnector.value == false) {
+                    if (myPref.role.val == "partner") {
+                      return Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: RoundedButton(
+                          width: MediaQuery.of(context).size.width / 1.15,
+                          horizontalPadding: 20,
+                          buttonName: 'Submit',
+                          onTap:
+                              Get.find<AddProductController>().isLoading.value
+                              ? null
+                              : Get.find<AddProductController>().createProduct,
+                        ),
+                      );
                     }
-                    if (myPref.role.val == "connector") {
-                      if (product.outOfStock == true ||
-                          (product.stockQty ?? 0) <= 0) {
-                        if (product.isNotify == true) {
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              horizontalPadding: 20,
-                              buttonName: 'Notified',
-                              color: Colors.grey[400],
-                              fontColor: Colors.white,
-                              borderRadius: 8,
-                              fontSize: 16.sp,
-                              style: MyTexts.medium16.copyWith(
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: RoundedButton(
-                              horizontalPadding: 20,
-                              buttonName: 'Notify Me',
-                              color: MyColors.primary,
-                              fontColor: Colors.white,
-                              borderRadius: 8,
-                              style: MyTexts.medium16.copyWith(
-                                color: Colors.white,
-                              ),
-                              onTap: () async {
-                                await Get.find<HomeController>().notifyMeApi(
-                                  mID: product.id ?? 0,
-                                  onSuccess: () {
-                                    controller.onApiCall?.call();
-                                  },
-                                );
-                                Get.back();
-                              },
-                            ),
-                          );
-                        }
-                      }
-
-                      // CASE 3: Handle Connection Status Logic
-                      final String? connectionStatus = product.status;
-
-                      print(connectionStatus);
-                      if ((connectionStatus ?? "").isEmpty) {
+                  }
+                  if (myPref.role.val == "connector") {
+                    if (product.outOfStock == true ||
+                        (product.stockQty ?? 0) <= 0) {
+                      if (product.isNotify == true) {
                         return Padding(
                           padding: const EdgeInsets.all(24.0),
                           child: RoundedButton(
                             horizontalPadding: 20,
-                            buttonName: 'Connect',
-                            color: MyColors.primary,
+                            buttonName: 'Notified',
+                            color: Colors.grey[400],
+                            fontColor: Colors.white,
+                            borderRadius: 8,
+                            fontSize: 16.sp,
                             style: MyTexts.medium16.copyWith(
                               color: Colors.white,
-                            ),
-                            onTap: () {
-                              ConnectionDialogs.showSendConnectionDialog(
-                                context,
-                                controller.product,
-                                isFromIn: true,
-                                onTap: () async {
-                                  Get.back();
-                                  await Get.find<HomeController>()
-                                      .addToConnectApi(
-                                        mID:
-                                            controller
-                                                .product
-                                                .merchantProfileId ??
-                                            0,
-                                        message: '',
-                                        pID: controller.product.id ?? 0,
-                                        onSuccess: () {
-                                          controller.onApiCall?.call();
-                                          Get.back();
-                                          // Get.back();
-                                        },
-                                      );
-                                },
-                              );
-                            },
-                          ),
-                        );
-                      } else if (connectionStatus == 'pending') {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            color: MyColors.pendingBtn,
-                            horizontalPadding: 20,
-                            buttonName: 'Pending',
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
-                            ),
-                          ),
-                        );
-                      } else if (connectionStatus == 'accepted') {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            horizontalPadding: 20,
-                            color: MyColors.grayEA,
-                            buttonName: 'Connected',
-                            borderRadius: 8,
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
-                            ),
-                          ),
-                        );
-                      } else if (connectionStatus == 'rejected') {
-                        return Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: RoundedButton(
-                            horizontalPadding: 20,
-                            color: MyColors.rejectBtn,
-                            buttonName: 'Rejected',
-                            borderRadius: 8,
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
                             ),
                           ),
                         );
                       } else {
-                        // Default fallback (in case of any unknown status)
                         return Padding(
                           padding: const EdgeInsets.all(24.0),
                           child: RoundedButton(
                             horizontalPadding: 20,
-                            color: MyColors.grey,
-                            buttonName: connectionStatus ?? '',
+                            buttonName: 'Notify Me',
+                            color: MyColors.primary,
                             fontColor: Colors.white,
+                            borderRadius: 8,
+                            style: MyTexts.medium16.copyWith(
+                              color: Colors.white,
+                            ),
+                            onTap: () async {
+                              await Get.find<HomeController>().notifyMeApi(
+                                mID: product.id ?? 0,
+                                onSuccess: () {
+                                  controller.onApiCall?.call();
+                                },
+                              );
+                              Get.back();
+                            },
                           ),
                         );
                       }
-                    } else {
-                      return const SizedBox();
                     }
-                  }),
-                ],
-              );
-      });
+
+                    // CASE 3: Handle Connection Status Logic
+                    final String? connectionStatus = product.status;
+
+                    print(connectionStatus);
+                    if ((connectionStatus ?? "").isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: RoundedButton(
+                          horizontalPadding: 20,
+                          buttonName: 'Connect',
+                          color: MyColors.primary,
+                          style: MyTexts.medium16.copyWith(color: Colors.white),
+                          onTap: () {
+                            ConnectionDialogs.showSendConnectionDialog(
+                              context,
+                              controller.product,
+                              isFromIn: true,
+                              onTap: () async {
+                                Get.back();
+                                await Get.find<HomeController>()
+                                    .addToConnectApi(
+                                      mID:
+                                          controller
+                                              .product
+                                              .merchantProfileId ??
+                                          0,
+                                      message: '',
+                                      pID: controller.product.id ?? 0,
+                                      onSuccess: () {
+                                        controller.onApiCall?.call();
+                                        Get.back();
+                                        // Get.back();
+                                      },
+                                    );
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    } else if (connectionStatus == 'pending') {
+                      return Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: RoundedButton(
+                          color: MyColors.pendingBtn,
+                          horizontalPadding: 20,
+                          buttonName: 'Pending',
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.gray54,
+                          ),
+                        ),
+                      );
+                    } else if (connectionStatus == 'accepted') {
+                      return Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: RoundedButton(
+                          horizontalPadding: 20,
+                          color: MyColors.grayEA,
+                          buttonName: 'Connected',
+                          borderRadius: 8,
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.gray54,
+                          ),
+                        ),
+                      );
+                    } else if (connectionStatus == 'rejected') {
+                      return Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: RoundedButton(
+                          horizontalPadding: 20,
+                          color: MyColors.rejectBtn,
+                          buttonName: 'Rejected',
+                          borderRadius: 8,
+                          style: MyTexts.medium16.copyWith(
+                            color: MyColors.gray54,
+                          ),
+                        ),
+                      );
+                    } else {
+                      // Default fallback (in case of any unknown status)
+                      return Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: RoundedButton(
+                          horizontalPadding: 20,
+                          color: MyColors.grey,
+                          buttonName: connectionStatus ?? '',
+                          fontColor: Colors.white,
+                        ),
+                      );
+                    }
+                  } else {
+                    return const SizedBox();
+                  }
+                }),
+              ],
+            );
+    });
   }
 
   Widget buildRatingRow(Product product) {

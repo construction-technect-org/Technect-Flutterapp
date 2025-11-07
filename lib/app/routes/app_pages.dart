@@ -32,10 +32,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/views/add_manufacturer_address_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/binding/new_launch_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/view/new_launches_product.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/bindings/connection_inbox_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/binding/add_service_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/binding/service_detail_binding.dart';
@@ -143,7 +141,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MAIN,
-      page: () => const BottomBarView(),
+      page: () => BottomBarView(),
       binding: BottomBinding(),
     ),
     GetPage(
@@ -317,11 +315,6 @@ class AppPages {
       name: Routes.ACCOUNT,
       page: () => const AccountScreen(),
       binding: AccountBinding(),
-    ),
-    GetPage(
-      name: Routes.NEW_LAUNCH,
-      page: () => NewLaunchesProduct(),
-      binding: NewLaunchBinding(),
     ),
     GetPage(
       name: Routes.CART_LIST,

@@ -3,7 +3,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_service_card.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/controller/search_service_controller.dart';
 
@@ -136,8 +136,9 @@ class SearchServiceView extends GetView<SearchServiceController> {
                         onTap: () {
                           Get.toNamed(
                             Routes.SERVICE_DETAILS,
-                            arguments: {"service": service,
-                              "onConnectTap":(){
+                            arguments: {
+                              "service": service,
+                              "onConnectTap": () {
                                 ConnectionDialogs.showSendServiceConnectionDialog(
                                   context,
                                   service,
