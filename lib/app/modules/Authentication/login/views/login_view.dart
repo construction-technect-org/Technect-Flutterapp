@@ -4,14 +4,14 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
 import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/google_sign_in_service.dart';
+import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/widget/save_pass_widget.dart';
 import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
-import 'package:upgrader/upgrader.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:construction_technect/app/core/widgets/no_network.dart';
+import 'package:upgrader/upgrader.dart';
 
 class LoginView extends GetView<LoginController> {
-  LoginView({super.key});
+   LoginView({super.key});
   bool _isBottomSheetOpen = false;
 
   @override
@@ -21,7 +21,6 @@ class LoginView extends GetView<LoginController> {
       connectivityBuilder: (context, connectivity, child) {
         final bool connected = !connectivity.contains(ConnectivityResult.none);
 
-        // show full-screen "No Internet" bottom sheet if offline
         if (!connected && !_isBottomSheetOpen) {
           _isBottomSheetOpen = true;
 
@@ -36,8 +35,10 @@ class LoginView extends GetView<LoginController> {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
-                builder: (_) => WillPopScope(
-                  onWillPop: () async => false,
+                builder: (_) => PopScope(
+                  canPop: false,
+                  onPopInvokedWithResult: (didPop, result) {
+                  },
                   child: NoInternetBottomSheet(),
                 ),
               ).whenComplete(() {
@@ -55,7 +56,6 @@ class LoginView extends GetView<LoginController> {
     );
   }
 
-  /// ✅ Wrap the main UI inside Upgrader alert
   Widget _buildUpgradeAlert(BuildContext context) {
     return UpgradeAlert(
       dialogStyle: UpgradeDialogStyle.cupertino,
@@ -66,7 +66,6 @@ class LoginView extends GetView<LoginController> {
     );
   }
 
-  /// ✅ Login Body UI (unchanged)
   Widget _buildMainLoginBody(BuildContext context) {
     return LoaderWrapper(
       isLoading: controller.isLoading,
@@ -175,7 +174,6 @@ class LoginView extends GetView<LoginController> {
                         }),
                         const Gap(8),
 
-                        /// 💾 Remember Me + Forgot Password
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -200,8 +198,6 @@ class LoginView extends GetView<LoginController> {
                         ),
 
                         const Gap(24),
-
-                        /// 🔘 Login Button
                         Obx(
                           () => RoundedButton(
                             buttonName: 'Login',
@@ -248,7 +244,6 @@ class LoginView extends GetView<LoginController> {
 
                         const Gap(24),
 
-                        /// 🔸 Or Divider
                         Row(
                           children: [
                             Expanded(
@@ -280,7 +275,6 @@ class LoginView extends GetView<LoginController> {
 
                         const Gap(24),
 
-                        /// 🔹 Google + Facebook Sign-in
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -334,8 +328,6 @@ class LoginView extends GetView<LoginController> {
                         ),
 
                         const Gap(24),
-
-                        /// 🧾 Signup Redirect
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.SIGN_UP_ROLE);

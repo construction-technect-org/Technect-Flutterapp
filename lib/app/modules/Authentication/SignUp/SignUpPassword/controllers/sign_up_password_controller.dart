@@ -217,7 +217,9 @@ class SignUpPasswordController extends GetxController {
         );
       }
     } catch (e) {
-      // Error snackbar is already shown by ApiManager
+      if (kDebugMode) {
+        print(e);
+      }
     } finally {
       isLoading.value = false;
     }

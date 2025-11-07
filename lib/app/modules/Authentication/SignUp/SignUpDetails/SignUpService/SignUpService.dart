@@ -17,37 +17,28 @@ class SignUpService {
         body: {
           if ((email ?? "").isNotEmpty) "email": email,
           if ((mobileNumber ?? "").isNotEmpty) "mobileNumber": mobileNumber,
-          // API expects countryCode when checking phone availability
           if ((mobileNumber ?? "").isNotEmpty && (countryCode ?? "").isNotEmpty)
             "countryCode": countryCode,
           if ((gstNumber ?? "").isNotEmpty) "gstNumber": gstNumber,
         },
       );
-      // Parse availability based on requested field
       final data = response["data"] ?? {};
       if ((email ?? '').isNotEmpty) {
         final emailData = data["email"];
         if (emailData is Map) {
-          // Check if available is explicitly true
           final available = emailData["available"];
-          // If available is explicitly false, email is not available (already registered)
           if (available == false) {
             return false;
           }
-          // If available is explicitly true, email is available
           if (available == true) {
             return true;
           }
-          // If available is null or not a boolean, check for exists field
-          // Some APIs return exists: true when email is already registered
           final exists = emailData["exists"];
           if (exists == true) {
-            return false; // Email exists, so not available
+            return false;
           }
-          // If we can't determine, default to false (not available) for safety
           return false;
         }
-        // if API doesn't return email block, default to false (not available) for safety
         return false;
       }
       if ((mobileNumber ?? '').isNotEmpty) {

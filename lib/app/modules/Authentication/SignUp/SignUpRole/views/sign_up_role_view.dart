@@ -27,9 +27,6 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // SizedBox(height: 2.h),
-                // const StepperWidget(currentStep: 0),
-                // SizedBox(height: 2.h),
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
                   title: const Text("Sign up"),
@@ -222,7 +219,6 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                       hideKeyboard();
                       controller.selectedFinalRole.value = "connector";
                       myPref.setRole(controller.selectedFinalRole.value);
-                      // Get.back();
                       Get.toNamed(Routes.SIGN_UP_DETAILS);
                     },
                   ),
