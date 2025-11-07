@@ -960,4 +960,59 @@ class AddProductController extends GetxController {
     videoPlayerController?.dispose();
     videoPlayerController = null;
   }
+  void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
+    final playerController = isNetwork
+        ? VideoPlayerController.network(videoPath)
+        : VideoPlayerController.file(File(videoPath));
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return Dialog(
+          insetPadding: const EdgeInsets.all(16),
+          child: FutureBuilder(
+            future: playerController.initialize(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                playerController.play();
+                return AspectRatio(
+                  aspectRatio: playerController.value.aspectRatio,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      VideoPlayer(playerController),
+                      VideoProgressIndicator(
+                        playerController,
+                        allowScrubbing: true,
+                        colors: const VideoProgressColors(
+                          backgroundColor: MyColors.grayEA,
+                          playedColor: MyColors.primary,
+                          bufferedColor: MyColors.grayEA,
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          onPressed: () {
+                            playerController.pause();
+                            playerController.dispose();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
+
 }
