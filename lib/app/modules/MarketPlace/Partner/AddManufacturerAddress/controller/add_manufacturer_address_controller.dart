@@ -1,12 +1,11 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/services/manufacturer_address_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/controller/manufacturer_address_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/services/add_manufacturer_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_places_flutter/model/prediction.dart';
 
 class AddManufacturerAddressController extends GetxController {
   RxBool isLoading = false.obs;
@@ -16,13 +15,11 @@ class AddManufacturerAddressController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController addressNameController = TextEditingController();
   final TextEditingController landmarkController = TextEditingController();
-  ManufacturerAddressController controller = Get.find();
   RxBool isEditMode = false.obs;
   RxString editAddressId = ''.obs;
 
   RxBool isSearching = false.obs;
   RxString selectedAddress = ''.obs;
-  RxList<Prediction> searchResults = <Prediction>[].obs;
 
   late GoogleMapController mapController;
   Rx<LatLng> currentPosition = const LatLng(21.1702, 72.8311).obs;
@@ -96,7 +93,9 @@ class AddManufacturerAddressController extends GetxController {
       }
 
       final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
 
       currentPosition.value = LatLng(position.latitude, position.longitude);
@@ -175,12 +174,12 @@ class AddManufacturerAddressController extends GetxController {
       };
       log(manufacturerAddress.toString());
       if (isEditMode.value) {
-        await ManufacturerAddressService.updateManufacturerAddress(
+        await AddManufacturerAddressService.updateManufacturerAddress(
           editAddressId.value,
           manufacturerAddress,
         );
       } else {
-        await ManufacturerAddressService.submitManufacturerAddress(
+        await AddManufacturerAddressService.submitManufacturerAddress(
           manufacturerAddress,
         );
       }

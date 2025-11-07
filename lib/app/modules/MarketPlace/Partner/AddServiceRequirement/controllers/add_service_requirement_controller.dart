@@ -13,22 +13,16 @@ class AddServiceRequirementController extends GetxController {
   final isLoading = false.obs;
   HomeController homeController = Get.find<HomeController>();
 
-  // Form Controllers
   final noteController = TextEditingController();
 
-  // Service Category Hierarchy Data
-  Rx<ServiceCategoryModel?> serviceCategoryHierarchy =
-      Rx<ServiceCategoryModel?>(null);
   RxList<ServiceCategoryData> mainCategories = <ServiceCategoryData>[].obs;
   RxList<ServicesSubCategories> subCategories = <ServicesSubCategories>[].obs;
   RxList<ServiceCategories> serviceCategories = <ServiceCategories>[].obs;
 
-  // Reactive name lists for dropdowns
   RxList<String> mainCategoryNames = <String>[].obs;
   RxList<String> subCategoryNames = <String>[].obs;
   RxList<String> serviceCategoryNames = <String>[].obs;
 
-  // Category Selections
   Rxn<String> selectedMainCategory = Rxn<String>();
   Rxn<String> selectedSubCategory = Rxn<String>();
   Rxn<String> selectedServiceCategory = Rxn<String>();
@@ -36,19 +30,16 @@ class AddServiceRequirementController extends GetxController {
   Rxn<int> selectedSubCategoryId = Rxn<int>();
   Rxn<int> selectedServiceCategoryId = Rxn<int>();
 
-  // Site Address
   RxList<SiteLocation> siteLocations = <SiteLocation>[].obs;
   RxInt selectedSiteAddressId = 0.obs;
-  RxString selectedSiteAddressName = ''.obs;
   Rxn<SiteLocation> selectedSiteAddress = Rxn<SiteLocation>();
 
-  // Estimate Start Date
   Rxn<DateTime> estimateStartDate = Rxn<DateTime>();
   final estimateStartDateController = TextEditingController();
 
   final serviceRequirementService = AddServiceRequirementService();
 
-  int? serviceRequirementId; // For edit mode
+  int? serviceRequirementId;
 
   @override
   void onInit() {
@@ -62,7 +53,6 @@ class AddServiceRequirementController extends GetxController {
   void _initializeServiceCategoryHierarchy() {
     final cachedHierarchy = myPref.getServiceCategoryHierarchyModel();
     if (cachedHierarchy != null) {
-      serviceCategoryHierarchy.value = cachedHierarchy;
       _populateCategoriesFromHierarchy(cachedHierarchy);
     }
   }
@@ -75,7 +65,6 @@ class AddServiceRequirementController extends GetxController {
         .toList();
   }
 
-  // Main Category Selection
   void onMainCategorySelected(String? categoryName) {
     if (categoryName == null) {
       _clearSubCategories();
@@ -99,7 +88,6 @@ class AddServiceRequirementController extends GetxController {
     }
   }
 
-  // Sub Category Selection
   void onSubCategorySelected(String? subCategoryName) {
     if (subCategoryName == null) {
       _clearServiceCategories();
@@ -123,7 +111,6 @@ class AddServiceRequirementController extends GetxController {
     }
   }
 
-  // Service Category Selection
   void onServiceCategorySelected(String? serviceCategoryName) {
     if (serviceCategoryName == null) {
       selectedServiceCategory.value = null;
@@ -153,11 +140,9 @@ class AddServiceRequirementController extends GetxController {
     selectedServiceCategoryId.value = null;
   }
 
-  // Site Address
   Future<void> _fetchSiteAddresses() async {
     siteLocations.value =
         homeController.profileData.value.data?.siteLocations ?? [];
-    // Sync selected site address after loading
     _syncSelectedSiteAddress();
   }
 
@@ -165,31 +150,23 @@ class AddServiceRequirementController extends GetxController {
     if (site != null) {
       selectedSiteAddress.value = site;
       selectedSiteAddressId.value = site.id ?? 0;
-      selectedSiteAddressName.value = site.siteName ?? '';
     } else {
       selectedSiteAddress.value = null;
       selectedSiteAddressId.value = 0;
-      selectedSiteAddressName.value = '';
     }
   }
 
-  // Helper method to sync selectedSiteAddress with ID
   void _syncSelectedSiteAddress() {
     if (selectedSiteAddressId.value > 0) {
       final site = siteLocations.firstWhereOrNull(
         (s) => s.id == selectedSiteAddressId.value,
       );
       selectedSiteAddress.value = site;
-      if (site != null) {
-        selectedSiteAddressName.value = site.siteName ?? '';
-      }
     } else {
       selectedSiteAddress.value = null;
-      selectedSiteAddressName.value = '';
     }
   }
 
-  // Date Selection
   Future<void> selectEstimateStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -218,14 +195,10 @@ class AddServiceRequirementController extends GetxController {
 
     if (args is Map) {
       serviceRequirementId = args['serviceRequirementId'];
-      log('args: ${args.toString()}');
-
-      // Populate note
       if (args['note'] != null) {
         noteController.text = args['note'];
       }
 
-      // Populate estimate start date
       if (args['estimate_start_date'] != null) {
         try {
           estimateStartDate.value = DateTime.parse(args['estimate_start_date']);
@@ -235,14 +208,12 @@ class AddServiceRequirementController extends GetxController {
         }
       }
 
-      // Populate site address
       if (args['site_address_id'] != null) {
         final siteId = args['site_address_id'] as int;
         selectedSiteAddressId.value = siteId;
         _syncSelectedSiteAddress();
       }
 
-      // Populate categories from IDs
       if (args['main_category_id'] != null) {
         final mainCatId = args['main_category_id'] as int;
         final mainCat = mainCategories.firstWhereOrNull(
@@ -252,7 +223,6 @@ class AddServiceRequirementController extends GetxController {
           selectedMainCategoryId.value = mainCatId;
           selectedMainCategory.value = mainCat.name;
 
-          // Populate sub categories
           if (mainCat.subCategories != null) {
             subCategories.value = mainCat.subCategories!;
             subCategoryNames.value = subCategories
@@ -260,7 +230,6 @@ class AddServiceRequirementController extends GetxController {
                 .where((name) => name.isNotEmpty)
                 .toList();
 
-            // Set sub category if ID provided
             if (args['sub_category_id'] != null) {
               final subCatId = args['sub_category_id'] as int;
               final subCat = subCategories.firstWhereOrNull(
@@ -270,7 +239,6 @@ class AddServiceRequirementController extends GetxController {
                 selectedSubCategoryId.value = subCatId;
                 selectedSubCategory.value = subCat.name;
 
-                // Populate service categories
                 if (subCat.serviceCategories != null) {
                   serviceCategories.value = subCat.serviceCategories!;
                   serviceCategoryNames.value = serviceCategories
@@ -278,7 +246,6 @@ class AddServiceRequirementController extends GetxController {
                       .where((name) => name.isNotEmpty)
                       .toList();
 
-                  // Set service category if ID provided
                   if (args['service_category_id'] != null) {
                     final serviceCatId = args['service_category_id'] as int;
                     final serviceCat = serviceCategories.firstWhereOrNull(
@@ -314,7 +281,7 @@ class AddServiceRequirementController extends GetxController {
       return false;
     }
 
-    if (selectedSiteAddressName.value.isEmpty) {
+    if (selectedSiteAddress.value == null) {
       SnackBars.errorSnackBar(content: "Please select site address");
       return false;
     }

@@ -3,13 +3,12 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/models/GetRequirementModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/services/AddRequirementService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/services/requirement_services.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/models/get_service_requirement_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/services/add_service_requirement_service.dart';
 
 class RequirementController extends GetxController {
   final AddRequirementService requirementService = AddRequirementService();
-  final AddServiceRequirementService serviceRequirementService =
-      AddServiceRequirementService();
+  final RequirementServices requirementServices = RequirementServices();
 
   RxBool isLoading = false.obs;
   RxInt selectedTabIndex = 0.obs; // 0 = Product, 1 = Service
@@ -180,7 +179,7 @@ class RequirementController extends GetxController {
     try {
       isLoading.value = true;
 
-      final result = await serviceRequirementService.getServiceRequirementsList(
+      final result = await requirementServices.getServiceRequirementsList(
         status: status,
         page: page,
         limit: limit,
@@ -291,7 +290,7 @@ class RequirementController extends GetxController {
       isLoading.value = true;
       Get.back();
 
-      await serviceRequirementService.deleteServiceRequirement(
+      await requirementServices.deleteServiceRequirement(
         serviceRequirementId: serviceRequirementId,
       );
 
