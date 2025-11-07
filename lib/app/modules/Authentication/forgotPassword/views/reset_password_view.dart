@@ -20,8 +20,8 @@ class ResetPasswordView extends StatelessWidget {
         onTap: hideKeyboard,
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: CommonAppBar(
-            title: const Text("Reset password"),
+          appBar: const CommonAppBar(
+            title: Text("Reset password"),
             isCenter: false,
           ),
           bottomNavigationBar: Padding(

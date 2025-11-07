@@ -14,8 +14,8 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
       isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar: CommonAppBar(
-          title: const Text("Service Details"),
+        appBar: const CommonAppBar(
+          title: Text("Service Details"),
           isCenter: false,
         ),
         bottomNavigationBar: Row(
@@ -320,11 +320,13 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                             path,
                                             width: 360.w,
                                             fit: BoxFit.contain,
-                                            errorBuilder: (_) => const Icon(
-                                              Icons.broken_image,
-                                              size: 60,
-                                              color: Colors.grey,
-                                            ),
+                                            errorBuilder:
+                                                (context, error, stackTrace) =>
+                                                    const Icon(
+                                                      Icons.broken_image,
+                                                      size: 60,
+                                                      color: Colors.grey,
+                                                    ),
                                           )
                                         : Image.file(
                                             File(path),
@@ -620,11 +622,13 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                       child: Image.network(
                                         referenceUrl,
                                         fit: BoxFit.contain,
-                                        errorBuilder: (_) => const Icon(
-                                          Icons.broken_image,
-                                          size: 60,
-                                          color: Colors.grey,
-                                        ),
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                const Icon(
+                                                  Icons.broken_image,
+                                                  size: 60,
+                                                  color: Colors.grey,
+                                                ),
                                       ),
                                     ),
                                   ),
@@ -637,17 +641,18 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (_) => Container(
-                                    height: 200,
-                                    color: MyColors.grayEA,
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.broken_image,
-                                        size: 60,
-                                        color: Colors.grey,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                        height: 200,
+                                        color: MyColors.grayEA,
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.broken_image,
+                                            size: 60,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
                                   loadingBuilder:
                                       (context, child, loadingProgress) {
                                         if (loadingProgress == null) {

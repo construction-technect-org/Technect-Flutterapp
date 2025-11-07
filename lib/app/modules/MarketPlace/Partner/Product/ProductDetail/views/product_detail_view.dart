@@ -221,11 +221,16 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               fit: BoxFit.fitHeight,
                                               height: 35.h,
                                               width: 360.w,
-                                              errorBuilder: (_) => const Icon(
-                                                Icons.broken_image,
-                                                size: 60,
-                                                color: Colors.grey,
-                                              ),
+                                              errorBuilder:
+                                                  (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) => const Icon(
+                                                    Icons.broken_image,
+                                                    size: 60,
+                                                    color: Colors.grey,
+                                                  ),
                                             )
                                           : Image.file(
                                               File(path),

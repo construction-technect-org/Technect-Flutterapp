@@ -25,8 +25,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CommonAppBar(
-        title: const Text("OTP Verification"),
+      appBar: const CommonAppBar(
+        title: Text("OTP Verification"),
         isCenter: false,
       ),
       body: Padding(

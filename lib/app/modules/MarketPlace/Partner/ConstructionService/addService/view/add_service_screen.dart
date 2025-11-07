@@ -725,11 +725,13 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                     referenceUrl,
                                     width: 360.w,
                                     fit: BoxFit.contain,
-                                    errorBuilder: (_) => const Icon(
-                                      Icons.broken_image,
-                                      size: 60,
-                                      color: Colors.grey,
-                                    ),
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(
+                                              Icons.broken_image,
+                                              size: 60,
+                                              color: Colors.grey,
+                                            ),
                                   ),
                                 ),
                               ),
@@ -742,17 +744,18 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               height: 200,
                               width: double.infinity,
                               fit: BoxFit.cover,
-                              errorBuilder: (_) => Container(
-                                height: 200,
-                                color: MyColors.grayEA,
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.broken_image,
-                                    size: 60,
-                                    color: Colors.grey,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    height: 200,
+                                    color: MyColors.grayEA,
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.broken_image,
+                                        size: 60,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
                               loadingBuilder:
                                   (context, child, loadingProgress) {
                                     if (loadingProgress == null) return child;
