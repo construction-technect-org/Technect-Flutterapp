@@ -34,9 +34,10 @@ class EditProfileView extends GetView<EditProfileController> {
                 buttonName: 'Update',
                 onTap: () async {
                   if (!controller.formKey.currentState!.validate()) return;
-
-                  await controller.validateEmailAvailability();
                   if (controller.emailError.value != '') {
+                    return;
+                  }
+                  if (controller.websiteError.value != '') {
                     return;
                   }
                   controller.updateProfile();
@@ -161,7 +162,6 @@ class EditProfileView extends GetView<EditProfileController> {
                             ],
                           ),
                           Gap(3.h),
-
                           BusinessDetailsStep(
                             controller: controller,
                             formKey: controller.formKey,
