@@ -5,8 +5,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Pr
 
 class ProductCard extends StatelessWidget {
   final Product product;
-
-  /// Optional actions
   final VoidCallback? onWishlistTap;
   final VoidCallback? onNotifyTap;
   final VoidCallback? onConnectTap;

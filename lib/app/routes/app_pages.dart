@@ -79,8 +79,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleDetails/views/role_details_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/bindings/role_management_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/role_management_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/TeamDetails/bindings/team_details_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/TeamDetails/views/team_details_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/bindings/add_product_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/bindings/product_detail_binding.dart';
@@ -210,11 +208,6 @@ class AppPages {
       name: _Paths.FAQ,
       page: () => const FaqScreen(),
       binding: FAQBindings(),
-    ),
-    GetPage(
-      name: _Paths.TEAM_DETAILS,
-      page: () => const TeamDetailsView(),
-      binding: TeamDetailsBinding(),
     ),
 
     // GetPage(
