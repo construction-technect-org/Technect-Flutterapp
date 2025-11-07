@@ -1,10 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 class BusinessHoursController extends GetxController {
-  // Enable / Disable all business hours
   RxBool isEnabled = true.obs;
 
-  // Days toggle
   final Map<String, RxBool> daysEnabled = {
     "Monday": true.obs,
     "Tuesday": true.obs,
@@ -15,7 +13,6 @@ class BusinessHoursController extends GetxController {
     "Sunday": false.obs,
   };
 
-  // From / To text controllers
   final Map<String, TextEditingController> fromControllers = {};
   final Map<String, TextEditingController> toControllers = {};
 
@@ -43,7 +40,6 @@ class BusinessHoursController extends GetxController {
     super.onClose();
   }
 
-  /// Validate time input (1-24 hours)
   void validateTimeInput(String value, String day, String type) {
     if (value.isNotEmpty) {
       final int? hour = int.tryParse(value);
@@ -53,16 +49,11 @@ class BusinessHoursController extends GetxController {
         } else {
           toControllers[day]?.clear();
         }
-        SnackBars.errorSnackBar(
-          content: "Please enter valid time (0-12 hours)",
-          time: 2,
-        );
+        SnackBars.errorSnackBar(content: "Please enter valid time (0-12 hours)", time: 2);
       }
     }
   }
 
-
-  // Store previous business hours data when editing
   void loadPreviousBusinessHours(List<Map<String, dynamic>> previousData) {
     Get.printInfo(info: '📅 Loading previous business hours data');
 
@@ -74,24 +65,20 @@ class BusinessHoursController extends GetxController {
         daysEnabled[dayName]!.value = isOpen;
 
         if (isOpen && dayData['open_time'] != 'Closed') {
-          // Extract hour from "09:00" format
           final openTime = dayData['open_time'] as String;
           final closeTime = dayData['close_time'] as String;
 
-          // Remove ":00" and get just the hour
           final openHour = openTime.replaceAll(':00', '');
           final closeHour = closeTime.replaceAll(':00', '');
-          String _removeAmPm(String time) {
-            return time.replaceAll(RegExp(r'(AM|PM)', caseSensitive: false), "").trim();
+          String removeAmPm(String time) {
+            return time.replaceAll(RegExp('(AM|PM)', caseSensitive: false), "").trim();
           }
 
-
-          fromControllers[dayName]?.text = _removeAmPm(openHour);
-          toControllers[dayName]?.text = _removeAmPm(closeHour);
+          fromControllers[dayName]?.text = removeAmPm(openHour);
+          toControllers[dayName]?.text = removeAmPm(closeHour);
 
           Get.printInfo(info: '📅 Restored $dayName: $openHour - $closeHour');
         } else {
-          // Clear times for closed days
           fromControllers[dayName]?.text = '';
           toControllers[dayName]?.text = '';
           Get.printInfo(info: '📅 $dayName is closed');
@@ -100,20 +87,17 @@ class BusinessHoursController extends GetxController {
     }
   }
 
-  // Handle submit and return data to edit profile
   void onSubmit() {
     if (!isEnabled.value) {
       SnackBars.errorSnackBar(content: "Please enable business hours");
       return;
     }
 
-    // Validate that at least one day has time set
     bool hasValidHours = false;
     for (final day in daysEnabled.keys) {
       if (daysEnabled[day]!.value &&
           fromControllers[day]?.text.isNotEmpty == true &&
           toControllers[day]?.text.isNotEmpty == true) {
-        // Validate time format (1-24)
         final fromHour = int.tryParse(fromControllers[day]!.text);
         final toHour = int.tryParse(toControllers[day]!.text);
 
@@ -122,7 +106,7 @@ class BusinessHoursController extends GetxController {
             fromHour >= 1 &&
             fromHour <= 24 &&
             toHour >= 1 &&
-            toHour <= 24 ) {
+            toHour <= 24) {
           hasValidHours = true;
         } else {
           SnackBars.errorSnackBar(
@@ -136,15 +120,11 @@ class BusinessHoursController extends GetxController {
     }
 
     if (!hasValidHours) {
-      SnackBars.errorSnackBar(
-        content: "Please set valid business hours for at least one day",
-      );
+      SnackBars.errorSnackBar(content: "Please set valid business hours for at least one day");
       return;
     }
 
-    // Create business hours data
     final List<Map<String, dynamic>> businessHoursData = [];
-    // Map day names to correct day_of_week values (0=Sunday, 1=Monday, etc.)
     final Map<String, int> dayToWeekMap = {
       "Monday": 1,
       "Tuesday": 2,
@@ -161,16 +141,15 @@ class BusinessHoursController extends GetxController {
       if (daysEnabled[day]!.value &&
           fromControllers[day]?.text.isNotEmpty == true &&
           toControllers[day]?.text.isNotEmpty == true) {
-        // Day is open with valid times
         businessHoursData.add({
           "day_of_week": dayOfWeek,
           "day_name": day,
           "is_open": true,
-          "open_time": "${fromControllers[day]?.text.padLeft(2, '0')}:00 ${fromPeriods[day]!.value}",
+          "open_time":
+              "${fromControllers[day]?.text.padLeft(2, '0')}:00 ${fromPeriods[day]!.value}",
           "close_time": "${toControllers[day]?.text.padLeft(2, '0')}:00 ${toPeriods[day]!.value}",
         });
       } else {
-        // Day is closed or has no valid times
         businessHoursData.add({
           "day_of_week": dayOfWeek,
           "day_name": day,

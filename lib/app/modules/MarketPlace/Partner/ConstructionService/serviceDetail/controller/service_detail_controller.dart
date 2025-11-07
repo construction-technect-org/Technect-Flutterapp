@@ -92,7 +92,7 @@ class ServiceDetailController extends GetxController {
           log('Full main video URL: $videoUrl');
 
           try {
-            videoPlayerController = VideoPlayerController.networkUrl(
+          videoPlayerController = VideoPlayerController.networkUrl(
               Uri.parse(videoUrl),
               httpHeaders: {
                 'Range': 'bytes=0-',
@@ -100,7 +100,7 @@ class ServiceDetailController extends GetxController {
                 'User-Agent': 'Mozilla/5.0',
               },
               videoPlayerOptions: VideoPlayerOptions(),
-            );
+          );
 
             await videoPlayerController?.initialize().timeout(
               const Duration(seconds: 30),

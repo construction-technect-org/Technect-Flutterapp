@@ -19,7 +19,6 @@ class SearchServiceController extends GetxController {
     final trimmed = query.trim();
     searchQuery.value = trimmed;
 
-    // Cancel previous timer
     _debounceTimer?.cancel();
 
     if (trimmed.isEmpty) {
@@ -28,7 +27,6 @@ class SearchServiceController extends GetxController {
       return;
     }
 
-    // Set up new timer for debounced search
     _debounceTimer = Timer(const Duration(milliseconds: 1000), () {
       performSearch(trimmed);
     });
@@ -42,7 +40,7 @@ class SearchServiceController extends GetxController {
         query: query,
       );
     } catch (e) {
-      Get.snackbar('Error', 'Failed to search services: $e');
+      // No Error Show
     } finally {
       isLoading.value = false;
     }

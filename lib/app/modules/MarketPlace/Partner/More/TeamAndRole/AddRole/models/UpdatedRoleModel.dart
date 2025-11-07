@@ -18,25 +18,21 @@ class UpdatedRoleModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'data': data?.toJson(),
-      'message': message,
-    };
+    return {'success': success, 'data': data?.toJson(), 'message': message};
   }
 }
 
-class  UpdatedRole {
+class UpdatedRole {
   final int id;
   final int merchantProfileId;
   final String roleTitle;
   final String roleDescription;
-  final String functionalities; // keep as raw string from API
+  final String functionalities;
   final bool isActive;
   final String createdAt;
   final String updatedAt;
 
-   UpdatedRole({
+  UpdatedRole({
     required this.id,
     required this.merchantProfileId,
     required this.roleTitle,
@@ -71,16 +67,5 @@ class  UpdatedRole {
       'created_at': createdAt,
       'updated_at': updatedAt,
     };
-  }
-
-  /// Helper to convert the string to a list
-  List<String> get functionalityList {
-    // API sends string like {"view_products","edit_products"}
-    return functionalities
-        .replaceAll(RegExp(r'[\{\}]'), '') // remove { }
-        .split(',')
-        .map((e) => e.replaceAll('"', '').trim())
-        .where((e) => e.isNotEmpty)
-        .toList();
   }
 }

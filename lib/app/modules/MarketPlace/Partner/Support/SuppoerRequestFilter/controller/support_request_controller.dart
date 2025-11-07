@@ -18,9 +18,8 @@ class SupportRequestController extends GetxController {
       final response = await _service.supportMyTicketsModel(filter: status);
       myTickets.clear();
       myTickets.addAll(response.data?.tickets ?? []);
-      print('Tickets updated: ${myTickets.length} tickets');
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Failed to fetch tickets: $e');
+      // No Error Show
     } finally {
       isLoading.value = false;
     }

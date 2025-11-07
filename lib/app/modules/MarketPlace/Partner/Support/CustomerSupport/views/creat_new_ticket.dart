@@ -8,12 +8,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketCategoriesModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportTicketPrioritiesModel.dart';
 
-class CreatNewTicket extends StatelessWidget {
-  final CreateNewTicketController controller = Get.put(
-    CreateNewTicketController(),
-  );
-  final formKey = GlobalKey<FormState>();
-
+class CreatNewTicket extends GetView<CreateNewTicketController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -52,13 +47,12 @@ class CreatNewTicket extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Form(
-                              key: formKey,
+                              key: controller.formKey,
                               child: Column(
                                 children: [
                                   CommonDropdown<SupportCategory>(
                                     headerText: 'Select Category',
                                     itemLabel: (item) => item.name,
-                                    // Show category name
                                     items: controller.categories,
                                     selectedValue: controller.selectedCategory,
                                     onChanged: controller.onCategorySelected,
@@ -70,7 +64,7 @@ class CreatNewTicket extends StatelessWidget {
                                       return null;
                                     },
                                   ),
-                      
+
                                   SizedBox(height: 2.h),
                                   CommonDropdown<SupportPriority>(
                                     headerText: 'Select Priority',
@@ -86,7 +80,7 @@ class CreatNewTicket extends StatelessWidget {
                                       return null;
                                     },
                                   ),
-                      
+
                                   SizedBox(height: 2.h),
                                   CommonTextField(
                                     headerText: 'Subject',
@@ -106,7 +100,8 @@ class CreatNewTicket extends StatelessWidget {
                                   CommonTextField(
                                     headerText: 'Description',
                                     hintText: "Enter your description",
-                                    controller: controller.descriptionController,
+                                    controller:
+                                        controller.descriptionController,
                                     maxLine: 3,
                                     validator: (value) {
                                       if ((value ?? "").isEmpty) {
@@ -133,11 +128,11 @@ class CreatNewTicket extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 30),
             child: Obx(
               () => RoundedButton(
-                buttonName:  'Submit',
+                buttonName: 'Submit',
                 onTap: controller.isSubmitting.value
                     ? null
                     : () async {
-                        if (formKey.currentState!.validate()) {
+                        if (controller.formKey.currentState!.validate()) {
                           await controller.submitTicket();
                         }
                       },

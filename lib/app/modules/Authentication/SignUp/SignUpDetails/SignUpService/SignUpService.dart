@@ -10,6 +10,7 @@ class SignUpService {
     String? mobileNumber,
     String? countryCode,
     String? gstNumber,
+    String? website,
   }) async {
     try {
       final response = await apiManager.postObject(
@@ -20,6 +21,7 @@ class SignUpService {
           if ((mobileNumber ?? "").isNotEmpty && (countryCode ?? "").isNotEmpty)
             "countryCode": countryCode,
           if ((gstNumber ?? "").isNotEmpty) "gstNumber": gstNumber,
+          if ((website ?? "").isNotEmpty) "website": website,
         },
       );
       final data = response["data"] ?? {};
@@ -52,6 +54,13 @@ class SignUpService {
         final gstData = data["gstNumber"] ?? data["gst"];
         if (gstData is Map) {
           return gstData["available"] == true;
+        }
+        return true;
+      }
+      if ((website ?? '').isNotEmpty) {
+        final websiteData = data["website"];
+        if (websiteData is Map) {
+          return websiteData["available"] == true;
         }
         return true;
       }

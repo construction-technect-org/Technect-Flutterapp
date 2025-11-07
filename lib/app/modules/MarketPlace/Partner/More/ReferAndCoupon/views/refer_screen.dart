@@ -2,11 +2,10 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/controller/refer_controller.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ReferAndEarnScreen extends StatelessWidget {
-  const ReferAndEarnScreen({super.key});
-
+class ReferAndEarnScreen extends GetView<ReferController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,10 +55,7 @@ class ReferAndEarnScreen extends StatelessWidget {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: MyColors.grayEA,
-                              width: 1,
-                            ),
+                            border: Border.all(color: MyColors.grayEA),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(

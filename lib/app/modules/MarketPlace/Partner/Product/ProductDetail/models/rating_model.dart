@@ -61,14 +61,15 @@ class Ratings {
   String? userName;
   String? userEmail;
 
-  Ratings(
-      {this.id,
-        this.rating,
-        this.reviewText,
-        this.isAnonymous,
-        this.createdAt,
-        this.userName,
-        this.userEmail});
+  Ratings({
+    this.id,
+    this.rating,
+    this.reviewText,
+    this.isAnonymous,
+    this.createdAt,
+    this.userName,
+    this.userEmail,
+  });
 
   Ratings.fromJson(Map<String, dynamic> json) {
     id = json['id'];

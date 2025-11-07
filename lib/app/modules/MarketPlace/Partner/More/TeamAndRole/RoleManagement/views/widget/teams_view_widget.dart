@@ -5,13 +5,12 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/widget/team_card_widget.dart';
 
 class TeamsViewWidget extends StatelessWidget {
-  const TeamsViewWidget({super.key});
+  TeamsViewWidget({super.key});
+  final roleManagementController = Get.find<RoleManagementController>();
+  final homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
-    final con = Get.find<RoleManagementController>();
-    final homecon = Get.find<HomeController>();
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -24,7 +23,8 @@ class TeamsViewWidget extends StatelessWidget {
                   () => StatisticTile(
                     image: Asset.totalProduct,
                     title: 'Total Team',
-                    value: homecon.statistics.value.totalTeamMember ?? '0',
+                    value:
+                        homeController.statistics.value.totalTeamMember ?? '0',
                   ),
                 ),
               ),
@@ -34,7 +34,8 @@ class TeamsViewWidget extends StatelessWidget {
                   () => StatisticTile(
                     image: Asset.totalProduct,
                     title: 'Active Team',
-                    value: homecon.statistics.value.activeTeamMember ?? '0',
+                    value:
+                        homeController.statistics.value.activeTeamMember ?? '0',
                   ),
                 ),
               ),
@@ -42,15 +43,15 @@ class TeamsViewWidget extends StatelessWidget {
           ),
           const Gap(10),
           RefreshIndicator(
-            onRefresh: () async => await homecon.refreshTeamList(),
+            onRefresh: () async => await homeController.refreshTeamList(),
             child: Obx(() {
-              if (con.isLoadingTeam.value) {
+              if (roleManagementController.isLoadingTeam.value) {
                 return SizedBox(
                   height: MediaQuery.of(context).size.height / 3,
                   child: const Center(child: CircularProgressIndicator()),
                 );
               }
-              if (homecon.teamList.isEmpty) {
+              if (homeController.teamList.isEmpty) {
                 return Center(
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -66,9 +67,9 @@ class TeamsViewWidget extends StatelessWidget {
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: homecon.teamList.length,
+                itemCount: homeController.teamList.length,
                 itemBuilder: (context, index) {
-                  final team = homecon.teamList[index];
+                  final team = homeController.teamList[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TeamCardWidget(user: team),

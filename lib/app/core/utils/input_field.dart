@@ -19,7 +19,7 @@ class NameInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    String newText = newValue.text.replaceAll(RegExp(r'[^a-zA-Z]'), '');
+    String newText = newValue.text.replaceAll(RegExp('[^a-zA-Z]'), '');
     if (newText.isNotEmpty) {
       newText =
           newText[0].toUpperCase() +

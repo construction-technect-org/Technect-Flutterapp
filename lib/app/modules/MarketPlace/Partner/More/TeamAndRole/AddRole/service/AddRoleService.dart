@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/AddRolemodel.dart';
@@ -8,7 +6,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 class RoleService {
   static final ApiManager _apiManager = ApiManager();
 
-  static Future<AddRolemodel?> createRole({
+  static Future<AddRolemodel> createRole({
     required String roleTitle,
     required String roleDescription,
     required String functionalities,
@@ -25,22 +23,13 @@ class RoleService {
         },
       );
 
-      if (response != null) {
-        return AddRolemodel.fromJson(response);
-      } else {
-        return AddRolemodel(
-          success: false,
-          data: null,
-          message: "Null response from server",
-        );
-      }
+      return AddRolemodel.fromJson(response);
     } catch (e) {
-      log("❌ Error: $e");
-      return AddRolemodel(success: false, data: null, message: e.toString());
+      rethrow;
     }
   }
 
-  static Future<UpdatedRoleModel?> updateRole({
+  static Future<UpdatedRoleModel> updateRole({
     required int roleId,
     required String roleTitle,
     required String roleDescription,
@@ -49,38 +38,26 @@ class RoleService {
   }) async {
     try {
       final response = await _apiManager.putObject(
-        url: "${APIConstants.updateRole}/$roleId", // ✅ pass role id in URL
+        url: "${APIConstants.updateRole}/$roleId",
         body: {
           "role_title": roleTitle,
           "role_description": roleDescription,
-          "functionalities": functionalities, // ✅ backend expects string
+          "functionalities": functionalities,
           "is_active": isActive,
         },
       );
 
-      log("⬅️ Update Response: $response");
-
-      if (response != null) {
-        return UpdatedRoleModel.fromJson(response);
-      } else {
-        return UpdatedRoleModel(
-          success: false,
-          data: null,
-          message: "Null response from server",
-        );
-      }
-    } catch (e) {
-      log("❌ Update Error: $e");
-      return UpdatedRoleModel(success: false, data: null, message: e.toString());
+      return UpdatedRoleModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error updating role: $e , $st');
     }
   }
 
-  Future<Map<String, dynamic>> deleteRole(String id) async {
+  Future<void> deleteRole(String id) async {
     try {
-      final response = await _apiManager.delete(url: "${APIConstants.deleteRole}$id");
-      return Map<String, dynamic>.from(response);
+      await _apiManager.delete(url: "${APIConstants.deleteRole}$id");
     } catch (e, st) {
-      throw Exception('Error deleting team member: $e , $st');
+      throw Exception('Error deleting role: $e , $st');
     }
   }
 }

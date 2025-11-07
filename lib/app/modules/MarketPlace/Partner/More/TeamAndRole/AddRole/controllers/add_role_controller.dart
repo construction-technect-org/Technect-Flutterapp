@@ -1,6 +1,3 @@
-// ignore_for_file: type_annotate_public_apis
-
-import 'dart:developer';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/AddRoleService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
@@ -8,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddRoleController extends GetxController {
+  final formKey = GlobalKey<FormState>();
   final roleController = TextEditingController();
   final roleDescription = TextEditingController();
-  final argument = Get.arguments;
   final selectedFunctionalities = ''.obs;
   final isLoading = false.obs;
   Rx<GetAllRole> dataModel = GetAllRole().obs;
@@ -20,14 +17,15 @@ class AddRoleController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
+    final argument = Get.arguments;
     if (argument != null) {
-      isEdit.value = argument["isEdit"];
-      dataModel.value = argument["data"];
+      isEdit.value = argument['isEdit'] ?? false;
+      dataModel.value = argument['data'] ?? GetAllRole();
     }
     if (isEdit.value) {
       loadRoleData(dataModel.value);
     }
-    super.onInit();
   }
 
   void loadRoleData(GetAllRole role) {
@@ -58,13 +56,10 @@ class AddRoleController extends GetxController {
           isActive: true,
         );
 
-        if (result != null && result.success) {
+        if (result.success) {
           await _refreshRoleManagement();
           Get.back();
-        } else {
-          Get.snackbar("Failed", result?.message ?? "Something went wrong");
         }
-        Get.back();
       } else {
         final result = await RoleService.createRole(
           roleTitle: roleController.text,
@@ -73,15 +68,13 @@ class AddRoleController extends GetxController {
           isActive: true,
         );
 
-        if (result != null && result.success) {
+        if (result.success) {
           await _refreshRoleManagement();
           Get.back();
-        } else {
-          Get.snackbar("Failed", result?.message ?? "Something went wrong");
         }
       }
     } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e");
+      // ignore: avoid_print
     } finally {
       isLoading.value = false;
     }
@@ -94,7 +87,7 @@ class AddRoleController extends GetxController {
         await roleManagementController.refreshRoles();
       }
     } catch (e) {
-      log('RoleManagementController not found: $e');
+      // ignore: avoid_print
     }
   }
 }

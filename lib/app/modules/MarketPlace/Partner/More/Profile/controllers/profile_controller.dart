@@ -15,15 +15,25 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 
 class ProfileController extends GetxController {
+  final formKey = GlobalKey<FormState>();
+
   final isSwitch = false.obs;
   Rx<File?> selectedImage = Rx<File?>(null);
 
   final ImagePicker picker = ImagePicker();
   RxString image = "".obs;
+  final TextEditingController titleController = TextEditingController();
+  RxString filePath = "".obs;
+
+  Future<void> _pickFile() async {
+    final path = await pickFile();
+    if (path != null) {
+      filePath.value = path;
+    }
+  }
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     selectedTabIndex.value = 0;
     if (Get.arguments != null) {
@@ -75,7 +85,6 @@ class ProfileController extends GetxController {
         loadCertificatesFromDocuments(merchantProfile!.documents!);
       }
 
-      // Ensure observers are notified after assigning individual fields
       businessModel.refresh();
     }
   }
@@ -96,7 +105,6 @@ class ProfileController extends GetxController {
         certificates[2].filePath = path;
         certificates[2].name = name;
       } else {
-        // Add extra certificates dynamically
         certificates.add(
           CertificateModel(
             title: (doc.documentType ?? type)
@@ -313,12 +321,10 @@ class ProfileController extends GetxController {
         return null;
       }
 
-      // Robust validation for file extension and MIME type
       final fileName = file.name.toLowerCase();
       final fileExtension = fileName.split('.').last;
       final allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
 
-      // Check if file has an extension
       if (!fileName.contains('.')) {
         SnackBars.errorSnackBar(
           content:
@@ -327,7 +333,6 @@ class ProfileController extends GetxController {
         return null;
       }
 
-      // Check for explicitly disallowed file types
       final disallowedExtensions = [
         'rtf',
         'odt',
@@ -349,7 +354,6 @@ class ProfileController extends GetxController {
         return null;
       }
 
-      // Check file extension
       if (!allowedExtensions.contains(fileExtension)) {
         SnackBars.errorSnackBar(
           content:
@@ -358,7 +362,6 @@ class ProfileController extends GetxController {
         return null;
       }
 
-      // Additional MIME type validation for extra security
       if (file.bytes != null) {
         final bytes = file.bytes!;
         final isValidFile = _validateFileType(bytes, fileExtension);
@@ -387,27 +390,22 @@ class ProfileController extends GetxController {
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
   EditProfileService editProfileService = EditProfileService();
 
-  // Validate file type by checking file signatures (magic numbers)
   bool _validateFileType(List<int> bytes, String extension) {
     if (bytes.length < 4) return false;
 
-    // Check file signatures
     switch (extension.toLowerCase()) {
       case 'pdf':
-        // PDF files start with %PDF
         final pdfSignature = String.fromCharCodes(bytes.take(4));
         return pdfSignature == '%PDF';
 
       case 'jpg':
       case 'jpeg':
-        // JPEG files start with FF D8 FF
         return bytes.length >= 3 &&
             bytes[0] == 0xFF &&
             bytes[1] == 0xD8 &&
             bytes[2] == 0xFF;
 
       case 'png':
-        // PNG files start with 89 50 4E 47
         return bytes.length >= 4 &&
             bytes[0] == 0x89 &&
             bytes[1] == 0x50 &&
@@ -416,18 +414,13 @@ class ProfileController extends GetxController {
 
       case 'doc':
       case 'docx':
-        // DOC/DOCX files have specific signatures
-        // DOC files start with D0 CF 11 E0 (OLE signature)
-        // DOCX files are ZIP archives with specific structure
         if (bytes.length >= 4) {
-          // Check for OLE signature (DOC files)
           if (bytes[0] == 0xD0 &&
               bytes[1] == 0xCF &&
               bytes[2] == 0x11 &&
               bytes[3] == 0xE0) {
             return true;
           }
-          // Check for ZIP signature (DOCX files)
           if (bytes[0] == 0x50 &&
               bytes[1] == 0x4B &&
               bytes[2] == 0x03 &&
@@ -438,8 +431,6 @@ class ProfileController extends GetxController {
         return false;
 
       case 'txt':
-        // TXT files are plain text, so we'll be more lenient
-        // Check if it contains mostly printable ASCII characters
         if (bytes.isEmpty) return true;
         int printableCount = 0;
         for (final int byte in bytes) {
@@ -450,8 +441,7 @@ class ProfileController extends GetxController {
             printableCount++;
           }
         }
-        return printableCount >=
-            (bytes.length * 0.8); // 80% printable characters
+        return printableCount >= (bytes.length * 0.8);
 
       default:
         return false;
@@ -461,16 +451,15 @@ class ProfileController extends GetxController {
   String? _normalizeTime(dynamic time) {
     if (time == null || time.toString().isEmpty) return null;
 
-    // If already in HH:mm format, return as is
     if (RegExp(r'^\d{2}:\d{2}$').hasMatch(time.toString())) {
       return time.toString();
     }
 
     try {
-      final parsed = DateFormat.jm().parse(time.toString()); // parses "9:00 AM"
-      return DateFormat.Hm().format(parsed); // converts to "09:00"
+      final parsed = DateFormat.jm().parse(time.toString());
+      return DateFormat.Hm().format(parsed);
     } catch (_) {
-      return time.toString(); // fallback, don’t break
+      return time.toString();
     }
   }
 
@@ -524,7 +513,6 @@ class ProfileController extends GetxController {
         files['mtc_certificate'] = certificates[2].filePath!;
       }
 
-      // For any additional certificates
       if (certificates.length > 3) {
         for (var i = 3; i < certificates.length; i++) {
           if (!(certificates[i].filePath ?? "").startsWith(
@@ -545,7 +533,6 @@ class ProfileController extends GetxController {
       }).toList();
       formFields['business_hours'] = json.encode(normalizedBusinessHours);
 
-      // Call appropriate API based on merchant ID
       final response = isUpdate
           ? await editProfileService.updateMerchantData(
               formFields: formFields,

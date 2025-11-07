@@ -1,16 +1,4 @@
-// To parse this JSON data, do
-//
-//     final getFilterModel = getFilterModelFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
-
-ProductListModel getFilterModelFromJson(String str) =>
-    ProductListModel.fromJson(json.decode(str));
-
-String getFilterModelToJson(ProductListModel data) =>
-    json.encode(data.toJson());
 
 class ProductImage {
   final String? s3Key;
@@ -113,7 +101,7 @@ class Product {
   final bool? isActive;
   final bool? isNotify;
   final String? status;
-   bool? isInWishList;
+  bool? isInWishList;
   final String? approvalStatus;
   final String? mainCategoryName;
   final String? subCategoryName;
@@ -132,7 +120,6 @@ class Product {
   final String? warehouseType;
   final String? stockYardAddress;
   List<BusinessHours>? businessHours;
-
 
   Product({
     this.id,
@@ -211,7 +198,9 @@ class Product {
       texture: json["texture"],
       colour: json["colour"],
       size: json["size"],
-      distanceKm: json["distance_km"]!=null ?json["distance_km"].toString():"",
+      distanceKm: json["distance_km"] != null
+          ? json["distance_km"].toString()
+          : "",
       price: json["price"],
       address: json["address"],
       gstPercentage: json["gst_percentage"],
@@ -247,8 +236,8 @@ class Product {
       businessHours: json["business_hours"] == null
           ? []
           : List<BusinessHours>.from(
-        json["business_hours"]!.map((x) => BusinessHours.fromJson(x)),
-      ),
+              json["business_hours"]!.map((x) => BusinessHours.fromJson(x)),
+            ),
       filterValues: json["filter_values"] != null
           ? Map<String, dynamic>.from(json["filter_values"])
           : null,
@@ -270,7 +259,7 @@ class Product {
     "merchant_name": merchantName,
     "merchant_email": merchantEmail,
     "category_product_id": categoryProductId,
-    "merchant_logo":  merchantLogo,
+    "merchant_logo": merchantLogo,
     "brand": brand,
     "stock_yard_address": stockYardAddress,
     "warehouse_type": warehouseType,

@@ -321,39 +321,48 @@ class ConnectorSelectedProductController extends GetxController {
                 style: MyTexts.medium16.copyWith(color: MyColors.black),
               ),
               const SizedBox(height: 12),
-              ...[
-                'Relevance',
-                'New Arrivals',
-                'Price (High to Low)',
-                'Price (Low to High)',
-                'Ratings',
-              ].map((sortType) {
-                return RadioListTile<String>(
-                  dense: true,
-                  controlAffinity: ListTileControlAffinity.trailing,
-                  selectedTileColor: MyColors.primary,
-                  fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-                    if (states.contains(WidgetState.selected)) {
-                      return MyColors.primary;
-                    }
-                    return Colors.grey;
-                  }),
-
-                  visualDensity: VisualDensity.compact,
-                  contentPadding: EdgeInsets.zero,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  title: Text(
-                    sortType,
-                    style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
-                  ),
-                  value: sortType,
-                  groupValue: selectedSort.value,
-                  onChanged: (value) {
-                    applySorting(value!);
-                    Get.back();
-                  },
-                );
-              }),
+              RadioGroup<String>(
+                groupValue: selectedSort.value,
+                onChanged: (value) {
+                  applySorting(value ?? '');
+                  Get.back();
+                },
+                child: Column(
+                  children:
+                      [
+                        'Relevance',
+                        'New Arrivals',
+                        'Price (High to Low)',
+                        'Price (Low to High)',
+                        'Ratings',
+                      ].map((sortType) {
+                        return RadioListTile<String>(
+                          dense: true,
+                          controlAffinity: ListTileControlAffinity.trailing,
+                          selectedTileColor: MyColors.primary,
+                          fillColor: WidgetStateProperty.resolveWith<Color>((
+                            states,
+                          ) {
+                            if (states.contains(WidgetState.selected)) {
+                              return MyColors.primary;
+                            }
+                            return Colors.grey;
+                          }),
+                          visualDensity: VisualDensity.compact,
+                          contentPadding: EdgeInsets.zero,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          title: Text(
+                            sortType,
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.gray2E,
+                            ),
+                          ),
+                          value: sortType,
+                        );
+                      }).toList(),
+                ),
+              ),
               const SizedBox(height: 10),
             ],
           ),

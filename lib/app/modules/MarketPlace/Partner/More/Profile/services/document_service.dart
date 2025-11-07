@@ -4,7 +4,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 class DocumentService {
   final ApiManager _apiManager = ApiManager();
 
-  /// Delete a document by ID
   Future<DeleteDocumentResponse> deleteDocument(int documentId) async {
     try {
       final response = await _apiManager.delete(
@@ -16,7 +15,6 @@ class DocumentService {
     }
   }
 
-  /// View a document by opening it in external app
   Future<void> viewDocument(Documents document) async {
     try {
       if (document.filePath != null) {
@@ -34,7 +32,6 @@ class DocumentService {
     }
   }
 
-  /// Get document display name based on document type
   String getDocumentDisplayName(String? documentType) {
     switch (documentType) {
       case 'business_license':

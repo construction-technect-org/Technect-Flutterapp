@@ -5,17 +5,22 @@ class SubCategoryModel {
 
   SubCategoryModel({this.success, this.data, this.message});
 
-  factory SubCategoryModel.fromJson(Map<String, dynamic> json) => SubCategoryModel(
-    success: json["success"],
-    data: json["data"] == null
-        ? []
-        : List<SubCategory>.from(json["data"]!.map((x) => SubCategory.fromJson(x))),
-    message: json["message"],
-  );
+  factory SubCategoryModel.fromJson(Map<String, dynamic> json) =>
+      SubCategoryModel(
+        success: json["success"],
+        data: json["data"] == null
+            ? []
+            : List<SubCategory>.from(
+                json["data"]!.map((x) => SubCategory.fromJson(x)),
+              ),
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -49,8 +54,12 @@ class SubCategory {
     name: json["name"],
     isActive: json["is_active"],
     sortOrder: json["sort_order"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null
+        ? null
+        : DateTime.parse(json["updated_at"]),
     mainCategoryName: json["main_category_name"],
     image: json["image"],
   );

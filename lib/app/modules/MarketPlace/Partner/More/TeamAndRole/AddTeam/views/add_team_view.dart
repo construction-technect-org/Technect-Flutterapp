@@ -9,10 +9,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 
 class AddTeamView extends GetView<AddTeamController> {
-  AddTeamView({super.key});
-
-  final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -80,7 +76,7 @@ class AddTeamView extends GetView<AddTeamController> {
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(16),
                       child: Form(
-                        key: formKey,
+                        key: controller.formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -289,7 +285,7 @@ class AddTeamView extends GetView<AddTeamController> {
               () => RoundedButton(
                 buttonName: controller.isEdit.value ? "Update" : 'Add',
                 onTap: () {
-                  if (!formKey.currentState!.validate()) return;
+                  if (!controller.formKey.currentState!.validate()) return;
                   if (controller.emailError.value.isNotEmpty) return;
                   controller.validateEmailAvailability(
                     controller.emialIdController.text,

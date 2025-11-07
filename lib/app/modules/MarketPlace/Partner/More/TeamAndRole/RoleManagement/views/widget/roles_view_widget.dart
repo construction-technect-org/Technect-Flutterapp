@@ -4,11 +4,11 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/widget/statistic_tile_widget.dart';
 
 class RolesViewWidget extends StatelessWidget {
-  const RolesViewWidget({super.key});
+  RolesViewWidget({super.key});
+  final roleManagementController = Get.find<RoleManagementController>();
 
   @override
   Widget build(BuildContext context) {
-    final con = Get.find<RoleManagementController>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -21,7 +21,9 @@ class RolesViewWidget extends StatelessWidget {
                   () => StatisticTile(
                     image: Asset.totalProduct,
                     title: 'Total Roles',
-                    value: con.statistics.value.totalRoles ?? "0",
+                    value:
+                        roleManagementController.statistics.value.totalRoles ??
+                        "0",
                   ),
                 ),
               ),
@@ -31,7 +33,9 @@ class RolesViewWidget extends StatelessWidget {
                   () => StatisticTile(
                     image: Asset.totalProduct,
                     title: 'Active Roles',
-                    value: con.statistics.value.activeRoles ?? "0",
+                    value:
+                        roleManagementController.statistics.value.activeRoles ??
+                        "0",
                   ),
                 ),
               ),
@@ -39,15 +43,16 @@ class RolesViewWidget extends StatelessWidget {
           ),
           const Gap(10),
           RefreshIndicator(
-            onRefresh: () async => await con.refreshRoles(),
+            onRefresh: () async =>
+                await roleManagementController.refreshRoles(),
             child: Obx(() {
-              if (con.isLoading.value) {
+              if (roleManagementController.isLoading.value) {
                 return SizedBox(
                   height: MediaQuery.of(context).size.height / 3,
                   child: const Center(child: CircularProgressIndicator()),
                 );
               }
-              if (con.roles.isEmpty) {
+              if (roleManagementController.roles.isEmpty) {
                 return Center(
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -63,9 +68,9 @@ class RolesViewWidget extends StatelessWidget {
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: con.roles.length,
+                itemCount: roleManagementController.roles.length,
                 itemBuilder: (context, index) {
-                  final role = con.roles[index];
+                  final role = roleManagementController.roles[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: RoleCard(role: role),

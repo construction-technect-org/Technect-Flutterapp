@@ -12,7 +12,8 @@ class SupportTicketPrioritiesModel {
   factory SupportTicketPrioritiesModel.fromJson(Map<String, dynamic> json) {
     return SupportTicketPrioritiesModel(
       success: json['success'] ?? false,
-      data: (json['data'] as List<dynamic>?)
+      data:
+          (json['data'] as List<dynamic>?)
               ?.map((e) => SupportPriority.fromJson(e))
               .toList() ??
           [],

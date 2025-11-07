@@ -1,14 +1,10 @@
-import 'dart:developer';
-
-import 'package:construction_technect/app/core/apiManager/api_constants.dart';
-import 'package:construction_technect/app/core/apiManager/api_manager.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/models/AddRolemodel.dart';
 
 class FeedbackService {
-  static final ApiManager _apiManager = ApiManager();
+  final ApiManager _apiManager = ApiManager();
 
-  static Future<AddRolemodel?> addFeedback({
+  Future<AddRolemodel> addFeedback({
     required int rating,
     required String text,
   }) async {
@@ -25,22 +21,13 @@ class FeedbackService {
         },
       );
 
-      if (response != null) {
-        return AddRolemodel.fromJson(response);
-      } else {
-        return AddRolemodel(
-          success: false,
-          data: null,
-          message: "Null response from server",
-        );
-      }
+      return AddRolemodel.fromJson(response);
     } catch (e) {
-      log("❌ Error: $e");
-      return AddRolemodel(success: false, data: null, message: e.toString());
+      throw Exception('Error adding feedback: $e');
     }
   }
 
-  static Future<AddRolemodel?> addConnectorFeedback({
+  Future<AddRolemodel> addConnectorFeedback({
     required int rating,
     required String text,
     required int id,
@@ -51,18 +38,9 @@ class FeedbackService {
         body: {"rating": rating, "review_text": text, "is_anonymous": false},
       );
 
-      if (response != null) {
-        return AddRolemodel.fromJson(response);
-      } else {
-        return AddRolemodel(
-          success: false,
-          data: null,
-          message: "Null response from server",
-        );
-      }
+      return AddRolemodel.fromJson(response);
     } catch (e) {
-      log("❌ Error: $e");
-      return AddRolemodel(success: false, data: null, message: e.toString());
+      throw Exception('Error adding connector feedback: $e');
     }
   }
 }

@@ -12,10 +12,6 @@ import 'package:video_player/video_player.dart';
 class ProductDetailsController extends GetxController {
   Product product = Product();
 
-  ProfileModel profileData = ProfileModel.fromJson(
-    myPref.getProfileData() ?? {},
-  );
-  final RxBool showProductDetails = false.obs;
   final RxBool isFromAdd = false.obs;
   final RxBool isFromConnector = false.obs;
   final RxBool isLoading = false.obs;
@@ -23,16 +19,19 @@ class ProductDetailsController extends GetxController {
   final RxInt currentIndex = 0.obs;
   final ProductDetailService _service = ProductDetailService();
   VideoPlayerController? videoPlayerController;
-  final VoidCallback? onApiCall = Get.arguments['onApiCall'] ?? () {};
+  VoidCallback? onApiCall;
   Rx<ProductDetailsModel> productDetailsModel = ProductDetailsModel().obs;
+  RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
-    final argument = Get.arguments as Map;
+    super.onInit();
+    final argument = Get.arguments as Map? ?? {};
     product = argument['product'] ?? Product();
     isLiked.value = product.isInWishList ?? false;
-    isFromAdd.value = argument["isFromAdd"]??false;
-    isFromConnector.value = argument["isFromConnector"]??false;
+    isFromAdd.value = argument["isFromAdd"] ?? false;
+    isFromConnector.value = argument["isFromConnector"] ?? false;
+    onApiCall = argument["onApiCall"];
     if (isFromAdd.value == false) {
       fetchReview(product.id ?? 0, isFromConnector.value);
       if (!(isFromAdd.value == false && isFromConnector.value == false)) {
@@ -71,8 +70,8 @@ class ProductDetailsController extends GetxController {
         await videoPlayerController?.initialize();
       });
     }
-    super.onInit();
   }
+
   List<BusinessHours> get businessHours => product.businessHours ?? [];
 
   void onEditProduct() {
@@ -171,6 +170,4 @@ class ProductDetailsController extends GetxController {
       },
     );
   }
-  RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
-
 }

@@ -19,8 +19,6 @@ class RoleManagementController extends GetxController {
   final isLoadingTeam = false.obs;
   final isLoadingTeamStats = false.obs;
 
-  final GetAllRoleService _service = GetAllRoleService();
-
   @override
   void onInit() {
     super.onInit();
@@ -54,38 +52,12 @@ class RoleManagementController extends GetxController {
   Future<void> fetchRoles() async {
     try {
       isLoading.value = true;
-      final result = await _service.fetchAllRoles();
-      if (result != null && result.success) {
-        roles.assignAll(result.data);
-        if (result.statistics != null) {
-          statistics.value = result.statistics!;
-        }
-        myPref.setRoleModelData(result);
-      } else if (result != null && !result.success) {
-        final cachedRoleModel = myPref.getRoleModelData();
-        if (cachedRoleModel != null && cachedRoleModel.data.isNotEmpty) {
-          roles.assignAll(cachedRoleModel.data);
-          if (cachedRoleModel.statistics != null) {
-            statistics.value = cachedRoleModel.statistics!;
-          }
-        }
-      } else {
-        final cachedRoleModel = myPref.getRoleModelData();
-        if (cachedRoleModel != null && cachedRoleModel.data.isNotEmpty) {
-          roles.assignAll(cachedRoleModel.data);
-          if (cachedRoleModel.statistics != null) {
-            statistics.value = cachedRoleModel.statistics!;
-          }
-        }
-      }
+      final result = await GetAllRoleService().fetchAllRoles();
+      roles.assignAll(result.data);
+      statistics.value = result.statistics!;
+      myPref.setRoleModelData(result);
     } catch (e) {
-      final cachedRoleModel = myPref.getRoleModelData();
-      if (cachedRoleModel != null && cachedRoleModel.data.isNotEmpty) {
-        roles.assignAll(cachedRoleModel.data);
-        if (cachedRoleModel.statistics != null) {
-          statistics.value = cachedRoleModel.statistics!;
-        }
-      }
+      // ignore: avoid_print
     } finally {
       isLoading.value = false;
     }
@@ -94,17 +66,11 @@ class RoleManagementController extends GetxController {
   Future<void> deleteTeamMember(int teamMemberId) async {
     try {
       isLoadingTeam.value = true;
-      final response = await addTeamService.deleteTeamMember(teamMemberId);
-      if (response['success'] == true) {
-        await homeController.refreshTeamList();
-        await homeController.fetchTeamList();
-        SnackBars.successSnackBar(content: 'Team member deleted successfully');
-      } else {
-        final message = response['message'] ?? 'Failed to delete team member';
-        SnackBars.errorSnackBar(content: message);
-      }
+      await addTeamService.deleteTeamMember(teamMemberId);
+      await homeController.refreshTeamList();
+      await homeController.fetchTeamList();
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error deleting team member: $e');
+      // ignore: avoid_print
     } finally {
       isLoadingTeam.value = false;
     }
@@ -117,50 +83,11 @@ class RoleManagementController extends GetxController {
   Future<void> deleteRole(int roleId) async {
     try {
       isLoading.value = true;
-      final response = await _service.deleteRole(roleId);
-      if (response != null &&
-          (response['success'] == true || response['status'] == true)) {
-        final updatedRoles = roles.where((r) => r.id != roleId).toList();
-
-        final currentStats = statistics.value;
-        final currentTotal = int.tryParse(currentStats.totalRoles ?? '0') ?? 0;
-        final newTotal = currentTotal > 0 ? currentTotal - 1 : 0;
-
-        statistics.value = Statistics(
-          totalRoles: newTotal.toString(),
-          activeRoles: newTotal.toString(),
-          openTickets: currentStats.openTickets,
-          closedTickets: currentStats.closedTickets,
-          inProgressTickets: currentStats.inProgressTickets,
-          resolvedTickets: currentStats.resolvedTickets,
-          totalTeamMember: currentStats.totalTeamMember,
-          activeTeamMember: currentStats.activeTeamMember,
-          avgResponse: currentStats.avgResponse,
-        );
-
-        roles.assignAll(updatedRoles);
-
-        isLoading.value = false;
-
-        final updatedModel = GetAllRoleModel(
-          success: true,
-          data: updatedRoles,
-          message: 'Role deleted successfully',
-          statistics: statistics.value,
-        );
-        myPref.setRoleModelData(updatedModel);
-        await _saveRolesToStorage();
-
-        SnackBars.successSnackBar(content: 'Role deleted successfully');
-      } else {
-        final message = response != null
-            ? (response['message'] ?? 'Failed to delete role')
-            : 'Failed to delete role';
-        SnackBars.errorSnackBar(content: message);
-        isLoading.value = false;
-      }
+      await GetAllRoleService().deleteRole(roleId);
+      await fetchRoles();
     } catch (e) {
-      SnackBars.errorSnackBar(content: 'Error deleting role: $e');
+      // ignore: avoid_print
+    } finally {
       isLoading.value = false;
     }
   }

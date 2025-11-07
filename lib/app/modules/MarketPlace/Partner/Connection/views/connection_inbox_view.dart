@@ -22,11 +22,11 @@ class ConnectionInboxView extends StatelessWidget {
         },
         child: Scaffold(
           backgroundColor: MyColors.white,
-          appBar: CommonAppBar(
+          appBar: const CommonAppBar(
             isCenter: false,
-            leading: const SizedBox(),
+            leading: SizedBox(),
             leadingWidth: 0,
-            title: const Text("Connection Inbox"),
+            title: Text("Connection Inbox"),
           ),
           body: Stack(
             children: [

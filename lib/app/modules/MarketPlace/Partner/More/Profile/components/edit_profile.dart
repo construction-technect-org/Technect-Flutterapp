@@ -11,10 +11,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:image_picker/image_picker.dart';
 
 class EditProfile extends StatelessWidget {
-  EditProfile({super.key});
-
-  final eController = Get.put<EditProfileController>(EditProfileController());
-  final formKey = GlobalKey<FormState>();
+  final EditProfileController eController = Get.put(EditProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +56,7 @@ class EditProfile extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Form(
-                          key: formKey,
+                          key: eController.formKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -188,7 +185,7 @@ class EditProfile extends StatelessWidget {
             child: RoundedButton(
               buttonName: "Update",
               onTap: () {
-                if (formKey.currentState!.validate()) {
+                if (eController.formKey.currentState!.validate()) {
                   eController.updateProfile();
                 }
               },
@@ -201,6 +198,8 @@ class EditProfile extends StatelessWidget {
 }
 
 class EditProfileController extends GetxController {
+  final formKey = GlobalKey<FormState>();
+
   final fNameController = TextEditingController();
   final lNameController = TextEditingController();
   final emailController = TextEditingController();

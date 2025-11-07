@@ -14,9 +14,9 @@ class SupportRequestScreen extends GetView<SupportRequestController> {
         onTap: hideKeyboard,
         child: Scaffold(
           backgroundColor: MyColors.white,
-          appBar: CommonAppBar(
+          appBar: const CommonAppBar(
             isCenter: false,
-            title: const Text("Support Request"),
+            title: Text("Support Request"),
           ),
           body: Obx(() {
             if (controller.myTickets.isEmpty) {

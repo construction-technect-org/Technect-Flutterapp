@@ -5,6 +5,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/components/business_detail_view.dart';
@@ -39,13 +40,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
             ),
           ),
           isCenter: false,
-          // action: [
-          //   // SvgPicture.asset(Asset.link),
-          //   IconButton(
-          //     onPressed: () {},
-          //     icon: const Icon(Icons.more_vert, color: Colors.black),
-          //   ),
-          // ],
         ),
         bottomNavigationBar: buildBottom(context),
         body: SingleChildScrollView(
@@ -68,7 +62,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           final List<String> imageUrls = [];
                           String? videoUrl;
 
-                          // 🟦 Collect images
                           if (isNetwork) {
                             if (controller.product.images?.isNotEmpty ??
                                 false) {
@@ -87,14 +80,12 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               );
                             }
 
-                            // 🟩 Check if video exists from network (edit mode)
                             if (controller.product.productVideo != null &&
                                 controller.product.productVideo!.isNotEmpty) {
                               videoUrl =
                                   "${APIConstants.bucketUrl}${controller.product.productVideo!}";
                             }
                           } else {
-                            // From local (add mode)
                             if (controller.product.images?.isNotEmpty ??
                                 false) {
                               imageUrls.addAll(
@@ -114,13 +105,11 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               );
                             }
 
-                            // 🟩 Local video (from file)
                             if (controller.product.productVideo != null) {
                               videoUrl = controller.product.productVideo;
                             }
                           }
 
-                          // 🟪 If nothing to show
                           if (imageUrls.isEmpty && videoUrl == null) {
                             return const Center(
                               child: Icon(
@@ -131,7 +120,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             );
                           }
 
-                          // Combine both (images + optional video)
                           final List<Map<String, dynamic>> mediaList = [
                             ...imageUrls.map(
                               (e) => {'type': 'image', 'path': e},
@@ -140,14 +128,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               {'type': 'video', 'path': videoUrl},
                           ];
 
-                          // 🧭 PageView (images + video)
                           return Container(
                             height: 35.h,
                             width: 360.w,
                             color: MyColors.white,
                             child: PageView.builder(
                               itemCount: mediaList.length,
-                              controller: PageController(viewportFraction: 1),
+                              controller: PageController(),
                               onPageChanged: (index) =>
                                   controller.currentIndex.value = index,
                               itemBuilder: (context, index) {
@@ -156,7 +143,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 final isHttp = path.startsWith('http');
 
                                 if (media['type'] == 'video') {
-                                  // 🟠 Video Thumbnail
                                   return GestureDetector(
                                     onTap: () => controller.openVideoDialog(
                                       context,
@@ -186,19 +172,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                                   ),
                                                 ),
                                         ),
-                                        Container(
-                                          width: 60,
-                                          height: 60,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black45,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: const Icon(
-                                            Icons.play_arrow,
-                                            color: Colors.white,
-                                            size: 40,
-                                          ),
-                                        ),
+                                        const VideoPlay(),
                                       ],
                                     ),
                                   );
@@ -236,8 +210,12 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                               fit: BoxFit.fitHeight,
                                               height: 35.h,
                                               width: 360.w,
-                                              errorBuilder: (_, __, ___) =>
-                                                  const Icon(
+                                              errorBuilder:
+                                                  (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) => const Icon(
                                                     Icons.broken_image,
                                                     size: 60,
                                                     color: Colors.grey,
@@ -362,7 +340,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               ? TextButton.icon(
                                   onPressed: controller.onEditProduct,
                                   icon: SvgPicture.asset(
-                                    Asset.editIcon,
+                                    Asset.edit,
                                     width: 16,
                                     height: 16,
                                     colorFilter: const ColorFilter.mode(
@@ -520,8 +498,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     ),
                     if (myPref.role.val == "connector")
                       Obx(() {
-                        print("controller.product.distanceKm");
-                        print(controller.product.distanceKm);
                         if (controller.isFromAdd.value == false &&
                             controller.isFromConnector.value == false) {
                           return const SizedBox();
@@ -1127,10 +1103,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       }
                     }
 
-                    // CASE 3: Handle Connection Status Logic
                     final String? connectionStatus = product.status;
 
-                    print(connectionStatus);
                     if ((connectionStatus ?? "").isEmpty) {
                       return Padding(
                         padding: const EdgeInsets.all(24.0),
@@ -1205,7 +1179,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         ),
                       );
                     } else {
-                      // Default fallback (in case of any unknown status)
                       return Padding(
                         padding: const EdgeInsets.all(24.0),
                         child: RoundedButton(
@@ -1358,10 +1331,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
         borderRadius: BorderRadius.circular(8),
         child: Table(
           columnWidths: const {0: FlexColumnWidth(2), 1: FlexColumnWidth(3)},
-          border: const TableBorder(
-            // horizontalInside: BorderSide(color: MyColors.grayD4),
-            // verticalInside: BorderSide(color: MyColors.grayD4),
-          ),
           children: [
             TableRow(
               decoration: const BoxDecoration(color: MyColors.grayE6),
@@ -1446,6 +1415,3 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     }
   }
 }
-
-//Fouzi@2025
-//7559972845

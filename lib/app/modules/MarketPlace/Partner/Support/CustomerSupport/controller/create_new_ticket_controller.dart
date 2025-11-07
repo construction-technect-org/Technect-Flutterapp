@@ -5,6 +5,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/services/SupportTicketCategoriesServices.dart';
 
 class CreateNewTicketController extends GetxController {
+  final formKey = GlobalKey<FormState>();
   final SupportTicketCategoriesServices _service =
       SupportTicketCategoriesServices();
   final CustomerSupportController controller = Get.find();
@@ -91,20 +92,15 @@ class CreateNewTicketController extends GetxController {
     selectedPriority.value = value;
   }
 
-  // Clear cache (useful for logout or force refresh)
   Future<void> clearCache() async {
     try {
       myPref.cachedCategories.val = '';
       myPref.cachedPriorities.val = '';
-      if (kDebugMode) {
-        print('Cache cleared successfully');
-      }
     } catch (e) {
-      print('Error clearing cache: $e');
+      // No Error Show
     }
   }
 
-  // Force refresh from API (ignores cache)
   Future<void> forceRefreshCategories() async {
     try {
       isLoading.value = true;
@@ -112,7 +108,6 @@ class CreateNewTicketController extends GetxController {
       if (response.data.isNotEmpty) {
         categories.assignAll(response.data);
         myPref.setCategoriesData(response.data);
-        print('Categories force refreshed from API');
       }
     } finally {
       isLoading.value = false;
@@ -126,14 +121,12 @@ class CreateNewTicketController extends GetxController {
       if (response.data.isNotEmpty) {
         priorities.assignAll(response.data);
         myPref.setPrioritiesData(response.data);
-        print('Priorities force refreshed from API');
       }
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// Submit Ticket
   Future<void> submitTicket() async {
     try {
       isSubmitting.value = true;
@@ -151,7 +144,7 @@ class CreateNewTicketController extends GetxController {
         Get.back();
       }
     } catch (e) {
-      // NO need
+      // No Error Show
     } finally {
       isSubmitting.value = false;
       isLoading.value = false;

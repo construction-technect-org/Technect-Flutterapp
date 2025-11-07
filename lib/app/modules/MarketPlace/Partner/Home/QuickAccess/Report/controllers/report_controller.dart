@@ -24,17 +24,14 @@ class ReportController extends GetxController {
     "Last 12 Months",
   ];
 
-  // Returns inclusive month count between start and end
   int inclusiveMonthSpan(DateTime start, DateTime end) {
     final int months =
         (end.year - start.year) * 12 + (end.month - start.month) + 1;
     return months;
   }
 
-  // Returns the latest allowed end month (inclusive) for a given start month
   DateTime lastAllowedEndMonth(DateTime start) {
-    // Allow up to 12 months inclusive (start month + 11 months)
-    return DateTime(start.year, start.month + 11, 1);
+    return DateTime(start.year, start.month + 11);
   }
 
   Future<void> fetchAnalysis() async {
@@ -197,9 +194,7 @@ class ReportController extends GetxController {
     super.onInit();
     if (Get.arguments != null) {
       isReport.value = Get.arguments["isReport"];
-      // if (isReport.value == false) {
       fetchAnalysisByDD();
-      // }
     }
   }
 }

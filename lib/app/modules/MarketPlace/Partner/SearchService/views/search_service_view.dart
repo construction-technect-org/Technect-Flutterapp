@@ -8,7 +8,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/SearchService/controller/search_service_controller.dart';
 
 class SearchServiceView extends GetView<SearchServiceController> {
-  SearchServiceView({super.key});
   final HomeController homeController = Get.find<HomeController>();
 
   @override
@@ -18,7 +17,7 @@ class SearchServiceView extends GetView<SearchServiceController> {
       child: LoaderWrapper(
         isLoading: controller.isLoading,
         child: Scaffold(
-          appBar: CommonAppBar(title: const Text("Search Services")),
+          appBar: const CommonAppBar(title: Text("Search Services")),
           backgroundColor: Colors.white,
           body: Column(
             children: [

@@ -7,11 +7,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:open_filex/open_filex.dart';
 
 class CertificationsComponent extends StatelessWidget {
-  const CertificationsComponent({this.isDelete});
-
-  final bool? isDelete;
-
-  ProfileController get controller => Get.find<ProfileController>();
+  final ProfileController controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +146,7 @@ class CertificationsComponent extends StatelessWidget {
           Align(
             child: GestureDetector(
               onTap: () {
-                Get.to(() => const AddCertificate())?.then((val) {
+                Get.to(() => AddCertificate())?.then((val) {
                   if (val != null) {
                     controller.certificates.add(val);
                   }

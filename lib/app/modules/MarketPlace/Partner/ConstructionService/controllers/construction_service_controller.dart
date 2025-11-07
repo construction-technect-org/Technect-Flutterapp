@@ -266,10 +266,10 @@ class ConstructionServiceController extends GetxController {
                           dense: true,
                           controlAffinity: ListTileControlAffinity.trailing,
                           selectedTileColor: MyColors.primary,
-                          fillColor: MaterialStateProperty.resolveWith<Color>((
+                          fillColor: WidgetStateProperty.resolveWith<Color>((
                             states,
                           ) {
-                            if (states.contains(MaterialState.selected)) {
+                            if (states.contains(WidgetState.selected)) {
                               return MyColors.primary;
                             }
                             return Colors.grey;
@@ -434,6 +434,7 @@ class ConstructionServiceController extends GetxController {
       );
       await fetchServicesFromApi(isLoading: false);
     } catch (e) {
+      // ignore: avoid_print
     } finally {
       isLoading(false);
     }

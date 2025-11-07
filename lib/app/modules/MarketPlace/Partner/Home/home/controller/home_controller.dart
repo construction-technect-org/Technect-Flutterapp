@@ -51,67 +51,6 @@ class HomeController extends GetxController {
     await fetchProfileData();
   }
 
-  void _showProfileCompletionDialog() {
-    if (Get.isDialogOpen == true) {
-      return;
-    }
-
-    Get.dialog(
-      PopScope(
-        canPop: false,
-        child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(13),
-          ),
-          child: GestureDetector(
-            onTap: () {
-              _handleProfileDialogTap();
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(13),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(Asset.pendingIcon, height: 80),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Complete your Profile',
-                      style: MyTexts.medium18.copyWith(
-                        color: MyColors.textFieldBackground,
-                        fontFamily: MyTexts.SpaceGrotesk,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Profile Pending',
-                      style: MyTexts.medium16.copyWith(
-                        color: MyColors.warning,
-                        fontFamily: MyTexts.SpaceGrotesk,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
-  }
 
   void _handleProfileDialogTap() {
     if ((profileData.value.data?.user?.roleName ?? "").toLowerCase() ==
@@ -216,27 +155,16 @@ class HomeController extends GetxController {
   Future<void> fetchTeamList() async {
     try {
       isLoading.value = true;
-      final TeamListModel? result = await roleService.fetchAllTeam();
-      if (result?.success == true) {
-        teamList.clear();
-        teamList.addAll(result?.data ?? []);
+      final TeamListModel result = await roleService.fetchAllTeam();
+      teamList.clear();
+      teamList.addAll(result.data ?? []);
 
-        if (result?.statistics != null) {
-          statistics.value = result!.statistics!;
-        }
-        // Store the complete model
-        myPref.setTeamModelData(result!);
+      if (result.statistics != null) {
+        statistics.value = result.statistics!;
       }
+      myPref.setTeamModelData(result);
     } catch (e) {
-      // Fallback to cached data if API fails
-      final cachedTeamModel = myPref.getTeamModelData();
-      if (cachedTeamModel != null && cachedTeamModel.data != null) {
-        teamList.assignAll(cachedTeamModel.data!);
-        if (cachedTeamModel.statistics != null) {
-          statistics.value = cachedTeamModel.statistics!;
-        }
-      }
-      Get.printError(info: 'Error fetching team list: $e');
+      // ignore: avoid_print
     } finally {
       isLoading.value = false;
     }

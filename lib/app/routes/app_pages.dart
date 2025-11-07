@@ -181,7 +181,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ROLE_DETAILS,
-      page: () => const RoleDetailsView(),
+      page: () => RoleDetailsView(),
       binding: RoleDetailsBinding(),
     ),
     GetPage(
@@ -245,7 +245,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.REFER_EARN,
-      page: () => const ReferAndEarnScreen(),
+      page: () => ReferAndEarnScreen(),
       binding: ReferBindings(),
     ),
     GetPage(

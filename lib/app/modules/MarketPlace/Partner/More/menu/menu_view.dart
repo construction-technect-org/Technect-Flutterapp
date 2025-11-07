@@ -9,11 +9,11 @@ class MenuView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: CommonAppBar(
+      appBar: const CommonAppBar(
         isCenter: false,
-        leading: const SizedBox(),
+        leading: SizedBox(),
         leadingWidth: 0,
-        title: const Text("More"),
+        title: Text("More"),
       ),
       body: SingleChildScrollView(
         child: Padding(

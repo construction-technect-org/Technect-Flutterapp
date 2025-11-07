@@ -1,4 +1,3 @@
-
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
 
 class GetAllRoleModel {
@@ -8,7 +7,12 @@ class GetAllRoleModel {
 
   final String message;
 
-  GetAllRoleModel({required this.success, required this.data, required this.message,this.statistics});
+  GetAllRoleModel({
+    required this.success,
+    required this.data,
+    required this.message,
+    this.statistics,
+  });
 
   factory GetAllRoleModel.fromJson(Map<String, dynamic> json) {
     return GetAllRoleModel(

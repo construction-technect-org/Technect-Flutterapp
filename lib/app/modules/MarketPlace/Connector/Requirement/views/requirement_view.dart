@@ -18,7 +18,7 @@ class RequirementView extends StatelessWidget {
           onTap: hideKeyboard,
           child: Scaffold(
             backgroundColor: MyColors.white,
-            appBar: CommonAppBar(title: const Text("Requirements")),
+            appBar: const CommonAppBar(title: Text("Requirements")),
             body: Column(
               children: [
                 // Tab Bar

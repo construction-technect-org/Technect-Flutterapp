@@ -6,29 +6,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/widget/file_icon_widget.dart';
 import 'package:path/path.dart';
 
-class AddCertificate extends StatefulWidget {
-  const AddCertificate({super.key});
-
-  @override
-  State<AddCertificate> createState() => _AddCertificateState();
-}
-
-class _AddCertificateState extends State<AddCertificate> {
-  final TextEditingController titleController = TextEditingController();
-  String? filePath;
-
-  final formKey = GlobalKey<FormState>();
-
-  ProfileController get controller => Get.find<ProfileController>();
-
-  Future<void> _pickFile() async {
-    final path = await controller.pickFile();
-    if (path != null) {
-      setState(() {
-        filePath = path;
-      });
-    }
-  }
+class AddCertificate extends StatelessWidget {
+  final ProfileController controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +30,7 @@ class _AddCertificateState extends State<AddCertificate> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -64,13 +39,13 @@ class _AddCertificateState extends State<AddCertificate> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Form(
-                        key: formKey,
+                        key: controller.formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Gap(16),
                             CommonTextField(
-                              controller: titleController,
+                              controller: controller.titleController,
                               headerText: "Certificate",
                               hintText: "Enter your certificate name",
                               textInputAction: TextInputAction.done,
@@ -78,21 +53,17 @@ class _AddCertificateState extends State<AddCertificate> {
                                 LengthLimitingTextInputFormatter(30),
                                 NameInputFormatter(),
                               ],
-                              validator: (value) => validateName(
-                                value,
-                                fieldName: "certificate name",
-                              ),
+                              validator: (value) =>
+                                  validateName(value, fieldName: "certificate name"),
                             ),
                             const Gap(20),
                             Text(
                               "Add File",
-                              style: MyTexts.bold16.copyWith(
-                                color: MyColors.gray2E,
-                              ),
+                              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
                             ),
                             const Gap(10),
                             GestureDetector(
-                              onTap: _pickFile,
+                              onTap: controller.pickFile,
                               child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.all(20),
@@ -100,15 +71,13 @@ class _AddCertificateState extends State<AddCertificate> {
                                   border: Border.all(color: MyColors.grey),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: filePath == null
+                                child: controller.filePath == null
                                     ? Column(
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: MyColors.grey,
-                                              ),
+                                              border: Border.all(color: MyColors.grey),
                                             ),
                                             padding: const EdgeInsets.all(14),
                                             child: const Icon(
@@ -120,21 +89,17 @@ class _AddCertificateState extends State<AddCertificate> {
                                           const Gap(10),
                                           Text(
                                             "Select File you want to upload",
-                                            style: MyTexts.medium14.copyWith(
-                                              color: MyColors.grey,
-                                            ),
+                                            style: MyTexts.medium14.copyWith(color: MyColors.grey),
                                           ),
                                           const Gap(10),
                                           Text(
                                             "Upload Certification",
-                                            style: MyTexts.bold16.copyWith(
-                                              color: MyColors.black,
-                                            ),
+                                            style: MyTexts.bold16.copyWith(color: MyColors.black),
                                           ),
                                         ],
                                       )
                                     : FileIconWidget(
-                                        fileName: filePath!,
+                                        fileName: controller.filePath.value!,
                                         showFileName: true,
                                       ),
                               ),
@@ -154,15 +119,15 @@ class _AddCertificateState extends State<AddCertificate> {
           child: RoundedButton(
             buttonName: "Add",
             onTap: () {
-              if (filePath == null) {
+              if (controller.filePath.value.isEmpty) {
                 SnackBars.errorSnackBar(content: "Please upload certificate");
               }
-              if (formKey.currentState!.validate()) {
-                if (filePath != null) {
+              if (controller.formKey.currentState!.validate()) {
+                if (controller.filePath.value.isNotEmpty) {
                   final cert = CertificateModel(
-                    title: titleController.text,
-                    filePath: filePath,
-                    name: basename(filePath ?? ""),
+                    title: controller.titleController.text,
+                    filePath: controller.filePath.value,
+                    name: basename(controller.filePath.value),
                   );
                   Get.back(result: cert);
                 }
@@ -184,10 +149,7 @@ class CommonBgImage extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(Asset.moreIBg),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
       ),
     );
   }

@@ -17,7 +17,6 @@ class Dashboard extends StatelessWidget {
           body: Stack(
             children: [
               Container(
-                margin: const EdgeInsets.only(top: 25),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(Asset.categoryBg),
@@ -31,7 +30,7 @@ class Dashboard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Gap(50),
+                    const Gap(55),
                     Row(
                       children: [
                         GestureDetector(
@@ -48,11 +47,7 @@ class Dashboard extends StatelessWidget {
                                             ?.image ??
                                         "")
                                     .isEmpty
-                                ? Image.asset(
-                                    Asset.profil,
-                                    height: 48,
-                                    width: 48,
-                                  )
+                                ? const Icon(Icons.account_circle_sharp,color: Colors.black,size: 40,)
                                 : ClipOval(
                                     child: getImageView(
                                       finalUrl:

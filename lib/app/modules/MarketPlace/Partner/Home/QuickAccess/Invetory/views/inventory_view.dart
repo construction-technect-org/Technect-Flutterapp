@@ -15,7 +15,7 @@ class InventoryView extends GetView<InventoryController> {
         onTap: hideKeyboard,
         child: Scaffold(
           backgroundColor: MyColors.white,
-          appBar: CommonAppBar(title: const Text('Inventory'), isCenter: false),
+          appBar: const CommonAppBar(title: Text('Inventory'), isCenter: false),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -203,17 +203,18 @@ class InventoryView extends GetView<InventoryController> {
                             onTap: () {
                               Get.toNamed(
                                 Routes.SERVICE_DETAILS,
-                                arguments: {"service": service,
-                                  "isEdit":true,
-                                "onApiCall":() async {
-                                  Get.back();
-                                  Get.back();
-                                  Get.back();
-                                  controller.selectedStatus.value = "service";
-                                  controller.searchController.clear();
-                                  controller.searchQuery.value = "";
-                                  await controller.fetchProducts();
-                                }
+                                arguments: {
+                                  "service": service,
+                                  "isEdit": true,
+                                  "onApiCall": () async {
+                                    Get.back();
+                                    Get.back();
+                                    Get.back();
+                                    controller.selectedStatus.value = "service";
+                                    controller.searchController.clear();
+                                    controller.searchQuery.value = "";
+                                    await controller.fetchProducts();
+                                  },
                                 },
                               );
                             },

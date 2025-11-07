@@ -18,8 +18,8 @@ class AddManufacturerAddressView
         onTap: hideKeyboard,
         child: Scaffold(
           backgroundColor: MyColors.white,
-          appBar: CommonAppBar(
-            title: const Text("Add Manufacturer Address"),
+          appBar: const CommonAppBar(
+            title: Text("Add Manufacturer Address"),
             isCenter: false,
           ),
           body: Column(

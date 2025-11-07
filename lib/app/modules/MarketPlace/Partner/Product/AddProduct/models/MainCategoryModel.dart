@@ -5,17 +5,22 @@ class MainCategoryModel {
 
   MainCategoryModel({this.success, this.data, this.message});
 
-  factory MainCategoryModel.fromJson(Map<String, dynamic> json) => MainCategoryModel(
-    success: json["success"],
-    data: json["data"] == null
-        ? []
-        : List<MainCategory>.from(json["data"]!.map((x) => MainCategory.fromJson(x))),
-    message: json["message"],
-  );
+  factory MainCategoryModel.fromJson(Map<String, dynamic> json) =>
+      MainCategoryModel(
+        success: json["success"],
+        data: json["data"] == null
+            ? []
+            : List<MainCategory>.from(
+                json["data"]!.map((x) => MainCategory.fromJson(x)),
+              ),
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
     "message": message,
   };
 }
@@ -42,8 +47,12 @@ class MainCategory {
     name: json["name"],
     isActive: json["is_active"],
     sortOrder: json["sort_order"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null
+        ? null
+        : DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
