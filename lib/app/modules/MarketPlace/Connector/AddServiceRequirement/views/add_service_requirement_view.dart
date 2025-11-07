@@ -3,18 +3,15 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/controllers/add_service_requirement_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/controllers/add_service_requirement_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 
-class AddServiceRequirementView extends StatelessWidget {
-  AddServiceRequirementView({super.key});
-
-  final controller = Get.put(AddServiceRequirementController());
-
+class AddServiceRequirementView
+    extends GetView<AddServiceRequirementController> {
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading: controller.isLoading,
+      isLoading: controller.isLoading.value,
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
