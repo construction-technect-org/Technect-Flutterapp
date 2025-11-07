@@ -5,7 +5,7 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
 import 'package:construction_technect/app/core/widgets/common_service_card.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/controllers/cart_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/components/connection_dialogs.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 
@@ -452,7 +452,7 @@ class CartListView extends GetView<CartListController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: MyColors.grayEA, width: 1),
+        border: Border.all(color: MyColors.grayEA),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),

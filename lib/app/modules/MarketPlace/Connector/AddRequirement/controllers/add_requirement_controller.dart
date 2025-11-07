@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/services/AddRequirementService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/controllers/requirement_controller.dart';
@@ -343,7 +342,7 @@ class AddRequirementController extends GetxController {
 
     if (args is Map) {
       requirementId = args['requirementId'];
-      log('args: ${args.toString()}');
+      log('args: $args');
       // Populate quantity
       if (args['quantity'] != null) {
         quantityController.text = args['quantity'].toString();

@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/Support/RequestDemo/model/demo_requet_create_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/RequestDemo/model/demo_requet_create_model.dart';
 
 class RequestDemoService {
   static final ApiManager _apiManager = ApiManager();

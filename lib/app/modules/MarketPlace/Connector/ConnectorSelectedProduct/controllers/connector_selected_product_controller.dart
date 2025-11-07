@@ -10,28 +10,22 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Ad
 class ConnectorSelectedProductController extends GetxController {
   HomeController homeController = Get.find<HomeController>();
   RxBool hasOpenedOnce = false.obs;
-
-  // Observable variables
   RxInt selectedProductIndex = (-1).obs;
 
-  // Two-pane navigation index (0..4)
   RxInt navigationIndex = 0.obs;
 
-  // View state handled via navigationIndex only (0..4)
   RxBool isLoadingProducts = false.obs;
   RxBool isLoading = false.obs;
   RxBool moreThenHundred = false.obs;
   RxBool showSubCategoryOptions = false.obs;
   RxBool isGridView = true.obs;
 
-  // Product categories (from CategoryData model) and main products from API
   Rx<SubCategory> productCategories = SubCategory().obs;
   Rx<ConnectorSelectedProductModel?> productListModel =
       Rx<ConnectorSelectedProductModel?>(null);
   RxInt selectedProductCategoryIndex = 0.obs;
   RxInt selectedSubProductCategoryIndex = 0.obs;
 
-  // Variables for categories and products
   Rx<CategoryData?> mainCategory = CategoryData().obs; // Main Category
   RxList<SubCategory> subCategories = <SubCategory>[].obs; // Sub Category
   Rx<SubCategory?> selectedSubCategory = Rx<SubCategory?>(null);
@@ -42,7 +36,6 @@ class ConnectorSelectedProductController extends GetxController {
     null,
   );
 
-  // Arguments from navigation
   int? mainCategoryId;
   String? mainCategoryName;
   RxInt selectedSubCategoryId = 0.obs;
@@ -55,7 +48,6 @@ class ConnectorSelectedProductController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Get arguments passed from home page
     if (myPref.role.val == "connector") {
       ever(hasOpenedOnce, (opened) {
         if (!opened) {
@@ -66,7 +58,7 @@ class ConnectorSelectedProductController extends GetxController {
       });
     }
 
-    hasOpenedOnce.value = false; // Reset each time screen is created
+    hasOpenedOnce.value = false;
     final arguments = Get.arguments as Map<String, dynamic>?;
     mainCategoryId = arguments?['mainCategoryId'] ?? 0;
     mainCategoryName = arguments?['mainCategoryName'] ?? 'Select Product';
@@ -77,8 +69,6 @@ class ConnectorSelectedProductController extends GetxController {
   void openAddressSelection() {
     openSelectAddressBottomSheet(
       onAddressChanged: () async {
-        // When user selects an address
-        // isAddressSelected.value = true;
         hasOpenedOnce.value = true;
         await fetchProductsFromApi(isLoading: true);
       },
@@ -342,13 +332,13 @@ class ConnectorSelectedProductController extends GetxController {
                   dense: true,
                   controlAffinity: ListTileControlAffinity.trailing,
                   selectedTileColor: MyColors.primary,
-
-                  fillColor: MaterialStateProperty.resolveWith<Color>((states) {
-                    if (states.contains(MaterialState.selected)) {
+                  fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+                    if (states.contains(WidgetState.selected)) {
                       return MyColors.primary;
                     }
                     return Colors.grey;
                   }),
+
                   visualDensity: VisualDensity.compact,
                   contentPadding: EdgeInsets.zero,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

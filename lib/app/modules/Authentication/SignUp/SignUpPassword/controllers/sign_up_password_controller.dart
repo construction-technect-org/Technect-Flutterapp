@@ -192,6 +192,15 @@ class SignUpPasswordController extends GetxController {
           myPref.setUserModel(signUpResponse.data!.user!);
         }
 
+        if (rememberMe.value) {
+          myPref.saveCredentials(
+            userData!.mobileNumber,
+            passwordController.text,
+          );
+        } else {
+          myPref.clearCredentials();
+        }
+
         Get.to(
           () => SuccessScreen(
             title: "Success!",
@@ -208,7 +217,9 @@ class SignUpPasswordController extends GetxController {
         );
       }
     } catch (e) {
-      // Error snackbar is already shown by ApiManager
+      if (kDebugMode) {
+        print(e);
+      }
     } finally {
       isLoading.value = false;
     }

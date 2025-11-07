@@ -1,5 +1,5 @@
+import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/controller/search_product_controller.dart';
 import 'package:get/get.dart';
-import '../controller/search_product_controller.dart';
 
 class SearchProductBinding extends Bindings {
   @override

@@ -1,7 +1,3 @@
-import 'package:construction_technect/app/modules/Authentication/Location/AddLocationManually/bindings/add_location_manually_binding.dart';
-import 'package:construction_technect/app/modules/Authentication/Location/AddLocationManually/views/add_location_manually_view.dart';
-import 'package:construction_technect/app/modules/Authentication/Location/Address/bindings/address_bindings.dart';
-import 'package:construction_technect/app/modules/Authentication/Location/Address/views/address_view.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/bindings/sign_up_details_binding.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/otp_verification_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
@@ -17,6 +13,8 @@ import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/bindings/add_requirement_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/views/add_requirement_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/bindings/add_service_requirement_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/views/add_service_requirement_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/bindings/cart_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/views/cart_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/bindings/connector_profile_binding.dart';
@@ -30,12 +28,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/views/wish_list_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/bindings/add_manufacturer_address_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/AddManufacturerAddress/views/add_manufacturer_address_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/bindings/add_service_requirement_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/AddServiceRequirement/views/add_service_requirement_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/binding/new_launch_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Category/newLanuch/view/new_launches_product.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/bindings/connection_inbox_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/ConnectionInbox/views/connection_inbox_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/bindings/connection_inbox_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/views/connection_inbox_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/binding/add_service_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/binding/service_detail_binding.dart';
@@ -81,8 +75,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleDetails/views/role_details_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/bindings/role_management_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/role_management_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/TeamDetails/bindings/team_details_binding.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/TeamDetails/views/team_details_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/bindings/add_product_binding.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/views/add_product_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/bindings/product_detail_binding.dart';
@@ -143,7 +135,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MAIN,
-      page: () => const BottomBarView(),
+      page: () => BottomBarView(),
       binding: BottomBinding(),
     ),
     GetPage(
@@ -155,18 +147,6 @@ class AppPages {
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
       binding: BusinessHoursBinding(),
-    ),
-
-    GetPage(
-      name: _Paths.ADDRESS,
-      page: () => const AddressView(),
-      binding: AddressBinding(),
-    ),
-
-    GetPage(
-      name: _Paths.ADD_LOCATION_MANUALLY,
-      page: () => AddLocationManuallyView(),
-      binding: AddLocationBinding(),
     ),
     GetPage(
       name: _Paths.ADD_PRODUCT,
@@ -212,11 +192,6 @@ class AppPages {
       name: _Paths.FAQ,
       page: () => const FaqScreen(),
       binding: FAQBindings(),
-    ),
-    GetPage(
-      name: _Paths.TEAM_DETAILS,
-      page: () => const TeamDetailsView(),
-      binding: TeamDetailsBinding(),
     ),
 
     // GetPage(
@@ -317,11 +292,6 @@ class AppPages {
       name: Routes.ACCOUNT,
       page: () => const AccountScreen(),
       binding: AccountBinding(),
-    ),
-    GetPage(
-      name: Routes.NEW_LAUNCH,
-      page: () => NewLaunchesProduct(),
-      binding: NewLaunchBinding(),
     ),
     GetPage(
       name: Routes.CART_LIST,

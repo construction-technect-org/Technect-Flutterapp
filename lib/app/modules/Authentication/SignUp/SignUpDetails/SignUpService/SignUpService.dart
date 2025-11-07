@@ -17,21 +17,29 @@ class SignUpService {
         body: {
           if ((email ?? "").isNotEmpty) "email": email,
           if ((mobileNumber ?? "").isNotEmpty) "mobileNumber": mobileNumber,
-          // API expects countryCode when checking phone availability
           if ((mobileNumber ?? "").isNotEmpty && (countryCode ?? "").isNotEmpty)
             "countryCode": countryCode,
           if ((gstNumber ?? "").isNotEmpty) "gstNumber": gstNumber,
         },
       );
-      // Parse availability based on requested field
       final data = response["data"] ?? {};
       if ((email ?? '').isNotEmpty) {
         final emailData = data["email"];
         if (emailData is Map) {
-          return emailData["available"] == true;
+          final available = emailData["available"];
+          if (available == false) {
+            return false;
+          }
+          if (available == true) {
+            return true;
+          }
+          final exists = emailData["exists"];
+          if (exists == true) {
+            return false;
+          }
+          return false;
         }
-        // if API doesn't return email block, treat as available
-        return true;
+        return false;
       }
       if ((mobileNumber ?? '').isNotEmpty) {
         final phoneData = data["phone"] ?? data["mobileNumber"];

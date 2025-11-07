@@ -18,7 +18,6 @@ class SearchProductController extends GetxController {
     final trimmed = query.trim();
     searchQuery.value = trimmed;
 
-    // Cancel previous timer
     _debounceTimer?.cancel();
 
     if (trimmed.isEmpty) {
@@ -27,7 +26,6 @@ class SearchProductController extends GetxController {
       return;
     }
 
-    // Set up new timer for debounced search
     _debounceTimer = Timer(const Duration(milliseconds: 1000), () {
       performSearch(trimmed);
     });

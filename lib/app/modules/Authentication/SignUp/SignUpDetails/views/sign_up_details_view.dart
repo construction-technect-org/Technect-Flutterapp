@@ -105,12 +105,14 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                               onFocusChange: (hasFocus) {
                                 if (!hasFocus) {
                                   final email = controller.emailController.text;
+                                  // Only validate availability if format is valid
                                   final formatError = Validate.validateEmail(
                                     email,
                                   );
                                   if (formatError == null) {
                                     controller.validateEmailAvailability(email);
                                   } else {
+                                    // Format error - clear API error, validator will show format error
                                     controller.emailError.value = "";
                                   }
                                 }
@@ -137,6 +139,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                     },
                                     onFieldSubmitted: (value) {
                                       if (value != null) {
+                                        // Only validate availability if format is valid
                                         final formatError =
                                             Validate.validateEmail(value);
                                         if (formatError == null) {
@@ -144,6 +147,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                             value,
                                           );
                                         } else {
+                                          // Format error - clear API error, validator will show format error
                                           controller.emailError.value = "";
                                         }
                                       }
@@ -407,14 +411,23 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
           padding: const EdgeInsets.all(24.0),
           child: RoundedButton(
             buttonName: 'Continue',
-            onTap: () {
-              hideKeyboard();
+            onTap: () async {
+              // First validate form (format validation)
               if (!formKey.currentState!.validate()) return;
 
+              // Format validation passed, now validate email availability (async)
+              // validateEmailAvailability will only check API if format is valid
+              await controller.validateEmailAvailability(
+                controller.emailController.text,
+              );
+
+              // Block on email API error (format errors are already shown by validator)
               if (controller.emailError.value.isNotEmpty) {
                 SnackBars.errorSnackBar(content: controller.emailError.value);
                 return;
               }
+
+              hideKeyboard();
 
               if (controller.isVerified.value) {
                 FocusManager.instance.primaryFocus?.unfocus();
