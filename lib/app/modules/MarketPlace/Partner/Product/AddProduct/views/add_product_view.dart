@@ -709,12 +709,14 @@ class AddProductView extends GetView<AddProductController> {
                                       alignment: AlignmentGeometry.topRight,
                                       children: [
                                         GestureDetector(
-                                          onTap: () => controller.openVideoDialog(
-                                            context,
-                                            APIConstants.bucketUrl +
-                                                controller.product.productVideo.toString(),
-                                            true,
-                                          ),
+                                          onTap: () {
+                                            controller.openVideoDialog(
+                                              context,
+                                                (controller.selectedVideo.value?.path??"")=="abc" ? (APIConstants.bucketUrl +
+                                                  controller.product.productVideo.toString()): (controller.selectedVideo.value?.path??""),
+                                              controller.selectedVideo.value?.path=="abc",
+                                            );
+                                          },
                                           child: Stack(
                                             alignment: AlignmentGeometry.center,
                                             children: [
