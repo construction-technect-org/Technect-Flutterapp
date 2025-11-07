@@ -74,7 +74,9 @@ class RoleCard extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             DeleteRoleDialog.showDeleteRoleDialog(context, () {
-                              RoleManagementController.to.deleteRole(role.id!);
+                              Get.find<RoleManagementController>().deleteRole(
+                                role.id!,
+                              );
                             });
                           },
                           behavior: HitTestBehavior.translucent,

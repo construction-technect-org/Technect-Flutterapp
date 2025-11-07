@@ -8,7 +8,7 @@ class RolesViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final con = RoleManagementController.to;
+    final con = Get.find<RoleManagementController>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(

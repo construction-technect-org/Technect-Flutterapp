@@ -9,7 +9,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 class RoleManagementView extends GetView<RoleManagementController> {
   RoleManagementView({super.key});
 
-  final homeController = HomeController.to;
+  final homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {

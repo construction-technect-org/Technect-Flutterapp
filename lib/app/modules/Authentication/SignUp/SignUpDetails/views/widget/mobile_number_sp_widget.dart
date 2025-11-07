@@ -24,7 +24,7 @@ class MobileNumberSpWidget extends StatelessWidget {
     this.onCountryCodeChanged,
   });
 
-  final controller = SignUpDetailsController.to;
+  final controller = Get.find<SignUpDetailsController>();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

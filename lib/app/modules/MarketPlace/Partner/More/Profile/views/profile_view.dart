@@ -8,12 +8,12 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/metrics_screen.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  final homeController = HomeController.to;
+  final homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading: controller. isLoading,
+      isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
         body: Stack(
@@ -69,7 +69,8 @@ class ProfileView extends GetView<ProfileController> {
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(
                                         alpha:
-                                            controller.selectedTabIndex.value == 0
+                                            controller.selectedTabIndex.value ==
+                                                0
                                             ? 1
                                             : 0,
                                       ),
@@ -101,7 +102,8 @@ class ProfileView extends GetView<ProfileController> {
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(
                                         alpha:
-                                            controller.selectedTabIndex.value == 1
+                                            controller.selectedTabIndex.value ==
+                                                1
                                             ? 1
                                             : 0,
                                       ),
@@ -133,7 +135,8 @@ class ProfileView extends GetView<ProfileController> {
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(
                                         alpha:
-                                            controller.selectedTabIndex.value == 2
+                                            controller.selectedTabIndex.value ==
+                                                2
                                             ? 1
                                             : 0,
                                       ),

@@ -13,7 +13,7 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   late final TextEditingController _localOtpController;
-  final contr = SignUpDetailsController.to;
+  final contr = Get.find<SignUpDetailsController>();
 
   @override
   void initState() {

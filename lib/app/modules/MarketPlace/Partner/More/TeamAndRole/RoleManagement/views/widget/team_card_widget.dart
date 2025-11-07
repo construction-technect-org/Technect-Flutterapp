@@ -10,7 +10,7 @@ class TeamCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final con = RoleManagementController.to;
+    final con = Get.find<RoleManagementController>();
     return Container(
       decoration: BoxDecoration(
         color: MyColors.white,

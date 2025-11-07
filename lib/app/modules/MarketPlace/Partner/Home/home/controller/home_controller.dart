@@ -16,7 +16,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/Cu
 import 'package:geolocator/geolocator.dart';
 
 class HomeController extends GetxController {
-  static final HomeController to = Get.find();
   // New
   RxBool isMarketPlace = true.obs;
   RxInt marketPlace = 0.obs;

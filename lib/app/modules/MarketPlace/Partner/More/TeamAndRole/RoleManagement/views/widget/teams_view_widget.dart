@@ -9,8 +9,8 @@ class TeamsViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final con = RoleManagementController.to;
-    final homecon = HomeController.to;
+    final con = Get.find<RoleManagementController>();
+    final homecon = Get.find<HomeController>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
