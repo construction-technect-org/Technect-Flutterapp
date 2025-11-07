@@ -78,13 +78,11 @@ class AddServiceController extends GetxController {
         for (final key in toRemove) {
           removedImages.remove(key);
         }
-        // int assignIndex = 0;
         for (var path in pickedFiles.map((e) => e.path)) {
           final emptyIndex = imageSlots.indexWhere((e) => e == null);
           if (emptyIndex != -1) {
             removedImages.remove("remove_image_${emptyIndex + 1}");
             imageSlots[emptyIndex] = path;
-            // assignIndex++;
           } else {
             break;
           }
@@ -231,7 +229,8 @@ class AddServiceController extends GetxController {
       isLoading(true);
 
       final cachedCategoryHierarchy = myPref.getServiceCategoryHierarchyModel();
-      final categoryHierarchy = cachedCategoryHierarchy ??
+      final categoryHierarchy =
+          cachedCategoryHierarchy ??
           await HomeService().getCategoryServiceHierarchy();
 
       mainCategories.assignAll(categoryHierarchy.data ?? []);
@@ -242,13 +241,11 @@ class AddServiceController extends GetxController {
     }
   }
 
-  /// --- Dropdown Logic ---
   void onMainCategorySelected(String? value) {
     selectedMainCategory.value = mainCategories.firstWhereOrNull(
       (e) => e.name == value,
     );
 
-    // ✅ use assignAll() instead of .value =
     subCategories.assignAll(selectedMainCategory.value?.subCategories ?? []);
 
     selectedSubCategory.value = null;
@@ -261,7 +258,6 @@ class AddServiceController extends GetxController {
       (e) => e.name == value,
     );
 
-    // ✅ use assignAll() here too
     serviceCategories.assignAll(
       selectedSubCategory.value?.serviceCategories ?? [],
     );
@@ -420,7 +416,6 @@ class AddServiceController extends GetxController {
     }
   }
 
-  /// Update existing product
   Future<void> updateService(int serviceId) async {
     isLoading.value = true;
     final Map<String, String> selectedFiles = {};
@@ -442,21 +437,17 @@ class AddServiceController extends GetxController {
     if (referenceDeleted.value == true) {
       fields["remove_reference"] = "remove";
     }
-    // 🟩 Step 1: Prepare a copy of remove map
     final Map<String, String> tempRemoved = Map.from(removedImages);
 
-    // 🟦 Step 2: Rebuild fields and remove flags properly
     for (int i = 0; i < imageSlots.length; i++) {
       final path = imageSlots[i];
       final key = "image_${i + 1}";
 
       if (path == null || path.trim().isEmpty) {
-        // slot is empty => keep/remove flag
         tempRemoved["remove_image_${i + 1}"] = "remove";
         continue;
       }
 
-      // slot has an image, so ensure it's not marked removed
       tempRemoved.remove("remove_image_${i + 1}");
 
       if (path.contains('http')) {

@@ -4,18 +4,12 @@ import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class ServiceDetailController extends GetxController {
   Rx<Service> service = Service().obs;
 
-  ProfileModel profileData = ProfileModel.fromJson(
-    myPref.getProfileData() ?? {},
-  );
   final RxBool isLoading = false.obs;
-  final RxBool isLiked = false.obs;
   final RxBool isEdit = false.obs;
   final RxBool isRefVideo = false.obs;
   final RxInt currentIndex = 0.obs;
@@ -32,19 +26,15 @@ class ServiceDetailController extends GetxController {
     onApiCall = argument?["onApiCall"];
     isEdit.value = argument?["isEdit"] ?? false;
 
-    // fetchServiceDetails(service.id ?? 0);
     WidgetsBinding.instance.addPostFrameCallback((val) async {
-      // Initialize video from reference if reference type is video
       if (service.value.reference != null &&
           service.value.reference?.referenceType?.toLowerCase() == 'video') {
-        // Try referenceS3Key first, fallback to referenceUrl
         final referencePath =
             service.value.reference?.referenceS3Key ??
             service.value.reference?.referenceUrl ??
             "";
 
         if (referencePath.isNotEmpty) {
-          // If path doesn't start with http, prepend bucket URL
           final referenceVideoUrl = referencePath.startsWith('http')
               ? referencePath
               : APIConstants.bucketUrl + referencePath;
@@ -62,19 +52,22 @@ class ServiceDetailController extends GetxController {
               videoPlayerOptions: VideoPlayerOptions(),
             );
 
-            await refVideoPlayerController?.initialize().timeout(
-              const Duration(seconds: 30),
-              onTimeout: () {
-                log('Reference video initialization timeout');
-                throw TimeoutException('Video initialization took too long');
-              },
-
-            ).then((val){
-              isRefVideo.value=true;
-
-            });
+            await refVideoPlayerController
+                ?.initialize()
+                .timeout(
+                  const Duration(seconds: 30),
+                  onTimeout: () {
+                    log('Reference video initialization timeout');
+                    throw TimeoutException(
+                      'Video initialization took too long',
+                    );
+                  },
+                )
+                .then((val) {
+                  isRefVideo.value = true;
+                });
             log('Reference video initialized successfully');
-            update(); // Notify listeners to rebuild
+            update();
           } catch (e) {
             log('Error initializing reference video: $e');
             if (kDebugMode) {
@@ -84,17 +77,14 @@ class ServiceDetailController extends GetxController {
         }
       }
 
-      // Initialize video controllers for video in media list (only if reference is not video)
       if (service.value.reference?.referenceType?.toLowerCase() != 'video' &&
           service.value.video != null) {
-        // Try mediaS3Key first, fallback to mediaUrl
         final videoPath =
             service.value.video?.mediaS3Key ??
             service.value.video?.mediaUrl ??
             "";
 
         if (videoPath.isNotEmpty) {
-          // If path doesn't start with http, prepend bucket URL
           final videoUrl = videoPath.startsWith('http')
               ? videoPath
               : APIConstants.bucketUrl + videoPath;
@@ -112,7 +102,6 @@ class ServiceDetailController extends GetxController {
               videoPlayerOptions: VideoPlayerOptions(),
             );
 
-            // Add timeout for initialization
             await videoPlayerController?.initialize().timeout(
               const Duration(seconds: 30),
               onTimeout: () {
@@ -124,7 +113,6 @@ class ServiceDetailController extends GetxController {
             log('Video initialized successfully');
           } catch (e) {
             log('Error initializing video: $e');
-            // Show error to user or provide fallback
             if (kDebugMode) {
               print('Video initialization failed: $e');
             }
@@ -147,19 +135,17 @@ class ServiceDetailController extends GetxController {
 
   @override
   void onClose() {
-    // Dispose video controller
     videoPlayerController?.dispose();
+    refVideoPlayerController?.dispose();
     super.onClose();
   }
 
   Future<void> retryVideoInitialization() async {
     if (service.value.video != null) {
-      // Dispose old controller
       videoPlayerController?.dispose();
       videoPlayerController = null;
       update();
 
-      // Try mediaS3Key first, fallback to mediaUrl
       final videoPath = service.value.video?.mediaS3Key ?? "";
 
       if (videoPath.isEmpty) {
@@ -168,7 +154,6 @@ class ServiceDetailController extends GetxController {
         return;
       }
 
-      // If path doesn't start with http, prepend bucket URL
       final videoUrl = videoPath.startsWith('http')
           ? videoPath
           : APIConstants.bucketUrl + videoPath;
@@ -198,7 +183,6 @@ class ServiceDetailController extends GetxController {
         update();
       } catch (e) {
         log('Error retrying video initialization: $e');
-        // Show error message to user
         if (kDebugMode) {
           print('Video retry failed: $e');
         }
@@ -208,15 +192,12 @@ class ServiceDetailController extends GetxController {
   }
 
   Future<void> retryReferenceVideoInitialization() async {
-    // Retry reference video (only if reference type is video)
     if (service.value.reference != null &&
         service.value.reference?.referenceType?.toLowerCase() == 'video') {
-      // Dispose old controller
-      videoPlayerController?.dispose();
-      videoPlayerController = null;
+      refVideoPlayerController?.dispose();
+      refVideoPlayerController = null;
       update();
 
-      // Try referenceS3Key first, fallback to referenceUrl
       final referencePath =
           service.value.reference?.referenceS3Key ??
           service.value.reference?.referenceUrl ??
@@ -228,7 +209,6 @@ class ServiceDetailController extends GetxController {
         return;
       }
 
-      // If path doesn't start with http, prepend bucket URL
       final referenceVideoUrl = referencePath.startsWith('http')
           ? referencePath
           : APIConstants.bucketUrl + referencePath;
@@ -236,7 +216,7 @@ class ServiceDetailController extends GetxController {
       log('Retrying reference video - URL: $referenceVideoUrl');
 
       try {
-        videoPlayerController = VideoPlayerController.networkUrl(
+        refVideoPlayerController = VideoPlayerController.networkUrl(
           Uri.parse(referenceVideoUrl),
           httpHeaders: {
             'Range': 'bytes=0-',
@@ -246,7 +226,7 @@ class ServiceDetailController extends GetxController {
           videoPlayerOptions: VideoPlayerOptions(),
         );
 
-        await videoPlayerController?.initialize().timeout(
+        await refVideoPlayerController?.initialize().timeout(
           const Duration(seconds: 30),
           onTimeout: () {
             log('Reference video initialization timeout on retry');
@@ -254,6 +234,7 @@ class ServiceDetailController extends GetxController {
           },
         );
 
+        isRefVideo.value = true;
         log('Reference video retry successful');
         update();
       } catch (e) {

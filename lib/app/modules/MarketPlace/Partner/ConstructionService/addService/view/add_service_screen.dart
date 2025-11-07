@@ -414,7 +414,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                             }
                           },
                           hintText: "SELECT GST PERCENTAGE",
-                          items: controller.gstList,
+                          items: const ["5%", "12%", "18%", "28%"],
                           selectedValue: controller.selectedGST,
                           itemLabel: (item) => item,
                         ),

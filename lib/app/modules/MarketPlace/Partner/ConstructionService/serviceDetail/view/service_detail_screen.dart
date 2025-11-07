@@ -61,10 +61,8 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
               Obx(() {
                 final service = controller.service.value;
 
-                // 🟩 Prepare media list - images first, then video at the end
                 final List<Map<String, dynamic>> mediaList = [];
 
-                // Add all images first
                 if (service.images != null && service.images!.isNotEmpty) {
                   for (var image in service.images!) {
                     if (image.mediaUrl != null && image.mediaUrl!.isNotEmpty) {
@@ -73,7 +71,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                   }
                 }
 
-                // Add video at the end if available
                 if (service.video != null && service.video!.mediaUrl != null) {
                   final url = service.video?.mediaUrl ?? '';
                   if (url.isNotEmpty) {
@@ -81,7 +78,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                   }
                 }
 
-                // 🟪 If nothing to show
                 if (mediaList.isEmpty) {
                   return Container(
                     height: 35.h,
@@ -96,7 +92,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                   );
                 }
 
-                // 🧭 PageView (handles both images & videos)
                 return Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
@@ -108,7 +103,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                         controller: PageController(viewportFraction: 1),
                         onPageChanged: (index) {
                           controller.currentIndex.value = index;
-                          // Auto-play video if the new page is a video
                           final media = mediaList[index];
                           if (media['type'] == 'video') {
                             if (controller.videoPlayerController != null &&
@@ -119,7 +113,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                               controller.videoPlayerController!.play();
                             }
                           } else {
-                            // Pause video when switching to image page
                             if (controller.videoPlayerController != null &&
                                 controller
                                     .videoPlayerController!
@@ -146,7 +139,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                             return GestureDetector(
                               onTap: () {
                                 if (hasError) {
-                                  // If error, try to open in browser
                                   final videoPath =
                                       controller
                                           .service
@@ -169,7 +161,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                       videoUrl,
                                       true,
                                     );
-                                    // controller.openReferenceUrl(videoUrl);
                                   }
                                 } else if (videoController != null &&
                                     videoController.value.isInitialized) {
@@ -230,7 +221,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                                     children: [
                                                       TextButton(
                                                         onPressed: () {
-                                                          // Retry video loading
                                                           controller
                                                               .retryVideoInitialization();
                                                         },
@@ -244,7 +234,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                                       const SizedBox(width: 16),
                                                       TextButton(
                                                         onPressed: () {
-                                                          // Open video in external player/browser
                                                           final videoPath =
                                                               controller
                                                                   .service
@@ -293,10 +282,8 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                             ),
                                     ),
                                   ),
-                                  if (!isPlaying)
-                                    const VideoPlay(),
+                                  if (!isPlaying) const VideoPlay(),
 
-                                  // Video progress indicator
                                   if (videoController != null &&
                                       videoController.value.isInitialized)
                                     Positioned(
@@ -318,7 +305,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                             );
                           }
 
-                          // 🖼️ Image
                           return GestureDetector(
                             onTap: () {
                               showDialog(
@@ -723,7 +709,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                 ),
                               ),
                             )
-                          // Unknown type
                           else
                             Container(
                               height: 200,
@@ -792,10 +777,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
         borderRadius: BorderRadius.circular(8),
         child: Table(
           columnWidths: const {0: FlexColumnWidth(2), 1: FlexColumnWidth(3)},
-          border: const TableBorder(
-            // horizontalInside: BorderSide(color: MyColors.grayD4),
-            // verticalInside: BorderSide(color: MyColors.grayD4),
-          ),
           children: [
             TableRow(
               decoration: const BoxDecoration(color: MyColors.grayE6),
@@ -887,24 +868,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
           style: MyTexts.medium16.copyWith(color: Colors.white),
           onTap: () {
             Get.arguments["onConnectTap"]?.call();
-            // ConnectionDialogs.showSendServiceConnectionDialog(
-            //   context,
-            //   service,
-            //   isFromIn: true,
-            //   onTap: (message) async {
-            //     Get.back();
-            //     await Get.find<HomeController>().addServiceToConnectApi(
-            //       mID: service.merchantProfileId ?? 0,
-            //       message: message,
-            //       sID: service.id ?? 0,
-            //       onSuccess: () {
-            //         Get.arguments["onConnectTap"]?.call();
-            //         Get.back();
-            //         // controller.onApiCall?.call();
-            //       },
-            //     );
-            //   },
-            // );
           },
         ),
       );
@@ -941,7 +904,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
         ),
       );
     } else {
-      // Default fallback (in case of any unknown status)
       return Padding(
         padding: const EdgeInsets.all(24.0),
         child: RoundedButton(
