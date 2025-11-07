@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/model/cart_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/services/CartService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class CartListController extends GetxController {
   RxBool isLoading = false.obs;

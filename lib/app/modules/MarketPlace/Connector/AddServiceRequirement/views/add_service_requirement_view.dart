@@ -11,7 +11,7 @@ class AddServiceRequirementView
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading: controller.isLoading.value,
+      isLoading: controller.isLoading,
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(

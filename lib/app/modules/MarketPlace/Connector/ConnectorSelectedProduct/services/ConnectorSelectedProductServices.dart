@@ -74,7 +74,6 @@ class ConnectorSelectedProductServices {
         "message": message ?? "",
       };
       debugPrint('Calling API: $url');
-      // ✅ Send POST request via your apiManager
       final response = await apiManager.postObject(url: url, body: body);
       debugPrint('Response: $response');
 
