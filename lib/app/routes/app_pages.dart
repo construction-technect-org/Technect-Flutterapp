@@ -1,7 +1,5 @@
 import 'package:construction_technect/app/modules/Authentication/Location/AddLocationManually/bindings/add_location_manually_binding.dart';
 import 'package:construction_technect/app/modules/Authentication/Location/AddLocationManually/views/add_location_manually_view.dart';
-import 'package:construction_technect/app/modules/Authentication/Location/Address/bindings/address_bindings.dart';
-import 'package:construction_technect/app/modules/Authentication/Location/Address/views/address_view.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/bindings/sign_up_details_binding.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/otp_verification_screen.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/views/sign_up_details_view.dart';
@@ -151,12 +149,6 @@ class AppPages {
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
       binding: BusinessHoursBinding(),
-    ),
-
-    GetPage(
-      name: _Paths.ADDRESS,
-      page: () => const AddressView(),
-      binding: AddressBinding(),
     ),
 
     GetPage(

@@ -5,7 +5,6 @@ import 'package:construction_technect/app/modules/Authentication/forgotPassword/
 import 'package:timer_count_down/timer_controller.dart';
 
 class ForgotPasswordController extends GetxController {
-  // Controllers
   final phoneEmailController = TextEditingController();
   final otpController = TextEditingController();
   final newPasswordController = TextEditingController();
@@ -27,14 +26,12 @@ class ForgotPasswordController extends GetxController {
     isResendVisible.value = true;
   }
 
-  // State management
   final otpSend = false.obs;
   final otpVerify = false.obs;
   final isLoading = false.obs;
   final isNewPasswordVisible = false.obs;
   final isConfirmPasswordVisible = false.obs;
 
-  // Services
   ForgotPasswordService forgotPasswordService = ForgotPasswordService();
 
   void toggleNewPasswordVisibility() {
@@ -45,7 +42,6 @@ class ForgotPasswordController extends GetxController {
     isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
   }
 
-  // Send OTP for mobile number verification
   Future<void> sendOtp() async {
     if (!_validateMobileNumber()) return;
 
@@ -61,12 +57,12 @@ class ForgotPasswordController extends GetxController {
         otpSend.value = true;
         SnackBars.successSnackBar(content: 'OTP sent successfully');
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to send OTP',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
       }
     } catch (e) {
-      // Error is already shown by ApiManager
+      if (kDebugMode) {
+        print(e);
+      }
     } finally {
       isLoading.value = false;
     }
@@ -105,9 +101,7 @@ class ForgotPasswordController extends GetxController {
         Get.to(() => ResetPasswordView());
         SnackBars.successSnackBar(content: 'OTP verified successfully');
       } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'OTP verification failed',
-        );
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'OTP verification failed');
       }
     } catch (e) {
       // Error is already shown by ApiManager
@@ -147,16 +141,11 @@ class ForgotPasswordController extends GetxController {
       );
 
       if (resetResponse.success == true) {
-        //Remember me
         if (rememberMe.value) {
-          myPref.saveCredentials(
-            phoneEmailController.text,
-            newPasswordController.text,
-          );
+          myPref.saveCredentials(phoneEmailController.text, newPasswordController.text);
         } else {
           myPref.clearCredentials();
         }
-        //Navigation
         Get.offAll(
           () => SuccessScreen(
             title: "Success!",
@@ -169,9 +158,7 @@ class ForgotPasswordController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(
-          content: resetResponse.message ?? 'Password reset failed',
-        );
+        SnackBars.errorSnackBar(content: resetResponse.message ?? 'Password reset failed');
       }
     } catch (e) {
       if (kDebugMode) {
