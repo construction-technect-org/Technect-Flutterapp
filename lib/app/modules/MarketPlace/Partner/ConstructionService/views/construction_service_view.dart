@@ -120,7 +120,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
           controller.selectedSubCategoryId.value ==
           controller.subCategories[index].id,
       onTap: (index) => controller.lestSide0LeftView(index),
-      getImageUrl: (item) => item.image ?? 'category-images/FineAggregate.png',
+      getImageUrl: (item) => item.image ?? 'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
       getName: (item) => item.name ?? '',
     );
   }
@@ -136,7 +136,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       onTap: (index) => controller.selectServiceCategoryFromGrid(index),
       getImageUrl: (_) =>
           controller.selectedSubCategory.value?.image ??
-          'category-images/FineAggregate.png',
+          'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
       getName: (item) => item.name ?? '',
       useObxForSelection: true,
     );
@@ -490,7 +490,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
             Expanded(
               child: _buildCircularImageContainer(
                 controller.selectedSubCategory.value?.image ??
-                    'category-images/FineAggregate.png',
+                    'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
               ),
             ),
             const SizedBox(height: _itemSpacing),
@@ -526,7 +526,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
             Expanded(
               child: _buildCircularImageContainer(
                 controller.selectedSubCategory.value?.image ??
-                    'category-images/FineAggregate.png',
+                    'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
               ),
             ),
             const SizedBox(height: _itemSpacing),
@@ -574,7 +574,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                   )
                 : DecorationImage(
                     image: const NetworkImage(
-                      '${APIConstants.bucketUrl}category-images/FineAggregate.png',
+                      '${APIConstants.bucketUrl}profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
                     ),
                     fit: BoxFit.fill,
                     onError: (exception, stackTrace) {},
