@@ -709,12 +709,14 @@ class AddProductView extends GetView<AddProductController> {
                                       alignment: AlignmentGeometry.topRight,
                                       children: [
                                         GestureDetector(
-                                          onTap: () => controller.openVideoDialog(
-                                            context,
-                                            APIConstants.bucketUrl +
-                                                controller.product.productVideo.toString(),
-                                            true,
-                                          ),
+                                          onTap: () {
+                                            controller.openVideoDialog(
+                                              context,
+                                                (controller.selectedVideo.value?.path??"")=="abc" ? (APIConstants.bucketUrl +
+                                                  controller.product.productVideo.toString()): (controller.selectedVideo.value?.path??""),
+                                              controller.selectedVideo.value?.path=="abc",
+                                            );
+                                          },
                                           child: Stack(
                                             alignment: AlignmentGeometry.center,
                                             children: [
@@ -753,7 +755,7 @@ class AddProductView extends GetView<AddProductController> {
                                             SvgPicture.asset(Asset.add, height: 40),
                                             const Gap(16),
                                             Text(
-                                              "Upload Video (max 24 MB)",
+                                              "Upload Video (max 10 MB)",
                                               textAlign: TextAlign.center,
                                               style: MyTexts.regular14,
                                             ),
@@ -838,7 +840,7 @@ class AddProductView extends GetView<AddProductController> {
                                             SvgPicture.asset(Asset.add, height: 40),
                                             const Gap(16),
                                             Text(
-                                              "Upload Video (max 24 MB)",
+                                              "Upload Video (max 10 MB)",
                                               textAlign: TextAlign.center,
                                               style: MyTexts.regular14,
                                             ),
