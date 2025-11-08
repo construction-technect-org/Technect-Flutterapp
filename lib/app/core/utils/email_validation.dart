@@ -1,6 +1,8 @@
 /// Comprehensive email validation class following RFC 5322 standards
 /// This class provides robust email validation similar to Google's validation
 class EmailValidation {
+  static const vaild_mail = "Please enter a valid email address";
+
   // Comprehensive list of valid Top-Level Domains (TLDs)
   // Includes gTLDs, ccTLDs, and new gTLDs
   static const Set<String> _validTlds = {
@@ -388,82 +390,98 @@ class EmailValidation {
 
     // Check total length
     if (trimmed.length > 254) {
-      return "Email address is too long (maximum 254 characters)";
+      // return "Email address is too long (maximum 254 characters)";
+      return vaild_mail;
     }
 
     // Basic format check
     if (!isValidEmail(trimmed)) {
       // Provide more specific error messages
       if (!trimmed.contains('@')) {
-        return "Email address must contain @ symbol";
+        // return "Email address must contain @ symbol";
+        return vaild_mail;
       }
 
       final parts = trimmed.split('@');
       if (parts.length != 2) {
-        return "Email address must contain exactly one @ symbol";
+        // return "Email address must contain exactly one @ symbol";
+        return vaild_mail;
       }
 
       final localPart = parts[0];
       final domain = parts[1];
 
       if (localPart.isEmpty) {
-        return "Email address must have a local part (before @)";
+        return vaild_mail;
+        // return "Email address must have a local part (before @)";
       }
 
       if (domain.isEmpty) {
-        return "Email address must have a domain (after @)";
+        return vaild_mail;
+        // return "Email address must have a domain (after @)";
       }
 
       if (localPart.length > 64) {
-        return "Local part (before @) is too long (maximum 64 characters)";
+        return vaild_mail;
+        // return "Local part (before @) is too long (maximum 64 characters)";
       }
 
       if (localPart.startsWith('.') || localPart.endsWith('.')) {
-        return "Local part cannot start or end with a dot";
+        return vaild_mail;
+        // return "Local part cannot start or end with a dot";
       }
 
       if (localPart.contains('..')) {
-        return "Local part cannot contain consecutive dots";
+        return vaild_mail;
+        // return "Local part cannot contain consecutive dots";
       }
 
       if (localPart.contains(' ')) {
-        return "Local part cannot contain spaces";
+        return vaild_mail;
+        // return "Local part cannot contain spaces";
       }
 
       if (domain.startsWith('.') ||
           domain.endsWith('.') ||
           domain.startsWith('-') ||
           domain.endsWith('-')) {
-        return "Domain cannot start or end with dot or hyphen";
+        return vaild_mail;
+        // return "Domain cannot start or end with dot or hyphen";
       }
 
       if (domain.contains('..')) {
-        return "Domain cannot contain consecutive dots";
+        return vaild_mail;
+        // return "Domain cannot contain consecutive dots";
       }
 
       if (domain.contains(' ')) {
-        return "Domain cannot contain spaces";
+        return vaild_mail;
+        // return "Domain cannot contain spaces";
       }
 
       if (domain.contains('_')) {
-        return "Domain cannot contain underscores";
+        return vaild_mail;
+        // return "Domain cannot contain underscores";
       }
 
       final domainParts = domain.split('.');
       if (domainParts.length < 2) {
-        return "Domain must include a top-level domain (e.g., .com, .org)";
+        return vaild_mail;
+        // return "Domain must include a top-level domain (e.g., .com, .org)";
       }
 
       final tld = domainParts.last.toLowerCase();
       if (tld.length < 2) {
-        return "Top-level domain must be at least 2 characters";
+        return vaild_mail;
+        // return "Top-level domain must be at least 2 characters";
       }
 
       if (tld.length > 63) {
-        return "Top-level domain is too long (maximum 63 characters)";
+        return vaild_mail;
+        // return "Top-level domain is too long (maximum 63 characters)";
       }
 
-      return "Please enter a valid email address";
+      return vaild_mail;
     }
 
     // Additional domain validation
@@ -493,41 +511,44 @@ class EmailValidation {
   /// Returns error message if invalid, null if valid
   static String? validateEmailDomain(String? email) {
     if (email == null || email.isEmpty) {
-      return "Please enter a valid email address";
+      return vaild_mail;
     }
 
     final value = email.trim().toLowerCase();
 
     // Extract domain part
     if (!value.contains('@')) {
-      return "Please enter a valid email address";
+      return vaild_mail;
     }
 
     final parts = value.split('@');
     if (parts.length != 2 || parts[1].isEmpty) {
-      return "Please enter a valid email address";
+      return vaild_mail;
     }
 
     final domain = parts[1];
 
     // Check for trailing dots or invalid characters in domain
     if (domain.endsWith('.') || domain.startsWith('.')) {
-      return "Please enter a valid email address. Invalid domain format (trailing or leading dot)";
+      return vaild_mail;
+      // return "Please enter a valid email address. Invalid domain format (trailing or leading dot)";
     }
 
     // Check for consecutive dots
     if (domain.contains('..')) {
-      return "Please enter a valid email address with a valid domain";
+      return vaild_mail;
+      // return "Please enter a valid email address with a valid domain";
     }
 
     // Extract domain parts
     final domainParts = domain.split('.');
 
-    // Filter out empty parts (which could happen with trailing dots)
+    // Filter vaild_mail empty parts (which could happen with trailing dots)
     domainParts.removeWhere((part) => part.isEmpty);
 
     if (domainParts.length < 2) {
-      return "Please enter a valid email address with a valid domain";
+      return vaild_mail;
+      // return "Please enter a valid email address with a valid domain";
     }
 
     String tld;
@@ -558,7 +579,8 @@ class EmailValidation {
 
     // Validate TLD format - must be at least 2 characters
     if (tld.length < 2) {
-      return "Please enter a valid email address with a valid domain";
+      return vaild_mail;
+      // return "Please enter a valid email address with a valid domain";
     }
 
     // Use comprehensive TLD validation
@@ -567,16 +589,18 @@ class EmailValidation {
       final invalidTlds = ['con', 'coom', 'coon', 'comn', 'c0m'];
       final singleTld = tld.contains('.') ? tld.split('.').last : tld;
       if (invalidTlds.contains(singleTld)) {
-        return "Please enter a valid email address. The domain extension appears to be invalid or a typo";
+        return vaild_mail;
+        // return "Please enter a valid email address. The domain extension appears to be invalid or a typo";
       }
-      return "Please enter a valid email address with a valid domain extension";
+      return vaild_mail;
+      // return "Please enter a valid email address with a valid domain extension";
     }
 
     // Common email providers
     final commonEmailProviders = [
       'gmail',
       'yahoo',
-      'outlook',
+      'vaild_maillook',
       'hotmail',
       'icloud',
       'protonmail',
@@ -596,18 +620,21 @@ class EmailValidation {
       // Gmail MUST use .com TLD only
       if (providerName.toLowerCase() == 'gmail') {
         if (singleTld != 'com') {
-          return "Please enter a valid email address. Gmail only uses .com domain extension";
+          return vaild_mail;
+          // return "Please enter a valid email address. Gmail only uses .com domain extension";
         }
       } else {
         // For other providers, block obvious typos: .con (should be .com), .cm (should be .com)
         if (singleTld == 'con' || singleTld == 'cm') {
-          return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
+          return vaild_mail;
+          // return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
         }
-        // For yahoo and outlook with .io or .cm, block as likely typos
+        // For yahoo and vaild_maillook with .io or .cm, block as likely typos
         if ((providerName.toLowerCase() == 'yahoo' ||
-                providerName.toLowerCase() == 'outlook') &&
+                providerName.toLowerCase() == 'vaild_maillook') &&
             (singleTld == 'io' || singleTld == 'cm')) {
-          return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
+          return vaild_mail;
+          // return "Please enter a valid email address. The domain extension appears to be invalid (did you mean .com?)";
         }
       }
     }
@@ -622,15 +649,18 @@ class EmailValidation {
     // Validate each domain part
     for (final part in partsToValidate) {
       if (part.isEmpty) {
-        return "Please enter a valid email address with a valid domain";
+        return vaild_mail;
+        // return "Please enter a valid email address with a valid domain";
       }
       // Validate domain name segments don't start or end with hyphen
       if (part.startsWith('-') || part.endsWith('-')) {
-        return "Please enter a valid email address with a valid domain";
+        return vaild_mail;
+        // return "Please enter a valid email address with a valid domain";
       }
       // Validate domain name segments contain only valid characters
       if (!RegExp(r'^[a-z0-9-]+$').hasMatch(part)) {
-        return "Please enter a valid email address with a valid domain";
+        return vaild_mail;
+        // return "Please enter a valid email address with a valid domain";
       }
     }
 
