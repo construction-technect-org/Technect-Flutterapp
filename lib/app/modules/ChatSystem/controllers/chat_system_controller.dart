@@ -24,6 +24,7 @@ class ChatSystemController extends GetxController {
 
   int connectionId = 0;
   String name = "User";
+  String image = "";
   VoidCallback? onRefresh;
   @override
   void onInit() {
@@ -32,6 +33,7 @@ class ChatSystemController extends GetxController {
       connectionId= Get.arguments["cId"];
       onRefresh= Get.arguments["onRefresh"];
       name= Get.arguments["name"];
+      image= Get.arguments["image"];
     }
     socket = IO.io(
       'http://43.205.117.97',

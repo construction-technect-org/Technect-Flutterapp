@@ -45,7 +45,7 @@ class _ChatSystemViewState extends State<ChatSystemView> {
           backGroundColor: MyColors.white,
           chatTitle: controller.name,
           elevation: 0,
-          profilePicture: "",
+          profilePicture: controller.image,
           leading: GestureDetector(
             onTap: () {
               Get.back();
@@ -55,9 +55,8 @@ class _ChatSystemViewState extends State<ChatSystemView> {
               child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 24),
             ),
           ),
-
           backArrowColor: MyColors.fontBlack,
-          chatTitleTextStyle: MyTexts.medium18.copyWith(color: MyColors.primary),
+          chatTitleTextStyle: MyTexts.medium18.copyWith(color: MyColors.black),
           // userStatus: "Online",
           // userStatusTextStyle: MyTexts.regular14.copyWith(color: MyColors.green),
         ),
