@@ -18,18 +18,41 @@ class ChatSystemController extends GetxController {
 
   late final ChatController chatController;
   final ImagePicker picker = ImagePicker();
-  final IO.Socket socket = IO.io("${ApiManager.baseUrl}?token=${myPref.token}");
+  final IO.Socket socket = IO.io(
+    'http://43.205.117.97', // Base URL only
+    IO.OptionBuilder()
+        .setTransports(['websocket']) // Flutter needs websocket transport
+        .setQuery({'token': myPref.token}) // Send token properly
+        .enableAutoConnect() // optional: auto-connect
+        .build(),
+  );
 
   @override
   void onInit() {
     super.onInit();
+    super.onInit();
+
+    socket.connect(); // 👈 Important!
+
     socket.onConnect((_) {
-      print('connect');
+      print('✅ Connected to socket server');
       socket.emit('msg', 'test');
     });
-    socket.on('event', (data) => print(data));
-    socket.onDisconnect((_) => print('disconnect'));
-    socket.on('fromServer', (_) => print("_"));
+
+    socket.onConnectError((data) {
+      print('❌ Connect Error: $data');
+    });
+
+    socket.onError((data) {
+      print('⚠️ Socket Error: $data');
+    });
+
+    socket.onDisconnect((_) {
+      print('🔌 Disconnected from socket');
+    });
+
+    socket.on('event', (data) => print('📩 Event: $data'));
+    socket.on('fromServer', (data) => print('📨 fromServer: $data'));
     chatController = ChatController(
       initialMessageList: [],
       scrollController: ScrollController(),
