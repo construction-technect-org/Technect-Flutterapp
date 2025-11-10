@@ -1,7 +1,6 @@
 import 'package:chatview/chatview.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/controllers/chat_system_controller.dart';
-import 'package:flutter/material.dart';
 
 class ChatSystemView extends StatefulWidget {
   const ChatSystemView({super.key});
@@ -134,7 +133,6 @@ class _ChatSystemViewState extends State<ChatSystemView> {
           ),
         ),
         repliedMessageConfig: RepliedMessageConfiguration(
-
           micIconColor: Colors.black,
           repliedImageMessageHeight: 100,
           repliedImageMessageWidth: 100,

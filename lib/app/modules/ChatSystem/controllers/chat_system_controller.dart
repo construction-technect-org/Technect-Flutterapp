@@ -22,9 +22,15 @@ class ChatSystemController extends GetxController {
   final ImagePicker picker = ImagePicker();
   late final IO.Socket socket;
 
+  int connectionId = 0;
+  VoidCallback? onRefresh;
   @override
   void onInit() {
     super.onInit();
+    if(Get.arguments!=null){
+      connectionId= Get.arguments["cId"];
+      onRefresh= Get.arguments["onRefresh"];
+    }
     socket = IO.io(
       'http://43.205.117.97',
       IO.OptionBuilder()
@@ -69,6 +75,7 @@ class ChatSystemController extends GetxController {
   void onSendTap(String message, ReplyMessage replyMessage, MessageType type) {
     if (message.trim().isEmpty) return;
 
+
     final msg = Message(
       id: DateTime.now().toString(),
       message: message,
@@ -79,6 +86,11 @@ class ChatSystemController extends GetxController {
     );
 
     chatController.addMessage(msg);
+    socket.emit('send_message', {
+      'connection_id': connectionId,
+      'message': message,
+    });
+    onRefresh?.call();
     Future.delayed(const Duration(seconds: 2), () {
       chatController.addMessage(
         Message(
