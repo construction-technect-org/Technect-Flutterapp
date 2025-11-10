@@ -817,10 +817,18 @@ class AddProductView extends GetView<AddProductController> {
                                                     BorderRadius.circular(12),
                                                 child: AspectRatio(
                                                   aspectRatio: 16 / 9,
-                                                  child: VideoPlayer(
-                                                    controller
-                                                        .videoPlayerController!,
-                                                  ),
+                                                  child:
+                                                      (controller.videoPlayerController !=
+                                                              null &&
+                                                          controller
+                                                              .videoPlayerController!
+                                                              .value
+                                                              .isInitialized)
+                                                      ? VideoPlayer(
+                                                          controller
+                                                              .videoPlayerController!,
+                                                        )
+                                                      : const SizedBox.shrink(),
                                                 ),
                                               ),
                                               const VideoPlay(),
@@ -894,10 +902,18 @@ class AddProductView extends GetView<AddProductController> {
                                                   BorderRadius.circular(12),
                                               child: AspectRatio(
                                                 aspectRatio: 16 / 9,
-                                                child: VideoPlayer(
-                                                  controller
-                                                      .videoPlayerController!,
-                                                ),
+                                                child:
+                                                    (controller.videoPlayerController !=
+                                                            null &&
+                                                        controller
+                                                            .videoPlayerController!
+                                                            .value
+                                                            .isInitialized)
+                                                    ? VideoPlayer(
+                                                        controller
+                                                            .videoPlayerController!,
+                                                      )
+                                                    : const SizedBox.shrink(),
                                               ),
                                             ),
                                             GestureDetector(
