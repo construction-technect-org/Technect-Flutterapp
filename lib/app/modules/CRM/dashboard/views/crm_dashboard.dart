@@ -2,9 +2,6 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/controller/crm_dashboard_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
-
 class CRMDashboardScreen extends StatelessWidget {
   CRMDashboardScreen({super.key});
 
@@ -131,22 +128,36 @@ class CRMDashboardScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+                        // const Gap(10),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Get.put<SwitchAccountController>(SwitchAccountController());
+                        //     showSwitchAccountBottomSheet();
+                        //   },
+                        //   child: Stack(
+                        //     alignment: AlignmentGeometry.center,
+                        //     children: [
+                        //       Image.asset(Asset.explore, width: 18.w),
+                        //       Text(
+                        //         "Switch",
+                        //         style: MyTexts.medium14.copyWith(color: MyColors.white),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         const Gap(10),
                         GestureDetector(
                           onTap: () {
-                            Get.put<SwitchAccountController>(SwitchAccountController());
-                            showSwitchAccountBottomSheet();
-                            // Get.to(() => const ExploreView());
+                            Get.toNamed(Routes.All_CHAT_LIST);
                           },
-                          child: Stack(
-                            alignment: AlignmentGeometry.center,
-                            children: [
-                              Image.asset(Asset.explore, width: 18.w),
-                              Text(
-                                "Switch",
-                                style: MyTexts.medium14.copyWith(color: MyColors.white),
-                              ),
-                            ],
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: MyColors.white,
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(Asset.chat, width: 24, height: 24),
                           ),
                         ),
                         const Gap(10),

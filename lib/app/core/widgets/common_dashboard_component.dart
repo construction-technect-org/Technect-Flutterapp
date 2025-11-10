@@ -24,8 +24,8 @@ class _CommonDashboardState extends State<CommonDashboard> {
             LayoutBuilder(
               builder: (context, constraints) {
                 final double itemWidth =
-                    (constraints.maxWidth - (2 * 10)) / 3; // 4 per row with spacing
-                final double itemHeight = itemWidth + 10; // for icon + text
+                    (constraints.maxWidth - (2 * 10)) / 3;
+                final double itemHeight = itemWidth + 10;
                 return GridView.builder(
                   padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),

@@ -13,6 +13,8 @@ import 'package:construction_technect/app/modules/CRM/bottom/bindings/bottom_bin
 import 'package:construction_technect/app/modules/CRM/bottom/views/bottom_view.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
+import 'package:construction_technect/app/modules/ChatSystem/AllChatList/binding/chat_system_binding.dart';
+import 'package:construction_technect/app/modules/ChatSystem/AllChatList/views/all_chat_list.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/bindings/add_requirement_binding.dart';
@@ -371,6 +373,11 @@ class AppPages {
       name: _Paths.ADD_LEAD,
       page: () => const AddLeadScreen(),
       binding: AddLeadBinding(),
+    ),
+    GetPage(
+      name: _Paths.All_CHAT_LIST,
+      page: () => const AllChatListScreen(),
+      binding: AllChatListBinding(),
     ),
   ];
 }

@@ -1,27 +1,56 @@
+import 'package:chatview/chatview.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatSystemController extends GetxController {
-  RxString selectedRole = "".obs;
+  final ChatUser currentUser = const ChatUser(
+    id: '1',
+    name: 'You',
+    profilePhoto: 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+  );
 
-  final TextEditingController textController = TextEditingController();
+  final ChatUser supportUser = const ChatUser(
+    id: '2',
+    name: 'Support',
+    profilePhoto: 'https://cdn-icons-png.flaticon.com/512/4712/4712109.png',
+  );
 
-  // Expandable states
-  RxBool profileUpdation = false.obs;
-  RxBool profileApproval = false.obs;
-  RxBool profileDeletion = false.obs;
+  late final ChatController chatController;
+  final ImagePicker picker = ImagePicker();
 
-  // Selected chip
-  RxString selectedChip = "".obs;
-
-  void toggleTile(RxBool tile) {
-    tile.value = !tile.value;
+  @override
+  void onInit() {
+    super.onInit();
+    chatController = ChatController(
+      initialMessageList: [],
+      scrollController: ScrollController(),
+      currentUser: currentUser,
+      otherUsers: [supportUser],
+    );
   }
 
-  void selectChip(String label) {
-    selectedChip.value = label;
-  }
+  void onSendTap(String message, ReplyMessage replyMessage, MessageType type) {
+    if (message.trim().isEmpty) return;
 
-  void selectRole(String role) {
-    selectedRole.value = role;
+    final msg = Message(
+      id: DateTime.now().toString(),
+      message: message,
+      createdAt: DateTime.now(),
+      sentBy: currentUser.id,
+      messageType: type,
+      replyMessage: replyMessage,
+    );
+
+    chatController.addMessage(msg);
+    Future.delayed(const Duration(seconds: 2), () {
+      chatController.addMessage(
+        Message(
+          id: DateTime.now().toString(),
+          message: "Thanks for reaching out! We’ll get back shortly.",
+          createdAt: DateTime.now(),
+          sentBy: supportUser.id,
+        ),
+      );
+    });
   }
 }

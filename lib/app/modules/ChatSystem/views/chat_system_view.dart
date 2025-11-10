@@ -1,319 +1,156 @@
+import 'package:chatview/chatview.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/controllers/chat_system_controller.dart';
+import 'package:flutter/material.dart';
 
-class ChatSystemView extends GetView<ChatSystemController> {
+class ChatSystemView extends StatefulWidget {
   const ChatSystemView({super.key});
 
   @override
+  State<ChatSystemView> createState() => _ChatSystemViewState();
+}
+
+class _ChatSystemViewState extends State<ChatSystemView> {
+  late ChatSystemController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(ChatSystemController());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    const String timeStamp = '12 May 2025,09:12 am';
-
     return Scaffold(
-      backgroundColor: MyColors.backgroundColor,
-      resizeToAvoidBottomInset: true, 
-      appBar: AppBar(
-          forceMaterialTransparency: true,
-
-        centerTitle: false,
-        titleSpacing: 0,
-        elevation: 0,
-        backgroundColor: MyColors.backgroundColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: MyColors.fontBlack, size: 24),
-          onPressed: () => Navigator.pop(context),
+      backgroundColor: MyColors.white,
+      body: ChatView(
+        chatController: controller.chatController,
+        onSendTap: controller.onSendTap,
+        featureActiveConfig: const FeatureActiveConfig(enableScrollToBottomButton: true),
+        // scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
+        //   backgroundColor: MyColors.primary,
+        //   border: Border.all(color: MyColors.primary.withOpacity(0.3)),
+        //   icon: const Icon(
+        //     Icons.keyboard_arrow_down_rounded,
+        //     color: MyColors.primary,
+        //     size: 28,
+        //   ),
+        // ),
+        chatViewState: ChatViewState.hasMessages,
+        chatViewStateConfig: const ChatViewStateConfiguration(),
+        typeIndicatorConfig: const TypeIndicatorConfiguration(
+          flashingCircleBrightColor: MyColors.primary,
+          flashingCircleDarkColor: MyColors.lightBlue,
         ),
-        title: Text(
-          "Support",
-          style: MyTexts.light22.copyWith(color: MyColors.textFieldBackground),
-        ),
-      ),
-      body: Stack(
-        children: [
-         
-          Container(color: MyColors.backgroundColor),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                color: MyColors.white,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-              ),
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  reverse: true,
-
-                  child: Column(
-                    children: [
-                    
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        child: const SizedBox(),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Select your issue to proceed",
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                            SizedBox(height: 1.h),
-                            Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _buildChip(
-                                    label: 'Profile Details',
-                                    color: MyColors.aquacolor,
-                                    borderColor: MyColors.faneuilBrick,
-                                  ),
-                                  SizedBox(width: 2.w),
-                                  _buildChip(
-                                    label: 'Product Details',
-                                    color: const Color(0xFFE6F4FF),
-                                  ),
-                                  SizedBox(width: 2.w),
-                                  _buildChip(
-                                    label: 'XYZ',
-                                    color: const Color(0xFFFFF0E5),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 2.h),
-                            Text(
-                              "What help do you need for Profile:",
-                              style: MyTexts.regular14.copyWith(
-                                color: MyColors.fontBlack,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            _buildExpandableTile(
-                              title: "Profile Updation",
-                              isExpanded: controller.profileUpdation,
-                              onTap: () =>
-                                  controller.toggleTile(controller.profileUpdation),
-                            ),
-                            _buildExpandableTile(
-                              title: "Profile Approval Status",
-                              isExpanded: controller.profileApproval,
-                              onTap: () =>
-                                  controller.toggleTile(controller.profileApproval),
-                            ),
-                            _buildExpandableTile(
-                              title: "Profile Deletion",
-                              isExpanded: controller.profileDeletion,
-                              onTap: () =>
-                                  controller.toggleTile(controller.profileDeletion),
-                            ),
-                            SizedBox(height: 1.h),
-                          ],
-                        ),
-                      ),
-
-                      // Chat bubbles section
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                const CircleAvatar(
-                                  radius: 20,
-                                  backgroundImage: AssetImage(Asset.profil),
-                                ),
-                                const SizedBox(width: 8),
-                                Flexible(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFD8E6FF),
-                                      borderRadius: BorderRadius.circular(27),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          "We have received your request and are processing it",
-                                          style: MyTexts.regular16.copyWith(
-                                            color: MyColors.fontBlack,
-                                          ),
-                                          maxLines: 2,
-                                        ),
-                                        SizedBox(height: 2.h),
-                                        Text(
-                                          timeStamp,
-                                          style: MyTexts.regular12.copyWith(
-                                            color: MyColors.fontBlack,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 2.h),
-
-                           
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Flexible(
-                                  child: Container(
-                                    width: 164,
-                                    height: 92,
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFE8E8E8),
-                                      borderRadius: BorderRadius.circular(27),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Thank You!",
-                                          style: MyTexts.regular16.copyWith(
-                                            color: MyColors.fontBlack,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Text(
-                                          timeStamp,
-                                          style: MyTexts.regular12.copyWith(
-                                            color: MyColors.fontBlack,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 1.w),
-                                const CircleAvatar(
-                                  radius: 20,
-                                  backgroundImage: AssetImage(Asset.profil),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                decoration: BoxDecoration(
-                                  color: MyColors.brightGray,
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: TextField(
-                                  decoration: const InputDecoration(
-                                    hintText: "Type here...",
-                                    border: InputBorder.none,
-                                  ),
-                                  style: MyTexts.regular16.copyWith(
-                                    color: MyColors.fontBlack,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 1.w),
-                            Container(
-                              decoration: const BoxDecoration(
-                                color: MyColors.progressRemaining,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: Image.asset(
-                                  Asset.supportView,
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                onPressed: () {
-                                 
-                                },
-                              ),
-                            ),
-                            SizedBox(width: 1.w),
-                            Container(
-                              decoration: const BoxDecoration(
-                                color: MyColors.progressRemaining,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Icons.mic, color: MyColors.fontBlack),
-                                onPressed: () {},
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+        appBar: ChatViewAppBar(
+          backGroundColor: MyColors.white,
+          chatTitle: "User",
+          elevation: 0,
+          profilePicture: "",
+          leading: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 10.0, right: 10),
+              child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 24),
             ),
           ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildChip({required String label, required Color color, Color? borderColor}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(30),
-        border: borderColor != null ? Border.all(color: borderColor) : null,
-      ),
-      child: Text(label, style: MyTexts.regular14.copyWith(color: MyColors.fontBlack)),
-    );
-  }
+          backArrowColor: MyColors.fontBlack,
+          chatTitleTextStyle: MyTexts.medium18.copyWith(color: MyColors.primary),
+          // userStatus: "Online",
+          // userStatusTextStyle: MyTexts.regular14.copyWith(color: MyColors.green),
+        ),
 
-  Widget _buildExpandableTile({
-    required String title,
-    required RxBool isExpanded,
-    required VoidCallback onTap,
-  }) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 6),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: BoxDecoration(
-              color: MyColors.brightGray,
-              borderRadius: BorderRadius.circular(8),
+        // 🔹 Background config
+        chatBackgroundConfig: ChatBackgroundConfiguration(
+          backgroundColor: MyColors.white,
+          defaultGroupSeparatorConfig: DefaultGroupSeparatorConfiguration(
+            textStyle: TextStyle(color: MyColors.black, fontSize: 15),
+          ),
+        ),
+        sendMessageConfig: SendMessageConfiguration(
+          replyTitleColor: MyColors.primary,
+          voiceRecordingConfiguration: VoiceRecordingConfiguration(
+            backgroundColor: MyColors.primary,
+            waveStyle: WaveStyle(
+              durationLinesColor: Colors.white,
+              waveColor: Colors.white,
+              showMiddleLine: false,
+              backgroundColor: MyColors.primary,
+              showDurationLabel: true,
+              durationStyle: MyTexts.medium16.copyWith(color: Colors.white),
+              showBottom: false,
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.add, color: MyColors.fontBlack, size: 12),
-                const SizedBox(width: 6),
-                Text(title, style: MyTexts.regular16.copyWith(color: MyColors.fontBlack)),
-              ],
+          ),
+          textFieldConfig: TextFieldConfiguration(
+            hintText: "Type your message...",
+            hintStyle: MyTexts.medium13.copyWith(color: MyColors.primary.withValues(alpha: 0.5)),
+            textStyle: MyTexts.bold16.copyWith(color: MyColors.primary),
+            onMessageTyping: (status) {
+              debugPrint(status.toString());
+            },
+          ),
+          defaultSendButtonColor: MyColors.black,
+          textFieldBackgroundColor: MyColors.metricBackground,
+          replyDialogColor: MyColors.white,
+          replyMessageColor: MyColors.lightBlue,
+          imagePickerIconsConfig: ImagePickerIconsConfiguration(
+            cameraIconColor: MyColors.black,
+            galleryIconColor: MyColors.black,
+          ),
+          micIconColor: MyColors.black,
+        ),
+
+        chatBubbleConfig: ChatBubbleConfiguration(
+
+          outgoingChatBubbleConfig: ChatBubble(
+            color: MyColors.primary,
+            textStyle: MyTexts.bold16.copyWith(color: Colors.white),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              bottomLeft: Radius.circular(12),
+              bottomRight: Radius.circular(12),
+            ),
+          ),
+          inComingChatBubbleConfig: ChatBubble(
+            color: MyColors.veryPaleBlue,
+            textStyle: MyTexts.bold16.copyWith(color: Colors.black),
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(12),
+              bottomLeft: Radius.circular(12),
+              bottomRight: Radius.circular(12),
             ),
           ),
         ),
-      ],
+
+        // 🔹 Reaction + reply swipe config
+        messageConfig: MessageConfiguration(
+          messageReactionConfig: MessageReactionConfiguration(
+            backgroundColor: Colors.white,
+            borderColor: MyColors.gra54EA,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        repliedMessageConfig: RepliedMessageConfiguration(
+
+          micIconColor: Colors.black,
+          repliedImageMessageHeight: 100,
+          repliedImageMessageWidth: 100,
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(12),
+            bottomLeft: Radius.circular(12),
+            bottomRight: Radius.circular(12),
+          ),
+          textStyle: MyTexts.medium14.copyWith(color: Colors.black),
+          backgroundColor: MyColors.veryPaleBlue.withValues(alpha: 0.3),
+        ),
+        swipeToReplyConfig: SwipeToReplyConfiguration(
+          replyIconColor: MyColors.white,
+          replyIconBackgroundColor: MyColors.primary,
+        ),
+      ),
     );
   }
 }
