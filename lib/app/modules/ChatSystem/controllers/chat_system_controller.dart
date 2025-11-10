@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chatview/chatview.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,39 +20,38 @@ class ChatSystemController extends GetxController {
 
   late final ChatController chatController;
   final ImagePicker picker = ImagePicker();
-  final IO.Socket socket = IO.io(
-    'http://43.205.117.97', // Base URL only
-    IO.OptionBuilder()
-        .setTransports(['websocket']) // Flutter needs websocket transport
-        .setQuery({'token': myPref.token}) // Send token properly
-        .enableAutoConnect() // optional: auto-connect
-        .build(),
-  );
+  late final IO.Socket socket;
 
   @override
   void onInit() {
     super.onInit();
-    socket.connect(); // 👈 Important!
+    socket = IO.io(
+      'http://43.205.117.97',
+      IO.OptionBuilder()
+          .setTransports(['websocket', 'polling'])
+          .disableAutoConnect()
+          .setPath('/socket.io/')
+          .setQuery({'token': myPref.getToken()})
+          .enableForceNew()
+          .setReconnectionAttempts(5)
+          .setReconnectionDelay(1000)
+          .build(),
+    );
 
     socket.onConnect((_) {
-      print('✅ Connected to socket server');
-      socket.emit('msg', 'test');
+      log('✅ Connected to socket server - ID: ${socket.id}');
     });
 
     socket.onConnectError((data) {
-      print('❌ Connect Error: $data');
+      log('❌ Socket Connect Error: $data');
     });
 
-    socket.onError((data) {
-      print('⚠️ Socket Error: $data');
+    socket.onDisconnect((reason) {
+      log('🔌 Socket Disconnected: $reason');
     });
 
-    socket.onDisconnect((_) {
-      print('🔌 Disconnected from socket');
-    });
+    socket.connect();
 
-    socket.on('event', (data) => print('📩 Event: $data'));
-    socket.on('fromServer', (data) => print('📨 fromServer: $data'));
     chatController = ChatController(
       initialMessageList: [],
       scrollController: ScrollController(),
@@ -61,7 +62,6 @@ class ChatSystemController extends GetxController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
     socket.dispose();
   }
