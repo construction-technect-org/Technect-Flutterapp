@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -16,6 +17,7 @@ class CommonPhoneField extends StatelessWidget {
   final double? borderRadius;
   final Widget? suffix;
   final RxString? customErrorMessage;
+  final bool enableRealTimeValidation;
 
   const CommonPhoneField({
     super.key,
@@ -31,6 +33,7 @@ class CommonPhoneField extends StatelessWidget {
     this.bgColor,
     this.borderRadius,
     this.customErrorMessage,
+    this.enableRealTimeValidation = true,
   });
 
   @override
@@ -80,14 +83,17 @@ class CommonPhoneField extends StatelessWidget {
               color: MyColors.primary,
               fontFamily: MyTexts.SpaceGrotesk,
             ),
-
+            disableLengthCheck: true,
+            invalidNumberMessage: "",
             decoration: InputDecoration(
               suffixIcon: suffix,
-              errorText:
-                  null, // Prevent built-in error display, we use custom error below
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: isValid.value == 0
+                  color:
+                      (isValid.value == 0 ||
+                          isValid.value == 1 ||
+                          (enableRealTimeValidation &&
+                              customErrorMessage?.value.isNotEmpty == true))
                       ? Colors.red
                       : MyColors.textFieldBorder,
                 ),
@@ -174,26 +180,45 @@ class CommonPhoneField extends StatelessWidget {
               }
             },
             onChanged: (phone) {
-              // Clear error message when user types/changes number
-              if (customErrorMessage?.value.isNotEmpty == true) {
-                customErrorMessage?.value = "";
-              }
-              if (isValid.value != -1) {
-                isValid.value = -1;
-              }
-
-              if (phone.number.isEmpty) {
-                isValid.value = 0;
-              } else {
-                isValid.value = -1; // Reset validation state
-              }
-
               if (onCountryCodeChanged != null) {
                 onCountryCodeChanged!(phone.countryCode);
               }
+
+              if (enableRealTimeValidation) {
+                final number = phone.number.trim();
+                if (number.isEmpty) {
+                  customErrorMessage?.value = "";
+                  isValid.value = -1;
+                } else {
+                  final error = Validate.validateMobileNumber(number);
+                  if (error != null) {
+                    customErrorMessage?.value = error;
+                    isValid.value = 1;
+                  } else {
+                    customErrorMessage?.value = "";
+                    isValid.value = -1;
+                  }
+                }
+              } else {
+                if (customErrorMessage?.value.isNotEmpty == true) {
+                  customErrorMessage?.value = "";
+                }
+                if (isValid.value != -1) {
+                  isValid.value = -1;
+                }
+
+                if (phone.number.isEmpty) {
+                  isValid.value = 0;
+                } else {
+                  isValid.value = -1;
+                }
+              }
             },
           ),
-          if (isValid.value == 0 || isValid.value == 1)
+          if (isValid.value == 0 ||
+              isValid.value == 1 ||
+              (enableRealTimeValidation &&
+                  customErrorMessage?.value.isNotEmpty == true))
             Padding(
               padding: const EdgeInsets.only(left: 12, top: 6),
               child: Text(
