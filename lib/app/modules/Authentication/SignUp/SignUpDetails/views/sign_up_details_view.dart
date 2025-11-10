@@ -62,14 +62,7 @@ class SignUpDetailsView extends GetView<SignUpDetailsController> {
                                 color: MyColors.primary,
                               ),
                             ),
-                            SizedBox(height: 1.h),
-                            Text(
-                              'Lets start with the basics first',
-                              style: MyTexts.medium13.copyWith(
-                                color: MyColors.primary,
-                              ),
-                            ),
-                            SizedBox(height: 2.5.h),
+                            SizedBox(height: 2.h),
                             CommonTextField(
                               isRed: true,
                               headerText: "First Name",
