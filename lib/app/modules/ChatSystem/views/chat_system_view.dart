@@ -43,7 +43,7 @@ class _ChatSystemViewState extends State<ChatSystemView> {
         ),
         appBar: ChatViewAppBar(
           backGroundColor: MyColors.white,
-          chatTitle: "User",
+          chatTitle: controller.name,
           elevation: 0,
           profilePicture: "",
           leading: GestureDetector(
@@ -103,7 +103,6 @@ class _ChatSystemViewState extends State<ChatSystemView> {
         ),
 
         chatBubbleConfig: ChatBubbleConfiguration(
-
           outgoingChatBubbleConfig: ChatBubble(
             color: MyColors.primary,
             textStyle: MyTexts.bold16.copyWith(color: Colors.white),

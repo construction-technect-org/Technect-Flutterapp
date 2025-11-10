@@ -42,7 +42,7 @@ class AllChatListScreen extends GetView<AllChatListController> {
                 ),
               ),
               title: Text(
-                chat.connector?.firstName ?? "",
+                "${chat.connector?.firstName ?? ""} ${chat.connector?.lastName ?? ""}",
                 style: MyTexts.bold16.copyWith(color: MyColors.primary),
               ),
               subtitle: Text(
@@ -78,6 +78,7 @@ class AllChatListScreen extends GetView<AllChatListController> {
                   Routes.CHAT_SYSTEM,
                   arguments: {
                     "cId": chat.connectionId,
+                    "name": "${chat.connector?.firstName ?? ""} ${chat.connector?.lastName ?? ""}",
                     "onRefresh": () {
                       controller.fetchWishList();
                     },

@@ -23,6 +23,7 @@ class ChatSystemController extends GetxController {
   late final IO.Socket socket;
 
   int connectionId = 0;
+  String name = "User";
   VoidCallback? onRefresh;
   @override
   void onInit() {
@@ -30,6 +31,7 @@ class ChatSystemController extends GetxController {
     if(Get.arguments!=null){
       connectionId= Get.arguments["cId"];
       onRefresh= Get.arguments["onRefresh"];
+      name= Get.arguments["name"];
     }
     socket = IO.io(
       'http://43.205.117.97',
