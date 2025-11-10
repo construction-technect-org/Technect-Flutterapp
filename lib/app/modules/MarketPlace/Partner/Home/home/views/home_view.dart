@@ -309,7 +309,7 @@ class HomeView extends StatelessWidget {
                             imageUrl:
                                 APIConstants.bucketUrl +
                                 (subCategory.image ??
-                                    'category-images/FineAggregate.png'),
+                                    'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
                             fit: BoxFit.fill,
                             placeholder: (context, url) => const Center(
                               child: CircularProgressIndicator(),
