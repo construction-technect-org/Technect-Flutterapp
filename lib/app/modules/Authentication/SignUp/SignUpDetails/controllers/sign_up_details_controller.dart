@@ -24,6 +24,8 @@ class SignUpDetailsController extends GetxController {
 
   RxInt isValid = (-1).obs;
   RxString countryCode = "+91".obs;
+  RxString numberError = "".obs;
+
   // final RxString mobileValidationError = "".obs;
 
   final countdownController = CountdownController(autoStart: true);
@@ -32,7 +34,6 @@ class SignUpDetailsController extends GetxController {
 
   // Email validation state
   RxString emailError = "".obs;
-  RxString numberError = "".obs;
   RxBool isEmailValidating = false.obs;
 
   void startTimer() {

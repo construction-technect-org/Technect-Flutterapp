@@ -33,9 +33,7 @@ class SplashController extends GetxController {
     Get.dialog(
       AlertDialog(
         title: const Text('No Internet Connection'),
-        content: const Text(
-          'Please check your internet connection and try again.',
-        ),
+        content: const Text('Please check your internet connection and try again.'),
         actions: [
           TextButton(
             onPressed: () {
@@ -53,7 +51,11 @@ class SplashController extends GetxController {
   void _navigateToHome() {
     Future.delayed(const Duration(seconds: 3), () {
       if (myPref.role.val.isNotEmpty) {
-        Get.offAllNamed(Routes.MAIN);
+        if (myPref.dashboard.val == "crm") {
+          Get.offAllNamed(Routes.CRM_MAIN);
+        } else {
+          Get.offAllNamed(Routes.MAIN);
+        }
       } else {
         Get.offAllNamed(Routes.LOGIN);
       }

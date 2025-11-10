@@ -80,6 +80,10 @@ abstract class Routes {
   static const REQUIREMENT = _Paths.REQUIREMENT;
   static const ADD_SERVICES = _Paths.ADD_SERVICES;
   static const ADD_SERVICE_REQUIREMENT = _Paths.ADD_SERVICE_REQUIREMENT;
+  ///crm
+  static const CRM_MAIN = _Paths.CRM_MAIN;
+  static const ADD_LEAD = _Paths.ADD_LEAD;
+
 }
 
 abstract class _Paths {
@@ -161,4 +165,8 @@ abstract class _Paths {
   static const REQUIREMENT = '/requirement';
   static const ADD_SERVICES = '/add-services';
   static const ADD_SERVICE_REQUIREMENT = '/add-service-requirement';
+
+  ///
+  static const CRM_MAIN = '/crm-mail';
+  static const ADD_LEAD = '/add-lead';
 }

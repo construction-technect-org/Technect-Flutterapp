@@ -1,12 +1,15 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/controller/crm_dashboard_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 
-class Dashboard extends StatelessWidget {
-  final HomeController controller = Get.put<HomeController>(HomeController());
+class CRMDashboardScreen extends StatelessWidget {
+  CRMDashboardScreen({super.key});
+
+  final controller = Get.put<CRMDashboardController>(CRMDashboardController());
+
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -18,10 +21,7 @@ class Dashboard extends StatelessWidget {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.categoryBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
                 ),
               ),
               Padding(
@@ -38,26 +38,21 @@ class Dashboard extends StatelessWidget {
                           },
                           behavior: HitTestBehavior.translucent,
                           child: Obx(() {
-                            return (controller
-                                .profileData
-                                .value
-                                .data
-                                ?.user
-                                ?.image ??
-                                "")
-                                .isEmpty
+                            return (controller.profileData.value.data?.user?.image ?? "").isEmpty
                                 ? const Icon(
-                              Icons.account_circle_sharp, color: Colors.black, size: 48,)
+                                    Icons.account_circle_sharp,
+                                    color: Colors.black,
+                                    size: 48,
+                                  )
                                 : ClipOval(
-                              child: getImageView(
-                                finalUrl:
-                                "${APIConstants.bucketUrl}${controller.profileData.value.data?.user
-                                    ?.image ?? ""}",
-                                fit: BoxFit.cover,
-                                height: 48,
-                                width: 48,
-                              ),
-                            );
+                                    child: getImageView(
+                                      finalUrl:
+                                          "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                                      fit: BoxFit.cover,
+                                      height: 48,
+                                      width: 48,
+                                    ),
+                                  );
                           }),
                         ),
                         SizedBox(width: 1.h),
@@ -66,29 +61,25 @@ class Dashboard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Obx(
-                                    () =>
-                                    RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      text: TextSpan(
-                                        style: MyTexts.medium14.copyWith(
-                                          color: MyColors.custom('545454'),
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text:
-                                            '${(controller.profileData.value.data?.user
-                                                ?.firstName ?? "").capitalizeFirst} ${(controller
-                                                .profileData.value.data?.user?.lastName ?? "")
-                                                .capitalizeFirst}!',
-                                            style: MyTexts.medium16.copyWith(
-                                              color: MyColors.fontBlack,
-                                              fontFamily: MyTexts.SpaceGrotesk,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                () => RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  text: TextSpan(
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.custom('545454'),
                                     ),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                        style: MyTexts.medium16.copyWith(
+                                          color: MyColors.fontBlack,
+                                          fontFamily: MyTexts.SpaceGrotesk,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -117,18 +108,11 @@ class Dashboard extends StatelessWidget {
                                               color: MyColors.custom('545454'),
                                             ),
                                             children: [
-                                              TextSpan(
-                                                text: controller
-                                                    .getCurrentAddress()
-                                                    .value,
-                                              ),
+                                              TextSpan(text: controller.getCurrentAddress().value),
                                               const WidgetSpan(
-                                                alignment:
-                                                PlaceholderAlignment.middle,
+                                                alignment: PlaceholderAlignment.middle,
                                                 child: Padding(
-                                                  padding: EdgeInsets.only(
-                                                    left: 4,
-                                                  ),
+                                                  padding: EdgeInsets.only(left: 4),
                                                   child: Icon(
                                                     Icons.keyboard_arrow_down,
                                                     size: 16,
@@ -150,9 +134,7 @@ class Dashboard extends StatelessWidget {
                         const Gap(10),
                         GestureDetector(
                           onTap: () {
-                            Get.put<SwitchAccountController>(
-                              SwitchAccountController(),
-                            );
+                            Get.put<SwitchAccountController>(SwitchAccountController());
                             showSwitchAccountBottomSheet();
                             // Get.to(() => const ExploreView());
                           },
@@ -162,9 +144,7 @@ class Dashboard extends StatelessWidget {
                               Image.asset(Asset.explore, width: 18.w),
                               Text(
                                 "Switch",
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.white,
-                                ),
+                                style: MyTexts.medium14.copyWith(color: MyColors.white),
                               ),
                             ],
                           ),
@@ -178,16 +158,10 @@ class Dashboard extends StatelessWidget {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: MyColors.white,
-                              border: Border.all(
-                                color: MyColors.custom('EAEAEA'),
-                              ),
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
-                            child: SvgPicture.asset(
-                              Asset.notification,
-                              width: 24,
-                              height: 24,
-                            ),
+                            child: SvgPicture.asset(Asset.notification, width: 24, height: 24),
                           ),
                         ),
                         const Gap(10),
@@ -199,16 +173,10 @@ class Dashboard extends StatelessWidget {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: MyColors.white,
-                              border: Border.all(
-                                color: MyColors.custom('EAEAEA'),
-                              ),
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
-                            child: SvgPicture.asset(
-                              Asset.news,
-                              width: 24,
-                              height: 24,
-                            ),
+                            child: SvgPicture.asset(Asset.news, width: 24, height: 24),
                           ),
                         ),
                       ],
@@ -216,16 +184,26 @@ class Dashboard extends StatelessWidget {
                     const Gap(24),
                     Obx(() {
                       return CommonDashboard(
-                        totalMerchant: controller.profileData.value.data?.statistics
-                            ?.totalMerchantProfilesCreated
-                            ?.toString() ??
+                        totalMerchant:
+                            controller
+                                .profileData
+                                .value
+                                .data
+                                ?.statistics
+                                ?.totalMerchantProfilesCreated
+                                ?.toString() ??
                             "0",
-                        totalConnector: controller.profileData.value.data?.statistics
-                            ?.totalConnectorProfilesCreated
-                            ?.toString() ??
+                        totalConnector:
+                            controller
+                                .profileData
+                                .value
+                                .data
+                                ?.statistics
+                                ?.totalConnectorProfilesCreated
+                                ?.toString() ??
                             "0",
                       );
-                    })
+                    }),
                   ],
                 ),
               ),
@@ -235,6 +213,4 @@ class Dashboard extends StatelessWidget {
       ),
     );
   }
-
 }
-

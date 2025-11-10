@@ -9,6 +9,10 @@ import 'package:construction_technect/app/modules/Authentication/forgotPassword/
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/forgot_password_view.dart';
 import 'package:construction_technect/app/modules/Authentication/login/bindings/login_binding.dart';
 import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
+import 'package:construction_technect/app/modules/CRM/bottom/bindings/bottom_binding.dart';
+import 'package:construction_technect/app/modules/CRM/bottom/views/bottom_view.dart';
+import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
+import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/views/chat_system_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/bindings/add_requirement_binding.dart';
@@ -353,6 +357,20 @@ class AppPages {
       name: Routes.SERVICE_DETAILS,
       page: () => const ServiceDetailScreen(),
       binding: ServiceDetailBinding(),
+    ),
+
+
+    ///CRM
+    GetPage(
+      name: _Paths.CRM_MAIN,
+      page: () => CRMBottomBarView(),
+      binding: CRMBottomBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.ADD_LEAD,
+      page: () => const AddLeadScreen(),
+      binding: AddLeadBinding(),
     ),
   ];
 }

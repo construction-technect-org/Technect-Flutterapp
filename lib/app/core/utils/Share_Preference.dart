@@ -30,6 +30,7 @@ class AppSharedPreference {
   }
 
   final token = ''.val('token');
+  final dashboard = ''.val('dashboard');
   final isOffice = true.val('isOffice');
   final role = ''.val('role');
   final userModel = <String, dynamic>{}.val('userModel');
@@ -75,6 +76,14 @@ class AppSharedPreference {
 
   String getToken() {
     return token.val;
+  }
+
+  void setDashboard(String dashValue) {
+    dashboard.val = dashValue;
+  }
+
+  String getDashboard() {
+    return dashboard.val;
   }
 
   void setRole(String newRole) {

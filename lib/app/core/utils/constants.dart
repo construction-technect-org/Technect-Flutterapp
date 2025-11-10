@@ -117,6 +117,8 @@ class Asset {
   static const String sort = 'assets/images/icons/sort.svg';
 
   // New Icons
+  static const String task = '${newIcons}task.svg';
+  static const String task1 = '${newIcons}task.svg';
   static const String category = '${newIcons}category.svg';
   static const String category1 = '${newIcons}category1.svg';
   static const String connection = '${newIcons}connection.svg';
