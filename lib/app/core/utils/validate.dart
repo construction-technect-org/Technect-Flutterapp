@@ -125,17 +125,25 @@ class Validate {
     // Handle null or empty values
     if (mobileNumber == null || mobileNumber.trim().isEmpty) {
       if (isOptional) {
-        return null; // Valid - field is optional and empty
+        return null;
       } else {
-        return "Please enter mobile number"; // Error - field is required
+        return "Please enter mobile number";
       }
     }
 
     final digits = mobileNumber.trim();
 
     // Check length (should be 10 digits for Indian numbers)
-    if (digits.length != 10) {
+    if (digits.length < 10) {
+      return "Please enter 10 digits.";
+    }
+
+    if (digits.length > 10) {
       return "Mobile number must be exactly 10 digits";
+    }
+
+    if (!RegExp(r'^[6-9]\d{9}$').hasMatch(digits)) {
+      return "Please enter a valid mobile number.";
     }
 
     // Check if all digits are identical (e.g., 1111111111, 2222222222)
