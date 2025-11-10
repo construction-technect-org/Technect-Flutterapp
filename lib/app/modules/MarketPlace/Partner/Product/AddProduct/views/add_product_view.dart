@@ -78,9 +78,14 @@ class AddProductView extends GetView<AddProductController> {
                                       alignment: Alignment.topRight,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 8.0, top: 8),
+                                          padding: const EdgeInsets.only(
+                                            right: 8.0,
+                                            top: 8,
+                                          ),
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
                                             child: GestureDetector(
                                               child: path.contains('http')
                                                   ? getImageView(
@@ -102,7 +107,8 @@ class AddProductView extends GetView<AddProductController> {
                                           top: 4,
                                           right: 4,
                                           child: GestureDetector(
-                                            onTap: () => controller.removeImageAt(index),
+                                            onTap: () =>
+                                                controller.removeImageAt(index),
                                             child: Container(
                                               decoration: const BoxDecoration(
                                                 color: Colors.red,
@@ -121,15 +127,23 @@ class AddProductView extends GetView<AddProductController> {
                                     );
                                   } else {
                                     return Padding(
-                                      padding: const EdgeInsets.only(right: 8.0, top: 8),
+                                      padding: const EdgeInsets.only(
+                                        right: 8.0,
+                                        top: 8,
+                                      ),
                                       child: GestureDetector(
                                         onTap: controller.pickImageEdit,
                                         child: Container(
                                           width: 78,
                                           height: 78,
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: MyColors.grayCD, width: 1.2),
-                                            borderRadius: BorderRadius.circular(40),
+                                            border: Border.all(
+                                              color: MyColors.grayCD,
+                                              width: 1.2,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              40,
+                                            ),
                                             color: MyColors.grayEA,
                                           ),
                                           child: Center(
@@ -158,40 +172,64 @@ class AddProductView extends GetView<AddProductController> {
                                       alignment: Alignment.topRight,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(right: 8.0, top: 8),
+                                          padding: const EdgeInsets.only(
+                                            right: 8.0,
+                                            top: 8,
+                                          ),
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(53),
+                                            borderRadius: BorderRadius.circular(
+                                              53,
+                                            ),
                                             child: GestureDetector(
                                               onTap: () {
                                                 Get.dialog(
                                                   Dialog(
-                                                    backgroundColor: Colors.white,
-                                                    insetPadding: const EdgeInsets.all(20),
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    insetPadding:
+                                                        const EdgeInsets.all(
+                                                          20,
+                                                        ),
                                                     child: Stack(
-                                                      alignment: Alignment.topRight,
+                                                      alignment:
+                                                          Alignment.topRight,
                                                       children: [
                                                         InteractiveViewer(
-                                                          child: path.contains('http')
+                                                          child:
+                                                              path.contains(
+                                                                'http',
+                                                              )
                                                               ? Image.network(
                                                                   path,
-                                                                  fit: BoxFit.contain,
-                                                                  width: double.infinity,
-                                                                  height: double.infinity,
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: double
+                                                                      .infinity,
                                                                 )
                                                               : Image.file(
                                                                   File(path),
-                                                                  fit: BoxFit.contain,
-                                                                  width: double.infinity,
-                                                                  height: double.infinity,
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: double
+                                                                      .infinity,
                                                                 ),
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.all(16.0),
+                                                          padding:
+                                                              const EdgeInsets.all(
+                                                                16.0,
+                                                              ),
                                                           child: GestureDetector(
-                                                            onTap: () => Get.back(),
+                                                            onTap: () =>
+                                                                Get.back(),
                                                             child: const Icon(
                                                               Icons.close,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                               size: 30,
                                                             ),
                                                           ),
@@ -221,7 +259,9 @@ class AddProductView extends GetView<AddProductController> {
                                           top: 4,
                                           right: 4,
                                           child: GestureDetector(
-                                            onTap: () => controller.pickedFilePathList.remove(path),
+                                            onTap: () => controller
+                                                .pickedFilePathList
+                                                .remove(path),
                                             child: Container(
                                               decoration: const BoxDecoration(
                                                 color: Colors.red,
@@ -241,15 +281,23 @@ class AddProductView extends GetView<AddProductController> {
                                   ),
                                   if (controller.pickedFilePathList.length < 5)
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 8.0, top: 8),
+                                      padding: const EdgeInsets.only(
+                                        right: 8.0,
+                                        top: 8,
+                                      ),
                                       child: GestureDetector(
                                         onTap: controller.pickImage,
                                         child: Container(
                                           width: 78,
                                           height: 78,
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: MyColors.grayCD, width: 1.2),
-                                            borderRadius: BorderRadius.circular(40),
+                                            border: Border.all(
+                                              color: MyColors.grayCD,
+                                              width: 1.2,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              40,
+                                            ),
                                             color: MyColors.grayEA,
                                           ),
                                           child: Center(
@@ -298,18 +346,24 @@ class AddProductView extends GetView<AddProductController> {
                             return null;
                           },
                           hintText: "Select the detail of warehouse",
-                          items: const ["Manufacture unit", "Stock yard", "Ware-house"],
+                          items: const [
+                            "Manufacture unit",
+                            "Stock yard",
+                            "Ware-house",
+                          ],
                           selectedValue: controller.selectedWareHouseType,
                           itemLabel: (item) => item,
                           onChanged: controller.isEdit
                               ? null
                               : (value) {
-                                  controller.selectedWareHouseType.value = value;
+                                  controller.selectedWareHouseType.value =
+                                      value;
                                 },
                           enabled: !controller.isEdit,
                         ),
                         Obx(() {
-                          return controller.selectedWareHouseType.value == "Stock yard"
+                          return controller.selectedWareHouseType.value ==
+                                  "Stock yard"
                               ? controller.isEdit
                                     ? Column(
                                         children: [
@@ -319,7 +373,8 @@ class AddProductView extends GetView<AddProductController> {
                                             bgColor: Colors.grey.shade100,
 
                                             headerText: 'Stock yard Address',
-                                            controller: controller.stockYardAddressController,
+                                            controller: controller
+                                                .stockYardAddressController,
                                           ),
                                         ],
                                       )
@@ -327,18 +382,22 @@ class AddProductView extends GetView<AddProductController> {
                                         children: [
                                           SizedBox(height: 2.h),
                                           CommonDropdown<ManufacturerAddress>(
-                                            headerText: 'Select Stock yard Address',
+                                            headerText:
+                                                'Select Stock yard Address',
                                             validator: (val) {
                                               if (val == null) {
                                                 return "Please select stock yard address";
                                               }
                                               return null;
                                             },
-                                            hintText: "Select stock yard address",
+                                            hintText:
+                                                "Select stock yard address",
                                             items: controller.siteLocations,
-                                            selectedValue: controller.selectedSiteAddress,
+                                            selectedValue:
+                                                controller.selectedSiteAddress,
                                             itemLabel: (item) =>
-                                                item.fullAddress ?? 'No address name',
+                                                item.fullAddress ??
+                                                'No address name',
                                             onChanged: (val) {
                                               controller.selectSiteAddress(val);
                                             },
@@ -457,12 +516,17 @@ class AddProductView extends GetView<AddProductController> {
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(color: MyColors.grayEA),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               child: Row(
                                 children: [
                                   Text(
                                     'In Stock',
-                                    style: MyTexts.medium14.copyWith(color: MyColors.gra54),
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.gra54,
+                                    ),
                                   ),
                                   const Spacer(),
                                   Obx(() {
@@ -484,7 +548,8 @@ class AddProductView extends GetView<AddProductController> {
                                         CommonTextField(
                                           headerText: "Add Stock",
                                           hintText: "Enter stock quantity",
-                                          controller: controller.stockController,
+                                          controller:
+                                              controller.stockController,
                                           keyboardType: TextInputType.number,
                                           validator: (val) {
                                             if (val == null || val.isEmpty) {
@@ -542,7 +607,8 @@ class AddProductView extends GetView<AddProductController> {
                           child: RoundedButton(
                             buttonName: 'Continue',
                             onTap: () {
-                              if (controller.pickedFilePathList.isEmpty && !controller.isEdit) {
+                              if (controller.pickedFilePathList.isEmpty &&
+                                  !controller.isEdit) {
                                 SnackBars.errorSnackBar(
                                   content: 'Please upload at least one image',
                                 );
@@ -550,7 +616,8 @@ class AddProductView extends GetView<AddProductController> {
                               }
                               if (controller.isEdit) {
                                 final hasImage = controller.imageSlots.any(
-                                  (path) => path != null && path.trim().isNotEmpty,
+                                  (path) =>
+                                      path != null && path.trim().isNotEmpty,
                                 );
                                 if (!hasImage) {
                                   SnackBars.errorSnackBar(
@@ -559,7 +626,8 @@ class AddProductView extends GetView<AddProductController> {
                                   return;
                                 }
                               }
-                              if (controller.formKey2.currentState!.validate()) {
+                              if (controller.formKey2.currentState!
+                                  .validate()) {
                                 controller.showExtraFields.value = true;
                                 controller.pageController.animateToPage(
                                   1,
@@ -568,7 +636,8 @@ class AddProductView extends GetView<AddProductController> {
                                 );
                               } else {
                                 SnackBars.errorSnackBar(
-                                  content: "Please fill all required fields properly",
+                                  content:
+                                      "Please fill all required fields properly",
                                 );
                               }
                             },
@@ -637,7 +706,10 @@ class AddProductView extends GetView<AddProductController> {
                                 },
                                 onChanged: (val) {
                                   if ((val ?? "").isNotEmpty) {
-                                    if (controller.priceController.text.isNotEmpty) {
+                                    if (controller
+                                        .priceController
+                                        .text
+                                        .isNotEmpty) {
                                       controller.gstCalculate();
                                     }
                                   }
@@ -690,7 +762,9 @@ class AddProductView extends GetView<AddProductController> {
                         const Gap(20),
                         Text(
                           "Product Demo Video",
-                          style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
+                          style: MyTexts.medium14.copyWith(
+                            color: MyColors.gray2E,
+                          ),
                         ),
                         const Gap(16),
                         if (controller.isEdit)
@@ -712,20 +786,40 @@ class AddProductView extends GetView<AddProductController> {
                                           onTap: () {
                                             controller.openVideoDialog(
                                               context,
-                                                (controller.selectedVideo.value?.path??"")=="abc" ? (APIConstants.bucketUrl +
-                                                  controller.product.productVideo.toString()): (controller.selectedVideo.value?.path??""),
-                                              controller.selectedVideo.value?.path=="abc",
+                                              (controller
+                                                              .selectedVideo
+                                                              .value
+                                                              ?.path ??
+                                                          "") ==
+                                                      "abc"
+                                                  ? (APIConstants.bucketUrl +
+                                                        controller
+                                                            .product
+                                                            .productVideo
+                                                            .toString())
+                                                  : (controller
+                                                            .selectedVideo
+                                                            .value
+                                                            ?.path ??
+                                                        ""),
+                                              controller
+                                                      .selectedVideo
+                                                      .value
+                                                      ?.path ==
+                                                  "abc",
                                             );
                                           },
                                           child: Stack(
                                             alignment: AlignmentGeometry.center,
                                             children: [
                                               ClipRRect(
-                                                borderRadius: BorderRadius.circular(12),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
                                                 child: AspectRatio(
                                                   aspectRatio: 16 / 9,
                                                   child: VideoPlayer(
-                                                    controller.videoPlayerController!,
+                                                    controller
+                                                        .videoPlayerController!,
                                                   ),
                                                 ),
                                               ),
@@ -737,7 +831,9 @@ class AddProductView extends GetView<AddProductController> {
                                           onTap: controller.removeVideo,
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: SvgPicture.asset(Asset.delete),
+                                            child: SvgPicture.asset(
+                                              Asset.delete,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -745,14 +841,20 @@ class AddProductView extends GetView<AddProductController> {
                                   else
                                     GestureDetector(
                                       onTap: () =>
-                                          controller.openVideoPickerBottomSheet(Get.context!),
+                                          controller.openVideoPickerBottomSheet(
+                                            Get.context!,
+                                          ),
                                       child: Center(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const Gap(24),
 
-                                            SvgPicture.asset(Asset.add, height: 40),
+                                            SvgPicture.asset(
+                                              Asset.add,
+                                              height: 40,
+                                            ),
                                             const Gap(16),
                                             Text(
                                               "Upload Video (max 10 MB)",
@@ -788,11 +890,13 @@ class AddProductView extends GetView<AddProductController> {
                                           alignment: AlignmentGeometry.center,
                                           children: [
                                             ClipRRect(
-                                              borderRadius: BorderRadius.circular(12),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
                                               child: AspectRatio(
                                                 aspectRatio: 16 / 9,
                                                 child: VideoPlayer(
-                                                  controller.videoPlayerController!,
+                                                  controller
+                                                      .videoPlayerController!,
                                                 ),
                                               ),
                                             ),
@@ -809,9 +913,12 @@ class AddProductView extends GetView<AddProductController> {
                                                   shape: BoxShape.circle,
                                                   color: MyColors.primary,
                                                 ),
-                                                padding: const EdgeInsets.all(12),
+                                                padding: const EdgeInsets.all(
+                                                  12,
+                                                ),
                                                 child: const Icon(
-                                                  Icons.video_camera_back_outlined,
+                                                  Icons
+                                                      .video_camera_back_outlined,
                                                   color: Colors.white,
                                                 ),
                                               ),
@@ -822,7 +929,9 @@ class AddProductView extends GetView<AddProductController> {
                                           onTap: controller.removeVideo,
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: SvgPicture.asset(Asset.delete),
+                                            child: SvgPicture.asset(
+                                              Asset.delete,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -830,14 +939,20 @@ class AddProductView extends GetView<AddProductController> {
                                   else
                                     GestureDetector(
                                       onTap: () =>
-                                          controller.openVideoPickerBottomSheet(Get.context!),
+                                          controller.openVideoPickerBottomSheet(
+                                            Get.context!,
+                                          ),
                                       child: Center(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const Gap(24),
 
-                                            SvgPicture.asset(Asset.add, height: 40),
+                                            SvgPicture.asset(
+                                              Asset.add,
+                                              height: 40,
+                                            ),
                                             const Gap(16),
                                             Text(
                                               "Upload Video (max 10 MB)",
@@ -860,9 +975,12 @@ class AddProductView extends GetView<AddProductController> {
                             buttonName: 'Continue',
                             onTap: () {
                               hideKeyboard();
-                              if (controller.formKey3.currentState!.validate()) {
+                              if (controller.formKey3.currentState!
+                                  .validate()) {
                                 if (controller.selectedVideo.value == null) {
-                                  SnackBars.errorSnackBar(content: "Please upload a video");
+                                  SnackBars.errorSnackBar(
+                                    content: "Please upload a video",
+                                  );
                                   return;
                                 }
                                 controller.showExtraFields.value = true;
@@ -896,8 +1014,8 @@ class AddProductView extends GetView<AddProductController> {
                             itemCount: controller.filters.length,
                             itemBuilder: (context, index) {
                               final filter = controller.filters[index];
-                              final controllerField =
-                                  controller.dynamicControllers[filter.filterName];
+                              final controllerField = controller
+                                  .dynamicControllers[filter.filterName];
 
                               if (filter.filterType == 'dropdown') {
                                 controller.dropdownValues.putIfAbsent(
@@ -909,18 +1027,24 @@ class AddProductView extends GetView<AddProductController> {
                                   padding: EdgeInsets.only(bottom: 2.h),
                                   child: CommonDropdown<String>(
                                     headerText: filter.filterLabel ?? '',
-                                    hintText: "Select ${filter.filterLabel ?? ''}",
-                                    items: (filter.dropdownList ?? []).cast<String>(),
+                                    hintText:
+                                        "Select ${filter.filterLabel ?? ''}",
+                                    items: (filter.dropdownList ?? [])
+                                        .cast<String>(),
                                     validator: (val) {
                                       if (val == null || val.isEmpty) {
                                         return "Please select ${filter.filterLabel ?? 'a value'}";
                                       }
                                       return null;
                                     },
-                                    selectedValue: controller.dropdownValues[filter.filterName]!,
+                                    selectedValue: controller
+                                        .dropdownValues[filter.filterName]!,
                                     itemLabel: (item) => item,
                                     onChanged: (val) {
-                                      controller.dynamicControllers[filter.filterName]?.text =
+                                      controller
+                                              .dynamicControllers[filter
+                                                  .filterName]
+                                              ?.text =
                                           val ?? '';
                                     },
                                   ),
@@ -935,14 +1059,15 @@ class AddProductView extends GetView<AddProductController> {
 
                                 final RxString errorText = ''.obs;
 
-                                final selectedList =
-                                    controller.multiDropdownValues[filter.filterName]!;
+                                final selectedList = controller
+                                    .multiDropdownValues[filter.filterName]!;
 
                                 return Obx(
                                   () => Padding(
                                     padding: EdgeInsets.only(bottom: 2.h),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
@@ -957,30 +1082,44 @@ class AddProductView extends GetView<AddProductController> {
                                         const Gap(5),
                                         GestureDetector(
                                           onTap: () async {
-                                            final List<String> items = (filter.dropdownList ?? [])
-                                                .cast<String>();
+                                            final List<String> items =
+                                                (filter.dropdownList ?? [])
+                                                    .cast<String>();
 
                                             final selected = await showDialog<List<String>>(
                                               context: context,
                                               builder: (_) {
-                                                final tempSelection = selectedList.toSet().obs;
+                                                final tempSelection =
+                                                    selectedList.toSet().obs;
                                                 return AlertDialog(
                                                   backgroundColor: Colors.white,
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          10,
+                                                        ),
                                                   ),
-                                                  title: Text("Select ${filter.filterLabel ?? ''}"),
-                                                  titleTextStyle: MyTexts.medium15.copyWith(
-                                                    color: MyColors.primary,
-                                                    fontFamily: MyTexts.SpaceGrotesk,
+                                                  title: Text(
+                                                    "Select ${filter.filterLabel ?? ''}",
                                                   ),
+                                                  titleTextStyle: MyTexts
+                                                      .medium15
+                                                      .copyWith(
+                                                        color: MyColors.primary,
+                                                        fontFamily: MyTexts
+                                                            .SpaceGrotesk,
+                                                      ),
                                                   content: Obx(
                                                     () => SingleChildScrollView(
                                                       child: Column(
-                                                        children: items.map((item) {
-                                                          final isSelected = tempSelection.contains(
-                                                            item,
-                                                          );
+                                                        children: items.map((
+                                                          item,
+                                                        ) {
+                                                          final isSelected =
+                                                              tempSelection
+                                                                  .contains(
+                                                                    item,
+                                                                  );
                                                           return CheckboxListTile(
                                                             title: Text(item),
                                                             value: isSelected,
@@ -989,17 +1128,25 @@ class AddProductView extends GetView<AddProductController> {
                                                                   Color
                                                                 >((states) {
                                                                   if (states.contains(
-                                                                    WidgetState.selected,
+                                                                    WidgetState
+                                                                        .selected,
                                                                   )) {
-                                                                    return MyColors.primary;
+                                                                    return MyColors
+                                                                        .primary;
                                                                   }
-                                                                  return Colors.white;
+                                                                  return Colors
+                                                                      .white;
                                                                 }),
                                                             onChanged: (checked) {
-                                                              if (checked == true) {
-                                                                tempSelection.add(item);
+                                                              if (checked ==
+                                                                  true) {
+                                                                tempSelection
+                                                                    .add(item);
                                                               } else {
-                                                                tempSelection.remove(item);
+                                                                tempSelection
+                                                                    .remove(
+                                                                      item,
+                                                                    );
                                                               }
                                                             },
                                                           );
@@ -1009,13 +1156,17 @@ class AddProductView extends GetView<AddProductController> {
                                                   ),
                                                   actions: [
                                                     TextButton(
-                                                      onPressed: () =>
-                                                          Get.back(result: tempSelection.toList()),
+                                                      onPressed: () => Get.back(
+                                                        result: tempSelection
+                                                            .toList(),
+                                                      ),
                                                       child: Text(
                                                         "OK",
-                                                        style: MyTexts.bold16.copyWith(
-                                                          color: MyColors.primary,
-                                                        ),
+                                                        style: MyTexts.bold16
+                                                            .copyWith(
+                                                              color: MyColors
+                                                                  .primary,
+                                                            ),
                                                       ),
                                                     ),
                                                   ],
@@ -1026,7 +1177,8 @@ class AddProductView extends GetView<AddProductController> {
                                             if (selected != null) {
                                               selectedList.assignAll(selected);
                                               controller
-                                                  .dynamicControllers[filter.filterName]
+                                                  .dynamicControllers[filter
+                                                      .filterName]
                                                   ?.text = selected.join(
                                                 ', ',
                                               );
@@ -1046,32 +1198,44 @@ class AddProductView extends GetView<AddProductController> {
                                                     ? Colors.red
                                                     : MyColors.grayEA,
                                               ),
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                               color: Colors.white,
                                             ),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Expanded(
                                                   child: Text(
                                                     selectedList.isEmpty
                                                         ? "Select ${filter.filterLabel ?? ''}"
-                                                        : selectedList.join(', '),
+                                                        : selectedList.join(
+                                                            ', ',
+                                                          ),
                                                     style: selectedList.isEmpty
                                                         ? MyTexts.medium13.copyWith(
-                                                            color: MyColors.primary.withValues(
-                                                              alpha: 0.5,
-                                                            ),
-                                                            fontFamily: MyTexts.SpaceGrotesk,
+                                                            color: MyColors
+                                                                .primary
+                                                                .withValues(
+                                                                  alpha: 0.5,
+                                                                ),
+                                                            fontFamily: MyTexts
+                                                                .SpaceGrotesk,
                                                           )
-                                                        : MyTexts.medium15.copyWith(
-                                                            color: MyColors.primary,
-                                                          ),
-                                                    overflow: TextOverflow.ellipsis,
+                                                        : MyTexts.medium15
+                                                              .copyWith(
+                                                                color: MyColors
+                                                                    .primary,
+                                                              ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                 ),
                                                 const Icon(
-                                                  Icons.keyboard_arrow_down_rounded,
+                                                  Icons
+                                                      .keyboard_arrow_down_rounded,
                                                   size: 24,
                                                 ),
                                               ],
@@ -1080,7 +1244,10 @@ class AddProductView extends GetView<AddProductController> {
                                         ),
                                         if (errorText.isNotEmpty)
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 4, left: 8),
+                                            padding: const EdgeInsets.only(
+                                              top: 4,
+                                              left: 8,
+                                            ),
                                             child: Text(
                                               errorText.value,
                                               style: const TextStyle(
@@ -1096,17 +1263,23 @@ class AddProductView extends GetView<AddProductController> {
                               }
 
                               if (filter.filterType == 'number') {
-                                final min = double.tryParse(filter.minValue?.toString() ?? '');
-                                final max = double.tryParse(filter.maxValue?.toString() ?? '');
+                                final min = double.tryParse(
+                                  filter.minValue?.toString() ?? '',
+                                );
+                                final max = double.tryParse(
+                                  filter.maxValue?.toString() ?? '',
+                                );
 
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: 2.h),
                                   child: CommonTextField(
-                                    keyboardType: const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                          decimal: true,
+                                        ),
                                     headerText: filter.filterLabel ?? '',
-                                    hintText: "Enter ${filter.filterLabel ?? ''}",
+                                    hintText:
+                                        "Enter ${filter.filterLabel ?? ''}",
                                     controller: controllerField,
                                     validator: (val) {
                                       if (val == null || val.isEmpty) {
@@ -1118,7 +1291,9 @@ class AddProductView extends GetView<AddProductController> {
                                         return "Enter a valid number";
                                       }
 
-                                      if (min != null && max != null && min == max) {
+                                      if (min != null &&
+                                          max != null &&
+                                          min == max) {
                                         if (numValue != min) {
                                           return "Value must be exactly $min";
                                         }
@@ -1137,7 +1312,10 @@ class AddProductView extends GetView<AddProductController> {
 
                                     suffixIcon: filter.unit != null
                                         ? Padding(
-                                            padding: const EdgeInsets.only(right: 8.0, top: 12.0),
+                                            padding: const EdgeInsets.only(
+                                              right: 8.0,
+                                              top: 12.0,
+                                            ),
                                             child: Text(
                                               filter.unit!,
                                               style: MyTexts.medium14.copyWith(
@@ -1164,10 +1342,15 @@ class AddProductView extends GetView<AddProductController> {
                                   },
                                   suffixIcon: filter.unit != null
                                       ? Padding(
-                                          padding: const EdgeInsets.only(right: 8.0, top: 8.0),
+                                          padding: const EdgeInsets.only(
+                                            right: 8.0,
+                                            top: 8.0,
+                                          ),
                                           child: Text(
                                             filter.unit!,
-                                            style: MyTexts.regular14.copyWith(color: MyColors.grey),
+                                            style: MyTexts.regular14.copyWith(
+                                              color: MyColors.grey,
+                                            ),
                                           ),
                                         )
                                       : null,
@@ -1184,20 +1367,26 @@ class AddProductView extends GetView<AddProductController> {
                             onTap: () {
                               hideKeyboard();
 
-                              if (!controller.formKey1.currentState!.validate()) {
+                              if (!controller.formKey1.currentState!
+                                  .validate()) {
                                 SnackBars.errorSnackBar(
-                                  content: "Please fill all required fields properly",
+                                  content:
+                                      "Please fill all required fields properly",
                                 );
                                 return;
                               }
 
                               bool allValid = true;
 
-                              controller.multiDropdownValues.forEach((key, list) {
+                              controller.multiDropdownValues.forEach((
+                                key,
+                                list,
+                              ) {
                                 if (list.isEmpty) {
                                   allValid = false;
                                   SnackBars.errorSnackBar(
-                                    content: "Please select at least one value for $key",
+                                    content:
+                                        "Please select at least one value for $key",
                                   );
                                 }
                               });
@@ -1234,7 +1423,9 @@ class AddProductView extends GetView<AddProductController> {
             child: Text(
               controller.addProduct[i] ?? "",
               style: MyTexts.medium14.copyWith(
-                decoration: isActive ? TextDecoration.underline : TextDecoration.none,
+                decoration: isActive
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
                 color: isActive ? MyColors.primary : MyColors.grayA5,
               ),
             ),

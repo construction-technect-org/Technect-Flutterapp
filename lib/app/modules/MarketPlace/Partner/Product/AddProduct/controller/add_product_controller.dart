@@ -326,9 +326,7 @@ class AddProductController extends GetxController {
       final result = await _service.getFilter(subCategoryId);
 
       if (result.success == true) {
-        filters.value = (result.data as List<FilterData>)
-            .map((e) => e)
-            .toList();
+        filters.value = (result.data!).map((e) => e).toList();
         for (final FilterData filter in filters) {
           if (filter.filterType == 'dropdown') {
             dropdownValues[filter.filterName ?? ''] = Rxn<String>();
@@ -960,6 +958,7 @@ class AddProductController extends GetxController {
     videoPlayerController?.dispose();
     videoPlayerController = null;
   }
+
   void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
     final playerController = isNetwork
         ? VideoPlayerController.network(videoPath)
@@ -1014,5 +1013,4 @@ class AddProductController extends GetxController {
       },
     );
   }
-
 }
