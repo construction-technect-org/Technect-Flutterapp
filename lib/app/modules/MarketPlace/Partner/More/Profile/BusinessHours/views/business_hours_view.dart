@@ -100,68 +100,68 @@ class BusinessHoursView extends GetView<BusinessHoursController> {
                             ],
                           ),
                           SizedBox(height: 3.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Timezone",
-                                    style: MyTexts.bold15.copyWith(
-                                      color: MyColors.gray2E,
-                                    ),
-                                  ),
-                                  SizedBox(height: 0.7.h),
-                                  Text(
-                                    "Set your timezone",
-                                    style: MyTexts.medium13.copyWith(
-                                      color: MyColors.gray54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                height: 5.h,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: MyColors.grayEA),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(9),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "(UTC-8:00) Pacific Time",
-                                        style: MyTexts.medium13.copyWith(
-                                          color: MyColors.gray54,
-                                        ),
-                                      ),
-                                      SizedBox(width: 5.w),
-                                      const Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.keyboard_arrow_down,
-                                            size: 10,
-                                            color: Colors.black,
-                                          ),
-                                          Icon(
-                                            Icons.keyboard_arrow_up,
-                                            size: 10,
-                                            color: Colors.black,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(height: 4.h, color: MyColors.brightGray1),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       children: [
+                          //         Text(
+                          //           "Timezone",
+                          //           style: MyTexts.bold15.copyWith(
+                          //             color: MyColors.gray2E,
+                          //           ),
+                          //         ),
+                          //         SizedBox(height: 0.7.h),
+                          //         Text(
+                          //           "Set your timezone",
+                          //           style: MyTexts.medium13.copyWith(
+                          //             color: MyColors.gray54,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     Container(
+                          //       height: 5.h,
+                          //       decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(12),
+                          //         border: Border.all(color: MyColors.grayEA),
+                          //       ),
+                          //       child: Padding(
+                          //         padding: const EdgeInsets.all(9),
+                          //         child: Row(
+                          //           mainAxisAlignment:
+                          //               MainAxisAlignment.spaceBetween,
+                          //           children: [
+                          //             Text(
+                          //               "(UTC-8:00) Pacific Time",
+                          //               style: MyTexts.medium13.copyWith(
+                          //                 color: MyColors.gray54,
+                          //               ),
+                          //             ),
+                          //             SizedBox(width: 5.w),
+                          //             const Column(
+                          //               mainAxisSize: MainAxisSize.min,
+                          //               children: [
+                          //                 Icon(
+                          //                   Icons.keyboard_arrow_down,
+                          //                   size: 10,
+                          //                   color: Colors.black,
+                          //                 ),
+                          //                 Icon(
+                          //                   Icons.keyboard_arrow_up,
+                          //                   size: 10,
+                          //                   color: Colors.black,
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // Divider(height: 4.h, color: MyColors.brightGray1),
                           // Days List
                           Obx(() {
                             if (!controller.isEnabled.value) {
