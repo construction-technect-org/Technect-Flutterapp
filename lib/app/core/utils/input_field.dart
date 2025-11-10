@@ -1,14 +1,15 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
 String? validateName(String? value, {String fieldName = "Name"}) {
+  final name = fieldName.capitalizeFirst;
   if (value == null || value.trim().isEmpty) {
-    return "Please enter $fieldName";
+    return "Please enter $name";
   }
   if (value.trim().length < 2) {
-    return "$fieldName must be at least 2 characters long";
+    return "Minimum 2 characters required";
   }
   if (!RegExp(r'^[A-Z][a-zA-Z]*$').hasMatch(value.trim())) {
-    return "$fieldName must start with uppercase and contain only letters";
+    return "$name must start with uppercase and contain only letters";
   }
   return null;
 }
