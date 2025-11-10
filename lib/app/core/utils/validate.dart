@@ -118,17 +118,6 @@ class Validate {
     return null;
   }
 
-  /// Validates mobile number format with strict rules
-  /// Returns error message if invalid, null if valid
-  /// Checks for:
-  /// - Empty or null values (if isOptional is false, returns error; if true, returns null)
-  /// - Length (must be 10 digits)
-  /// - All identical digits (e.g., 1111111111, 2222222222)
-  /// - All zeros after first digit (e.g., 6000000000, 7000000000)
-  /// - Valid Indian mobile number format (starts with 6, 7, 8, or 9)
-  ///
-  /// [isOptional] - If true, null/empty values are considered valid
-  ///                If false, null/empty values return an error
   static String? validateMobileNumber(
     String? mobileNumber, {
     bool isOptional = false,
@@ -146,7 +135,7 @@ class Validate {
 
     // Check length (should be 10 digits for Indian numbers)
     if (digits.length != 10) {
-      return "Enter a valid mobile number.";
+      return "Mobile number must be exactly 10 digits";
     }
 
     // Check if all digits are identical (e.g., 1111111111, 2222222222)
