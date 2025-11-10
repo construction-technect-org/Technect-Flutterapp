@@ -30,8 +30,6 @@ class ChatSystemController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    super.onInit();
-
     socket.connect(); // 👈 Important!
 
     socket.onConnect((_) {
