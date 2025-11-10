@@ -1,4 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/ChatSystem/AllChatList/model/all_chat_list_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/AllChatList/service/all_chat_service.dart';
 
 class AllChatListController extends GetxController {
   final RxList<Map<String, dynamic>> chatList = <Map<String, dynamic>>[].obs;
@@ -7,6 +9,10 @@ class AllChatListController extends GetxController {
   void onInit() {
     super.onInit();
     loadChats();
+    WidgetsBinding.instance.addPostFrameCallback((val) async {
+      await fetchWishList(isLoad: true);
+
+    });
   }
 
   void loadChats() {
@@ -29,4 +35,24 @@ class AllChatListController extends GetxController {
       },
     ];
   }
+  Rx<AllChatListModel> chatListModel = AllChatListModel().obs;
+
+  RxBool isLoading = false.obs;
+
+  Future<void> fetchWishList({bool? isLoad}) async {
+    try {
+      isLoading.value = isLoad ?? false;
+      final result = await AllChatListServices().allChatList();
+      if (result.success == true) {
+        chatListModel.value = result;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 }

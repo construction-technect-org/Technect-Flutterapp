@@ -630,18 +630,19 @@ class ConnectionInboxView extends StatelessWidget {
                     const Gap(12),
                     GestureDetector(
                       onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(24),
-                            ),
-                          ),
-                          builder: (_) =>
-                              ChatBottomSheet(connection: connection),
-                        );
+                        Get.toNamed(Routes.All_CHAT_LIST);
+                        // showModalBottomSheet(
+                        //   context: context,
+                        //   isScrollControlled: true,
+                        //   backgroundColor: Colors.white,
+                        //   shape: const RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.vertical(
+                        //       top: Radius.circular(24),
+                        //     ),
+                        //   ),
+                        //   builder: (_) =>
+                        //       ChatBottomSheet(connection: connection),
+                        // );
                       },
                       child: Container(
                         height: 36,

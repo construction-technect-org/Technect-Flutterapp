@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/AllChatList/controllers/chat_system_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/AllChatList/controllers/all_chat_list_controller.dart';
 
 class AllChatListScreen extends GetView<AllChatListController> {
   const AllChatListScreen({super.key});
@@ -11,7 +11,11 @@ class AllChatListScreen extends GetView<AllChatListController> {
       backgroundColor: MyColors.white,
       appBar: const CommonAppBar(title: Text("Chats")),
       body: Obx(() {
-        if (controller.chatList.isEmpty) {
+        if(controller.isLoading.value){
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if ((controller.chatListModel.value.chats?.conversations??[]).isEmpty) {
           return Center(
             child: Text(
               "No conversations yet",
@@ -22,21 +26,21 @@ class AllChatListScreen extends GetView<AllChatListController> {
 
         return ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          itemCount: controller.chatList.length,
+          itemCount: (controller.chatListModel.value.chats?.conversations??[]).length,
           separatorBuilder: (_, __) => const Divider(height: 1, color: MyColors.grayEA),
           itemBuilder: (context, index) {
-            final chat = controller.chatList[index];
-            final int unreadCount = (chat["unreadCount"] ?? 0) as int;
+            final chat =(controller.chatListModel.value.chats?.conversations??[])[index];
+            final int unreadCount =chat.chatInfo?.unreadCount??0;
 
             return ListTile(
               contentPadding: const EdgeInsets.symmetric(vertical: 6),
               leading: CircleAvatar(
                 radius: 26,
-                backgroundImage: NetworkImage(chat["profilePhoto"]),
+                backgroundImage: NetworkImage (APIConstants.bucketUrl+( chat.connector?.profileImage??"")),
               ),
-              title: Text(chat["name"], style: MyTexts.bold16.copyWith(color: MyColors.primary)),
+              title: Text(chat.connector?.firstName??"", style: MyTexts.bold16.copyWith(color: MyColors.primary)),
               subtitle: Text(
-                chat["lastMessage"],
+                chat.chatInfo?.lastMessage??"",
                 style: MyTexts.medium14.copyWith(color: MyColors.fontBlack.withOpacity(0.7)),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -44,7 +48,7 @@ class AllChatListScreen extends GetView<AllChatListController> {
               trailing: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(chat["time"], style: MyTexts.medium12.copyWith(color: MyColors.grey)),
+                  Text(chat.chatInfo?.lastMessageTime??"", style: MyTexts.medium12.copyWith(color: MyColors.grey)),
                   if (unreadCount > 0)
                     Container(
                       margin: const EdgeInsets.only(top: 4),
@@ -54,7 +58,7 @@ class AllChatListScreen extends GetView<AllChatListController> {
                         shape: BoxShape.circle,
                       ),
                       child: Text(
-                        "${chat["unreadCount"]}",
+                        unreadCount.toString(),
                         style: MyTexts.bold12.copyWith(color: Colors.white),
                       ),
                     ),

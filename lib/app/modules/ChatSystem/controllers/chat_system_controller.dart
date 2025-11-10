@@ -1,6 +1,7 @@
 import 'package:chatview/chatview.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatSystemController extends GetxController {
   final ChatUser currentUser = const ChatUser(
@@ -17,16 +18,31 @@ class ChatSystemController extends GetxController {
 
   late final ChatController chatController;
   final ImagePicker picker = ImagePicker();
+  final IO.Socket socket = IO.io("${ApiManager.baseUrl}?token=${myPref.token}");
 
   @override
   void onInit() {
     super.onInit();
+    socket.onConnect((_) {
+      print('connect');
+      socket.emit('msg', 'test');
+    });
+    socket.on('event', (data) => print(data));
+    socket.onDisconnect((_) => print('disconnect'));
+    socket.on('fromServer', (_) => print("_"));
     chatController = ChatController(
       initialMessageList: [],
       scrollController: ScrollController(),
       currentUser: currentUser,
       otherUsers: [supportUser],
     );
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    socket.dispose();
   }
 
   void onSendTap(String message, ReplyMessage replyMessage, MessageType type) {

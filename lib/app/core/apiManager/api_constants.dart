@@ -149,4 +149,11 @@ class APIConstants {
   static const String updateService = "merchant/service/";
   static const String getServiceList = "merchant/service/list";
   static const String connectorServices = "connector/service/services";
+
+
+
+
+  ///CRM
+  static const String merchantChatList = "merchant/chat/conversations";
+  static const String connectorChatList = "connector/chat/conversations";
 }

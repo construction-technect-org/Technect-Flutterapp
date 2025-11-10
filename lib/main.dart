@@ -16,6 +16,7 @@ Future<void> main() async {
   await initService();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(
     ResponsiveSizer(
       builder: (context, orientation, screenType) {
