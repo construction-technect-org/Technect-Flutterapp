@@ -157,10 +157,18 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           child: isHttp
                                               ? AspectRatio(
                                                   aspectRatio: 16 / 11,
-                                                  child: VideoPlayer(
-                                                    controller
-                                                        .videoPlayerController!,
-                                                  ),
+                                                  child:
+                                                      (controller.videoPlayerController !=
+                                                              null &&
+                                                          controller
+                                                              .videoPlayerController!
+                                                              .value
+                                                              .isInitialized)
+                                                      ? VideoPlayer(
+                                                          controller
+                                                              .videoPlayerController!,
+                                                        )
+                                                      : const SizedBox.shrink(),
                                                 )
                                               : AspectRatio(
                                                   aspectRatio: 16 / 11,

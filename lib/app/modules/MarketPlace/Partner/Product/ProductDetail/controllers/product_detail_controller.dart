@@ -68,6 +68,8 @@ class ProductDetailsController extends GetxController {
           Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()),
         );
         await videoPlayerController?.initialize();
+        await videoPlayerController?.setLooping(false);
+        await videoPlayerController?.setVolume(1.0);
       });
     }
   }
@@ -116,58 +118,93 @@ class ProductDetailsController extends GetxController {
     }
   }
 
+  @override
+  void onClose() {
+    try {
+      videoPlayerController?.pause();
+      videoPlayerController?.dispose();
+    } catch (_) {}
+    super.onClose();
+  }
+
   void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
+    try {
+      videoPlayerController?.pause();
+    } catch (_) {}
+
     final playerController = isNetwork
         ? VideoPlayerController.network(videoPath)
         : VideoPlayerController.file(File(videoPath));
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (_) {
-        return Dialog(
-          insetPadding: const EdgeInsets.all(16),
-          child: FutureBuilder(
-            future: playerController.initialize(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                playerController.play();
-                return AspectRatio(
-                  aspectRatio: playerController.value.aspectRatio,
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      VideoPlayer(playerController),
-                      VideoProgressIndicator(
-                        playerController,
-                        allowScrubbing: true,
-                        colors: const VideoProgressColors(
-                          backgroundColor: MyColors.grayEA,
-                          playedColor: MyColors.primary,
-                          bufferedColor: MyColors.grayEA,
+        return WillPopScope(
+          onWillPop: () async {
+            try {
+              await playerController.pause();
+              await playerController.dispose();
+            } catch (_) {}
+            return true;
+          },
+          child: Dialog(
+            insetPadding: const EdgeInsets.all(16),
+            child: FutureBuilder(
+              future: () async {
+                await playerController.initialize();
+                await playerController.setLooping(false);
+                await playerController.setVolume(1.0);
+                return true;
+              }(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  playerController.play();
+                  return AspectRatio(
+                    aspectRatio: playerController.value.aspectRatio,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        VideoPlayer(playerController),
+                        VideoProgressIndicator(
+                          playerController,
+                          allowScrubbing: true,
+                          colors: const VideoProgressColors(
+                            backgroundColor: MyColors.grayEA,
+                            playedColor: MyColors.primary,
+                            bufferedColor: MyColors.grayEA,
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: IconButton(
-                          icon: const Icon(Icons.close, color: Colors.white),
-                          onPressed: () {
-                            playerController.pause();
-                            playerController.dispose();
-                            Navigator.pop(context);
-                          },
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white),
+                            onPressed: () async {
+                              try {
+                                await playerController.pause();
+                                await playerController.dispose();
+                              } catch (_) {}
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
+                      ],
+                    ),
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
           ),
         );
       },
-    );
+    ).then((_) {
+      try {
+        playerController.pause();
+        playerController.dispose();
+      } catch (_) {}
+    });
   }
 }
