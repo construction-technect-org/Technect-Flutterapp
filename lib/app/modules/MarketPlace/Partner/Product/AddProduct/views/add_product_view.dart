@@ -555,7 +555,7 @@ class AddProductView extends GetView<AddProductController> {
                                             if (val == null || val.isEmpty) {
                                               return "Please enter stock";
                                             }
-                                            if (double.tryParse(val) == null) {
+                                            if (int.tryParse(val) == null) {
                                               return "Enter valid number";
                                             }
                                             if (int.tryParse(val) == 0) {
