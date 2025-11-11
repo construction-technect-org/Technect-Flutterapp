@@ -29,6 +29,7 @@ abstract class Routes {
   static const ADD_SERVICE = _Paths.ADD_SERVICE;
   static const SERVICE_DETAILS = _Paths.SERVICE_DETAILS;
   static const CHAT_SYSTEM = _Paths.CHAT_SYSTEM;
+  static const CONNECTOR_CHAT_SYSTEM = _Paths.CONNECTOR_CHAT_SYSTEM;
   static const CONNECTION_INBOX = _Paths.CONNECTION_INBOX;
   static const DASHBOARD = _Paths.DASHBOARD;
   static const DASHABORD_MARKET_PLACE = _Paths.DASHABOARD_MARKET_PLACE;
@@ -86,6 +87,7 @@ abstract class Routes {
   static const CRM_MAIN = _Paths.CRM_MAIN;
   static const ADD_LEAD = _Paths.ADD_LEAD;
   static const All_CHAT_LIST = _Paths.All_CHAT_LIST;
+  static const CONNECTOR_All_CHAT_LIST = _Paths.CONNECTOR_All_CHAT_LIST;
 
 }
 
@@ -119,6 +121,7 @@ abstract class _Paths {
   static const ADD_SERVICE = '/add-service';
   static const SERVICE_DETAILS = '/service-details';
   static const CHAT_SYSTEM = '/chat-system';
+  static const CONNECTOR_CHAT_SYSTEM = '/connector-chat-system';
   static const CONNECTION_INBOX = '/connection-inbox';
   static const SETTING = '/setting';
   static const DASHBOARD = '/dashboard';
@@ -173,4 +176,5 @@ abstract class _Paths {
   static const CRM_MAIN = '/crm-mail';
   static const ADD_LEAD = '/add-lead';
   static const All_CHAT_LIST = '/all-chat-list';
+  static const CONNECTOR_All_CHAT_LIST = '/connector-all-chat-list';
 }

@@ -1,22 +1,22 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/modules/ChatSystem/controllers/chat_system_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/chat_system_controller.dart';
 
-class ChatSystemView extends StatefulWidget {
-  const ChatSystemView({super.key});
+class ConnectorChatSystemView extends StatefulWidget {
+  const ConnectorChatSystemView({super.key});
 
   @override
-  State<ChatSystemView> createState() => _ChatSystemViewState();
+  State<ConnectorChatSystemView> createState() => _ConnectorChatSystemViewState();
 }
 
-class _ChatSystemViewState extends State<ChatSystemView> {
-  late ChatSystemController controller;
+class _ConnectorChatSystemViewState extends State<ConnectorChatSystemView> {
+  late ConnectorChatSystemController controller;
   final TextEditingController messageController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    controller = Get.put(ChatSystemController());
+    controller = Get.put(ConnectorChatSystemController());
   }
 
   @override

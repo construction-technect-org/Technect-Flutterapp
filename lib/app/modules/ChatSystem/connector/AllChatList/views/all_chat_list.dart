@@ -1,10 +1,10 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/AllChatList/controllers/all_chat_list_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/controllers/all_chat_list_controller.dart';
 import 'package:intl/intl.dart';
 
-class AllChatListScreen extends GetView<AllChatListController> {
-  const AllChatListScreen({super.key});
+class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController> {
+  const ConnectorAllChatListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

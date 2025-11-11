@@ -1,8 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/AllChatList/model/all_chat_list_model.dart';
-import 'package:construction_technect/app/modules/ChatSystem/AllChatList/service/all_chat_service.dart';
-
-class AllChatListController extends GetxController {
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/model/all_chat_list_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/service/all_chat_service.dart';
+class ConnectorAllChatListController extends GetxController {
   final RxList<Map<String, dynamic>> chatList = <Map<String, dynamic>>[].obs;
 
   @override
@@ -42,7 +41,7 @@ class AllChatListController extends GetxController {
   Future<void> fetchWishList({bool? isLoad}) async {
     try {
       isLoading.value = isLoad ?? false;
-      final result = await AllChatListServices().allChatList();
+      final result = await ConnectorAllChatListServices().allChatList();
       if (result.success == true) {
         chatListModel.value = result;
       }

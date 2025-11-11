@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/model/chat_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/chat_model.dart';
 
-class ChatServices {
+class ConnectorChatServices {
   ApiManager apiManager = ApiManager();
 
   Future<ChatListModel> allChatList({required int cId}) async {
