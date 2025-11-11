@@ -92,6 +92,11 @@ class ChatSystemController extends GetxController {
     } catch (e) {
       log('❌ Error fetching chat list: $e');
     } finally {
+      if (messages.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _jumpToBottom();
+        });
+      }
       isLoading.value = false;
     }
   }
@@ -183,6 +188,11 @@ class ChatSystemController extends GetxController {
       });
     }
   }
+  void _jumpToBottom() {
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    }
+  }
 
   /// Send message
   void onSendTap(String message) {
@@ -200,7 +210,9 @@ class ChatSystemController extends GetxController {
     _scrollToBottom();
 
     socket.emit('send_message', {'connection_id': connectionId, 'message': message});
-
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _scrollToBottom();
+    });
     // onRefresh?.call();
   }
 

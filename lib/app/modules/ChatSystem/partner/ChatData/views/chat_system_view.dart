@@ -2,24 +2,37 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/controllers/chat_system_controller.dart';
+import 'package:intl/intl.dart';
 
-class ChatSystemView extends StatefulWidget {
-  const ChatSystemView({super.key});
+class ChatSystemView extends StatelessWidget {
+   ChatSystemView({super.key});
 
-  @override
-  State<ChatSystemView> createState() => _ChatSystemViewState();
-}
-
-class _ChatSystemViewState extends State<ChatSystemView> {
-  late ChatSystemController controller;
   final TextEditingController messageController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.put(ChatSystemController());
-  }
+  final ChatSystemController controller = Get.put(
+    ChatSystemController(),
+  );
 
+
+   String _formatTime(DateTime dateTime) {
+     final now = DateTime.now();
+     final today = DateTime(now.year, now.month, now.day);
+     final messageDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+     if (messageDate == today) {
+       // Today: show time only (e.g., "10:45 AM")
+       return DateFormat('h:mm a').format(dateTime);
+     } else if (messageDate == today.subtract(const Duration(days: 1))) {
+       // Yesterday
+       return 'Yesterday';
+     } else if (now.difference(dateTime).inDays < 7) {
+       // Within last week: show day name (e.g., "Monday")
+       return DateFormat('EEEE').format(dateTime);
+     } else {
+       // Older: show date (e.g., "11/05/2025")
+       return DateFormat('dd/MM/yyyy').format(dateTime);
+     }
+   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,26 +88,42 @@ class _ChatSystemViewState extends State<ChatSystemView> {
                           isMine ? MyColors.primary : MyColors.veryPaleBlue,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Flexible(
-                              child: Text(
-                                message.message,
-                                style: MyTexts.bold16.copyWith(
-                                  color: isMine ? Colors.white : Colors.black,
-                                ),
+                            Text(
+                              message.message,
+                              style: MyTexts.bold16.copyWith(
+                                color: isMine ? Colors.white : Colors.black,
                               ),
                             ),
-                            if (isMine) ...[
-                              const SizedBox(width: 6),
-                              Icon(
-                                isRead ? Icons.done_all : Icons.check,
-                                size: 16,
-                                color: isRead ? Colors.blue : Colors.white70,
-                              ),
-                            ],
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  _formatTime(message.createdAt),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: isMine
+                                        ? Colors.white70
+                                        : Colors.black54,
+                                  ),
+                                ),
+                                if (isMine) ...[
+                                  const SizedBox(width: 4),
+                                  Icon(
+                                    isRead ? Icons.done_all : Icons.check,
+                                    size: 14,
+                                    color: isRead
+                                        ? Colors.blue
+                                        : Colors.white70,
+                                  ),
+                                ],
+                              ],
+                            ),
                           ],
                         ),
                       ),

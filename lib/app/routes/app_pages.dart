@@ -212,7 +212,7 @@ class AppPages {
     // ),
     GetPage(
       name: _Paths.CHAT_SYSTEM,
-      page: () => const ChatSystemView(),
+      page: () =>  ChatSystemView(),
       binding: ChatSystemBinding(),
     ),
     GetPage(
