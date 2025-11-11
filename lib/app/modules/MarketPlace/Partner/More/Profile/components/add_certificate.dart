@@ -63,7 +63,7 @@ class AddCertificate extends StatelessWidget {
                             ),
                             const Gap(10),
                             GestureDetector(
-                              onTap: controller.pickFile,
+                              onTap: controller.pickFiles,
                               child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.all(20),
@@ -71,37 +71,41 @@ class AddCertificate extends StatelessWidget {
                                   border: Border.all(color: MyColors.grey),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: controller.filePath == null
-                                    ? Column(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(color: MyColors.grey),
+                                child: Obx(
+                                  () => controller.filePath.value == ''
+                                      ? Column(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(color: MyColors.grey),
+                                              ),
+                                              padding: const EdgeInsets.all(14),
+                                              child: const Icon(
+                                                Icons.add,
+                                                size: 30,
+                                                color: MyColors.grey,
+                                              ),
                                             ),
-                                            padding: const EdgeInsets.all(14),
-                                            child: const Icon(
-                                              Icons.add,
-                                              size: 30,
-                                              color: MyColors.grey,
+                                            const Gap(10),
+                                            Text(
+                                              "Select File you want to upload",
+                                              style: MyTexts.medium14.copyWith(
+                                                color: MyColors.grey,
+                                              ),
                                             ),
-                                          ),
-                                          const Gap(10),
-                                          Text(
-                                            "Select File you want to upload",
-                                            style: MyTexts.medium14.copyWith(color: MyColors.grey),
-                                          ),
-                                          const Gap(10),
-                                          Text(
-                                            "Upload Certification",
-                                            style: MyTexts.bold16.copyWith(color: MyColors.black),
-                                          ),
-                                        ],
-                                      )
-                                    : FileIconWidget(
-                                        fileName: controller.filePath.value!,
-                                        showFileName: true,
-                                      ),
+                                            const Gap(10),
+                                            Text(
+                                              "Upload Certification",
+                                              style: MyTexts.bold16.copyWith(color: MyColors.black),
+                                            ),
+                                          ],
+                                        )
+                                      : FileIconWidget(
+                                          fileName: controller.filePath.value!,
+                                          showFileName: true,
+                                        ),
+                                ),
                               ),
                             ),
                           ],
