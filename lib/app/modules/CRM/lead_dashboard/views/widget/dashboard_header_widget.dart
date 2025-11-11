@@ -15,7 +15,7 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
             child: Text(
               "Dashboard",
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 24,
                 fontWeight: FontWeight.w600,
                 color: MyColors.fontBlack,
               ),

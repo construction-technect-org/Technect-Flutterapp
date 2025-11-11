@@ -33,7 +33,7 @@ class StatCardWidget extends StatelessWidget {
             const Gap(4),
             Text(
               title,
-              style: MyTexts.medium12.copyWith(color: MyColors.fontBlack),
+              style: MyTexts.regular12.copyWith(color: MyColors.fontBlack),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),

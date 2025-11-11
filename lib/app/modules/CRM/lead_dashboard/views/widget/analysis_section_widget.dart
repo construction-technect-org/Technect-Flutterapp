@@ -43,8 +43,14 @@ class AnalysisSectionWidget extends GetView<LeadDashController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${item['count']} ${item['label']}',
-                            style: MyTexts.medium12.copyWith(
+                            '${item['label']}',
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.fontBlack,
+                            ),
+                          ),
+                          Text(
+                            '${item['count']}',
+                            style: MyTexts.medium16.copyWith(
                               color: MyColors.fontBlack,
                             ),
                           ),

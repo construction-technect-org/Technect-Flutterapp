@@ -34,8 +34,8 @@ class PipelineSectionWidget extends GetView<LeadDashController> {
                   child: Row(
                     children: [
                       Container(
-                        width: 12,
-                        height: 12,
+                        width: 16,
+                        height: 16,
                         decoration: BoxDecoration(
                           color: item['color']! as Color,
                           shape: BoxShape.circle,
@@ -62,7 +62,7 @@ class PipelineSectionWidget extends GetView<LeadDashController> {
                         ),
                         child: Text(
                           item['label']! as String,
-                          style: MyTexts.medium12.copyWith(
+                          style: MyTexts.medium14.copyWith(
                             color: item['color']! as Color,
                           ),
                         ),

@@ -19,13 +19,13 @@ class LeadDashController extends GetxController {
 
   // Leads data
   final totalLeads = 6.obs;
-  final inboundLeads = 6.obs;
-  final outboundLeads = 6.obs;
+  final inboundLeads = 8.obs;
+  final outboundLeads = 5.obs;
 
   // Task data
-  final totalTasks = 6.obs;
-  final completedTasks = 6.obs;
-  final upcomingTasks = 6.obs;
+  final totalTasks = 2.obs;
+  final completedTasks = 9.obs;
+  final upcomingTasks = 4.obs;
 
   // Pipeline data
   final pipelineData = [

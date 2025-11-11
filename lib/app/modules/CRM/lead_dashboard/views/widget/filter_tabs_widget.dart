@@ -24,7 +24,7 @@ class FilterTabsWidget extends GetView<LeadDashController> {
                   border: Border(
                     bottom: BorderSide(
                       color: isSelected ? MyColors.primary : Colors.transparent,
-                      width: 2,
+                      width: 4,
                     ),
                   ),
                 ),
