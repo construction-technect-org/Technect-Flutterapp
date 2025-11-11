@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/chat_system_controller.dart';
@@ -23,13 +24,8 @@ class _ConnectorChatSystemViewState extends State<ConnectorChatSystemView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        elevation: 0,
+      appBar: CommonAppBar(
         backgroundColor: MyColors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black),
-          onPressed: Get.back,
-        ),
         title: Row(
           children: [
             CircleAvatar(
