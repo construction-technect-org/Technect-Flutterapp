@@ -260,12 +260,12 @@ class ConnectionInboxView extends StatelessWidget {
                   CircleAvatar(
                     backgroundColor: MyColors.grey,
                     radius: 18,
-                    child: connection.connectorProfileImageUrl != null
+                    child: connection.merchantProfileImageUrl != null
                         ? ClipOval(
                             child: CachedNetworkImage(
                               imageUrl:
                                   APIConstants.bucketUrl +
-                                  connection.connectorProfileImageUrl!,
+                                  connection.merchantProfileImageUrl!,
                               width: 36,
                               height: 36,
                               fit: BoxFit.cover,
@@ -287,7 +287,7 @@ class ConnectionInboxView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          connection.connectorName ?? 'Unknown',
+                          connection.merchantName ?? 'Unknown',
                           style: MyTexts.medium16.copyWith(
                             color: MyColors.fontBlack,
                             fontFamily: MyTexts.SpaceGrotesk,
