@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/service/connector_chat_service.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ConnectorChatSystemController extends GetxController {
   Rx<ChatListModel> chatListModel = ChatListModel().obs;
   RxBool isLoading = false.obs;
+  final TextEditingController messageController = TextEditingController();
 
   late CustomUser currentUser;
   late CustomUser supportUser;
@@ -287,6 +290,71 @@ class ConnectorChatSystemController extends GetxController {
       log("📤 Sent image message via socket");
     } catch (e) {
       log("❌ Error capturing/sending image: $e");
+    }
+  }
+
+  Future<void> sendFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'zip'],
+        allowMultiple: false,
+      );
+
+      if (result == null || result.files.isEmpty) return;
+
+      final file = result.files.first;
+      final fileName = file.name;
+      final fileSize = file.size;
+      final filePath = file.path;
+
+      if (filePath == null) {
+        log("❌ File path is null");
+        return;
+      }
+
+      // Get file extension to determine mime type
+      final extension = fileName.split('.').last.toLowerCase();
+      String mimeType = 'application/octet-stream';
+
+      switch (extension) {
+        case 'pdf':
+          mimeType = 'application/pdf';
+        case 'doc':
+          mimeType = 'application/msword';
+        case 'docx':
+          mimeType =
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        case 'xls':
+          mimeType = 'application/vnd.ms-excel';
+        case 'xlsx':
+          mimeType =
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        case 'txt':
+          mimeType = 'text/plain';
+        case 'zip':
+          mimeType = 'application/zip';
+      }
+
+      log(
+        "📄 File selected: $fileName (${(fileSize / 1024).toStringAsFixed(2)} KB)",
+      );
+      _scrollToBottom();
+
+      final bytes = file.bytes ?? await File(filePath).readAsBytes();
+      final base64File = base64Encode(bytes);
+
+      socket.emit('send_message', {
+        'connection_id': connectionId,
+        'message_type': 'file',
+        'media_base64': base64File,
+        'media_mime_type': mimeType,
+        'file_name': fileName,
+        'message': fileName,
+      });
+      log("📤 Sent file message via socket");
+    } catch (e) {
+      log("❌ Error picking/sending file: $e");
     }
   }
 

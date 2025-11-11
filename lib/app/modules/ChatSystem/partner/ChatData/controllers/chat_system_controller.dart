@@ -1,26 +1,24 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/service/chat_service.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatSystemController extends GetxController {
-  /// Chat list model
   Rx<ChatListModel> chatListModel = ChatListModel().obs;
   RxBool isLoading = false.obs;
-
-  /// Chat user info
+  final TextEditingController messageController = TextEditingController();
   late CustomUser currentUser;
   late CustomUser supportUser;
 
-  /// Chat messages
   final RxList<CustomMessage> messages = <CustomMessage>[].obs;
   final ScrollController scrollController = ScrollController();
 
-  /// Others
   final ImagePicker picker = ImagePicker();
   late final IO.Socket socket;
   int connectionId = 0;
@@ -32,7 +30,6 @@ class ChatSystemController extends GetxController {
   void onInit() {
     super.onInit();
 
-    /// Get arguments from navigation
     if (Get.arguments != null) {
       connectionId = Get.arguments["cId"];
       onRefresh = Get.arguments["onRefresh"];
@@ -48,14 +45,11 @@ class ChatSystemController extends GetxController {
 
     supportUser = const CustomUser(id: '', name: '', profilePhoto: '');
 
-    /// Load chat
     fetchChatList();
 
-    /// Initialize socket
     _initSocket();
   }
 
-  /// Fetch chat history
   Future<void> fetchChatList({bool? isLoad}) async {
     try {
       isLoading.value = isLoad ?? true;
@@ -156,9 +150,6 @@ class ChatSystemController extends GetxController {
       if (kDebugMode) log('🟢 Your messages were read: $data');
 
       _markAllMessagesAsRead();
-
-      // Update UI to show read status (e.g., show double checkmark)
-      // You can update message read status here
     });
 
     socket.on('new_message', (data) {
@@ -195,7 +186,6 @@ class ChatSystemController extends GetxController {
     socket.connect();
   }
 
-  /// Mark all sent messages as read
   void _markAllMessagesAsRead() {
     final updatedMessages = messages.map((msg) {
       if (msg.sentBy == currentUser.id && msg.status != MessageStatus.read) {
@@ -230,19 +220,9 @@ class ChatSystemController extends GetxController {
     }
   }
 
-  /// Send message
   void onSendTap(String message) {
     if (message.trim().isEmpty) return;
-    //
-    // final tempMessage = CustomMessage(
-    //   id: DateTime.now().millisecondsSinceEpoch.toString(),
-    //   message: message,
-    //   createdAt: DateTime.now(),
-    //   sentBy: currentUser.id,
-    //   status: MessageStatus.sending,
-    // );
 
-    // messages.add(tempMessage);
     socket.emit('send_message', {
       'connection_id': connectionId,
       'message': message,
@@ -250,7 +230,6 @@ class ChatSystemController extends GetxController {
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
     });
-    // onRefresh?.call();
   }
 
   Future<void> sendImageFromGallery() async {
@@ -310,6 +289,70 @@ class ChatSystemController extends GetxController {
       log("📤 Sent image message via socket");
     } catch (e) {
       log("❌ Error capturing/sending image: $e");
+    }
+  }
+
+  Future<void> sendFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'zip'],
+        allowMultiple: false,
+      );
+
+      if (result == null || result.files.isEmpty) return;
+
+      final file = result.files.first;
+      final fileName = file.name;
+      final fileSize = file.size;
+      final filePath = file.path;
+
+      if (filePath == null) {
+        log("❌ File path is null");
+        return;
+      }
+
+      final extension = fileName.split('.').last.toLowerCase();
+      String mimeType = 'application/octet-stream';
+
+      switch (extension) {
+        case 'pdf':
+          mimeType = 'application/pdf';
+        case 'doc':
+          mimeType = 'application/msword';
+        case 'docx':
+          mimeType =
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        case 'xls':
+          mimeType = 'application/vnd.ms-excel';
+        case 'xlsx':
+          mimeType =
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        case 'txt':
+          mimeType = 'text/plain';
+        case 'zip':
+          mimeType = 'application/zip';
+      }
+
+      log(
+        "📄 File selected: $fileName (${(fileSize / 1024).toStringAsFixed(2)} KB)",
+      );
+      _scrollToBottom();
+
+      final bytes = file.bytes ?? await File(filePath).readAsBytes();
+      final base64File = base64Encode(bytes);
+
+      socket.emit('send_message', {
+        'connection_id': connectionId,
+        'message_type': 'file',
+        'media_base64': base64File,
+        'media_mime_type': mimeType,
+        'file_name': fileName,
+        'message': fileName,
+      });
+      log("📤 Sent file message via socket");
+    } catch (e) {
+      log("❌ Error picking/sending file: $e");
     }
   }
 
