@@ -185,6 +185,15 @@ class ConnectorChatSystemView extends StatelessWidget {
                       ),
                     ),
                     IconButton(
+                      icon: const Icon(
+                        Icons.camera_alt,
+                        color: MyColors.primary,
+                      ),
+                      onPressed: () async {
+                        await controller.sendImage();
+                      },
+                    ),
+                    IconButton(
                       icon: const Icon(Icons.send, color: MyColors.primary),
                       onPressed: () {
                         final text = messageController.text.trim();

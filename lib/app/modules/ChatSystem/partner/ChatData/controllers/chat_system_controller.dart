@@ -249,7 +249,7 @@ class ChatSystemController extends GetxController {
     // onRefresh?.call();
   }
 
-  /// Send image message
+
   Future<void> sendImage() async {
     try {
       final XFile? pickedFile = await picker.pickImage(

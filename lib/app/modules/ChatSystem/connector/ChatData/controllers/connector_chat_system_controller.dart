@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -247,6 +248,37 @@ class ConnectorChatSystemController extends GetxController {
       _scrollToBottom();
     });
   }
+
+  Future<void> sendImage() async {
+    try {
+      final XFile? pickedFile = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 70,
+        maxWidth: 1024,
+      );
+
+      if (pickedFile == null) return;
+
+      final filePath = pickedFile.path;
+      log("📸 Image captured: $filePath");
+      _scrollToBottom();
+
+      final bytes = await pickedFile.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      socket.emit('send_message', {
+        'connection_id': connectionId,
+        "message_type": "image",
+        'message': "hello",
+        "media_base64": base64Image,
+        'media_url': filePath,
+      });
+      log("📤 Sent image message via socket");
+    } catch (e) {
+      log("❌ Error capturing/sending image: $e");
+    }
+  }
+
 
   @override
   void onClose() {
