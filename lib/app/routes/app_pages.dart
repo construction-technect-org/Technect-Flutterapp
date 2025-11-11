@@ -114,8 +114,16 @@ class AppPages {
   static const INITIAL = Routes.SPLASH;
 
   static final routes = [
-    GetPage(name: _Paths.SPLASH, page: () => const SplashView(), binding: SplashBinding()),
-    GetPage(name: _Paths.LOGIN, page: () => LoginView(), binding: LoginBinding()),
+    GetPage(
+      name: _Paths.SPLASH,
+      page: () => const SplashView(),
+      binding: SplashBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => LoginView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: _Paths.SIGN_UP_ROLE,
       page: () => const SignUpRoleView(),
@@ -136,14 +144,26 @@ class AppPages {
       page: () => ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
     ),
-    GetPage(name: _Paths.MAIN, page: () => BottomBarView(), binding: BottomBinding()),
-    GetPage(name: _Paths.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
+    GetPage(
+      name: _Paths.MAIN,
+      page: () => BottomBarView(),
+      binding: BottomBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => ProfileView(),
+      binding: ProfileBinding(),
+    ),
     GetPage(
       name: _Paths.BUSINESS_HOURS,
       page: () => BusinessHoursView(),
       binding: BusinessHoursBinding(),
     ),
-    GetPage(name: _Paths.ADD_PRODUCT, page: () => AddProductView(), binding: AddProductBinding()),
+    GetPage(
+      name: _Paths.ADD_PRODUCT,
+      page: () => AddProductView(),
+      binding: AddProductBinding(),
+    ),
     GetPage(
       name: _Paths.PRODUCT_DETAILS,
       page: () => ProductDetailsView(),
@@ -154,8 +174,16 @@ class AppPages {
       page: () => RoleManagementView(),
       binding: RoleManagementBinding(),
     ),
-    GetPage(name: _Paths.ADD_ROLE, page: () => AddRoleView(), binding: AddRoleBinding()),
-    GetPage(name: _Paths.ADD_TEAM, page: () => AddTeamView(), binding: AddTeamBinding()),
+    GetPage(
+      name: _Paths.ADD_ROLE,
+      page: () => AddRoleView(),
+      binding: AddRoleBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_TEAM,
+      page: () => AddTeamView(),
+      binding: AddTeamBinding(),
+    ),
     GetPage(
       name: _Paths.APPROVAL_INBOX,
       page: () => ApprovalInboxView(),
@@ -171,7 +199,11 @@ class AppPages {
       page: () => const FeedbackViewScreen(),
       binding: FeedbackBindings(),
     ),
-    GetPage(name: _Paths.FAQ, page: () => const FaqScreen(), binding: FAQBindings()),
+    GetPage(
+      name: _Paths.FAQ,
+      page: () => const FaqScreen(),
+      binding: FAQBindings(),
+    ),
 
     // GetPage(
     //   name: _Paths.SERVICE_DETAILS,
@@ -185,7 +217,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.CONNECTOR_CHAT_SYSTEM,
-      page: () => const ConnectorChatSystemView(),
+      page: () => ConnectorChatSystemView(),
       binding: ConnectorChatSystemBinding(),
     ),
     GetPage(
@@ -193,7 +225,11 @@ class AppPages {
       page: () => ConnectionInboxView(),
       binding: ConnectionInboxBinding(),
     ),
-    GetPage(name: _Paths.SETTING, page: () => const SettingView(), binding: SettingBinding()),
+    GetPage(
+      name: _Paths.SETTING,
+      page: () => const SettingView(),
+      binding: SettingBinding(),
+    ),
 
     GetPage(
       name: _Paths.EDIT_PROFILE,
@@ -222,9 +258,21 @@ class AppPages {
       page: () => CreatNewTicket(),
       binding: CreateNewTicketBinding(),
     ),
-    GetPage(name: Routes.REFER_EARN, page: () => ReferAndEarnScreen(), binding: ReferBindings()),
-    GetPage(name: Routes.REPORT, page: () => const ReportView(), binding: ReportBinding()),
-    GetPage(name: Routes.INVENTORY, page: () => InventoryView(), binding: InventoryBinding()),
+    GetPage(
+      name: Routes.REFER_EARN,
+      page: () => ReferAndEarnScreen(),
+      binding: ReferBindings(),
+    ),
+    GetPage(
+      name: Routes.REPORT,
+      page: () => const ReportView(),
+      binding: ReportBinding(),
+    ),
+    GetPage(
+      name: Routes.INVENTORY,
+      page: () => InventoryView(),
+      binding: InventoryBinding(),
+    ),
     GetPage(name: Routes.NEWS, page: () => NewsView(), binding: NewsBinding()),
     GetPage(
       name: Routes.NOTIFICATIONS,
@@ -236,20 +284,36 @@ class AppPages {
       page: () => AddRequirementView(),
       binding: AddRequirementBinding(),
     ),
-    GetPage(name: Routes.REQUIREMENT, page: () => RequirementView(), binding: RequirementBinding()),
+    GetPage(
+      name: Routes.REQUIREMENT,
+      page: () => RequirementView(),
+      binding: RequirementBinding(),
+    ),
     GetPage(
       name: Routes.ADD_SERVICE_REQUIREMENT,
       page: () => AddServiceRequirementView(),
       binding: AddServiceRequirementBinding(),
     ),
-    GetPage(name: Routes.WISH_LIST, page: () => WishListView(), binding: WishListBinding()),
+    GetPage(
+      name: Routes.WISH_LIST,
+      page: () => WishListView(),
+      binding: WishListBinding(),
+    ),
     GetPage(
       name: Routes.ON_BOARDING,
       page: () => const OnBoardingScreen(),
       binding: OnBoardingBinding(),
     ),
-    GetPage(name: Routes.ACCOUNT, page: () => const AccountScreen(), binding: AccountBinding()),
-    GetPage(name: Routes.CART_LIST, page: () => CartListView(), binding: CartListBinding()),
+    GetPage(
+      name: Routes.ACCOUNT,
+      page: () => const AccountScreen(),
+      binding: AccountBinding(),
+    ),
+    GetPage(
+      name: Routes.CART_LIST,
+      page: () => CartListView(),
+      binding: CartListBinding(),
+    ),
     GetPage(
       name: Routes.SELECT_PRODUCT,
       page: () => SelectedProductView(),
@@ -307,9 +371,17 @@ class AppPages {
     ),
 
     ///CRM
-    GetPage(name: _Paths.CRM_MAIN, page: () => CRMBottomBarView(), binding: CRMBottomBinding()),
+    GetPage(
+      name: _Paths.CRM_MAIN,
+      page: () => CRMBottomBarView(),
+      binding: CRMBottomBinding(),
+    ),
 
-    GetPage(name: _Paths.ADD_LEAD, page: () => const AddLeadScreen(), binding: AddLeadBinding()),
+    GetPage(
+      name: _Paths.ADD_LEAD,
+      page: () => const AddLeadScreen(),
+      binding: AddLeadBinding(),
+    ),
     GetPage(
       name: _Paths.All_CHAT_LIST,
       page: () => const AllChatListScreen(),
