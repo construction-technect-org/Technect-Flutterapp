@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/model/all_chat_list_model.dart';
-import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/service/all_chat_service.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/model/all_chat_list_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/service/connector_all_chat_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-class AllChatListController extends GetxController {
+class ConnectorAllChatListController extends GetxController {
   late final IO.Socket socket;
 
   @override
@@ -17,20 +17,20 @@ class AllChatListController extends GetxController {
     });
   }
 
-  Rx<AllChatListModel> chatListModel = AllChatListModel().obs;
+  Rx<ConnectorAllChatListModel> chatListModel = ConnectorAllChatListModel().obs;
 
   RxBool isLoading = false.obs;
 
   Future<void> fetchChatList({bool? isLoad}) async {
     try {
       isLoading.value = isLoad ?? false;
-      final result = await AllChatListServices().allChatList();
+      final result = await ConnectorAllChatListServices().allChatList();
       if (result.success == true) {
         chatListModel.value = result;
       }
     } catch (e) {
       if (kDebugMode) {
-        log(e.toString());
+        print(e);
       }
     } finally {
       isLoading.value = false;
@@ -100,7 +100,7 @@ class AllChatListController extends GetxController {
         conversations.removeAt(index);
         conversations.insert(0, conversation);
 
-        chatListModel.value = AllChatListModel(
+        chatListModel.value = ConnectorAllChatListModel(
           success: chatListModel.value.success,
           chats: Chats(
             conversations: conversations,

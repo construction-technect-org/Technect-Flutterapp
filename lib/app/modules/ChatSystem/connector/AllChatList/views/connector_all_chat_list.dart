@@ -1,9 +1,10 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/controllers/all_chat_list_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/controllers/controller_all_chat_list_controller.dart';
 import 'package:intl/intl.dart';
 
-class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController> {
+class ConnectorAllChatListScreen
+    extends GetView<ConnectorAllChatListController> {
   const ConnectorAllChatListScreen({super.key});
 
   @override
@@ -16,7 +17,8 @@ class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController>
           return const Center(child: CircularProgressIndicator());
         }
 
-        if ((controller.chatListModel.value.chats?.conversations ?? []).isEmpty) {
+        if ((controller.chatListModel.value.chats?.conversations ?? [])
+            .isEmpty) {
           return Center(
             child: Text(
               "No conversations yet",
@@ -27,10 +29,14 @@ class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController>
 
         return ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          itemCount: (controller.chatListModel.value.chats?.conversations ?? []).length,
-          separatorBuilder: (_, __) => const Divider(height: 1, color: MyColors.grayEA),
+          itemCount: (controller.chatListModel.value.chats?.conversations ?? [])
+              .length,
+          separatorBuilder: (_, _) =>
+              const Divider(height: 1, color: MyColors.grayEA),
           itemBuilder: (context, index) {
-            final chat = (controller.chatListModel.value.chats?.conversations ?? [])[index];
+            final chat =
+                (controller.chatListModel.value.chats?.conversations ??
+                [])[index];
             final int unreadCount = chat.chatInfo?.unreadCount ?? 0;
 
             return ListTile(
@@ -47,7 +53,9 @@ class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController>
               ),
               subtitle: Text(
                 chat.chatInfo?.lastMessage ?? "",
-                style: MyTexts.medium14.copyWith(color: MyColors.fontBlack.withValues(alpha: 0.7)),
+                style: MyTexts.medium14.copyWith(
+                  color: MyColors.fontBlack.withValues(alpha: 0.7),
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -55,7 +63,9 @@ class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    formattedChatTime(DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? '')),
+                    formattedChatTime(
+                      DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? ''),
+                    ),
                     style: MyTexts.medium14.copyWith(color: MyColors.black),
                   ),
                   if (unreadCount > 0)
@@ -77,11 +87,14 @@ class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController>
                 Get.toNamed(
                   Routes.CONNECTOR_CHAT_SYSTEM,
                   arguments: {
-                    "image": APIConstants.bucketUrl + (chat.merchant?.profileImage ?? ""),
+                    "image":
+                        APIConstants.bucketUrl +
+                        (chat.merchant?.profileImage ?? ""),
                     "cId": chat.connectionId,
-                    "name": "${chat.merchant?.firstName ?? ""} ${chat.merchant?.lastName ?? ""}",
+                    "name":
+                        "${chat.merchant?.firstName ?? ""} ${chat.merchant?.lastName ?? ""}",
                     "onRefresh": () {
-                      controller.fetchWishList();
+                      controller.fetchChatList();
                     },
                   },
                 );

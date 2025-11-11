@@ -6,15 +6,11 @@ class ConnectorAllChatListServices {
 
   Future<ConnectorAllChatListModel> allChatList() async {
     try {
-      const String url =  APIConstants.connectorChatList;
-      debugPrint('Calling API: $url');
+      const String url = APIConstants.connectorChatList;
       final response = await apiManager.get(url: url);
-      debugPrint('Response: $response');
 
       return ConnectorAllChatListModel.fromJson(response);
     } catch (e, st) {
-      debugPrint('Error: $e');
-      debugPrint('StackTrace: $st');
       throw Exception('Error fetching chat: $e');
     }
   }

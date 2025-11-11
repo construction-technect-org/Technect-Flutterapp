@@ -56,11 +56,9 @@ class ApiManager {
   }) async {
     try {
       // Build full URL with query parameters
-      final uri = Uri.parse(baseUrl + url).replace(
-        queryParameters: params?.map(
-          (key, value) => MapEntry(key, value.toString()),
-        ),
-      );
+      final uri = Uri.parse(
+        baseUrl + url,
+      ).replace(queryParameters: params?.map((key, value) => MapEntry(key, value.toString())));
 
       final headers = {
         'Content-Type': 'application/json',
@@ -94,10 +92,7 @@ class ApiManager {
   }
 
   /// POST method for JSON body requests
-  Future<dynamic> postObject({
-    required String url,
-    required Object body,
-  }) async {
+  Future<dynamic> postObject({required String url, required Object body}) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -253,8 +248,7 @@ class ApiManager {
             case 'doc':
               mimeType = 'application/msword';
             case 'docx':
-              mimeType =
-                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+              mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
             default:
               mimeType = 'application/octet-stream';
           }
@@ -337,8 +331,7 @@ class ApiManager {
             case 'doc':
               mimeType = 'application/msword';
             case 'docx':
-              mimeType =
-                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+              mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
             default:
               mimeType = 'application/octet-stream';
           }
@@ -423,10 +416,7 @@ class ApiManager {
     }
   }
 
-  Future<dynamic> deleteObject({
-    required String url,
-    required Object body,
-  }) async {
+  Future<dynamic> deleteObject({required String url, required Object body}) async {
     try {
       final headers = {
         'Content-Type': 'application/json',
@@ -470,8 +460,6 @@ class ApiManager {
   Future<dynamic> _returnResponse(http.StreamedResponse response) async {
     final responseString = await response.stream.bytesToString();
 
-    Get.printInfo(info: '📋 Raw Response Body: $responseString');
-
     switch (response.statusCode) {
       case 200:
         final responseJson = json.decode(responseString);
@@ -481,13 +469,9 @@ class ApiManager {
         final responseJson = json.decode(responseString);
         return responseJson;
       case 400:
-        showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Bad Request',
-        );
+        showErrorSheet(ErrorModel.fromJson(json.decode(responseString)).message ?? 'Bad Request');
         throw BadRequestException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Bad Request',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Bad Request',
         );
       case 401:
         final responseJson = json.decode(responseString);
@@ -505,40 +489,28 @@ class ApiManager {
 
         // For non-token-expiry 401 errors (like login failures), return the response
         // so the caller can handle it (e.g., show specific error messages)
-        Get.printInfo(
-          info: '⚠️ 401 Unauthorized - Authentication Error: $message',
-        );
+        Get.printInfo(info: '⚠️ 401 Unauthorized - Authentication Error: $message');
         showErrorSheet(message ?? 'Unauthorized');
         return responseJson; // Return response instead of throwing
 
       case 403:
-        showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Forbidden',
-        );
+        showErrorSheet(ErrorModel.fromJson(json.decode(responseString)).message ?? 'Forbidden');
         throw UnauthorisedException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Forbidden',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Forbidden',
         );
 
       case 404:
-        showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Not Found',
-        );
+        showErrorSheet(ErrorModel.fromJson(json.decode(responseString)).message ?? 'Not Found');
         throw UnauthorisedException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Not Found',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Not Found',
         );
 
       case 409:
         showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Conflict Error',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
         );
         throw BadRequestException(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Conflict Error',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
         );
       case 502:
         showErrorSheet('Server is down. Please try again later.');
@@ -547,8 +519,7 @@ class ApiManager {
       case 500:
       default:
         showErrorSheet(
-          ErrorModel.fromJson(json.decode(responseString)).message ??
-              'Conflict Error',
+          ErrorModel.fromJson(json.decode(responseString)).message ?? 'Conflict Error',
         );
 
         throw FetchDataException(

@@ -16,7 +16,8 @@ class AllChatListScreen extends GetView<AllChatListController> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if ((controller.chatListModel.value.chats?.conversations ?? []).isEmpty) {
+        if ((controller.chatListModel.value.chats?.conversations ?? [])
+            .isEmpty) {
           return Center(
             child: Text(
               "No conversations yet",
@@ -27,10 +28,14 @@ class AllChatListScreen extends GetView<AllChatListController> {
 
         return ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          itemCount: (controller.chatListModel.value.chats?.conversations ?? []).length,
-          separatorBuilder: (_, __) => const Divider(height: 1, color: MyColors.grayEA),
+          itemCount: (controller.chatListModel.value.chats?.conversations ?? [])
+              .length,
+          separatorBuilder: (_, __) =>
+              const Divider(height: 1, color: MyColors.grayEA),
           itemBuilder: (context, index) {
-            final chat = (controller.chatListModel.value.chats?.conversations ?? [])[index];
+            final chat =
+                (controller.chatListModel.value.chats?.conversations ??
+                [])[index];
             final int unreadCount = chat.chatInfo?.unreadCount ?? 0;
 
             return ListTile(
@@ -47,7 +52,9 @@ class AllChatListScreen extends GetView<AllChatListController> {
               ),
               subtitle: Text(
                 chat.chatInfo?.lastMessage ?? "",
-                style: MyTexts.medium14.copyWith(color: MyColors.fontBlack.withValues(alpha: 0.7)),
+                style: MyTexts.medium14.copyWith(
+                  color: MyColors.fontBlack.withValues(alpha: 0.7),
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -55,7 +62,9 @@ class AllChatListScreen extends GetView<AllChatListController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    formattedChatTime(DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? '')),
+                    formattedChatTime(
+                      DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? ''),
+                    ),
                     style: MyTexts.medium14.copyWith(color: MyColors.black),
                   ),
                   if (unreadCount > 0)
@@ -77,11 +86,14 @@ class AllChatListScreen extends GetView<AllChatListController> {
                 Get.toNamed(
                   Routes.CHAT_SYSTEM,
                   arguments: {
-                    "image": APIConstants.bucketUrl + (chat.connector?.profileImage ?? ""),
+                    "image":
+                        APIConstants.bucketUrl +
+                        (chat.connector?.profileImage ?? ""),
                     "cId": chat.connectionId,
-                    "name": "${chat.connector?.firstName ?? ""} ${chat.connector?.lastName ?? ""}",
+                    "name":
+                        "${chat.connector?.firstName ?? ""} ${chat.connector?.lastName ?? ""}",
                     "onRefresh": () {
-                      controller.fetchWishList();
+                      controller.fetchChatList();
                     },
                   },
                 );

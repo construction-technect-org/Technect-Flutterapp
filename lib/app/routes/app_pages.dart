@@ -13,8 +13,8 @@ import 'package:construction_technect/app/modules/CRM/bottom/bindings/bottom_bin
 import 'package:construction_technect/app/modules/CRM/bottom/views/bottom_view.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/binding/all_chat_list_binding.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/views/all_chat_list.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/binding/connector_all_chat_list_binding.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/views/connector_all_chat_list.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/binding/chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/views/chat_system_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/binding/all_chat_list_binding.dart';
@@ -212,7 +212,7 @@ class AppPages {
     // ),
     GetPage(
       name: _Paths.CHAT_SYSTEM,
-      page: () =>  ChatSystemView(),
+      page: () => ChatSystemView(),
       binding: ChatSystemBinding(),
     ),
     GetPage(
