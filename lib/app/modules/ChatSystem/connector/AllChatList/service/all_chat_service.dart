@@ -4,15 +4,14 @@ import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatLi
 class ConnectorAllChatListServices {
   ApiManager apiManager = ApiManager();
 
-  Future<AllChatListModel> allChatList() async {
+  Future<ConnectorAllChatListModel> allChatList() async {
     try {
-      final bool isPartner = myPref.role.val == "connector";
-      final String url = !isPartner ? APIConstants.merchantChatList : APIConstants.connectorChatList;
+      const String url =  APIConstants.connectorChatList;
       debugPrint('Calling API: $url');
       final response = await apiManager.get(url: url);
       debugPrint('Response: $response');
 
-      return AllChatListModel.fromJson(response);
+      return ConnectorAllChatListModel.fromJson(response);
     } catch (e, st) {
       debugPrint('Error: $e');
       debugPrint('StackTrace: $st');

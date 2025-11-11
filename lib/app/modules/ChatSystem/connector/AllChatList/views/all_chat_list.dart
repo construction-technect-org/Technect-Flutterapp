@@ -38,11 +38,11 @@ class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController>
               leading: CircleAvatar(
                 radius: 24,
                 backgroundImage: NetworkImage(
-                  APIConstants.bucketUrl + (chat.connector?.profileImage ?? ""),
+                  APIConstants.bucketUrl + (chat.merchant?.profileImage ?? ""),
                 ),
               ),
               title: Text(
-                "${chat.connector?.firstName ?? ""} ${chat.connector?.lastName ?? ""}",
+                "${chat.merchant?.firstName ?? ""} ${chat.merchant?.lastName ?? ""}",
                 style: MyTexts.bold16.copyWith(color: MyColors.primary),
               ),
               subtitle: Text(
@@ -75,11 +75,11 @@ class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController>
               ),
               onTap: () {
                 Get.toNamed(
-                  Routes.CHAT_SYSTEM,
+                  Routes.CONNECTOR_CHAT_SYSTEM,
                   arguments: {
-                    "image": APIConstants.bucketUrl + (chat.connector?.profileImage ?? ""),
+                    "image": APIConstants.bucketUrl + (chat.merchant?.profileImage ?? ""),
                     "cId": chat.connectionId,
-                    "name": "${chat.connector?.firstName ?? ""} ${chat.connector?.lastName ?? ""}",
+                    "name": "${chat.merchant?.firstName ?? ""} ${chat.merchant?.lastName ?? ""}",
                     "onRefresh": () {
                       controller.fetchWishList();
                     },

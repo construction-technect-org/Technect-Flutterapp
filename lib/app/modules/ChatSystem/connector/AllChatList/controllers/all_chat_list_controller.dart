@@ -34,7 +34,7 @@ class ConnectorAllChatListController extends GetxController {
       },
     ];
   }
-  Rx<AllChatListModel> chatListModel = AllChatListModel().obs;
+  Rx<ConnectorAllChatListModel> chatListModel = ConnectorAllChatListModel().obs;
 
   RxBool isLoading = false.obs;
 

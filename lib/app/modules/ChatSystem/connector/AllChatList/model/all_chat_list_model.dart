@@ -1,13 +1,11 @@
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
-
-class AllChatListModel {
+class ConnectorAllChatListModel {
   bool? success;
   Chats? chats;
   String? message;
 
-  AllChatListModel({this.success, this.chats, this.message});
+  ConnectorAllChatListModel({this.success, this.chats, this.message});
 
-  AllChatListModel.fromJson(Map<String, dynamic> json) {
+  ConnectorAllChatListModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     chats = json['data'] != null ? Chats.fromJson(json['data']) : null;
     message = json['message'];
@@ -56,22 +54,22 @@ class Chats {
 
 class Conversations {
   int? connectionId;
-  Connector? connector;
+  Merchant? merchant;
   Product? product;
   ConnectionInfo? connectionInfo;
   ChatInfo? chatInfo;
 
   Conversations(
       {this.connectionId,
-        this.connector,
+        this.merchant,
         this.product,
         this.connectionInfo,
         this.chatInfo});
 
   Conversations.fromJson(Map<String, dynamic> json) {
     connectionId = json['connection_id'];
-    connector = json['connector'] != null
-        ? Connector.fromJson(json['connector'])
+    merchant = json['merchant'] != null
+        ? Merchant.fromJson(json['merchant'])
         : null;
     product =
     json['product'] != null ? Product.fromJson(json['product']) : null;
@@ -86,8 +84,8 @@ class Conversations {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['connection_id'] = connectionId;
-    if (connector != null) {
-      data['connector'] = connector!.toJson();
+    if (merchant != null) {
+      data['merchant'] = merchant!.toJson();
     }
     if (product != null) {
       data['product'] = product!.toJson();
@@ -102,9 +100,12 @@ class Conversations {
   }
 }
 
-class Connector {
+class Merchant {
   int? id;
   int? userId;
+  String? businessName;
+  String? businessEmail;
+  String? businessContactNumber;
   String? firstName;
   String? lastName;
   String? profileImage;
@@ -112,9 +113,12 @@ class Connector {
   String? countryCode;
   String? email;
 
-  Connector(
+  Merchant(
       {this.id,
         this.userId,
+        this.businessName,
+        this.businessEmail,
+        this.businessContactNumber,
         this.firstName,
         this.lastName,
         this.profileImage,
@@ -122,9 +126,12 @@ class Connector {
         this.countryCode,
         this.email});
 
-  Connector.fromJson(Map<String, dynamic> json) {
+  Merchant.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
+    businessName = json['business_name'];
+    businessEmail = json['business_email'];
+    businessContactNumber = json['business_contact_number'];
     firstName = json['first_name'];
     lastName = json['last_name'];
     profileImage = json['profile_image'];
@@ -137,6 +144,9 @@ class Connector {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['user_id'] = userId;
+    data['business_name'] = businessName;
+    data['business_email'] = businessEmail;
+    data['business_contact_number'] = businessContactNumber;
     data['first_name'] = firstName;
     data['last_name'] = lastName;
     data['profile_image'] = profileImage;
@@ -147,247 +157,151 @@ class Connector {
   }
 }
 
+class Product {
+  int? id;
+  int? merchantProfileId;
+  int? mainCategoryId;
+  int? subCategoryId;
+  int? categoryProductId;
+  String? brand;
+  String? price;
+  String? gstPercentage;
+  String? gstAmount;
+  String? termsAndConditions;
+  String? createdAt;
+  String? updatedAt;
+  String? averageRating;
+  int? totalRatings;
+  int? ratingCount;
+  String? productCode;
+  String? totalAmount;
+  String? productNote;
+  bool? outofstock;
+  String? approvalStatus;
+  int? approvedBy;
+  String? approvedAt;
+  String? rejectionReason;
+  String? approvalNotes;
+  int? stockQty;
+  String? address;
+  String? latitude;
+  String? longitude;
+  int? productSubCategoryId;
+  String? warehouseType;
+  String? stockYardAddress;
+  String? mainCategoryName;
+  String? subCategoryName;
+  String? categoryProductName;
 
-class FilterValues {
-  Uom? uom;
-  Uoc? uoc;
-  PackageType? packageType;
-  Uom? packageSize;
-  PackageType? shape;
-  PackageType? texture;
-  PackageType? colour;
-  Uom? size;
-  PackageType? finenessModulus;
-  PackageType? specificGravity;
-  Uom? bulkDensity;
-  Uom? waterAbsorption;
-  Uom? moistureContent;
-  Uom? clayDustContent;
-  Uom? siltContent;
-  PackageType? machineType;
+  Product(
+      {this.id,
+        this.merchantProfileId,
+        this.mainCategoryId,
+        this.subCategoryId,
+        this.categoryProductId,
+        this.brand,
+        this.price,
+        this.gstPercentage,
+        this.gstAmount,
+        this.termsAndConditions,
+        this.createdAt,
+        this.updatedAt,
+        this.averageRating,
+        this.totalRatings,
+        this.ratingCount,
+        this.productCode,
+        this.totalAmount,
+        this.productNote,
+        this.outofstock,
+        this.approvalStatus,
+        this.approvedBy,
+        this.approvedAt,
+        this.rejectionReason,
+        this.approvalNotes,
+        this.stockQty,
+        this.address,
+        this.latitude,
+        this.longitude,
+        this.productSubCategoryId,
+        this.warehouseType,
+        this.stockYardAddress,
+        this.mainCategoryName,
+        this.subCategoryName,
+        this.categoryProductName});
 
-  FilterValues(
-      {this.uom,
-        this.uoc,
-        this.packageType,
-        this.packageSize,
-        this.shape,
-        this.texture,
-        this.colour,
-        this.size,
-        this.finenessModulus,
-        this.specificGravity,
-        this.bulkDensity,
-        this.waterAbsorption,
-        this.moistureContent,
-        this.clayDustContent,
-        this.siltContent,
-        this.machineType});
-
-  FilterValues.fromJson(Map<String, dynamic> json) {
-    uom = json['uom'] != null ? Uom.fromJson(json['uom']) : null;
-    uoc = json['uoc'] != null ? Uoc.fromJson(json['uoc']) : null;
-    packageType = json['package_type'] != null
-        ? PackageType.fromJson(json['package_type'])
-        : null;
-    packageSize = json['package_size'] != null
-        ? Uom.fromJson(json['package_size'])
-        : null;
-    shape =
-    json['shape'] != null ? PackageType.fromJson(json['shape']) : null;
-    texture = json['texture'] != null
-        ? PackageType.fromJson(json['texture'])
-        : null;
-    colour = json['colour'] != null
-        ? PackageType.fromJson(json['colour'])
-        : null;
-    size = json['size'] != null ? Uom.fromJson(json['size']) : null;
-    finenessModulus = json['fineness_modulus'] != null
-        ? PackageType.fromJson(json['fineness_modulus'])
-        : null;
-    specificGravity = json['specific_gravity'] != null
-        ? PackageType.fromJson(json['specific_gravity'])
-        : null;
-    bulkDensity = json['bulk_density'] != null
-        ? Uom.fromJson(json['bulk_density'])
-        : null;
-    waterAbsorption = json['water_absorption'] != null
-        ? Uom.fromJson(json['water_absorption'])
-        : null;
-    moistureContent = json['moisture_content'] != null
-        ? Uom.fromJson(json['moisture_content'])
-        : null;
-    clayDustContent = json['clay_dust_content'] != null
-        ? Uom.fromJson(json['clay_dust_content'])
-        : null;
-    siltContent = json['silt_content'] != null
-        ? Uom.fromJson(json['silt_content'])
-        : null;
-    machineType = json['machine_type'] != null
-        ? PackageType.fromJson(json['machine_type'])
-        : null;
+  Product.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    merchantProfileId = json['merchant_profile_id'];
+    mainCategoryId = json['main_category_id'];
+    subCategoryId = json['sub_category_id'];
+    categoryProductId = json['category_product_id'];
+    brand = json['brand'];
+    price = json['price'];
+    gstPercentage = json['gst_percentage'];
+    gstAmount = json['gst_amount'];
+    termsAndConditions = json['terms_and_conditions'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    averageRating = json['average_rating'];
+    totalRatings = json['total_ratings'];
+    ratingCount = json['rating_count'];
+    productCode = json['product_code'];
+    totalAmount = json['total_amount'];
+    productNote = json['product_note'];
+    outofstock = json['outofstock'];
+    approvalStatus = json['approval_status'];
+    approvedBy = json['approved_by'];
+    approvedAt = json['approved_at'];
+    rejectionReason = json['rejection_reason'];
+    approvalNotes = json['approval_notes'];
+    stockQty = json['stock_qty'];
+    address = json['address'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    productSubCategoryId = json['product_sub_category_id'];
+    warehouseType = json['warehouse_type'];
+    stockYardAddress = json['stock_yard_address'];
+    mainCategoryName = json['main_category_name'];
+    subCategoryName = json['sub_category_name'];
+    categoryProductName = json['category_product_name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (uom != null) {
-      data['uom'] = uom!.toJson();
-    }
-    if (uoc != null) {
-      data['uoc'] = uoc!.toJson();
-    }
-    if (packageType != null) {
-      data['package_type'] = packageType!.toJson();
-    }
-    if (packageSize != null) {
-      data['package_size'] = packageSize!.toJson();
-    }
-    if (shape != null) {
-      data['shape'] = shape!.toJson();
-    }
-    if (texture != null) {
-      data['texture'] = texture!.toJson();
-    }
-    if (colour != null) {
-      data['colour'] = colour!.toJson();
-    }
-    if (size != null) {
-      data['size'] = size!.toJson();
-    }
-    if (finenessModulus != null) {
-      data['fineness_modulus'] = finenessModulus!.toJson();
-    }
-    if (specificGravity != null) {
-      data['specific_gravity'] = specificGravity!.toJson();
-    }
-    if (bulkDensity != null) {
-      data['bulk_density'] = bulkDensity!.toJson();
-    }
-    if (waterAbsorption != null) {
-      data['water_absorption'] = waterAbsorption!.toJson();
-    }
-    if (moistureContent != null) {
-      data['moisture_content'] = moistureContent!.toJson();
-    }
-    if (clayDustContent != null) {
-      data['clay_dust_content'] = clayDustContent!.toJson();
-    }
-    if (siltContent != null) {
-      data['silt_content'] = siltContent!.toJson();
-    }
-    if (machineType != null) {
-      data['machine_type'] = machineType!.toJson();
-    }
-    return data;
-  }
-}
-
-class Uom {
-  String? value;
-  String? displayValue;
-  String? unit;
-  String? label;
-  String? type;
-
-  Uom({this.value, this.displayValue, this.unit, this.label, this.type});
-
-  Uom.fromJson(Map<String, dynamic> json) {
-    value = json['value'];
-    displayValue = json['display_value'];
-    unit = json['unit'];
-    label = json['label'];
-    type = json['type'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['display_value'] = displayValue;
-    data['unit'] = unit;
-    data['label'] = label;
-    data['type'] = type;
-    return data;
-  }
-}
-
-class Uoc {
-  List<String>? value;
-  String? displayValue;
-  String? unit;
-  String? label;
-  String? type;
-
-  Uoc({this.value, this.displayValue, this.unit, this.label, this.type});
-
-  Uoc.fromJson(Map<String, dynamic> json) {
-    value = json['value'].cast<String>();
-    displayValue = json['display_value'];
-    unit = json['unit'];
-    label = json['label'];
-    type = json['type'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['display_value'] = displayValue;
-    data['unit'] = unit;
-    data['label'] = label;
-    data['type'] = type;
-    return data;
-  }
-}
-
-class PackageType {
-  String? value;
-  String? displayValue;
-  String? unit;
-  String? label;
-  String? type;
-
-  PackageType(
-      {this.value, this.displayValue, this.unit, this.label, this.type});
-
-  PackageType.fromJson(Map<String, dynamic> json) {
-    value = json['value'];
-    displayValue = json['display_value'];
-    unit = json['unit'];
-    label = json['label'];
-    type = json['type'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['display_value'] = displayValue;
-    data['unit'] = unit;
-    data['label'] = label;
-    data['type'] = type;
-    return data;
-  }
-}
-
-class Images {
-  String? s3Key;
-  String? s3Url;
-  int? sortOrder;
-  String? mediaType;
-
-  Images({this.s3Key, this.s3Url, this.sortOrder, this.mediaType});
-
-  Images.fromJson(Map<String, dynamic> json) {
-    s3Key = json['s3_key'];
-    s3Url = json['s3_url'];
-    sortOrder = json['sort_order'];
-    mediaType = json['media_type'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['s3_key'] = s3Key;
-    data['s3_url'] = s3Url;
-    data['sort_order'] = sortOrder;
-    data['media_type'] = mediaType;
+    data['id'] = id;
+    data['merchant_profile_id'] = merchantProfileId;
+    data['main_category_id'] = mainCategoryId;
+    data['sub_category_id'] = subCategoryId;
+    data['category_product_id'] = categoryProductId;
+    data['brand'] = brand;
+    data['price'] = price;
+    data['gst_percentage'] = gstPercentage;
+    data['gst_amount'] = gstAmount;
+    data['terms_and_conditions'] = termsAndConditions;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['average_rating'] = averageRating;
+    data['total_ratings'] = totalRatings;
+    data['rating_count'] = ratingCount;
+    data['product_code'] = productCode;
+    data['total_amount'] = totalAmount;
+    data['product_note'] = productNote;
+    data['outofstock'] = outofstock;
+    data['approval_status'] = approvalStatus;
+    data['approved_by'] = approvedBy;
+    data['approved_at'] = approvedAt;
+    data['rejection_reason'] = rejectionReason;
+    data['approval_notes'] = approvalNotes;
+    data['stock_qty'] = stockQty;
+    data['address'] = address;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    data['product_sub_category_id'] = productSubCategoryId;
+    data['warehouse_type'] = warehouseType;
+    data['stock_yard_address'] = stockYardAddress;
+    data['main_category_name'] = mainCategoryName;
+    data['sub_category_name'] = subCategoryName;
+    data['category_product_name'] = categoryProductName;
     return data;
   }
 }

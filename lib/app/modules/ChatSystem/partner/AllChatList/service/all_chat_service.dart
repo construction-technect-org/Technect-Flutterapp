@@ -1,13 +1,12 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/model/all_chat_list_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/model/all_chat_list_model.dart';
 
 class AllChatListServices {
   ApiManager apiManager = ApiManager();
 
   Future<AllChatListModel> allChatList() async {
     try {
-      final bool isPartner = myPref.role.val == "connector";
-      final String url = !isPartner ? APIConstants.merchantChatList : APIConstants.connectorChatList;
+      const String url =  APIConstants.merchantChatList ;
       debugPrint('Calling API: $url');
       final response = await apiManager.get(url: url);
       debugPrint('Response: $response');

@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/model/all_chat_list_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/model/all_chat_list_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/service/all_chat_service.dart';
 class AllChatListController extends GetxController {
   final RxList<Map<String, dynamic>> chatList = <Map<String, dynamic>>[].obs;
