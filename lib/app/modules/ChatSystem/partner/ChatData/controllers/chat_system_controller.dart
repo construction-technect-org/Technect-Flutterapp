@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/chat_system_controller.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/chat_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/service/chat_service.dart';
 import 'package:image_picker/image_picker.dart';
@@ -87,17 +88,17 @@ class ChatSystemController extends GetxController {
 
         // fetchedMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
         messages.assignAll(fetchedMessages);
-        _scrollToBottom();
       }
     } catch (e) {
       log('❌ Error fetching chat list: $e');
     } finally {
+      isLoading.value = false;
+
       if (messages.isNotEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _jumpToBottom();
         });
       }
-      isLoading.value = false;
     }
   }
 
@@ -135,15 +136,13 @@ class ChatSystemController extends GetxController {
     socket.on('messages_marked_read', (data) {
       if (kDebugMode) log('🟢 messages read: $data');
 
-      // {
-      //   success: true,
-      //   connection_id: 10,
-      //   count: 5,
-      //   read_at: "2025-11-11T10:45:00.000Z"
-      // }
+
     });
     socket.on('messages_read', (data) {
       if (kDebugMode) log('🟢 Your messages were read: $data');
+
+      _markAllMessagesAsRead();
+
 
       // Update UI to show read status (e.g., show double checkmark)
       // You can update message read status here
@@ -176,6 +175,22 @@ class ChatSystemController extends GetxController {
 
     socket.connect();
   }
+  /// Mark all sent messages as read
+  void _markAllMessagesAsRead() {
+    final updatedMessages = messages.map((msg) {
+      if (msg.sentBy == currentUser.id && msg.status != MessageStatus.read) {
+        return msg.copyWith(status: MessageStatus.read);
+      }
+      return msg;
+    }).toList();
+
+    messages.assignAll(updatedMessages);
+    if (kDebugMode) {
+      log(
+        '✅ Marked ${updatedMessages.where((m) => m.status == MessageStatus.read && m.sentBy == currentUser.id).length} messages as read',
+      );
+    }
+  }
 
   void _scrollToBottom() {
     if (scrollController.hasClients) {
@@ -207,8 +222,6 @@ class ChatSystemController extends GetxController {
     // );
 
     // messages.add(tempMessage);
-    _scrollToBottom();
-
     socket.emit('send_message', {'connection_id': connectionId, 'message': message});
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
@@ -222,30 +235,4 @@ class ChatSystemController extends GetxController {
     socket.dispose();
     super.onClose();
   }
-}
-
-class CustomUser {
-  final String id;
-  final String name;
-  final String profilePhoto;
-
-  const CustomUser({required this.id, required this.name, required this.profilePhoto});
-}
-
-enum MessageStatus { sending, sent, delivered, read }
-
-class CustomMessage {
-  final String id;
-  final String message;
-  final String sentBy;
-  final DateTime createdAt;
-  final MessageStatus status;
-
-  CustomMessage({
-    required this.id,
-    required this.message,
-    required this.sentBy,
-    required this.createdAt,
-    this.status = MessageStatus.sent,
-  });
 }
