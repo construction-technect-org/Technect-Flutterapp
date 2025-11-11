@@ -68,7 +68,10 @@ class LeadDashController extends GetxController {
 
   void onFilterTabChanged(int index) {
     selectedFilterIndex.value = index;
-    // Load data based on filter
+
+    if (filterTabs[index] == 'Requirement') {
+      Get.toNamed(Routes.Add_New_Requ);
+    }
   }
 
   void toggleCRMVRM(bool isCRM) {

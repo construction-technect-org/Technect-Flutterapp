@@ -13,6 +13,8 @@ import 'package:construction_technect/app/modules/CRM/bottom/bindings/bottom_bin
 import 'package:construction_technect/app/modules/CRM/bottom/views/bottom_view.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
+import 'package:construction_technect/app/modules/CRM/requirement/add/bindings/add_new_requ_binding.dart';
+import 'package:construction_technect/app/modules/CRM/requirement/add/view/add_new_requirement.dart';
 import 'package:construction_technect/app/modules/ChatSystem/AllChatList/binding/all_chat_list_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/AllChatList/views/all_chat_list.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
@@ -361,7 +363,6 @@ class AppPages {
       binding: ServiceDetailBinding(),
     ),
 
-
     ///CRM
     GetPage(
       name: _Paths.CRM_MAIN,
@@ -378,6 +379,11 @@ class AppPages {
       name: _Paths.All_CHAT_LIST,
       page: () => const AllChatListScreen(),
       binding: AllChatListBinding(),
+    ),
+    GetPage(
+      name: _Paths.Add_New_REQUIREMENT,
+      page: () => const AddNewRequirement(),
+      binding: AddNewRequBinding(),
     ),
   ];
 }
