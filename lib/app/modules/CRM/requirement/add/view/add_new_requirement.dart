@@ -159,7 +159,7 @@ class AddNewRequirement extends GetView<AddNewRequController> {
                             controller: controller.productCodeCtrl,
                             headerText: "Product Code",
                             hintText: "Enter Product Code",
-                            readOnly: true,
+                            // readOnly: true,
                             validator: (val) =>
                                 Validate.validateNull(val, "Product Code"),
                           ),
@@ -275,7 +275,7 @@ class AddNewRequirement extends GetView<AddNewRequController> {
                           const Gap(30),
                           RoundedButton(
                             buttonName: "Add Requirement",
-                            onTap: controller.onSubmit,
+                            onTap: () => controller.onSubmit(context),
                           ),
                           const Gap(40),
                         ],

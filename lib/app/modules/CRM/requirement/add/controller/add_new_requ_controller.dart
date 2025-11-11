@@ -119,15 +119,13 @@ class AddNewRequController extends GetxController {
   }
 
   // Handle submit action
-  void onSubmit() {
+  void onSubmit(BuildContext context) {
     if (formKey.currentState?.validate() != true) return;
     if (numList.isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter Customer Phone no");
       return;
     }
     SnackBars.successSnackBar(content: 'Requirement added successfully');
-    // selectedCustomerType.value = null;
-    // selectedSource.value = null;
-    // numList.clear();
+    Navigator.pop(context);
   }
 }
