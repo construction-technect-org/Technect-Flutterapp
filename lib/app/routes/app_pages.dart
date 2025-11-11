@@ -15,6 +15,7 @@ import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_
 import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/add/bindings/add_new_requ_binding.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/add/view/add_new_requirement.dart';
+import 'package:construction_technect/app/modules/CRM/requirement/details/views/requirement_detail_screen.dart';
 import 'package:construction_technect/app/modules/ChatSystem/AllChatList/binding/all_chat_list_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/AllChatList/views/all_chat_list.dart';
 import 'package:construction_technect/app/modules/ChatSystem/binding/chat_system_binding.dart';
@@ -384,6 +385,11 @@ class AppPages {
       name: _Paths.Add_New_REQUIREMENT,
       page: () => const AddNewRequirement(),
       binding: AddNewRequBinding(),
+    ),
+    GetPage(
+      name: Routes.Requ_DetailS,
+      page: () => const RequirementDetailScreen(),
+      // binding: AddNewRequBinding(),
     ),
   ];
 }
