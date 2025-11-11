@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/chat_system_controller.dart';
@@ -135,14 +136,11 @@ class ChatSystemController extends GetxController {
     });
     socket.on('messages_marked_read', (data) {
       if (kDebugMode) log('🟢 messages read: $data');
-
-
     });
     socket.on('messages_read', (data) {
       if (kDebugMode) log('🟢 Your messages were read: $data');
 
       _markAllMessagesAsRead();
-
 
       // Update UI to show read status (e.g., show double checkmark)
       // You can update message read status here
@@ -175,6 +173,7 @@ class ChatSystemController extends GetxController {
 
     socket.connect();
   }
+
   /// Mark all sent messages as read
   void _markAllMessagesAsRead() {
     final updatedMessages = messages.map((msg) {
@@ -203,6 +202,7 @@ class ChatSystemController extends GetxController {
       });
     }
   }
+
   void _jumpToBottom() {
     if (scrollController.hasClients) {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
@@ -212,21 +212,42 @@ class ChatSystemController extends GetxController {
   /// Send message
   void onSendTap(String message) {
     if (message.trim().isEmpty) return;
-    //
-    // final tempMessage = CustomMessage(
-    //   id: DateTime.now().millisecondsSinceEpoch.toString(),
-    //   message: message,
-    //   createdAt: DateTime.now(),
-    //   sentBy: currentUser.id,
-    //   status: MessageStatus.sending,
-    // );
-
-    // messages.add(tempMessage);
     socket.emit('send_message', {'connection_id': connectionId, 'message': message});
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
     });
     // onRefresh?.call();
+  }
+
+  /// Send image message
+  Future<void> sendImage() async {
+    try {
+      final XFile? pickedFile = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 70,
+        maxWidth: 1024,
+      );
+
+      if (pickedFile == null) return;
+
+      final filePath = pickedFile.path;
+      log("📸 Image captured: $filePath");
+      _scrollToBottom();
+
+      final bytes = await pickedFile.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      socket.emit('send_message', {
+        'connection_id': connectionId,
+        "message_type": "image",
+        'message': "hello",
+        "media_base64": base64Image,
+        'media_url': filePath,
+      });
+      log("📤 Sent image message via socket");
+    } catch (e) {
+      log("❌ Error capturing/sending image: $e");
+    }
   }
 
   @override

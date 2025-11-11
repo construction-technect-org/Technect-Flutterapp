@@ -272,6 +272,7 @@ class CustomMessage {
   final String sentBy;
   final DateTime createdAt;
   final MessageStatus status;
+  final String? type;
 
   CustomMessage({
     required this.id,
@@ -279,6 +280,7 @@ class CustomMessage {
     required this.sentBy,
     required this.createdAt,
     this.status = MessageStatus.sent,
+    this.type = 'text',
   });
 
   CustomMessage copyWith({
@@ -287,6 +289,7 @@ class CustomMessage {
     String? sentBy,
     DateTime? createdAt,
     MessageStatus? status,
+    String? type,
   }) {
     return CustomMessage(
       id: id ?? this.id,
@@ -294,6 +297,7 @@ class CustomMessage {
       sentBy: sentBy ?? this.sentBy,
       createdAt: createdAt ?? this.createdAt,
       status: status ?? this.status,
+      type: type ?? this.type,
     );
   }
 }
