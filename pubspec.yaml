@@ -50,7 +50,6 @@ dependencies:
   upgrader: ^11.5.0
   app_settings: ^6.1.1
   flutter_offline: ^6.0.0
-  chatview: ^2.5.0
   socket_io_client: ^3.1.2
 
 

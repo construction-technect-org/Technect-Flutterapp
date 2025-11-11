@@ -156,4 +156,6 @@ class APIConstants {
   ///CRM
   static const String merchantChatList = "merchant/chat/conversations";
   static const String connectorChatList = "connector/chat/conversations";
+  static const String messages = "messages/";
+
 }
