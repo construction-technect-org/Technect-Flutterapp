@@ -1,17 +1,17 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/AllChatList/model/all_chat_list_model.dart';
-class AllChatListServices {
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
+
+class ConnectorChatServices {
   ApiManager apiManager = ApiManager();
 
-
-  Future<AllChatListModel> allChatList() async {
+  Future<ChatListModel> allChatList({required int cId}) async {
     try {
-      const String url = APIConstants.merchantChatList;
+      final String url = "${APIConstants.messages}$cId";
       debugPrint('Calling API: $url');
       final response = await apiManager.get(url: url);
       debugPrint('Response: $response');
 
-      return AllChatListModel.fromJson(response);
+      return ChatListModel.fromJson(response);
     } catch (e, st) {
       debugPrint('Error: $e');
       debugPrint('StackTrace: $st');

@@ -29,6 +29,7 @@ abstract class Routes {
   static const ADD_SERVICE = _Paths.ADD_SERVICE;
   static const SERVICE_DETAILS = _Paths.SERVICE_DETAILS;
   static const CHAT_SYSTEM = _Paths.CHAT_SYSTEM;
+  static const CONNECTOR_CHAT_SYSTEM = _Paths.CONNECTOR_CHAT_SYSTEM;
   static const CONNECTION_INBOX = _Paths.CONNECTION_INBOX;
   static const DASHBOARD = _Paths.DASHBOARD;
   static const DASHABORD_MARKET_PLACE = _Paths.DASHABOARD_MARKET_PLACE;
@@ -87,6 +88,7 @@ abstract class Routes {
   static const All_CHAT_LIST = _Paths.All_CHAT_LIST;
   static const Add_New_Requ = _Paths.Add_New_REQUIREMENT;
   static const Requ_DetailS = _Paths.Requirement_DetailS;
+  static const CONNECTOR_All_CHAT_LIST = _Paths.CONNECTOR_All_CHAT_LIST;
 }
 
 abstract class _Paths {
@@ -119,6 +121,7 @@ abstract class _Paths {
   static const ADD_SERVICE = '/add-service';
   static const SERVICE_DETAILS = '/service-details';
   static const CHAT_SYSTEM = '/chat-system';
+  static const CONNECTOR_CHAT_SYSTEM = '/connector-chat-system';
   static const CONNECTION_INBOX = '/connection-inbox';
   static const SETTING = '/setting';
   static const DASHBOARD = '/dashboard';
@@ -175,4 +178,5 @@ abstract class _Paths {
   static const All_CHAT_LIST = '/all-chat-list';
   static const Add_New_REQUIREMENT = '/add_new_requirement';
   static const Requirement_DetailS = '/RequirementDetailScreen';
+  static const CONNECTOR_All_CHAT_LIST = '/connector-all-chat-list';
 }
