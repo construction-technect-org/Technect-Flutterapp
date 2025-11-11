@@ -134,7 +134,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (message.type == 'image')
+                            if (message.type == 'image') ...[
                               GestureDetector(
                                 onTap: () {
                                   final imageUrl =
@@ -184,8 +184,21 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              )
-                            else if (message.type == 'file')
+                              ),
+                              if (message.message.isNotEmpty &&
+                                  message.message.toLowerCase() != 'photo')
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Text(
+                                    message.message,
+                                    style: MyTexts.bold14.copyWith(
+                                      color: isMine
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                            ] else if (message.type == 'file') ...[
                               GestureDetector(
                                 onTap: () {
                                   final fileUrl =
@@ -207,7 +220,10 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(
-                                        ChatUtils.getFileIcon(message.message),
+                                        ChatUtils.getFileIcon(
+                                          message.mediaUrl?.split('/').last ??
+                                              message.message,
+                                        ),
                                         size: 40,
                                         color: isMine
                                             ? Colors.white
@@ -220,7 +236,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              message.message,
+                                              ChatUtils.extractFileName(
+                                                message.mediaUrl ?? '',
+                                              ),
                                               style: MyTexts.bold14.copyWith(
                                                 color: isMine
                                                     ? Colors.white
@@ -245,8 +263,21 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                              )
-                            else
+                              ),
+                              if (message.message.isNotEmpty &&
+                                  !ChatUtils.isFileNameOnly(message.message))
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Text(
+                                    message.message,
+                                    style: MyTexts.bold14.copyWith(
+                                      color: isMine
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                            ] else
                               Text(
                                 message.message,
                                 style: MyTexts.bold16.copyWith(

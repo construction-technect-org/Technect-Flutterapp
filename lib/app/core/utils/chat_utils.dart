@@ -99,4 +99,35 @@ class ChatUtils {
       );
     }
   }
+
+  /// Extract clean filename from media URL by removing timestamp prefix
+  static String extractFileName(String mediaUrl) {
+    if (mediaUrl.isEmpty) return 'File';
+
+    try {
+      final fileName = mediaUrl.split('/').last;
+      // Remove timestamp prefix if exists (format: timestamp_actualfilename.ext)
+      final parts = fileName.split('_');
+      if (parts.length > 1 && int.tryParse(parts[0]) != null) {
+        return parts.sublist(1).join('_');
+      }
+      return fileName;
+    } catch (e) {
+      return 'File';
+    }
+  }
+
+  /// Check if message text is just a filename (not a caption)
+  static bool isFileNameOnly(String message) {
+    final extensions = [
+      '.pdf',
+      '.doc',
+      '.docx',
+      '.xls',
+      '.xlsx',
+      '.txt',
+      '.zip',
+    ];
+    return extensions.any((ext) => message.toLowerCase().endsWith(ext));
+  }
 }

@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:construction_technect/app/core/utils/chat_utils.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/service/connector_chat_service.dart';
+import 'package:construction_technect/app/modules/ChatSystem/widgets/media_preview_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -245,19 +247,27 @@ class ConnectorChatSystemController extends GetxController {
 
       final filePath = pickedFile.path;
       log("🖼️ Image selected from gallery: $filePath");
-      _scrollToBottom();
 
-      final bytes = await pickedFile.readAsBytes();
-      final base64Image = base64Encode(bytes);
+      // Show preview dialog with caption option
+      Get.dialog(
+        MediaPreviewDialog(
+          imagePath: filePath,
+          onSend: (caption) async {
+            _scrollToBottom();
+            final bytes = await pickedFile.readAsBytes();
+            final base64Image = base64Encode(bytes);
 
-      socket.emit('send_message', {
-        'connection_id': connectionId,
-        "message_type": "image",
-        'message': "Photo",
-        "media_base64": base64Image,
-        'media_url': filePath,
-      });
-      log("📤 Sent image message via socket");
+            socket.emit('send_message', {
+              'connection_id': connectionId,
+              "message_type": "image",
+              'message': caption.isEmpty ? "Photo" : caption,
+              "media_base64": base64Image,
+              'media_url': filePath,
+            });
+            log("📤 Sent image message via socket with caption: $caption");
+          },
+        ),
+      );
     } catch (e) {
       log("❌ Error selecting/sending image: $e");
     }
@@ -275,19 +285,27 @@ class ConnectorChatSystemController extends GetxController {
 
       final filePath = pickedFile.path;
       log("📸 Image captured from camera: $filePath");
-      _scrollToBottom();
 
-      final bytes = await pickedFile.readAsBytes();
-      final base64Image = base64Encode(bytes);
+      // Show preview dialog with caption option
+      Get.dialog(
+        MediaPreviewDialog(
+          imagePath: filePath,
+          onSend: (caption) async {
+            _scrollToBottom();
+            final bytes = await pickedFile.readAsBytes();
+            final base64Image = base64Encode(bytes);
 
-      socket.emit('send_message', {
-        'connection_id': connectionId,
-        "message_type": "image",
-        'message': "Photo",
-        "media_base64": base64Image,
-        'media_url': filePath,
-      });
-      log("📤 Sent image message via socket");
+            socket.emit('send_message', {
+              'connection_id': connectionId,
+              "message_type": "image",
+              'message': caption.isEmpty ? "Photo" : caption,
+              "media_base64": base64Image,
+              'media_url': filePath,
+            });
+            log("📤 Sent image message via socket with caption: $caption");
+          },
+        ),
+      );
     } catch (e) {
       log("❌ Error capturing/sending image: $e");
     }
@@ -339,20 +357,31 @@ class ConnectorChatSystemController extends GetxController {
       log(
         "📄 File selected: $fileName (${(fileSize / 1024).toStringAsFixed(2)} KB)",
       );
-      _scrollToBottom();
 
-      final bytes = file.bytes ?? await File(filePath).readAsBytes();
-      final base64File = base64Encode(bytes);
+      // Show preview dialog with caption option
+      Get.dialog(
+        MediaPreviewDialog(
+          fileName: fileName,
+          fileIcon: ChatUtils.getFileIcon(fileName),
+          filePath: filePath,
+          fileSize: fileSize,
+          onSend: (caption) async {
+            _scrollToBottom();
+            final bytes = file.bytes ?? await File(filePath).readAsBytes();
+            final base64File = base64Encode(bytes);
 
-      socket.emit('send_message', {
-        'connection_id': connectionId,
-        'message_type': 'file',
-        'media_base64': base64File,
-        'media_mime_type': mimeType,
-        'file_name': fileName,
-        'message': fileName,
-      });
-      log("📤 Sent file message via socket");
+            socket.emit('send_message', {
+              'connection_id': connectionId,
+              'message_type': 'file',
+              'media_base64': base64File,
+              'media_mime_type': mimeType,
+              'file_name': fileName,
+              'message': caption.isEmpty ? fileName : caption,
+            });
+            log("📤 Sent file message via socket with caption: $caption");
+          },
+        ),
+      );
     } catch (e) {
       log("❌ Error picking/sending file: $e");
     }
