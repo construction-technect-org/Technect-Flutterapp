@@ -13,9 +13,10 @@ class LeadConversationSectionWidget extends GetView<LeadDashController> {
           'Lead conversation',
           style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
         ),
-        const Gap(12),
+        const Gap(16),
         Obx(() {
           final leadConversations = controller.leadConversations;
+
           return Column(
             children: [
               ...leadConversations.take(2).map((conversation) {
@@ -26,8 +27,14 @@ class LeadConversationSectionWidget extends GetView<LeadDashController> {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: MyColors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: MyColors.grayEA),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: MyColors.black.withValues(alpha: 0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: Row(
                       children: [
@@ -35,7 +42,7 @@ class LeadConversationSectionWidget extends GetView<LeadDashController> {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: MyColors.primary.withValues(alpha: 0.1),
+                            color: MyColors.yellow.withValues(alpha: 0.25),
                             shape: BoxShape.circle,
                           ),
                           child: Center(
@@ -47,23 +54,46 @@ class LeadConversationSectionWidget extends GetView<LeadDashController> {
                             ),
                           ),
                         ),
-                        const Gap(12),
+                        const Gap(16),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                conversation['location'] ?? '',
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.fontBlack,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Location',
+                                    style: MyTexts.regular14.copyWith(
+                                      color: MyColors.custom('9E9E9E'),
+                                    ),
+                                  ),
+                                  const Gap(4),
+                                  Text(
+                                    conversation['location'] ?? '',
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const Gap(4),
-                              Text(
-                                conversation['product'] ?? '',
-                                style: MyTexts.regular12.copyWith(
-                                  color: MyColors.custom('545454'),
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Product',
+                                    style: MyTexts.regular14.copyWith(
+                                      color: MyColors.custom('9E9E9E'),
+                                    ),
+                                  ),
+                                  const Gap(4),
+                                  Text(
+                                    conversation['product'] ?? '',
+                                    style: MyTexts.medium16.copyWith(
+                                      color: MyColors.fontBlack,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -76,13 +106,16 @@ class LeadConversationSectionWidget extends GetView<LeadDashController> {
               if (leadConversations.length > 2)
                 GestureDetector(
                   onTap: () {
-                    // Navigate to see more
+                    // TODO: navigate to full conversation list
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     child: Text(
                       'See more',
-                      style: MyTexts.medium14.copyWith(color: MyColors.primary),
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.primary,
+                        decoration: TextDecoration.none,
+                      ),
                     ),
                   ),
                 ),

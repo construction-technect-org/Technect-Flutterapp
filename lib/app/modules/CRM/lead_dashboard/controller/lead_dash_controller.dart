@@ -49,16 +49,9 @@ class LeadDashController extends GetxController {
 
   // Lead conversations
   final leadConversations = [
-    {
-      'location': 'Location Jp nagar',
-      'product': 'Product Manufacture sand',
-      'id': '48',
-    },
-    {
-      'location': 'Location Jp nagar',
-      'product': 'Product Manufacture sand',
-      'id': '48',
-    },
+    {'location': 'Rp nagar', 'product': 'Manufacture sand', 'id': '47'},
+    {'location': 'Xp nagar', 'product': 'Manufacture sand', 'id': '48'},
+    {'location': 'Jp nagar', 'product': 'Manufacture sand', 'id': '49'},
   ].obs;
 
   // Notification counts

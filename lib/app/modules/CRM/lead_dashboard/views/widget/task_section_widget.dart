@@ -10,33 +10,7 @@ class TaskSectionWidget extends GetView<LeadDashController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Task',
-              style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
-            ),
-            GestureDetector(
-              onTap: () {
-                // Navigate to calendar/task view
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: MyColors.grayEA),
-                ),
-                child: const Icon(
-                  Icons.calendar_today,
-                  size: 20,
-                  color: MyColors.fontBlack,
-                ),
-              ),
-            ),
-          ],
-        ),
+        Text('Task', style: MyTexts.bold18.copyWith(color: MyColors.fontBlack)),
         const Gap(12),
         Obx(() {
           final totalTasks = controller.totalTasks.value;
