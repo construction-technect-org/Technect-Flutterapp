@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/chat_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
 
 class ConnectorChatServices {
   ApiManager apiManager = ApiManager();

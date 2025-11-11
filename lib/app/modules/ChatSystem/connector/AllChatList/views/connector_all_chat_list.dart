@@ -51,13 +51,27 @@ class ConnectorAllChatListScreen
                 "${chat.merchant?.firstName ?? ""} ${chat.merchant?.lastName ?? ""}",
                 style: MyTexts.bold16.copyWith(color: MyColors.primary),
               ),
-              subtitle: Text(
-                chat.chatInfo?.lastMessage ?? "",
-                style: MyTexts.medium14.copyWith(
-                  color: MyColors.fontBlack.withValues(alpha: 0.7),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              subtitle: Row(
+                children: [
+                  if (_isImageMessage(chat.chatInfo?.lastMessage)) ...[
+                    const Icon(
+                      Icons.image,
+                      size: 16,
+                      color: MyColors.fontBlack,
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                  Expanded(
+                    child: Text(
+                      _getDisplayMessage(chat.chatInfo?.lastMessage),
+                      style: MyTexts.medium14.copyWith(
+                        color: MyColors.fontBlack.withValues(alpha: 0.7),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
               trailing: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -104,6 +118,31 @@ class ConnectorAllChatListScreen
         );
       }),
     );
+  }
+
+  bool _isImageMessage(String? message) {
+    if (message == null || message.isEmpty) return false;
+    // Check if message starts with common image indicators
+    return message.toLowerCase().startsWith('image') ||
+        message.toLowerCase().startsWith('photo') ||
+        message.toLowerCase().startsWith('📷') ||
+        message.contains('.jpg') ||
+        message.contains('.jpeg') ||
+        message.contains('.png') ||
+        message.contains('.gif') ||
+        message.contains('.webp') ||
+        message.contains('/uploads/');
+  }
+
+  String _getDisplayMessage(String? message) {
+    if (message == null || message.isEmpty) return '';
+
+    // If it's an image message, return a friendly text
+    if (_isImageMessage(message)) {
+      return 'Photo';
+    }
+
+    return message;
   }
 
   String formattedChatTime(DateTime? dateTime) {

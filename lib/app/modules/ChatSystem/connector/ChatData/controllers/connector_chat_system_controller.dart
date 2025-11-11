@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/chat_model.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/service/chat_service.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/service/connector_chat_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -97,6 +97,8 @@ class ConnectorChatSystemController extends GetxController {
                 status: msg.isRead == true
                     ? MessageStatus.read
                     : MessageStatus.delivered,
+                type: msg.messageType,
+                mediaUrl: msg.messageMediaUrl,
               );
             }).toList() ??
             [];
@@ -178,6 +180,8 @@ class ConnectorChatSystemController extends GetxController {
           status: chatData.isRead == true
               ? MessageStatus.read
               : MessageStatus.delivered,
+          type: chatData.messageType,
+          mediaUrl: chatData.messageMediaUrl,
         );
 
         // Add new message at the end (newest messages at bottom)
@@ -273,6 +277,7 @@ class CustomMessage {
   final DateTime createdAt;
   final MessageStatus status;
   final String? type;
+  final String? mediaUrl;
 
   CustomMessage({
     required this.id,
@@ -281,6 +286,7 @@ class CustomMessage {
     required this.createdAt,
     this.status = MessageStatus.sent,
     this.type = 'text',
+    this.mediaUrl,
   });
 
   CustomMessage copyWith({
@@ -290,6 +296,7 @@ class CustomMessage {
     DateTime? createdAt,
     MessageStatus? status,
     String? type,
+    String? mediaUrl,
   }) {
     return CustomMessage(
       id: id ?? this.id,
@@ -298,6 +305,7 @@ class CustomMessage {
       createdAt: createdAt ?? this.createdAt,
       status: status ?? this.status,
       type: type ?? this.type,
+      mediaUrl: mediaUrl ?? this.mediaUrl,
     );
   }
 }

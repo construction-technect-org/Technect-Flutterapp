@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/chat_system_controller.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/chat_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/service/chat_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -65,13 +65,22 @@ class ChatSystemController extends GetxController {
       if (result.success == true) {
         chatListModel.value = result;
 
-        final firstMessage = result.chatData?.isNotEmpty == true ? result.chatData!.first : null;
+        final firstMessage = result.chatData?.isNotEmpty == true
+            ? result.chatData!.first
+            : null;
 
         if (firstMessage != null) {
-          final isSenderMe = firstMessage.senderUserId == myPref.userModel.val["id"];
-          final otherId = isSenderMe ? firstMessage.receiverUserId : firstMessage.senderUserId;
+          final isSenderMe =
+              firstMessage.senderUserId == myPref.userModel.val["id"];
+          final otherId = isSenderMe
+              ? firstMessage.receiverUserId
+              : firstMessage.senderUserId;
 
-          supportUser = CustomUser(id: otherId?.toString() ?? '', name: name, profilePhoto: image);
+          supportUser = CustomUser(
+            id: otherId?.toString() ?? '',
+            name: name,
+            profilePhoto: image,
+          );
         }
 
         final fetchedMessages =
@@ -80,9 +89,13 @@ class ChatSystemController extends GetxController {
               return CustomMessage(
                 id: msg.id.toString(),
                 message: msg.messageText ?? '',
-                createdAt: DateTime.parse(msg.createdAt ?? DateTime.now().toIso8601String()),
+                createdAt: DateTime.parse(
+                  msg.createdAt ?? DateTime.now().toIso8601String(),
+                ),
                 sentBy: isSentByMe ? currentUser.id : supportUser.id,
-                status: msg.isRead == true ? MessageStatus.read : MessageStatus.delivered,
+                status: msg.isRead == true
+                    ? MessageStatus.read
+                    : MessageStatus.delivered,
               );
             }).toList() ??
             [];
@@ -157,9 +170,13 @@ class ChatSystemController extends GetxController {
         final newMessage = CustomMessage(
           id: chatData.id.toString(),
           message: chatData.messageText ?? '',
-          createdAt: DateTime.parse(chatData.createdAt ?? DateTime.now().toIso8601String()),
+          createdAt: DateTime.parse(
+            chatData.createdAt ?? DateTime.now().toIso8601String(),
+          ),
           sentBy: isSentByMe ? currentUser.id : supportUser.id,
-          status: chatData.isRead == true ? MessageStatus.read : MessageStatus.delivered,
+          status: chatData.isRead == true
+              ? MessageStatus.read
+              : MessageStatus.delivered,
         );
 
         messages.add(newMessage);
@@ -212,7 +229,20 @@ class ChatSystemController extends GetxController {
   /// Send message
   void onSendTap(String message) {
     if (message.trim().isEmpty) return;
-    socket.emit('send_message', {'connection_id': connectionId, 'message': message});
+    //
+    // final tempMessage = CustomMessage(
+    //   id: DateTime.now().millisecondsSinceEpoch.toString(),
+    //   message: message,
+    //   createdAt: DateTime.now(),
+    //   sentBy: currentUser.id,
+    //   status: MessageStatus.sending,
+    // );
+
+    // messages.add(tempMessage);
+    socket.emit('send_message', {
+      'connection_id': connectionId,
+      'message': message,
+    });
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
     });

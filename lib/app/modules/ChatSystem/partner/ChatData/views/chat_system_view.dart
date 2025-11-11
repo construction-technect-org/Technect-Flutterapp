@@ -2,7 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/chat_system_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/controllers/chat_system_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -19,12 +19,16 @@ class ChatSystemView extends StatelessWidget {
     final messageDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
     if (messageDate == today) {
+      // Today: show time only (e.g., "10:45 AM")
       return DateFormat('h:mm a').format(dateTime);
     } else if (messageDate == today.subtract(const Duration(days: 1))) {
+      // Yesterday
       return 'Yesterday';
     } else if (now.difference(dateTime).inDays < 7) {
+      // Within last week: show day name (e.g., "Monday")
       return DateFormat('EEEE').format(dateTime);
     } else {
+      // Older: show date (e.g., "11/05/2025")
       return DateFormat('dd/MM/yyyy').format(dateTime);
     }
   }
@@ -39,7 +43,10 @@ class ChatSystemView extends StatelessWidget {
           children: [
             CircleAvatar(backgroundImage: NetworkImage(controller.image)),
             const SizedBox(width: 10),
-            Text(controller.name, style: MyTexts.medium18.copyWith(color: MyColors.black)),
+            Text(
+              controller.name,
+              style: MyTexts.medium18.copyWith(color: MyColors.black),
+            ),
           ],
         ),
       ),
@@ -64,7 +71,9 @@ class ChatSystemView extends StatelessWidget {
                   final isRead = message.status == MessageStatus.read;
 
                   return Align(
-                    alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment: isMine
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         maxWidth: MediaQuery.of(context).size.width * 0.75,
@@ -73,7 +82,9 @@ class ChatSystemView extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(vertical: 4),
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: isMine ? MyColors.primary : MyColors.veryPaleBlue,
+                          color: isMine
+                              ? MyColors.primary
+                              : MyColors.veryPaleBlue,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Column(
@@ -86,7 +97,8 @@ class ChatSystemView extends StatelessWidget {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: getImageView(
-                                  width: MediaQuery.of(context).size.width * 0.6,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
                                   height: 200,
                                   fit: BoxFit.cover,
                                   finalUrl: message.message,
@@ -108,7 +120,9 @@ class ChatSystemView extends StatelessWidget {
                                   _formatTime(message.createdAt),
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: isMine ? Colors.white70 : Colors.black54,
+                                    color: isMine
+                                        ? Colors.white70
+                                        : Colors.black54,
                                   ),
                                 ),
                                 if (isMine) ...[
@@ -116,7 +130,9 @@ class ChatSystemView extends StatelessWidget {
                                   Icon(
                                     isRead ? Icons.done_all : Icons.check,
                                     size: 14,
-                                    color: isRead ? Colors.blue : Colors.white70,
+                                    color: isRead
+                                        ? Colors.blue
+                                        : Colors.white70,
                                   ),
                                 ],
                               ],
@@ -145,7 +161,10 @@ class ChatSystemView extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.camera_alt, color: MyColors.primary),
+                      icon: const Icon(
+                        Icons.camera_alt,
+                        color: MyColors.primary,
+                      ),
                       onPressed: () async {
                         await controller.sendImage();
                       },

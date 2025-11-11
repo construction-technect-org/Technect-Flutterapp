@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/chat_system_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
 import 'package:intl/intl.dart';
 
 class ConnectorChatSystemView extends StatelessWidget {
@@ -88,12 +88,53 @@ class ConnectorChatSystemView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              message.message,
-                              style: MyTexts.bold16.copyWith(
-                                color: isMine ? Colors.white : Colors.black,
+                            if (message.type == 'image')
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  APIConstants.bucketUrl +
+                                      (message.mediaUrl ?? ''),
+                                  width: 200,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Container(
+                                          width: 200,
+                                          height: 200,
+                                          color: Colors.grey[300],
+                                          child: const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      width: 200,
+                                      height: 150,
+                                      color: Colors.grey[300],
+                                      child: const Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.broken_image, size: 40),
+                                          SizedBox(height: 8),
+                                          Text('Image not available'),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            else
+                              Text(
+                                message.message,
+                                style: MyTexts.bold16.copyWith(
+                                  color: isMine ? Colors.white : Colors.black,
+                                ),
                               ),
-                            ),
                             const SizedBox(height: 4),
                             Row(
                               mainAxisSize: MainAxisSize.min,

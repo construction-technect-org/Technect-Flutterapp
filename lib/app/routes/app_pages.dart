@@ -15,8 +15,8 @@ import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_
 import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/binding/connector_all_chat_list_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/views/connector_all_chat_list.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/binding/chat_system_binding.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/views/chat_system_view.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/binding/connector_chat_system_binding.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/views/connector_chat_system_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/binding/all_chat_list_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/views/all_chat_list.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/binding/chat_system_binding.dart';
