@@ -38,22 +38,25 @@ class ChatData {
   int? receiverUserId;
   String? messageText;
   String? messageType;
+  String? messageMediaUrl;
   bool? isRead;
   String? readAt;
   String? createdAt;
   String? updatedAt;
 
-  ChatData(
-      {this.id,
-        this.connectionId,
-        this.senderUserId,
-        this.receiverUserId,
-        this.messageText,
-        this.messageType,
-        this.isRead,
-        this.readAt,
-        this.createdAt,
-        this.updatedAt});
+  ChatData({
+    this.id,
+    this.connectionId,
+    this.senderUserId,
+    this.receiverUserId,
+    this.messageText,
+    this.messageType,
+    this.messageMediaUrl,
+    this.isRead,
+    this.readAt,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   ChatData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -62,6 +65,7 @@ class ChatData {
     receiverUserId = json['receiver_user_id'];
     messageText = json['message_text'];
     messageType = json['message_type'];
+    messageMediaUrl = json['message_media_url'];
     isRead = json['is_read'];
     readAt = json['read_at'];
     createdAt = json['created_at'];
@@ -76,6 +80,7 @@ class ChatData {
     data['receiver_user_id'] = receiverUserId;
     data['message_text'] = messageText;
     data['message_type'] = messageType;
+    data['message_media_url'] = messageMediaUrl;
     data['is_read'] = isRead;
     data['read_at'] = readAt;
     data['created_at'] = createdAt;

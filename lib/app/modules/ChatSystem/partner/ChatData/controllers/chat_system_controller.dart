@@ -96,6 +96,8 @@ class ChatSystemController extends GetxController {
                 status: msg.isRead == true
                     ? MessageStatus.read
                     : MessageStatus.delivered,
+                type: msg.messageType,
+                mediaUrl: msg.messageMediaUrl,
               );
             }).toList() ??
             [];
@@ -177,6 +179,8 @@ class ChatSystemController extends GetxController {
           status: chatData.isRead == true
               ? MessageStatus.read
               : MessageStatus.delivered,
+          type: chatData.messageType,
+          mediaUrl: chatData.messageMediaUrl,
         );
 
         messages.add(newMessage);
@@ -249,8 +253,37 @@ class ChatSystemController extends GetxController {
     // onRefresh?.call();
   }
 
+  Future<void> sendImageFromGallery() async {
+    try {
+      final XFile? pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 70,
+        maxWidth: 1024,
+      );
 
-  Future<void> sendImage() async {
+      if (pickedFile == null) return;
+
+      final filePath = pickedFile.path;
+      log("🖼️ Image selected from gallery: $filePath");
+      _scrollToBottom();
+
+      final bytes = await pickedFile.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      socket.emit('send_message', {
+        'connection_id': connectionId,
+        "message_type": "image",
+        'message': "Photo",
+        "media_base64": base64Image,
+        'media_url': filePath,
+      });
+      log("📤 Sent image message via socket");
+    } catch (e) {
+      log("❌ Error selecting/sending image: $e");
+    }
+  }
+
+  Future<void> sendImageFromCamera() async {
     try {
       final XFile? pickedFile = await picker.pickImage(
         source: ImageSource.camera,
@@ -261,7 +294,7 @@ class ChatSystemController extends GetxController {
       if (pickedFile == null) return;
 
       final filePath = pickedFile.path;
-      log("📸 Image captured: $filePath");
+      log("📸 Image captured from camera: $filePath");
       _scrollToBottom();
 
       final bytes = await pickedFile.readAsBytes();
@@ -270,7 +303,7 @@ class ChatSystemController extends GetxController {
       socket.emit('send_message', {
         'connection_id': connectionId,
         "message_type": "image",
-        'message': "hello",
+        'message': "Photo",
         "media_base64": base64Image,
         'media_url': filePath,
       });

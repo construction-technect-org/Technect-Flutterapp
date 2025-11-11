@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/controllers/chat_system_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/widgets/chat_image_viewer.dart';
 import 'package:intl/intl.dart';
 
 class ChatSystemView extends StatelessWidget {
@@ -19,16 +20,12 @@ class ChatSystemView extends StatelessWidget {
     final messageDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
     if (messageDate == today) {
-      // Today: show time only (e.g., "10:45 AM")
       return DateFormat('h:mm a').format(dateTime);
     } else if (messageDate == today.subtract(const Duration(days: 1))) {
-      // Yesterday
       return 'Yesterday';
     } else if (now.difference(dateTime).inDays < 7) {
-      // Within last week: show day name (e.g., "Monday")
       return DateFormat('EEEE').format(dateTime);
     } else {
-      // Older: show date (e.g., "11/05/2025")
       return DateFormat('dd/MM/yyyy').format(dateTime);
     }
   }
@@ -59,7 +56,6 @@ class ChatSystemView extends StatelessWidget {
 
         return Column(
           children: [
-            // 🔹 Message List
             Expanded(
               child: ListView.builder(
                 controller: controller.scrollController,
@@ -94,14 +90,54 @@ class ChatSystemView extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             if (message.type == 'image')
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: getImageView(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.6,
-                                  height: 200,
-                                  fit: BoxFit.cover,
-                                  finalUrl: message.message,
+                              GestureDetector(
+                                onTap: () {
+                                  final imageUrl =
+                                      (message.mediaUrl?.startsWith('http') ??
+                                          false)
+                                      ? message.mediaUrl!
+                                      : 'http://43.205.117.97${message.mediaUrl ?? ''}';
+
+                                  showDialog(
+                                    context: context,
+                                    barrierColor: Colors.black,
+                                    builder: (context) => ChatImageViewer(
+                                      imageUrl: imageUrl,
+                                      senderName: isMine
+                                          ? 'You'
+                                          : controller.name,
+                                      timestamp: message.createdAt,
+                                    ),
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                          0.65,
+                                      maxHeight: 300,
+                                      minHeight: 150,
+                                    ),
+                                    child: AspectRatio(
+                                      aspectRatio: 3 / 4,
+                                      child: getImageView(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                            0.65,
+                                        height: 300,
+                                        fit: BoxFit.cover,
+                                        finalUrl:
+                                            (message.mediaUrl?.startsWith(
+                                                  'http',
+                                                ) ??
+                                                false)
+                                            ? message.mediaUrl!
+                                            : 'http://43.205.117.97${message.mediaUrl ?? ''}',
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               )
                             else
@@ -146,7 +182,6 @@ class ChatSystemView extends StatelessWidget {
               ),
             ),
 
-            // 🔹 Input Area
             Container(
               color: MyColors.metricBackground,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -161,12 +196,18 @@ class ChatSystemView extends StatelessWidget {
                       ),
                     ),
                     IconButton(
+                      icon: const Icon(Icons.image, color: MyColors.primary),
+                      onPressed: () async {
+                        await controller.sendImageFromGallery();
+                      },
+                    ),
+                    IconButton(
                       icon: const Icon(
                         Icons.camera_alt,
                         color: MyColors.primary,
                       ),
                       onPressed: () async {
-                        await controller.sendImage();
+                        await controller.sendImageFromCamera();
                       },
                     ),
                     IconButton(

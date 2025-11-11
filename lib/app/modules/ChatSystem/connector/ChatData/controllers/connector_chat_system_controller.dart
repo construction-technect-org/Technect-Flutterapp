@@ -8,19 +8,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ConnectorChatSystemController extends GetxController {
-  /// Chat list model
   Rx<ChatListModel> chatListModel = ChatListModel().obs;
   RxBool isLoading = false.obs;
 
-  /// Chat user info
   late CustomUser currentUser;
   late CustomUser supportUser;
 
-  /// Chat messages
   final RxList<CustomMessage> messages = <CustomMessage>[].obs;
   final ScrollController scrollController = ScrollController();
 
-  /// Others
   final ImagePicker picker = ImagePicker();
   late final IO.Socket socket;
   int connectionId = 0;
@@ -32,7 +28,6 @@ class ConnectorChatSystemController extends GetxController {
   void onInit() {
     super.onInit();
 
-    /// Get arguments from navigation
     if (Get.arguments != null) {
       connectionId = Get.arguments["cId"];
       onRefresh = Get.arguments["onRefresh"];
@@ -48,10 +43,8 @@ class ConnectorChatSystemController extends GetxController {
 
     supportUser = const CustomUser(id: '', name: '', profilePhoto: '');
 
-    /// Load chat
     fetchChatList();
 
-    /// Initialize socket
     _initSocket();
   }
 
@@ -104,14 +97,12 @@ class ConnectorChatSystemController extends GetxController {
             }).toList() ??
             [];
 
-        // Backend sends ASC [old→new], store as-is for normal ListView
         messages.assignAll(fetchedMessages);
       }
     } catch (e) {
       log('❌ Error fetching chat list: $e');
     } finally {
       isLoading.value = false;
-      // Jump to bottom instantly (no animation) after UI is built
       if (messages.isNotEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _jumpToBottom();
@@ -153,13 +144,10 @@ class ConnectorChatSystemController extends GetxController {
     });
     socket.on('messages_marked_read', (data) {
       if (kDebugMode) log('🟢 messages marked as read: $data');
-      // This confirms that incoming messages were marked as read on server
-      // No UI update needed here as these are messages you received
     });
     socket.on('messages_read', (data) {
       if (kDebugMode) log('🟢 Your messages were read: $data');
 
-      // Mark all sent messages as read (update from delivered to read)
       _markAllMessagesAsRead();
     });
 
@@ -185,7 +173,6 @@ class ConnectorChatSystemController extends GetxController {
           mediaUrl: chatData.messageMediaUrl,
         );
 
-        // Add new message at the end (newest messages at bottom)
         messages.add(newMessage);
         _scrollToBottom();
         socket.emit('mark_messages_read', {"connection_id": connectionId});
@@ -198,14 +185,12 @@ class ConnectorChatSystemController extends GetxController {
     socket.connect();
   }
 
-  /// Jump to bottom instantly (no animation) - for initial load
   void _jumpToBottom() {
     if (scrollController.hasClients) {
       scrollController.jumpTo(scrollController.position.maxScrollExtent);
     }
   }
 
-  /// Scroll to bottom with animation - for new messages
   void _scrollToBottom() {
     if (scrollController.hasClients) {
       scrollController.animateTo(
@@ -216,10 +201,8 @@ class ConnectorChatSystemController extends GetxController {
     }
   }
 
-  /// Mark all sent messages as read
   void _markAllMessagesAsRead() {
     final updatedMessages = messages.map((msg) {
-      // Update only messages sent by current user that are not already read
       if (msg.sentBy == currentUser.id && msg.status != MessageStatus.read) {
         return msg.copyWith(status: MessageStatus.read);
       }
@@ -234,7 +217,6 @@ class ConnectorChatSystemController extends GetxController {
     }
   }
 
-  /// Send message
   void onSendTap(String message) {
     if (message.trim().isEmpty) return;
 
@@ -243,13 +225,42 @@ class ConnectorChatSystemController extends GetxController {
       'message': message,
     });
 
-    // Scroll to bottom to show where the message will appear
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
     });
   }
 
-  Future<void> sendImage() async {
+  Future<void> sendImageFromGallery() async {
+    try {
+      final XFile? pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 70,
+        maxWidth: 1024,
+      );
+
+      if (pickedFile == null) return;
+
+      final filePath = pickedFile.path;
+      log("🖼️ Image selected from gallery: $filePath");
+      _scrollToBottom();
+
+      final bytes = await pickedFile.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      socket.emit('send_message', {
+        'connection_id': connectionId,
+        "message_type": "image",
+        'message': "Photo",
+        "media_base64": base64Image,
+        'media_url': filePath,
+      });
+      log("📤 Sent image message via socket");
+    } catch (e) {
+      log("❌ Error selecting/sending image: $e");
+    }
+  }
+
+  Future<void> sendImageFromCamera() async {
     try {
       final XFile? pickedFile = await picker.pickImage(
         source: ImageSource.camera,
@@ -260,7 +271,7 @@ class ConnectorChatSystemController extends GetxController {
       if (pickedFile == null) return;
 
       final filePath = pickedFile.path;
-      log("📸 Image captured: $filePath");
+      log("📸 Image captured from camera: $filePath");
       _scrollToBottom();
 
       final bytes = await pickedFile.readAsBytes();
@@ -269,7 +280,7 @@ class ConnectorChatSystemController extends GetxController {
       socket.emit('send_message', {
         'connection_id': connectionId,
         "message_type": "image",
-        'message': "hello",
+        'message': "Photo",
         "media_base64": base64Image,
         'media_url': filePath,
       });
@@ -278,7 +289,6 @@ class ConnectorChatSystemController extends GetxController {
       log("❌ Error capturing/sending image: $e");
     }
   }
-
 
   @override
   void onClose() {
