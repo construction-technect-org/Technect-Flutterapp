@@ -108,7 +108,7 @@ class _ChatSystemViewState extends State<ChatSystemView> {
             Container(
               color: MyColors.metricBackground,
               padding:
-              const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               child: SafeArea(
                 top: false,
                 child: Row(

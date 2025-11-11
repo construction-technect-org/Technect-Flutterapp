@@ -162,6 +162,7 @@ class ChatSystemController extends GetxController {
 
         messages.add(newMessage);
         _scrollToBottom();
+        socket.emit('mark_messages_read', {"connection_id": connectionId});
       } catch (e, st) {
         log('❌ Error parsing new message: $e');
         log(st.toString());
@@ -200,7 +201,7 @@ class ChatSystemController extends GetxController {
 
     socket.emit('send_message', {'connection_id': connectionId, 'message': message});
 
-    onRefresh?.call();
+    // onRefresh?.call();
   }
 
   @override
