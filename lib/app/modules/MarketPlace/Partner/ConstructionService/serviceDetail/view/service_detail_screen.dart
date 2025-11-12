@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/controller/service_detail_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
 import 'package:video_player/video_player.dart';
 
 class ServiceDetailScreen extends GetView<ServiceDetailController> {
@@ -408,6 +409,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                     ),
                     const Gap(20),
                     _buildSpecificationsTable(),
+                    _buildFeatureTable(),
                     const Gap(20),
                     Container(
                       width: double.infinity,
@@ -427,6 +429,27 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           const Gap(8),
                           Text(
                             controller.service.value.description ?? "-",
+                            style: MyTexts.medium16.copyWith(color: MyColors.gray54),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEF7E8),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: const Color(0xFFFDEBC8)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Note", style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
+                          const Gap(8),
+                          Text(
+                            controller.service.value.note ?? "-",
                             style: MyTexts.medium16.copyWith(color: MyColors.gray54),
                           ),
                         ],
@@ -731,19 +754,44 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
     );
   }
 
-  Widget _buildSpecificationsTable() {
-    final product = controller.service;
-    final specifications = [
-      {'label': 'Brand Name', 'value': product.value.mainCategoryName.toString()},
-      {'label': 'Category', 'value': product.value.subCategoryName.toString()},
-      {'label': 'Sub category', 'value': product.value.subCategoryName.toString()},
-      {'label': 'Unit', 'value': product.value.units.toString()},
-    ];
+  Widget _buildFeatureTable() {
+    final service = controller.service.value;
 
-    return _buildSpecificationTable(specifications);
+    final List<ServiceFeature>? features = (service.features is List) ? service.features : [];
+
+    // If no features, show nothing
+    if ((features ?? []).isEmpty) return const SizedBox();
+
+    final featureList = (features ?? []).map<Map<String, String>>((f) {
+      final featureName = f.feature?.toString() ?? '';
+      final details = f.details.toString() ?? '';
+      return {'label': featureName, 'value': details};
+    }).toList();
+
+    // Return the same table structure, with "Features" header
+    return Column(
+      children: [
+        const Gap(20),
+        _buildSpecificationTable(featureList, true),
+      ],
+    );
   }
 
-  Widget _buildSpecificationTable(List<Map<String, String>> specifications) {
+  Widget _buildSpecificationsTable() {
+    final service = controller.service;
+    final specifications = [
+      {'label': 'Brand Name', 'value': service.value.mainCategoryName.toString()},
+      {'label': 'Category', 'value': service.value.subCategoryName.toString()},
+      {'label': 'Sub category', 'value': service.value.subCategoryName.toString()},
+      {'label': 'Unit', 'value': service.value.units.toString()},
+      if((service.value.serviceReferenceUrl??"").isNotEmpty)
+      {'label': 'Reference url', 'value': service.value.serviceReferenceUrl.toString()},
+    ];
+
+    return _buildSpecificationTable(specifications, false);
+  }
+
+  Widget _buildSpecificationTable(List<Map<String, String>> specifications, bool isFeature) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
@@ -761,7 +809,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: Text(
-                    'Specification',
+                    isFeature == true ? "Features" : 'Specification',
                     style: MyTexts.medium16.copyWith(
                       color: MyColors.black,
                       fontFamily: MyTexts.SpaceGrotesk,

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -15,9 +16,10 @@ class FeatureItem {
   final TextEditingController descController;
 
   FeatureItem()
-      : headerController = TextEditingController(),
-        descController = TextEditingController();
+    : headerController = TextEditingController(),
+      descController = TextEditingController();
 }
+
 class AddServiceController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
@@ -27,14 +29,14 @@ class AddServiceController extends GetxController {
   VoidCallback? onApiCall;
 
   RxList<FeatureItem> featureList = <FeatureItem>[].obs;
+
   void addNewFeature() {
     if (featureList.isNotEmpty) {
       final lastFeature = featureList.last;
       if (lastFeature.headerController.text.trim().isEmpty ||
           lastFeature.descController.text.trim().isEmpty) {
         SnackBars.errorSnackBar(
-          content:
-          "Please fill both header and description before adding another feature.",
+          content: "Please fill both header and description before adding another feature.",
         );
         return;
       }
@@ -46,15 +48,12 @@ class AddServiceController extends GetxController {
   void removeFeature(int index) {
     featureList.removeAt(index);
   }
+
   RxList<ServiceCategoryData> mainCategories = <ServiceCategoryData>[].obs;
-  Rx<ServiceCategoryData?> selectedMainCategory = Rx<ServiceCategoryData?>(
-    null,
-  );
+  Rx<ServiceCategoryData?> selectedMainCategory = Rx<ServiceCategoryData?>(null);
 
   RxList<ServicesSubCategories> subCategories = <ServicesSubCategories>[].obs;
-  Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(
-    null,
-  );
+  Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(null);
   RxList<String> pickedFilePathList = <String>[].obs;
 
   RxList<ServiceCategories> serviceCategories = <ServiceCategories>[].obs;
@@ -99,9 +98,7 @@ class AddServiceController extends GetxController {
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
-          if (index >= 0 &&
-              index < imageSlots.length &&
-              imageSlots[index] != null) {
+          if (index >= 0 && index < imageSlots.length && imageSlots[index] != null) {
             toRemove.add(key);
           }
         });
@@ -117,15 +114,11 @@ class AddServiceController extends GetxController {
             break;
           }
         }
-        final hasAnyImage = imageSlots.any(
-          (e) => e != null && e.toString().isNotEmpty,
-        );
+        final hasAnyImage = imageSlots.any((e) => e != null && e.toString().isNotEmpty);
         if (hasAnyImage) {
           removedImages.removeWhere((key, value) {
             final index = int.parse(key.split('_').last) - 1;
-            return index >= 0 &&
-                index < imageSlots.length &&
-                imageSlots[index] != null;
+            return index >= 0 && index < imageSlots.length && imageSlots[index] != null;
           });
         }
       }
@@ -142,9 +135,7 @@ class AddServiceController extends GetxController {
         return;
       }
 
-      final List<XFile>? results = await ImagePicker().pickMultiImage(
-        limit: remainingSlots,
-      );
+      final List<XFile>? results = await ImagePicker().pickMultiImage(limit: remainingSlots);
 
       if (results != null && results.isNotEmpty) {
         pickedFilePathList.addAll(results.map((e) => e.path));
@@ -175,9 +166,7 @@ class AddServiceController extends GetxController {
         if (serviceRef.value.referenceType == "video") {
           refVideoPlayerController?.dispose();
           refVideoPlayerController = VideoPlayerController.networkUrl(
-            Uri.parse(
-              APIConstants.bucketUrl + (serviceRef.value.referenceS3Key ?? ""),
-            ),
+            Uri.parse(APIConstants.bucketUrl + (serviceRef.value.referenceS3Key ?? "")),
           );
           WidgetsBinding.instance.addPostFrameCallback((val) async {
             await refVideoPlayerController!.initialize();
@@ -191,7 +180,7 @@ class AddServiceController extends GetxController {
     }
   }
 
-  void _prefillServiceData(dynamic service) {
+  Future<void> _prefillServiceData(dynamic service) async {
     try {
       /// --- Category Selections ---
       selectedMainCategory.value = mainCategories.firstWhereOrNull(
@@ -199,17 +188,13 @@ class AddServiceController extends GetxController {
       );
 
       if (selectedMainCategory.value != null) {
-        subCategories.assignAll(
-          selectedMainCategory.value?.subCategories ?? [],
-        );
+        subCategories.assignAll(selectedMainCategory.value?.subCategories ?? []);
         selectedSubCategory.value = subCategories.firstWhereOrNull(
           (e) => e.id == service.subCategoryId,
         );
 
         if (selectedSubCategory.value != null) {
-          serviceCategories.assignAll(
-            selectedSubCategory.value?.serviceCategories ?? [],
-          );
+          serviceCategories.assignAll(selectedSubCategory.value?.serviceCategories ?? []);
           selectedServiceCategory.value = serviceCategories.firstWhereOrNull(
             (e) => e.id == service.serviceCategoryId,
           );
@@ -219,18 +204,28 @@ class AddServiceController extends GetxController {
       /// --- Text Controllers ---
       unitController.text = service.units ?? "";
       priceController.text = service.price ?? "";
-      // referenceFileUrl.value = service.referenceFile ?? '';
+      refUrlController.text = service.serviceReferenceUrl ?? '';
+      noteController.text = service.note ?? '';
       gstController.text = service.gstPercentage ?? "";
       descriptionController.text = service.description ?? "";
       gstPriceController.text = service.gstAmount ?? "";
       amountController.text = service.totalAmount ?? "";
       selectedGST.value = "${service.gstPercentage?.split(".").first}%";
-
+      featureList.clear();
+      if (service.features != null && service.features is List) {
+        final List<ServiceFeature> features = service.features;
+        for (final f in features) {
+          final item = FeatureItem();
+          item.headerController.text = f.feature ?? '';
+          item.descController.text = f.details ?? '';
+          featureList.add(item);
+        }
+      }
+      featureList.refresh();
       imageSlots.value = List<String?>.filled(5, null);
       final existingImages = service.images ?? [];
       for (int i = 0; i < existingImages.length && i < 5; i++) {
-        imageSlots[i] =
-            "${APIConstants.bucketUrl}${existingImages[i].mediaS3Key!}";
+        imageSlots[i] = "${APIConstants.bucketUrl}${existingImages[i].mediaS3Key!}";
       }
       final existingVideo = service.video ?? ServiceMediaItem();
 
@@ -239,9 +234,7 @@ class AddServiceController extends GetxController {
           selectedVideo.value = File("abc");
           videoPlayerController?.dispose();
           videoPlayerController = VideoPlayerController.networkUrl(
-            Uri.parse(
-              APIConstants.bucketUrl + existingVideo.mediaS3Key.toString(),
-            ),
+            Uri.parse(APIConstants.bucketUrl + existingVideo.mediaS3Key.toString()),
           );
           await videoPlayerController!.initialize();
           videoPlayerController!.setLooping(false);
@@ -260,8 +253,7 @@ class AddServiceController extends GetxController {
 
       final cachedCategoryHierarchy = myPref.getServiceCategoryHierarchyModel();
       final categoryHierarchy =
-          cachedCategoryHierarchy ??
-          await HomeService().getCategoryServiceHierarchy();
+          cachedCategoryHierarchy ?? await HomeService().getCategoryServiceHierarchy();
 
       mainCategories.assignAll(categoryHierarchy.data ?? []);
     } catch (e) {
@@ -272,9 +264,7 @@ class AddServiceController extends GetxController {
   }
 
   void onMainCategorySelected(String? value) {
-    selectedMainCategory.value = mainCategories.firstWhereOrNull(
-      (e) => e.name == value,
-    );
+    selectedMainCategory.value = mainCategories.firstWhereOrNull((e) => e.name == value);
 
     subCategories.assignAll(selectedMainCategory.value?.subCategories ?? []);
 
@@ -284,28 +274,20 @@ class AddServiceController extends GetxController {
   }
 
   void onSubCategorySelected(String? value) {
-    selectedSubCategory.value = subCategories.firstWhereOrNull(
-      (e) => e.name == value,
-    );
+    selectedSubCategory.value = subCategories.firstWhereOrNull((e) => e.name == value);
 
-    serviceCategories.assignAll(
-      selectedSubCategory.value?.serviceCategories ?? [],
-    );
+    serviceCategories.assignAll(selectedSubCategory.value?.serviceCategories ?? []);
 
     selectedServiceCategory.value = null;
   }
 
   void onServiceCategorySelected(String? value) {
-    selectedServiceCategory.value = serviceCategories.firstWhereOrNull(
-      (e) => e.name == value,
-    );
+    selectedServiceCategory.value = serviceCategories.firstWhereOrNull((e) => e.name == value);
   }
 
   void gstCalculate() {
     final double amount =
-        double.parse(
-          priceController.text.isEmpty ? '0.0' : priceController.text,
-        ) *
+        double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
         double.parse(
           selectedGST.value.toString().replaceAll("%", "").isEmpty
               ? '0.0'
@@ -313,8 +295,7 @@ class AddServiceController extends GetxController {
         ) /
         100;
     gstPriceController.text = amount.toStringAsFixed(2);
-    amountController.text = (amount + double.parse(priceController.text))
-        .toStringAsFixed(2);
+    amountController.text = (amount + double.parse(priceController.text)).toStringAsFixed(2);
   }
 
   Future<void> openVideoPickerBottomSheet(BuildContext context) {
@@ -391,7 +372,17 @@ class AddServiceController extends GetxController {
   Future<void> createService() async {
     isLoading.value = true;
     Map<String, dynamic> fields = {};
+    final List<Map<String, String>> featureData = featureList
+        .map(
+          (f) => {
+            "feature": f.headerController.text.trim(),
+            "details": f.descController.text.trim(),
+          },
+        )
+        .where((item) => item["feature"]!.isNotEmpty && item["details"]!.isNotEmpty)
+        .toList();
 
+    final String featuresJson = jsonEncode(featureData);
     final imageList = pickedFilePathList;
     int index = 1;
     final Map<String, String> selectedFiles = {};
@@ -417,14 +408,14 @@ class AddServiceController extends GetxController {
       "price": priceController.text,
       "gst_percentage": selectedGST.value,
       "description": descriptionController.text,
+      "note": noteController.text,
+      if (featureList.isNotEmpty) "features": featuresJson,
+      if (refUrlController.text.isNotEmpty) "service_reference_url": refUrlController.text,
       if (referenceFile.value != null) 'reference_type': referenceFileUrl.value,
     };
 
     try {
-      final res = await _service.createService(
-        fields: fields,
-        files: selectedFiles,
-      );
+      final res = await _service.createService(fields: fields, files: selectedFiles);
       if (res.success) {
         Get.to(
           () => SuccessScreen(
@@ -449,7 +440,17 @@ class AddServiceController extends GetxController {
   Future<void> updateService(int serviceId) async {
     isLoading.value = true;
     final Map<String, String> selectedFiles = {};
+    final List<Map<String, String>> featureData = featureList
+        .map(
+          (f) => {
+            "feature": f.headerController.text.trim(),
+            "details": f.descController.text.trim(),
+          },
+        )
+        .where((item) => item["feature"]!.isNotEmpty && item["details"]!.isNotEmpty)
+        .toList();
 
+    final String featuresJson = jsonEncode(featureData);
     if (referenceFile.value != null && referenceDeleted.value == true) {
       selectedFiles['reference'] = referenceFile.value!.path;
     }
@@ -462,7 +463,10 @@ class AddServiceController extends GetxController {
       "price": priceController.text,
       "gst_percentage": selectedGST.value,
       "description": descriptionController.text,
-      if (referenceFile.value != null) 'reference_type': referenceFileUrl.value,
+      "note": noteController.text,
+      "features": featuresJson,
+      "service_reference_url": refUrlController.text,
+      'reference_type': referenceFileUrl.value,
     };
     if (referenceDeleted.value == true) {
       fields["remove_reference"] = "remove";

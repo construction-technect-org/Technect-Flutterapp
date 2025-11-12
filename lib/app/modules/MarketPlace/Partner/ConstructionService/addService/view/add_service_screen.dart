@@ -412,7 +412,6 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                       color: MyColors.lightBlueSecond,
                                     ),
                                   ),
-                                  if (controller.featureList.length > 1)
                                     GestureDetector(
                                       onTap: () => controller.removeFeature(index),
                                       child: const Icon(Icons.delete, color: Colors.red, size: 22),
@@ -430,10 +429,10 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               const Gap(10),
                               CommonTextField(
                                 controller: feature.descController,
-                                headerText: "Description",
-                                hintText: "Enter feature description",
+                                headerText: "Detail",
+                                hintText: "Enter feature detail",
                                 validator: (val) =>
-                                    val == null || val.isEmpty ? "Please enter description" : null,
+                                    val == null || val.isEmpty ? "Please enter detail" : null,
                                 maxLine: 2,
                               ),
                               const Divider(thickness: 1, height: 24),
