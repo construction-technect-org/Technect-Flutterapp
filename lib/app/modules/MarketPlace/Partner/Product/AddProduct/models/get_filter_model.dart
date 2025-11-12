@@ -38,6 +38,7 @@ class FilterData {
   final String? productName;
   final String? subCategoryName;
   final String? mainCategoryName;
+  final String? keyBoardType;
 
   FilterData({
     this.id,
@@ -50,6 +51,7 @@ class FilterData {
     this.maxValue,
     this.isRequired,
     this.dropdownList,
+    this.keyBoardType,
     this.productName,
     this.subCategoryName,
     this.mainCategoryName,
@@ -64,6 +66,7 @@ class FilterData {
     unit: json["unit"],
     minValue: json["min_value"],
     maxValue: json["max_value"],
+    keyBoardType: json["keyboard_type"],
     isRequired: json["is_required"],
     dropdownList: json["dropdown_list"] == null
         ? []
@@ -83,6 +86,7 @@ class FilterData {
     "min_value": minValue,
     "max_value": maxValue,
     "is_required": isRequired,
+    "keyboard_type": keyBoardType,
     "dropdown_list": dropdownList == null
         ? []
         : List<dynamic>.from(dropdownList!.map((x) => x)),

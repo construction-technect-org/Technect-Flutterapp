@@ -1289,7 +1289,9 @@ class AddProductView extends GetView<AddProductController> {
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: 2.h),
                                   child: CommonTextField(
-                                    keyboardType:
+                                    keyboardType:  filter.keyBoardType=="text"?
+                                        TextInputType.text
+                                        :
                                         const TextInputType.numberWithOptions(
                                           decimal: true,
                                         ),
@@ -1347,6 +1349,12 @@ class AddProductView extends GetView<AddProductController> {
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 2.h),
                                 child: CommonTextField(
+                                  keyboardType:  filter.keyBoardType=="text"?
+                                  TextInputType.text
+                                      :
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
                                   headerText: filter.filterLabel ?? '',
                                   hintText: "Enter ${filter.filterLabel ?? ''}",
                                   controller: controllerField,
