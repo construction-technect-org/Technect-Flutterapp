@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/constants.dart';
 import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/RequestDemo/service/RequestDemoService.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class RequestDemoController extends GetxController {
 
   late YoutubePlayerController youtubeController;
 
-  final String videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+  final String videoUrl = Constants.tutorial;
 
   Future<void> addRequestDemo() async {
     try {

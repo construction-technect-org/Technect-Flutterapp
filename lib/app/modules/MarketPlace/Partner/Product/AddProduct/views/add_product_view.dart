@@ -20,6 +20,7 @@ class AddProductView extends GetView<AddProductController> {
           if (controller.pageController.page == 0) {
             Get.back();
           } else {
+            hideKeyboard();
             controller.pageController.jumpToPage(0);
           }
         }
@@ -37,8 +38,10 @@ class AddProductView extends GetView<AddProductController> {
                     Get.back();
                   }
                   if (controller.pageController.page == 1) {
+                    hideKeyboard();
                     controller.pageController.jumpToPage(0);
                   } else {
+                    hideKeyboard();
                     controller.pageController.jumpToPage(1);
                   }
                 },
