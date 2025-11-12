@@ -1362,7 +1362,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      spec['label']!,
+                      (spec['label'] ?? "").capitalize ?? "",
                       style: MyTexts.medium15.copyWith(color: MyColors.gray54),
                     ),
                   ),
