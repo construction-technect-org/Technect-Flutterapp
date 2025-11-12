@@ -62,8 +62,11 @@ class ChatSystemController extends GetxController {
     }
 
     supportUser = const CustomUser(id: '', name: '', profilePhoto: '');
+    initCalled();
+  }
 
-    fetchChatList();
+  Future<void> initCalled() async {
+    await fetchChatList();
 
     _initSocket();
   }
@@ -120,7 +123,6 @@ class ChatSystemController extends GetxController {
         }
 
         _updateStatusText();
-        log('✅ Updated status for user $userId: ${userStatusText.value}');
       }
     } catch (e) {
       log('❌ Error handling online status: $e');
@@ -148,17 +150,12 @@ class ChatSystemController extends GetxController {
               : firstMessage.senderUserId;
 
           otherUserId = otherId; // Store the other user's ID
+
           supportUser = CustomUser(
             id: otherId?.toString() ?? '',
             name: name,
             profilePhoto: image,
           );
-
-          // Check online status after getting other user ID
-          if (socket.connected && otherUserId != null) {
-            socket.emit('check_user_online', {'user_id': otherUserId});
-            log("🔍 Checking online status for user: $otherUserId");
-          }
         }
 
         final fetchedMessages =
@@ -230,7 +227,6 @@ class ChatSystemController extends GetxController {
       // Check online status after joining
       if (otherUserId != null) {
         socket.emit('check_user_online', {'user_id': otherUserId});
-        log("🔍 Checking online status for user: $otherUserId");
       }
     });
     socket.on('messages_marked_read', (data) {
@@ -243,16 +239,12 @@ class ChatSystemController extends GetxController {
     });
 
     // Listen for initial online status when joining connection
-    log('👤 User Online Status:');
     socket.on('user_online_status', (data) {
-      log('👤 User Online Status: $data');
       _handleOnlineStatusUpdate(data);
     });
 
     // Listen for real-time status changes
-    log('👤 User Status Changed:');
     socket.on('user_status_changed', (data) {
-      log('🔄 User Status Changed: $data');
       _handleOnlineStatusUpdate(data);
     });
 

@@ -63,8 +63,11 @@ class ConnectorChatSystemController extends GetxController {
     }
 
     supportUser = const CustomUser(id: '', name: '', profilePhoto: '');
+    initCalled();
+  }
 
-    fetchChatList();
+  Future<void> initCalled() async {
+    await fetchChatList();
 
     _initSocket();
   }
@@ -121,7 +124,6 @@ class ConnectorChatSystemController extends GetxController {
         }
 
         _updateStatusText();
-        log('✅ Updated status for user $userId: ${userStatusText.value}');
       }
     } catch (e) {
       log('❌ Error handling online status: $e');
@@ -225,12 +227,12 @@ class ConnectorChatSystemController extends GetxController {
       // Check online status after joining
       if (otherUserId != null) {
         socket.emit('check_user_online', {'user_id': otherUserId});
-        log("🔍 Checking online status for user: $otherUserId");
       }
     });
     socket.on('messages_marked_read', (data) {
       if (kDebugMode) log('🟢 messages marked as read: $data');
     });
+
     socket.on('messages_read', (data) {
       if (kDebugMode) log('🟢 Your messages were read: $data');
 
@@ -238,16 +240,12 @@ class ConnectorChatSystemController extends GetxController {
     });
 
     // Listen for initial online status when joining connection
-    log('👤 User Online Status:');
     socket.on('user_online_status', (data) {
-      log('👤 User Online Status: $data');
       _handleOnlineStatusUpdate(data);
     });
 
     // Listen for real-time status changes
-    log('👤 User Status Changed:');
     socket.on('user_status_changed', (data) {
-      log('🔄 User Status Changed: $data');
       _handleOnlineStatusUpdate(data);
     });
 
