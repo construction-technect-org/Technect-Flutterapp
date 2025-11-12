@@ -83,6 +83,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                         controller: controller.phoneEmailController,
                         focusNode: FocusNode(),
                         isValid: controller.isValid,
+                        customErrorMessage: controller.mobileValidationError,
                         onCountryCodeChanged: (code) {
                           controller.countryCode.value = code;
                         },
@@ -98,6 +99,11 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
             child: RoundedButton(
               buttonName: 'Request otp',
               onTap: () async {
+                if (!formKey.currentState!.validate()) return;
+                if (controller.mobileValidationError.isNotEmpty ||
+                    controller.mobileValidationError.value != '') {
+                  return;
+                }
                 controller.isValid.value = -1;
                 if (controller.phoneEmailController.text.isEmpty) {
                   controller.isValid.value = 0;

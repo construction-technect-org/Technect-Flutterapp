@@ -9,6 +9,7 @@ class ForgotPasswordController extends GetxController {
   final otpController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final RxString mobileValidationError = "".obs;
 
   RxInt isValid = (-1).obs;
   RxString countryCode = "".obs;
@@ -57,7 +58,9 @@ class ForgotPasswordController extends GetxController {
         otpSend.value = true;
         SnackBars.successSnackBar(content: 'OTP sent successfully');
       } else {
-        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
+        SnackBars.errorSnackBar(
+          content: otpResponse.message ?? 'Failed to send OTP',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
@@ -101,7 +104,9 @@ class ForgotPasswordController extends GetxController {
         Get.to(() => ResetPasswordView());
         SnackBars.successSnackBar(content: 'OTP verified successfully');
       } else {
-        SnackBars.errorSnackBar(content: otpResponse.message ?? 'OTP verification failed');
+        SnackBars.errorSnackBar(
+          content: otpResponse.message ?? 'OTP verification failed',
+        );
       }
     } catch (e) {
       // Error is already shown by ApiManager
@@ -142,7 +147,10 @@ class ForgotPasswordController extends GetxController {
 
       if (resetResponse.success == true) {
         if (rememberMe.value) {
-          myPref.saveCredentials(phoneEmailController.text, newPasswordController.text);
+          myPref.saveCredentials(
+            phoneEmailController.text,
+            newPasswordController.text,
+          );
         } else {
           myPref.clearCredentials();
         }
@@ -158,7 +166,9 @@ class ForgotPasswordController extends GetxController {
           ),
         );
       } else {
-        SnackBars.errorSnackBar(content: resetResponse.message ?? 'Password reset failed');
+        SnackBars.errorSnackBar(
+          content: resetResponse.message ?? 'Password reset failed',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
