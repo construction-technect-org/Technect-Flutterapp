@@ -68,7 +68,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Gap(16),
+                const Gap(24),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -170,6 +170,7 @@ class HomeView extends StatelessWidget {
   /// ============================
   Widget _buildMaterialList(BuildContext context, List<dynamic> data) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
@@ -190,6 +191,7 @@ class HomeView extends StatelessWidget {
   /// ============================
   Widget _buildServiceList(BuildContext context, List<dynamic> data) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
@@ -210,6 +212,7 @@ class HomeView extends StatelessWidget {
   Widget _buildToolsList(BuildContext context, List<dynamic> data) {
     return ListView.builder(
       shrinkWrap: true,
+      padding: EdgeInsets.zero,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
       itemBuilder: (context, mainIndex) {

@@ -896,7 +896,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
 
     final featureList = (features ?? []).map<Map<String, String>>((f) {
       final featureName = f.feature?.toString() ?? '';
-      final details = f.details.toString() ?? '';
+      final details = f.details.toString();
       return {'label': featureName, 'value': details};
     }).toList();
 

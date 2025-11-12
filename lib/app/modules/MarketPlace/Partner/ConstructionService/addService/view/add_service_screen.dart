@@ -391,9 +391,32 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   ),
 
                   const Gap(20),
-                  Text("Features", style: MyTexts.medium16.copyWith(color: MyColors.black)),
+                  CommonTextField(
+                    controller: controller.descriptionController,
+                    headerText: "Description",
+                    hintText: "Enter service description",
+                    validator: (val) =>
+                        val == null || val.isEmpty ? "Please enter service description" : null,
+                    maxLine: 3,
+                  ),
                   const Gap(16),
-
+                  CommonTextField(
+                    controller: controller.noteController,
+                    headerText: "Note",
+                    hintText: "Enter service note",
+                    maxLine: 2,
+                    validator: (val) =>
+                        val == null || val.isEmpty ? "Please enter service note" : null,
+                  ),
+                  const Gap(16),
+                  CommonTextField(
+                    controller: controller.refUrlController,
+                    headerText: "Reference Url (Optional)",
+                    hintText: "Enter reference url",
+                  ),
+                  const Gap(20),
+                  Text("Features", style: MyTexts.medium16.copyWith(color: MyColors.black)),
+                  const Gap(8),
                   Obx(() {
                     return Column(
                       children: [
@@ -412,10 +435,10 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                       color: MyColors.lightBlueSecond,
                                     ),
                                   ),
-                                    GestureDetector(
-                                      onTap: () => controller.removeFeature(index),
-                                      child: const Icon(Icons.delete, color: Colors.red, size: 22),
-                                    ),
+                                  GestureDetector(
+                                    onTap: () => controller.removeFeature(index),
+                                    child: const Icon(Icons.delete, color: Colors.red, size: 22),
+                                  ),
                                 ],
                               ),
                               const Gap(8),
@@ -424,7 +447,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 headerText: "Header",
                                 hintText: "Enter feature header",
                                 validator: (val) =>
-                                    val == null || val.isEmpty ? "Please enter header" : null,
+                                val == null || val.isEmpty ? "Please enter header" : null,
                               ),
                               const Gap(10),
                               CommonTextField(
@@ -432,7 +455,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 headerText: "Detail",
                                 hintText: "Enter feature detail",
                                 validator: (val) =>
-                                    val == null || val.isEmpty ? "Please enter detail" : null,
+                                val == null || val.isEmpty ? "Please enter detail" : null,
                                 maxLine: 2,
                               ),
                               const Divider(thickness: 1, height: 24),
@@ -464,25 +487,6 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       ],
                     );
                   }),
-
-                  const Gap(16),
-                  CommonTextField(
-                    controller: controller.descriptionController,
-                    headerText: "Description",
-                    hintText: "Enter service description",
-                    validator: (val) =>
-                        val == null || val.isEmpty ? "Please enter service description" : null,
-                    maxLine: 3,
-                  ),
-                  const Gap(16),
-                  CommonTextField(
-                    controller: controller.noteController,
-                    headerText: "Note",
-                    hintText: "Enter service note",
-                    maxLine: 2,
-                    validator: (val) =>
-                        val == null || val.isEmpty ? "Please enter service note" : null,
-                  ),
                   const Gap(20),
                   Text(
                     "Service Demo Video",
@@ -887,12 +891,6 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       return const SizedBox();
                     }
                   }),
-                  const Gap(24),
-                  CommonTextField(
-                    controller: controller.refUrlController,
-                    headerText: "Reference Url (Optional)",
-                    hintText: "Enter reference url",
-                  ),
                   const Gap(32),
                   RoundedButton(
                     buttonName: controller.isEdit.value ? "Update Service" : "Add Service",
