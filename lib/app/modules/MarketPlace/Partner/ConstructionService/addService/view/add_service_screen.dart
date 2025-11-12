@@ -16,10 +16,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
-          appBar: const CommonAppBar(
-            title: Text("Add Service"),
-            isCenter: false,
-          ),
+          appBar: const CommonAppBar(title: Text("Add Service"), isCenter: false),
           backgroundColor: MyColors.white,
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -41,10 +38,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 alignment: Alignment.topRight,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 8.0,
-                                      top: 8,
-                                    ),
+                                    padding: const EdgeInsets.only(right: 8.0, top: 8),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: GestureDetector(
@@ -52,31 +46,20 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                           showDialog(
                                             context: context,
                                             builder: (_) => Dialog(
-                                              insetPadding:
-                                                  const EdgeInsets.all(16),
+                                              insetPadding: const EdgeInsets.all(16),
                                               child: InteractiveViewer(
                                                 child: path.contains('http')
                                                     ? Image.network(
                                                         path,
                                                         width: 360.w,
                                                         fit: BoxFit.contain,
-                                                        errorBuilder:
-                                                            (
-                                                              _,
-                                                              _,
-                                                              _,
-                                                            ) => const Icon(
-                                                              Icons
-                                                                  .broken_image,
-                                                              size: 60,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
+                                                        errorBuilder: (_, _, _) => const Icon(
+                                                          Icons.broken_image,
+                                                          size: 60,
+                                                          color: Colors.grey,
+                                                        ),
                                                       )
-                                                    : Image.file(
-                                                        File(path),
-                                                        fit: BoxFit.contain,
-                                                      ),
+                                                    : Image.file(File(path), fit: BoxFit.contain),
                                               ),
                                             ),
                                           );
@@ -101,8 +84,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                     top: 4,
                                     right: 4,
                                     child: GestureDetector(
-                                      onTap: () =>
-                                          controller.removeImageAt(index),
+                                      onTap: () => controller.removeImageAt(index),
                                       child: Container(
                                         decoration: const BoxDecoration(
                                           color: Colors.red,
@@ -121,29 +103,19 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               );
                             } else {
                               return Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 8.0,
-                                  top: 8,
-                                ),
+                                padding: const EdgeInsets.only(right: 8.0, top: 8),
                                 child: GestureDetector(
                                   onTap: controller.pickImageEdit,
                                   child: Container(
                                     width: 78,
                                     height: 78,
                                     decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: MyColors.grayCD,
-                                        width: 1.2,
-                                      ),
+                                      border: Border.all(color: MyColors.grayCD, width: 1.2),
                                       borderRadius: BorderRadius.circular(40),
                                       color: MyColors.grayEA,
                                     ),
                                     child: Center(
-                                      child: SvgPicture.asset(
-                                        Asset.add,
-                                        height: 24,
-                                        width: 24,
-                                      ),
+                                      child: SvgPicture.asset(Asset.add, height: 24, width: 24),
                                     ),
                                   ),
                                 ),
@@ -164,10 +136,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 alignment: Alignment.topRight,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 8.0,
-                                      top: 8,
-                                    ),
+                                    padding: const EdgeInsets.only(right: 8.0, top: 8),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(53),
                                       child: GestureDetector(
@@ -175,8 +144,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                           Get.dialog(
                                             Dialog(
                                               backgroundColor: Colors.white,
-                                              insetPadding:
-                                                  const EdgeInsets.all(20),
+                                              insetPadding: const EdgeInsets.all(20),
                                               child: Stack(
                                                 alignment: Alignment.topRight,
                                                 children: [
@@ -185,25 +153,18 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                                         ? Image.network(
                                                             path,
                                                             fit: BoxFit.contain,
-                                                            width:
-                                                                double.infinity,
-                                                            height:
-                                                                double.infinity,
+                                                            width: double.infinity,
+                                                            height: double.infinity,
                                                           )
                                                         : Image.file(
                                                             File(path),
                                                             fit: BoxFit.contain,
-                                                            width:
-                                                                double.infinity,
-                                                            height:
-                                                                double.infinity,
+                                                            width: double.infinity,
+                                                            height: double.infinity,
                                                           ),
                                                   ),
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                          16.0,
-                                                        ),
+                                                    padding: const EdgeInsets.all(16.0),
                                                     child: GestureDetector(
                                                       onTap: () => Get.back(),
                                                       child: const Icon(
@@ -238,8 +199,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                     top: 4,
                                     right: 4,
                                     child: GestureDetector(
-                                      onTap: () => controller.pickedFilePathList
-                                          .remove(path),
+                                      onTap: () => controller.pickedFilePathList.remove(path),
                                       child: Container(
                                         decoration: const BoxDecoration(
                                           color: Colors.red,
@@ -259,29 +219,19 @@ class AddServiceScreen extends GetView<AddServiceController> {
                             ),
                             if (controller.pickedFilePathList.length < 5)
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 8.0,
-                                  top: 8,
-                                ),
+                                padding: const EdgeInsets.only(right: 8.0, top: 8),
                                 child: GestureDetector(
                                   onTap: controller.pickImage,
                                   child: Container(
                                     width: 78,
                                     height: 78,
                                     decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: MyColors.grayCD,
-                                        width: 1.2,
-                                      ),
+                                      border: Border.all(color: MyColors.grayCD, width: 1.2),
                                       borderRadius: BorderRadius.circular(40),
                                       color: MyColors.grayEA,
                                     ),
                                     child: Center(
-                                      child: SvgPicture.asset(
-                                        Asset.add,
-                                        height: 24,
-                                        width: 24,
-                                      ),
+                                      child: SvgPicture.asset(Asset.add, height: 24, width: 24),
                                     ),
                                   ),
                                 ),
@@ -295,20 +245,13 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   Obx(() {
                     return CommonDropdown<String>(
                       headerText: 'Main Category',
-                      validator: (val) => val == null || val.isEmpty
-                          ? "Please select a main category"
-                          : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? "Please select a main category" : null,
                       hintText: "Select Main Category",
-                      items: controller.mainCategories
-                          .map((e) => e.name ?? "")
-                          .toList(),
-                      selectedValue:
-                          (controller.selectedMainCategory.value?.name ?? "")
-                              .obs,
+                      items: controller.mainCategories.map((e) => e.name ?? "").toList(),
+                      selectedValue: (controller.selectedMainCategory.value?.name ?? "").obs,
                       itemLabel: (item) => item,
-                      onChanged: controller.isEdit.value
-                          ? null
-                          : controller.onMainCategorySelected,
+                      onChanged: controller.isEdit.value ? null : controller.onMainCategorySelected,
                       enabled: !controller.isEdit.value,
                     );
                   }),
@@ -317,20 +260,13 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   Obx(() {
                     return CommonDropdown<String>(
                       headerText: 'Sub Category',
-                      validator: (val) => val == null || val.isEmpty
-                          ? "Please select a sub category"
-                          : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? "Please select a sub category" : null,
                       hintText: "Select Sub Category",
-                      items: controller.subCategories
-                          .map((e) => e.name ?? "")
-                          .toList(),
-                      selectedValue:
-                          (controller.selectedSubCategory.value?.name ?? "")
-                              .obs,
+                      items: controller.subCategories.map((e) => e.name ?? "").toList(),
+                      selectedValue: (controller.selectedSubCategory.value?.name ?? "").obs,
                       itemLabel: (item) => item,
-                      onChanged: controller.isEdit.value
-                          ? null
-                          : controller.onSubCategorySelected,
+                      onChanged: controller.isEdit.value ? null : controller.onSubCategorySelected,
                       enabled: !controller.isEdit.value,
                     );
                   }),
@@ -339,16 +275,11 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   Obx(() {
                     return CommonDropdown<String>(
                       headerText: 'Service Category',
-                      validator: (val) => val == null || val.isEmpty
-                          ? "Please select a service category"
-                          : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? "Please select a service category" : null,
                       hintText: "Select Service Category",
-                      items: controller.serviceCategories
-                          .map((e) => e.name ?? "")
-                          .toList(),
-                      selectedValue:
-                          (controller.selectedServiceCategory.value?.name ?? "")
-                              .obs,
+                      items: controller.serviceCategories.map((e) => e.name ?? "").toList(),
+                      selectedValue: (controller.selectedServiceCategory.value?.name ?? "").obs,
                       itemLabel: (item) => item,
                       onChanged: controller.isEdit.value
                           ? null
@@ -361,6 +292,8 @@ class AddServiceScreen extends GetView<AddServiceController> {
                     controller: controller.unitController,
                     headerText: "Unit",
                     hintText: "Enter unit (e.g., Sqft, Hour, etc.)",
+                    validator: (val) =>
+                        val == null || val.isEmpty ? "Please enter service unit" : null,
                   ),
                   const Gap(16),
 
@@ -393,9 +326,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
                               "₹",
-                              style: MyTexts.regular20.copyWith(
-                                color: MyColors.lightBlueSecond,
-                              ),
+                              style: MyTexts.regular20.copyWith(color: MyColors.lightBlueSecond),
                             ),
                           ),
                         ),
@@ -440,9 +371,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
                               "₹",
-                              style: MyTexts.regular20.copyWith(
-                                color: MyColors.lightBlueSecond,
-                              ),
+                              style: MyTexts.regular20.copyWith(color: MyColors.lightBlueSecond),
                             ),
                           ),
                         ),
@@ -460,14 +389,101 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       ),
                     ],
                   ),
+
+                  const Gap(20),
+                  Text("Features", style: MyTexts.medium16.copyWith(color: MyColors.black)),
+                  const Gap(16),
+
+                  Obx(() {
+                    return Column(
+                      children: [
+                        ...List.generate(controller.featureList.length, (index) {
+                          final feature = controller.featureList[index];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Gap(12),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Feature ${index + 1}",
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.lightBlueSecond,
+                                    ),
+                                  ),
+                                  if (controller.featureList.length > 1)
+                                    GestureDetector(
+                                      onTap: () => controller.removeFeature(index),
+                                      child: const Icon(Icons.delete, color: Colors.red, size: 22),
+                                    ),
+                                ],
+                              ),
+                              const Gap(8),
+                              CommonTextField(
+                                controller: feature.headerController,
+                                headerText: "Header",
+                                hintText: "Enter feature header",
+                                validator: (val) =>
+                                    val == null || val.isEmpty ? "Please enter header" : null,
+                              ),
+                              const Gap(10),
+                              CommonTextField(
+                                controller: feature.descController,
+                                headerText: "Description",
+                                hintText: "Enter feature description",
+                                validator: (val) =>
+                                    val == null || val.isEmpty ? "Please enter description" : null,
+                                maxLine: 2,
+                              ),
+                              const Divider(thickness: 1, height: 24),
+                            ],
+                          );
+                        }),
+                        GestureDetector(
+                          onTap: controller.addNewFeature,
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: MyColors.lightBlueSecond.withOpacity(0.1),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.add, color: MyColors.lightBlueSecond),
+                                const SizedBox(width: 6),
+                                Text(
+                                  "Add Feature",
+                                  style: MyTexts.medium14.copyWith(color: MyColors.lightBlueSecond),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+
                   const Gap(16),
                   CommonTextField(
                     controller: controller.descriptionController,
                     headerText: "Description",
                     hintText: "Enter service description",
+                    validator: (val) =>
+                        val == null || val.isEmpty ? "Please enter service description" : null,
                     maxLine: 3,
                   ),
-
+                  const Gap(16),
+                  CommonTextField(
+                    controller: controller.noteController,
+                    headerText: "Note",
+                    hintText: "Enter service note",
+                    maxLine: 2,
+                    validator: (val) =>
+                        val == null || val.isEmpty ? "Please enter service note" : null,
+                  ),
                   const Gap(20),
                   Text(
                     "Service Demo Video",
@@ -493,8 +509,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                     onTap: () {
                                       controller.openVideoDialog(
                                         context,
-                                        controller.serviceVid.value.mediaUrl ??
-                                            "",
+                                        controller.serviceVid.value.mediaUrl ?? "",
                                         true,
                                       );
                                     },
@@ -502,14 +517,10 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                       alignment: AlignmentGeometry.center,
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
+                                          borderRadius: BorderRadius.circular(12),
                                           child: AspectRatio(
                                             aspectRatio: 16 / 9,
-                                            child: VideoPlayer(
-                                              controller.videoPlayerController!,
-                                            ),
+                                            child: VideoPlayer(controller.videoPlayerController!),
                                           ),
                                         ),
                                         const VideoPlay(),
@@ -527,8 +538,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               )
                             else
                               GestureDetector(
-                                onTap: () => controller
-                                    .openVideoPickerBottomSheet(Get.context!),
+                                onTap: () => controller.openVideoPickerBottomSheet(Get.context!),
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -574,9 +584,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                         borderRadius: BorderRadius.circular(12),
                                         child: AspectRatio(
                                           aspectRatio: 16 / 9,
-                                          child: VideoPlayer(
-                                            controller.videoPlayerController!,
-                                          ),
+                                          child: VideoPlayer(controller.videoPlayerController!),
                                         ),
                                       ),
                                       GestureDetector(
@@ -608,8 +616,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               )
                             else
                               GestureDetector(
-                                onTap: () => controller
-                                    .openVideoPickerBottomSheet(Get.context!),
+                                onTap: () => controller.openVideoPickerBottomSheet(Get.context!),
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -642,8 +649,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                   Obx(() {
                     if (!controller.referenceDeleted.value) {
                       final reference = controller.serviceRef.value;
-                      final hasReference =
-                          reference.referenceS3Key?.isNotEmpty ?? false;
+                      final hasReference = reference.referenceS3Key?.isNotEmpty ?? false;
 
                       // If reference deleted manually, show add UI again
                       if (controller.referenceDeleted.value || !hasReference) {
@@ -669,9 +675,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 const SizedBox(height: 10),
                                 Text(
                                   "Add Reference File",
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.gray54,
-                                  ),
+                                  style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                                 ),
                               ],
                             ),
@@ -679,22 +683,16 @@ class AddServiceScreen extends GetView<AddServiceController> {
                         );
                       }
 
-                      final referenceType =
-                          reference.referenceType?.toLowerCase() ?? '';
+                      final referenceType = reference.referenceType?.toLowerCase() ?? '';
                       final referenceUrl =
-                          APIConstants.bucketUrl +
-                          (reference.referenceS3Key ?? '');
+                          APIConstants.bucketUrl + (reference.referenceS3Key ?? '');
 
                       Widget referenceWidget;
 
                       // --- VIDEO ---
                       if (referenceType == 'video') {
                         referenceWidget = GestureDetector(
-                          onTap: () => controller.openVideoDialog(
-                            context,
-                            referenceUrl,
-                            true,
-                          ),
+                          onTap: () => controller.openVideoDialog(context, referenceUrl, true),
                           child: Stack(
                             alignment: AlignmentGeometry.center,
                             children: [
@@ -702,9 +700,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 borderRadius: BorderRadius.circular(12),
                                 child: AspectRatio(
                                   aspectRatio: 16 / 9,
-                                  child: VideoPlayer(
-                                    controller.refVideoPlayerController!,
-                                  ),
+                                  child: VideoPlayer(controller.refVideoPlayerController!),
                                 ),
                               ),
                               const VideoPlay(),
@@ -725,13 +721,11 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                     referenceUrl,
                                     width: 360.w,
                                     fit: BoxFit.contain,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(
-                                              Icons.broken_image,
-                                              size: 60,
-                                              color: Colors.grey,
-                                            ),
+                                    errorBuilder: (context, error, stackTrace) => const Icon(
+                                      Icons.broken_image,
+                                      size: 60,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -744,37 +738,27 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               height: 200,
                               width: double.infinity,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(
-                                    height: 200,
-                                    color: MyColors.grayEA,
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.broken_image,
-                                        size: 60,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Container(
-                                      height: 200,
-                                      color: MyColors.grayEA,
-                                      child: const Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  },
+                              errorBuilder: (context, error, stackTrace) => Container(
+                                height: 200,
+                                color: MyColors.grayEA,
+                                child: const Center(
+                                  child: Icon(Icons.broken_image, size: 60, color: Colors.grey),
+                                ),
+                              ),
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Container(
+                                  height: 200,
+                                  color: MyColors.grayEA,
+                                  child: const Center(child: CircularProgressIndicator()),
+                                );
+                              },
                             ),
                           ),
                         );
-                      } else if (referenceType == 'pdf' ||
-                          referenceType == 'document') {
+                      } else if (referenceType == 'pdf' || referenceType == 'document') {
                         referenceWidget = GestureDetector(
-                          onTap: () =>
-                              controller.openReferenceUrl(referenceUrl),
+                          onTap: () => controller.openReferenceUrl(referenceUrl),
                           child: Container(
                             height: 200,
                             width: double.infinity,
@@ -788,26 +772,19 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  referenceType == 'pdf'
-                                      ? Icons.picture_as_pdf
-                                      : Icons.description,
+                                  referenceType == 'pdf' ? Icons.picture_as_pdf : Icons.description,
                                   size: 64,
                                   color: MyColors.primary,
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
-                                  reference.referenceType?.toUpperCase() ??
-                                      'Document',
-                                  style: MyTexts.medium16.copyWith(
-                                    color: MyColors.fontBlack,
-                                  ),
+                                  reference.referenceType?.toUpperCase() ?? 'Document',
+                                  style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Tap to open',
-                                  style: MyTexts.medium14.copyWith(
-                                    color: MyColors.gray54,
-                                  ),
+                                  style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                                 ),
                               ],
                             ),
@@ -823,11 +800,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Center(
-                            child: Icon(
-                              Icons.insert_drive_file,
-                              size: 64,
-                              color: MyColors.gray54,
-                            ),
+                            child: Icon(Icons.insert_drive_file, size: 64, color: MyColors.gray54),
                           ),
                         );
                       }
@@ -860,11 +833,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                         preview = _buildReferencePreview(ext, file.path);
                       } else if (url.isNotEmpty) {
                         final ext = url.split('.').last.toLowerCase();
-                        preview = _buildReferencePreview(
-                          ext,
-                          url,
-                          isNetwork: true,
-                        );
+                        preview = _buildReferencePreview(ext, url, isNetwork: true);
                       }
 
                       return Row(
@@ -874,8 +843,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               alignment: Alignment.topRight,
                               children: [
                                 GestureDetector(
-                                  onTap: () =>
-                                      OpenFilex.open(file?.path ?? url),
+                                  onTap: () => OpenFilex.open(file?.path ?? url),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: preview,
@@ -892,11 +860,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                         shape: BoxShape.circle,
                                       ),
                                       padding: const EdgeInsets.all(3),
-                                      child: const Icon(
-                                        Icons.close,
-                                        size: 16,
-                                        color: Colors.white,
-                                      ),
+                                      child: const Icon(Icons.close, size: 16, color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -909,19 +873,12 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 width: 90,
                                 height: 90,
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: MyColors.grayCD,
-                                    width: 1.2,
-                                  ),
+                                  border: Border.all(color: MyColors.grayCD, width: 1.2),
                                   borderRadius: BorderRadius.circular(12),
                                   color: MyColors.grayEA,
                                 ),
                                 child: const Center(
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 28,
-                                    color: Colors.grey,
-                                  ),
+                                  child: Icon(Icons.add, size: 28, color: Colors.black),
                                 ),
                               ),
                             ),
@@ -931,42 +888,35 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       return const SizedBox();
                     }
                   }),
-
+                  const Gap(24),
+                  CommonTextField(
+                    controller: controller.refUrlController,
+                    headerText: "Reference Url (Optional)",
+                    hintText: "Enter reference url",
+                  ),
                   const Gap(32),
                   RoundedButton(
-                    buttonName: controller.isEdit.value
-                        ? "Update Service"
-                        : "Add Service",
+                    buttonName: controller.isEdit.value ? "Update Service" : "Add Service",
                     onTap: () async {
-                      if (controller.pickedFilePathList.isEmpty &&
-                          !controller.isEdit.value) {
-                        SnackBars.errorSnackBar(
-                          content: 'Please upload at least one image',
-                        );
+                      if (controller.pickedFilePathList.isEmpty && !controller.isEdit.value) {
+                        SnackBars.errorSnackBar(content: 'Please upload at least one image');
                         return;
                       }
 
-                      if (controller.videoPlayerController == null &&
-                          !controller.isEdit.value) {
-                        SnackBars.errorSnackBar(
-                          content: 'Please upload service demo video',
-                        );
+                      if (controller.videoPlayerController == null && !controller.isEdit.value) {
+                        SnackBars.errorSnackBar(content: 'Please upload service demo video');
                         return;
                       }
                       if (controller.isEdit.value) {
                         final hasImage = controller.imageSlots.any(
-                          (path) =>
-                              path != null && path.toString().trim().isNotEmpty,
+                          (path) => path != null && path.toString().trim().isNotEmpty,
                         );
                         if (!hasImage) {
-                          SnackBars.errorSnackBar(
-                            content: 'Please upload at least one image',
-                          );
+                          SnackBars.errorSnackBar(content: 'Please upload at least one image');
                           return;
                         }
                       }
-                      if (controller.formKey.currentState?.validate() ??
-                          false) {
+                      if (controller.formKey.currentState?.validate() ?? false) {
                         if (controller.isEdit.value) {
                           controller.updateService(controller.serviceId.value);
                         } else {
@@ -988,11 +938,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
     );
   }
 
-  Widget _buildReferencePreview(
-    String ext,
-    String path, {
-    bool isNetwork = false,
-  }) {
+  Widget _buildReferencePreview(String ext, String path, {bool isNetwork = false}) {
     if (['jpg', 'jpeg', 'png'].contains(ext)) {
       return isNetwork
           ? Image.network(path, width: 90, height: 90, fit: BoxFit.cover)
@@ -1030,10 +976,7 @@ class VideoPlay extends StatelessWidget {
     return Container(
       width: 40,
       height: 40,
-      decoration: const BoxDecoration(
-        color: MyColors.primary,
-        shape: BoxShape.circle,
-      ),
+      decoration: const BoxDecoration(color: MyColors.primary, shape: BoxShape.circle),
       child: const Icon(Icons.play_arrow, color: Colors.white, size: 24),
     );
   }

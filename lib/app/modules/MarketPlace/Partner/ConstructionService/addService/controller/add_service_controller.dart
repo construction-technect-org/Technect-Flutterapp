@@ -10,6 +10,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
+class FeatureItem {
+  final TextEditingController headerController;
+  final TextEditingController descController;
+
+  FeatureItem()
+      : headerController = TextEditingController(),
+        descController = TextEditingController();
+}
 class AddServiceController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
@@ -18,6 +26,26 @@ class AddServiceController extends GetxController {
 
   VoidCallback? onApiCall;
 
+  RxList<FeatureItem> featureList = <FeatureItem>[].obs;
+  void addNewFeature() {
+    if (featureList.isNotEmpty) {
+      final lastFeature = featureList.last;
+      if (lastFeature.headerController.text.trim().isEmpty ||
+          lastFeature.descController.text.trim().isEmpty) {
+        SnackBars.errorSnackBar(
+          content:
+          "Please fill both header and description before adding another feature.",
+        );
+        return;
+      }
+    }
+
+    featureList.add(FeatureItem());
+  }
+
+  void removeFeature(int index) {
+    featureList.removeAt(index);
+  }
   RxList<ServiceCategoryData> mainCategories = <ServiceCategoryData>[].obs;
   Rx<ServiceCategoryData?> selectedMainCategory = Rx<ServiceCategoryData?>(
     null,
@@ -46,6 +74,8 @@ class AddServiceController extends GetxController {
   final descriptionController = TextEditingController();
   final gstPriceController = TextEditingController();
   final amountController = TextEditingController();
+  final noteController = TextEditingController();
+  final refUrlController = TextEditingController();
   RxList<String?> imageSlots = List<String?>.filled(5, null).obs;
   Map<String, String> removedImages = {};
 

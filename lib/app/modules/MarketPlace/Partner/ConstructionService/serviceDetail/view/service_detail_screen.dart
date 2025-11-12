@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
@@ -14,10 +15,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
       isLoading: controller.isLoading,
       child: Scaffold(
         backgroundColor: MyColors.white,
-        appBar: const CommonAppBar(
-          title: Text("Service Details"),
-          isCenter: false,
-        ),
+        appBar: const CommonAppBar(title: Text("Service Details"), isCenter: false),
         bottomNavigationBar: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -34,23 +32,18 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                     children: [
                       Text(
                         "Explore More!",
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.grayA5,
-                        ),
+                        style: MyTexts.medium14.copyWith(color: MyColors.grayA5),
                       ),
                       const Gap(8),
                       Text(
                         "View Categories >",
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.gray54,
-                        ),
+                        style: MyTexts.medium16.copyWith(color: MyColors.gray54),
                       ),
                     ],
                   ),
                 ),
               ),
-            if (myPref.role.val == "connector")
-              _buildConnectionButton(context, controller),
+            if (myPref.role.val == "connector") _buildConnectionButton(context, controller),
           ],
         ),
 
@@ -66,10 +59,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                 if (service.images != null && service.images!.isNotEmpty) {
                   for (final image in service.images!) {
                     if (image.mediaUrl != null && image.mediaUrl!.isNotEmpty) {
-                      mediaList.add({
-                        'type': 'image',
-                        'path': image.mediaUrl ?? '',
-                      });
+                      mediaList.add({'type': 'image', 'path': image.mediaUrl ?? ''});
                     }
                   }
                 }
@@ -87,11 +77,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                     width: 360.w,
                     color: MyColors.grayF2,
                     alignment: Alignment.center,
-                    child: const Icon(
-                      Icons.image_not_supported,
-                      size: 60,
-                      color: Colors.grey,
-                    ),
+                    child: const Icon(Icons.image_not_supported, size: 60, color: Colors.grey),
                   );
                 }
 
@@ -109,18 +95,12 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           final media = mediaList[index];
                           if (media['type'] == 'video') {
                             if (controller.videoPlayerController != null &&
-                                controller
-                                    .videoPlayerController!
-                                    .value
-                                    .isInitialized) {
+                                controller.videoPlayerController!.value.isInitialized) {
                               controller.videoPlayerController!.play();
                             }
                           } else {
                             if (controller.videoPlayerController != null &&
-                                controller
-                                    .videoPlayerController!
-                                    .value
-                                    .isInitialized) {
+                                controller.videoPlayerController!.value.isInitialized) {
                               controller.videoPlayerController!.pause();
                             }
                           }
@@ -131,8 +111,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           final isHttp = path.startsWith('http');
 
                           if (media['type'] == 'video') {
-                            final videoController =
-                                controller.videoPlayerController;
+                            final videoController = controller.videoPlayerController;
                             final isPlaying =
                                 videoController != null &&
                                 videoController.value.isInitialized &&
@@ -143,27 +122,14 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                               onTap: () {
                                 if (hasError) {
                                   final videoPath =
-                                      controller
-                                          .service
-                                          .value
-                                          .video
-                                          ?.mediaS3Key ??
-                                      controller
-                                          .service
-                                          .value
-                                          .video
-                                          ?.mediaUrl ??
+                                      controller.service.value.video?.mediaS3Key ??
+                                      controller.service.value.video?.mediaUrl ??
                                       "";
                                   if (videoPath.isNotEmpty) {
-                                    final videoUrl =
-                                        videoPath.startsWith('http')
+                                    final videoUrl = videoPath.startsWith('http')
                                         ? videoPath
                                         : APIConstants.bucketUrl + videoPath;
-                                    controller.openVideoDialog(
-                                      context,
-                                      videoUrl,
-                                      true,
-                                    );
+                                    controller.openVideoDialog(context, videoUrl, true);
                                   }
                                 } else if (videoController != null &&
                                     videoController.value.isInitialized) {
@@ -183,16 +149,13 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                       aspectRatio: 16 / 9,
                                       child:
                                           videoController != null &&
-                                              videoController
-                                                  .value
-                                                  .isInitialized
+                                              videoController.value.isInitialized
                                           ? VideoPlayer(videoController)
                                           : videoController != null &&
                                                 videoController.value.hasError
                                           ? Center(
                                               child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   const Icon(
                                                     Icons.error_outline,
@@ -202,36 +165,29 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                                   const SizedBox(height: 16),
                                                   Text(
                                                     'Failed to load video',
-                                                    style: MyTexts.medium14
-                                                        .copyWith(
-                                                          color: Colors.white,
-                                                        ),
+                                                    style: MyTexts.medium14.copyWith(
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
                                                   const SizedBox(height: 8),
                                                   Text(
                                                     'Video codec may not be supported on this device',
-                                                    style: MyTexts.medium12
-                                                        .copyWith(
-                                                          color: Colors.white70,
-                                                        ),
+                                                    style: MyTexts.medium12.copyWith(
+                                                      color: Colors.white70,
+                                                    ),
                                                     textAlign: TextAlign.center,
                                                   ),
                                                   const SizedBox(height: 16),
                                                   Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
                                                       TextButton(
                                                         onPressed: () {
-                                                          controller
-                                                              .retryVideoInitialization();
+                                                          controller.retryVideoInitialization();
                                                         },
                                                         child: const Text(
                                                           'Retry',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
+                                                          style: TextStyle(color: Colors.white),
                                                         ),
                                                       ),
                                                       const SizedBox(width: 16),
@@ -249,28 +205,18 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                                                   .video
                                                                   ?.mediaUrl ??
                                                               "";
-                                                          if (videoPath
-                                                              .isNotEmpty) {
+                                                          if (videoPath.isNotEmpty) {
                                                             final videoUrl =
-                                                                videoPath
-                                                                    .startsWith(
-                                                                      'http',
-                                                                    )
+                                                                videoPath.startsWith('http')
                                                                 ? videoPath
-                                                                : APIConstants
-                                                                          .bucketUrl +
+                                                                : APIConstants.bucketUrl +
                                                                       videoPath;
-                                                            controller
-                                                                .openReferenceUrl(
-                                                                  videoUrl,
-                                                                );
+                                                            controller.openReferenceUrl(videoUrl);
                                                           }
                                                         },
                                                         child: const Text(
                                                           'Open in Browser',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
+                                                          style: TextStyle(color: Colors.white),
                                                         ),
                                                       ),
                                                     ],
@@ -279,9 +225,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                               ),
                                             )
                                           : const Center(
-                                              child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                              ),
+                                              child: CircularProgressIndicator(color: Colors.white),
                                             ),
                                     ),
                                   ),
@@ -320,26 +264,20 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                             path,
                                             width: 360.w,
                                             fit: BoxFit.contain,
-                                            errorBuilder:
-                                                (context, error, stackTrace) =>
-                                                    const Icon(
-                                                      Icons.broken_image,
-                                                      size: 60,
-                                                      color: Colors.grey,
-                                                    ),
+                                            errorBuilder: (context, error, stackTrace) =>
+                                                const Icon(
+                                                  Icons.broken_image,
+                                                  size: 60,
+                                                  color: Colors.grey,
+                                                ),
                                           )
-                                        : Image.file(
-                                            File(path),
-                                            fit: BoxFit.contain,
-                                          ),
+                                        : Image.file(File(path), fit: BoxFit.contain),
                                   ),
                                 ),
                               );
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 4.0,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(0),
                                 child: isHttp
@@ -371,12 +309,8 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                             (index) => AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
                               margin: const EdgeInsets.symmetric(horizontal: 4),
-                              height: controller.currentIndex.value == index
-                                  ? 14
-                                  : 9,
-                              width: controller.currentIndex.value == index
-                                  ? 14
-                                  : 9,
+                              height: controller.currentIndex.value == index ? 14 : 9,
+                              width: controller.currentIndex.value == index ? 14 : 9,
                               decoration: BoxDecoration(
                                 color: controller.currentIndex.value == index
                                     ? MyColors.primary
@@ -405,12 +339,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                       children: [
                         Expanded(
                           child: Text(
-                            controller
-                                    .service
-                                    .value
-                                    .serviceCategoryName
-                                    ?.capitalizeFirst ??
-                                '-',
+                            controller.service.value.serviceCategoryName?.capitalizeFirst ?? '-',
                             style: MyTexts.medium18.copyWith(
                               color: MyColors.fontBlack,
                               fontFamily: MyTexts.SpaceGrotesk,
@@ -449,10 +378,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                     const Gap(20),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 16,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(6),
@@ -465,11 +391,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                       ),
                       child: Column(
                         children: [
-                          rowText(
-                            '₹ ${controller.service.value.price ?? 0}',
-
-                            'Ex factory rate',
-                          ),
+                          rowText('₹ ${controller.service.value.price ?? 0}', 'Ex factory rate'),
                           const Gap(4),
                           rowText(
                             '₹ ${controller.service.value.gstPercentage?.split(".").first ?? 0}% - (₹${controller.service.value.gstAmount ?? 0})',
@@ -489,10 +411,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                     const Gap(20),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 12,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFEF7E8),
                         borderRadius: BorderRadius.circular(6),
@@ -503,16 +422,12 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                         children: [
                           Text(
                             "Description",
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.grayA5,
-                            ),
+                            style: MyTexts.medium14.copyWith(color: MyColors.grayA5),
                           ),
                           const Gap(8),
                           Text(
                             controller.service.value.description ?? "-",
-                            style: MyTexts.medium16.copyWith(
-                              color: MyColors.gray54,
-                            ),
+                            style: MyTexts.medium16.copyWith(color: MyColors.gray54),
                           ),
                         ],
                       ),
@@ -524,36 +439,28 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                         return const SizedBox();
                       }
 
-                      final referenceType =
-                          reference.referenceType?.toLowerCase() ?? '';
+                      final referenceType = reference.referenceType?.toLowerCase() ?? '';
                       final referenceUrl =
-                          APIConstants.bucketUrl +
-                          (reference.referenceS3Key ?? '');
+                          APIConstants.bucketUrl + (reference.referenceS3Key ?? '');
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "Reference ${referenceType.toUpperCase()}",
-                            style: MyTexts.bold16.copyWith(
-                              color: MyColors.fontBlack,
-                            ),
+                            style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
                           ),
                           const Gap(10),
                           // Video reference
                           if (referenceType == 'video')
                             Obx(() {
-                              final refController =
-                                  controller.refVideoPlayerController;
+                              final refController = controller.refVideoPlayerController;
                               if (controller.isRefVideo.value &&
                                   refController != null &&
                                   refController.value.isInitialized) {
                                 return GestureDetector(
-                                  onTap: () => controller.openVideoDialog(
-                                    context,
-                                    referenceUrl,
-                                    true,
-                                  ),
+                                  onTap: () =>
+                                      controller.openVideoDialog(context, referenceUrl, true),
                                   child: Stack(
                                     alignment: AlignmentGeometry.center,
                                     children: [
@@ -568,8 +475,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     ],
                                   ),
                                 );
-                              } else if (refController != null &&
-                                  refController.value.hasError) {
+                              } else if (refController != null && refController.value.hasError) {
                                 return Container(
                                   height: 200,
                                   decoration: BoxDecoration(
@@ -578,8 +484,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                   ),
                                   child: Center(
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         const Icon(
                                           Icons.error_outline,
@@ -589,8 +494,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                         const SizedBox(height: 8),
                                         const Text('Failed to load video'),
                                         TextButton(
-                                          onPressed: controller
-                                              .retryReferenceVideoInitialization,
+                                          onPressed: controller.retryReferenceVideoInitialization,
                                           child: const Text('Retry'),
                                         ),
                                       ],
@@ -604,9 +508,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     color: MyColors.grayEA,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
+                                  child: const Center(child: CircularProgressIndicator()),
                                 );
                               }
                             })
@@ -622,13 +524,11 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                       child: Image.network(
                                         referenceUrl,
                                         fit: BoxFit.contain,
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                const Icon(
-                                                  Icons.broken_image,
-                                                  size: 60,
-                                                  color: Colors.grey,
-                                                ),
+                                        errorBuilder: (context, error, stackTrace) => const Icon(
+                                          Icons.broken_image,
+                                          size: 60,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -641,37 +541,28 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Container(
-                                        height: 200,
-                                        color: MyColors.grayEA,
-                                        child: const Center(
-                                          child: Icon(
-                                            Icons.broken_image,
-                                            size: 60,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return Container(
-                                          height: 200,
-                                          color: MyColors.grayEA,
-                                          child: const Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        );
-                                      },
+                                  errorBuilder: (context, error, stackTrace) => Container(
+                                    height: 200,
+                                    color: MyColors.grayEA,
+                                    child: const Center(
+                                      child: Icon(Icons.broken_image, size: 60, color: Colors.grey),
+                                    ),
+                                  ),
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return Container(
+                                      height: 200,
+                                      color: MyColors.grayEA,
+                                      child: const Center(child: CircularProgressIndicator()),
+                                    );
+                                  },
                                 ),
                               ),
                             )
                           // PDF or DOC reference
-                          else if (referenceType == 'pdf' ||
-                              referenceType == 'document')
+                          else if (referenceType == 'pdf' || referenceType == 'document')
                             GestureDetector(
                               onTap: () {
                                 // Open URL in external browser
@@ -698,18 +589,13 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     ),
                                     const SizedBox(height: 12),
                                     Text(
-                                      reference.referenceType?.toUpperCase() ??
-                                          'Document',
-                                      style: MyTexts.medium16.copyWith(
-                                        color: MyColors.fontBlack,
-                                      ),
+                                      reference.referenceType?.toUpperCase() ?? 'Document',
+                                      style: MyTexts.medium16.copyWith(color: MyColors.fontBlack),
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
                                       'Tap to open',
-                                      style: MyTexts.medium14.copyWith(
-                                        color: MyColors.gray54,
-                                      ),
+                                      style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                                     ),
                                   ],
                                 ),
@@ -733,8 +619,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     ),
                                     const SizedBox(height: 12),
                                     Text(
-                                      reference.referenceType?.toUpperCase() ??
-                                          'Reference',
+                                      reference.referenceType?.toUpperCase() ?? 'Reference',
                                       style: MyTexts.medium16,
                                     ),
                                   ],
@@ -744,6 +629,98 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                         ],
                       );
                     }),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Explore our other services', style: MyTexts.bold18),
+                        const Gap(12),
+                        SizedBox(
+                          height: 120,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 5, // showing 5 dummy services
+                            itemBuilder: (context, index) {
+                              // Dummy data list
+                              final dummyServices = [
+                                {
+                                  "title": "Plumbing Repair",
+                                  "image": "https://picsum.photos/200/300?random=1",
+                                  "category": "Home Maintenance",
+                                },
+                                {
+                                  "title": "House Painting",
+                                  "image": "https://picsum.photos/200/300?random=2",
+                                  "category": "Interior Design",
+                                },
+                                {
+                                  "title": "Electric Fittings",
+                                  "image": "https://picsum.photos/200/300?random=3",
+                                  "category": "Electrical",
+                                },
+                                {
+                                  "title": "Carpentry Work",
+                                  "image": "https://picsum.photos/200/300?random=4",
+                                  "category": "Woodwork",
+                                },
+                                {
+                                  "title": "Tile Installation",
+                                  "image": "https://picsum.photos/200/300?random=5",
+                                  "category": "Flooring",
+                                },
+                              ];
+
+                              final data = dummyServices[index];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  // you can navigate later, for now just show snackbar
+                                  SnackBars.successSnackBar(content: "Clicked on ${data["title"]}");
+                                },
+                                child: Container(
+                                  width: 112,
+                                  margin: EdgeInsets.only(right: index < 4 ? 12 : 0),
+                                  child: Column(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: CachedNetworkImage(
+                                          height: 90,
+                                          width: 112,
+                                          imageUrl: data["image"]!,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              const Center(child: CircularProgressIndicator()),
+                                          errorWidget: (context, url, error) => const Icon(
+                                            Icons.build,
+                                            color: MyColors.primary,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ),
+                                      const Gap(5),
+                                      Text(
+                                        data["title"]!,
+                                        style: MyTexts.medium14,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        data["category"]!,
+                                        style: MyTexts.regular12.copyWith(color: MyColors.grey),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -757,15 +734,9 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
   Widget _buildSpecificationsTable() {
     final product = controller.service;
     final specifications = [
-      {
-        'label': 'Brand Name',
-        'value': product.value.mainCategoryName.toString(),
-      },
+      {'label': 'Brand Name', 'value': product.value.mainCategoryName.toString()},
       {'label': 'Category', 'value': product.value.subCategoryName.toString()},
-      {
-        'label': 'Sub category',
-        'value': product.value.subCategoryName.toString(),
-      },
+      {'label': 'Sub category', 'value': product.value.subCategoryName.toString()},
       {'label': 'Unit', 'value': product.value.units.toString()},
     ];
 
@@ -857,10 +828,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
     );
   }
 
-  Widget _buildConnectionButton(
-    BuildContext context,
-    ServiceDetailController controller,
-  ) {
+  Widget _buildConnectionButton(BuildContext context, ServiceDetailController controller) {
     final service = controller.service.value;
     final String? connectionStatus = service.connectionRequestStatus;
 
