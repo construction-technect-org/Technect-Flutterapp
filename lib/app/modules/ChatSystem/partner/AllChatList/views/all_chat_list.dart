@@ -100,12 +100,7 @@ class AllChatListScreen extends GetView<AllChatListController> {
                 Get.toNamed(
                   Routes.CHAT_SYSTEM,
                   arguments: {
-                    "image":
-                        APIConstants.bucketUrl +
-                        (chat.connector?.profileImage ?? ""),
-                    "cId": chat.connectionId,
-                    "name":
-                        "${chat.connector?.firstName ?? ""} ${chat.connector?.lastName ?? ""}",
+                    "chatData": chat,
                     "onRefresh": () {
                       controller.fetchChatList();
                     },

@@ -9,6 +9,7 @@ import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/se
 import 'package:construction_technect/app/modules/ChatSystem/widgets/media_preview_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:video_compress/video_compress.dart';
 
@@ -27,17 +28,31 @@ class ChatSystemController extends GetxController {
   int connectionId = 0;
   String name = "User";
   String image = "";
+  int? otherUserId; // ID of the other user in the chat
   VoidCallback? onRefresh;
+
+  // Online status tracking
+  RxBool isUserOnline = false.obs;
+  Rx<DateTime?> lastSeenTime = Rx<DateTime?>(null);
+  RxString userStatusText = 'Offline'.obs;
 
   @override
   void onInit() {
     super.onInit();
 
     if (Get.arguments != null) {
-      connectionId = Get.arguments["cId"];
+      final chatData = Get.arguments["chatData"];
       onRefresh = Get.arguments["onRefresh"];
-      name = Get.arguments["name"];
-      image = Get.arguments["image"];
+
+      if (chatData != null) {
+        connectionId = chatData.connectionId ?? 0;
+        name =
+            "${chatData.connector?.firstName ?? ""} ${chatData.connector?.lastName ?? ""}"
+                .trim();
+        image =
+            APIConstants.bucketUrl + (chatData.connector?.profileImage ?? "");
+        otherUserId = chatData.connector?.userId;
+      }
 
       currentUser = CustomUser(
         id: myPref.userModel.val["id"].toString(),
@@ -51,6 +66,65 @@ class ChatSystemController extends GetxController {
     fetchChatList();
 
     _initSocket();
+  }
+
+  /// Update user status text based on online/offline state
+  void _updateStatusText() {
+    if (isUserOnline.value) {
+      userStatusText.value = 'Online';
+    } else if (lastSeenTime.value != null) {
+      userStatusText.value =
+          'Last seen ${_formatLastSeen(lastSeenTime.value!)}';
+    } else {
+      userStatusText.value = 'Offline';
+    }
+  }
+
+  /// Format last seen time in a user-friendly way
+  String _formatLastSeen(DateTime lastSeen) {
+    final now = DateTime.now();
+    final difference = now.difference(lastSeen);
+
+    if (difference.inSeconds < 60) {
+      return 'just now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inDays == 1) {
+      return 'yesterday';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays}d ago';
+    } else {
+      return DateFormat('dd/MM/yyyy').format(lastSeen);
+    }
+  }
+
+  /// Handle online status updates from socket
+  void _handleOnlineStatusUpdate(dynamic data) {
+    try {
+      if (data == null || data['user_id'] == null) return;
+
+      final userId = data['user_id'];
+      final isOnline = data['is_online'] == true;
+      final lastSeenStr = data['last_seen'];
+
+      // Only update if this is the user we're chatting with
+      if (userId == otherUserId) {
+        isUserOnline.value = isOnline;
+
+        if (lastSeenStr != null && !isOnline) {
+          lastSeenTime.value = DateTime.parse(lastSeenStr);
+        } else {
+          lastSeenTime.value = null;
+        }
+
+        _updateStatusText();
+        log('✅ Updated status for user $userId: ${userStatusText.value}');
+      }
+    } catch (e) {
+      log('❌ Error handling online status: $e');
+    }
   }
 
   Future<void> fetchChatList({bool? isLoad}) async {
@@ -73,11 +147,18 @@ class ChatSystemController extends GetxController {
               ? firstMessage.receiverUserId
               : firstMessage.senderUserId;
 
+          otherUserId = otherId; // Store the other user's ID
           supportUser = CustomUser(
             id: otherId?.toString() ?? '',
             name: name,
             profilePhoto: image,
           );
+
+          // Check online status after getting other user ID
+          if (socket.connected && otherUserId != null) {
+            socket.emit('check_user_online', {'user_id': otherUserId});
+            log("🔍 Checking online status for user: $otherUserId");
+          }
         }
 
         final fetchedMessages =
@@ -145,6 +226,12 @@ class ChatSystemController extends GetxController {
     socket.on('joined_connection', (data) {
       if (kDebugMode) log('🟢 Joined Connection: $data');
       socket.emit('mark_messages_read', {"connection_id": connectionId});
+
+      // Check online status after joining
+      if (otherUserId != null) {
+        socket.emit('check_user_online', {'user_id': otherUserId});
+        log("🔍 Checking online status for user: $otherUserId");
+      }
     });
     socket.on('messages_marked_read', (data) {
       if (kDebugMode) log('🟢 messages read: $data');
@@ -153,6 +240,18 @@ class ChatSystemController extends GetxController {
       if (kDebugMode) log('🟢 Your messages were read: $data');
 
       _markAllMessagesAsRead();
+    });
+
+    // Listen for initial online status when joining connection
+    socket.on('user_online_status', (data) {
+      log('👤 User Online Status: $data');
+      _handleOnlineStatusUpdate(data);
+    });
+
+    // Listen for real-time status changes
+    socket.on('user_status_changed', (data) {
+      log('🔄 User Status Changed: $data');
+      _handleOnlineStatusUpdate(data);
     });
 
     socket.on('new_message', (data) {

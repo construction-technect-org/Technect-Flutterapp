@@ -137,9 +137,28 @@ class ChatSystemView extends StatelessWidget {
             children: [
               CircleAvatar(backgroundImage: NetworkImage(controller.image)),
               const SizedBox(width: 10),
-              Text(
-                controller.name,
-                style: MyTexts.medium18.copyWith(color: MyColors.black),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      controller.name,
+                      style: MyTexts.medium18.copyWith(color: MyColors.black),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Obx(
+                      () => Text(
+                        controller.userStatusText.value,
+                        style: MyTexts.regular12.copyWith(
+                          color: controller.isUserOnline.value
+                              ? Colors.green
+                              : Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
