@@ -10,6 +10,7 @@ import 'package:construction_technect/app/modules/ChatSystem/widgets/media_previ
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:video_compress/video_compress.dart';
 
 class ConnectorChatSystemController extends GetxController {
   Rx<ChatListModel> chatListModel = ChatListModel().obs;
@@ -245,30 +246,160 @@ class ConnectorChatSystemController extends GetxController {
       if (pickedFile == null) return;
 
       final filePath = pickedFile.path;
+      final fileName = filePath.split('/').last;
       log("🎞️ Video selected from gallery: $filePath");
+
+      // Check original file size before showing preview
+      final originalFile = File(filePath);
+      final originalSizeInMB = (await originalFile.length()) / (1024 * 1024);
+
+      if (originalSizeInMB > 50) {
+        Get.snackbar(
+          'Video Too Large',
+          'Video is ${originalSizeInMB.toStringAsFixed(1)}MB. Please select a video shorter than 2 minutes.',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 4),
+        );
+        return;
+      }
 
       Get.dialog(
         MediaPreviewDialog(
           videoPath: filePath,
           onSend: (caption) async {
-            _scrollToBottom();
-            final bytes = await File(filePath).readAsBytes();
-            final base64Video = base64Encode(bytes);
+            try {
+              // Show compressing dialog
+              Get.dialog(
+                WillPopScope(
+                  onWillPop: () async => false,
+                  child: const Center(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text('Compressing video...'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                barrierDismissible: false,
+              );
 
-            socket.emit('send_message', {
-              'connection_id': connectionId,
-              'message_type': 'video',
-              'message': caption.isEmpty ? "Video" : caption,
-              'media_base64': base64Video,
-              'media_url': filePath,
-            });
+              _scrollToBottom();
 
-            log("📤 Sent video from gallery via socket with caption: $caption");
+              // Compress video
+              final info = await VideoCompress.compressVideo(
+                filePath,
+                quality: VideoQuality.MediumQuality,
+                deleteOrigin: false,
+              );
+
+              if (info == null) {
+                Get.back(); // Close loading dialog
+                Get.snackbar(
+                  'Error',
+                  'Failed to compress video',
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                );
+                return;
+              }
+
+              final compressedFile = info.file;
+              if (compressedFile == null) {
+                Get.back(); // Close loading dialog
+                Get.snackbar(
+                  'Error',
+                  'Failed to compress video',
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                );
+                return;
+              }
+
+              final bytes = await compressedFile.readAsBytes();
+              final fileSizeInMB = bytes.length / (1024 * 1024);
+
+              log(
+                "📊 Original size: ${(await File(filePath).length()) / (1024 * 1024)} MB",
+              );
+              log("📊 Compressed size: $fileSizeInMB MB");
+
+              // Check if file is still too large (max 10MB)
+              if (fileSizeInMB > 10) {
+                Get.back(); // Close loading dialog
+                Get.snackbar(
+                  'Error',
+                  'Video is too large (${fileSizeInMB.toStringAsFixed(1)}MB). Please select a shorter video.',
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 4),
+                );
+                return;
+              }
+
+              final base64Video = base64Encode(bytes);
+
+              // Determine mime type from file extension
+              final extension = fileName.split('.').last.toLowerCase();
+              String mimeType = 'video/mp4';
+              switch (extension) {
+                case 'mp4':
+                  mimeType = 'video/mp4';
+                case 'mov':
+                  mimeType = 'video/quicktime';
+                case 'avi':
+                  mimeType = 'video/x-msvideo';
+                case 'mkv':
+                  mimeType = 'video/x-matroska';
+                case '3gp':
+                  mimeType = 'video/3gpp';
+              }
+
+              Get.back(); // Close loading dialog
+
+              socket.emit('send_message', {
+                'connection_id': connectionId,
+                'message_type': 'video',
+                'media_base64': base64Video,
+                'media_mime_type': mimeType,
+                'file_name': fileName,
+                'caption': caption.isEmpty ? null : caption,
+              });
+
+              log(
+                "📤 Sent video from gallery via socket with caption: $caption",
+              );
+            } catch (e) {
+              if (Get.isDialogOpen ?? false) {
+                Get.back(); // Close loading dialog
+              }
+              log("❌ Error compressing/sending video: $e");
+              Get.snackbar(
+                'Error',
+                'Failed to send video: $e',
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
+            }
           },
         ),
       );
     } catch (e) {
       log("❌ Error selecting/sending video: $e");
+      Get.snackbar(
+        'Error',
+        'Failed to select video: $e',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -282,30 +413,160 @@ class ConnectorChatSystemController extends GetxController {
       if (pickedFile == null) return;
 
       final filePath = pickedFile.path;
+      final fileName = filePath.split('/').last;
       log("📹 Video captured from camera: $filePath");
+
+      // Check original file size before showing preview
+      final originalFile = File(filePath);
+      final originalSizeInMB = (await originalFile.length()) / (1024 * 1024);
+
+      if (originalSizeInMB > 50) {
+        Get.snackbar(
+          'Video Too Large',
+          'Video is ${originalSizeInMB.toStringAsFixed(1)}MB. Please record a shorter video.',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 4),
+        );
+        return;
+      }
 
       Get.dialog(
         MediaPreviewDialog(
           videoPath: filePath,
           onSend: (caption) async {
-            _scrollToBottom();
-            final bytes = await File(filePath).readAsBytes();
-            final base64Video = base64Encode(bytes);
+            try {
+              // Show compressing dialog
+              Get.dialog(
+                WillPopScope(
+                  onWillPop: () async => false,
+                  child: const Center(
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text('Compressing video...'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                barrierDismissible: false,
+              );
 
-            socket.emit('send_message', {
-              'connection_id': connectionId,
-              'message_type': 'video',
-              'message': caption.isEmpty ? "Video" : caption,
-              'media_base64': base64Video,
-              'media_url': filePath,
-            });
+              _scrollToBottom();
 
-            log("📤 Sent video from camera via socket with caption: $caption");
+              // Compress video
+              final info = await VideoCompress.compressVideo(
+                filePath,
+                quality: VideoQuality.MediumQuality,
+                deleteOrigin: false,
+              );
+
+              if (info == null) {
+                Get.back(); // Close loading dialog
+                Get.snackbar(
+                  'Error',
+                  'Failed to compress video',
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                );
+                return;
+              }
+
+              final compressedFile = info.file;
+              if (compressedFile == null) {
+                Get.back(); // Close loading dialog
+                Get.snackbar(
+                  'Error',
+                  'Failed to compress video',
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                );
+                return;
+              }
+
+              final bytes = await compressedFile.readAsBytes();
+              final fileSizeInMB = bytes.length / (1024 * 1024);
+
+              log(
+                "📊 Original size: ${(await File(filePath).length()) / (1024 * 1024)} MB",
+              );
+              log("📊 Compressed size: $fileSizeInMB MB");
+
+              // Check if file is still too large (max 10MB)
+              if (fileSizeInMB > 10) {
+                Get.back(); // Close loading dialog
+                Get.snackbar(
+                  'Error',
+                  'Video is too large (${fileSizeInMB.toStringAsFixed(1)}MB). Please select a shorter video.',
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 4),
+                );
+                return;
+              }
+
+              final base64Video = base64Encode(bytes);
+
+              // Determine mime type from file extension
+              final extension = fileName.split('.').last.toLowerCase();
+              String mimeType = 'video/mp4';
+              switch (extension) {
+                case 'mp4':
+                  mimeType = 'video/mp4';
+                case 'mov':
+                  mimeType = 'video/quicktime';
+                case 'avi':
+                  mimeType = 'video/x-msvideo';
+                case 'mkv':
+                  mimeType = 'video/x-matroska';
+                case '3gp':
+                  mimeType = 'video/3gpp';
+              }
+
+              Get.back(); // Close loading dialog
+
+              socket.emit('send_message', {
+                'connection_id': connectionId,
+                'message_type': 'video',
+                'media_base64': base64Video,
+                'media_mime_type': mimeType,
+                'file_name': fileName,
+                'caption': caption.isEmpty ? null : caption,
+              });
+
+              log(
+                "📤 Sent video from camera via socket with caption: $caption",
+              );
+            } catch (e) {
+              if (Get.isDialogOpen ?? false) {
+                Get.back(); // Close loading dialog
+              }
+              log("❌ Error compressing/sending video: $e");
+              Get.snackbar(
+                'Error',
+                'Failed to send video: $e',
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
+            }
           },
         ),
       );
     } catch (e) {
       log("❌ Error capturing/sending video: $e");
+      Get.snackbar(
+        'Error',
+        'Failed to capture video: $e',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
