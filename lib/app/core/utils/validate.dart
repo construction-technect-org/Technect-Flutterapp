@@ -207,8 +207,6 @@ class Validate {
   // ==================== GST Validation ====================
 
   /// Validates GSTIN number format and availability
-  /// Returns true if valid and available, false otherwise
-  /// Shows snackbar messages for user feedback
   static Future<bool> validateGSTAvailability(String value) async {
     if (value.isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter GSTIN number");
@@ -230,7 +228,7 @@ class Validate {
       return true;
     } else {
       SnackBars.errorSnackBar(
-        content: "User with this GST number already exists",
+        content: "User with this GSTIN number already exists",
       );
       return false;
     }
