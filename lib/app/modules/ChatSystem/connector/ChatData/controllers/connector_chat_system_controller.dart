@@ -235,6 +235,80 @@ class ConnectorChatSystemController extends GetxController {
     });
   }
 
+  Future<void> sendVideoFromGallery() async {
+    try {
+      final XFile? pickedFile = await picker.pickVideo(
+        source: ImageSource.gallery,
+        maxDuration: const Duration(minutes: 5),
+      );
+
+      if (pickedFile == null) return;
+
+      final filePath = pickedFile.path;
+      log("🎞️ Video selected from gallery: $filePath");
+
+      Get.dialog(
+        MediaPreviewDialog(
+          videoPath: filePath,
+          onSend: (caption) async {
+            _scrollToBottom();
+            final bytes = await File(filePath).readAsBytes();
+            final base64Video = base64Encode(bytes);
+
+            socket.emit('send_message', {
+              'connection_id': connectionId,
+              'message_type': 'video',
+              'message': caption.isEmpty ? "Video" : caption,
+              'media_base64': base64Video,
+              'media_url': filePath,
+            });
+
+            log("📤 Sent video from gallery via socket with caption: $caption");
+          },
+        ),
+      );
+    } catch (e) {
+      log("❌ Error selecting/sending video: $e");
+    }
+  }
+
+  Future<void> sendVideoFromCamera() async {
+    try {
+      final XFile? pickedFile = await picker.pickVideo(
+        source: ImageSource.camera,
+        maxDuration: const Duration(minutes: 5),
+      );
+
+      if (pickedFile == null) return;
+
+      final filePath = pickedFile.path;
+      log("📹 Video captured from camera: $filePath");
+
+      Get.dialog(
+        MediaPreviewDialog(
+          videoPath: filePath,
+          onSend: (caption) async {
+            _scrollToBottom();
+            final bytes = await File(filePath).readAsBytes();
+            final base64Video = base64Encode(bytes);
+
+            socket.emit('send_message', {
+              'connection_id': connectionId,
+              'message_type': 'video',
+              'message': caption.isEmpty ? "Video" : caption,
+              'media_base64': base64Video,
+              'media_url': filePath,
+            });
+
+            log("📤 Sent video from camera via socket with caption: $caption");
+          },
+        ),
+      );
+    } catch (e) {
+      log("❌ Error capturing/sending video: $e");
+    }
+  }
+
   Future<void> sendImageFromGallery() async {
     try {
       final XFile? pickedFile = await picker.pickImage(

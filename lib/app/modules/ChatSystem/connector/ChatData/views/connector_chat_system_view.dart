@@ -71,12 +71,58 @@ class ConnectorChatSystemView extends StatelessWidget {
                 controller.sendImageFromCamera();
               },
             ),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.videocam, color: MyColors.primary),
+              ),
+              title: const Text('Video'),
+              subtitle: const Text('Record or choose video'),
+              onTap: () {
+                Navigator.pop(context);
+                _showVideoSourceOptions(context);
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
+  void _showVideoSourceOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.video_library, color: MyColors.primary),
+            title: const Text('Select from Gallery'),
+            onTap: () {
+              Navigator.pop(context);
+              controller.sendVideoFromGallery();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.videocam, color: MyColors.primary),
+            title: const Text('Record Video'),
+            onTap: () {
+              Navigator.pop(context);
+              controller.sendVideoFromCamera();
+            },
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -200,7 +246,34 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                              ] else if (message.type == 'file') ...[
+                              ]
+                              else if (message.type == 'video') ...[
+                                GestureDetector(
+                                  onTap: () {
+                                    final videoUrl = (message.mediaUrl?.startsWith('http') ?? false)
+                                        ? message.mediaUrl!
+                                        : 'http://43.205.117.97${message.mediaUrl ?? ''}';
+                                    ChatUtils.openFile(videoUrl); // open in external player for now
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: getThumbnailView(
+                                          message.mediaUrl,
+                                        ), // ✅ add below helper
+                                      ),
+                                      const Icon(
+                                        Icons.play_circle_fill,
+                                        size: 48,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ]
+                              else if (message.type == 'file') ...[
                                 GestureDetector(
                                   onTap: () {
                                     final fileUrl =
@@ -357,5 +430,8 @@ class ConnectorChatSystemView extends StatelessWidget {
         }),
       ),
     );
+  }
+  Widget getThumbnailView(String? url) {
+    return Container();
   }
 }

@@ -1,10 +1,11 @@
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:open_filex/open_filex.dart';
+import 'package:video_player/video_player.dart';
 
-class MediaPreviewDialog extends StatelessWidget {
+class MediaPreviewDialog extends StatefulWidget {
   final String? imagePath;
+  final String? videoPath; // ✅ new
   final String? fileName;
   final IconData? fileIcon;
   final String? filePath;
@@ -14,6 +15,7 @@ class MediaPreviewDialog extends StatelessWidget {
   const MediaPreviewDialog({
     super.key,
     this.imagePath,
+    this.videoPath, // ✅ new
     this.fileName,
     this.fileIcon,
     this.filePath,
@@ -22,9 +24,34 @@ class MediaPreviewDialog extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController captionController = TextEditingController();
+  State<MediaPreviewDialog> createState() => _MediaPreviewDialogState();
+}
 
+class _MediaPreviewDialogState extends State<MediaPreviewDialog> {
+  final TextEditingController captionController = TextEditingController();
+  VideoPlayerController? _videoController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.videoPath != null) {
+      _videoController = VideoPlayerController.file(File(widget.videoPath!))
+        ..initialize().then((_) {
+          setState(() {});
+          _videoController?.play();
+        });
+    }
+  }
+
+  @override
+  void dispose() {
+    _videoController?.dispose();
+    captionController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.black,
       insetPadding: EdgeInsets.zero,
@@ -43,7 +70,7 @@ class MediaPreviewDialog extends StatelessWidget {
             // Preview area
             Expanded(child: _buildPreviewContent()),
 
-            // Caption input area
+            // Caption + Send
             Container(
               color: Colors.grey[900],
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -81,7 +108,7 @@ class MediaPreviewDialog extends StatelessWidget {
                         onPressed: () {
                           final caption = captionController.text.trim();
                           Navigator.pop(context);
-                          onSend(caption);
+                          widget.onSend(caption);
                         },
                       ),
                     ),
@@ -96,12 +123,30 @@ class MediaPreviewDialog extends StatelessWidget {
   }
 
   Widget _buildPreviewContent() {
-    // Show image preview
-    if (imagePath != null) {
-      return Center(child: Image.file(File(imagePath!), fit: BoxFit.contain));
+    // ✅ Video Preview
+    if (widget.videoPath != null && _videoController != null && _videoController!.value.isInitialized) {
+      return Center(
+        child: Stack(
+          alignment: AlignmentGeometry.center,
+          children: [
+            AspectRatio(
+              aspectRatio: _videoController!.value.aspectRatio,
+              child:VideoPlayer(_videoController!),
+            ),
+            _PlayPauseOverlay(controller: _videoController!),
+          ],
+        ),
+      );
     }
 
-    // Show file info card with preview button for documents
+    // ✅ Image Preview
+    if (widget.imagePath != null) {
+      return Center(
+        child: Image.file(File(widget.imagePath!), fit: BoxFit.contain),
+      );
+    }
+
+    // ✅ File Preview
     return _buildFileInfoCard();
   }
 
@@ -118,7 +163,6 @@ class MediaPreviewDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // File Icon with background
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
@@ -126,16 +170,14 @@ class MediaPreviewDialog extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                fileIcon ?? Icons.insert_drive_file,
+                widget.fileIcon ?? Icons.insert_drive_file,
                 size: 80,
                 color: MyColors.primary,
               ),
             ),
             const SizedBox(height: 24),
-
-            // File Name
             Text(
-              fileName ?? 'File',
+              widget.fileName ?? 'File',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -146,20 +188,15 @@ class MediaPreviewDialog extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 12),
-
-            // File Extension Badge
-            if (fileName != null)
+            if (widget.fileName != null)
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: MyColors.primary,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  fileName!.split('.').last.toUpperCase(),
+                  widget.fileName!.split('.').last.toUpperCase(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -168,20 +205,16 @@ class MediaPreviewDialog extends StatelessWidget {
                 ),
               ),
             const SizedBox(height: 12),
-
-            // File Size
-            if (fileSize != null)
+            if (widget.fileSize != null)
               Text(
-                _formatFileSize(fileSize!),
+                _formatFileSize(widget.fileSize!),
                 style: TextStyle(color: Colors.grey[400], fontSize: 14),
               ),
             const SizedBox(height: 24),
-
-            // Preview File Button
-            if (filePath != null)
+            if (widget.filePath != null)
               ElevatedButton.icon(
                 onPressed: () async {
-                  await OpenFilex.open(filePath!);
+                  await OpenFilex.open(widget.filePath!);
                 },
                 icon: const Icon(Icons.visibility, color: Colors.white),
                 label: const Text(
@@ -190,10 +223,7 @@ class MediaPreviewDialog extends StatelessWidget {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MyColors.primary,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -206,14 +236,35 @@ class MediaPreviewDialog extends StatelessWidget {
   }
 
   String _formatFileSize(int bytes) {
-    if (bytes < 1024) {
-      return '$bytes B';
-    } else if (bytes < 1024 * 1024) {
-      return '${(bytes / 1024).toStringAsFixed(1)} KB';
-    } else if (bytes < 1024 * 1024 * 1024) {
-      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
-    } else {
-      return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
-    }
+    if (bytes < 1024) return '$bytes B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    if (bytes < 1024 * 1024 * 1024) return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+    return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
+  }
+}
+
+/// 🔘 Play/Pause overlay
+class _PlayPauseOverlay extends StatelessWidget {
+  final VideoPlayerController controller;
+
+  const _PlayPauseOverlay({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        controller.value.isPlaying ? controller.pause() : controller.play();
+      },
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: controller.value.isPlaying
+            ? const SizedBox.shrink()
+            : const Icon(
+          Icons.play_circle_fill,
+          color: Colors.white,
+          size: 80,
+        ),
+      ),
+    );
   }
 }

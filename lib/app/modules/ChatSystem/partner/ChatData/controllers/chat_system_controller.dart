@@ -61,22 +61,13 @@ class ChatSystemController extends GetxController {
       if (result.success == true) {
         chatListModel.value = result;
 
-        final firstMessage = result.chatData?.isNotEmpty == true
-            ? result.chatData!.first
-            : null;
+        final firstMessage = result.chatData?.isNotEmpty == true ? result.chatData!.first : null;
 
         if (firstMessage != null) {
-          final isSenderMe =
-              firstMessage.senderUserId == myPref.userModel.val["id"];
-          final otherId = isSenderMe
-              ? firstMessage.receiverUserId
-              : firstMessage.senderUserId;
+          final isSenderMe = firstMessage.senderUserId == myPref.userModel.val["id"];
+          final otherId = isSenderMe ? firstMessage.receiverUserId : firstMessage.senderUserId;
 
-          supportUser = CustomUser(
-            id: otherId?.toString() ?? '',
-            name: name,
-            profilePhoto: image,
-          );
+          supportUser = CustomUser(id: otherId?.toString() ?? '', name: name, profilePhoto: image);
         }
 
         final fetchedMessages =
@@ -85,13 +76,9 @@ class ChatSystemController extends GetxController {
               return CustomMessage(
                 id: msg.id.toString(),
                 message: msg.messageText ?? '',
-                createdAt: DateTime.parse(
-                  msg.createdAt ?? DateTime.now().toIso8601String(),
-                ),
+                createdAt: DateTime.parse(msg.createdAt ?? DateTime.now().toIso8601String()),
                 sentBy: isSentByMe ? currentUser.id : supportUser.id,
-                status: msg.isRead == true
-                    ? MessageStatus.read
-                    : MessageStatus.delivered,
+                status: msg.isRead == true ? MessageStatus.read : MessageStatus.delivered,
                 type: msg.messageType,
                 mediaUrl: msg.messageMediaUrl,
               );
@@ -165,13 +152,9 @@ class ChatSystemController extends GetxController {
         final newMessage = CustomMessage(
           id: chatData.id.toString(),
           message: chatData.messageText ?? '',
-          createdAt: DateTime.parse(
-            chatData.createdAt ?? DateTime.now().toIso8601String(),
-          ),
+          createdAt: DateTime.parse(chatData.createdAt ?? DateTime.now().toIso8601String()),
           sentBy: isSentByMe ? currentUser.id : supportUser.id,
-          status: chatData.isRead == true
-              ? MessageStatus.read
-              : MessageStatus.delivered,
+          status: chatData.isRead == true ? MessageStatus.read : MessageStatus.delivered,
           type: chatData.messageType,
           mediaUrl: chatData.messageMediaUrl,
         );
@@ -225,13 +208,83 @@ class ChatSystemController extends GetxController {
   void onSendTap(String message) {
     if (message.trim().isEmpty) return;
 
-    socket.emit('send_message', {
-      'connection_id': connectionId,
-      'message': message,
-    });
+    socket.emit('send_message', {'connection_id': connectionId, 'message': message});
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
     });
+  }
+  Future<void> sendVideoFromGallery() async {
+    try {
+      final XFile? pickedFile = await picker.pickVideo(
+        source: ImageSource.gallery,
+        maxDuration: const Duration(minutes: 5),
+      );
+
+      if (pickedFile == null) return;
+
+      final filePath = pickedFile.path;
+      log("🎞️ Video selected from gallery: $filePath");
+
+      Get.dialog(
+        MediaPreviewDialog(
+          videoPath: filePath,
+          onSend: (caption) async {
+            _scrollToBottom();
+            final bytes = await File(filePath).readAsBytes();
+            final base64Video = base64Encode(bytes);
+
+            socket.emit('send_message', {
+              'connection_id': connectionId,
+              'message_type': 'video',
+              'message': caption.isEmpty ? "Video" : caption,
+              'media_base64': base64Video,
+              'media_url': filePath,
+            });
+
+            log("📤 Sent video from gallery via socket with caption: $caption");
+          },
+        ),
+      );
+    } catch (e) {
+      log("❌ Error selecting/sending video: $e");
+    }
+  }
+
+  Future<void> sendVideoFromCamera() async {
+    try {
+      final XFile? pickedFile = await picker.pickVideo(
+        source: ImageSource.camera,
+        maxDuration: const Duration(minutes: 5),
+      );
+
+      if (pickedFile == null) return;
+
+      final filePath = pickedFile.path;
+      log("📹 Video captured from camera: $filePath");
+
+      Get.dialog(
+        MediaPreviewDialog(
+          videoPath: filePath,
+          onSend: (caption) async {
+            _scrollToBottom();
+            final bytes = await File(filePath).readAsBytes();
+            final base64Video = base64Encode(bytes);
+
+            socket.emit('send_message', {
+              'connection_id': connectionId,
+              'message_type': 'video',
+              'message': caption.isEmpty ? "Video" : caption,
+              'media_base64': base64Video,
+              'media_url': filePath,
+            });
+
+            log("📤 Sent video from camera via socket with caption: $caption");
+          },
+        ),
+      );
+    } catch (e) {
+      log("❌ Error capturing/sending video: $e");
+    }
   }
 
   Future<void> sendImageFromGallery() async {
@@ -271,6 +324,8 @@ class ChatSystemController extends GetxController {
       log("❌ Error selecting/sending image: $e");
     }
   }
+
+
 
   Future<void> sendImageFromCamera() async {
     try {
@@ -339,22 +394,18 @@ class ChatSystemController extends GetxController {
         case 'doc':
           mimeType = 'application/msword';
         case 'docx':
-          mimeType =
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+          mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
         case 'xls':
           mimeType = 'application/vnd.ms-excel';
         case 'xlsx':
-          mimeType =
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+          mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
         case 'txt':
           mimeType = 'text/plain';
         case 'zip':
           mimeType = 'application/zip';
       }
 
-      log(
-        "📄 File selected: $fileName (${(fileSize / 1024).toStringAsFixed(2)} KB)",
-      );
+      log("📄 File selected: $fileName (${(fileSize / 1024).toStringAsFixed(2)} KB)");
 
       // Show preview dialog with caption option
       Get.dialog(
