@@ -709,7 +709,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                 "isEdit": controller.isEdit.value,
                                 "onApiCall": controller.onApiCall,
                               };
-                              Get.toNamed(
+                              Get.offNamed(
                                 Routes.SERVICE_DETAILS,
                                 arguments: finalData,
                                 preventDuplicates: false,
