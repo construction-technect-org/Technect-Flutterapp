@@ -652,100 +652,119 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                         ],
                       );
                     }),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Explore our other services', style: MyTexts.bold18),
-                        const Gap(12),
-                        SizedBox(
-                          height: 120,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 5, // showing 5 dummy services
-                            itemBuilder: (context, index) {
-                              // Dummy data list
-                              final dummyServices = [
-                                {
-                                  "title": "Plumbing Repair",
-                                  "image": "https://picsum.photos/200/300?random=1",
-                                  "category": "Home Maintenance",
-                                },
-                                {
-                                  "title": "House Painting",
-                                  "image": "https://picsum.photos/200/300?random=2",
-                                  "category": "Interior Design",
-                                },
-                                {
-                                  "title": "Electric Fittings",
-                                  "image": "https://picsum.photos/200/300?random=3",
-                                  "category": "Electrical",
-                                },
-                                {
-                                  "title": "Carpentry Work",
-                                  "image": "https://picsum.photos/200/300?random=4",
-                                  "category": "Woodwork",
-                                },
-                                {
-                                  "title": "Tile Installation",
-                                  "image": "https://picsum.photos/200/300?random=5",
-                                  "category": "Flooring",
-                                },
-                              ];
-
-                              final data = dummyServices[index];
-
-                              return GestureDetector(
-                                onTap: () {
-                                  // you can navigate later, for now just show snackbar
-                                  SnackBars.successSnackBar(content: "Clicked on ${data["title"]}");
-                                },
-                                child: Container(
-                                  width: 112,
-                                  margin: EdgeInsets.only(right: index < 4 ? 12 : 0),
-                                  child: Column(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: CachedNetworkImage(
-                                          height: 90,
-                                          width: 112,
-                                          imageUrl: data["image"]!,
-                                          fit: BoxFit.cover,
-                                          placeholder: (context, url) =>
-                                              const Center(child: CircularProgressIndicator()),
-                                          errorWidget: (context, url, error) => const Icon(
-                                            Icons.build,
-                                            color: MyColors.primary,
-                                            size: 24,
-                                          ),
-                                        ),
-                                      ),
-                                      const Gap(5),
-                                      Text(
-                                        data["title"]!,
-                                        style: MyTexts.medium14,
-                                        textAlign: TextAlign.center,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        data["category"]!,
-                                        style: MyTexts.regular12.copyWith(color: MyColors.grey),
-                                        textAlign: TextAlign.center,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
+              ),
+              Obx(
+                    () =>
+                    controller.isEdit.value?const SizedBox():
+
+               (controller
+                    .productDetailsModel
+                    .value
+                    .data
+                    ?.similarServices
+                    ?.isEmpty ??
+                    true)
+                    ? const SizedBox()
+                    : Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Explore our other product',
+                          style: MyTexts.bold18,
+                        ),
+                        // const Icon(Icons.arrow_forward_ios, size: 20),
+                      ],
+                    ),
+                    const Gap(12),
+                    SizedBox(
+                      height: 120,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount:
+                        (controller
+                            .productDetailsModel
+                            .value
+                            .data
+                            ?.similarServices
+                            ?.length ??
+                            0)
+                            .clamp(0, 5),
+                        itemBuilder: (context, index) {
+                          final Service data =
+                              controller
+                                  .productDetailsModel
+                                  .value
+                                  .data
+                                  ?.similarServices?[index] ??
+                                  Service();
+                          return GestureDetector(
+                            onTap: () {
+
+                              final finalData = {
+                                "service": data,
+                                "isEdit": controller.isEdit.value,
+                                "onApiCall": controller.onApiCall,
+                              };
+                              Get.toNamed(
+                                Routes.SERVICE_DETAILS,
+                                arguments: finalData,
+                                preventDuplicates: false,
+                              );
+                            },
+                            child: Container(
+                              width: 112,
+                              margin: EdgeInsets.only(
+                                right: index < 4 ? 12 : 0,
+                              ),
+                              child: Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      8,
+                                    ),
+                                    child: CachedNetworkImage(
+                                      height: 90,
+                                      width: 112,
+                                      imageUrl:
+                                      APIConstants.bucketUrl +
+                                          (data.images?.first.mediaS3Key ??
+                                              ''),
+                                      fit: BoxFit.fill,
+                                      placeholder: (context, url) =>
+                                      const Center(
+                                        child:
+                                        CircularProgressIndicator(),
+                                      ),
+                                      errorWidget:
+                                          (context, url, error) =>
+                                      const Icon(
+                                        Icons.category,
+                                        color: MyColors.primary,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ),
+                                  const Gap(10),
+                                  Text(
+                                    data.subCategoryName ?? '',
+                                    style: MyTexts.medium14,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ).paddingSymmetric(horizontal: 20),
               ),
             ],
           ),
@@ -840,6 +859,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),

@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/service/add_constrcution_Service.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/serviceDetail/model/service_deatil_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
 import 'package:video_player/video_player.dart';
 
@@ -25,6 +27,11 @@ class ServiceDetailController extends GetxController {
     service.value = argument?['service'] ?? Service();
     onApiCall = argument?["onApiCall"];
     isEdit.value = argument?["isEdit"] ?? false;
+
+    if( isEdit.value==false){
+      serviceDetails(service.value.id??0);
+
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((val) async {
       if (service.value.reference != null &&
@@ -314,6 +321,23 @@ class ServiceDetailController extends GetxController {
       }
     } catch (e) {
       log('Error opening reference URL: $e');
+    }
+  }
+
+  Rx<ServiceDetailModel> productDetailsModel = ServiceDetailModel().obs;
+  RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
+  Future<void> serviceDetails(int id) async {
+    try {
+      isLoading.value = true;
+      productDetailsModel.value = await AddServiceService().serviceDetails(
+        id: id.toString(),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
     }
   }
 }
