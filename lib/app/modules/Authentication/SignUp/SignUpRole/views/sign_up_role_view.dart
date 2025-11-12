@@ -206,7 +206,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                       controller.selectedFinalRole.value = "partner";
                       myPref.setRole(controller.selectedFinalRole.value);
                       // Get.back();
-                      Get.toNamed(Routes.SIGN_UP_DETAILS);
+                      Get.offNamed(Routes.SIGN_UP_DETAILS);
                     },
                   ),
                 ),
@@ -219,7 +219,7 @@ class SignUpRoleView extends GetView<SignUpRoleController> {
                       hideKeyboard();
                       controller.selectedFinalRole.value = "connector";
                       myPref.setRole(controller.selectedFinalRole.value);
-                      Get.toNamed(Routes.SIGN_UP_DETAILS);
+                      Get.offNamed(Routes.SIGN_UP_DETAILS);
                     },
                   ),
                 ),
