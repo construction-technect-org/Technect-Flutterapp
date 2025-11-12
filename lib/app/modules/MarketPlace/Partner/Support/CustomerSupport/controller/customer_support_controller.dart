@@ -29,6 +29,18 @@ class CustomerSupportController extends GetxController {
     }
   }
 
+  void sortfilteredTickets() {
+    final priorityOrder = {'Critical': 1, 'High': 2, 'Medium': 3, 'Low': 4};
+
+    filteredTickets.sort((a, b) {
+      final aPriority = priorityOrder[a.priorityName ?? ''] ?? 999;
+      final bPriority = priorityOrder[b.priorityName ?? ''] ?? 999;
+      return aPriority.compareTo(bPriority);
+    });
+
+    filteredTickets.refresh();
+  }
+
   Future<void> fetchMyTickets() async {
     try {
       isLoading.value = true;
@@ -44,6 +56,7 @@ class CustomerSupportController extends GetxController {
     } catch (e) {
       // No Error Show
     } finally {
+      sortfilteredTickets();
       isLoading.value = false;
     }
   }
