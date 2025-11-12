@@ -243,12 +243,14 @@ class ChatSystemController extends GetxController {
     });
 
     // Listen for initial online status when joining connection
+    log('👤 User Online Status:');
     socket.on('user_online_status', (data) {
       log('👤 User Online Status: $data');
       _handleOnlineStatusUpdate(data);
     });
 
     // Listen for real-time status changes
+    log('👤 User Status Changed:');
     socket.on('user_status_changed', (data) {
       log('🔄 User Status Changed: $data');
       _handleOnlineStatusUpdate(data);
