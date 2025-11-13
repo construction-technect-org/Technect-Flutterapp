@@ -503,7 +503,8 @@ class SuccessAction extends StatelessWidget {
               border: Border.all(color: const Color(0xffF9D0CB)),
             ),
             child: Text(
-              "Your account is ${actionType}ed",
+              actionType=="delete"?
+              "Your account is deleted":"Your account is deactivated",
               style: MyTexts.bold18.copyWith(color: Colors.black),
               textAlign: TextAlign.center,
             ),

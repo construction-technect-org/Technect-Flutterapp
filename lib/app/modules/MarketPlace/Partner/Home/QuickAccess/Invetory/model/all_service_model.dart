@@ -46,6 +46,8 @@ class Service {
   String? rejectionReason;
   String? createdAt;
   String? updatedAt;
+  String? serviceReferenceUrl;
+  String? note;
   String? mainCategoryName;
   String? subCategoryName;
   String? serviceCategoryName;
@@ -71,6 +73,7 @@ class Service {
   List<ServiceMediaItem>? images;
   ServiceMediaItem? video;
   ServiceReferenceItem? reference;
+  List<ServiceFeature>? features; // ✅ Added
   List<BusinessHoursItem>? businessHours;
   ConnectionRequest? connectionRequest;
 
@@ -93,6 +96,8 @@ class Service {
     this.rejectionReason,
     this.createdAt,
     this.updatedAt,
+    this.serviceReferenceUrl,
+    this.note,
     this.mainCategoryName,
     this.subCategoryName,
     this.serviceCategoryName,
@@ -118,6 +123,7 @@ class Service {
     this.images,
     this.video,
     this.reference,
+    this.features, // ✅ Added
     this.businessHours,
     this.connectionRequest,
   });
@@ -141,6 +147,8 @@ class Service {
     rejectionReason = json['rejection_reason'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    serviceReferenceUrl = json['service_reference_url'];
+    note = json['note'];
     mainCategoryName = json['main_category_name'];
     subCategoryName = json['sub_category_name'];
     serviceCategoryName = json['service_category_name'];
@@ -164,8 +172,8 @@ class Service {
     connectionRequestStatus = json['connection_request_status'];
     distanceKm = json['distance_km'] != null
         ? (json['distance_km'] is num
-              ? json['distance_km'].toDouble()
-              : double.tryParse(json['distance_km'].toString()))
+        ? json['distance_km'].toDouble()
+        : double.tryParse(json['distance_km'].toString()))
         : null;
 
     if (json['images'] != null) {
@@ -183,6 +191,13 @@ class Service {
       reference = ServiceReferenceItem.fromJson(json['reference']);
     }
 
+    if (json['features'] != null) { // ✅ Added
+      features = <ServiceFeature>[];
+      json['features'].forEach((v) {
+        features!.add(ServiceFeature.fromJson(v));
+      });
+    }
+
     if (json['business_hours'] != null) {
       businessHours = <BusinessHoursItem>[];
       json['business_hours'].forEach((v) {
@@ -191,9 +206,7 @@ class Service {
     }
 
     if (json['connection_request'] != null) {
-      connectionRequest = ConnectionRequest.fromJson(
-        json['connection_request'],
-      );
+      connectionRequest = ConnectionRequest.fromJson(json['connection_request']);
     }
   }
 
@@ -217,6 +230,8 @@ class Service {
     data['rejection_reason'] = rejectionReason;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    data['service_reference_url'] = serviceReferenceUrl;
+    data['note'] = note;
     data['main_category_name'] = mainCategoryName;
     data['sub_category_name'] = subCategoryName;
     data['service_category_name'] = serviceCategoryName;
@@ -248,12 +263,59 @@ class Service {
     if (reference != null) {
       data['reference'] = reference!.toJson();
     }
+    if (features != null) { // ✅ Added
+      data['features'] = features!.map((v) => v.toJson()).toList();
+    }
     if (businessHours != null) {
-      data['business_hours'] = businessHours!.map((v) => v.toJson()).toList();
+      data['business_hours'] =
+          businessHours!.map((v) => v.toJson()).toList();
     }
     if (connectionRequest != null) {
       data['connection_request'] = connectionRequest!.toJson();
     }
+    return data;
+  }
+}
+class ServiceFeature {
+  int? id;
+  int? merchantServiceId;
+  String? feature;
+  String? details;
+  int? sortOrder;
+  String? createdAt;
+  String? updatedAt;
+
+  ServiceFeature({
+    this.id,
+    this.merchantServiceId,
+    this.feature,
+    this.details,
+    this.sortOrder,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory ServiceFeature.fromJson(Map<String, dynamic> json) {
+    return ServiceFeature(
+      id: json['id'],
+      merchantServiceId: json['merchant_service_id'],
+      feature: json['feature'],
+      details: json['details'],
+      sortOrder: json['sort_order'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['merchant_service_id'] = merchantServiceId;
+    data['feature'] = feature;
+    data['details'] = details;
+    data['sort_order'] = sortOrder;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

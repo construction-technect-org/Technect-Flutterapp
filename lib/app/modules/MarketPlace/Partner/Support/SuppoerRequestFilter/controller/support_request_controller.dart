@@ -21,8 +21,21 @@ class SupportRequestController extends GetxController {
     } catch (e) {
       // No Error Show
     } finally {
+      sortfilteredTickets();
       isLoading.value = false;
     }
+  }
+
+  void sortfilteredTickets() {
+    final priorityOrder = {'Critical': 1, 'High': 2, 'Medium': 3, 'Low': 4};
+
+    myTickets.sort((a, b) {
+      final aPriority = priorityOrder[a.priorityName ?? ''] ?? 999;
+      final bPriority = priorityOrder[b.priorityName ?? ''] ?? 999;
+      return aPriority.compareTo(bPriority);
+    });
+
+    myTickets.refresh();
   }
 
   @override

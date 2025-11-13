@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -16,6 +18,7 @@ class ProductDetailsController extends GetxController {
   final RxBool isFromConnector = false.obs;
   final RxBool isLoading = false.obs;
   final RxBool isLiked = false.obs;
+  final RxBool isVideoReady = false.obs;
   final RxInt currentIndex = 0.obs;
   final ProductDetailService _service = ProductDetailService();
   VideoPlayerController? videoPlayerController;
@@ -64,12 +67,52 @@ class ProductDetailsController extends GetxController {
       }).toList();
 
       WidgetsBinding.instance.addPostFrameCallback((val) async {
-        videoPlayerController = VideoPlayerController.networkUrl(
-          Uri.parse(APIConstants.bucketUrl + product.productVideo.toString()),
-        );
-        await videoPlayerController?.initialize();
-        await videoPlayerController?.setLooping(false);
-        await videoPlayerController?.setVolume(1.0);
+        if (product.productVideo != null &&
+            (product.productVideo?.isNotEmpty ?? false)) {
+          final videoPath = product.productVideo ?? "";
+
+          if (videoPath.isNotEmpty) {
+            final videoUrl = videoPath.startsWith('http')
+                ? videoPath
+                : APIConstants.bucketUrl + videoPath;
+            log('Main video path: $videoPath');
+            log('Full main video URL: $videoUrl');
+
+            try {
+              videoPlayerController = VideoPlayerController.networkUrl(
+                Uri.parse(videoUrl),
+                httpHeaders: {
+                  'Range': 'bytes=0-',
+                  'Accept': 'video/*',
+                  'User-Agent': 'Mozilla/5.0',
+                },
+                videoPlayerOptions: VideoPlayerOptions(),
+              );
+
+              await videoPlayerController
+                  ?.initialize()
+                  .timeout(
+                    const Duration(seconds: 30),
+                    onTimeout: () {
+                      log('Video initialization timeout');
+                      throw TimeoutException(
+                        'Video initialization took too long',
+                      );
+                    },
+                  )
+                  .then((val) {
+                    isVideoReady.value = true;
+                  });
+              log('Main video initialized successfully');
+              update();
+            } catch (e) {
+              log('Error initializing main video: $e');
+              if (kDebugMode) {
+                print('Main video initialization failed: $e');
+              }
+            }
+          }
+        }
       });
     }
   }
@@ -115,6 +158,73 @@ class ProductDetailsController extends GetxController {
       }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> retryVideoInitialization() async {
+    if (product.productVideo != null) {
+      videoPlayerController?.dispose();
+      videoPlayerController = null;
+      isVideoReady.value = false;
+      update();
+
+      final videoPath = product.productVideo ?? "";
+
+      if (videoPath.isEmpty) {
+        log('No main video path available for retry');
+        update();
+        return;
+      }
+
+      final videoUrl = videoPath.startsWith('http')
+          ? videoPath
+          : APIConstants.bucketUrl + videoPath;
+      log('Retrying main video - path: $videoPath');
+      log('Retrying main video - URL: $videoUrl');
+
+      try {
+        videoPlayerController = VideoPlayerController.networkUrl(
+          Uri.parse(videoUrl),
+          httpHeaders: {
+            'Range': 'bytes=0-',
+            'Accept': 'video/*',
+            'User-Agent': 'Mozilla/5.0',
+          },
+          videoPlayerOptions: VideoPlayerOptions(),
+        );
+
+        await videoPlayerController?.initialize().timeout(
+          const Duration(seconds: 30),
+          onTimeout: () {
+            log('Video initialization timeout on retry');
+            throw TimeoutException('Video initialization took too long');
+          },
+        );
+        isVideoReady.value = true;
+        log('Video retry successful');
+        update();
+      } catch (e) {
+        log('Error retrying video initialization: $e');
+        if (kDebugMode) {
+          print('Video retry failed: $e');
+        }
+        update();
+      }
+    }
+  }
+
+  Future<void> openReferenceUrl(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (kDebugMode) {
+          print('Could not launch $url');
+        }
+      }
+    } catch (e) {
+      log('Error opening reference URL: $e');
     }
   }
 

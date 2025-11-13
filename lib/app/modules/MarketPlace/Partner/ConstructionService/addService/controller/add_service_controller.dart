@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -10,6 +11,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
+class FeatureItem {
+  final TextEditingController headerController;
+  final TextEditingController descController;
+
+  FeatureItem()
+    : headerController = TextEditingController(),
+      descController = TextEditingController();
+}
+
 class AddServiceController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
@@ -17,6 +27,28 @@ class AddServiceController extends GetxController {
   RxBool isEdit = false.obs;
 
   VoidCallback? onApiCall;
+
+  RxList<FeatureItem> featureList = <FeatureItem>[].obs;
+
+  void addNewFeature() {
+    if (featureList.isNotEmpty) {
+      final lastFeature = featureList.last;
+      if (lastFeature.headerController.text.trim().isEmpty ||
+          lastFeature.descController.text.trim().isEmpty) {
+        SnackBars.errorSnackBar(
+          content:
+              "Please fill both header and description before adding another feature.",
+        );
+        return;
+      }
+    }
+
+    featureList.add(FeatureItem());
+  }
+
+  void removeFeature(int index) {
+    featureList.removeAt(index);
+  }
 
   RxList<ServiceCategoryData> mainCategories = <ServiceCategoryData>[].obs;
   Rx<ServiceCategoryData?> selectedMainCategory = Rx<ServiceCategoryData?>(
@@ -46,6 +78,8 @@ class AddServiceController extends GetxController {
   final descriptionController = TextEditingController();
   final gstPriceController = TextEditingController();
   final amountController = TextEditingController();
+  final noteController = TextEditingController();
+  final refUrlController = TextEditingController();
   RxList<String?> imageSlots = List<String?>.filled(5, null).obs;
   Map<String, String> removedImages = {};
 
@@ -161,7 +195,7 @@ class AddServiceController extends GetxController {
     }
   }
 
-  void _prefillServiceData(dynamic service) {
+  Future<void> _prefillServiceData(dynamic service) async {
     try {
       /// --- Category Selections ---
       selectedMainCategory.value = mainCategories.firstWhereOrNull(
@@ -189,13 +223,24 @@ class AddServiceController extends GetxController {
       /// --- Text Controllers ---
       unitController.text = service.units ?? "";
       priceController.text = service.price ?? "";
-      // referenceFileUrl.value = service.referenceFile ?? '';
+      refUrlController.text = service.serviceReferenceUrl ?? '';
+      noteController.text = service.note ?? '';
       gstController.text = service.gstPercentage ?? "";
       descriptionController.text = service.description ?? "";
       gstPriceController.text = service.gstAmount ?? "";
       amountController.text = service.totalAmount ?? "";
       selectedGST.value = "${service.gstPercentage?.split(".").first}%";
-
+      featureList.clear();
+      if (service.features != null && service.features is List) {
+        final List<ServiceFeature> features = service.features;
+        for (final f in features) {
+          final item = FeatureItem();
+          item.headerController.text = f.feature ?? '';
+          item.descController.text = f.details ?? '';
+          featureList.add(item);
+        }
+      }
+      featureList.refresh();
       imageSlots.value = List<String?>.filled(5, null);
       final existingImages = service.images ?? [];
       for (int i = 0; i < existingImages.length && i < 5; i++) {
@@ -361,7 +406,19 @@ class AddServiceController extends GetxController {
   Future<void> createService() async {
     isLoading.value = true;
     Map<String, dynamic> fields = {};
+    final List<Map<String, String>> featureData = featureList
+        .map(
+          (f) => {
+            "feature": f.headerController.text.trim(),
+            "details": f.descController.text.trim(),
+          },
+        )
+        .where(
+          (item) => item["feature"]!.isNotEmpty && item["details"]!.isNotEmpty,
+        )
+        .toList();
 
+    final String featuresJson = jsonEncode(featureData);
     final imageList = pickedFilePathList;
     int index = 1;
     final Map<String, String> selectedFiles = {};
@@ -387,6 +444,10 @@ class AddServiceController extends GetxController {
       "price": priceController.text,
       "gst_percentage": selectedGST.value,
       "description": descriptionController.text,
+      "note": noteController.text,
+      if (featureList.isNotEmpty) "features": featuresJson,
+      if (refUrlController.text.isNotEmpty)
+        "service_reference_url": refUrlController.text,
       if (referenceFile.value != null) 'reference_type': referenceFileUrl.value,
     };
 
@@ -419,7 +480,19 @@ class AddServiceController extends GetxController {
   Future<void> updateService(int serviceId) async {
     isLoading.value = true;
     final Map<String, String> selectedFiles = {};
+    final List<Map<String, String>> featureData = featureList
+        .map(
+          (f) => {
+            "feature": f.headerController.text.trim(),
+            "details": f.descController.text.trim(),
+          },
+        )
+        .where(
+          (item) => item["feature"]!.isNotEmpty && item["details"]!.isNotEmpty,
+        )
+        .toList();
 
+    final String featuresJson = jsonEncode(featureData);
     if (referenceFile.value != null && referenceDeleted.value == true) {
       selectedFiles['reference'] = referenceFile.value!.path;
     }
@@ -432,7 +505,10 @@ class AddServiceController extends GetxController {
       "price": priceController.text,
       "gst_percentage": selectedGST.value,
       "description": descriptionController.text,
-      if (referenceFile.value != null) 'reference_type': referenceFileUrl.value,
+      "note": noteController.text,
+      "features": featuresJson,
+      "service_reference_url": refUrlController.text,
+      'reference_type': referenceFileUrl.value,
     };
     if (referenceDeleted.value == true) {
       fields["remove_reference"] = "remove";
@@ -551,57 +627,83 @@ class AddServiceController extends GetxController {
   }
 
   void openVideoDialog(BuildContext context, String videoPath, bool isNetwork) {
+    try {
+      videoPlayerController?.pause();
+    } catch (_) {}
+
     final playerController = isNetwork
         ? VideoPlayerController.network(videoPath)
         : VideoPlayerController.file(File(videoPath));
 
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (_) {
-        return Dialog(
-          insetPadding: const EdgeInsets.all(16),
-          child: FutureBuilder(
-            future: playerController.initialize(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                playerController.play();
-                return AspectRatio(
-                  aspectRatio: playerController.value.aspectRatio,
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      VideoPlayer(playerController),
-                      VideoProgressIndicator(
-                        playerController,
-                        allowScrubbing: true,
-                        colors: const VideoProgressColors(
-                          backgroundColor: MyColors.grayEA,
-                          playedColor: MyColors.primary,
-                          bufferedColor: MyColors.grayEA,
+        return WillPopScope(
+          onWillPop: () async {
+            try {
+              await playerController.pause();
+              await playerController.dispose();
+            } catch (_) {}
+            return true;
+          },
+          child: Dialog(
+            insetPadding: const EdgeInsets.all(16),
+            child: FutureBuilder(
+              future: () async {
+                await playerController.initialize();
+                await playerController.setLooping(false);
+                await playerController.setVolume(1.0);
+                return true;
+              }(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  playerController.play();
+                  return AspectRatio(
+                    aspectRatio: playerController.value.aspectRatio,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        VideoPlayer(playerController),
+                        VideoProgressIndicator(
+                          playerController,
+                          allowScrubbing: true,
+                          colors: const VideoProgressColors(
+                            backgroundColor: MyColors.grayEA,
+                            playedColor: MyColors.primary,
+                            bufferedColor: MyColors.grayEA,
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: IconButton(
-                          icon: const Icon(Icons.close, color: Colors.white),
-                          onPressed: () {
-                            playerController.pause();
-                            playerController.dispose();
-                            Navigator.pop(context);
-                          },
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white),
+                            onPressed: () async {
+                              try {
+                                await playerController.pause();
+                                await playerController.dispose();
+                              } catch (_) {}
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
+                      ],
+                    ),
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
           ),
         );
       },
-    );
+    ).then((_) {
+      try {
+        playerController.pause();
+        playerController.dispose();
+      } catch (_) {}
+    });
   }
 }

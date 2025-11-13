@@ -101,12 +101,7 @@ class ConnectorAllChatListScreen
                 Get.toNamed(
                   Routes.CONNECTOR_CHAT_SYSTEM,
                   arguments: {
-                    "image":
-                        APIConstants.bucketUrl +
-                        (chat.merchant?.profileImage ?? ""),
-                    "cId": chat.connectionId,
-                    "name":
-                        "${chat.merchant?.firstName ?? ""} ${chat.merchant?.lastName ?? ""}",
+                    "chatData": chat,
                     "onRefresh": () {
                       controller.fetchChatList();
                     },

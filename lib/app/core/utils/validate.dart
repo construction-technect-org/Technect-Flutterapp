@@ -223,7 +223,7 @@ class Validate {
       return true;
     } else {
       SnackBars.errorSnackBar(
-        content: "User with this GST number already exists",
+        content: "User with this GSTIN number already exists",
       );
       return false;
     }

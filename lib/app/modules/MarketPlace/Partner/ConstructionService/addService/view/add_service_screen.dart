@@ -361,6 +361,9 @@ class AddServiceScreen extends GetView<AddServiceController> {
                     controller: controller.unitController,
                     headerText: "Unit",
                     hintText: "Enter unit (e.g., Sqft, Hour, etc.)",
+                    validator: (val) => val == null || val.isEmpty
+                        ? "Please enter service unit"
+                        : null,
                   ),
                   const Gap(16),
 
@@ -460,15 +463,126 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       ),
                     ],
                   ),
-                  const Gap(16),
+
+                  const Gap(20),
                   CommonTextField(
                     controller: controller.descriptionController,
                     headerText: "Description",
                     hintText: "Enter service description",
+                    validator: (val) => val == null || val.isEmpty
+                        ? "Please enter service description"
+                        : null,
                     maxLine: 3,
                   ),
-
+                  const Gap(16),
+                  CommonTextField(
+                    controller: controller.noteController,
+                    headerText: "Note",
+                    hintText: "Enter service note",
+                    maxLine: 2,
+                    validator: (val) => val == null || val.isEmpty
+                        ? "Please enter service note"
+                        : null,
+                  ),
+                  const Gap(16),
+                  CommonTextField(
+                    controller: controller.refUrlController,
+                    headerText: "Reference Url (Optional)",
+                    hintText: "Enter reference url",
+                  ),
                   const Gap(20),
+                  Text(
+                    "Features",
+                    style: MyTexts.medium16.copyWith(color: MyColors.black),
+                  ),
+                  const Gap(8),
+                  Obx(() {
+                    return Column(
+                      children: [
+                        ...List.generate(controller.featureList.length, (
+                          index,
+                        ) {
+                          final feature = controller.featureList[index];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Gap(12),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Feature ${index + 1}",
+                                    style: MyTexts.medium14.copyWith(
+                                      color: MyColors.lightBlueSecond,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () =>
+                                        controller.removeFeature(index),
+                                    child: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                      size: 22,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Gap(8),
+                              CommonTextField(
+                                controller: feature.headerController,
+                                headerText: "Header",
+                                hintText: "Enter feature header",
+                                validator: (val) => val == null || val.isEmpty
+                                    ? "Please enter header"
+                                    : null,
+                              ),
+                              const Gap(10),
+                              CommonTextField(
+                                controller: feature.descController,
+                                headerText: "Detail",
+                                hintText: "Enter feature detail",
+                                validator: (val) => val == null || val.isEmpty
+                                    ? "Please enter detail"
+                                    : null,
+                                maxLine: 2,
+                              ),
+                              const Divider(thickness: 1, height: 24),
+                            ],
+                          );
+                        }),
+                        GestureDetector(
+                          onTap: controller.addNewFeature,
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: MyColors.lightBlueSecond.withOpacity(0.1),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.add,
+                                  color: MyColors.lightBlueSecond,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  "Add Feature",
+                                  style: MyTexts.medium14.copyWith(
+                                    color: MyColors.lightBlueSecond,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+                  const Gap(20),
+                  //==============Service Demo Video===================
                   Text(
                     "Service Demo Video",
                     style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
@@ -489,12 +603,27 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               Stack(
                                 alignment: AlignmentGeometry.topRight,
                                 children: [
+                                  //play video
                                   GestureDetector(
                                     onTap: () {
                                       controller.openVideoDialog(
                                         context,
-                                        controller.serviceVid.value.mediaUrl ??
-                                            "",
+                                        ((controller
+                                                        .selectedVideo
+                                                        .value
+                                                        ?.path ??
+                                                    "") ==
+                                                "abc")
+                                            ? (controller
+                                                      .serviceVid
+                                                      .value
+                                                      .mediaUrl ??
+                                                  "")
+                                            : (controller
+                                                      .selectedVideo
+                                                      .value
+                                                      ?.path ??
+                                                  ""),
                                         true,
                                       );
                                     },
@@ -516,6 +645,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                       ],
                                     ),
                                   ),
+                                  //delect icon
                                   GestureDetector(
                                     onTap: controller.removeVideo,
                                     child: Padding(
@@ -526,6 +656,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 ],
                               )
                             else
+                              //No video
                               GestureDetector(
                                 onTap: () => controller
                                     .openVideoPickerBottomSheet(Get.context!),
@@ -551,6 +682,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                         ),
                       );
                     }),
+                  //add Service
                   if (!controller.isEdit.value)
                     Obx(() {
                       final video = controller.selectedVideo.value;
@@ -633,6 +765,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       );
                     }),
                   const Gap(24),
+                  //==============Reference File (Optional)===================
                   Text(
                     "Reference File (Optional)",
                     style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
@@ -920,7 +1053,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                   child: Icon(
                                     Icons.add,
                                     size: 28,
-                                    color: Colors.grey,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ),
@@ -931,7 +1064,6 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       return const SizedBox();
                     }
                   }),
-
                   const Gap(32),
                   RoundedButton(
                     buttonName: controller.isEdit.value

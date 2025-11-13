@@ -68,7 +68,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Gap(16),
+                const Gap(24),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -170,6 +170,7 @@ class HomeView extends StatelessWidget {
   /// ============================
   Widget _buildMaterialList(BuildContext context, List<dynamic> data) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
@@ -190,6 +191,7 @@ class HomeView extends StatelessWidget {
   /// ============================
   Widget _buildServiceList(BuildContext context, List<dynamic> data) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
@@ -210,6 +212,7 @@ class HomeView extends StatelessWidget {
   Widget _buildToolsList(BuildContext context, List<dynamic> data) {
     return ListView.builder(
       shrinkWrap: true,
+      padding: EdgeInsets.zero,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
       itemBuilder: (context, mainIndex) {
@@ -367,53 +370,6 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard({
-    required Widget icon,
-    required String title,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 12, top: 12),
-      child: Container(
-        width: 180,
-        height: 89,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: MyColors.grayD4),
-        ),
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                icon,
-                SizedBox(width: 0.6.h),
-                Text(
-                  title,
-                  style: MyTexts.medium16.copyWith(
-                    color: MyColors.textFieldBackground,
-
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 0.8.h),
-            Text(
-              value,
-              style: MyTexts.extraBold18.copyWith(
-                color: MyColors.textFieldBackground,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   void _showAddAddressDialog() {
     Get.dialog(
       AlertDialog(
@@ -449,153 +405,9 @@ class HomeView extends StatelessWidget {
       barrierDismissible: false,
     );
   }
-
-  Widget _buildNotiCard({
-    String? title,
-    String? value,
-    Function()? onTap,
-    String? icon,
-    Color? color,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.translucent,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
-        decoration: BoxDecoration(
-          border: Border.all(color: MyColors.greyE5),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 4, top: 4),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: (color ?? Colors.black).withValues(alpha: 0.3),
-                  ),
-                  child: SvgPicture.asset(
-                    icon ?? "",
-                    height: 30,
-                    width: 30,
-                    colorFilter: ColorFilter.mode(
-                      color ?? Colors.black,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 12,
-                  width: 12,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.red,
-                  ),
-                ),
-              ],
-            ),
-            const Gap(12),
-
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title ?? "",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: MyTexts.regular14.copyWith(
-                      color: MyColors.gray5D,
-                      fontFamily: MyTexts.SpaceGrotesk,
-                    ),
-                  ),
-                  Text(
-                    value ?? "",
-                    style: MyTexts.bold20.copyWith(
-                      color: MyColors.black,
-                      fontFamily: MyTexts.SpaceGrotesk,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
-class StaticsCard extends StatefulWidget {
-  String? icon;
-  String? title;
-  String? value;
-  Color? color;
-  Color? bColor;
 
-  StaticsCard({
-    super.key,
-    this.icon,
-    this.title,
-    this.value,
-    this.color,
-    this.bColor,
-  });
-
-  @override
-  State<StaticsCard> createState() => _StaticsCardState();
-}
-
-class _StaticsCardState extends State<StaticsCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-      decoration: BoxDecoration(
-        border: Border.all(color: widget.bColor ?? MyColors.greyE5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-          SvgPicture.asset(
-            widget.icon ?? "",
-            height: 20,
-            width: 20,
-            colorFilter: widget.color == null
-                ? null
-                : ColorFilter.mode(
-                    widget.color ?? Colors.black,
-                    BlendMode.srcIn,
-                  ),
-          ),
-          const Gap(6),
-          Text(
-            widget.title ?? "",
-            overflow: TextOverflow.ellipsis,
-            style: MyTexts.regular14.copyWith(
-              color: MyColors.fontBlack,
-              fontFamily: MyTexts.SpaceGrotesk,
-            ),
-          ),
-          Text(
-            widget.value ?? "",
-            style: MyTexts.bold16.copyWith(
-              color: MyColors.black,
-              fontFamily: MyTexts.SpaceGrotesk,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class HeaderText extends StatelessWidget {
   String text;
@@ -613,19 +425,3 @@ class HeaderText extends StatelessWidget {
     );
   }
 }
-
-final List<int> barCounts = [0, 2, 4, 0, 3, 4, 3, 5, 0, 4, 3, 5];
-
-List<String> _monthNames = [
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-  "Feb",
-  "Mar",
-];

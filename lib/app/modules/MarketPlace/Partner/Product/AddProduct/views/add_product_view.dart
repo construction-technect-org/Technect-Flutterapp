@@ -20,6 +20,7 @@ class AddProductView extends GetView<AddProductController> {
           if (controller.pageController.page == 0) {
             Get.back();
           } else {
+            hideKeyboard();
             controller.pageController.jumpToPage(0);
           }
         }
@@ -37,8 +38,10 @@ class AddProductView extends GetView<AddProductController> {
                     Get.back();
                   }
                   if (controller.pageController.page == 1) {
+                    hideKeyboard();
                     controller.pageController.jumpToPage(0);
                   } else {
+                    hideKeyboard();
                     controller.pageController.jumpToPage(1);
                   }
                 },
@@ -759,6 +762,7 @@ class AddProductView extends GetView<AddProductController> {
                             ),
                           ],
                         ),
+                        //=======================Video======================//
                         const Gap(20),
                         Text(
                           "Product Demo Video",
@@ -782,6 +786,7 @@ class AddProductView extends GetView<AddProductController> {
                                     Stack(
                                       alignment: AlignmentGeometry.topRight,
                                       children: [
+                                        //play video
                                         GestureDetector(
                                           onTap: () {
                                             controller.openVideoDialog(
@@ -817,24 +822,17 @@ class AddProductView extends GetView<AddProductController> {
                                                     BorderRadius.circular(12),
                                                 child: AspectRatio(
                                                   aspectRatio: 16 / 9,
-                                                  child:
-                                                      (controller.videoPlayerController !=
-                                                              null &&
-                                                          controller
-                                                              .videoPlayerController!
-                                                              .value
-                                                              .isInitialized)
-                                                      ? VideoPlayer(
-                                                          controller
-                                                              .videoPlayerController!,
-                                                        )
-                                                      : const SizedBox.shrink(),
+                                                  child: VideoPlayer(
+                                                    controller
+                                                        .videoPlayerController!,
+                                                  ),
                                                 ),
                                               ),
                                               const VideoPlay(),
                                             ],
                                           ),
                                         ),
+                                        //Remove icon
                                         GestureDetector(
                                           onTap: controller.removeVideo,
                                           child: Padding(
@@ -847,6 +845,7 @@ class AddProductView extends GetView<AddProductController> {
                                       ],
                                     )
                                   else
+                                    //no video uploaded
                                     GestureDetector(
                                       onTap: () =>
                                           controller.openVideoPickerBottomSheet(
@@ -878,6 +877,7 @@ class AddProductView extends GetView<AddProductController> {
                               ),
                             );
                           }),
+                        //add product
                         if (!controller.isEdit)
                           Obx(() {
                             final video = controller.selectedVideo.value;
@@ -902,18 +902,13 @@ class AddProductView extends GetView<AddProductController> {
                                                   BorderRadius.circular(12),
                                               child: AspectRatio(
                                                 aspectRatio: 16 / 9,
-                                                child:
-                                                    (controller.videoPlayerController !=
-                                                            null &&
-                                                        controller
-                                                            .videoPlayerController!
-                                                            .value
-                                                            .isInitialized)
-                                                    ? VideoPlayer(
-                                                        controller
-                                                            .videoPlayerController!,
-                                                      )
-                                                    : const SizedBox.shrink(),
+                                                child: AspectRatio(
+                                                  aspectRatio: 16 / 9,
+                                                  child: VideoPlayer(
+                                                    controller
+                                                        .videoPlayerController!,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             GestureDetector(
@@ -924,19 +919,25 @@ class AddProductView extends GetView<AddProductController> {
                                                   false,
                                                 );
                                               },
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: MyColors.primary,
-                                                ),
-                                                padding: const EdgeInsets.all(
-                                                  12,
-                                                ),
-                                                child: const Icon(
-                                                  Icons
-                                                      .video_camera_back_outlined,
-                                                  color: Colors.white,
-                                                ),
+                                              child: Stack(
+                                                alignment:
+                                                    AlignmentGeometry.center,
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          12,
+                                                        ),
+                                                    child: AspectRatio(
+                                                      aspectRatio: 16 / 9,
+                                                      child: VideoPlayer(
+                                                        controller
+                                                            .videoPlayerController!,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const VideoPlay(),
+                                                ],
                                               ),
                                             ),
                                           ],
@@ -986,6 +987,7 @@ class AddProductView extends GetView<AddProductController> {
                           }),
 
                         const Gap(35),
+                        //Continue Button
                         Center(
                           child: RoundedButton(
                             buttonName: 'Continue',
@@ -1013,7 +1015,7 @@ class AddProductView extends GetView<AddProductController> {
                     ),
                   ),
                 ),
-
+                //3 screen
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(
@@ -1289,10 +1291,11 @@ class AddProductView extends GetView<AddProductController> {
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: 2.h),
                                   child: CommonTextField(
-                                    keyboardType:
-                                        const TextInputType.numberWithOptions(
-                                          decimal: true,
-                                        ),
+                                    keyboardType: filter.keyBoardType == "text"
+                                        ? TextInputType.text
+                                        : const TextInputType.numberWithOptions(
+                                            decimal: true,
+                                          ),
                                     headerText: filter.filterLabel ?? '',
                                     hintText:
                                         "Enter ${filter.filterLabel ?? ''}",
@@ -1347,6 +1350,11 @@ class AddProductView extends GetView<AddProductController> {
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 2.h),
                                 child: CommonTextField(
+                                  keyboardType: filter.keyBoardType == "text"
+                                      ? TextInputType.text
+                                      : const TextInputType.numberWithOptions(
+                                          decimal: true,
+                                        ),
                                   headerText: filter.filterLabel ?? '',
                                   hintText: "Enter ${filter.filterLabel ?? ''}",
                                   controller: controllerField,
