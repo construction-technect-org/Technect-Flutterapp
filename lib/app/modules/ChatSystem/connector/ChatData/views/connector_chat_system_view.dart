@@ -8,6 +8,8 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/components/share_location_screen.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/chat_image_viewer.dart';
+import 'package:construction_technect/app/modules/ChatSystem/widgets/create_event_dialog.dart';
+import 'package:construction_technect/app/modules/ChatSystem/widgets/event_card_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorChatSystemView extends StatelessWidget {
@@ -121,6 +123,39 @@ class ConnectorChatSystemView extends StatelessWidget {
                     longitude: loc.longitude,
                   );
                 }
+              },
+            ),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.event, color: MyColors.primary),
+              ),
+              title: const Text('Event'),
+              subtitle: const Text('Send event invitation'),
+              onTap: () {
+                Navigator.pop(context);
+                Get.dialog(
+                  CreateEventDialog(
+                    onSend:
+                        ({
+                          required String title,
+                          required String date,
+                          required String time,
+                          String? description,
+                        }) {
+                          controller.sendEvent(
+                            title: title,
+                            date: date,
+                            time: time,
+                            description: description,
+                          );
+                        },
+                  ),
+                );
               },
             ),
           ],
@@ -530,6 +565,30 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
+                              ] else if (message.type == 'event') ...[
+                                Obx(
+                                  () => EventCardWidget(
+                                    messageId: message.id,
+                                    eventData: message.message,
+                                    isMine: isMine,
+                                    isResponding:
+                                        controller.respondingEventId.value ==
+                                        int.tryParse(message.id),
+                                    currentUserId: myPref.userModel.val["id"],
+                                    receiverUserId:
+                                        int.tryParse(
+                                          controller.supportUser.id,
+                                        ) ??
+                                        0,
+                                    onRespond: (response) {
+                                      controller.respondToEvent(
+                                        messageId:
+                                            int.tryParse(message.id) ?? 0,
+                                        response: response,
+                                      );
+                                    },
+                                  ),
+                                ),
                               ] else
                                 Text(
                                   message.message,

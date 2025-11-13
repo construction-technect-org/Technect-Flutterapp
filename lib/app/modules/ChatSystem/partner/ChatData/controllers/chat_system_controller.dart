@@ -43,6 +43,9 @@ class ChatSystemController extends GetxController {
   Timer? _typingTimer;
   bool _isTyping = false;
 
+  // Event response tracking
+  RxInt respondingEventId = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -270,6 +273,52 @@ class ChatSystemController extends GetxController {
 
     socket.on('typing_error', (error) {
       log('❌ Typing indicator error: ${error['message']}');
+    });
+
+    // Listen for event updates
+    socket.on('event_updated', (data) {
+      log('📅 Event updated: $data');
+      if (data != null && data['success'] == true && data['data'] != null) {
+        try {
+          final chatData = ChatData.fromJson(data['data']);
+          final updatedMessageId = chatData.id.toString();
+
+          // Find and update the message in the list
+          final messageIndex = messages.indexWhere(
+            (msg) => msg.id == updatedMessageId,
+          );
+          if (messageIndex != -1) {
+            final existingMessage = messages[messageIndex];
+            final updatedMessage = existingMessage.copyWith(
+              message: chatData.messageText ?? existingMessage.message,
+            );
+            messages[messageIndex] = updatedMessage;
+          }
+
+          // Clear responding state
+          if (respondingEventId.value == chatData.id) {
+            respondingEventId.value = 0;
+          }
+        } catch (e) {
+          log('❌ Error parsing event update: $e');
+        }
+      }
+    });
+
+    socket.on('event_response_ack', (data) {
+      log('✅ Event response ack: $data');
+      respondingEventId.value = 0;
+    });
+
+    socket.on('event_response_error', (error) {
+      log('❌ Event response error: $error');
+      Get.snackbar(
+        'Error',
+        error['message'] ?? 'Failed to update event status',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      respondingEventId.value = 0;
     });
 
     socket.on('new_message', (data) {
@@ -869,6 +918,51 @@ class ChatSystemController extends GetxController {
     } catch (e) {
       log("❌ Error picking/sending file: $e");
     }
+  }
+
+  /// Send event invitation
+  void sendEvent({
+    required String title,
+    required String date,
+    required String time,
+    String? description,
+  }) {
+    socket.emit('send_message', {
+      'connection_id': connectionId,
+      'message_type': 'event',
+      'event_title': title,
+      'event_description': description ?? '',
+      'event_date': date, // YYYY-MM-DD format
+      'event_time': time, // HH:MM 24-hour format
+    });
+
+    log('📅 Sent event invitation: $title on $date at $time');
+  }
+
+  /// Respond to event invitation (accept/reject)
+  void respondToEvent({
+    required int messageId,
+    required String response, // 'accepted' or 'rejected'
+  }) {
+    if (!socket.connected) {
+      Get.snackbar(
+        'Error',
+        'Not connected to server',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    respondingEventId.value = messageId;
+
+    socket.emit('respond_event', {
+      'connection_id': connectionId,
+      'message_id': messageId,
+      'response': response,
+    });
+
+    log('📅 Responding to event $messageId: $response');
   }
 
   Future<void> sendLocation({
