@@ -268,17 +268,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                         ),
                                       );
                                     } else {
-                                      return Container(
-                                        height: 200,
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: const Center(
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.grey.withValues(
+                                            alpha: 0.5,
                                           ),
                                         ),
                                       );
