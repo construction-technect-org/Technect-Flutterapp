@@ -1,5 +1,8 @@
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/controller/crm_dashboard_controller.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/crm_vrm_toggle_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/header_icon_widget.dart';
 
 class DashboardHeaderWidget extends GetView<LeadDashController> {
@@ -7,20 +10,37 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+    final dash = Get.find<CRMDashboardController>();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
       child: Row(
         children: [
-          const Expanded(
-            child: Text(
-              "Dashboard",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-                color: MyColors.fontBlack,
-              ),
-            ),
+          GestureDetector(
+            onTap: () => Get.toNamed(Routes.ACCOUNT),
+            behavior: HitTestBehavior.translucent,
+            child: Obx(() {
+              return (dash.profileData.value.data?.user?.image ?? "").isEmpty
+                  ? const Icon(
+                      Icons.account_circle_sharp,
+                      color: MyColors.primary,
+                      size: 48,
+                    )
+                  : ClipOval(
+                      child: getImageView(
+                        finalUrl:
+                            "${APIConstants.bucketUrl}${dash.profileData.value.data?.user?.image ?? ""}",
+                        fit: BoxFit.cover,
+                        height: 48,
+                        width: 48,
+                      ),
+                    );
+            }),
           ),
+          const Gap(8),
+          const Flexible(child: CRMVRMToggleWidget()),
+          const Gap(8),
+          // const Spacer(),
           Obx(
             () => HeaderIconWidget(
               icon: Asset.chat,
@@ -28,7 +48,7 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
               onTap: () => Get.toNamed(Routes.All_CHAT_LIST),
             ),
           ),
-          const Gap(10),
+          const Gap(12),
           Obx(
             () => HeaderIconWidget(
               icon: Asset.notification,
@@ -37,7 +57,7 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
               isAlert: true,
             ),
           ),
-          const Gap(10),
+          const Gap(12),
           Obx(
             () => HeaderIconWidget(
               icon: Asset.notification,

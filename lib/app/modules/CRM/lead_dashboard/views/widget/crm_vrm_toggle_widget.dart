@@ -8,69 +8,56 @@ class CRMVRMToggleWidget extends GetView<LeadDashController> {
   Widget build(BuildContext context) {
     return Obx(() {
       final isCRMSelected = controller.isCRMSelected.value;
+
       return Container(
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: MyColors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: MyColors.grayEA),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(40),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => controller.toggleCRMVRM(true),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: isCRMSelected
-                        ? MyColors.primary
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'CRM',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isCRMSelected
-                            ? MyColors.white
-                            : MyColors.fontBlack,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            _pillButton(
+              title: "CRM",
+              isSelected: isCRMSelected,
+              onTap: () => controller.toggleCRMVRM(true),
             ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => controller.toggleCRMVRM(false),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: !isCRMSelected
-                        ? MyColors.primary
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'VRM',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: !isCRMSelected
-                            ? MyColors.white
-                            : MyColors.fontBlack,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            const SizedBox(width: 5),
+            _pillButton(
+              title: "VRM",
+              isSelected: !isCRMSelected,
+              onTap: () => controller.toggleCRMVRM(false),
             ),
           ],
         ),
       );
     });
+  }
+
+  Widget _pillButton({
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF1E305C) : Colors.transparent,
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: isSelected ? Colors.white : const Color(0xFF1E305C),
+          ),
+        ),
+      ),
+    );
   }
 }

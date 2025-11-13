@@ -2,9 +2,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/analysis_section_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/crm_vrm_toggle_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/dashboard_header_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/filter_tabs_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/lead_conversation_section_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/leads_section_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/pipeline_section_widget.dart';
@@ -41,10 +39,6 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Gap(8),
-                            FilterTabsWidget(),
-                            Gap(16),
-                            CRMVRMToggleWidget(),
-                            Gap(24),
                             LeadsSectionWidget(),
                             Gap(24),
                             TaskSectionWidget(),
