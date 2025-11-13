@@ -603,6 +603,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               Stack(
                                 alignment: AlignmentGeometry.topRight,
                                 children: [
+                                  //play video
                                   GestureDetector(
                                     onTap: () {
                                       controller.openVideoDialog(
@@ -644,6 +645,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                       ],
                                     ),
                                   ),
+                                  //delect icon
                                   GestureDetector(
                                     onTap: controller.removeVideo,
                                     child: Padding(
@@ -654,6 +656,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                 ],
                               )
                             else
+                              //No video
                               GestureDetector(
                                 onTap: () => controller
                                     .openVideoPickerBottomSheet(Get.context!),
@@ -679,6 +682,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                         ),
                       );
                     }),
+                  //add Service
                   if (!controller.isEdit.value)
                     Obx(() {
                       final video = controller.selectedVideo.value;
