@@ -14,6 +14,7 @@ class ServiceDetailController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isEdit = false.obs;
   final RxBool isRefVideo = false.obs;
+  final RxBool isVideoReady = false.obs;
   final RxInt currentIndex = 0.obs;
   VoidCallback? onApiCall;
 
@@ -108,19 +109,27 @@ class ServiceDetailController extends GetxController {
               videoPlayerOptions: VideoPlayerOptions(),
             );
 
-            await videoPlayerController?.initialize().timeout(
-              const Duration(seconds: 30),
-              onTimeout: () {
-                log('Video initialization timeout');
-                throw TimeoutException('Video initialization took too long');
-              },
-            );
+            await videoPlayerController
+                ?.initialize()
+                .timeout(
+                  const Duration(seconds: 30),
+                  onTimeout: () {
+                    log('Video initialization timeout');
+                    throw TimeoutException(
+                      'Video initialization took too long',
+                    );
+                  },
+                )
+                .then((_) {
+                  isVideoReady.value = true;
+                });
 
-            log('Video initialized successfully');
+            log('Main video initialized successfully');
+            update();
           } catch (e) {
-            log('Error initializing video: $e');
+            log('Error initializing main video: $e');
             if (kDebugMode) {
-              print('Video initialization failed: $e');
+              print('Main video initialization failed: $e');
             }
           }
         }
@@ -184,7 +193,8 @@ class ServiceDetailController extends GetxController {
             throw TimeoutException('Video initialization took too long');
           },
         );
-
+        isVideoReady.value = true;
+        log('Reference video retry successful');
         log('Video retry successful');
         update();
       } catch (e) {
