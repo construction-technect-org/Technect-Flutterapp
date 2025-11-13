@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -115,6 +117,72 @@ class ProductDetailsController extends GetxController {
       }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> retryVideoInitialization() async {
+    if (product.productVideo != null) {
+      videoPlayerController?.dispose();
+      videoPlayerController = null;
+      update();
+
+      final videoPath = product.productVideo ?? "";
+
+      if (videoPath.isEmpty) {
+        log('No main video path available for retry');
+        update();
+        return;
+      }
+
+      final videoUrl = videoPath.startsWith('http')
+          ? videoPath
+          : APIConstants.bucketUrl + videoPath;
+      log('Retrying main video - path: $videoPath');
+      log('Retrying main video - URL: $videoUrl');
+
+      try {
+        videoPlayerController = VideoPlayerController.networkUrl(
+          Uri.parse(videoUrl),
+          httpHeaders: {
+            'Range': 'bytes=0-',
+            'Accept': 'video/*',
+            'User-Agent': 'Mozilla/5.0',
+          },
+          videoPlayerOptions: VideoPlayerOptions(),
+        );
+
+        await videoPlayerController?.initialize().timeout(
+          const Duration(seconds: 30),
+          onTimeout: () {
+            log('Video initialization timeout on retry');
+            throw TimeoutException('Video initialization took too long');
+          },
+        );
+
+        log('Video retry successful');
+        update();
+      } catch (e) {
+        log('Error retrying video initialization: $e');
+        if (kDebugMode) {
+          print('Video retry failed: $e');
+        }
+        update();
+      }
+    }
+  }
+
+  Future<void> openReferenceUrl(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (kDebugMode) {
+          print('Could not launch $url');
+        }
+      }
+    } catch (e) {
+      log('Error opening reference URL: $e');
     }
   }
 

@@ -55,7 +55,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
               _buildConnectionButton(context, controller),
           ],
         ),
-
+        //image/video
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -177,6 +177,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                           : videoController != null &&
                                                 videoController.value.hasError
                                           ? Center(
+                                              //Failed to load video
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -266,6 +267,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                               ),
                                             )
                                           : const Center(
+                                              //CircularProgressIndicator
                                               child: CircularProgressIndicator(
                                                 color: Colors.white,
                                               ),
@@ -383,9 +385,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //image/video
-                    // 🟦 IMAGE / VIDEO SECTION
-
                     /// =============== SERVICE INFO SECTION ===============
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -405,7 +404,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           ),
                         ),
                         const Gap(16),
-
+                        //Edit icon
                         Obx(() {
                           return controller.isEdit.value
                               ? TextButton.icon(
