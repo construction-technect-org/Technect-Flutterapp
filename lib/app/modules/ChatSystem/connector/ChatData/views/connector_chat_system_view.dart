@@ -11,7 +11,9 @@ import 'package:construction_technect/app/modules/ChatSystem/widgets/chat_image_
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorChatSystemView extends StatelessWidget {
-  final ConnectorChatSystemController controller = Get.put(ConnectorChatSystemController());
+  final ConnectorChatSystemController controller = Get.put(
+    ConnectorChatSystemController(),
+  );
 
   void _showAttachmentOptions(BuildContext context) {
     showModalBottomSheet(
@@ -96,7 +98,10 @@ class ConnectorChatSystemView extends StatelessWidget {
                   color: MyColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.location_on_rounded, color: MyColors.primary),
+                child: const Icon(
+                  Icons.location_on_rounded,
+                  color: MyColors.primary,
+                ),
               ),
               title: const Text('Location'),
               subtitle: const Text('Share your current location'),
@@ -179,9 +184,15 @@ class ConnectorChatSystemView extends StatelessWidget {
                     ),
                     Obx(
                       () => Text(
-                        controller.userStatusText.value,
+                        controller.isOtherUserTyping.value
+                            ? 'Typing...'
+                            : controller.userStatusText.value,
                         style: MyTexts.regular12.copyWith(
-                          color: controller.isUserOnline.value ? Colors.green : Colors.grey,
+                          color: controller.isOtherUserTyping.value
+                              ? MyColors.primary
+                              : (controller.isUserOnline.value
+                                    ? Colors.green
+                                    : Colors.grey),
                         ),
                       ),
                     ),
@@ -211,7 +222,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                     final isRead = message.status == MessageStatus.read;
 
                     return Align(
-                      alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
+                      alignment: isMine
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width * 0.75,
@@ -220,7 +233,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                           margin: const EdgeInsets.symmetric(vertical: 4),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: isMine ? MyColors.primary : MyColors.veryPaleBlue,
+                            color: isMine
+                                ? MyColors.primary
+                                : MyColors.veryPaleBlue,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Column(
@@ -230,7 +245,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                               if (message.type == 'image') ...[
                                 GestureDetector(
                                   onTap: () {
-                                    final imageUrl = (message.mediaUrl?.startsWith('http') ?? false)
+                                    final imageUrl =
+                                        (message.mediaUrl?.startsWith('http') ??
+                                            false)
                                         ? message.mediaUrl!
                                         : 'http://43.205.117.97${message.mediaUrl ?? ''}';
 
@@ -239,7 +256,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       barrierColor: Colors.black,
                                       builder: (context) => ChatImageViewer(
                                         imageUrl: imageUrl,
-                                        senderName: isMine ? 'You' : controller.name,
+                                        senderName: isMine
+                                            ? 'You'
+                                            : controller.name,
                                         timestamp: message.createdAt,
                                       ),
                                     );
@@ -248,17 +267,27 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                     child: ConstrainedBox(
                                       constraints: BoxConstraints(
-                                        maxWidth: MediaQuery.of(context).size.width * 0.65,
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width *
+                                            0.65,
                                         maxHeight: 300,
                                         minHeight: 150,
                                       ),
                                       child: AspectRatio(
                                         aspectRatio: 3 / 4,
                                         child: getImageView(
-                                          width: MediaQuery.of(context).size.width * 0.65,
+                                          width:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              0.65,
                                           height: 300,
                                           fit: BoxFit.cover,
-                                          finalUrl: (message.mediaUrl?.startsWith('http') ?? false)
+                                          finalUrl:
+                                              (message.mediaUrl?.startsWith(
+                                                    'http',
+                                                  ) ??
+                                                  false)
                                               ? message.mediaUrl!
                                               : 'http://43.205.117.97${message.mediaUrl ?? ''}',
                                         ),
@@ -273,14 +302,18 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     child: Text(
                                       message.message,
                                       style: MyTexts.bold14.copyWith(
-                                        color: isMine ? Colors.white : Colors.black,
+                                        color: isMine
+                                            ? Colors.white
+                                            : Colors.black,
                                       ),
                                     ),
                                   ),
                               ] else if (message.type == 'video') ...[
                                 GestureDetector(
                                   onTap: () {
-                                    final videoUrl = (message.mediaUrl?.startsWith('http') ?? false)
+                                    final videoUrl =
+                                        (message.mediaUrl?.startsWith('http') ??
+                                            false)
                                         ? message.mediaUrl!
                                         : 'http://43.205.117.97${message.mediaUrl ?? ''}';
                                     ChatUtils.openFile(videoUrl);
@@ -290,7 +323,10 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: ChatUtils.buildVideoThumbnailView(message.mediaUrl),
+                                        child:
+                                            ChatUtils.buildVideoThumbnailView(
+                                              message.mediaUrl,
+                                            ),
                                       ),
                                       const Icon(
                                         Icons.play_circle_fill,
@@ -308,20 +344,27 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     child: Text(
                                       message.message,
                                       style: MyTexts.bold14.copyWith(
-                                        color: isMine ? Colors.white : Colors.black,
+                                        color: isMine
+                                            ? Colors.white
+                                            : Colors.black,
                                       ),
                                     ),
                                   ),
                               ] else if (message.type == 'location') ...[
                                 Builder(
                                   builder: (context) {
-                                    final location = jsonDecode(message.message);
+                                    final location = jsonDecode(
+                                      message.message,
+                                    );
                                     final lat = location['latitude'] as double?;
-                                    final lng = location['longitude'] as double?;
+                                    final lng =
+                                        location['longitude'] as double?;
                                     final address = location['address'] ?? '';
 
                                     if (lat == null || lng == null) {
-                                      return const Text('Invalid location data');
+                                      return const Text(
+                                        'Invalid location data',
+                                      );
                                     }
 
                                     return Column(
@@ -333,10 +376,13 @@ class ConnectorChatSystemView extends StatelessWidget {
                                           onTap: () async {
                                             final url =
                                                 "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
-                                            if (await canLaunchUrl(Uri.parse(url))) {
+                                            if (await canLaunchUrl(
+                                              Uri.parse(url),
+                                            )) {
                                               await launchUrl(
                                                 Uri.parse(url),
-                                                mode: LaunchMode.externalApplication,
+                                                mode: LaunchMode
+                                                    .externalApplication,
                                               );
                                             }
                                           },
@@ -344,21 +390,26 @@ class ConnectorChatSystemView extends StatelessWidget {
                                             height: 180,
                                             width: 300,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                               color: Colors.grey[200],
                                               border: Border.all(
-                                                color: MyColors.primary.withOpacity(0.2),
+                                                color: MyColors.primary
+                                                    .withOpacity(0.2),
                                               ),
                                             ),
                                             clipBehavior: Clip.hardEdge,
                                             child: GoogleMap(
-                                              initialCameraPosition: CameraPosition(
-                                                target: LatLng(lat, lng),
-                                                zoom: 15,
-                                              ),
+                                              initialCameraPosition:
+                                                  CameraPosition(
+                                                    target: LatLng(lat, lng),
+                                                    zoom: 15,
+                                                  ),
                                               markers: {
                                                 Marker(
-                                                  markerId: const MarkerId('shared_location'),
+                                                  markerId: const MarkerId(
+                                                    'shared_location',
+                                                  ),
                                                   position: LatLng(lat, lng),
                                                 ),
                                               },
@@ -370,10 +421,13 @@ class ConnectorChatSystemView extends StatelessWidget {
                                               onTap: (_) async {
                                                 final url =
                                                     "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
-                                                if (await canLaunchUrl(Uri.parse(url))) {
+                                                if (await canLaunchUrl(
+                                                  Uri.parse(url),
+                                                )) {
                                                   await launchUrl(
                                                     Uri.parse(url),
-                                                    mode: LaunchMode.externalApplication,
+                                                    mode: LaunchMode
+                                                        .externalApplication,
                                                   );
                                                 }
                                               },
@@ -381,11 +435,15 @@ class ConnectorChatSystemView extends StatelessWidget {
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 8),
+                                          padding: const EdgeInsets.only(
+                                            top: 8,
+                                          ),
                                           child: Text(
                                             address,
                                             style: MyTexts.bold14.copyWith(
-                                              color: isMine ? Colors.white : Colors.black,
+                                              color: isMine
+                                                  ? Colors.white
+                                                  : Colors.black,
                                             ),
                                           ),
                                         ),
@@ -396,7 +454,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                               ] else if (message.type == 'file') ...[
                                 GestureDetector(
                                   onTap: () {
-                                    final fileUrl = (message.mediaUrl?.startsWith('http') ?? false)
+                                    final fileUrl =
+                                        (message.mediaUrl?.startsWith('http') ??
+                                            false)
                                         ? message.mediaUrl!
                                         : 'http://43.205.117.97${message.mediaUrl ?? ''}';
                                     ChatUtils.openFile(fileUrl);
@@ -414,20 +474,28 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       children: [
                                         Icon(
                                           ChatUtils.getFileIcon(
-                                            message.mediaUrl?.split('/').last ?? message.message,
+                                            message.mediaUrl?.split('/').last ??
+                                                message.message,
                                           ),
                                           size: 40,
-                                          color: isMine ? Colors.white : MyColors.primary,
+                                          color: isMine
+                                              ? Colors.white
+                                              : MyColors.primary,
                                         ),
                                         const SizedBox(width: 12),
                                         Flexible(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                ChatUtils.extractFileName(message.mediaUrl ?? ''),
+                                                ChatUtils.extractFileName(
+                                                  message.mediaUrl ?? '',
+                                                ),
                                                 style: MyTexts.bold14.copyWith(
-                                                  color: isMine ? Colors.white : Colors.black,
+                                                  color: isMine
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                 ),
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -437,7 +505,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                                                 'Tap to open',
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  color: isMine ? Colors.white70 : Colors.black54,
+                                                  color: isMine
+                                                      ? Colors.white70
+                                                      : Colors.black54,
                                                 ),
                                               ),
                                             ],
@@ -454,7 +524,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     child: Text(
                                       message.message,
                                       style: MyTexts.bold14.copyWith(
-                                        color: isMine ? Colors.white : Colors.black,
+                                        color: isMine
+                                            ? Colors.white
+                                            : Colors.black,
                                       ),
                                     ),
                                   ),
@@ -474,7 +546,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     ChatUtils.formatTime(message.createdAt),
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: isMine ? Colors.white70 : Colors.black54,
+                                      color: isMine
+                                          ? Colors.white70
+                                          : Colors.black54,
                                     ),
                                   ),
                                   if (isMine) ...[
@@ -482,7 +556,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     Icon(
                                       isRead ? Icons.done_all : Icons.check,
                                       size: 14,
-                                      color: isRead ? Colors.blue : Colors.white70,
+                                      color: isRead
+                                          ? Colors.blue
+                                          : Colors.white70,
                                     ),
                                   ],
                                 ],
@@ -498,7 +574,10 @@ class ConnectorChatSystemView extends StatelessWidget {
 
               Container(
                 color: MyColors.metricBackground,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
                 child: SafeArea(
                   top: false,
                   child: Row(
@@ -511,6 +590,8 @@ class ConnectorChatSystemView extends StatelessWidget {
                         child: CommonTextField(
                           controller: controller.messageController,
                           hintText: "Type your message...",
+                          onChange: (text) =>
+                              controller.onTextChanged(text ?? ''),
                         ),
                       ),
                       IconButton(

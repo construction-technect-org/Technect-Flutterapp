@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -37,6 +38,11 @@ class ConnectorChatSystemController extends GetxController {
   RxBool isUserOnline = false.obs;
   Rx<DateTime?> lastSeenTime = Rx<DateTime?>(null);
   RxString userStatusText = 'Offline'.obs;
+
+  // Typing indicator
+  RxBool isOtherUserTyping = false.obs;
+  Timer? _typingTimer;
+  bool _isTyping = false;
 
   @override
   void onInit() {
@@ -250,6 +256,23 @@ class ConnectorChatSystemController extends GetxController {
       _handleOnlineStatusUpdate(data);
     });
 
+    // Listen for typing indicators
+    socket.on('user_typing', (data) {
+      if (data != null && data['user_id'] == otherUserId) {
+        isOtherUserTyping.value = true;
+      }
+    });
+
+    socket.on('user_stopped_typing', (data) {
+      if (data != null && data['user_id'] == otherUserId) {
+        isOtherUserTyping.value = false;
+      }
+    });
+
+    socket.on('typing_error', (error) {
+      log('❌ Typing indicator error: ${error['message']}');
+    });
+
     socket.on('new_message', (data) {
       log("📩 New Message Received: $data");
       try {
@@ -319,6 +342,9 @@ class ConnectorChatSystemController extends GetxController {
   void onSendTap(String message) {
     if (message.trim().isEmpty) return;
 
+    // Stop typing indicator when sending message
+    _stopTyping();
+
     socket.emit('send_message', {
       'connection_id': connectionId,
       'message': message,
@@ -327,6 +353,37 @@ class ConnectorChatSystemController extends GetxController {
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
     });
+  }
+
+  /// Handle text field changes to emit typing indicator
+  void onTextChanged(String text) {
+    if (text.trim().isEmpty) {
+      _stopTyping();
+      return;
+    }
+
+    // Emit typing event if not already typing
+    if (!_isTyping) {
+      _isTyping = true;
+      socket.emit('user_typing', {'connection_id': connectionId});
+    }
+
+    // Cancel existing timer
+    _typingTimer?.cancel();
+
+    // Auto-stop typing after 2 seconds of inactivity
+    _typingTimer = Timer(const Duration(seconds: 2), () {
+      _stopTyping();
+    });
+  }
+
+  /// Stop typing indicator
+  void _stopTyping() {
+    if (_isTyping) {
+      _isTyping = false;
+      _typingTimer?.cancel();
+      socket.emit('user_stopped_typing', {'connection_id': connectionId});
+    }
   }
 
   Future<void> sendVideoFromGallery() async {
@@ -814,6 +871,7 @@ class ConnectorChatSystemController extends GetxController {
       log("❌ Error picking/sending file: $e");
     }
   }
+
   Future<void> sendLocation({
     required String type,
     String? message,
@@ -822,9 +880,14 @@ class ConnectorChatSystemController extends GetxController {
   }) async {
     if (type == 'location') {
       String address = message?.trim() ?? '';
-      if ((address.isEmpty || address == '') && latitude != null && longitude != null) {
+      if ((address.isEmpty || address == '') &&
+          latitude != null &&
+          longitude != null) {
         try {
-          final List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+          final List<Placemark> placemarks = await placemarkFromCoordinates(
+            latitude,
+            longitude,
+          );
           if (placemarks.isNotEmpty) {
             final p = placemarks.first;
             address = [
@@ -832,7 +895,7 @@ class ConnectorChatSystemController extends GetxController {
               p.subLocality,
               p.locality,
               p.administrativeArea,
-              p.country
+              p.country,
             ].where((e) => e != null && e.isNotEmpty).join(', ');
             print(address);
           }
@@ -864,11 +927,9 @@ class ConnectorChatSystemController extends GetxController {
     }
   }
 
-
-
-
   @override
   void onClose() {
+    _typingTimer?.cancel();
     socket.emit('leave_connection', {"connection_id": connectionId});
     socket.dispose();
     super.onClose();
