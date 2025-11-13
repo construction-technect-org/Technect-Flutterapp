@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:construction_technect/app/core/utils/chat_utils.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
@@ -110,8 +112,8 @@ class ChatSystemView extends StatelessWidget {
                   final LatLng loc = result["location"];
                   final String caption = result["caption"] ?? "";
 
-                  controller.sendMessage(
-                    message: caption.isNotEmpty ? caption : "Shared a location",
+                  controller.sendLocation(
+                    message: caption.isNotEmpty ? caption : "",
                     type: "location",
                     latitude: loc.latitude,
                     longitude: loc.longitude,
@@ -182,9 +184,7 @@ class ChatSystemView extends StatelessWidget {
                       () => Text(
                         controller.userStatusText.value,
                         style: MyTexts.regular12.copyWith(
-                          color: controller.isUserOnline.value
-                              ? Colors.green
-                              : Colors.grey,
+                          color: controller.isUserOnline.value ? Colors.green : Colors.grey,
                         ),
                       ),
                     ),
@@ -214,9 +214,7 @@ class ChatSystemView extends StatelessWidget {
                     final isRead = message.status == MessageStatus.read;
 
                     return Align(
-                      alignment: isMine
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
+                      alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width * 0.75,
@@ -225,9 +223,7 @@ class ChatSystemView extends StatelessWidget {
                           margin: const EdgeInsets.symmetric(vertical: 4),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: isMine
-                                ? MyColors.primary
-                                : MyColors.veryPaleBlue,
+                            color: isMine ? MyColors.primary : MyColors.veryPaleBlue,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Column(
@@ -239,9 +235,7 @@ class ChatSystemView extends StatelessWidget {
                               if (message.type == 'image') ...[
                                 GestureDetector(
                                   onTap: () {
-                                    final imageUrl =
-                                        (message.mediaUrl?.startsWith('http') ??
-                                            false)
+                                    final imageUrl = (message.mediaUrl?.startsWith('http') ?? false)
                                         ? message.mediaUrl!
                                         : 'http://43.205.117.97${message.mediaUrl ?? ''}';
 
@@ -250,9 +244,7 @@ class ChatSystemView extends StatelessWidget {
                                       barrierColor: Colors.black,
                                       builder: (context) => ChatImageViewer(
                                         imageUrl: imageUrl,
-                                        senderName: isMine
-                                            ? 'You'
-                                            : controller.name,
+                                        senderName: isMine ? 'You' : controller.name,
                                         timestamp: message.createdAt,
                                       ),
                                     );
@@ -261,27 +253,17 @@ class ChatSystemView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                     child: ConstrainedBox(
                                       constraints: BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width *
-                                            0.65,
+                                        maxWidth: MediaQuery.of(context).size.width * 0.65,
                                         maxHeight: 300,
                                         minHeight: 150,
                                       ),
                                       child: AspectRatio(
                                         aspectRatio: 3 / 4,
                                         child: getImageView(
-                                          width:
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.width *
-                                              0.65,
+                                          width: MediaQuery.of(context).size.width * 0.65,
                                           height: 300,
                                           fit: BoxFit.cover,
-                                          finalUrl:
-                                              (message.mediaUrl?.startsWith(
-                                                    'http',
-                                                  ) ??
-                                                  false)
+                                          finalUrl: (message.mediaUrl?.startsWith('http') ?? false)
                                               ? message.mediaUrl!
                                               : 'http://43.205.117.97${message.mediaUrl ?? ''}',
                                         ),
@@ -296,18 +278,15 @@ class ChatSystemView extends StatelessWidget {
                                     child: Text(
                                       message.message,
                                       style: MyTexts.bold14.copyWith(
-                                        color: isMine
-                                            ? Colors.white
-                                            : Colors.black,
+                                        color: isMine ? Colors.white : Colors.black,
                                       ),
                                     ),
                                   ),
-                              ] else if (message.type == 'video') ...[
+                              ]
+                              else if (message.type == 'video') ...[
                                 GestureDetector(
                                   onTap: () {
-                                    final videoUrl =
-                                        (message.mediaUrl?.startsWith('http') ??
-                                            false)
+                                    final videoUrl = (message.mediaUrl?.startsWith('http') ?? false)
                                         ? message.mediaUrl!
                                         : 'http://43.205.117.97${message.mediaUrl ?? ''}';
                                     ChatUtils.openFile(videoUrl);
@@ -317,10 +296,7 @@ class ChatSystemView extends StatelessWidget {
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child:
-                                            ChatUtils.buildVideoThumbnailView(
-                                              message.mediaUrl,
-                                            ),
+                                        child: ChatUtils.buildVideoThumbnailView(message.mediaUrl),
                                       ),
                                       const Icon(
                                         Icons.play_circle_fill,
@@ -338,18 +314,90 @@ class ChatSystemView extends StatelessWidget {
                                     child: Text(
                                       message.message,
                                       style: MyTexts.bold14.copyWith(
-                                        color: isMine
-                                            ? Colors.white
-                                            : Colors.black,
+                                        color: isMine ? Colors.white : Colors.black,
                                       ),
                                     ),
                                   ),
-                              ] else if (message.type == 'file') ...[
+                              ]
+                              else if (message.type == 'location') ...[
+                                Builder(
+                                  builder: (context) {
+                                    final location = jsonDecode(message.message);
+                                    final lat = location['latitude'] as double?;
+                                    final lng = location['longitude'] as double?;
+                                    final address = location['address'] ?? '';
+
+                                    if (lat == null || lng == null) {
+                                      return const Text('Invalid location data');
+                                    }
+
+                                    return Column(
+                                      crossAxisAlignment:
+                                      isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () async {
+                                            final url =
+                                                "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+                                            if (await canLaunchUrl(Uri.parse(url))) {
+                                              await launchUrl(Uri.parse(url),
+                                                  mode: LaunchMode.externalApplication);
+                                            }
+                                          },
+                                          child: Container(
+                                            height: 180,
+                                            width: 300,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: Colors.grey[200],
+                                              border: Border.all(color: MyColors.primary.withOpacity(0.2)),
+                                            ),
+                                            clipBehavior: Clip.hardEdge,
+                                            child: GoogleMap(
+                                              initialCameraPosition: CameraPosition(
+                                                target: LatLng(lat, lng),
+                                                zoom: 15,
+                                              ),
+                                              markers: {
+                                                Marker(
+                                                  markerId: const MarkerId('shared_location'),
+                                                  position: LatLng(lat, lng),
+                                                ),
+                                              },
+                                              zoomControlsEnabled: false,
+                                              scrollGesturesEnabled: false,
+                                              tiltGesturesEnabled: false,
+                                              rotateGesturesEnabled: false,
+                                              myLocationButtonEnabled: false,
+                                              onTap: (_) async {
+                                                final url =
+                                                    "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+                                                if (await canLaunchUrl(Uri.parse(url))) {
+                                                  await launchUrl(Uri.parse(url),
+                                                      mode: LaunchMode.externalApplication);
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                         Padding(
+                                            padding: const EdgeInsets.only(top: 8),
+                                            child: Text(
+                                              address,
+                                              style: MyTexts.bold14.copyWith(
+                                                color: isMine ? Colors.white : Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ]
+                              else if (message.type == 'file') ...[
                                 GestureDetector(
                                   onTap: () {
-                                    final fileUrl =
-                                        (message.mediaUrl?.startsWith('http') ??
-                                            false)
+                                    final fileUrl = (message.mediaUrl?.startsWith('http') ?? false)
                                         ? message.mediaUrl!
                                         : 'http://43.205.117.97${message.mediaUrl ?? ''}';
                                     ChatUtils.openFile(fileUrl);
@@ -367,28 +415,20 @@ class ChatSystemView extends StatelessWidget {
                                       children: [
                                         Icon(
                                           ChatUtils.getFileIcon(
-                                            message.mediaUrl?.split('/').last ??
-                                                message.message,
+                                            message.mediaUrl?.split('/').last ?? message.message,
                                           ),
                                           size: 40,
-                                          color: isMine
-                                              ? Colors.white
-                                              : MyColors.primary,
+                                          color: isMine ? Colors.white : MyColors.primary,
                                         ),
                                         const SizedBox(width: 12),
                                         Flexible(
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                ChatUtils.extractFileName(
-                                                  message.mediaUrl ?? '',
-                                                ),
+                                                ChatUtils.extractFileName(message.mediaUrl ?? ''),
                                                 style: MyTexts.bold14.copyWith(
-                                                  color: isMine
-                                                      ? Colors.white
-                                                      : Colors.black,
+                                                  color: isMine ? Colors.white : Colors.black,
                                                 ),
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
@@ -398,9 +438,7 @@ class ChatSystemView extends StatelessWidget {
                                                 'Tap to open',
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  color: isMine
-                                                      ? Colors.white70
-                                                      : Colors.black54,
+                                                  color: isMine ? Colors.white70 : Colors.black54,
                                                 ),
                                               ),
                                             ],
@@ -417,9 +455,7 @@ class ChatSystemView extends StatelessWidget {
                                     child: Text(
                                       message.message,
                                       style: MyTexts.bold14.copyWith(
-                                        color: isMine
-                                            ? Colors.white
-                                            : Colors.black,
+                                        color: isMine ? Colors.white : Colors.black,
                                       ),
                                     ),
                                   ),
@@ -439,9 +475,7 @@ class ChatSystemView extends StatelessWidget {
                                     ChatUtils.formatTime(message.createdAt),
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: isMine
-                                          ? Colors.white70
-                                          : Colors.black54,
+                                      color: isMine ? Colors.white70 : Colors.black54,
                                     ),
                                   ),
                                   if (isMine) ...[
@@ -449,9 +483,7 @@ class ChatSystemView extends StatelessWidget {
                                     Icon(
                                       isRead ? Icons.done_all : Icons.check,
                                       size: 14,
-                                      color: isRead
-                                          ? Colors.blue
-                                          : Colors.white70,
+                                      color: isRead ? Colors.blue : Colors.white70,
                                     ),
                                   ],
                                 ],
@@ -467,10 +499,7 @@ class ChatSystemView extends StatelessWidget {
 
               Container(
                 color: MyColors.metricBackground,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 child: SafeArea(
                   top: false,
                   child: Row(

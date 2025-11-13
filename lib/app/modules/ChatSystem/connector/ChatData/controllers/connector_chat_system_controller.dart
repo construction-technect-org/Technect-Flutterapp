@@ -8,6 +8,7 @@ import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/service/connector_chat_service.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/media_preview_dialog.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -813,35 +814,57 @@ class ConnectorChatSystemController extends GetxController {
       log("❌ Error picking/sending file: $e");
     }
   }
-
-  void sendMessage({
-    required String message,
+  Future<void> sendLocation({
     required String type,
+    String? message,
     double? latitude,
     double? longitude,
-  }) {
-    final msg = {
-      "sentBy": currentUser.id,
-      "message": message,
-      "type": type,
-      "createdAt": DateTime.now().toIso8601String(),
-    };
+  }) async {
+    if (type == 'location') {
+      String address = message?.trim() ?? '';
+      if ((address.isEmpty || address == '') && latitude != null && longitude != null) {
+        try {
+          final List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+          if (placemarks.isNotEmpty) {
+            final p = placemarks.first;
+            address = [
+              p.name,
+              p.subLocality,
+              p.locality,
+              p.administrativeArea,
+              p.country
+            ].where((e) => e != null && e.isNotEmpty).join(', ');
+            print(address);
+          }
+        } catch (e) {
+          address = '';
+          debugPrint('Reverse geocoding failed: $e');
+        }
+      }
 
-    // include lat/lng only if type == location
-    if (type == "location" && latitude != null && longitude != null) {
-      msg["latitude"] = latitude.toString();
-      msg["longitude"] = longitude.toString();
+      final locationData = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "address": address,
+      };
+
+      socket.emit('send_message', {
+        "connection_id": connectionId,
+        "message_type": 'location',
+        "message": jsonEncode(locationData),
+      });
+
+      debugPrint("📍 Location sent: $locationData");
+    } else {
+      socket.emit('send_message', {
+        "connection_id": connectionId,
+        "message_type": type,
+        "message": message ?? '',
+      });
     }
-
-
-    if (kDebugMode) {
-      print(msg);
-    }
-    Get.snackbar("Location Sent", "Your current location has been shared.");
-
-    // socket.emit("send_message", msg);
-    update();
   }
+
+
 
 
   @override
