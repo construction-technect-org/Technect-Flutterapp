@@ -7,8 +7,6 @@ class EventCardWidget extends StatelessWidget {
   final String eventData;
   final bool isMine;
   final bool isResponding;
-  final int currentUserId;
-  final int receiverUserId;
   final Function(String response) onRespond;
 
   const EventCardWidget({
@@ -17,8 +15,6 @@ class EventCardWidget extends StatelessWidget {
     required this.eventData,
     required this.isMine,
     required this.isResponding,
-    required this.currentUserId,
-    required this.receiverUserId,
     required this.onRespond,
   });
 
@@ -90,12 +86,10 @@ class EventCardWidget extends StatelessWidget {
     final date = (event['date'] ?? '') as String;
     final time = (event['time'] ?? '') as String;
     final status = (event['status'] ?? 'pending') as String;
-    final respondedByUserId = event['responded_by_user_id'];
 
-    final isReceiver = currentUserId == receiverUserId;
     final isPending = status.toLowerCase() == 'pending';
-    final canRespond = isReceiver && isPending && !isMine;
-    final didIRespond = respondedByUserId == currentUserId;
+    // If the message is not mine, I'm the receiver and can respond
+    final canRespond = !isMine && isPending;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -246,8 +240,8 @@ class EventCardWidget extends StatelessWidget {
             ),
           ],
 
-          // Show response note if user responded
-          if (didIRespond && !isPending) ...[
+          // Show response note if receiver responded
+          if (!isMine && !isPending) ...[
             const SizedBox(height: 8),
             Text(
               status.toLowerCase() == 'accepted'

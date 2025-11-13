@@ -577,12 +577,6 @@ class ChatSystemView extends StatelessWidget {
                                     isResponding:
                                         controller.respondingEventId.value ==
                                         int.tryParse(message.id),
-                                    currentUserId: myPref.userModel.val["id"],
-                                    receiverUserId:
-                                        int.tryParse(
-                                          controller.supportUser.id,
-                                        ) ??
-                                        0,
                                     onRespond: (response) {
                                       controller.respondToEvent(
                                         messageId:
