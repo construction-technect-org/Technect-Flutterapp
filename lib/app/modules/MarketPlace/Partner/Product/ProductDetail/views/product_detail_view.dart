@@ -143,48 +143,149 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 final isHttp = path.startsWith('http');
 
                                 if (media['type'] == 'video') {
-                                  return GestureDetector(
-                                    onTap: () => controller.openVideoDialog(
-                                      context,
-                                      path,
-                                      isHttp,
-                                    ),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        ColoredBox(
-                                          color: Colors.black12,
-                                          child: isHttp
-                                              ? AspectRatio(
-                                                  aspectRatio: 16 / 11,
-                                                  child:
-                                                      (controller.videoPlayerController !=
-                                                              null &&
-                                                          controller
-                                                              .videoPlayerController!
-                                                              .value
-                                                              .isInitialized)
-                                                      ? VideoPlayer(
-                                                          controller
-                                                              .videoPlayerController!,
-                                                        )
-                                                      : const SizedBox.shrink(),
-                                                )
-                                              : AspectRatio(
-                                                  aspectRatio: 16 / 11,
-                                                  child: VideoPlayer(
-                                                    Get.find<
-                                                          AddProductController
-                                                        >()
-                                                        .videoPlayerController!,
-                                                  ),
-                                                ),
+                                  return Obx(() {
+                                    final videoPlayerController =
+                                        controller.videoPlayerController;
+                                    final isReady =
+                                        controller.isVideoReady.value;
+
+                                    if (isReady &&
+                                        videoPlayerController != null &&
+                                        videoPlayerController
+                                            .value
+                                            .isInitialized) {
+                                      return GestureDetector(
+                                        onTap: () => controller.openVideoDialog(
+                                          context,
+                                          path,
+                                          isHttp,
                                         ),
-                                        const VideoPlay(),
-                                      ],
-                                    ),
-                                  );
+                                        child: Stack(
+                                          alignment: AlignmentGeometry.center,
+                                          children: [
+                                            ClipRRect(
+                                              child: AspectRatio(
+                                                aspectRatio: 16 / 9,
+                                                child: VideoPlayer(
+                                                  videoPlayerController,
+                                                ),
+                                              ),
+                                            ),
+                                            const VideoPlay(),
+                                          ],
+                                        ),
+                                      );
+                                    } else if (videoPlayerController != null &&
+                                        videoPlayerController.value.hasError) {
+                                      return Container(
+                                        height: 200,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                Icons.error_outline,
+                                                color: Colors.white,
+                                                size: 48,
+                                              ),
+                                              const SizedBox(height: 16),
+                                              Text(
+                                                'Failed to load video',
+                                                style: MyTexts.medium14
+                                                    .copyWith(
+                                                      color: Colors.white,
+                                                    ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                'Video codec may not be supported on this device',
+                                                style: MyTexts.medium12
+                                                    .copyWith(
+                                                      color: Colors.white70,
+                                                    ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(height: 16),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      controller
+                                                          .retryVideoInitialization();
+                                                    },
+                                                    child: const Text(
+                                                      'Retry',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      final videoPath =
+                                                          controller
+                                                              .product
+                                                              .productVideo ??
+                                                          "";
+                                                      if (videoPath
+                                                          .isNotEmpty) {
+                                                        final videoUrl =
+                                                            videoPath
+                                                                .startsWith(
+                                                                  'http',
+                                                                )
+                                                            ? videoPath
+                                                            : APIConstants
+                                                                      .bucketUrl +
+                                                                  videoPath;
+                                                        controller
+                                                            .openReferenceUrl(
+                                                              videoUrl,
+                                                            );
+                                                      }
+                                                    },
+                                                    child: const Text(
+                                                      'Open in Browser',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Container(
+                                        height: 200,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  });
                                 }
+                                //Image
                                 return GestureDetector(
                                   onTap: () {
                                     showDialog(
@@ -243,6 +344,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           );
                         }),
                       ),
+
+                      /// =============== SERVICE INFO SECTION ===============
                       if (myPref.role.val == "connector")
                         Obx(() {
                           return (controller.isFromAdd.value == false &&

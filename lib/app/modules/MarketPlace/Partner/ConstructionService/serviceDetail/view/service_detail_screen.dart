@@ -55,7 +55,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
               _buildConnectionButton(context, controller),
           ],
         ),
-
+        //image/video
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -133,168 +133,84 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           final isHttp = path.startsWith('http');
 
                           if (media['type'] == 'video') {
-                            final videoController =
-                                controller.videoPlayerController;
-                            final isPlaying =
-                                videoController != null &&
-                                videoController.value.isInitialized &&
-                                videoController.value.isPlaying;
+                            return Obx(() {
+                              final videoController =
+                                  controller.videoPlayerController;
+                              final isReady = controller.isVideoReady.value;
+                              final videoPath =
+                                  controller.service.value.video?.mediaS3Key ??
+                                  controller.service.value.video?.mediaUrl ??
+                                  "";
+                              final videoUrl = videoPath.startsWith('http')
+                                  ? videoPath
+                                  : (APIConstants.bucketUrl + videoPath);
 
-                            return GestureDetector(
-                              onTap: () {
-                                final videoPath =
-                                    controller
-                                        .service
-                                        .value
-                                        .video
-                                        ?.mediaS3Key ??
-                                    controller.service.value.video?.mediaUrl ??
-                                    "";
-                                if (videoPath.isNotEmpty) {
-                                  final videoUrl = videoPath.startsWith('http')
-                                      ? videoPath
-                                      : APIConstants.bucketUrl + videoPath;
-                                  controller.openVideoDialog(
+                              if (isReady &&
+                                  videoController != null &&
+                                  videoController.value.isInitialized) {
+                                return GestureDetector(
+                                  onTap: () => controller.openVideoDialog(
                                     context,
                                     videoUrl,
                                     true,
-                                  );
-                                }
-                              },
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  ColoredBox(
-                                    color: Colors.black,
-                                    child: AspectRatio(
-                                      aspectRatio: 16 / 9,
-                                      child:
-                                          videoController != null &&
-                                              videoController
-                                                  .value
-                                                  .isInitialized
-                                          ? VideoPlayer(videoController)
-                                          : videoController != null &&
-                                                videoController.value.hasError
-                                          ? Center(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  const Icon(
-                                                    Icons.error_outline,
-                                                    color: Colors.white,
-                                                    size: 48,
-                                                  ),
-                                                  const SizedBox(height: 16),
-                                                  Text(
-                                                    'Failed to load video',
-                                                    style: MyTexts.medium14
-                                                        .copyWith(
-                                                          color: Colors.white,
-                                                        ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Text(
-                                                    'Video codec may not be supported on this device',
-                                                    style: MyTexts.medium12
-                                                        .copyWith(
-                                                          color: Colors.white70,
-                                                        ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  const SizedBox(height: 16),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          controller
-                                                              .retryVideoInitialization();
-                                                        },
-                                                        child: const Text(
-                                                          'Retry',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 16),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          final videoPath =
-                                                              controller
-                                                                  .service
-                                                                  .value
-                                                                  .video
-                                                                  ?.mediaS3Key ??
-                                                              controller
-                                                                  .service
-                                                                  .value
-                                                                  .video
-                                                                  ?.mediaUrl ??
-                                                              "";
-                                                          if (videoPath
-                                                              .isNotEmpty) {
-                                                            final videoUrl =
-                                                                videoPath
-                                                                    .startsWith(
-                                                                      'http',
-                                                                    )
-                                                                ? videoPath
-                                                                : APIConstants
-                                                                          .bucketUrl +
-                                                                      videoPath;
-                                                            controller
-                                                                .openReferenceUrl(
-                                                                  videoUrl,
-                                                                );
-                                                          }
-                                                        },
-                                                        child: const Text(
-                                                          'Open in Browser',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          : const Center(
-                                              child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                    ),
                                   ),
-                                  if (!isPlaying) const VideoPlay(),
-
-                                  if (videoController != null &&
-                                      videoController.value.isInitialized)
-                                    Positioned(
-                                      bottom: 0,
-                                      left: 0,
-                                      right: 0,
-                                      child: VideoProgressIndicator(
-                                        videoController,
-                                        allowScrubbing: true,
-                                        colors: const VideoProgressColors(
-                                          backgroundColor: Colors.black26,
-                                          playedColor: Colors.white,
-                                          bufferedColor: Colors.white38,
+                                  child: Stack(
+                                    alignment: AlignmentGeometry.center,
+                                    children: [
+                                      ClipRRect(
+                                        child: AspectRatio(
+                                          aspectRatio: 16 / 9,
+                                          child: VideoPlayer(videoController),
                                         ),
                                       ),
+                                      const VideoPlay(),
+                                    ],
+                                  ),
+                                );
+                              } else if (videoController != null &&
+                                  videoController.value.hasError) {
+                                return Container(
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    color: MyColors.grayEA,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.error_outline,
+                                          size: 48,
+                                          color: MyColors.gray54,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        const Text('Failed to load video'),
+                                        TextButton(
+                                          onPressed: controller
+                                              .retryVideoInitialization,
+                                          child: const Text('Retry'),
+                                        ),
+                                      ],
                                     ),
-                                ],
-                              ),
-                            );
+                                  ),
+                                );
+                              } else {
+                                return Container(
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    color: MyColors.black,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              }
+                            });
                           }
-
+                          //Image
                           return GestureDetector(
                             onTap: () {
                               showDialog(
@@ -383,9 +299,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //image/video
-                    // 🟦 IMAGE / VIDEO SECTION
-
                     /// =============== SERVICE INFO SECTION ===============
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -405,7 +318,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           ),
                         ),
                         const Gap(16),
-
+                        //Edit icon
                         Obx(() {
                           return controller.isEdit.value
                               ? TextButton.icon(
@@ -563,6 +476,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                             Obx(() {
                               final refController =
                                   controller.refVideoPlayerController;
+
                               if (controller.isRefVideo.value &&
                                   refController != null &&
                                   refController.value.isInitialized) {
@@ -588,6 +502,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                 );
                               } else if (refController != null &&
                                   refController.value.hasError) {
+                                //Failed to load video
                                 return Container(
                                   height: 200,
                                   decoration: BoxDecoration(
@@ -616,6 +531,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                   ),
                                 );
                               } else {
+                                //CircularProgressIndicator
                                 return Container(
                                   height: 200,
                                   decoration: BoxDecoration(
