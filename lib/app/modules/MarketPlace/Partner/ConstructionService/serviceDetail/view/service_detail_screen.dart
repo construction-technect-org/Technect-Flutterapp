@@ -158,7 +158,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     alignment: AlignmentGeometry.center,
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
                                         child: AspectRatio(
                                           aspectRatio: 16 / 9,
                                           child: VideoPlayer(videoController),
