@@ -558,7 +558,9 @@ class AddServiceScreen extends GetView<AddServiceController> {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              color: MyColors.lightBlueSecond.withOpacity(0.1),
+                              color: MyColors.lightBlueSecond.withValues(
+                                alpha: 0.1,
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -1069,7 +1071,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                     buttonName: controller.isEdit.value
                         ? "Update Service"
                         : "Add Service",
-                    onTap: () async {
+                    onTap: () {
                       if (controller.pickedFilePathList.isEmpty &&
                           !controller.isEdit.value) {
                         SnackBars.errorSnackBar(
@@ -1087,8 +1089,7 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       }
                       if (controller.isEdit.value) {
                         final hasImage = controller.imageSlots.any(
-                          (path) =>
-                              path != null && path.toString().trim().isNotEmpty,
+                          (path) => path != null && path.trim().isNotEmpty,
                         );
                         if (!hasImage) {
                           SnackBars.errorSnackBar(

@@ -43,6 +43,9 @@ class ChatSystemController extends GetxController {
   Timer? _typingTimer;
   bool _isTyping = false;
 
+  // Scroll helpers
+  RxBool showScrollToBottom = false.obs;
+
   // Event response tracking
   RxInt respondingEventId = 0.obs;
 
@@ -72,6 +75,7 @@ class ChatSystemController extends GetxController {
     }
 
     supportUser = const CustomUser(id: '', name: '', profilePhoto: '');
+    scrollController.addListener(_onScrollChanged);
     initCalled();
   }
 
@@ -194,12 +198,6 @@ class ChatSystemController extends GetxController {
       log('❌ Error fetching chat list: $e');
     } finally {
       isLoading.value = false;
-
-      if (messages.isNotEmpty) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _jumpToBottom();
-        });
-      }
     }
   }
 
@@ -373,19 +371,12 @@ class ChatSystemController extends GetxController {
 
   void _scrollToBottom() {
     if (scrollController.hasClients) {
-      Future.delayed(const Duration(milliseconds: 300), () {
-        scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      });
-    }
-  }
-
-  void _jumpToBottom() {
-    if (scrollController.hasClients) {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+      showScrollToBottom.value = false;
     }
   }
 
@@ -1022,9 +1013,20 @@ class ChatSystemController extends GetxController {
 
   @override
   void onClose() {
+    scrollController.removeListener(_onScrollChanged);
     _typingTimer?.cancel();
     socket.emit('leave_connection', {"connection_id": connectionId});
     socket.dispose();
     super.onClose();
+  }
+
+  void scrollToBottom() => _scrollToBottom();
+
+  void _onScrollChanged() {
+    if (!scrollController.hasClients) return;
+    final shouldShow = scrollController.offset > 200;
+    if (showScrollToBottom.value != shouldShow) {
+      showScrollToBottom.value = shouldShow;
+    }
   }
 }
