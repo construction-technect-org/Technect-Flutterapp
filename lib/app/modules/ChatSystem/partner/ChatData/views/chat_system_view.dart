@@ -4,8 +4,10 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
+import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/components/share_location_screen.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/controllers/chat_system_controller.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/chat_image_viewer.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ChatSystemView extends StatelessWidget {
   ChatSystemView({super.key});
@@ -86,6 +88,35 @@ class ChatSystemView extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 _showVideoSourceOptions(context);
+              },
+            ),
+            ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: MyColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.location_on_rounded, color: MyColors.primary),
+              ),
+              title: const Text('Location'),
+              subtitle: const Text('Share your current location'),
+              onTap: () async {
+                Navigator.pop(context);
+
+                final result = await Get.to(() => const ShareLocationScreen());
+
+                if (result != null) {
+                  final LatLng loc = result["location"];
+                  final String caption = result["caption"] ?? "";
+
+                  controller.sendMessage(
+                    message: caption.isNotEmpty ? caption : "Shared a location",
+                    type: "location",
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                  );
+                }
               },
             ),
           ],

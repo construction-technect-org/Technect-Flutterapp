@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/controllers/all_chat_list_controller.dart';
@@ -16,8 +17,7 @@ class AllChatListScreen extends GetView<AllChatListController> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if ((controller.chatListModel.value.chats?.conversations ?? [])
-            .isEmpty) {
+        if ((controller.chatListModel.value.chats?.conversations ?? []).isEmpty) {
           return Center(
             child: Text(
               "No conversations yet",
@@ -28,23 +28,33 @@ class AllChatListScreen extends GetView<AllChatListController> {
 
         return ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          itemCount: (controller.chatListModel.value.chats?.conversations ?? [])
-              .length,
-          separatorBuilder: (_, __) =>
-              const Divider(height: 1, color: MyColors.grayEA),
+          itemCount: (controller.chatListModel.value.chats?.conversations ?? []).length,
+          separatorBuilder: (_, __) => const Divider(height: 1, color: MyColors.grayEA),
           itemBuilder: (context, index) {
-            final chat =
-                (controller.chatListModel.value.chats?.conversations ??
-                [])[index];
+            final chat = (controller.chatListModel.value.chats?.conversations ?? [])[index];
             final int unreadCount = chat.chatInfo?.unreadCount ?? 0;
 
             return ListTile(
               contentPadding: const EdgeInsets.symmetric(vertical: 6),
               leading: CircleAvatar(
+                backgroundColor: MyColors.grey,
                 radius: 24,
-                backgroundImage: NetworkImage(
-                  APIConstants.bucketUrl + (chat.connector?.profileImage ?? ""),
-                ),
+                child: (chat.connector?.profileImage ?? "").isNotEmpty
+                    ? ClipOval(
+                        child: CachedNetworkImage(
+                          imageUrl: APIConstants.bucketUrl + (chat.connector?.profileImage ?? ""),
+                          width: 48,
+                          height: 48,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => const ColoredBox(
+                            color: MyColors.lightGray,
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.person, color: MyColors.white),
+                        ),
+                      )
+                    : Icon(Icons.person, color: MyColors.white),
               ),
               title: Text(
                 "${chat.connector?.firstName ?? ""} ${chat.connector?.lastName ?? ""}",
@@ -53,11 +63,7 @@ class AllChatListScreen extends GetView<AllChatListController> {
               subtitle: Row(
                 children: [
                   if (_isImageMessage(chat.chatInfo?.lastMessage)) ...[
-                    const Icon(
-                      Icons.image,
-                      size: 16,
-                      color: MyColors.fontBlack,
-                    ),
+                    const Icon(Icons.image, size: 16, color: MyColors.fontBlack),
                     const SizedBox(width: 4),
                   ],
                   Expanded(
@@ -76,9 +82,7 @@ class AllChatListScreen extends GetView<AllChatListController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    formattedChatTime(
-                      DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? ''),
-                    ),
+                    formattedChatTime(DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? '')),
                     style: MyTexts.medium14.copyWith(color: MyColors.black),
                   ),
                   if (unreadCount > 0)
@@ -116,7 +120,6 @@ class AllChatListScreen extends GetView<AllChatListController> {
 
   bool _isImageMessage(String? message) {
     if (message == null || message.isEmpty) return false;
-    // Check if message starts with common image indicators
     return message.toLowerCase().startsWith('image') ||
         message.toLowerCase().startsWith('photo') ||
         message.toLowerCase().startsWith('📷') ||

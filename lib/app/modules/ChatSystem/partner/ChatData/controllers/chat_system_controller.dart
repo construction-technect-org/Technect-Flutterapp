@@ -813,6 +813,37 @@ class ChatSystemController extends GetxController {
     }
   }
 
+  void sendMessage({
+    required String message,
+    required String type,
+    double? latitude,
+    double? longitude,
+  }) {
+    final msg = {
+      "sentBy": currentUser.id,
+      "message": message,
+      "type": type,
+      "createdAt": DateTime.now().toIso8601String(),
+    };
+
+    // include lat/lng only if type == location
+    if (type == "location" && latitude != null && longitude != null) {
+      msg["latitude"] = latitude.toString();
+      msg["longitude"] = longitude.toString();
+    }
+
+
+    if (kDebugMode) {
+      print(msg);
+    }
+    Get.snackbar("Location Sent", "Your current location has been shared.");
+
+    // socket.emit("send_message", msg);
+    update();
+  }
+
+
+
   @override
   void onClose() {
     socket.emit('leave_connection', {"connection_id": connectionId});
