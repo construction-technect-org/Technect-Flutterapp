@@ -200,7 +200,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                 return Container(
                                   height: 200,
                                   decoration: BoxDecoration(
-                                    color: MyColors.grayEA,
+                                    color: MyColors.black,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: const Center(
