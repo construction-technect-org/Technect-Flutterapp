@@ -7,9 +7,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/Pr
 
 class ConnectionDialogs {
   static void showAcceptConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+      BuildContext context,
+      Connection connection,
+      ) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Welcome! Let's connect";
 
@@ -30,49 +30,48 @@ class ConnectionDialogs {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 120,
-                  child: Image.asset(Asset.connectToCrm, fit: BoxFit.contain),
-                ),
-                SizedBox(height: 2.h),
                 Text(
                   "Accept Connection",
-                  style: MyTexts.extraBold20.copyWith(color: MyColors.primary),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  "Send a response message to ${connection.connectorName ?? 'the user'}",
-                  style: MyTexts.regular16.copyWith(
-                    color: MyColors.dopelyColors,
-                    fontFamily: MyTexts.SpaceGrotesk,
+                  style: MyTexts.bold18.copyWith(
+                    color: MyColors.primary,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 2.h),
-                TextField(
-                  controller: messageController,
-                  decoration: InputDecoration(
-                    hintText: "Enter your response message",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color(0xFFFEF7E8),
+                    border: Border.all(color: const Color(0xFFFDEBC8)),
                   ),
-                  maxLines: 3,
+                  child: Text(
+                    "Send a response message to ${connection.connectorName ?? 'the user'}.",
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                CommonTextField(
+                  controller: messageController,
+                  hintText: "Enter your response message",
+                  maxLine: 3,
                 ),
                 SizedBox(height: 2.h),
                 Row(
                   children: [
                     Expanded(
                       child: RoundedButton(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
+                        onTap: () => Navigator.of(context).pop(),
                         buttonName: 'Cancel',
                         borderRadius: 12,
                         verticalPadding: 0,
                         height: 45,
-                        color: MyColors.lightGray,
+                        fontColor: MyColors.white,
+                        color: MyColors.grayCD,
                       ),
                     ),
                     SizedBox(width: 2.w),
@@ -80,11 +79,10 @@ class ConnectionDialogs {
                       child: RoundedButton(
                         onTap: () {
                           Navigator.of(context).pop();
-                          Get.find<ConnectionInboxController>()
-                              .acceptConnection(
-                                connection.id ?? 0,
-                                messageController.text.trim(),
-                              );
+                          Get.find<ConnectionInboxController>().acceptConnection(
+                            connection.id ?? 0,
+                            messageController.text.trim(),
+                          );
                         },
                         buttonName: 'Accept',
                         borderRadius: 12,
@@ -103,10 +101,11 @@ class ConnectionDialogs {
     );
   }
 
+
   static void showRejectConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+      BuildContext context,
+      Connection connection,
+      ) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Not interested at this time";
 
@@ -127,50 +126,48 @@ class ConnectionDialogs {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.cancel_outlined,
-                  size: 60,
-                  color: MyColors.red,
-                ),
-                SizedBox(height: 2.h),
                 Text(
                   "Reject Connection",
-                  style: MyTexts.extraBold20.copyWith(color: MyColors.red),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  "Send a rejection message to ${connection.connectorName ?? 'the user'}",
-                  style: MyTexts.regular16.copyWith(
-                    color: MyColors.dopelyColors,
-                    fontFamily: MyTexts.SpaceGrotesk,
+                  style: MyTexts.bold18.copyWith(
+                    color: MyColors.red,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 2.h),
-                TextField(
-                  controller: messageController,
-                  decoration: InputDecoration(
-                    hintText: "Enter your rejection message",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color(0xFFFEF7E8),
+                    border: Border.all(color: const Color(0xFFFDEBC8)),
                   ),
-                  maxLines: 3,
+                  child: Text(
+                    "Send a rejection message to ${connection.connectorName ?? 'the user'}.",
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                CommonTextField(
+                  controller: messageController,
+                  hintText: "Enter your rejection message",
+                  maxLine: 3,
                 ),
                 SizedBox(height: 2.h),
                 Row(
                   children: [
                     Expanded(
                       child: RoundedButton(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
+                        onTap: () => Navigator.of(context).pop(),
                         buttonName: 'Cancel',
                         borderRadius: 12,
                         verticalPadding: 0,
                         height: 45,
-                        color: MyColors.lightGray,
+                        fontColor: MyColors.white,
+                        color: MyColors.grayCD,
                       ),
                     ),
                     SizedBox(width: 2.w),
@@ -178,16 +175,15 @@ class ConnectionDialogs {
                       child: RoundedButton(
                         onTap: () {
                           Navigator.of(context).pop();
-                          Get.find<ConnectionInboxController>()
-                              .rejectConnection(
-                                connection.id ?? 0,
-                                messageController.text.trim(),
-                              );
+                          Get.find<ConnectionInboxController>().rejectConnection(
+                            connection.id ?? 0,
+                            messageController.text.trim(),
+                          );
                         },
                         buttonName: 'Reject',
                         borderRadius: 12,
-                        height: 45,
                         verticalPadding: 0,
+                        height: 45,
                         color: MyColors.red,
                       ),
                     ),

@@ -644,7 +644,6 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
             Routes.SERVICE_DETAILS,
             arguments: {
               'service': service,
-
               "onConnectTap": () {
                 ConnectionDialogs.showSendServiceConnectionDialog(
                   context,
@@ -680,7 +679,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                     children: [
                       ClipRRect(
                         borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
+                          top: Radius.circular(4),
                         ),
                         child: imageUrl.isNotEmpty
                             ? CachedNetworkImage(
