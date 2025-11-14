@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/pill_button.dart';
 
 class CRMVRMToggleWidget extends GetView<LeadDashController> {
   const CRMVRMToggleWidget({super.key});
@@ -18,13 +19,13 @@ class CRMVRMToggleWidget extends GetView<LeadDashController> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _pillButton(
+            PillButton(
               title: "CRM",
               isSelected: isCRMSelected,
               onTap: () => controller.toggleCRMVRM(true),
             ),
             const SizedBox(width: 2),
-            _pillButton(
+            PillButton(
               title: "VRM",
               isSelected: !isCRMSelected,
               onTap: () => controller.toggleCRMVRM(false),
@@ -33,31 +34,5 @@ class CRMVRMToggleWidget extends GetView<LeadDashController> {
         ),
       );
     });
-  }
-
-  Widget _pillButton({
-    required String title,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF1E305C) : Colors.transparent,
-          borderRadius: BorderRadius.circular(40),
-        ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.white : const Color(0xFF1E305C),
-          ),
-        ),
-      ),
-    );
   }
 }
