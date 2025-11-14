@@ -7,7 +7,6 @@ import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class WishListView extends GetView<WishListController> {
   @override
@@ -130,20 +129,9 @@ class WishListView extends GetView<WishListController> {
                                       crossAxisSpacing: 12,
                                       mainAxisSpacing: 12,
                                     ),
-                                itemCount:
-                                    controller
-                                        .productListModel
-                                        .value
-                                        .data
-                                        ?.length ??
-                                    0,
+                                itemCount: controller.filteredProducts.length,
                                 itemBuilder: (context, index) {
-                                  final item =
-                                      controller
-                                          .productListModel
-                                          .value
-                                          .data?[index] ??
-                                      Product();
+                                  final item = controller.filteredProducts[index];
                                   return ProductCard(
                                     isFromAdd: false,
                                     isFromConnector: true,
