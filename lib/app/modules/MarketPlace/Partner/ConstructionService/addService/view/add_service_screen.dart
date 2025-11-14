@@ -643,10 +643,12 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                               color: Colors.black,
                                               child: Center(
                                                 child: AspectRatio(
-                                                  aspectRatio: controller
-                                                      .videoPlayerController!
-                                                      .value
-                                                      .aspectRatio,
+                                                  aspectRatio:
+                                                      controller
+                                                          .isVideoPortrait
+                                                          .value
+                                                      ? 9 / 16
+                                                      : 16 / 9,
                                                   child: VideoPlayer(
                                                     controller
                                                         .videoPlayerController!,
@@ -728,10 +730,12 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                             color: Colors.black,
                                             child: Center(
                                               child: AspectRatio(
-                                                aspectRatio: controller
-                                                    .videoPlayerController!
-                                                    .value
-                                                    .aspectRatio,
+                                                aspectRatio:
+                                                    controller
+                                                        .isVideoPortrait
+                                                        .value
+                                                    ? 9 / 16
+                                                    : 16 / 9,
                                                 child: VideoPlayer(
                                                   controller
                                                       .videoPlayerController!,
@@ -872,10 +876,10 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                     color: Colors.black,
                                     child: Center(
                                       child: AspectRatio(
-                                        aspectRatio: controller
-                                            .refVideoPlayerController!
-                                            .value
-                                            .aspectRatio,
+                                        aspectRatio:
+                                            controller.isVideoPortrait.value
+                                            ? 9 / 16
+                                            : 16 / 9,
                                         child: VideoPlayer(
                                           controller.refVideoPlayerController!,
                                         ),

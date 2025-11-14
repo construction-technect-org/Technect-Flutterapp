@@ -827,10 +827,12 @@ class AddProductView extends GetView<AddProductController> {
                                                     color: Colors.black,
                                                     child: Center(
                                                       child: AspectRatio(
-                                                        aspectRatio: controller
-                                                            .videoPlayerController!
-                                                            .value
-                                                            .aspectRatio,
+                                                        aspectRatio:
+                                                            controller
+                                                                .isVideoPortrait
+                                                                .value
+                                                            ? 9 / 16
+                                                            : 16 / 9,
                                                         child: VideoPlayer(
                                                           controller
                                                               .videoPlayerController!,
@@ -889,8 +891,8 @@ class AddProductView extends GetView<AddProductController> {
                               ),
                             );
                           }),
-                        //add product
                         if (!controller.isEdit)
+                          //add product
                           Obx(() {
                             final video = controller.selectedVideo.value;
                             return Container(
@@ -928,10 +930,12 @@ class AddProductView extends GetView<AddProductController> {
                                                     color: Colors.black,
                                                     child: Center(
                                                       child: AspectRatio(
-                                                        aspectRatio: controller
-                                                            .videoPlayerController!
-                                                            .value
-                                                            .aspectRatio,
+                                                        aspectRatio:
+                                                            controller
+                                                                .isVideoPortrait
+                                                                .value
+                                                            ? 9 / 16
+                                                            : 16 / 9,
                                                         child: VideoPlayer(
                                                           controller
                                                               .videoPlayerController!,
@@ -957,6 +961,7 @@ class AddProductView extends GetView<AddProductController> {
                                       ],
                                     )
                                   else
+                                    //No video uploaded
                                     GestureDetector(
                                       onTap: () =>
                                           controller.openVideoPickerBottomSheet(
