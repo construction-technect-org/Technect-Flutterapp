@@ -146,6 +146,20 @@ class ProductDetailsController extends GetxController {
     }
   }
 
+  double displayAspectRatio(VideoPlayerController? vController) {
+    if (videoPlayerController != null) {
+      final size = videoPlayerController!.value.size;
+      final bool isVideoPortrait = size.height > size.width;
+      log(
+        'Video Size: ${size.width}x${size.height}, Is Portrait: $isVideoPortrait',
+      );
+
+      return isVideoPortrait ? 9 / 16 : 16 / 9;
+    } else {
+      return 16 / 9;
+    }
+  }
+
   Future<void> productDetails(int id) async {
     try {
       isLoading.value = true;
