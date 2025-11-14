@@ -75,7 +75,50 @@ class ProductDetailsController extends GetxController {
             final videoUrl = videoPath.startsWith('http')
                 ? videoPath
                 : APIConstants.bucketUrl + videoPath;
-            log('Main video path: $videoPath');
+
+            try {
+              videoPlayerController = VideoPlayerController.networkUrl(
+                Uri.parse(videoUrl),
+                httpHeaders: {
+                  'Range': 'bytes=0-',
+                  'Accept': 'video/*',
+                  'User-Agent': 'Mozilla/5.0',
+                },
+                videoPlayerOptions: VideoPlayerOptions(),
+              );
+
+              await videoPlayerController
+                  ?.initialize()
+                  .timeout(
+                    const Duration(seconds: 30),
+                    onTimeout: () {
+                      log('Video initialization timeout');
+                      throw TimeoutException(
+                        'Video initialization took too long',
+                      );
+                    },
+                  )
+                  .then((val) {
+                    isVideoReady.value = true;
+                  });
+              log('Main video initialized successfully');
+              update();
+            } catch (e) {
+              log('Error initializing main video: $e');
+              if (kDebugMode) {
+                print('Main video initialization failed: $e');
+              }
+            }
+          }
+        }
+      });
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((val) async {
+        if (product.productVideo != null) {
+          final videoPath = product.productVideo ?? "";
+
+          if (videoPath.isNotEmpty) {
+            final videoUrl = videoPath;
             log('Full main video URL: $videoUrl');
 
             try {

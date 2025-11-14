@@ -772,6 +772,7 @@ class AddProductView extends GetView<AddProductController> {
                           ),
                         ),
                         const Gap(16),
+                        //edit product
                         if (controller.isEdit)
                           Obx(() {
                             return Container(
@@ -922,9 +923,6 @@ class AddProductView extends GetView<AddProductController> {
                                                 borderRadius:
                                                     BorderRadius.circular(12),
                                                 child: AspectRatio(
-                                                  // aspectRatio isPortrait ?
-                                                  //     9 / 16
-                                                  //     : 16 / 9,
                                                   aspectRatio: 16 / 9,
                                                   child: ColoredBox(
                                                     color: Colors.black,
