@@ -339,18 +339,21 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
   Widget _buildFilterButtons(BuildContext context) {
     final controller = Get.find<ConstructionServiceController>();
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        const Gap(4),
         _buildFilterButton(
           label: 'Sort',
           iconPath: Asset.sort,
           onTap: () => controller.showSortBottomSheet(context),
         ),
+        const Gap(4),
         _buildFilterButton(
           label: 'Location',
           iconPath: Asset.location,
           onTap: () => controller.showLocationBottomSheet(context),
         ),
+        const Spacer(),
+        const Gap(4),
         Obx(
           () => GestureDetector(
             onTap: () =>
@@ -370,6 +373,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
             ),
           ),
         ),
+        const Gap(4),
       ],
     );
   }
@@ -594,7 +598,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.grey[300]!),
@@ -608,7 +612,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                 color: MyColors.custom('2E2E2E'),
               ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 4),
             SvgPicture.asset(iconPath, width: 16, height: 16),
           ],
         ),
@@ -622,7 +626,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       padding: const EdgeInsets.all(16),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: myPref.role.val == "connector" ? 0.45 : 0.6,
+        childAspectRatio: myPref.role.val == "connector" ? 0.44 : 0.6,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),

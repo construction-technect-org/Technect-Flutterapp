@@ -193,19 +193,21 @@ class ProductImage extends StatelessWidget {
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
           child: imageUrl != null
-              ? CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  height: double.infinity,
-                  placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.inventory_2,
-                    size: 40,
-                    color: Colors.grey,
+              ? Center(
+                child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                    height: double.infinity,
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.inventory_2,
+                      size: 40,
+                      color: Colors.grey,
+                    ),
                   ),
-                )
+              )
               : const Icon(Icons.inventory_2, size: 40, color: Colors.grey),
         ),
         if (product.outOfStock == true || (product.stockQty ?? 0) <= 0)
