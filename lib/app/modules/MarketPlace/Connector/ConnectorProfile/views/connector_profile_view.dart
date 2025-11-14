@@ -92,7 +92,7 @@ class ConnectorProfileView extends GetView<ConnectorProfileController> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          "Info & Metrics",
+                                          "Info",
                                           style: MyTexts.medium15.copyWith(
                                             color: MyColors.gray2E,
                                           ),
@@ -216,7 +216,7 @@ class ConnectorMetrics extends StatelessWidget {
               style: MyTexts.medium16.copyWith(
                 color: MyColors.fontBlack,
                 fontFamily: MyTexts.SpaceGrotesk,
-              ),
+              ),  
             ),
             const Spacer(),
             GestureDetector(

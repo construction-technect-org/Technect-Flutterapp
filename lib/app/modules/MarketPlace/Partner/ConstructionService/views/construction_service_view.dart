@@ -48,11 +48,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       backgroundColor: MyColors.white,
       elevation: 0,
       leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: MyColors.fontBlack,
-          size: 20,
-        ),
+        icon: const Icon(Icons.arrow_back_ios, color: MyColors.fontBlack, size: 20),
         onPressed: () => controller.goBackToCategoryView(),
       ),
       actions: [
@@ -67,10 +63,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
               Asset.location,
               height: 20,
               width: 20,
-              colorFilter: const ColorFilter.mode(
-                Colors.black,
-                BlendMode.srcIn,
-              ),
+              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
             ),
           ),
         GestureDetector(
@@ -81,10 +74,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
               Asset.searchIcon,
               height: 20,
               width: 20,
-              colorFilter: const ColorFilter.mode(
-                Colors.black,
-                BlendMode.srcIn,
-              ),
+              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
             ),
           ),
         ),
@@ -117,10 +107,11 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       context: context,
       items: controller.subCategories,
       isSelected: (index) =>
-          controller.selectedSubCategoryId.value ==
-          controller.subCategories[index].id,
+          controller.selectedSubCategoryId.value == controller.subCategories[index].id,
       onTap: (index) => controller.lestSide0LeftView(index),
-      getImageUrl: (item) => item.image ?? 'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
+      getImageUrl: (item) =>
+          item.image ??
+          'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
       getName: (item) => item.name ?? '',
     );
   }
@@ -131,8 +122,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
     return _buildLeftSidebar(
       context: context,
       items: services,
-      isSelected: (index) =>
-          controller.selectedServiceCategory.value?.id == services[index].id,
+      isSelected: (index) => controller.selectedServiceCategory.value?.id == services[index].id,
       onTap: (index) => controller.selectServiceCategoryFromGrid(index),
       getImageUrl: (_) =>
           controller.selectedSubCategory.value?.image ??
@@ -174,11 +164,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                         children: [
                           _buildSelectionBarWidget(isSelected(index)),
                           const SizedBox(width: _selectionBarWidth),
-                          Expanded(
-                            child: _buildCategoryImageContainer(
-                              getImageUrl(items[index]),
-                            ),
-                          ),
+                          Expanded(child: _buildCategoryImageContainer(getImageUrl(items[index]))),
                         ],
                       ).paddingOnly(right: _horizontalPadding),
                       const SizedBox(height: _itemSpacing),
@@ -186,10 +172,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                         getName(items[index]),
                         style: MyTexts.medium14,
                         textAlign: TextAlign.center,
-                      ).paddingOnly(
-                        right: _horizontalPadding,
-                        left: _horizontalPadding,
-                      ),
+                      ).paddingOnly(right: _horizontalPadding, left: _horizontalPadding),
                     ],
                   ),
                 ),
@@ -208,11 +191,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                     children: [
                       _buildSelectionBarWidget(isSelected(index)),
                       const SizedBox(width: _selectionBarWidth),
-                      Expanded(
-                        child: _buildCategoryImageContainer(
-                          getImageUrl(items[index]),
-                        ),
-                      ),
+                      Expanded(child: _buildCategoryImageContainer(getImageUrl(items[index]))),
                     ],
                   ).paddingOnly(right: _horizontalPadding),
                   const SizedBox(height: _itemSpacing),
@@ -220,10 +199,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                     getName(items[index]),
                     style: MyTexts.medium14,
                     textAlign: TextAlign.center,
-                  ).paddingOnly(
-                    right: _horizontalPadding,
-                    left: _horizontalPadding,
-                  ),
+                  ).paddingOnly(right: _horizontalPadding, left: _horizontalPadding),
                 ],
               ),
             ),
@@ -258,10 +234,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
         gradient: LinearGradient(
           end: Alignment.bottomCenter,
           begin: Alignment.topCenter,
-          colors: [
-            MyColors.custom('EAEAEA').withValues(alpha: 0),
-            MyColors.custom('EAEAEA'),
-          ],
+          colors: [MyColors.custom('EAEAEA').withValues(alpha: 0), MyColors.custom('EAEAEA')],
         ),
       ),
       child: Stack(
@@ -273,13 +246,9 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                 ? CachedNetworkImage(
                     imageUrl: fullImageUrl,
                     fit: BoxFit.fill,
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => const Icon(
-                      Icons.category,
-                      color: MyColors.primary,
-                      size: 24,
-                    ),
+                    placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.category, color: MyColors.primary, size: 24),
                   )
                 : const Icon(Icons.category, color: MyColors.primary, size: 24),
           ),
@@ -294,14 +263,8 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(
-            title:
-                controller.selectedSubCategory.value?.name ??
-                'Select a category',
-          ),
-          Expanded(
-            child: _buildProductCategoriesGrid(controller.serviceCategoryList),
-          ),
+          _buildHeader(title: controller.selectedSubCategory.value?.name ?? 'Select a category'),
+          Expanded(child: _buildProductCategoriesGrid(controller.serviceCategoryList)),
         ],
       ),
     );
@@ -329,10 +292,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
         color: Colors.white,
         border: Border(bottom: BorderSide(color: _borderColor)),
       ),
-      child: Text(
-        title,
-        style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
-      ),
+      child: Text(title, style: MyTexts.bold18.copyWith(color: MyColors.fontBlack)),
     );
   }
 
@@ -356,8 +316,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
         const Gap(4),
         Obx(
           () => GestureDetector(
-            onTap: () =>
-                controller.isGridView.value = !controller.isGridView.value,
+            onTap: () => controller.isGridView.value = !controller.isGridView.value,
             behavior: HitTestBehavior.translucent,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
@@ -403,11 +362,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                       controller.selectedSort.value = "Relevance";
                       controller.applySorting("Relevance");
                     },
-                    child: const Icon(
-                      Icons.close,
-                      color: Colors.black,
-                      size: 13,
-                    ),
+                    child: const Icon(Icons.close, color: Colors.black, size: 13),
                   ),
                 ],
               ),
@@ -423,22 +378,17 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       }
 
       // Check if we have services data
-      final hasServices =
-          !(controller.serviceListModel.value.data?.services?.isEmpty ?? true);
+      final hasServices = !(controller.serviceListModel.value.data?.services?.isEmpty ?? true);
       if (!hasServices) {
         return const Center(
-          child: Text(
-            'No services available',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
-          ),
+          child: Text('No services available', style: TextStyle(color: Colors.grey, fontSize: 16)),
         );
       }
 
       // Always show services in grid or list view
       return Obx(
-        () => controller.isGridView.value
-            ? _buildServicesGrid(context)
-            : _buildServicesList(context),
+        () =>
+            controller.isGridView.value ? _buildServicesGrid(context) : _buildServicesList(context),
       );
     });
   }
@@ -460,9 +410,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
               }
               return Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                    right: colIndex < _itemsPerRow - 1 ? _itemSpacing : 0,
-                  ),
+                  padding: EdgeInsets.only(right: colIndex < _itemsPerRow - 1 ? _itemSpacing : 0),
                   child: _buildCircularCategoryTile(
                     product: products[index],
                     index: index,
@@ -570,8 +518,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
             image: hasImage
                 ? DecorationImage(
                     image: NetworkImage(
-                      APIConstants.bucketUrl +
-                          (controller.selectedSubCategory.value?.image ?? ''),
+                      APIConstants.bucketUrl + (controller.selectedSubCategory.value?.image ?? ''),
                     ),
                     fit: BoxFit.fill,
                     onError: (exception, stackTrace) {},
@@ -606,12 +553,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              label,
-              style: MyTexts.medium14.copyWith(
-                color: MyColors.custom('2E2E2E'),
-              ),
-            ),
+            Text(label, style: MyTexts.medium14.copyWith(color: MyColors.custom('2E2E2E'))),
             const SizedBox(width: 4),
             SvgPicture.asset(iconPath, width: 16, height: 16),
           ],
@@ -639,8 +581,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
         final service = services[index];
         String imageUrl = "";
         if ((service.images ?? []).isNotEmpty) {
-          imageUrl =
-              APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? "");
+          imageUrl = APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? "");
         }
 
         return GestureDetector(
@@ -682,17 +623,14 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                   child: Stack(
                     children: [
                       ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(4),
-                        ),
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                         child: imageUrl.isNotEmpty
                             ? CachedNetworkImage(
                                 imageUrl: imageUrl,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
                                 width: double.infinity,
-                                placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                                placeholder: (context, url) =>
+                                    const Center(child: CircularProgressIndicator()),
                                 errorWidget: (context, url, error) => Container(
                                   color: Colors.grey[200],
                                   child: const Icon(Icons.build, size: 40),
@@ -709,11 +647,11 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                             top: 0,
                             left: 0,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(topLeft: Radius.circular(3)),
+                                color: Colors.white,
                               ),
-                              color: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               child: Text(
                                 "${service.distanceKm?.toStringAsFixed(1)} km",
                                 style: MyTexts.light12,
@@ -746,18 +684,14 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                         const Spacer(),
                         Text(
                           '₹${service.price ?? '0'}/${service.units ?? ''}',
-                          style: MyTexts.bold14.copyWith(
-                            color: MyColors.primary,
-                          ),
+                          style: MyTexts.bold14.copyWith(color: MyColors.primary),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (myPref.role.val == "connector")
-                          const SizedBox(height: 4),
+                        if (myPref.role.val == "connector") const SizedBox(height: 4),
                         if (myPref.role.val == "connector")
                           () {
-                            final connectionStatus =
-                                service.connectionRequestStatus ?? '';
+                            final connectionStatus = service.connectionRequestStatus ?? '';
                             if (connectionStatus.isEmpty) {
                               return RoundedButton(
                                 buttonName: 'Connect',
@@ -770,14 +704,11 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                     isFromIn: true,
                                     onTap: (message) async {
                                       await controller.addServiceToConnect(
-                                        merchantProfileId:
-                                            service.merchantProfileId ?? 0,
+                                        merchantProfileId: service.merchantProfileId ?? 0,
                                         serviceId: service.id ?? 0,
                                         message: message,
                                         onSuccess: () async {
-                                          await controller.fetchServicesFromApi(
-                                            isLoading: false,
-                                          );
+                                          await controller.fetchServicesFromApi(isLoading: false);
                                         },
                                       );
                                     },
@@ -786,9 +717,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                 height: 28,
                                 borderRadius: 6,
                                 verticalPadding: 0,
-                                style: MyTexts.medium14.copyWith(
-                                  color: Colors.white,
-                                ),
+                                style: MyTexts.medium14.copyWith(color: Colors.white),
                               );
                             } else if (connectionStatus == 'pending') {
                               return RoundedButton(
@@ -798,9 +727,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                 horizontalPadding: 20,
                                 borderRadius: 6,
                                 verticalPadding: 0,
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.gray54,
-                                ),
+                                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                               );
                             } else if (connectionStatus == 'accepted') {
                               return RoundedButton(
@@ -810,9 +737,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                 borderRadius: 6,
                                 verticalPadding: 0,
                                 horizontalPadding: 20,
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.gray54,
-                                ),
+                                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                               );
                             } else if (connectionStatus == 'rejected') {
                               return RoundedButton(
@@ -822,9 +747,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                 borderRadius: 6,
                                 verticalPadding: 0,
                                 horizontalPadding: 20,
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.gray54,
-                                ),
+                                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                               );
                             }
                             return const SizedBox.shrink();
@@ -853,8 +776,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
         }
         final service = services[index];
 
-        final imageUrl =
-            APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? '');
+        final imageUrl = APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? '');
         return GestureDetector(
           onTap: () => Get.toNamed(
             Routes.SERVICE_DETAILS,
@@ -905,9 +827,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                 placeholder: (context, url) => const SizedBox(
                                   width: 100,
                                   height: 100,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
+                                  child: Center(child: CircularProgressIndicator()),
                                 ),
                                 errorWidget: (context, url, error) => Container(
                                   width: 100,
@@ -929,10 +849,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                             top: 0,
                             left: 0,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                               color: Colors.white,
                               child: Text(
                                 "${service.distanceKm?.toStringAsFixed(1)} km",
@@ -950,18 +867,14 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                     children: [
                       Text(
                         service.serviceCategoryName ?? 'Service',
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.custom('2E2E2E'),
-                        ),
+                        style: MyTexts.medium14.copyWith(color: MyColors.custom('2E2E2E')),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
                         service.merchantName ?? '',
-                        style: MyTexts.regular12.copyWith(
-                          color: Colors.grey[600],
-                        ),
+                        style: MyTexts.regular12.copyWith(color: Colors.grey[600]),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -969,9 +882,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                       if (service.description != null)
                         Text(
                           service.description!,
-                          style: MyTexts.regular12.copyWith(
-                            color: Colors.grey[600],
-                          ),
+                          style: MyTexts.regular12.copyWith(color: Colors.grey[600]),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -980,13 +891,11 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                         '₹${service.price ?? '0'}/${service.units ?? ''}',
                         style: MyTexts.bold14.copyWith(color: MyColors.primary),
                       ),
-                      if (myPref.role.val == "connector")
-                        const SizedBox(height: 8),
+                      if (myPref.role.val == "connector") const SizedBox(height: 8),
 
                       if (myPref.role.val == "connector")
                         () {
-                          final connectionStatus =
-                              service.connectionRequestStatus ?? '';
+                          final connectionStatus = service.connectionRequestStatus ?? '';
                           if (connectionStatus.isEmpty) {
                             return RoundedButton(
                               buttonName: 'Connect',
@@ -999,14 +908,11 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                   isFromIn: true,
                                   onTap: (message) async {
                                     await controller.addServiceToConnect(
-                                      merchantProfileId:
-                                          service.merchantProfileId ?? 0,
+                                      merchantProfileId: service.merchantProfileId ?? 0,
                                       serviceId: service.id ?? 0,
                                       message: message,
                                       onSuccess: () async {
-                                        await controller.fetchServicesFromApi(
-                                          isLoading: false,
-                                        );
+                                        await controller.fetchServicesFromApi(isLoading: false);
                                       },
                                     );
                                   },
@@ -1015,9 +921,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                               height: 28,
                               borderRadius: 6,
                               verticalPadding: 0,
-                              style: MyTexts.medium14.copyWith(
-                                color: Colors.white,
-                              ),
+                              style: MyTexts.medium14.copyWith(color: Colors.white),
                             );
                           } else if (connectionStatus == 'pending') {
                             return RoundedButton(
@@ -1027,9 +931,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                               horizontalPadding: 20,
                               borderRadius: 6,
                               verticalPadding: 0,
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.gray54,
-                              ),
+                              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                             );
                           } else if (connectionStatus == 'accepted') {
                             return RoundedButton(
@@ -1039,9 +941,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                               borderRadius: 6,
                               verticalPadding: 0,
                               horizontalPadding: 20,
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.gray54,
-                              ),
+                              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                             );
                           } else if (connectionStatus == 'rejected') {
                             return RoundedButton(
@@ -1051,9 +951,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                               borderRadius: 6,
                               verticalPadding: 0,
                               horizontalPadding: 20,
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.gray54,
-                              ),
+                              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                             );
                           }
                           return const SizedBox.shrink();
