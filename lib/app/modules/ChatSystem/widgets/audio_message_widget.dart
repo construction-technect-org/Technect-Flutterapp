@@ -28,6 +28,7 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
   bool _isLoaded = false; // Track if audio is fully loaded
   double _loadingProgress = 0.0; // Loading progress percentage
   String? _currentUrl; // Track current URL to ensure correct audio
+  bool _listenersInitialized = false; // Track if listeners are set up
 
   @override
   void initState() {
@@ -36,13 +37,52 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
     _initAudio();
   }
 
-  Future<void> _initAudio() async {
+  @override
+  void didUpdateWidget(AudioMessageWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Check if audio URL has changed
+    if (oldWidget.audioUrl != widget.audioUrl) {
+      // URL changed, reset state and reinitialize
+      _resetAndReinit();
+    }
+  }
+
+  Future<void> _resetAndReinit() async {
+    try {
+      // Stop and reset current audio
+      await _audioPlayer.stop();
+      await _audioPlayer.seek(Duration.zero);
+      AudioManager().releasePlayer(_audioPlayer);
+
+      // Reset all state
+      if (mounted) {
+        setState(() {
+          _isPlaying = false;
+          _position = Duration.zero;
+          _totalDuration = Duration.zero;
+          _hasCompleted = false;
+          _isLoading = false;
+          _isLoaded = false;
+          _loadingProgress = 0.0;
+          _currentUrl = null;
+        });
+      }
+
+      // Update URL without reinitializing listeners
+      await _updateUrl();
+    } catch (e) {
+      debugPrint('Error resetting audio widget: $e');
+    }
+  }
+
+  Future<void> _updateUrl() async {
     try {
       if (widget.audioUrl.isEmpty) {
         if (mounted) {
           setState(() {
             _isLoading = false;
             _isLoaded = false;
+            _currentUrl = null;
           });
         }
         return;
@@ -54,7 +94,7 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
 
       _currentUrl = url;
 
-      // Don't load automatically - show download button (WhatsApp style)
+      // Reset state for new URL
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -62,6 +102,21 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
           _loadingProgress = 0.0;
         });
       }
+    } catch (e) {
+      debugPrint('Error updating URL: $e');
+    }
+  }
+
+  Future<void> _initAudio() async {
+    try {
+      // Set up listeners only once
+      if (_listenersInitialized) {
+        await _updateUrl();
+        return;
+      }
+
+      // Update URL first
+      await _updateUrl();
 
       // Set up listeners but don't load the audio yet
       // Listen to buffering state for loading progress (when download starts)
@@ -150,6 +205,9 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
           });
         }
       });
+
+      // Mark listeners as initialized
+      _listenersInitialized = true;
     } catch (e) {
       debugPrint('Error initializing audio: $e');
       if (mounted) {
