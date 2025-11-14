@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:construction_technect/app/core/utils/chat_utils.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/audio_manager.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/service/connector_chat_service.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/media_preview_dialog.dart';
@@ -59,6 +60,7 @@ class ConnectorChatSystemController extends GetxController {
   Timer? _recordingTimer;
   String? _currentRecordingPath;
   RxBool hasText = false.obs;
+  RxDouble recordingDragOffset = 0.0.obs; // For swipe to cancel
 
   @override
   void onInit() {
@@ -1033,6 +1035,9 @@ class ConnectorChatSystemController extends GetxController {
   /// Start audio recording
   Future<void> startRecording() async {
     try {
+      // Stop any playing audio before recording
+      await AudioManager().stopAll();
+
       if (await _audioRecorder.hasPermission()) {
         final directory = await getTemporaryDirectory();
         final timestamp = DateTime.now().millisecondsSinceEpoch;
@@ -1080,12 +1085,33 @@ class ConnectorChatSystemController extends GetxController {
       if (!isRecording.value) return;
 
       _recordingTimer?.cancel();
+      final duration = recordingDuration.value;
       final path = await _audioRecorder.stop();
       isRecording.value = false;
 
+      // Check if recording is at least 1 second
       if (path != null && send && path.isNotEmpty) {
-        // Send the audio file
-        await _sendAudioFile(path);
+        if (duration.inSeconds < 1) {
+          // Recording is less than 1 second, cancel it
+          Get.snackbar(
+            'Recording too short',
+            'Audio must be at least 1 second long',
+            backgroundColor: Colors.orange,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 2),
+          );
+          try {
+            final file = File(path);
+            if (await file.exists()) {
+              await file.delete();
+            }
+          } catch (e) {
+            log('❌ Error deleting short recording: $e');
+          }
+        } else {
+          // Send the audio file
+          await _sendAudioFile(path);
+        }
       } else if (path != null && !send) {
         // Delete the recording if cancelled
         try {
@@ -1169,6 +1195,8 @@ class ConnectorChatSystemController extends GetxController {
     _typingTimer?.cancel();
     _recordingTimer?.cancel();
     _audioRecorder.dispose();
+    // Stop all audio playback when screen closes
+    AudioManager().stopAll();
     socket.emit('leave_connection', {"connection_id": connectionId});
     socket.dispose();
     super.onClose();

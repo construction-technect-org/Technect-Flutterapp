@@ -730,51 +730,95 @@ class ChatSystemView extends StatelessWidget {
                         child: Obx(() {
                           final isRecording = controller.isRecording.value;
                           if (isRecording) {
-                            // Show recording indicator like WhatsApp
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(25),
-                                border: Border.all(color: Colors.red, width: 2),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 12,
-                                    height: 12,
-                                    decoration: const BoxDecoration(
+                            // Show recording indicator like WhatsApp with swipe to cancel
+                            return GestureDetector(
+                              onHorizontalDragStart: (_) {
+                                controller.recordingDragOffset.value = 0.0;
+                              },
+                              onHorizontalDragUpdate: (details) {
+                                // Accumulate horizontal drag for swipe to cancel
+                                controller.recordingDragOffset.value +=
+                                    details.delta.dx;
+                              },
+                              onHorizontalDragEnd: (details) {
+                                // If swiped left significantly, cancel recording
+                                if (details.primaryVelocity != null &&
+                                    details.primaryVelocity! < -500) {
+                                  controller.stopRecording(send: false);
+                                }
+                                controller.recordingDragOffset.value = 0.0;
+                              },
+                              child: Transform.translate(
+                                offset: Offset(
+                                  controller.recordingDragOffset.value.clamp(
+                                    -100.0,
+                                    0.0,
+                                  ),
+                                  0,
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(25),
+                                    border: Border.all(
                                       color: Colors.red,
-                                      shape: BoxShape.circle,
+                                      width: 2,
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Obx(() {
-                                    final duration =
-                                        controller.recordingDuration.value;
-                                    final minutes = duration.inMinutes;
-                                    final seconds = duration.inSeconds % 60;
-                                    return Text(
-                                      '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                                      style: const TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 12,
+                                        height: 12,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
                                       ),
-                                    );
-                                  }),
-                                  const Spacer(),
-                                  const Text(
-                                    'Slide to cancel',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                    ),
+                                      const SizedBox(width: 8),
+                                      Obx(() {
+                                        final duration =
+                                            controller.recordingDuration.value;
+                                        final minutes = duration.inMinutes;
+                                        final seconds = duration.inSeconds % 60;
+                                        return Text(
+                                          '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+                                          style: const TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        );
+                                      }),
+                                      const Spacer(),
+                                      Obx(() {
+                                        final shouldShowCancel =
+                                            controller
+                                                .recordingDragOffset
+                                                .value <
+                                            -50;
+                                        return Text(
+                                          shouldShowCancel
+                                              ? 'Release to cancel'
+                                              : 'Slide to cancel',
+                                          style: TextStyle(
+                                            color: shouldShowCancel
+                                                ? Colors.red
+                                                : Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: shouldShowCancel
+                                                ? FontWeight.w600
+                                                : FontWeight.normal,
+                                          ),
+                                        );
+                                      }),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             );
                           }

@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/audio_manager.dart';
 import 'package:just_audio/just_audio.dart';
 
 class AudioMessageWidget extends StatefulWidget {
@@ -22,6 +23,7 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
   bool _isPlaying = false;
   Duration _position = Duration.zero;
   Duration _totalDuration = Duration.zero;
+  bool _hasCompleted = false; // Flag to prevent multiple resets
 
   @override
   void initState() {
@@ -52,6 +54,31 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
           setState(() {
             _isPlaying = state.playing;
           });
+
+          // Check if audio has completed
+          if (state.processingState == ProcessingState.completed &&
+              !state.playing &&
+              !_hasCompleted) {
+            // Audio completed, reset to 0:00 and update icon
+            _hasCompleted = true;
+            _audioPlayer
+                .seek(Duration.zero)
+                .then((_) {
+                  if (mounted) {
+                    setState(() {
+                      _position = Duration.zero;
+                      _isPlaying = false;
+                    });
+                  }
+                  AudioManager().releasePlayer(_audioPlayer);
+                })
+                .catchError((e) {
+                  debugPrint('Error resetting audio position: $e');
+                });
+          } else if (state.playing) {
+            // Reset flag when playing starts again
+            _hasCompleted = false;
+          }
         }
       });
     } catch (e) {
@@ -63,8 +90,14 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
     try {
       if (_isPlaying) {
         await _audioPlayer.pause();
+        AudioManager().releasePlayer(_audioPlayer);
       } else {
-        await _audioPlayer.play();
+        // Reset completion flag when starting to play
+        _hasCompleted = false;
+        final url = widget.audioUrl.startsWith('http')
+            ? widget.audioUrl
+            : 'http://43.205.117.97${widget.audioUrl}';
+        await AudioManager().playAudio(_audioPlayer, url);
       }
     } catch (e) {
       debugPrint('Error toggling playback: $e');
@@ -79,6 +112,7 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
 
   @override
   void dispose() {
+    AudioManager().releasePlayer(_audioPlayer);
     _audioPlayer.dispose();
     super.dispose();
   }
