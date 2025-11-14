@@ -10,6 +10,7 @@ import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/co
 import 'package:construction_technect/app/modules/ChatSystem/widgets/chat_image_viewer.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/create_event_dialog.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/event_card_widget.dart';
+import 'package:construction_technect/app/modules/ChatSystem/widgets/audio_message_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorChatSystemView extends StatelessWidget {
@@ -604,6 +605,12 @@ class ConnectorChatSystemView extends StatelessWidget {
                                           ),
                                         ),
                                       ),
+                                  ] else if (message.type == 'audio') ...[
+                                    AudioMessageWidget(
+                                      audioUrl: message.mediaUrl ?? '',
+                                      duration: message.message,
+                                      isMine: isMine,
+                                    ),
                                   ] else if (message.type == 'event') ...[
                                     Obx(
                                       () => EventCardWidget(
@@ -719,23 +726,110 @@ class ConnectorChatSystemView extends StatelessWidget {
                         onPressed: () => _showAttachmentOptions(context),
                       ),
                       Expanded(
-                        child: CommonTextField(
-                          controller: controller.messageController,
-                          hintText: "Type your message...",
-                          onChange: (text) =>
-                              controller.onTextChanged(text ?? ''),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.send, color: MyColors.primary),
-                        onPressed: () {
-                          final text = controller.messageController.text.trim();
-                          if (text.isNotEmpty) {
-                            controller.onSendTap(text);
-                            controller.messageController.clear();
+                        child: Obx(() {
+                          final isRecording = controller.isRecording.value;
+                          if (isRecording) {
+                            // Show recording indicator like WhatsApp
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(25),
+                                border: Border.all(color: Colors.red, width: 2),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Obx(() {
+                                    final duration =
+                                        controller.recordingDuration.value;
+                                    final minutes = duration.inMinutes;
+                                    final seconds = duration.inSeconds % 60;
+                                    return Text(
+                                      '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    );
+                                  }),
+                                  const Spacer(),
+                                  const Text(
+                                    'Slide to cancel',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           }
-                        },
+                          return CommonTextField(
+                            controller: controller.messageController,
+                            hintText: "Type your message...",
+                            onChange: (text) =>
+                                controller.onTextChanged(text ?? ''),
+                          );
+                        }),
                       ),
+                      Obx(() {
+                        final hasText = controller.hasText.value;
+                        final isRecording = controller.isRecording.value;
+
+                        if (hasText) {
+                          // Show send button when text is entered
+                          return IconButton(
+                            icon: const Icon(
+                              Icons.send,
+                              color: MyColors.primary,
+                            ),
+                            onPressed: () {
+                              final text = controller.messageController.text
+                                  .trim();
+                              if (text.isNotEmpty) {
+                                controller.onSendTap(text);
+                                controller.messageController.clear();
+                              }
+                            },
+                          );
+                        }
+
+                        // Show microphone button for recording (WhatsApp style)
+                        return GestureDetector(
+                          onLongPressStart: (_) => controller.startRecording(),
+                          onLongPressEnd: (_) =>
+                              controller.stopRecording(send: true),
+                          onLongPressCancel: () =>
+                              controller.stopRecording(send: false),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: isRecording
+                                  ? Colors.red
+                                  : MyColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              isRecording ? Icons.mic : Icons.mic,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
+                        );
+                      }),
                     ],
                   ),
                 ),
