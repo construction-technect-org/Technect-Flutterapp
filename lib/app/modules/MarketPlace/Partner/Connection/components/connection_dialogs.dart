@@ -202,14 +202,14 @@ class ConnectionDialogs {
   }
 
   static void showSendConnectionDialog(
-    BuildContext context,
-    Product product, {
-    bool? isFromIn = false,
-    void Function()? onTap,
-  }) {
+      BuildContext context,
+      Product product, {
+        bool? isFromIn = false,
+        void Function()? onTap,
+      }) {
     final TextEditingController messageController = TextEditingController();
     messageController.text =
-        "Hi, I would like to connect with you for business opportunities.";
+    "Hi, I would like to connect with you for business opportunities.";
 
     showDialog(
       context: context,
@@ -228,46 +228,52 @@ class ConnectionDialogs {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 120,
-                  child: Image.asset(Asset.connectToCrm, fit: BoxFit.contain),
-                ),
-                SizedBox(height: 2.h),
                 Text(
                   "Connect to CRM!",
-                  style: MyTexts.extraBold20.copyWith(color: MyColors.primary),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  "To Proceed with your request, please connect to CRM.",
-                  style: MyTexts.regular16.copyWith(
-                    color: MyColors.dopelyColors,
-                    fontFamily: MyTexts.SpaceGrotesk,
+                  style: MyTexts.bold18.copyWith(
+                    color: MyColors.primary,
                   ),
                   textAlign: TextAlign.center,
                 ),
+
+                SizedBox(height: 2.h),
+
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14,horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color(0xFFFEF7E8),
+                    border: Border.all(color: const Color(0xFFFDEBC8)),
+                  ),
+                  child: Text(
+                    "To proceed with your request, please connect to CRM.",
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
                 SizedBox(height: 2.h),
                 CommonTextField(
                   controller: messageController,
                   hintText: "Enter your message",
                   maxLine: 3,
                 ),
+
                 SizedBox(height: 2.h),
                 Row(
                   children: [
                     Expanded(
                       child: RoundedButton(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
+                        onTap: () => Navigator.of(context).pop(),
                         buttonName: 'Cancel',
                         borderRadius: 12,
                         verticalPadding: 0,
                         height: 45,
-                        fontColor: MyColors.primary,
-                        borderColor: MyColors.black,
-                        color: MyColors.white,
+                        fontColor: MyColors.white,
+                        color: MyColors.grayCD,
                       ),
                     ),
                     SizedBox(width: 2.w),
@@ -291,15 +297,16 @@ class ConnectionDialogs {
     );
   }
 
+
   static void showSendServiceConnectionDialog(
-    BuildContext context,
-    dynamic service, {
-    bool? isFromIn = false,
-    void Function(String message)? onTap,
-  }) {
+      BuildContext context,
+      dynamic service, {
+        bool? isFromIn = false,
+        void Function(String message)? onTap,
+      }) {
     final TextEditingController messageController = TextEditingController();
     messageController.text =
-        "Hi, I would like to connect with you for business opportunities.";
+    "Hi, I would like to connect with you for business opportunities.";
 
     showDialog(
       context: context,
@@ -318,24 +325,29 @@ class ConnectionDialogs {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 120,
-                  child: Image.asset(Asset.connectToCrm, fit: BoxFit.contain),
-                ),
-                SizedBox(height: 2.h),
                 Text(
                   "Connect to CRM!",
-                  style: MyTexts.extraBold20.copyWith(color: MyColors.primary),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 1.h),
-                Text(
-                  "To Proceed with your request, please connect to CRM.",
-                  style: MyTexts.regular16.copyWith(
-                    color: MyColors.dopelyColors,
-                    fontFamily: MyTexts.SpaceGrotesk,
+                  style: MyTexts.bold18.copyWith(
+                    color: MyColors.primary,
                   ),
                   textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 2.h),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color(0xFFFEF7E8),
+                    border: Border.all(color: const Color(0xFFFDEBC8)),
+                  ),
+                  child: Text(
+                    "To proceed with your request, please connect to CRM.",
+                    style: MyTexts.medium14.copyWith(
+                      color: MyColors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 SizedBox(height: 2.h),
                 CommonTextField(
@@ -348,16 +360,13 @@ class ConnectionDialogs {
                   children: [
                     Expanded(
                       child: RoundedButton(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
+                        onTap: () => Navigator.of(context).pop(),
                         buttonName: 'Cancel',
                         borderRadius: 12,
                         verticalPadding: 0,
                         height: 45,
-                        fontColor: MyColors.primary,
-                        borderColor: MyColors.black,
-                        color: MyColors.white,
+                        fontColor: MyColors.white,
+                        color: MyColors.grayCD,
                       ),
                     ),
                     SizedBox(width: 2.w),
@@ -385,6 +394,7 @@ class ConnectionDialogs {
       },
     );
   }
+
 
   static void showRemoveConnectionDialog(
     BuildContext context,
