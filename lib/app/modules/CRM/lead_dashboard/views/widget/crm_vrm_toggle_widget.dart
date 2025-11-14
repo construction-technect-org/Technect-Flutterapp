@@ -10,7 +10,7 @@ class CRMVRMToggleWidget extends GetView<LeadDashController> {
       final isCRMSelected = controller.isCRMSelected.value;
 
       return Container(
-        padding: const EdgeInsets.all(6),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(40),
@@ -23,7 +23,7 @@ class CRMVRMToggleWidget extends GetView<LeadDashController> {
               isSelected: isCRMSelected,
               onTap: () => controller.toggleCRMVRM(true),
             ),
-            const SizedBox(width: 5),
+            const SizedBox(width: 2),
             _pillButton(
               title: "VRM",
               isSelected: !isCRMSelected,
@@ -44,7 +44,7 @@ class CRMVRMToggleWidget extends GetView<LeadDashController> {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF1E305C) : Colors.transparent,
           borderRadius: BorderRadius.circular(40),

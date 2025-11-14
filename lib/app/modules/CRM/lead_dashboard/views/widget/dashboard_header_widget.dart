@@ -24,23 +24,20 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
                   ? const Icon(
                       Icons.account_circle_sharp,
                       color: MyColors.primary,
-                      size: 48,
+                      size: 30,
                     )
                   : ClipOval(
                       child: getImageView(
                         finalUrl:
                             "${APIConstants.bucketUrl}${dash.profileData.value.data?.user?.image ?? ""}",
                         fit: BoxFit.cover,
-                        height: 48,
-                        width: 48,
                       ),
                     );
             }),
           ),
-          const Gap(8),
+          const Gap(15),
           const Flexible(child: CRMVRMToggleWidget()),
-          const Gap(8),
-          // const Spacer(),
+          const Gap(18),
           Obx(
             () => HeaderIconWidget(
               icon: Asset.chat,
