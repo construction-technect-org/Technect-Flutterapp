@@ -14,6 +14,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:video_compress/video_compress.dart';
+import 'package:record/record.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ConnectorChatSystemController extends GetxController {
   Rx<ChatListModel> chatListModel = ChatListModel().obs;
@@ -50,6 +52,14 @@ class ConnectorChatSystemController extends GetxController {
   // Event response tracking
   RxInt respondingEventId = 0.obs;
 
+  // Audio recording
+  final AudioRecorder _audioRecorder = AudioRecorder();
+  RxBool isRecording = false.obs;
+  Rx<Duration> recordingDuration = Duration.zero.obs;
+  Timer? _recordingTimer;
+  String? _currentRecordingPath;
+  RxBool hasText = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -77,7 +87,12 @@ class ConnectorChatSystemController extends GetxController {
 
     supportUser = const CustomUser(id: '', name: '', profilePhoto: '');
     scrollController.addListener(_onScrollChanged);
+    messageController.addListener(_onMessageChanged);
     initCalled();
+  }
+
+  void _onMessageChanged() {
+    hasText.value = messageController.text.trim().isNotEmpty;
   }
 
   Future<void> initCalled() async {
@@ -1015,10 +1030,145 @@ class ConnectorChatSystemController extends GetxController {
     }
   }
 
+  /// Start audio recording
+  Future<void> startRecording() async {
+    try {
+      if (await _audioRecorder.hasPermission()) {
+        final directory = await getTemporaryDirectory();
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        _currentRecordingPath = '${directory.path}/audio_$timestamp.m4a';
+
+        await _audioRecorder.start(
+          const RecordConfig(
+            encoder: AudioEncoder.aacLc,
+            bitRate: 128000,
+            sampleRate: 44100,
+          ),
+          path: _currentRecordingPath!,
+        );
+
+        isRecording.value = true;
+        recordingDuration.value = Duration.zero;
+
+        _recordingTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          recordingDuration.value = Duration(seconds: timer.tick);
+        });
+
+        log('🎤 Started recording: $_currentRecordingPath');
+      } else {
+        Get.snackbar(
+          'Permission Denied',
+          'Microphone permission is required to record audio',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      log('❌ Error starting recording: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to start recording: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  /// Stop audio recording and send or cancel
+  Future<void> stopRecording({bool send = true}) async {
+    try {
+      if (!isRecording.value) return;
+
+      _recordingTimer?.cancel();
+      final path = await _audioRecorder.stop();
+      isRecording.value = false;
+
+      if (path != null && send && path.isNotEmpty) {
+        // Send the audio file
+        await _sendAudioFile(path);
+      } else if (path != null && !send) {
+        // Delete the recording if cancelled
+        try {
+          final file = File(path);
+          if (await file.exists()) {
+            await file.delete();
+          }
+        } catch (e) {
+          log('❌ Error deleting cancelled recording: $e');
+        }
+      }
+
+      _currentRecordingPath = null;
+      recordingDuration.value = Duration.zero;
+    } catch (e) {
+      log('❌ Error stopping recording: $e');
+      isRecording.value = false;
+      recordingDuration.value = Duration.zero;
+    }
+  }
+
+  /// Send audio file via socket
+  Future<void> _sendAudioFile(String audioPath) async {
+    try {
+      final file = File(audioPath);
+      if (!await file.exists()) {
+        Get.snackbar(
+          'Error',
+          'Audio file not found',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return;
+      }
+
+      final bytes = await file.readAsBytes();
+      final base64Audio = base64Encode(bytes);
+      final fileName = audioPath.split('/').last;
+      final duration = recordingDuration.value;
+
+      // Format duration as MM:SS
+      final minutes = duration.inMinutes;
+      final seconds = duration.inSeconds % 60;
+      final durationText =
+          '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+
+      socket.emit('send_message', {
+        'connection_id': connectionId,
+        'message_type': 'audio',
+        'media_base64': base64Audio,
+        'media_mime_type': 'audio/m4a',
+        'file_name': fileName,
+        'message': durationText, // Store duration as message text
+      });
+
+      log('🎵 Sent audio message: $fileName (${durationText})');
+
+      // Clean up the temporary file after sending
+      try {
+        await file.delete();
+      } catch (e) {
+        log('⚠️ Could not delete temp audio file: $e');
+      }
+
+      _scrollToBottom();
+    } catch (e) {
+      log('❌ Error sending audio: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to send audio: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   @override
   void onClose() {
     scrollController.removeListener(_onScrollChanged);
+    messageController.removeListener(_onMessageChanged);
     _typingTimer?.cancel();
+    _recordingTimer?.cancel();
+    _audioRecorder.dispose();
     socket.emit('leave_connection', {"connection_id": connectionId});
     socket.dispose();
     super.onClose();
