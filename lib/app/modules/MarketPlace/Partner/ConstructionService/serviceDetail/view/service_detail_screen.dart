@@ -55,11 +55,11 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
               _buildConnectionButton(context, controller),
           ],
         ),
-        //image/video
         body: SingleChildScrollView(
           child: Column(
             children: [
               const Gap(16),
+              //image/video
               Obx(() {
                 final service = controller.service.value;
 
@@ -115,7 +115,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     .videoPlayerController!
                                     .value
                                     .isInitialized) {
-                              controller.videoPlayerController!.play();
+                              controller.videoPlayerController!.pause();
                             }
                           } else {
                             if (controller.videoPlayerController != null &&
@@ -159,7 +159,10 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                     children: [
                                       ClipRRect(
                                         child: AspectRatio(
-                                          aspectRatio: 16 / 9,
+                                          aspectRatio: controller
+                                              .displayAspectRatio(
+                                                videoController,
+                                              ),
                                           child: VideoPlayer(videoController),
                                         ),
                                       ),
@@ -197,14 +200,9 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                   ),
                                 );
                               } else {
-                                return Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    color: MyColors.black,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Center(
-                                    child: CircularProgressIndicator(),
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.grey.withValues(alpha: 0.5),
                                   ),
                                 );
                               }
@@ -476,7 +474,6 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                             Obx(() {
                               final refController =
                                   controller.refVideoPlayerController;
-
                               if (controller.isRefVideo.value &&
                                   refController != null &&
                                   refController.value.isInitialized) {
@@ -493,7 +490,20 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                         borderRadius: BorderRadius.circular(12),
                                         child: AspectRatio(
                                           aspectRatio: 16 / 9,
-                                          child: VideoPlayer(refController),
+                                          child: ColoredBox(
+                                            color: Colors.black,
+                                            child: Center(
+                                              child: AspectRatio(
+                                                aspectRatio: controller
+                                                    .displayAspectRatio(
+                                                      refController,
+                                                    ),
+                                                child: VideoPlayer(
+                                                  refController,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       const VideoPlay(),
@@ -532,14 +542,9 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                 );
                               } else {
                                 //CircularProgressIndicator
-                                return Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    color: MyColors.grayEA,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Center(
-                                    child: CircularProgressIndicator(),
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.grey.withValues(alpha: 0.5),
                                   ),
                                 );
                               }
@@ -592,11 +597,11 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                         if (loadingProgress == null) {
                                           return child;
                                         }
-                                        return Container(
-                                          height: 200,
-                                          color: MyColors.grayEA,
-                                          child: const Center(
-                                            child: CircularProgressIndicator(),
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            color: Colors.grey.withValues(
+                                              alpha: 0.5,
+                                            ),
                                           ),
                                         );
                                       },
@@ -762,9 +767,14 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                                     ''),
                                             fit: BoxFit.fill,
                                             placeholder: (context, url) =>
-                                                const Center(
+                                                Center(
                                                   child:
-                                                      CircularProgressIndicator(),
+                                                      CircularProgressIndicator(
+                                                        color: Colors.grey
+                                                            .withValues(
+                                                              alpha: 0.5,
+                                                            ),
+                                                      ),
                                                 ),
                                             errorWidget:
                                                 (context, url, error) =>

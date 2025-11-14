@@ -165,7 +165,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           children: [
                                             ClipRRect(
                                               child: AspectRatio(
-                                                aspectRatio: 16 / 9,
+                                                aspectRatio: controller
+                                                    .displayAspectRatio(
+                                                      videoPlayerController,
+                                                    ),
                                                 child: VideoPlayer(
                                                   videoPlayerController,
                                                 ),
