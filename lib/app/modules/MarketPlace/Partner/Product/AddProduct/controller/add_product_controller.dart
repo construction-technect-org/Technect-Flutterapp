@@ -140,6 +140,7 @@ class AddProductController extends GetxController {
           await videoPlayerController!.initialize();
           videoPlayerController!.setLooping(false);
           videoPlayerController!.setVolume(1.0);
+          _checkVideoOrientation();
         });
       }
 
@@ -894,6 +895,7 @@ class AddProductController extends GetxController {
 
   final Rx<File?> selectedVideo = Rx<File?>(null);
   VideoPlayerController? videoPlayerController;
+  final RxBool isVideoPortrait = false.obs;
 
   Future<void> openVideoPickerBottomSheet(BuildContext context) {
     return showModalBottomSheet(
@@ -956,6 +958,18 @@ class AddProductController extends GetxController {
       await videoPlayerController!.initialize();
       videoPlayerController!.setLooping(false);
       videoPlayerController!.setVolume(1.0);
+
+      _checkVideoOrientation();
+    }
+  }
+
+  void _checkVideoOrientation() {
+    if (videoPlayerController != null) {
+      final size = videoPlayerController!.value.size;
+      isVideoPortrait.value = size.height > size.width;
+      log(
+        'Video Size: ${size.width}x${size.height}, Is Portrait: ${isVideoPortrait.value}',
+      );
     }
   }
 

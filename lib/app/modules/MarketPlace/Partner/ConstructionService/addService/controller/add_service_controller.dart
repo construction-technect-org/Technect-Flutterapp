@@ -138,6 +138,16 @@ class AddServiceController extends GetxController {
     }
   }
 
+  void _checkVideoOrientation() {
+    if (videoPlayerController != null) {
+      final size = videoPlayerController!.value.size;
+      isVideoPortrait.value = size.height > size.width;
+      log(
+        'Video Size: ${size.width}x${size.height}, Is Portrait: ${isVideoPortrait.value}',
+      );
+    }
+  }
+
   Future<void> pickImage() async {
     try {
       final remainingSlots = 5 - pickedFilePathList.length;
@@ -187,6 +197,7 @@ class AddServiceController extends GetxController {
             await refVideoPlayerController!.initialize();
             refVideoPlayerController!.setLooping(false);
           });
+          _checkVideoOrientation();
         }
       } else {
         referenceDeleted.value = true;
@@ -332,6 +343,8 @@ class AddServiceController extends GetxController {
         .toStringAsFixed(2);
   }
 
+  final RxBool isVideoPortrait = false.obs;
+
   Future<void> openVideoPickerBottomSheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
@@ -392,6 +405,7 @@ class AddServiceController extends GetxController {
       videoPlayerController = VideoPlayerController.file(file);
       await videoPlayerController!.initialize();
       videoPlayerController!.setLooping(false);
+      _checkVideoOrientation();
     }
   }
 

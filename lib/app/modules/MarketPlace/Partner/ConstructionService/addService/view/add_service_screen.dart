@@ -635,9 +635,24 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                             12,
                                           ),
                                           child: AspectRatio(
+                                            // aspectRatio isPortrait ?
+                                            //     9 / 16
+                                            //     : 16 / 9,
                                             aspectRatio: 16 / 9,
-                                            child: VideoPlayer(
-                                              controller.videoPlayerController!,
+                                            child: ColoredBox(
+                                              color: Colors.black,
+                                              child: Center(
+                                                child: AspectRatio(
+                                                  aspectRatio: controller
+                                                      .videoPlayerController!
+                                                      .value
+                                                      .aspectRatio,
+                                                  child: VideoPlayer(
+                                                    controller
+                                                        .videoPlayerController!,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -705,9 +720,24 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
                                         child: AspectRatio(
+                                          // aspectRatio isPortrait ?
+                                          //     9 / 16
+                                          //     : 16 / 9,
                                           aspectRatio: 16 / 9,
-                                          child: VideoPlayer(
-                                            controller.videoPlayerController!,
+                                          child: ColoredBox(
+                                            color: Colors.black,
+                                            child: Center(
+                                              child: AspectRatio(
+                                                aspectRatio: controller
+                                                    .videoPlayerController!
+                                                    .value
+                                                    .aspectRatio,
+                                                child: VideoPlayer(
+                                                  controller
+                                                      .videoPlayerController!,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -834,9 +864,23 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: AspectRatio(
+                                  // aspectRatio isPortrait ?
+                                  //     9 / 16
+                                  //     : 16 / 9,
                                   aspectRatio: 16 / 9,
-                                  child: VideoPlayer(
-                                    controller.refVideoPlayerController!,
+                                  child: ColoredBox(
+                                    color: Colors.black,
+                                    child: Center(
+                                      child: AspectRatio(
+                                        aspectRatio: controller
+                                            .refVideoPlayerController!
+                                            .value
+                                            .aspectRatio,
+                                        child: VideoPlayer(
+                                          controller.refVideoPlayerController!,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
