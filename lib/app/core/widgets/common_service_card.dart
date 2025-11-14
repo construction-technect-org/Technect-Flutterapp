@@ -38,7 +38,7 @@ class ServiceCard extends StatelessWidget {
                   child: imageUrl != null
                       ? CachedNetworkImage(
                           imageUrl: imageUrl,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           width: double.infinity,
                           height: double.infinity,
                           placeholder: (context, url) =>

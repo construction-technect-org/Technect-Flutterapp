@@ -351,15 +351,15 @@ class ConnectionInboxView extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: (connection.itemType?.toLowerCase() == 'service')
+                      color: ((connection.itemType?.toLowerCase() == 'service')
                           ? MyColors.primary
-                          : MyColors.greenBtn,
+                          : MyColors.greenBtn).withValues(alpha: 0.1),
                       borderRadius: const BorderRadius.only(topRight: Radius.circular(6)),
                     ),
                     child: Text(
                       (connection.itemType?.toLowerCase() == 'service') ? 'Service' : 'Product',
                       style: MyTexts.medium12.copyWith(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),
@@ -597,15 +597,15 @@ class ConnectionInboxView extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: (connection.itemType?.toLowerCase() == 'service')
+                      color: ((connection.itemType?.toLowerCase() == 'service')
                           ? MyColors.primary
-                          : MyColors.greenBtn,
+                          : MyColors.greenBtn).withValues(alpha: 0.1),
                       borderRadius: const BorderRadius.only(topRight: Radius.circular(6)),
                     ),
                     child: Text(
                       (connection.itemType?.toLowerCase() == 'service') ? 'Service' : 'Product',
                       style: MyTexts.medium12.copyWith(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontFamily: MyTexts.SpaceGrotesk,
                       ),
                     ),

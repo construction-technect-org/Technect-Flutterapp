@@ -59,6 +59,7 @@ class AddProductView extends GetView<AddProductController> {
               controller: controller.pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
+                //Page 1
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(
@@ -650,7 +651,7 @@ class AddProductView extends GetView<AddProductController> {
                     ),
                   ),
                 ),
-
+                //Page 2
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(
@@ -771,6 +772,7 @@ class AddProductView extends GetView<AddProductController> {
                           ),
                         ),
                         const Gap(16),
+                        //edit product
                         if (controller.isEdit)
                           Obx(() {
                             return Container(
@@ -822,9 +824,22 @@ class AddProductView extends GetView<AddProductController> {
                                                     BorderRadius.circular(12),
                                                 child: AspectRatio(
                                                   aspectRatio: 16 / 9,
-                                                  child: VideoPlayer(
-                                                    controller
-                                                        .videoPlayerController!,
+                                                  child: ColoredBox(
+                                                    color: Colors.black,
+                                                    child: Center(
+                                                      child: AspectRatio(
+                                                        aspectRatio:
+                                                            controller
+                                                                .isVideoPortrait
+                                                                .value
+                                                            ? 9 / 16
+                                                            : 16 / 9,
+                                                        child: VideoPlayer(
+                                                          controller
+                                                              .videoPlayerController!,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -877,8 +892,8 @@ class AddProductView extends GetView<AddProductController> {
                               ),
                             );
                           }),
-                        //add product
                         if (!controller.isEdit)
+                          //add product
                           Obx(() {
                             final video = controller.selectedVideo.value;
                             return Container(
@@ -894,53 +909,43 @@ class AddProductView extends GetView<AddProductController> {
                                     Stack(
                                       alignment: AlignmentGeometry.topRight,
                                       children: [
-                                        Stack(
-                                          alignment: AlignmentGeometry.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: AspectRatio(
-                                                aspectRatio: 16 / 9,
+                                        GestureDetector(
+                                          onTap: () =>
+                                              controller.openVideoDialog(
+                                                context,
+                                                video.path,
+                                                false,
+                                              ),
+                                          child: Stack(
+                                            alignment: AlignmentGeometry.center,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
                                                 child: AspectRatio(
                                                   aspectRatio: 16 / 9,
-                                                  child: VideoPlayer(
-                                                    controller
-                                                        .videoPlayerController!,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                controller.openVideoDialog(
-                                                  context,
-                                                  video.path,
-                                                  false,
-                                                );
-                                              },
-                                              child: Stack(
-                                                alignment:
-                                                    AlignmentGeometry.center,
-                                                children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          12,
+                                                  child: ColoredBox(
+                                                    color: Colors.black,
+                                                    child: Center(
+                                                      child: AspectRatio(
+                                                        aspectRatio:
+                                                            controller
+                                                                .isVideoPortrait
+                                                                .value
+                                                            ? 9 / 16
+                                                            : 16 / 9,
+                                                        child: VideoPlayer(
+                                                          controller
+                                                              .videoPlayerController!,
                                                         ),
-                                                    child: AspectRatio(
-                                                      aspectRatio: 16 / 9,
-                                                      child: VideoPlayer(
-                                                        controller
-                                                            .videoPlayerController!,
                                                       ),
                                                     ),
                                                   ),
-                                                  const VideoPlay(),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                              const VideoPlay(),
+                                            ],
+                                          ),
                                         ),
                                         GestureDetector(
                                           onTap: controller.removeVideo,
@@ -954,6 +959,7 @@ class AddProductView extends GetView<AddProductController> {
                                       ],
                                     )
                                   else
+                                    //No video uploaded
                                     GestureDetector(
                                       onTap: () =>
                                           controller.openVideoPickerBottomSheet(
@@ -1015,7 +1021,7 @@ class AddProductView extends GetView<AddProductController> {
                     ),
                   ),
                 ),
-                //3 screen
+                //Page 3
                 SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Form(

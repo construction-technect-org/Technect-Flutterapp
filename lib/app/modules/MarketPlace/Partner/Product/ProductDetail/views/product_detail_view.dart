@@ -127,7 +127,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             if (videoUrl != null)
                               {'type': 'video', 'path': videoUrl},
                           ];
-
                           return Container(
                             height: 35.h,
                             width: 360.w,
@@ -141,7 +140,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                 final media = mediaList[index];
                                 final path = media['path'] as String;
                                 final isHttp = path.startsWith('http');
-
+                                //========================= Video ============================
                                 if (media['type'] == 'video') {
                                   return Obx(() {
                                     final videoPlayerController =
@@ -154,6 +153,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                         videoPlayerController
                                             .value
                                             .isInitialized) {
+                                      //ready state
                                       return GestureDetector(
                                         onTap: () => controller.openVideoDialog(
                                           context,
@@ -165,7 +165,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           children: [
                                             ClipRRect(
                                               child: AspectRatio(
-                                                aspectRatio: 16 / 9,
+                                                aspectRatio: controller
+                                                    .displayAspectRatio(
+                                                      videoPlayerController,
+                                                    ),
                                                 child: VideoPlayer(
                                                   videoPlayerController,
                                                 ),
@@ -177,6 +180,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                       );
                                     } else if (videoPlayerController != null &&
                                         videoPlayerController.value.hasError) {
+                                      //error state
                                       return Container(
                                         height: 200,
                                         decoration: BoxDecoration(
@@ -268,24 +272,19 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                         ),
                                       );
                                     } else {
-                                      return Container(
-                                        height: 200,
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: const Center(
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
+                                      //loading
+                                      controller.retryVideoInitialization();
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.grey.withValues(
+                                            alpha: 0.5,
                                           ),
                                         ),
                                       );
                                     }
                                   });
                                 }
-                                //Image
+                                //========================= Image ============================
                                 return GestureDetector(
                                   onTap: () {
                                     showDialog(

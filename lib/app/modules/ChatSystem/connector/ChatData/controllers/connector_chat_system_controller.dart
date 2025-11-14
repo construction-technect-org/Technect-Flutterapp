@@ -44,6 +44,9 @@ class ConnectorChatSystemController extends GetxController {
   Timer? _typingTimer;
   bool _isTyping = false;
 
+  // Scroll helpers
+  RxBool showScrollToBottom = false.obs;
+
   // Event response tracking
   RxInt respondingEventId = 0.obs;
 
@@ -73,6 +76,7 @@ class ConnectorChatSystemController extends GetxController {
     }
 
     supportUser = const CustomUser(id: '', name: '', profilePhoto: '');
+    scrollController.addListener(_onScrollChanged);
     initCalled();
   }
 
@@ -195,11 +199,6 @@ class ConnectorChatSystemController extends GetxController {
       log('❌ Error fetching chat list: $e');
     } finally {
       isLoading.value = false;
-      if (messages.isNotEmpty) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _jumpToBottom();
-        });
-      }
     }
   }
 
@@ -356,19 +355,14 @@ class ConnectorChatSystemController extends GetxController {
     socket.connect();
   }
 
-  void _jumpToBottom() {
-    if (scrollController.hasClients) {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    }
-  }
-
   void _scrollToBottom() {
     if (scrollController.hasClients) {
       scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
+        0,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
+      showScrollToBottom.value = false;
     }
   }
 
@@ -1023,10 +1017,21 @@ class ConnectorChatSystemController extends GetxController {
 
   @override
   void onClose() {
+    scrollController.removeListener(_onScrollChanged);
     _typingTimer?.cancel();
     socket.emit('leave_connection', {"connection_id": connectionId});
     socket.dispose();
     super.onClose();
+  }
+
+  void scrollToBottom() => _scrollToBottom();
+
+  void _onScrollChanged() {
+    if (!scrollController.hasClients) return;
+    final shouldShow = scrollController.offset > 200;
+    if (showScrollToBottom.value != shouldShow) {
+      showScrollToBottom.value = shouldShow;
+    }
   }
 }
 
