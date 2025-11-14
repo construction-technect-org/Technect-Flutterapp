@@ -263,6 +263,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                         final isRead = message.status == MessageStatus.read;
 
                         return Align(
+                          key: ValueKey('message_${message.id}'),
                           alignment: isMine
                               ? Alignment.centerRight
                               : Alignment.centerLeft,
