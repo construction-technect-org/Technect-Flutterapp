@@ -16,15 +16,12 @@ class AddNewLeadButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade800, width: 1.6),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add, size: 22),
-            SizedBox(width: 8),
-            Text(
-              'Add New Lead',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-            ),
+            const Icon(Icons.add, size: 22),
+            const SizedBox(width: 8),
+            Text('Add New Lead', style: MyTexts.medium14),
           ],
         ),
       ),

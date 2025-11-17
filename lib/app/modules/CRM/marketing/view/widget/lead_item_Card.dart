@@ -53,17 +53,18 @@ class LeadItemCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Connector - ${lead.connector}',
-                            style: const TextStyle(
+                            style: MyTexts.medium10.copyWith(
                               fontWeight: FontWeight.w700,
-                              fontSize: 10,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          '${_formatTime(lead.dateTime)} , ${_formatDate(lead.dateTime)}',
-                          style: const TextStyle(fontSize: 10),
+                          '${_formatTime(lead.dateTime)}, ${_formatDate(lead.dateTime)}',
+                          style: MyTexts.medium10.copyWith(
+                            color: MyColors.gray54,
+                          ),
                           textAlign: TextAlign.right,
                         ),
                       ],
@@ -71,13 +72,13 @@ class LeadItemCard extends StatelessWidget {
 
                     const SizedBox(height: 3),
                     Text(
-                      'lead Id - ${lead.id}',
-                      style: const TextStyle(fontSize: 10),
+                      'Lead Id - ${lead.id}',
+                      style: MyTexts.medium10.copyWith(color: MyColors.gray54),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       'Product Interested - ${lead.product}',
-                      style: const TextStyle(fontSize: 10),
+                      style: MyTexts.medium10.copyWith(color: MyColors.gray54),
                     ),
                     const SizedBox(height: 4),
                     Row(
@@ -85,8 +86,10 @@ class LeadItemCard extends StatelessWidget {
                         const Icon(Icons.location_on, size: 14),
                         const SizedBox(width: 3),
                         Text(
-                          '${lead.distanceKm} km way',
-                          style: const TextStyle(fontSize: 10),
+                          '${lead.distanceKm} km away',
+                          style: MyTexts.medium10.copyWith(
+                            color: MyColors.gray54,
+                          ),
                         ),
                       ],
                     ),
@@ -100,11 +103,10 @@ class LeadItemCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: const Text(
-                        'View all details',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
+                      child: Text(
+                        'View Details',
+                        style: MyTexts.medium10.copyWith(
+                          color: Colors.white,
                           letterSpacing: 0.4,
                         ),
                       ),

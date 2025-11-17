@@ -1,6 +1,5 @@
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class TodaysLeadsCard extends GetView<MarketingController> {
   const TodaysLeadsCard();
@@ -21,20 +20,14 @@ class TodaysLeadsCard extends GetView<MarketingController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// ---- TOP TITLE + MONTH PILL ----
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Today 's Total  Leads",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.2,
-                ),
+              Text(
+                "Today's Total Leads",
+                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
               ),
 
-              /// MONTH FILTER PILL
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -44,17 +37,11 @@ class TodaysLeadsCard extends GetView<MarketingController> {
                   color: const Color(0xFFDCEAFF),
                   borderRadius: BorderRadius.circular(22),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.calendar_today_outlined, size: 12),
-                    SizedBox(width: 6),
-                    Text(
-                      'Month',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    const Icon(Icons.calendar_today_outlined, size: 12),
+                    const SizedBox(width: 6),
+                    Text('Month', style: MyTexts.medium12),
                   ],
                 ),
               ),
@@ -64,9 +51,8 @@ class TodaysLeadsCard extends GetView<MarketingController> {
           Obx(
             () => Text(
               '${controller.todaysTotal}',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w900,
+              style: MyTexts.medium24.copyWith(
+                fontWeight: FontWeight.w700,
                 letterSpacing: 0.5,
               ),
             ),
@@ -81,11 +67,10 @@ class TodaysLeadsCard extends GetView<MarketingController> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: const Text(
-                'View  in details',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
+              child: Text(
+                'View Details',
+                style: MyTexts.medium12.copyWith(
+                  color: Colors.white,
                   letterSpacing: 0.4,
                 ),
               ),

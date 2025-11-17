@@ -29,7 +29,7 @@ class MarketingController extends GetxController {
   ];
 
   // Today total
-  int get todaysTotal => 98; //leads.length;
+  int get todaysTotal => leads.length;
 
   // list of leads
   RxList<LeadModel> leads = <LeadModel>[
@@ -78,5 +78,22 @@ class MarketingController extends GetxController {
 
   void chatNow(String leadId) {
     debugPrint('Open chat for $leadId');
+  }
+
+  void onAdd(BuildContext ctx) {
+    // Example: open dialog to add a LeadModel
+    // final c = controller;
+    final now = DateTime.now();
+    addLead(
+      LeadModel(
+        id: '#CTO${1000 + leads.length + 1}',
+        name: 'New LeadModel ${leads.length + 1}',
+        connector: 'Connector X',
+        product: 'Concrete',
+        distanceKm: 1.2,
+        dateTime: now,
+        avatarUrl: 'https://i.pravatar.cc/150?img=${20 + leads.length}',
+      ),
+    );
   }
 }
