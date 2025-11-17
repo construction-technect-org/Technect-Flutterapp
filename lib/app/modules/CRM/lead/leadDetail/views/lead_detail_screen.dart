@@ -21,7 +21,6 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                 image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
               ),
             ),
-
             Column(
               children: [
                 CommonAppBar(
@@ -96,7 +95,15 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
       padding: const EdgeInsets.all(8),
       child: Row(
         children: [
-          getImageView(finalUrl: "finalUrl", height: 114, width: 78),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: getImageView(
+              finalUrl: "https://picsum.photos/200/300",
+              height: 114,
+              width: 90,
+              fit: BoxFit.cover,
+            ),
+          ),
           const Gap(10),
 
           /// TEXT AREA
@@ -277,7 +284,10 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
           children: [
             Text("Requirement", style: MyTexts.medium16),
             const Spacer(),
-            SvgPicture.asset(Asset.edit),
+            GestureDetector(
+              onTap: () => _openTeamBottomSheet(),
+              child: SvgPicture.asset(Asset.edit),
+            ),
           ],
         ),
         const Gap(16),
@@ -377,6 +387,159 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  void _openTeamBottomSheet() {
+    Get.bottomSheet(
+      Container(
+        height: Get.height * 0.7,
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        ),
+        child: GestureDetector(
+          onTap: hideKeyboard,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.arrow_back_ios_new, size: 20),
+                  const SizedBox(width: 8),
+                  Text("Team", style: MyTexts.bold20),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: Get.back,
+                    child: const CircleAvatar(
+                      radius: 18,
+                      backgroundColor: MyColors.grayF7,
+                      child: Icon(Icons.close, color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _teamCard(
+                        image: "https://picsum.photos/200/300",
+                        name: "Name",
+                        designation: "Designation",
+                        ratio: "Conversation Ration",
+                      ),
+                      const SizedBox(height: 20),
+                      _teamCard(
+                        image: "https://picsum.photos/200/400",
+                        name: "Name",
+                        designation: "Designation",
+                        ratio: "Conversation Ration",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  Widget _teamCard({
+    required String image,
+    required String name,
+    required String designation,
+    required String ratio,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF3F8FF),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: MyColors.grayEA),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(image, height: 70, width: 70, fit: BoxFit.cover),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Name :", style: MyTexts.medium14),
+                    const Gap(7),
+                    Text("Designation :", style: MyTexts.medium14),
+                    const Gap(7),
+                    Text("Conversation Ration :", style: MyTexts.medium14),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF142243),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text("Assign", style: MyTexts.bold14.copyWith(color: Colors.white)),
+                  ),
+                  const Gap(8),
+                  SvgPicture.asset(Asset.calendar),
+                  const Gap(8),
+                  SvgPicture.asset(Asset.chat),
+                ],
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 2),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.white,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("  Priority  ", style: MyTexts.medium14),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.green.shade700,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("High", style: MyTexts.medium13.copyWith(color: Colors.white)),
+                      const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          const CommonTextField(
+            hintText: "Note:Typing....",
+            maxLine: 3,
+          )
         ],
       ),
     );
