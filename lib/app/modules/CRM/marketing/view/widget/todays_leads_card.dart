@@ -59,14 +59,13 @@ class TodaysLeadsCard extends GetView<MarketingController> {
           ),
 
           Center(
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF17345A),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF17345A),
+                borderRadius: BorderRadius.circular(16),
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              margin: const EdgeInsets.only(top: 4, bottom: 10),
               child: Text(
                 'View Details',
                 style: MyTexts.medium12.copyWith(

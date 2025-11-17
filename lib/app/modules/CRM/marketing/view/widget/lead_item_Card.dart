@@ -95,13 +95,14 @@ class LeadItemCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
 
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF17345A),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF17345A),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
                       ),
                       child: Text(
                         'View Details',
