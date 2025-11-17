@@ -13,8 +13,9 @@ import 'package:construction_technect/app/modules/CRM/bottom/bindings/bottom_bin
 import 'package:construction_technect/app/modules/CRM/bottom/views/bottom_view.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/binding/connector_all_chat_list_binding.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/views/connector_all_chat_list.dart';
+import 'package:construction_technect/app/modules/CRM/requirement/add/bindings/add_new_requ_binding.dart';
+import 'package:construction_technect/app/modules/CRM/requirement/add/view/add_new_requirement.dart';
+import 'package:construction_technect/app/modules/CRM/requirement/details/views/requirement_detail_screen.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/binding/connector_chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/views/connector_chat_system_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/binding/all_chat_list_binding.dart';
@@ -388,9 +389,14 @@ class AppPages {
       binding: AllChatListBinding(),
     ),
     GetPage(
-      name: _Paths.CONNECTOR_All_CHAT_LIST,
-      page: () => const ConnectorAllChatListScreen(),
-      binding: ConnectorAllChatListBinding(),
+      name: _Paths.Add_New_REQUIREMENT,
+      page: () => const AddNewRequirement(),
+      binding: AddNewRequBinding(),
+    ),
+    GetPage(
+      name: Routes.Requ_DetailS,
+      page: () => const RequirementDetailScreen(),
+      // binding: AddNewRequBinding(),
     ),
   ];
 }

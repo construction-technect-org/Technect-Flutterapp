@@ -2,29 +2,26 @@ import 'package:construction_technect/app/core/utils/email_validation.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 
-/// Main validation utility class
-/// Provides validation methods for various input types including email, mobile, name, etc.
 class Validate {
-  // ==================== Email Validation ====================
+  // ==================== Null Validation ====================
+  static String? validateNull(String? value, String fieldName) {
+    if (value == null || value.isEmpty) {
+      return "Please enter $fieldName";
+    }
+    return null;
+  }
 
   /// Non-future email validation for TextField validators
-  /// Returns error message if invalid, null if valid
-  /// Does NOT check email availability (no API call)
   static String? validateEmail(String? email) {
     return EmailValidation.validateEmail(email);
   }
 
   /// Future email validation for button actions
-  /// Includes format validation AND availability check (API call)
-  /// Returns error message if invalid, empty string if valid and available
-  /// Only checks availability if format validation passes
   static Future<String?> validateEmailAsync(String? email) async {
     // First validate email format using the non-future method
     final formatError = validateEmail(email);
     if (formatError != null) {
-      // Return null to indicate format error (don't show API error if format is invalid)
-      // The format error will be shown by the validator
-      return null; // Format error is handled by validator, don't show API error
+      return null;
     }
 
     // Only check email availability via API if format is valid
@@ -52,8 +49,6 @@ class Validate {
   // ==================== Name Validation ====================
 
   /// Validates name format
-  /// Allows CamelCase and optional spaces/underscores between words
-  /// Each segment must start with uppercase and contain only letters
   static String? validateName(String? value, {String fieldName = "Name"}) {
     if (value == null || value.trim().isEmpty) {
       return "Please enter $fieldName";
@@ -69,9 +64,6 @@ class Validate {
   }
 
   /// Validates business name format
-  /// Allows words starting uppercase or common lowercase connectors (of, and, the, ...)
-  /// Words may include letters, numbers, and &, -, . between alphanumerics
-  /// Optional trailing hyphen allowed
   static String? validateBusinessName(
     String? value, {
     String fieldName = "Name",
@@ -82,10 +74,6 @@ class Validate {
     if (value.trim().length < 2) {
       return "$fieldName must be at least 2 characters long";
     }
-    // Allow words starting uppercase or common lowercase connectors (of, and, the, ...);
-    // words may include letters, numbers, and &, -, . between alphanumerics; optional trailing hyphen allowed.
-    // Examples accepted: "H&M Constructions", "Pro-Tech Builders", "A&B Traders", "Tech2Win", "Studio52",
-    // "The International Association of Engineers and Technologists Research and Development Solutions Private Limited-".
     final pattern = RegExp(
       '^(?:'
       r'(?:[A-Z][a-zA-Z0-9]*(?:[&.\-][A-Za-z0-9]+)*)'
@@ -172,12 +160,6 @@ class Validate {
   }
 
   /// Future mobile number validation for button actions
-  /// Includes format validation AND availability check (API call)
-  /// Returns error message if invalid, empty string if valid and available
-  /// Only checks availability if format validation passes
-  ///
-  /// [mobileNumber] - The mobile number to validate
-  /// [countryCode] - The country code (e.g., "+91")
   static Future<String?> validateMobileNumberAsync(
     String? mobileNumber, {
     String? countryCode,
@@ -197,7 +179,7 @@ class Validate {
       if (!isAvailable) {
         return "This mobile number is already registered";
       } else {
-        return ""; // Empty string means valid and available
+        return "";
       }
     } catch (e) {
       return "Error checking mobile number availability";
@@ -205,8 +187,21 @@ class Validate {
   }
 
   // ==================== GST Validation ====================
+  static String? validateGST(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return "Please enter GSTIN number";
+    }
+    if (value.trim().length != 15) {
+      return "GSTIN number must be exactly 15 characters";
+    }
+    if (!RegExp(
+      r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$',
+    ).hasMatch(value.trim())) {
+      return "Please enter a valid GSTIN number";
+    }
+    return null;
+  }
 
-  /// Validates GSTIN number format and availability
   static Future<bool> validateGSTAvailability(String value) async {
     if (value.isEmpty) {
       SnackBars.errorSnackBar(content: "Please enter GSTIN number");
