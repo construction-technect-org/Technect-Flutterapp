@@ -17,11 +17,11 @@ class StatCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: MyColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: MyColors.grayEA),
+          // border: Border.all(color: MyColors.grayEA),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

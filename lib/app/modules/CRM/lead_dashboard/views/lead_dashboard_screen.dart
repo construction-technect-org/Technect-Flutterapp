@@ -5,8 +5,8 @@ import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widge
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/dashboard_header_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/lead_conversation_section_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/leads_section_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/pipeline_section_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/task_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/pill_button.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/product_chart_widget.dart';
 
 class LeadDashboardScreen extends GetView<LeadDashController> {
   const LeadDashboardScreen({super.key});
@@ -28,27 +28,60 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                   ),
                 ),
               ),
-              const SafeArea(
+              SafeArea(
                 child: Column(
                   children: [
-                    DashboardHeaderWidget(),
+                    const DashboardHeaderWidget(),
                     Expanded(
                       child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Gap(8),
-                            LeadsSectionWidget(),
-                            Gap(24),
-                            TaskSectionWidget(),
-                            Gap(24),
-                            PipelineSectionWidget(),
-                            Gap(24),
-                            AnalysisSectionWidget(),
-                            Gap(24),
-                            LeadConversationSectionWidget(),
-                            Gap(24),
+                            const Gap(8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Obx(
+                                  () => PillButtonWithOuter(
+                                    title: "Marketing",
+                                    isSelected: controller.totalMarketing.value,
+                                    onTap: () =>
+                                        controller.toggleMarketingSalesAccounts(
+                                          "Marketing",
+                                        ),
+                                  ),
+                                ),
+                                Obx(
+                                  () => PillButtonWithOuter(
+                                    title: "Sales",
+                                    isSelected: controller.totalSales.value,
+                                    onTap: () => controller
+                                        .toggleMarketingSalesAccounts("Sales"),
+                                  ),
+                                ),
+
+                                Obx(
+                                  () => PillButtonWithOuter(
+                                    title: "Accounts",
+                                    isSelected: controller.totalAccounts.value,
+                                    onTap: () =>
+                                        controller.toggleMarketingSalesAccounts(
+                                          "Accounts",
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(24),
+                            const LeadsSectionWidget(),
+                            const Gap(24),
+                            const ProductChartWidget(),
+                            const Gap(24),
+                            const AnalysisSectionWidget(),
+                            const Gap(24),
+                            const LeadConversationSectionWidget(),
+                            const Gap(24),
                           ],
                         ),
                       ),

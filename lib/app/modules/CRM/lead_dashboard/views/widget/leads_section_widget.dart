@@ -7,68 +7,39 @@ class LeadsSectionWidget extends GetView<LeadDashController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
+    return Obx(() {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          color: MyColors.grayE6,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: MyColors.grayEA),
+        ),
+        child: Row(
           children: [
-            Text(
-              'Leads',
-              style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
+            Expanded(
+              child: StatCardWidget(
+                title: 'Raw Leads',
+                value: controller.rawLeads.toString(),
+              ),
             ),
-            GestureDetector(
-              onTap: () {
-                // Navigate to calendar/task view
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: MyColors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: MyColors.grayEA),
-                ),
-                child: const Icon(
-                  Icons.calendar_today,
-                  size: 20,
-                  color: MyColors.fontBlack,
-                ),
+            const Gap(12),
+            Expanded(
+              child: StatCardWidget(
+                title: 'Follow up Leads',
+                value: controller.followUpLeads.toString(),
+              ),
+            ),
+            const Gap(12),
+            Expanded(
+              child: StatCardWidget(
+                title: 'Pending Leads',
+                value: controller.pendingLeads.toString(),
               ),
             ),
           ],
         ),
-        const Gap(12),
-        Obx(() {
-          final totalLeads = controller.totalLeads.value;
-          final inboundLeads = controller.inboundLeads.value;
-          final outboundLeads = controller.outboundLeads.value;
-          return Row(
-            children: [
-              Expanded(
-                child: StatCardWidget(
-                  title: 'Total Leads',
-                  value: totalLeads.toString(),
-                ),
-              ),
-              const Gap(12),
-              Expanded(
-                child: StatCardWidget(
-                  title: 'Inbound Leads',
-                  value: inboundLeads.toString(),
-                ),
-              ),
-              const Gap(12),
-              Expanded(
-                child: StatCardWidget(
-                  title: 'Outbound Leads',
-                  value: outboundLeads.toString(),
-                ),
-              ),
-            ],
-          );
-        }),
-      ],
-    );
+      );
+    });
   }
 }

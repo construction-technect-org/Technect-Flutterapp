@@ -17,15 +17,15 @@ class LeadDashController extends GetxController {
   // CRM/VRM toggle
   final isCRMSelected = true.obs;
 
-  // Leads data
-  final totalLeads = 6.obs;
-  final inboundLeads = 8.obs;
-  final outboundLeads = 5.obs;
+  // Marketing / Sales / Accounts data
+  final totalMarketing = true.obs;
+  final totalSales = false.obs;
+  final totalAccounts = false.obs;
 
   // Task data
-  final totalTasks = 2.obs;
-  final completedTasks = 9.obs;
-  final upcomingTasks = 4.obs;
+  final rawLeads = 2.obs;
+  final followUpLeads = 9.obs;
+  final pendingLeads = 4.obs;
 
   // Pipeline data
   final pipelineData = [
@@ -71,4 +71,81 @@ class LeadDashController extends GetxController {
     isCRMSelected.value = isCRM;
     // Load data based on selection
   }
+
+  void toggleMarketingSalesAccounts(String type) {
+    if (type == 'Marketing') {
+      totalMarketing.value = true;
+      totalSales.value = false;
+      totalAccounts.value = false;
+    } else if (type == 'Sales') {
+      totalMarketing.value = false;
+      totalSales.value = true;
+      totalAccounts.value = false;
+    } else if (type == 'Accounts') {
+      totalMarketing.value = false;
+      totalSales.value = false;
+      totalAccounts.value = true;
+    }
+  }
+
+  //============ Additional methods to fetch/update data can be added here ============//
+  // Months labels (fixed)
+  final months = <String>[
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+  ];
+
+  // Products values as reactive lists (K = thousands). You can update these at runtime.
+  final productA = <double>[
+    500,
+    850,
+    850,
+    480,
+    580,
+    720,
+    1100,
+    1020,
+    950,
+    980,
+    1100,
+  ].obs;
+  final productB = <double>[
+    200,
+    480,
+    700,
+    780,
+    720,
+    640,
+    660,
+    700,
+    850,
+    1150,
+    1200,
+  ].obs;
+
+  // Toggle visibility of series
+  final showA = true.obs;
+  final showB = true.obs;
+
+  void updateProductA(List<double> newValues) {
+    productA.assignAll(newValues);
+    update();
+  }
+
+  void updateProductB(List<double> newValues) {
+    productB.assignAll(newValues);
+    update();
+  }
+
+  void toggleA() => showA.toggle();
+  void toggleB() => showB.toggle();
 }
