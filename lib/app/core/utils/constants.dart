@@ -56,6 +56,11 @@ class Asset {
   static const String info = '${svg}info.svg';
   static const String cart = '${svg}cart.svg';
   static const String wishlist = '${svg}wishlist.svg';
+  static const String pin = '${svg}pin.svg';
+  static const String calendar = '${svg}calendar.svg';
+  static const String moreV = '${svg}moreV.svg';
+  static const String paperclip = '${svg}paperclip.svg';
+  static const String userPlus = '${svg}userPlus.svg';
 
   /// feature
   static const String crm = '${feature}crm.png';
