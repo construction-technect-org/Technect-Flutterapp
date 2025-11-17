@@ -89,6 +89,8 @@ abstract class Routes {
   static const Add_New_Requ = _Paths.Add_New_REQUIREMENT;
   static const Requ_DetailS = _Paths.Requirement_DetailS;
   static const CONNECTOR_All_CHAT_LIST = _Paths.CONNECTOR_All_CHAT_LIST;
+
+  static const Marketing = _Paths.MarketingScreen;
 }
 
 abstract class _Paths {
@@ -179,4 +181,6 @@ abstract class _Paths {
   static const Add_New_REQUIREMENT = '/add_new_requirement';
   static const Requirement_DetailS = '/RequirementDetailScreen';
   static const CONNECTOR_All_CHAT_LIST = '/connector-all-chat-list';
+
+  static const MarketingScreen = "/MarketingScreen";
 }
