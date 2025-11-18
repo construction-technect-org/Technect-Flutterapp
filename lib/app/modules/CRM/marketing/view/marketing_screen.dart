@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/CRM/marketing/controller/marke
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/lead_screen.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/segment_filters_widget.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/topbar_header.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/white_card_widget.dart';
 
 class MarketingScreen extends GetView<MarketingController> {
   const MarketingScreen({super.key});
@@ -35,9 +36,11 @@ class MarketingScreen extends GetView<MarketingController> {
                           physics: const BouncingScrollPhysics(),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child:
-                                c.filterScreens[c.activeFilter.value] ??
-                                const LeadScreen(),
+                            child: WhiteCardWidget(
+                              child:
+                                  c.filterScreens[c.activeFilter.value] ??
+                                  const LeadScreen(),
+                            ),
                           ),
                         ),
                       ),

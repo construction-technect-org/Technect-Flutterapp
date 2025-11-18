@@ -24,7 +24,7 @@ class TodaysLeadsCard extends GetView<MarketingController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Today's Total Leads",
+                "Today's Total ${controller.activeFilter.value}",
                 style: MyTexts.medium14.copyWith(color: MyColors.gray54),
               ),
 
