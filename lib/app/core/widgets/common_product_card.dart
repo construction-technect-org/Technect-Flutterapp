@@ -75,8 +75,8 @@ class ProductCard extends StatelessWidget {
       Text(
         product.categoryProductName ?? 'Unknown Product',
         style: MyTexts.medium14.copyWith(color: MyColors.custom('2E2E2E')),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+        overflow: TextOverflow.fade,
       ),
       const SizedBox(height: 4),
       Row(
@@ -194,7 +194,7 @@ class ProductImage extends StatelessWidget {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
           child: imageUrl != null
               ? Center(
-                child: CachedNetworkImage(
+                  child: CachedNetworkImage(
                     imageUrl: imageUrl,
                     fit: BoxFit.contain,
                     width: double.infinity,
@@ -207,7 +207,7 @@ class ProductImage extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-              )
+                )
               : const Icon(Icons.inventory_2, size: 40, color: Colors.grey),
         ),
         if (product.outOfStock == true || (product.stockQty ?? 0) <= 0)
