@@ -1,5 +1,9 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/followup_screen.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/lead_screen.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/prospect_screen.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/qualified_screen.dart';
 
 class MarketingController extends GetxController {
   final isLoading = false.obs;
@@ -27,6 +31,13 @@ class MarketingController extends GetxController {
     'OCT',
     'NOV',
   ];
+  final items = ['Lead', 'Follow Up', 'Prospect', 'Qualified'];
+  final filterScreens = {
+    'Lead': const LeadScreen(),
+    'Follow Up': const FollowupScreen(),
+    'Prospect': const ProspectScreen(),
+    'Qualified': const QualifiedScreen(),
+  };
 
   // Today total
   int get todaysTotal => leads.length;

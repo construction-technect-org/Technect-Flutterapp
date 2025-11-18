@@ -6,8 +6,6 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
 
   @override
   Widget build(BuildContext context) {
-    final items = ['Lead', 'Follow Up', 'Prospect', 'Qualified'];
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Obx(
@@ -16,7 +14,7 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: items.map((it) {
+              children: controller.items.map((it) {
                 final bool isActive = controller.activeFilter.value == it;
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
