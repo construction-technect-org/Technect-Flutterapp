@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/controller/crm_dashboard_controller.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/crm_vrm_toggle_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/header_icon_widget.dart';
 
 class DashboardHeaderWidget extends GetView<LeadDashController> {
@@ -21,11 +20,7 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
             behavior: HitTestBehavior.translucent,
             child: Obx(() {
               return (dash.profileData.value.data?.user?.image ?? "").isEmpty
-                  ? const Icon(
-                      Icons.account_circle_sharp,
-                      color: MyColors.primary,
-                      size: 30,
-                    )
+                  ? const Icon(Icons.account_circle_sharp, color: MyColors.primary, size: 30)
                   : ClipOval(
                       child: getImageView(
                         finalUrl:
@@ -36,8 +31,9 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
             }),
           ),
           const Gap(15),
-          const Flexible(child: CRMVRMToggleWidget()),
+          Text("Adarsh", style: MyTexts.medium18),
           const Gap(18),
+          const Spacer(),
           Obx(
             () => HeaderIconWidget(
               icon: Asset.chat,
@@ -50,7 +46,7 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
             () => HeaderIconWidget(
               icon: Asset.notification,
               count: controller.alertNotificationCount.value,
-              onTap: () => Get.toNamed(Routes.NOTIFICATIONS),
+              onTap: () => Get.toNamed(Routes.NEWS),
               isAlert: true,
             ),
           ),

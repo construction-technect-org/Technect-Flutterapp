@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:flutter/material.dart';
 
 class PillButton extends StatelessWidget {
@@ -54,15 +55,13 @@ class PillButtonWithOuter extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF1E305C) : Colors.white,
+          color: isSelected ? MyColors.primary: const Color(0xFFF3F4F8),
           borderRadius: BorderRadius.circular(40),
         ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.white : const Color(0xFF1E305C),
+        child: Center(
+          child: Text(
+            title,
+            style: MyTexts.medium16.copyWith(color: isSelected ? Colors.white : const Color(0xFF1E305C),)
           ),
         ),
       ),
