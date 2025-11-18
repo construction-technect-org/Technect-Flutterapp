@@ -20,76 +20,75 @@ class MarketingScreen extends GetView<MarketingController> {
         child: Scaffold(
           body: Stack(
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.categoryBg),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              Positioned.fill(
+                child: Image.asset(Asset.categoryBg, fit: BoxFit.cover),
               ),
 
-              const TopBarHeader(),
-
-              Positioned.fill(
-                top: 110,
-                child: SafeArea(
-                  top: false,
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          const SegmentFiltersWidget(),
-                          const SizedBox(height: 20),
-
-                          WhiteCardWidget(
-                            child: Column(
-                              children: [
-                                AddNewLeadButton(
-                                  onTap: () => controller.onAdd(context),
-                                ),
-                                const SizedBox(height: 18),
-                                const TodaysLeadsCard(),
-                                const SizedBox(height: 20),
-
-                                Row(
+              Column(
+                children: [
+                  const TopBarHeader(),
+                  const SegmentFiltersWidget(),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: SafeArea(
+                      top: false,
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              WhiteCardWidget(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
-                                    Text(
-                                      'Lead Details',
-                                      style: MyTexts.medium20,
+                                    AddNewLeadButton(
+                                      onTap: () => controller.onAdd(context),
                                     ),
+                                    const SizedBox(height: 18),
+                                    const TodaysLeadsCard(),
+                                    const SizedBox(height: 20),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Lead Details',
+                                        style: MyTexts.medium20,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+
+                                    Obx(
+                                      () => Column(
+                                        children: controller.leads
+                                            .map(
+                                              (l) => Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                    ),
+                                                child: LeadItemCard(
+                                                  lead: l,
+                                                  controller: controller,
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 24),
                                   ],
                                 ),
-
-                                const SizedBox(height: 12),
-
-                                Obx(
-                                  () => Column(
-                                    children: controller.leads
-                                        .map(
-                                          (l) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 10,
-                                            ),
-                                            child: LeadItemCard(
-                                              lead: l,
-                                              controller: controller,
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(height: 40),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
