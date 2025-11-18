@@ -27,7 +27,7 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
                     ),
                     decoration: BoxDecoration(
                       color: isActive ? const Color(0xFF17345A) : Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(12),
                       boxShadow: isActive
                           ? const [
                               BoxShadow(color: Colors.black12, blurRadius: 6),
@@ -36,7 +36,7 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
                     ),
                     child: Text(
                       it,
-                      style: MyTexts.medium16.copyWith(
+                      style: MyTexts.medium14.copyWith(
                         color: isActive ? Colors.white : MyColors.black,
                       ),
                     ),

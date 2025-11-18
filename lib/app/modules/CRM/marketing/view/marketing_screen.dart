@@ -47,6 +47,7 @@ class MarketingScreen extends GetView<MarketingController> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SegmentFiltersWidget(),
                             const SizedBox(height: 20),
