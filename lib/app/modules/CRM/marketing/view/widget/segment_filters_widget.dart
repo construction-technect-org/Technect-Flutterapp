@@ -7,7 +7,7 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.zero,
       child: Obx(
         () => SizedBox(
           height: 40,
@@ -39,7 +39,7 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
                       ),
                       child: Text(
                         it,
-                        style: MyTexts.medium16.copyWith(
+                        style: MyTexts.medium14.copyWith(
                           color: isActive ? Colors.white : MyColors.black,
                         ),
                       ),
