@@ -30,9 +30,12 @@ class TodaysLeadsCard extends GetView<MarketingController> {
               ),
 
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFCBE0FF),
+                  color: MyColors.custom('CBE0FF'),
                   borderRadius: BorderRadius.circular(22),
                 ),
                 child: Row(
@@ -49,7 +52,10 @@ class TodaysLeadsCard extends GetView<MarketingController> {
           Obx(
             () => Text(
               '${controller.todaysTotal}',
-              style: MyTexts.medium24.copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.5),
+              style: MyTexts.medium24.copyWith(
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+              ),
             ),
           ),
 
@@ -125,7 +131,11 @@ class TodaysLeadsCard extends GetView<MarketingController> {
     );
   }
 
-  Widget _sourceCard(String name, String count, {String buttonText = "View All"}) {
+  Widget _sourceCard(
+    String name,
+    String count, {
+    String buttonText = "View All",
+  }) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -139,7 +149,9 @@ class TodaysLeadsCard extends GetView<MarketingController> {
             offset: const Offset(0, 3),
           ),
         ],
-        gradient: const LinearGradient(colors: [Color(0xFFEEF4FF), Color(0xFFFEFEFF)]),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFEEF4FF), Color(0xFFFEFEFF)],
+        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,7 +166,13 @@ class TodaysLeadsCard extends GetView<MarketingController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(count, style: MyTexts.medium20.copyWith(color: Colors.black, fontSize: 26)),
+                Text(
+                  count,
+                  style: MyTexts.medium20.copyWith(
+                    color: Colors.black,
+                    fontSize: 26,
+                  ),
+                ),
                 const Gap(4),
                 const Icon(Icons.star, size: 18, color: Color(0xFFFAC740)),
               ],
@@ -166,7 +184,10 @@ class TodaysLeadsCard extends GetView<MarketingController> {
               color: const Color(0xFF142243),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Text(buttonText, style: MyTexts.bold15.copyWith(color: Colors.white)),
+            child: Text(
+              buttonText,
+              style: MyTexts.bold15.copyWith(color: Colors.white),
+            ),
           ),
         ],
       ),
