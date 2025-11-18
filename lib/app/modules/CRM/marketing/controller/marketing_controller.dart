@@ -74,6 +74,7 @@ class MarketingController extends GetxController {
 
   void setReminder(String leadId, DateTime when) {
     debugPrint('Reminder for $leadId at $when');
+    Get.toNamed(Routes.SetReminder);
   }
 
   void chatNow(String leadId) {

@@ -92,6 +92,7 @@ abstract class Routes {
   static const CONNECTOR_All_CHAT_LIST = _Paths.CONNECTOR_All_CHAT_LIST;
 
   static const Marketing = _Paths.MarketingScreen;
+  static const SetReminder = _Paths.SetReminderScreen;
 }
 
 abstract class _Paths {
@@ -185,4 +186,5 @@ abstract class _Paths {
   static const CONNECTOR_All_CHAT_LIST = '/connector-all-chat-list';
 
   static const MarketingScreen = "/MarketingScreen";
+  static const SetReminderScreen = "/SetReminderScreen";
 }
