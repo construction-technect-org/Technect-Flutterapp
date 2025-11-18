@@ -60,6 +60,7 @@ class LeadDashController extends GetxController {
       totalMarketing.value = true;
       totalSales.value = false;
       totalAccounts.value = false;
+      Get.toNamed(Routes.Marketing);
     } else if (type == 'Sales') {
       totalMarketing.value = false;
       totalSales.value = true;

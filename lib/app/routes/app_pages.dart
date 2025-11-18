@@ -15,6 +15,8 @@ import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_
 import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/bindings/lead_detail_binding.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/views/lead_detail_screen.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/bindings/marketing_bindings.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/marketing_screen.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/add/bindings/add_new_requ_binding.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/add/view/add_new_requirement.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/details/views/requirement_detail_screen.dart';
@@ -404,6 +406,12 @@ class AppPages {
       name: Routes.Requ_DetailS,
       page: () => const RequirementDetailScreen(),
       // binding: AddNewRequBinding(),
+    ),
+
+    GetPage(
+      name: Routes.Marketing,
+      page: () => const MarketingScreen(),
+      binding: MarketingBindings(),
     ),
   ];
 }
