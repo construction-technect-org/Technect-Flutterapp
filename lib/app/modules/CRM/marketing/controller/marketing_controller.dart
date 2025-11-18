@@ -13,8 +13,8 @@ class MarketingController extends GetxController {
   final bellNotificationCount = 2.obs;
 
   // filters
-  RxString activeFilter =
-      'Lead'.obs; // LeadModel, Follow Up, Prospect, Qualified...
+  RxString activeFilter = 'Lead'.obs;
+  RxString activeStatusFilter = 'All'.obs;
   RxString category = 'Marketing'.obs;
 
   // sample months for chart (kept from previous widget if needed)
@@ -50,6 +50,7 @@ class MarketingController extends GetxController {
       connector: 'Anand',
       product: 'M sand',
       distanceKm: 2.8,
+      status: Status.completed,
       dateTime: DateTime(2024, 11, 12, 10, 30),
       avatarUrl: 'https://i.pravatar.cc/150?img=12',
     ),
@@ -59,10 +60,20 @@ class MarketingController extends GetxController {
       connector: 'Shiva',
       product: 'M sand',
       distanceKm: 2.8,
+      status: Status.closed,
       dateTime: DateTime(2024, 11, 12, 10, 40),
       avatarUrl: 'https://i.pravatar.cc/150?img=5',
     ),
   ].obs;
+
+  //RxList<LeadModel> followups = followups.addAll(leads).obs;
+  final List<String> statusItems = <String>[
+    "All",
+    "Pending",
+    "Completed",
+    "Closed",
+    "Missed",
+  ];
 
   // Notifications counts
   RxInt messagesCount = 2.obs;
@@ -71,6 +82,7 @@ class MarketingController extends GetxController {
 
   // Actions
   void setFilter(String f) => activeFilter.value = f;
+  void setStatusFilter(String f) => activeStatusFilter.value = f;
   void setCategory(String c) => category.value = c;
 
   void addLead(LeadModel l) {
@@ -93,8 +105,6 @@ class MarketingController extends GetxController {
   }
 
   void onAdd(BuildContext ctx) {
-    // Example: open dialog to add a LeadModel
-    // final c = controller;
     final now = DateTime.now();
     addLead(
       LeadModel(
@@ -104,6 +114,7 @@ class MarketingController extends GetxController {
         product: 'Concrete',
         distanceKm: 1.2,
         dateTime: now,
+        status: Status.values[leads.length % Status.values.length],
         avatarUrl: 'https://i.pravatar.cc/150?img=${20 + leads.length}',
       ),
     );
