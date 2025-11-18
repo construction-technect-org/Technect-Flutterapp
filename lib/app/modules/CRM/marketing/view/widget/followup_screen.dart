@@ -1,18 +1,49 @@
+import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/followup_item_card.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/status_view_widget.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/todays_leads_card.dart';
-import 'package:flutter/widgets.dart';
 
-class FollowupScreen extends StatelessWidget {
+class FollowupScreen extends GetView<MarketingController> {
   const FollowupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        TodaysLeadsCard(),
-        SizedBox(height: 20),
-        StatusViewWidget(),
-        SizedBox(height: 20),
+        const TodaysLeadsCard(),
+        const SizedBox(height: 10),
+        const StatusViewWidget(),
+        const SizedBox(height: 5),
+
+        Obx(
+          () => Column(
+            children: controller.followups.isEmpty
+                ? [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      child: Text(
+                        'No follow-ups available',
+                        style: MyTexts.medium16.copyWith(
+                          color: MyColors.gray54,
+                        ),
+                      ),
+                    ),
+                  ]
+                : controller.followups
+                      .map(
+                        (l) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: FollowupItemCard(
+                            lead: l,
+                            controller: controller,
+                          ),
+                        ),
+                      )
+                      .toList(),
+          ),
+        ),
+        const SizedBox(height: 24),
       ],
     );
   }

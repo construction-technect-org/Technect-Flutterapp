@@ -39,7 +39,7 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
                       ),
                       child: Text(
                         it,
-                        style: MyTexts.medium14.copyWith(
+                        style: MyTexts.medium16.copyWith(
                           color: isActive ? Colors.white : MyColors.black,
                         ),
                       ),

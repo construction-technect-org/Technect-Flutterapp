@@ -6,6 +6,12 @@ import 'package:construction_technect/app/modules/CRM/marketing/view/widget/pros
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/qualified_screen.dart';
 
 class MarketingController extends GetxController {
+  @override
+  void onInit() {
+    filterFollowupStatus();
+    super.onInit();
+  }
+
   final isLoading = false.obs;
   // Notification counts
   final chatNotificationCount = 2.obs;
@@ -15,6 +21,7 @@ class MarketingController extends GetxController {
   // filters
   RxString activeFilter = 'Lead'.obs;
   RxString activeStatusFilter = 'All'.obs;
+  RxString activeProspectStatusFilter = 'Fresh'.obs;
   RxString category = 'Marketing'.obs;
 
   // sample months for chart (kept from previous widget if needed)
@@ -66,13 +73,34 @@ class MarketingController extends GetxController {
     ),
   ].obs;
 
-  //RxList<LeadModel> followups = followups.addAll(leads).obs;
+  RxList<LeadModel> followups = <LeadModel>[].obs;
+  void filterFollowupStatus() {
+    if (activeStatusFilter.value == 'All') {
+      followups.value = leads;
+    } else {
+      followups.value = leads
+          .where(
+            (lead) =>
+                lead.status.name.toLowerCase() ==
+                activeStatusFilter.value.toLowerCase(),
+          )
+          .toList();
+    }
+  }
+
   final List<String> statusItems = <String>[
     "All",
     "Pending",
     "Completed",
     "Closed",
     "Missed",
+  ];
+
+  final List<String> statusProspectItems = <String>[
+    "Fresh",
+    "Reached Out",
+    "On Hold",
+    "Converted",
   ];
 
   // Notifications counts
@@ -82,7 +110,16 @@ class MarketingController extends GetxController {
 
   // Actions
   void setFilter(String f) => activeFilter.value = f;
-  void setStatusFilter(String f) => activeStatusFilter.value = f;
+  void setStatusFilter(String f) {
+    activeStatusFilter.value = f;
+    filterFollowupStatus();
+  }
+
+  void setStatusProspectFilter(String f) {
+    activeProspectStatusFilter.value = f;
+    // filterFollowupStatus();
+  }
+
   void setCategory(String c) => category.value = c;
 
   void addLead(LeadModel l) {

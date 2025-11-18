@@ -3,10 +3,10 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
 
-class LeadItemCard extends StatelessWidget {
+class FollowupItemCard extends StatelessWidget {
   final LeadModel lead;
   final MarketingController controller;
-  const LeadItemCard({required this.lead, required this.controller});
+  const FollowupItemCard({required this.lead, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -81,37 +81,30 @@ class LeadItemCard extends StatelessWidget {
                       style: MyTexts.medium12.copyWith(color: MyColors.gray54),
                     ),
                     const SizedBox(height: 4),
+                    Text(
+                      'Next Follow Up - N0V 14 , 3:00 PM',
+                      style: MyTexts.medium12.copyWith(color: MyColors.gray54),
+                    ),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.location_on, size: 14),
-                        const SizedBox(width: 3),
                         Text(
-                          '${lead.distanceKm} km away',
+                          'Status - ${lead.status.name.capitalizeFirst}',
                           style: MyTexts.medium12.copyWith(
-                            color: MyColors.gray54,
+                            color: colorMap[lead.status],
                           ),
                         ),
+                        if (lead.status == Status.completed)
+                          Icon(
+                            Icons.done,
+                            size: 16,
+                            color: colorMap[lead.status],
+                          )
+                        else
+                          const SizedBox.shrink(),
                       ],
                     ),
                     const SizedBox(height: 4),
-
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF17345A),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      child: Text(
-                        'View Details',
-                        style: MyTexts.medium12.copyWith(
-                          color: Colors.white,
-                          letterSpacing: 0.4,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -123,13 +116,13 @@ class LeadItemCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _ActionButton(
-                icon: Icons.person_add_alt_1_outlined,
-                label: 'Assign To',
+                icon: Icons.call_outlined,
+                label: 'Call',
                 onTap: () => controller.assignTo(lead.id, 'User A'),
               ),
               _ActionButton(
                 icon: Icons.schedule_outlined,
-                label: 'Set a Reminder',
+                label: 'Reschedule',
                 onTap: () => controller.setReminder(
                   lead.id,
                   DateTime.now().add(const Duration(days: 1)),
@@ -150,6 +143,12 @@ class LeadItemCard extends StatelessWidget {
   static String _formatTime(DateTime d) =>
       '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')} AM';
   static String _formatDate(DateTime d) => '${d.month}, ${d.day}';
+  static const colorMap = {
+    Status.pending: Colors.orange,
+    Status.closed: Colors.orange,
+    Status.completed: Colors.green,
+    Status.missed: Colors.red,
+  };
 }
 
 class _ActionButton extends StatelessWidget {
