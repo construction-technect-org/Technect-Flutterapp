@@ -3,21 +3,18 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 class MyTexts {
   static const String SpaceGrotesk = 'SpaceGrotesk';
 
-
-
   //bool Ukr = 'Ukr';
 
   /// Medium = 500 , light = 400 , bold = 600
   /// Format {fontWeight}size
 
-
- static TextStyle get medium8 => TextStyle(
+  static TextStyle get medium8 => TextStyle(
     fontSize: 8.sp,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
     fontFamily: SpaceGrotesk,
   );
- 
+
   static TextStyle get medium14 => TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
@@ -31,18 +28,21 @@ class MyTexts {
     color: MyColors.black,
     fontFamily: SpaceGrotesk,
   );
+
   static TextStyle get medium12 => TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
     fontFamily: SpaceGrotesk,
   );
+
   static TextStyle get medium10 => TextStyle(
     fontSize: 10.sp,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
     fontFamily: SpaceGrotesk,
   );
+
   static TextStyle get medium13 => TextStyle(
     fontSize: 13.sp,
     fontWeight: FontWeight.w500,
@@ -56,12 +56,14 @@ class MyTexts {
     fontWeight: FontWeight.w400,
     color: MyColors.black,
   );
+
   static TextStyle get light12 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: MyColors.black,
   );
+
   static TextStyle get light16 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 16.sp,
@@ -89,6 +91,7 @@ class MyTexts {
     fontWeight: FontWeight.w500,
     color: MyColors.black,
   );
+
   static TextStyle get medium17 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 17.sp,
@@ -102,19 +105,20 @@ class MyTexts {
     fontWeight: FontWeight.w500,
     color: MyColors.black,
   );
+
   static TextStyle get medium22 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 22.sp,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
   );
+
   static TextStyle get medium24 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 24.sp,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
   );
-
 
   static TextStyle get light24 => TextStyle(
     fontFamily: SpaceGrotesk,
@@ -149,7 +153,9 @@ class MyTexts {
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
     color: MyColors.black,
-  );  static TextStyle get regular13 => TextStyle(
+  );
+
+  static TextStyle get regular13 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 13.sp,
     fontWeight: FontWeight.w400,
@@ -176,6 +182,7 @@ class MyTexts {
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
+
   static TextStyle get bold15 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 15.sp,
@@ -189,18 +196,28 @@ class MyTexts {
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
+
+  static TextStyle get bold17 => TextStyle(
+    fontFamily: SpaceGrotesk,
+    fontSize: 17.sp,
+    fontWeight: FontWeight.w600,
+    color: MyColors.black,
+  );
+
   static TextStyle get bold12 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 12.sp,
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
+
   static TextStyle get bold13 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 13.sp,
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
+
   static TextStyle get bold18 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 18.sp,
@@ -214,7 +231,13 @@ class MyTexts {
     fontWeight: FontWeight.w600,
     color: MyColors.black,
   );
-  
+
+  static TextStyle get bold24 => TextStyle(
+    fontFamily: SpaceGrotesk,
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w600,
+    color: MyColors.black,
+  );
 
   static TextStyle get extraBold20 => TextStyle(
     fontFamily: SpaceGrotesk,
@@ -257,6 +280,4 @@ class MyTexts {
     fontWeight: FontWeight.w700,
     color: MyColors.black,
   );
-   
-
 }

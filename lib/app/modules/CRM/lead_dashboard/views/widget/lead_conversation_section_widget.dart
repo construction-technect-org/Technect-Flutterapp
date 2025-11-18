@@ -1,128 +1,88 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
+import 'package:fl_chart/fl_chart.dart';
 
-class LeadConversationSectionWidget extends GetView<LeadDashController> {
-  const LeadConversationSectionWidget({super.key});
+class ConversionRateChart extends StatelessWidget {
+  final double percentage;
+
+  const ConversionRateChart({super.key, required this.percentage});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Lead conversation',
-          style: MyTexts.bold18.copyWith(color: MyColors.fontBlack),
-        ),
-        const Gap(16),
-        Obx(() {
-          final leadConversations = controller.leadConversations;
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFFE0E0E0))
+      ),
+      child: Column(
+        children: [
+           Align(
+             alignment: AlignmentGeometry.topLeft,
+             child: Text(
+              "Conversion Rate",
+              style:MyTexts.bold17,
+                       ),
+           ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.only(top: 80.0),
+            child: SizedBox(
+              height: 90,
+              width: double.infinity,
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  PieChart(
+                    PieChartData(
+                      startDegreeOffset: 180,
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 80,
+                      sections: [
+                        PieChartSectionData(
+                          value: 10,
+                          color: Colors.blue.shade600,
+                          radius: 45,
+                          showTitle: false,
+                        ),
+                        PieChartSectionData(
+                          value: 10,
+                          color: Colors.amber.shade400,
+                          radius: 45,
+                          showTitle: false,
+                        ),
+                        PieChartSectionData(
+                          value: 10,
+                          color: Colors.redAccent.shade200,
+                          radius: 45,
+                          showTitle: false,
+                        ),
 
-          return Column(
-            children: [
-              ...leadConversations.take(2).map((conversation) {
-                return GestureDetector(
-                  onTap: () => Get.toNamed(Routes.Requ_DetailS),
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: MyColors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: MyColors.black.withValues(alpha: 0.05),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: MyColors.yellow.withValues(alpha: 0.25),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              conversation['id'] ?? '',
-                              style: MyTexts.bold16.copyWith(
-                                color: MyColors.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Gap(16),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Location',
-                                    style: MyTexts.regular14.copyWith(
-                                      color: MyColors.custom('9E9E9E'),
-                                    ),
-                                  ),
-                                  const Gap(4),
-                                  Text(
-                                    conversation['location'] ?? '',
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.fontBlack,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Product',
-                                    style: MyTexts.regular14.copyWith(
-                                      color: MyColors.custom('9E9E9E'),
-                                    ),
-                                  ),
-                                  const Gap(4),
-                                  Text(
-                                    conversation['product'] ?? '',
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.fontBlack,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                        /// Hide bottom half (180°)
+                        PieChartSectionData(
+                          value: 30,
+                          color: Colors.transparent,
+                          radius: 45,
+                          showTitle: false,
                         ),
                       ],
                     ),
                   ),
-                );
-              }),
-              if (leadConversations.length > 2)
-                GestureDetector(
-                  onTap: () {
-                    // TODO: navigate to full conversation list
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Text(
-                      'See more',
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.primary,
-                        decoration: TextDecoration.none,
-                      ),
-                    ),
+                  Text(
+                    "${percentage.toInt()}%",
+                    style:MyTexts.bold24,
                   ),
-                ),
-            ],
-          );
-        }),
-      ],
+                ],
+              ),
+            ),
+          ),
+           Text(
+            "Admin - Accessible to all team\nTeam Member - Accessible only his",
+            textAlign: TextAlign.center,
+            style:MyTexts.regular14,
+          ),
+        ],
+      ),
     );
   }
 }
