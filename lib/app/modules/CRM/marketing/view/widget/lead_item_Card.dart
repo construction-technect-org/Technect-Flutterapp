@@ -10,139 +10,144 @@ class LeadItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: CachedNetworkImage(
-                  imageUrl: lead.avatarUrl,
-                  width: 88,
-                  height: 88,
-                  fit: BoxFit.cover,
-                  placeholder: (c, s) => Container(
-                    color: Colors.grey.shade200,
-                    width: 88,
-                    height: 88,
-                  ),
-                  errorWidget: (c, s, e) => Container(
-                    color: Colors.grey.shade200,
-                    width: 88,
-                    height: 88,
-                    child: const Icon(Icons.person),
+    return GestureDetector(
+      onTap: (){
+        Get.toNamed(Routes.LEAD_DETAIL);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFEFF6FF),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: CachedNetworkImage(
+                    imageUrl: lead.avatarUrl,
+                    width: 71,
+                    height: 97,
+                    fit: BoxFit.cover,
+                    placeholder: (c, s) => Container(
+                      color: Colors.grey.shade200,
+                      width: 71,
+                      height: 97,
+                    ),
+                    errorWidget: (c, s, e) => Container(
+                      color: Colors.grey.shade200,
+                      width: 71,
+                      height: 97,
+                      child: const Icon(Icons.person),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Connector - ${lead.connector}',
-                            style: MyTexts.medium12.copyWith(
-                              fontWeight: FontWeight.w700,
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Connector - ${lead.connector}',
+                              style: MyTexts.medium12.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            overflow: TextOverflow.ellipsis,
                           ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '${_formatTime(lead.dateTime)}, ${_formatDate(lead.dateTime)}',
+                            style: MyTexts.medium12.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 3),
+                      Text(
+                        'Lead Id - ${lead.id}',
+                        style: MyTexts.medium12.copyWith(color: MyColors.gray54),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        'Product Interested - ${lead.product}',
+                        style: MyTexts.medium12.copyWith(color: MyColors.gray54),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.location_on, size: 14),
+                          const SizedBox(width: 3),
+                          Text(
+                            '${lead.distanceKm} km away',
+                            style: MyTexts.medium12.copyWith(
+                              color: MyColors.gray54,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF17345A),
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '${_formatTime(lead.dateTime)}, ${_formatDate(lead.dateTime)}',
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        child: Text(
+                          'View Details',
                           style: MyTexts.medium12.copyWith(
-                            color: MyColors.gray54,
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 3),
-                    Text(
-                      'Lead Id - ${lead.id}',
-                      style: MyTexts.medium12.copyWith(color: MyColors.gray54),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      'Product Interested - ${lead.product}',
-                      style: MyTexts.medium12.copyWith(color: MyColors.gray54),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(Icons.location_on, size: 14),
-                        const SizedBox(width: 3),
-                        Text(
-                          '${lead.distanceKm} km away',
-                          style: MyTexts.medium12.copyWith(
-                            color: MyColors.gray54,
+                            color: Colors.white,
+                            letterSpacing: 0.4,
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF17345A),
-                        borderRadius: BorderRadius.circular(16),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      child: Text(
-                        'View Details',
-                        style: MyTexts.medium12.copyWith(
-                          color: Colors.white,
-                          letterSpacing: 0.4,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
 
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _ActionButton(
-                icon: Icons.person_add_alt_1_outlined,
-                label: 'Assign To',
-                onTap: () => controller.assignTo(lead.id, 'User A'),
-              ),
-              _ActionButton(
-                icon: Icons.schedule_outlined,
-                label: 'Set a Reminder',
-                onTap: () => controller.setReminder(
-                  lead.id,
-                  DateTime.now().add(const Duration(days: 1)),
+            const SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _ActionButton(
+                  icon: Icons.person_add_alt_1_outlined,
+                  label: 'Assign To',
+                  onTap: () => controller.assignTo(lead.id, 'User A'),
                 ),
-              ),
-              _ActionButton(
-                icon: Icons.chat_bubble_outline,
-                label: 'Chat Now',
-                onTap: () => controller.chatNow(lead.id),
-              ),
-            ],
-          ),
-        ],
+                _ActionButton(
+                  icon: Icons.schedule_outlined,
+                  label: 'Set a Reminder',
+                  onTap: () => controller.setReminder(
+                    lead.id,
+                    DateTime.now().add(const Duration(days: 1)),
+                  ),
+                ),
+                _ActionButton(
+                  icon: Icons.chat_bubble_outline,
+                  label: 'Chat Now',
+                  onTap: () => controller.chatNow(lead.id),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

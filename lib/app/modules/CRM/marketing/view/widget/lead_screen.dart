@@ -10,37 +10,34 @@ class LeadScreen extends GetView<MarketingController> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AddNewLeadButton(onTap: () => controller.onAdd(context)),
-            const SizedBox(height: 18),
-            const TodaysLeadsCard(),
-            const SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text('Lead Details', style: MyTexts.medium20),
-            ),
-            const SizedBox(height: 12),
-
-            Obx(
-              () => Column(
-                children: controller.leads
-                    .map(
-                      (l) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: LeadItemCard(lead: l, controller: controller),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-          ],
+        AddNewLeadButton(
+          onTap: () {
+            Get.toNamed(Routes.ADD_LEAD);
+          },
         ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 18),
+        const TodaysLeadsCard(),
+        const SizedBox(height: 20),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text('Lead Details', style: MyTexts.medium18),
+        ),
+        Obx(
+          () => Column(
+            children: controller.leads
+                .map(
+                  (l) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: LeadItemCard(lead: l, controller: controller),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+
+        const SizedBox(height: 24),
       ],
     );
   }

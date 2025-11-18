@@ -11,7 +11,6 @@ class WhiteCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
       ),
       padding: const EdgeInsets.all(16),
       child: child,

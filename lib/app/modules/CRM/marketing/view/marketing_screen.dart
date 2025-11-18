@@ -1,10 +1,9 @@
+import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/lead_screen.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/segment_filters_widget.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/topbar_header.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/white_card_widget.dart';
 
 class MarketingScreen extends GetView<MarketingController> {
   const MarketingScreen({super.key});
@@ -19,31 +18,46 @@ class MarketingScreen extends GetView<MarketingController> {
         child: Scaffold(
           body: Stack(
             children: [
-              Positioned.fill(
-                child: Image.asset(Asset.categoryBg, fit: BoxFit.cover),
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
+                ),
               ),
-
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TopBarHeader(),
-                  const SegmentFiltersWidget(),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: SafeArea(
-                      top: false,
-                      child: Obx(
-                        () => SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: WhiteCardWidget(
-                              child:
-                                  c.filterScreens[c.activeFilter.value] ??
-                                  const LeadScreen(),
-                            ),
-                          ),
-                        ),
+                  CommonAppBar(
+                    backgroundColor: Colors.transparent,
+                    isCenter: false,
+                    title: const Text("Marketing"),
+                    leading: GestureDetector(
+                      onTap: Get.back,
+                      child: const Padding(
+                        padding: EdgeInsets.zero,
+                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
+                    ),
+                  ),
+                  // const TopBarHeader(),
+                  const SegmentFiltersWidget(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+
+                      child: Obx(() {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.75,
+                          child: SingleChildScrollView(
+                            child: c.filterScreens[c.activeFilter.value] ?? const LeadScreen(),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                 ],
