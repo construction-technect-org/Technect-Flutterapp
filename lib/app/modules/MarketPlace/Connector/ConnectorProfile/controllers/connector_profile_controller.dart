@@ -24,11 +24,12 @@ class ConnectorProfileController extends GetxController {
   final aadhaarController = TextEditingController();
   RxBool isVerified = false.obs;
 
-
   Future<void> proceedKyc() async {
     isLoading.value = true;
     try {
-      final response = await AddKycService().connectorAddKYC(aadhaar: aadhaarController.text.trim());
+      final response = await AddKycService().connectorAddKYC(
+        aadhaar: aadhaarController.text.trim(),
+      );
       if (response.success) {
         myPref.role.val = "connector";
         Get.find<SwitchAccountController>().updateRole(role: "connector");
@@ -45,10 +46,10 @@ class ConnectorProfileController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     if (Get.arguments != null) {
       isSwitch.value = true;
     }
+    Get.lazyPut(() => HomeController());
   }
 }
