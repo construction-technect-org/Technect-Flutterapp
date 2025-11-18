@@ -105,24 +105,6 @@ class FollowupItemCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF17345A),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      child: Text(
-                        'View Details',
-                        style: MyTexts.medium10.copyWith(
-                          color: Colors.white,
-                          letterSpacing: 0.4,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),

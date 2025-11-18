@@ -21,6 +21,7 @@ class MarketingController extends GetxController {
   // filters
   RxString activeFilter = 'Lead'.obs;
   RxString activeStatusFilter = 'All'.obs;
+  RxString activeProspectStatusFilter = 'Fresh'.obs;
   RxString category = 'Marketing'.obs;
 
   // sample months for chart (kept from previous widget if needed)
@@ -95,6 +96,13 @@ class MarketingController extends GetxController {
     "Missed",
   ];
 
+  final List<String> statusProspectItems = <String>[
+    "Fresh",
+    "Reached Out",
+    "On Hold",
+    "Converted",
+  ];
+
   // Notifications counts
   RxInt messagesCount = 2.obs;
   RxInt remindersCount = 2.obs;
@@ -105,6 +113,11 @@ class MarketingController extends GetxController {
   void setStatusFilter(String f) {
     activeStatusFilter.value = f;
     filterFollowupStatus();
+  }
+
+  void setStatusProspectFilter(String f) {
+    activeProspectStatusFilter.value = f;
+    // filterFollowupStatus();
   }
 
   void setCategory(String c) => category.value = c;
