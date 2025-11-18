@@ -6,6 +6,12 @@ import 'package:construction_technect/app/modules/CRM/marketing/view/widget/pros
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/qualified_screen.dart';
 
 class MarketingController extends GetxController {
+  @override
+  void onInit() {
+    filterFollowupStatus();
+    super.onInit();
+  }
+
   final isLoading = false.obs;
   // Notification counts
   final chatNotificationCount = 2.obs;
@@ -66,7 +72,21 @@ class MarketingController extends GetxController {
     ),
   ].obs;
 
-  //RxList<LeadModel> followups = followups.addAll(leads).obs;
+  RxList<LeadModel> followups = <LeadModel>[].obs;
+  void filterFollowupStatus() {
+    if (activeStatusFilter.value == 'All') {
+      followups.value = leads;
+    } else {
+      followups.value = leads
+          .where(
+            (lead) =>
+                lead.status.name.toLowerCase() ==
+                activeStatusFilter.value.toLowerCase(),
+          )
+          .toList();
+    }
+  }
+
   final List<String> statusItems = <String>[
     "All",
     "Pending",
@@ -82,7 +102,11 @@ class MarketingController extends GetxController {
 
   // Actions
   void setFilter(String f) => activeFilter.value = f;
-  void setStatusFilter(String f) => activeStatusFilter.value = f;
+  void setStatusFilter(String f) {
+    activeStatusFilter.value = f;
+    filterFollowupStatus();
+  }
+
   void setCategory(String c) => category.value = c;
 
   void addLead(LeadModel l) {
