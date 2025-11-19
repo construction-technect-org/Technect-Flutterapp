@@ -847,12 +847,13 @@ class ReportGraph extends StatelessWidget {
                         final label = labels[value.toInt()];
                         return SideTitleWidget(
                           meta: meta,
-                          space: 20,
+                          space: 0,
                           child: Transform.rotate(
-                            angle: -1.5708,
+                            angle: 0,
                             child: Text(
-                              label,
-                              style: MyTexts.bold13.copyWith(
+                              label.length > 3 ? label.substring(0, 3) : label,
+                              textAlign: TextAlign.end,
+                              style: MyTexts.medium13.copyWith(
                                 color: MyColors.grayA5,
                               ),
                             ),
