@@ -40,15 +40,17 @@ class ProfileController extends GetxController {
     if (Get.arguments != null) {
       isSwitch.value = true;
     }
+    Get.lazyPut(() => HomeController());
     businessModel.value.gstinNumber =
-        Get.find<HomeController>().profileData.value.data?.user?.gst ?? "";
+        homeController.profileData.value.data?.user?.gst ?? "";
     if (merchantProfile != null) {
       businessModel.value.website = merchantProfile?.website ?? "";
       businessModel.value.businessEmail = merchantProfile?.businessEmail ?? "";
       businessModel.value.year = merchantProfile?.yearsInBusiness != null
           ? merchantProfile?.yearsInBusiness.toString()
           : "";
-      businessModel.value.businessContactNumber = merchantProfile?.businessContactNumber ?? "";
+      businessModel.value.businessContactNumber =
+          merchantProfile?.businessContactNumber ?? "";
       businessModel.value.alternativeBusinessEmail =
           merchantProfile?.alternativeBusinessContactNumber ?? "";
       businessModel.value.businessName = merchantProfile?.businessName ?? "";
@@ -107,7 +109,9 @@ class ProfileController extends GetxController {
       } else {
         certificates.add(
           CertificateModel(
-            title: (doc.documentType ?? type).replaceAll("_", " ").toUpperCase(),
+            title: (doc.documentType ?? type)
+                .replaceAll("_", " ")
+                .toUpperCase(),
             filePath: path,
             name: doc.documentName ?? "",
           ),
@@ -131,13 +135,15 @@ class ProfileController extends GetxController {
 
   UserModel? get userData => profileData.data?.user;
 
-  int get profileCompletionPercentage => merchantProfile?.profileCompletionPercentage ?? 0;
+  int get profileCompletionPercentage =>
+      merchantProfile?.profileCompletionPercentage ?? 0;
 
   List<BusinessHours> get businessHours => merchantProfile?.businessHours ?? [];
 
   List<Documents> get documents => merchantProfile?.documents ?? [];
 
-  List<SiteLocation> get addressData => homeController.profileData.value.data?.siteLocations ?? [];
+  List<SiteLocation> get addressData =>
+      homeController.profileData.value.data?.siteLocations ?? [];
 
   String? get businessWebsite => merchantProfile?.businessWebsite;
 
@@ -167,10 +173,14 @@ class ProfileController extends GetxController {
       final response = await _documentService.deleteDocument(documentId);
 
       if (response.success == true) {
-        SnackBars.successSnackBar(content: response.message ?? 'Document deleted successfully');
+        SnackBars.successSnackBar(
+          content: response.message ?? 'Document deleted successfully',
+        );
         await homeController.fetchProfileData();
       } else {
-        SnackBars.errorSnackBar(content: response.message ?? 'Failed to delete document');
+        SnackBars.errorSnackBar(
+          content: response.message ?? 'Failed to delete document',
+        );
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: 'Error deleting document: $e');
@@ -239,7 +249,8 @@ class ProfileController extends GetxController {
 
         if (!fileName.contains('.')) {
           SnackBars.errorSnackBar(
-            content: "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
+            content:
+                "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
           );
           return;
         }
@@ -267,7 +278,8 @@ class ProfileController extends GetxController {
 
         if (!allowedExtensions.contains(fileExtension)) {
           SnackBars.errorSnackBar(
-            content: "Invalid certificate. Please upload only PDF or image files.",
+            content:
+                "Invalid certificate. Please upload only PDF or image files.",
           );
           return;
         }
@@ -278,7 +290,8 @@ class ProfileController extends GetxController {
 
           if (!isValidFile) {
             SnackBars.errorSnackBar(
-              content: "Invalid file format. Please select a valid PDF, JPG, or PNG file",
+              content:
+                  "Invalid file format. Please select a valid PDF, JPG, or PNG file",
             );
             return;
           }
@@ -304,7 +317,9 @@ class ProfileController extends GetxController {
       const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB
 
       if (sizeInBytes > maxSizeInBytes) {
-        SnackBars.errorSnackBar(content: "File too large,please select a file smaller than 2 MB");
+        SnackBars.errorSnackBar(
+          content: "File too large,please select a file smaller than 2 MB",
+        );
         return null;
       }
 
@@ -314,7 +329,8 @@ class ProfileController extends GetxController {
 
       if (!fileName.contains('.')) {
         SnackBars.errorSnackBar(
-          content: "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
+          content:
+              "Please select a file with a valid extension (PDF, JPG, PNG, DOC, TXT)",
         );
         return null;
       }
@@ -342,7 +358,8 @@ class ProfileController extends GetxController {
 
       if (!allowedExtensions.contains(fileExtension)) {
         SnackBars.errorSnackBar(
-          content: "Only PDF, JPG, PNG, DOC, and TXT files are allowed for certificates",
+          content:
+              "Only PDF, JPG, PNG, DOC, and TXT files are allowed for certificates",
         );
         return null;
       }
@@ -353,7 +370,8 @@ class ProfileController extends GetxController {
 
         if (!isValidFile) {
           SnackBars.errorSnackBar(
-            content: "Invalid file format. Please select a valid PDF, JPG, or PNG file",
+            content:
+                "Invalid file format. Please select a valid PDF, JPG, or PNG file",
           );
           return null;
         }
@@ -384,7 +402,10 @@ class ProfileController extends GetxController {
 
       case 'jpg':
       case 'jpeg':
-        return bytes.length >= 3 && bytes[0] == 0xFF && bytes[1] == 0xD8 && bytes[2] == 0xFF;
+        return bytes.length >= 3 &&
+            bytes[0] == 0xFF &&
+            bytes[1] == 0xD8 &&
+            bytes[2] == 0xFF;
 
       case 'png':
         return bytes.length >= 4 &&
@@ -396,10 +417,16 @@ class ProfileController extends GetxController {
       case 'doc':
       case 'docx':
         if (bytes.length >= 4) {
-          if (bytes[0] == 0xD0 && bytes[1] == 0xCF && bytes[2] == 0x11 && bytes[3] == 0xE0) {
+          if (bytes[0] == 0xD0 &&
+              bytes[1] == 0xCF &&
+              bytes[2] == 0x11 &&
+              bytes[3] == 0xE0) {
             return true;
           }
-          if (bytes[0] == 0x50 && bytes[1] == 0x4B && bytes[2] == 0x03 && bytes[3] == 0x04) {
+          if (bytes[0] == 0x50 &&
+              bytes[1] == 0x4B &&
+              bytes[2] == 0x03 &&
+              bytes[3] == 0x04) {
             return true;
           }
         }
@@ -409,7 +436,10 @@ class ProfileController extends GetxController {
         if (bytes.isEmpty) return true;
         int printableCount = 0;
         for (final int byte in bytes) {
-          if (byte >= 32 && byte <= 126 || byte == 9 || byte == 10 || byte == 13) {
+          if (byte >= 32 && byte <= 126 ||
+              byte == 9 ||
+              byte == 10 ||
+              byte == 13) {
             printableCount++;
           }
         }
@@ -440,7 +470,8 @@ class ProfileController extends GetxController {
       isLoading.value = true;
 
       final homeController = Get.find<HomeController>();
-      final merchantProfile = homeController.profileData.value.data?.merchantProfile;
+      final merchantProfile =
+          homeController.profileData.value.data?.merchantProfile;
       final bool isUpdate;
       if (isSwitch.value) {
         isUpdate = false;
@@ -454,11 +485,15 @@ class ProfileController extends GetxController {
         'year_of_established': businessModel.value.year.toString(),
         'business_email': businessModel.value.businessEmail.toString(),
         if ((businessModel.value.alternativeBusinessEmail ?? "").isNotEmpty)
-          'alternative_business_contact_number': businessModel.value.alternativeBusinessEmail
+          'alternative_business_contact_number': businessModel
+              .value
+              .alternativeBusinessEmail
               .toString(),
-        'business_contact_number': businessModel.value.businessContactNumber.toString(),
+        'business_contact_number': businessModel.value.businessContactNumber
+            .toString(),
         'website': businessModel.value.website.toString(),
-        if (!isUpdate) 'business_hours': json.encode(businessHoursData.toList()),
+        if (!isUpdate)
+          'business_hours': json.encode(businessHoursData.toList()),
       };
 
       final files = <String, String>{};
@@ -482,7 +517,9 @@ class ProfileController extends GetxController {
 
       if (certificates.length > 3) {
         for (var i = 3; i < certificates.length; i++) {
-          if (!(certificates[i].filePath ?? "").startsWith("merchant-documents")) {
+          if (!(certificates[i].filePath ?? "").startsWith(
+            "merchant-documents",
+          )) {
             files[certificates[i].title] = certificates[i].filePath!;
           }
         }
@@ -549,7 +586,9 @@ class ProfileController extends GetxController {
         }
       } else {
         SnackBars.errorSnackBar(
-          content: response['message'] ?? 'Failed to ${isUpdate ? 'update' : 'submit'} profile',
+          content:
+              response['message'] ??
+              'Failed to ${isUpdate ? 'update' : 'submit'} profile',
         );
       }
     } catch (e) {
@@ -566,7 +605,12 @@ class CertificateModel {
   String? name;
   final bool isDefault;
 
-  CertificateModel({required this.title, this.filePath, this.name, this.isDefault = false});
+  CertificateModel({
+    required this.title,
+    this.filePath,
+    this.name,
+    this.isDefault = false,
+  });
 }
 
 class BusinessModel {
