@@ -407,8 +407,6 @@ class HomeView extends StatelessWidget {
   }
 }
 
-
-
 class HeaderText extends StatelessWidget {
   String text;
 
