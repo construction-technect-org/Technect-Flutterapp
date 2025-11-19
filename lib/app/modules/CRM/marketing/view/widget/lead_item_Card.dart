@@ -38,10 +38,11 @@ class LeadItemCard extends StatelessWidget {
                     height: 97,
                     fit: BoxFit.cover,
                     placeholder: (c, s) =>
-                        Container(color: Colors.grey.shade200, width: 71, height: 97),
+                        Container(color: Colors.grey.shade200,     width: 80,
+                          height: 97,),
                     errorWidget: (c, s, e) => Container(
                       color: Colors.grey.shade200,
-                      width: 71,
+                      width: 80,
                       height: 97,
                       child: const Icon(Icons.person),
                     ),
@@ -59,7 +60,7 @@ class LeadItemCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               'Connector - ${lead.connector}',
-                              style: MyTexts.medium12.copyWith(fontWeight: FontWeight.w700),
+                              style: MyTexts.medium13.copyWith(fontWeight: FontWeight.w700),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -80,12 +81,12 @@ class LeadItemCard extends StatelessWidget {
                               children: [
                                 Text(
                                   'Lead Id - ${lead.id}',
-                                  style: MyTexts.medium12.copyWith(color: MyColors.black),
+                                  style: MyTexts.medium13.copyWith(color: MyColors.black),
                                 ),
                                 const SizedBox(height: 3),
                                 Text(
                                   'Product Interested - ${lead.product}',
-                                  style: MyTexts.medium12.copyWith(color: MyColors.black),
+                                  style: MyTexts.medium13.copyWith(color: MyColors.black),
                                 ),
                                 const SizedBox(height: 4),
                                 Row(
@@ -94,7 +95,7 @@ class LeadItemCard extends StatelessWidget {
                                     const SizedBox(width: 3),
                                     Text(
                                       '${lead.distanceKm} km away',
-                                      style: MyTexts.medium12.copyWith(color: MyColors.black),
+                                      style: MyTexts.medium13.copyWith(color: MyColors.black),
                                     ),
                                   ],
                                 ),
@@ -143,19 +144,19 @@ class LeadItemCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _ActionButton(
+                ActionButton(
                   icon: Asset.userPlus,
                   label: 'Assign To',
                   onTap: () {
                     _openTeamBottomSheet();
                   },
                 ),
-                _ActionButton(
+                ActionButton(
                   icon: Asset.chat,
                   label: 'Add Conversation',
                   onTap: () => _openAddConversationBottomSheet(context, lead),
                 ),
-                _ActionButton(
+                ActionButton(
                   icon: Asset.clock,
                   label: 'Set a Reminder',
                   onTap: () =>
@@ -498,19 +499,20 @@ class LeadItemCard extends StatelessWidget {
   }
 }
 
-class _ActionButton extends StatelessWidget {
+class ActionButton extends StatelessWidget {
   final String icon;
   final String label;
+  final double? hPadding;
   final VoidCallback onTap;
 
-  const _ActionButton({required this.icon, required this.label, required this.onTap});
+  const ActionButton({required this.icon, required this.label, required this.onTap,this.hPadding});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        padding: EdgeInsets.symmetric(horizontal:hPadding?? 6, vertical: 5),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),

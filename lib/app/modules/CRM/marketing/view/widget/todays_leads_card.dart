@@ -90,7 +90,7 @@ class TodaysLeadsCard extends GetView<MarketingController> {
             /// ---- HEADER ----
             Row(
               children: [
-                Text("Lead Details", style: MyTexts.bold20),
+                Text("Lead Details", style: MyTexts.medium18),
                 const Spacer(),
                 GestureDetector(
                   onTap: Get.back,

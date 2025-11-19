@@ -235,7 +235,6 @@ class MarketingController extends GetxController {
     "All",
     "Pending",
     "Completed",
-    "Closed",
     "Missed",
   ];
 

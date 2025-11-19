@@ -64,6 +64,7 @@ class Asset {
   static const String chartGreen = '${svg}chartGreen.svg';
   static const String message = '${svg}message.svg';
   static const String clock = '${svg}clock.svg';
+  static const String call = '${svg}call.svg';
 
   /// feature
   static const String crm = '${feature}crm.png';
