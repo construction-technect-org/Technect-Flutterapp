@@ -450,10 +450,10 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
               height: _textHeight,
               child: Text(
                 product.name ?? '',
-                style: MyTexts.medium14,
+                style: MyTexts.medium13,
                 textAlign: TextAlign.center,
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.fade,
               ),
             ),
           ],
