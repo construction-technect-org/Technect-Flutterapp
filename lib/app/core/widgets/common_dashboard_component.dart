@@ -1,22 +1,18 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 
 class CommonDashboard extends StatefulWidget {
   String totalMerchant;
   String totalConnector;
-  CommonDashboard({
-    super.key,
-    required this.totalMerchant,
-    required this.totalConnector,
-  });
+  CommonDashboard({super.key, required this.totalMerchant, required this.totalConnector});
 
   @override
   State<CommonDashboard> createState() => _CommonDashboardState();
 }
 
 class _CommonDashboardState extends State<CommonDashboard> {
-  final controller = Get.put<CommonDashboardController>(
-    CommonDashboardController(),
-  );
+  final controller = Get.put<CommonDashboardController>(CommonDashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +21,7 @@ class _CommonDashboardState extends State<CommonDashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Features",
-              style: MyTexts.extraBold18.copyWith(color: MyColors.black),
-            ),
+            Text("Features", style: MyTexts.extraBold18.copyWith(color: MyColors.black)),
             const Gap(16),
             LayoutBuilder(
               builder: (context, constraints) {
@@ -48,8 +41,7 @@ class _CommonDashboardState extends State<CommonDashboard> {
                   itemBuilder: (context, index) {
                     final item = controller.features[index];
                     return Obx(() {
-                      final isSelected =
-                          controller.selectedIndex.value == index;
+                      final isSelected = controller.selectedIndex.value == index;
                       return BuildFeatureCard(
                         isSelected: isSelected,
                         item: item,
@@ -61,7 +53,10 @@ class _CommonDashboardState extends State<CommonDashboard> {
                               controller.selectedIndex.value = index;
                               myPref.dashboard.val = item["value"].toString();
                               controller.onFeatureTap(item["value"].toString());
+                              const Duration(seconds: 1);
                             }
+
+                            controller.onSecondScreenTap(item["value"].toString());
                           }
                         },
                       );
@@ -72,27 +67,14 @@ class _CommonDashboardState extends State<CommonDashboard> {
             ),
             SizedBox(height: 1.h),
             SizedBox(height: 1.h),
-            Text(
-              "Statics",
-              style: MyTexts.bold18.copyWith(color: MyColors.black),
-            ),
+            Text("Statics", style: MyTexts.bold18.copyWith(color: MyColors.black)),
             SizedBox(height: 1.h),
             Row(
               children: [
-                Expanded(
-                  child: _buildStatCard(
-                    "Merchant",
-                    widget.totalMerchant,
-                    Asset.role1,
-                  ),
-                ),
+                Expanded(child: _buildStatCard("Merchant", widget.totalMerchant, Asset.role1)),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildStatCard(
-                    "Connectors",
-                    widget.totalConnector,
-                    Asset.contractor,
-                  ),
+                  child: _buildStatCard("Connectors", widget.totalConnector, Asset.contractor),
                 ),
               ],
             ),
@@ -120,10 +102,7 @@ class _CommonDashboardState extends State<CommonDashboard> {
               children: [
                 Image.asset(icon, height: 31, width: 31),
                 const Gap(7),
-                Text(
-                  title,
-                  style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
-                ),
+                Text(title, style: MyTexts.medium14.copyWith(color: MyColors.fontBlack)),
               ],
             ),
           ),
@@ -135,10 +114,7 @@ class _CommonDashboardState extends State<CommonDashboard> {
               border: Border.all(color: const Color(0xFFFFFDEA)),
               borderRadius: BorderRadius.circular(43),
             ),
-            child: Text(
-              value,
-              style: MyTexts.bold18.copyWith(color: MyColors.primary),
-            ),
+            child: Text(value, style: MyTexts.bold18.copyWith(color: MyColors.primary)),
           ),
         ],
       ),
@@ -148,12 +124,7 @@ class _CommonDashboardState extends State<CommonDashboard> {
 
 class CommonDashboardController extends GetxController {
   final features = [
-    {
-      "title": "Marketplace",
-      "icon": Asset.role1,
-      "available": true,
-      "value": "marketplace",
-    },
+    {"title": "Marketplace", "icon": Asset.role1, "available": true, "value": "marketplace"},
     {"title": "CRM", "icon": Asset.crm, "available": true, "value": "crm"},
     {"title": "ERP", "icon": Asset.erp, "available": false, "value": "erp"},
     {
@@ -184,9 +155,7 @@ class CommonDashboardController extends GetxController {
     super.onInit();
     final savedValue = myPref.dashboard.val;
 
-    final index = features.indexWhere(
-      (feature) => feature['value'] == savedValue,
-    );
+    final index = features.indexWhere((feature) => feature['value'] == savedValue);
 
     if (index != -1) {
       selectedIndex.value = index;
@@ -201,6 +170,19 @@ class CommonDashboardController extends GetxController {
         Get.offAllNamed(Routes.MAIN);
       case "crm":
         Get.offAllNamed(Routes.CRM_MAIN);
+      default:
+        Get.snackbar("Coming Soon", "This feature is not yet available");
+    }
+  }
+
+  void onSecondScreenTap(String value) {
+    switch (value) {
+      case "marketplace":
+        Get.lazyPut(() => BottomController());
+        Get.find<BottomController>().currentIndex.value = 1;
+      case "crm":
+        Get.lazyPut(() => CRMBottomController());
+        Get.find<CRMBottomController>().currentIndex.value = 1;
       default:
         Get.snackbar("Coming Soon", "This feature is not yet available");
     }
@@ -231,9 +213,7 @@ class BuildFeatureCard extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              border: isSelected
-                  ? null
-                  : BoxBorder.all(width: 2, color: MyColors.grayEA),
+              border: isSelected ? null : BoxBorder.all(width: 2, color: MyColors.grayEA),
               gradient: isSelected
                   ? LinearGradient(
                       begin: AlignmentGeometry.topCenter,
@@ -262,9 +242,7 @@ class BuildFeatureCard extends StatelessWidget {
                       ),
                       child: Text(
                         "Coming Soon",
-                        style: MyTexts.medium13.copyWith(
-                          color: MyColors.gray2E,
-                        ),
+                        style: MyTexts.medium13.copyWith(color: MyColors.gray2E),
                       ),
                     ),
                   ),
