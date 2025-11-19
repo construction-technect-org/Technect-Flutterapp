@@ -14,8 +14,6 @@ class FollowupScreen extends GetView<MarketingController> {
         const TodaysLeadsCard(),
         const SizedBox(height: 10),
         const StatusViewWidget(),
-        const SizedBox(height: 5),
-
         Obx(
           () => Column(
             children: controller.followups.isEmpty
