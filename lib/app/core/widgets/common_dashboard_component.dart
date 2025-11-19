@@ -1,4 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 
 class CommonDashboard extends StatefulWidget {
   String totalMerchant;
@@ -61,7 +63,12 @@ class _CommonDashboardState extends State<CommonDashboard> {
                               controller.selectedIndex.value = index;
                               myPref.dashboard.val = item["value"].toString();
                               controller.onFeatureTap(item["value"].toString());
+                              const Duration(seconds: 1);
                             }
+
+                            controller.onSecondScreenTap(
+                              item["value"].toString(),
+                            );
                           }
                         },
                       );
@@ -205,6 +212,19 @@ class CommonDashboardController extends GetxController {
         Get.snackbar("Coming Soon", "This feature is not yet available");
     }
   }
+
+  void onSecondScreenTap(String value) {
+    switch (value) {
+      case "marketplace":
+        Get.lazyPut(() => BottomController());
+        Get.find<BottomController>().currentIndex.value = 1;
+      case "crm":
+        Get.lazyPut(() => CRMBottomController());
+        Get.find<CRMBottomController>().currentIndex.value = 1;
+      default:
+        Get.snackbar("Coming Soon", "This feature is not yet available");
+    }
+  }
 }
 
 class BuildFeatureCard extends StatelessWidget {
@@ -280,12 +300,12 @@ class BuildFeatureCard extends StatelessWidget {
               ],
             ),
           ),
-          // if (isSelected)
-          //   const Icon(
-          //     Icons.check_circle_rounded,
-          //     color: MyColors.primary,
-          //     size: 20,
-          //   ),
+          if (isSelected)
+            const Icon(
+              Icons.check_circle_rounded,
+              color: MyColors.primary,
+              size: 20,
+            ),
         ],
       ),
     );
