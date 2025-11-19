@@ -5,9 +5,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 
 class HomeView extends StatelessWidget {
   final CommonController commonController = Get.find();
-  final HomeController controller = Get.isRegistered<HomeController>()
-      ? Get.find<HomeController>()
-      : Get.put(HomeController());
+  final HomeController controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
