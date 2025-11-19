@@ -3,14 +3,20 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 class CommonDashboard extends StatefulWidget {
   String totalMerchant;
   String totalConnector;
-  CommonDashboard({super.key,required this.totalMerchant, required this.totalConnector});
+  CommonDashboard({
+    super.key,
+    required this.totalMerchant,
+    required this.totalConnector,
+  });
 
   @override
   State<CommonDashboard> createState() => _CommonDashboardState();
 }
 
 class _CommonDashboardState extends State<CommonDashboard> {
-  final controller = Get.put<CommonDashboardController>(CommonDashboardController());
+  final controller = Get.put<CommonDashboardController>(
+    CommonDashboardController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +25,14 @@ class _CommonDashboardState extends State<CommonDashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Features", style: MyTexts.extraBold18.copyWith(color: MyColors.black)),
+            Text(
+              "Features",
+              style: MyTexts.extraBold18.copyWith(color: MyColors.black),
+            ),
             const Gap(16),
             LayoutBuilder(
               builder: (context, constraints) {
-                final double itemWidth =
-                    (constraints.maxWidth - (2 * 10)) / 3;
+                final double itemWidth = (constraints.maxWidth - (2 * 10)) / 3;
                 final double itemHeight = itemWidth + 10;
                 return GridView.builder(
                   padding: EdgeInsets.zero,
@@ -40,7 +48,8 @@ class _CommonDashboardState extends State<CommonDashboard> {
                   itemBuilder: (context, index) {
                     final item = controller.features[index];
                     return Obx(() {
-                      final isSelected = controller.selectedIndex.value == index;
+                      final isSelected =
+                          controller.selectedIndex.value == index;
                       return BuildFeatureCard(
                         isSelected: isSelected,
                         item: item,
@@ -63,7 +72,10 @@ class _CommonDashboardState extends State<CommonDashboard> {
             ),
             SizedBox(height: 1.h),
             SizedBox(height: 1.h),
-            Text("Statics", style: MyTexts.bold18.copyWith(color: MyColors.black)),
+            Text(
+              "Statics",
+              style: MyTexts.bold18.copyWith(color: MyColors.black),
+            ),
             SizedBox(height: 1.h),
             Row(
               children: [
@@ -72,7 +84,7 @@ class _CommonDashboardState extends State<CommonDashboard> {
                     "Merchant",
                     widget.totalMerchant,
                     Asset.role1,
-                  )
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -108,7 +120,10 @@ class _CommonDashboardState extends State<CommonDashboard> {
               children: [
                 Image.asset(icon, height: 31, width: 31),
                 const Gap(7),
-                Text(title, style: MyTexts.medium14.copyWith(color: MyColors.fontBlack)),
+                Text(
+                  title,
+                  style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
+                ),
               ],
             ),
           ),
@@ -120,7 +135,10 @@ class _CommonDashboardState extends State<CommonDashboard> {
               border: Border.all(color: const Color(0xFFFFFDEA)),
               borderRadius: BorderRadius.circular(43),
             ),
-            child: Text(value, style: MyTexts.bold18.copyWith(color: MyColors.primary)),
+            child: Text(
+              value,
+              style: MyTexts.bold18.copyWith(color: MyColors.primary),
+            ),
           ),
         ],
       ),
@@ -130,14 +148,34 @@ class _CommonDashboardState extends State<CommonDashboard> {
 
 class CommonDashboardController extends GetxController {
   final features = [
-    {"title": "Marketplace", "icon": Asset.role1, "available": true, "value": "marketplace"},
+    {
+      "title": "Marketplace",
+      "icon": Asset.role1,
+      "available": true,
+      "value": "marketplace",
+    },
     {"title": "CRM", "icon": Asset.crm, "available": true, "value": "crm"},
     {"title": "ERP", "icon": Asset.erp, "available": false, "value": "erp"},
-    {"title": "Project Management", "icon": Asset.project, "available": false, "value": "project_management"},
+    {
+      "title": "Project Management",
+      "icon": Asset.project,
+      "available": false,
+      "value": "project_management",
+    },
     {"title": "HRMS", "icon": Asset.hrms, "available": false, "value": "hrms"},
-    {"title": "Portfolio Management", "icon": Asset.portfolio, "available": false, "value": "portfolio_management"},
+    {
+      "title": "Portfolio Management",
+      "icon": Asset.portfolio,
+      "available": false,
+      "value": "portfolio_management",
+    },
     {"title": "OVP", "icon": Asset.ovp, "available": false, "value": "ovp"},
-    {"title": "Construction Taxi", "icon": Asset.taxi, "available": false, "value": "construction_taxi"},
+    {
+      "title": "Construction Taxi",
+      "icon": Asset.taxi,
+      "available": false,
+      "value": "construction_taxi",
+    },
   ];
   final RxInt selectedIndex = 0.obs;
 
@@ -146,7 +184,9 @@ class CommonDashboardController extends GetxController {
     super.onInit();
     final savedValue = myPref.dashboard.val;
 
-    final index = features.indexWhere((feature) => feature['value'] == savedValue);
+    final index = features.indexWhere(
+      (feature) => feature['value'] == savedValue,
+    );
 
     if (index != -1) {
       selectedIndex.value = index;
@@ -154,6 +194,7 @@ class CommonDashboardController extends GetxController {
       selectedIndex.value = 0;
     }
   }
+
   void onFeatureTap(String value) {
     switch (value) {
       case "marketplace":
@@ -164,9 +205,7 @@ class CommonDashboardController extends GetxController {
         Get.snackbar("Coming Soon", "This feature is not yet available");
     }
   }
-
 }
-
 
 class BuildFeatureCard extends StatelessWidget {
   const BuildFeatureCard({
@@ -192,15 +231,18 @@ class BuildFeatureCard extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
+              border: isSelected
+                  ? null
+                  : BoxBorder.all(width: 2, color: MyColors.grayEA),
               gradient: isSelected
                   ? LinearGradient(
-                begin: AlignmentGeometry.topCenter,
-                end: AlignmentGeometry.bottomCenter,
-                colors: [
-                  const Color(0xFFE9EBF8).withValues(alpha: 0),
-                  const Color(0xFFE9EBF8),
-                ],
-              )
+                      begin: AlignmentGeometry.topCenter,
+                      end: AlignmentGeometry.bottomCenter,
+                      colors: [
+                        const Color(0xFFE9EBF8).withValues(alpha: 0),
+                        const Color(0xFFE9EBF8),
+                      ],
+                    )
                   : null,
             ),
             child: Column(
@@ -209,16 +251,13 @@ class BuildFeatureCard extends StatelessWidget {
                   Align(
                     alignment: AlignmentGeometry.topRight,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3,
-                        horizontal: 8,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
                       decoration: const BoxDecoration(
                         color: MyColors.grayEA,
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32),
-                          bottomLeft: Radius.circular(32),
-                          topRight: Radius.circular(8),
+                          topLeft: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                          topRight: Radius.circular(22),
                         ),
                       ),
                       child: Text(
@@ -241,15 +280,14 @@ class BuildFeatureCard extends StatelessWidget {
               ],
             ),
           ),
-          if (isSelected)
-            const Icon(
-              Icons.check_circle_rounded,
-              color: MyColors.primary,
-              size: 20,
-            ),
+          // if (isSelected)
+          //   const Icon(
+          //     Icons.check_circle_rounded,
+          //     color: MyColors.primary,
+          //     size: 20,
+          //   ),
         ],
       ),
     );
   }
 }
-
