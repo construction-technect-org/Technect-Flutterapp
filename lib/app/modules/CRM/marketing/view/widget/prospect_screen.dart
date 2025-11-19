@@ -6,6 +6,7 @@ import 'package:construction_technect/app/modules/CRM/marketing/view/widget/toda
 
 class ProspectScreen extends GetView<MarketingController> {
   const ProspectScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,9 +23,7 @@ class ProspectScreen extends GetView<MarketingController> {
                       padding: const EdgeInsets.symmetric(vertical: 30),
                       child: Text(
                         'No Prospect available',
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.gray54,
-                        ),
+                        style: MyTexts.medium16.copyWith(color: MyColors.gray54),
                       ),
                     ),
                   ]
@@ -35,6 +34,7 @@ class ProspectScreen extends GetView<MarketingController> {
                           child: ProspectItemCard(
                             lead: l,
                             controller: controller,
+                            status: controller.activeProspectStatusFilter.value,
                           ),
                         ),
                       )
