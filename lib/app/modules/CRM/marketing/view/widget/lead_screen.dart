@@ -14,7 +14,8 @@ class LeadScreen extends GetView<MarketingController> {
       children: [
         AddNewLeadButton(
           onTap: () {
-            Get.toNamed(Routes.ADD_LEAD);
+            controller.onAdd(context);
+            //Get.toNamed(Routes.ADD_LEAD);
           },
         ),
         const SizedBox(height: 18),

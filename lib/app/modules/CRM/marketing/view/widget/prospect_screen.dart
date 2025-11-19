@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/Prospect_status_widget.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/followup_item_card.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/prospect_item_card.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/todays_leads_card.dart';
 
 class ProspectScreen extends GetView<MarketingController> {
@@ -16,7 +16,7 @@ class ProspectScreen extends GetView<MarketingController> {
         const SizedBox(height: 5),
         Obx(
           () => Column(
-            children: controller.followups.isEmpty
+            children: controller.prospectLeads.isEmpty
                 ? [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 30),
@@ -28,11 +28,11 @@ class ProspectScreen extends GetView<MarketingController> {
                       ),
                     ),
                   ]
-                : controller.followups
+                : controller.prospectLeads
                       .map(
                         (l) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: FollowupItemCard(
+                          child: ProspectItemCard(
                             lead: l,
                             controller: controller,
                           ),

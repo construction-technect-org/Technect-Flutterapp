@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/followup_screen.dart';
@@ -9,6 +11,7 @@ class MarketingController extends GetxController {
   @override
   void onInit() {
     filterFollowupStatus();
+    filterProspectStatus();
     super.onInit();
   }
 
@@ -88,6 +91,48 @@ class MarketingController extends GetxController {
     }
   }
 
+  RxList<LeadModel> prospectLeads = <LeadModel>[].obs;
+  void filterProspectStatus() {
+    if (activeProspectStatusFilter.value == 'Fresh') {
+      prospectLeads.value = leads;
+    } else {
+      prospectLeads.value = leads.where((lead) {
+        if (activeProspectStatusFilter.value.toLowerCase() ==
+            "Reached Out".toLowerCase()) {
+          if (lead.status == Status.completed) {
+            return true;
+          } else {
+            return false;
+          }
+        } else if (activeProspectStatusFilter.value.toLowerCase() ==
+            "On Hold".toLowerCase()) {
+          if (lead.status == Status.pending) {
+            return true;
+          } else {
+            return false;
+          }
+        } else if (activeProspectStatusFilter.value.toLowerCase() ==
+            "Converted".toLowerCase()) {
+          if (lead.status == Status.closed) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }).toList();
+    }
+
+    // prospectLeads.value = leads
+    //     .where(
+    //       (lead) =>
+    //           lead.status.name.toLowerCase() ==
+    //           activeProspectStatusFilter.value.toLowerCase(),
+    //     )
+    //     .toList();
+  }
+
   final List<String> statusItems = <String>[
     "All",
     "Pending",
@@ -117,7 +162,8 @@ class MarketingController extends GetxController {
 
   void setStatusProspectFilter(String f) {
     activeProspectStatusFilter.value = f;
-    // filterFollowupStatus();
+    log("setStatusProspectFilter: $f");
+    filterProspectStatus();
   }
 
   void setCategory(String c) => category.value = c;
