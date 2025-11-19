@@ -64,8 +64,9 @@ class TodaysLeadsCard extends GetView<MarketingController> {
               onTap: () {
                 _openSourceBottomSheet();
               },
-              height: 30,
+              height: 28,
               width: 115,
+              borderRadius: 6,
               buttonName: "View  in details",
               style: MyTexts.medium14.copyWith(color: Colors.white),
             ),
@@ -104,7 +105,6 @@ class TodaysLeadsCard extends GetView<MarketingController> {
 
             const SizedBox(height: 20),
 
-            /// ---- GRID ----
             GridView(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

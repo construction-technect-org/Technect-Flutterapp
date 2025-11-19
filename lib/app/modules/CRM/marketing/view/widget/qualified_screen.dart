@@ -13,8 +13,8 @@ class QualifiedScreen extends GetView<MarketingController> {
       children: [
         AddNewLeadButton(
           onTap: () {
-            controller.onAdd(context);
-            //Get.toNamed(Routes.ADD_LEAD);
+            // controller.onAdd(context);
+            Get.toNamed(Routes.ADD_LEAD);
           },
         ),
         const SizedBox(height: 18),

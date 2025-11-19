@@ -49,16 +49,14 @@ class MarketingController extends GetxController {
     'Qualified': const QualifiedScreen(),
   };
 
-  // Today total
   int get todaysTotal => leads.length;
 
-  // list of leads
   RxList<LeadModel> leads = <LeadModel>[
     LeadModel(
       id: '#CTO1256',
       name: 'Anand',
       connector: 'Anand',
-      product: 'M sand',
+      product: 'M Sand',
       distanceKm: 2.8,
       status: Status.completed,
       dateTime: DateTime(2024, 11, 12, 10, 30),
@@ -68,11 +66,111 @@ class MarketingController extends GetxController {
       id: '#CTO1259',
       name: 'Shiva',
       connector: 'Shiva',
-      product: 'M sand',
+      product: 'M Sand',
       distanceKm: 2.8,
       status: Status.closed,
       dateTime: DateTime(2024, 11, 12, 10, 40),
       avatarUrl: 'https://i.pravatar.cc/150?img=5',
+    ),
+    LeadModel(
+      id: '#CTO1260',
+      name: 'Rahul',
+      connector: 'Mukesh',
+      product: 'Cement',
+      distanceKm: 5.4,
+      status: Status.pending,
+      dateTime: DateTime(2024, 11, 13, 11, 10),
+      avatarUrl: 'https://i.pravatar.cc/150?img=8',
+    ),
+    LeadModel(
+      id: '#CTO1261',
+      name: 'Priya',
+      connector: 'Anil',
+      product: 'Bricks',
+      distanceKm: 1.8,
+      status: Status.completed,
+      dateTime: DateTime(2024, 11, 13, 12, 5),
+      avatarUrl: 'https://i.pravatar.cc/150?img=22',
+    ),
+    LeadModel(
+      id: '#CTO1262',
+      name: 'Vikas',
+      connector: 'Kiran',
+      product: 'Steel',
+      distanceKm: 3.3,
+      status: Status.pending,
+      dateTime: DateTime(2024, 11, 14, 9, 20),
+      avatarUrl: 'https://i.pravatar.cc/150?img=14',
+    ),
+    LeadModel(
+      id: '#CTO1263',
+      name: 'Meena',
+      connector: 'Deepak',
+      product: 'Concrete',
+      distanceKm: 4.1,
+      status: Status.missed,
+      dateTime: DateTime(2024, 11, 14, 10, 45),
+      avatarUrl: 'https://i.pravatar.cc/150?img=17',
+    ),
+    LeadModel(
+      id: '#CTO1264',
+      name: 'Karthik',
+      connector: 'Suresh',
+      product: 'M Sand',
+      distanceKm: 2.0,
+      status: Status.closed,
+      dateTime: DateTime(2024, 11, 15, 13, 15),
+      avatarUrl: 'https://i.pravatar.cc/150?img=28',
+    ),
+    LeadModel(
+      id: '#CTO1265',
+      name: 'Sangeeta',
+      connector: 'Anand',
+      product: 'Tiles',
+      distanceKm: 6.2,
+      status: Status.completed,
+      dateTime: DateTime(2024, 11, 15, 16, 10),
+      avatarUrl: 'https://i.pravatar.cc/150?img=32',
+    ),
+    LeadModel(
+      id: '#CTO1266',
+      name: 'Rohan',
+      connector: 'Prakash',
+      product: 'Blocks',
+      distanceKm: 1.5,
+      status: Status.pending,
+      dateTime: DateTime(2024, 11, 16, 11, 45),
+      avatarUrl: 'https://i.pravatar.cc/150?img=36',
+    ),
+    LeadModel(
+      id: '#CTO1267',
+      name: 'Divya',
+      connector: 'Vivek',
+      product: 'Cement',
+      distanceKm: 3.9,
+      status: Status.closed,
+      dateTime: DateTime(2024, 11, 16, 14, 25),
+      avatarUrl: 'https://i.pravatar.cc/150?img=41',
+    ),
+    LeadModel(
+      id: '#CTO1268',
+      name: 'Harshal',
+      connector: 'Manish',
+      product: 'TMT Steel',
+      distanceKm: 4.7,
+      status: Status.completed,
+      dateTime: DateTime(2024, 11, 17, 10, 55),
+      avatarUrl: 'https://i.pravatar.cc/150?img=45',
+    ),
+    LeadModel(
+      id: '#CTO1269',
+      name: 'Aarti',
+      connector: 'Ganesh',
+      product: 'Concrete',
+      distanceKm: 5.1,
+      status: Status.missed,
+      dateTime: DateTime(2024, 11, 17, 12, 40),
+      avatarUrl: 'https://i.pravatar.cc/150?img=50',
     ),
   ].obs;
 
@@ -184,22 +282,7 @@ class MarketingController extends GetxController {
   }
 
   void chatNow(String leadId) {
+    Get.toNamed(Routes.All_CHAT_LIST);
     debugPrint('Open chat for $leadId');
-  }
-
-  void onAdd(BuildContext ctx) {
-    final now = DateTime.now();
-    addLead(
-      LeadModel(
-        id: '#CTO${1000 + leads.length + 1}',
-        name: 'New LeadModel ${leads.length + 1}',
-        connector: 'Connector X',
-        product: 'Concrete',
-        distanceKm: 1.2,
-        dateTime: now,
-        status: Status.values[leads.length % Status.values.length],
-        avatarUrl: 'https://i.pravatar.cc/150?img=${20 + leads.length}',
-      ),
-    );
   }
 }

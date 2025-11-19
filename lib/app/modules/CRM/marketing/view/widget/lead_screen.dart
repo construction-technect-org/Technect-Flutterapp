@@ -14,13 +14,13 @@ class LeadScreen extends GetView<MarketingController> {
       children: [
         AddNewLeadButton(
           onTap: () {
-            controller.onAdd(context);
-            //Get.toNamed(Routes.ADD_LEAD);
+            // controller.onAdd(context);
+            Get.toNamed(Routes.ADD_LEAD);
           },
         ),
         const SizedBox(height: 18),
         const TodaysLeadsCard(),
-        const SizedBox(height: 20),
+        const SizedBox(height: 21),
         Align(
           alignment: Alignment.centerLeft,
           child: Text('Lead Details', style: MyTexts.medium18),
