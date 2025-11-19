@@ -490,30 +490,36 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                   ),
                                 );
                               },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.network(
-                                  referenceUrl,
-                                  height: 200,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) => Container(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: MyColors.grayEA
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.network(
+                                    referenceUrl,
                                     height: 200,
-                                    color: MyColors.grayEA,
-                                    child: const Center(
-                                      child: Icon(Icons.broken_image, size: 60, color: Colors.grey),
-                                    ),
-                                  ),
-                                  loadingBuilder: (context, child, loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    }
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        color: Colors.grey.withValues(alpha: 0.5),
+                                    width: double.infinity,
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (context, error, stackTrace) => Container(
+                                      height: 200,
+                                      color: MyColors.grayEA,
+                                      child: const Center(
+                                        child: Icon(Icons.broken_image, size: 60, color: Colors.grey),
                                       ),
-                                    );
-                                  },
+                                    ),
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.grey.withValues(alpha: 0.5),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             )
