@@ -153,7 +153,7 @@ class LeadItemCard extends StatelessWidget {
                 _ActionButton(
                   icon: Asset.chat,
                   label: 'Add Conversation',
-                  onTap: () => controller.chatNow(lead.id),
+                  onTap: () => _openAddConversationBottomSheet(context, lead),
                 ),
                 _ActionButton(
                   icon: Asset.clock,
@@ -316,6 +316,183 @@ class LeadItemCard extends StatelessWidget {
           const SizedBox(height: 14),
           const CommonTextField(hintText: "Note:Typing....", maxLine: 3),
         ],
+      ),
+    );
+  }
+
+  void _openAddConversationBottomSheet(BuildContext context, LeadModel lead) {
+    final TextEditingController lastController = TextEditingController();
+    final TextEditingController nextController = TextEditingController();
+
+    Get.bottomSheet(
+      GestureDetector(
+        onTap: hideKeyboard,
+        child: Container(
+          height: Get.height * 0.75,
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    Text("Add Conversation", style: MyTexts.medium18),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: Get.back,
+                      child: const CircleAvatar(
+                        radius: 18,
+                        backgroundColor: MyColors.grayF7,
+                        child: Icon(Icons.close, color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Last Conversation", style: MyTexts.bold15),
+                    const SizedBox(width: 8),
+                    _userInfo(lead),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                CommonTextField(
+                  controller: lastController,
+                  maxLine: 5,
+                  hintText: "Typing.....",
+                  bgColor: const Color(0xFFE8F1FF),
+                ),
+
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _whiteButton(
+                        "Save",
+                        onTap: () {
+                          Get.back();
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(child: _whiteButton("Cancel", onTap: Get.back)),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Next Conversation", style: MyTexts.bold15),
+                    const SizedBox(width: 8),
+                    _userInfo(lead),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+
+                CommonTextField(
+                  controller: nextController,
+                  maxLine: 5,
+                  hintText: "Typing.....",
+                  bgColor: const Color(0xFFFFF9BD),
+                ),
+
+                const SizedBox(height: 15),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: _whiteIconButton(
+                        icon: Icons.access_time,
+                        label: "Set Reminder",
+                        onTap: () {},
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(child: _whiteButton("Save", onTap: () {})),
+                    const SizedBox(width: 10),
+                    Expanded(child: _whiteButton("Cancel", onTap: Get.back)),
+                  ],
+                ),
+                const SizedBox(height: 40),
+              ],
+            ),
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  Widget _userInfo(LeadModel lead) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            CircleAvatar(radius: 12, backgroundImage: NetworkImage(lead.avatarUrl)),
+            const SizedBox(width: 8),
+            Text(lead.name, style: MyTexts.medium14),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          "${_formatTime(lead.dateTime)} , ${_formatDate(lead.dateTime)}",
+          style: MyTexts.medium12.copyWith(color: Colors.black54),
+        ),
+      ],
+    );
+  }
+
+  Widget _whiteButton(String label, {required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Text(label, style: MyTexts.medium14),
+      ),
+    );
+  }
+
+  Widget _whiteIconButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 16),
+            const SizedBox(width: 8),
+            Text(label, style: MyTexts.medium14),
+          ],
+        ),
       ),
     );
   }
