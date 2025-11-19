@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/lead_item_Card.dart';
 
 class QualifiedItemCard extends StatelessWidget {
   final LeadModel lead;
@@ -16,7 +17,7 @@ class QualifiedItemCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFFEFF6FF),
+          // color: const Color(0xFFEFF6FF),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.grey.shade300),
         ),
@@ -57,7 +58,7 @@ class QualifiedItemCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               'Connector - ${lead.connector}',
-                              style: MyTexts.medium12.copyWith(
+                              style: MyTexts.medium13.copyWith(
                                 fontWeight: FontWeight.w700,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -77,21 +78,21 @@ class QualifiedItemCard extends StatelessWidget {
                       const SizedBox(height: 3),
                       Text(
                         'Lead Id - ${lead.id}',
-                        style: MyTexts.medium12.copyWith(
+                        style: MyTexts.medium13.copyWith(
                           color: MyColors.gray54,
                         ),
                       ),
                       const SizedBox(height: 3),
                       Text(
                         'Product Interested - ${lead.product}',
-                        style: MyTexts.medium12.copyWith(
+                        style: MyTexts.medium13.copyWith(
                           color: MyColors.gray54,
                         ),
                       ),
                       const SizedBox(height: 3),
                       Text(
                         'Lead Score (24)',
-                        style: MyTexts.medium12.copyWith(
+                        style: MyTexts.medium13.copyWith(
                           color: MyColors.gray54,
                         ),
                       ),
@@ -102,7 +103,7 @@ class QualifiedItemCard extends StatelessWidget {
                           const SizedBox(width: 3),
                           Text(
                             '${lead.distanceKm} km away',
-                            style: MyTexts.medium12.copyWith(
+                            style: MyTexts.medium13.copyWith(
                               color: MyColors.gray54,
                             ),
                           ),
@@ -114,7 +115,7 @@ class QualifiedItemCard extends StatelessWidget {
                         children: [
                           Text(
                             'Qualification Reason',
-                            style: MyTexts.medium12.copyWith(
+                            style: MyTexts.medium13.copyWith(
                               color: MyColors.gray54,
                             ),
                           ),
@@ -154,30 +155,30 @@ class QualifiedItemCard extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _ActionButton(
-                  icon: Icons.person_add_alt_1_outlined,
-                  label: 'Assign To',
-                  onTap: () => controller.assignTo(lead.id, 'User A'),
-                ),
-                _ActionButton(
-                  icon: Icons.schedule_outlined,
+                // ActionButton(
+                //   icon: Asset.userPlus,
+                //   label: 'Assign To',
+                //   onTap: () => controller.assignTo(lead.id, 'User A'),
+                // ),
+                ActionButton(
+                  icon: Asset.clock,
                   label: 'Set a Reminder',
                   onTap: () => controller.setReminder(
                     lead.id,
                     DateTime.now().add(const Duration(days: 1)),
                   ),
                 ),
-                _ActionButton(
-                  icon: Icons.chat_bubble_outline,
+                ActionButton(
+                  icon: Asset.message,
                   label: 'Chat Now',
                   onTap: () => controller.chatNow(lead.id),
                 ),
-                _ActionButton(
-                  icon: Icons.done,
+                ActionButton(
+                  icon: Asset.check,
                   label: ' Move to Final Stage',
                   onTap: () => controller.chatNow(lead.id),
                 ),
@@ -192,37 +193,4 @@ class QualifiedItemCard extends StatelessWidget {
   static String _formatTime(DateTime d) =>
       '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')} AM';
   static String _formatDate(DateTime d) => '${d.month}, ${d.day}';
-}
-
-class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 12),
-            const Gap(5),
-            Text(label, style: const TextStyle(fontSize: 8)),
-          ],
-        ),
-      ),
-    );
-  }
 }

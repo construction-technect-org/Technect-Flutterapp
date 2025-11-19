@@ -394,7 +394,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Reference ${referenceType.toUpperCase()}",
+                            "Reference ${referenceType.capitalizeFirst}",
                             style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
                           ),
                           const Gap(10),

@@ -92,7 +92,7 @@ class CRMDashboardScreen extends StatelessWidget {
                                       Asset.location,
                                       width: 9,
                                       height: 12.22,
-                                      color: MyColors.custom('545454'),
+                                      colorFilter: ColorFilter.mode(MyColors.custom('545454'),BlendMode.srcIn)
                                     ),
                                     SizedBox(width: 0.4.h),
                                     Expanded(
