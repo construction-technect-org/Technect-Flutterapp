@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/CRM/reminder/controller/reminder_controller.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -18,10 +19,7 @@ class SetReminderScreen extends GetView<ReminderController> {
           children: [
             Container(
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Asset.categoryBg),
-                  fit: BoxFit.cover,
-                ),
+                image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
               ),
             ),
             Column(
@@ -34,11 +32,7 @@ class SetReminderScreen extends GetView<ReminderController> {
                     onTap: () => Get.back(),
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -47,7 +41,6 @@ class SetReminderScreen extends GetView<ReminderController> {
                     padding: const EdgeInsets.fromLTRB(16, 5, 16, 16),
                     child: Column(
                       children: [
-                        // Calendar card
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -55,9 +48,14 @@ class SetReminderScreen extends GetView<ReminderController> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black12.withValues(alpha: 0.05),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
+                                color: Colors.black.withValues(alpha: 0.10),
+                                blurRadius: 23,
+                                offset: const Offset(0, 10),
+                              ),
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.09),
+                                blurRadius: 42,
+                                offset: const Offset(0, 42),
                               ),
                             ],
                           ),
@@ -79,28 +77,18 @@ class SetReminderScreen extends GetView<ReminderController> {
                                     titleCentered: true,
                                     titleTextStyle: MyTexts.medium18.copyWith(
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.indigo.shade900,
+                                      color: MyColors.primary,
                                     ),
-                                    leftChevronIcon: const Icon(
-                                      Icons.chevron_left,
-                                      size: 28,
-                                    ),
-                                    rightChevronIcon: const Icon(
-                                      Icons.chevron_right,
-                                      size: 28,
-                                    ),
+                                    leftChevronIcon: const Icon(Icons.chevron_left, size: 28),
+                                    rightChevronIcon: const Icon(Icons.chevron_right, size: 28),
                                   ),
                                   daysOfWeekStyle: DaysOfWeekStyle(
-                                    weekendStyle: TextStyle(
-                                      color: Colors.indigo.shade700,
-                                    ),
-                                    weekdayStyle: TextStyle(
-                                      color: Colors.indigo.shade700,
-                                    ),
+                                    weekendStyle: MyTexts.bold15.copyWith(color:  MyColors.primary,),
+                                    weekdayStyle: MyTexts.bold15.copyWith(color:  MyColors.primary,),
                                   ),
                                   calendarStyle: CalendarStyle(
-                                    selectedDecoration: BoxDecoration(
-                                      color: Colors.indigo.shade800,
+                                    selectedDecoration: const BoxDecoration(
+                                      color: MyColors.primary,
                                       shape: BoxShape.circle,
                                     ),
                                     todayDecoration: BoxDecoration(
@@ -115,41 +103,27 @@ class SetReminderScreen extends GetView<ReminderController> {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              // Time row
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text("Time", style: MyTexts.medium18),
-                                  const SizedBox(width: 20),
+                                 const Spacer(),
                                   GestureDetector(
                                     onTap: () => c.pickTime(),
                                     child: Obx(() {
                                       final t = c.selectedTime.value;
-                                      final hh = t.hour.toString().padLeft(
-                                        2,
-                                        '0',
-                                      );
-                                      final mm = t.minute.toString().padLeft(
-                                        2,
-                                        '0',
-                                      );
+                                      final hh = t.hour.toString().padLeft(2, '0');
+                                      final mm = t.minute.toString().padLeft(2, '0');
                                       return Container(
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 12,
                                           horizontal: 22,
                                         ),
                                         decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.indigo.shade200,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
+                                          color: MyColors.primary.withValues(alpha: 0.12),
+                                          border: Border.all(color: Colors.indigo.shade200),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
-                                        child: Text(
-                                          "$hh : $mm",
-                                          style: MyTexts.medium18,
-                                        ),
+                                        child: Text("$hh : $mm", style: MyTexts.medium18),
                                       );
                                     }),
                                   ),
@@ -158,71 +132,25 @@ class SetReminderScreen extends GetView<ReminderController> {
                             ],
                           ),
                         ),
-
                         const SizedBox(height: 20),
-
-                        // Date & Time display
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Obx(
-                              () => _infoBox(
-                                label: "Date",
-                                value: c.formattedSelectedDate(),
-                              ),
-                            ),
-                            Obx(
-                              () => _infoBox(
-                                label: "Time",
-                                value: c.formattedSelectedTime(),
-                              ),
-                            ),
+                            Obx(() => _infoBox(label: "Date", value: c.formattedSelectedDate())),
+                            Obx(() => _infoBox(label: "Time", value: c.formattedSelectedTime())),
                           ],
                         ),
 
                         const SizedBox(height: 18),
+                        CommonTextField(
+                          controller: c.noteController,
+                          hintText: "Note...",
 
-                        // Note input
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          height: 130,
-                          decoration: BoxDecoration(
-                            color: Colors.indigo.shade50,
-                            borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: Colors.indigo.shade200),
-                          ),
-                          child: TextField(
-                            controller: c.noteController,
-                            maxLines: 5,
-                            decoration: const InputDecoration(
-                              hintText: "Note...",
-                              border: InputBorder.none,
-                            ),
-                            style: MyTexts.medium16,
-                          ),
+                          maxLine: 5,
+                          bgColor: const Color(0xFFF3F6FF),
                         ),
 
                         const SizedBox(height: 30),
-
-                        // Buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _actionButton(
-                              title: "Cancel",
-                              color: Colors.white,
-                              textColor: Colors.indigo.shade900,
-                              borderColor: Colors.indigo.shade300,
-                              onTap: () => Get.back(),
-                            ),
-                            _actionButton(
-                              title: "Save",
-                              color: Colors.indigo.shade900,
-                              textColor: Colors.white,
-                              onTap: () => c.saveReminder(),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
@@ -231,15 +159,39 @@ class SetReminderScreen extends GetView<ReminderController> {
             ),
           ],
         ),
+        bottomNavigationBar:  Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: RoundedButton(
+                  color: Colors.transparent,
+                  fontColor: MyColors.primary,
+                  buttonName: "Cancel",
+                  borderColor: MyColors.primary,
+                  onTap: () => Get.back(),
+                ),
+              ),
+              const Gap(24),
+              Expanded(
+                child: RoundedButton(
+                  buttonName: "Save",
+                  onTap: () => c.saveReminder(),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget _infoBox({required String label, required String value}) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.indigo.shade300),
+        color: Colors.white,
+        border: Border.all(color :MyColors.primary),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -269,17 +221,12 @@ class SetReminderScreen extends GetView<ReminderController> {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(14),
-          border: borderColor != null
-              ? Border.all(color: borderColor, width: 1.4)
-              : null,
+          border: borderColor != null ? Border.all(color: borderColor, width: 1.4) : null,
         ),
         child: Center(
           child: Text(
             title,
-            style: MyTexts.medium18.copyWith(
-              fontWeight: FontWeight.w600,
-              color: textColor,
-            ),
+            style: MyTexts.medium18.copyWith(fontWeight: FontWeight.w600, color: textColor),
           ),
         ),
       ),

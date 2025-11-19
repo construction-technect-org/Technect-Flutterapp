@@ -124,7 +124,12 @@ class LeadItemCard extends StatelessWidget {
                             ),
                           ),
                           const Gap(20),
-                          SvgPicture.asset(Asset.message),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.All_CHAT_LIST);
+                            },
+                            child: SvgPicture.asset(Asset.message),
+                          ),
                           const Gap(20),
                         ],
                       ),
@@ -338,7 +343,7 @@ class _ActionButton extends StatelessWidget {
           children: [
             SvgPicture.asset(icon, height: 12),
             const SizedBox(width: 8),
-            Text(label, style:MyTexts.regular12),
+            Text(label, style: MyTexts.regular12),
           ],
         ),
       ),

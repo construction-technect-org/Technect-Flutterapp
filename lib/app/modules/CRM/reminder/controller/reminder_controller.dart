@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,14 +49,12 @@ class ReminderController extends GetxController {
   }
 
   void saveReminder() {
-    // Connect to service / scheduling logic here.
     final note = noteController.text;
     final date = selectedDay.value ?? DateTime.now();
     final time = selectedTime.value;
-    // Example: log or call an API / schedule local notification
     debugPrint("Save reminder -> date: $date, time: $time, note: $note");
-    // close dialog or show snackbar
-    Get.snackbar("Reminder", "Saved", snackPosition: SnackPosition.BOTTOM);
+    Get.back();
+    SnackBars.successSnackBar(content: "Reminder set successfully");
   }
 
   @override
