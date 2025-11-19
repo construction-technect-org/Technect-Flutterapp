@@ -452,7 +452,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                 product.name ?? '',
                 style: MyTexts.medium13,
                 textAlign: TextAlign.center,
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.fade,
               ),
             ),
@@ -670,23 +670,23 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                       children: [
                         Text(
                           service.serviceCategoryName ?? 'Service',
-                          style: MyTexts.medium14,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          style: MyTexts.medium13,
+                          maxLines: 3,
+                          overflow: TextOverflow.fade,
                         ),
                         const Gap(4),
                         Text(
                           service.merchantName ?? '',
                           style: MyTexts.regular12.copyWith(color: Colors.grey),
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.fade,
                         ),
                         const Spacer(),
                         Text(
                           '₹${service.price ?? '0'}/${service.units ?? ''}',
-                          style: MyTexts.bold14.copyWith(color: MyColors.primary),
+                          style: MyTexts.bold13.copyWith(color: MyColors.primary),
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.fade,
                         ),
                         if (myPref.role.val == "connector") const SizedBox(height: 4),
                         if (myPref.role.val == "connector")
