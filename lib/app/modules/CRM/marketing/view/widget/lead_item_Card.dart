@@ -520,7 +520,7 @@ class ActionButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            SvgPicture.asset(icon, height: 12),
+            SvgPicture.asset(icon, height: 12,colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn)),
             const SizedBox(width: 8),
             Text(label, style: MyTexts.regular12),
           ],
