@@ -358,6 +358,9 @@ class AddRequirementController extends GetxController {
       if (args['note'] != null) {
         noteController.text = args['note'];
       }
+      if (args['radius'] != null) {
+        radiusController.text = args['radius'].toString();
+      }
 
       // Populate estimate delivery date
       if (args['estimate_delivery_date'] != null) {
@@ -500,6 +503,7 @@ class AddRequirementController extends GetxController {
       "quantity": int.tryParse(quantityController.text.trim()) ?? 0,
       "uom": selectedUOM.value ?? "",
       "site_address_id": selectedSiteAddressId.value,
+      "radius": radiusController.text,
       "estimate_delivery_date": formattedEstimateDeliveryDate.isNotEmpty
           ? formattedEstimateDeliveryDate
           : null,

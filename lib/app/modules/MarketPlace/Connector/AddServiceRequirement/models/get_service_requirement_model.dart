@@ -46,6 +46,7 @@ class ServiceRequirementData {
   String? estimateStartDate;
   String? note;
   String? status;
+  int? radius;
   DateTime? createdAt;
   DateTime? updatedAt;
   String? mainCategoryName;
@@ -62,6 +63,7 @@ class ServiceRequirementData {
     this.siteAddressId,
     this.estimateStartDate,
     this.note,
+    this.radius,
     this.status,
     this.createdAt,
     this.updatedAt,
@@ -81,6 +83,7 @@ class ServiceRequirementData {
       siteAddressId: json['site_address_id'],
       estimateStartDate: json['estimate_start_date'],
       note: json['note'],
+      radius: json['radius'],
       status: json['status'],
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
@@ -108,6 +111,7 @@ class ServiceRequirementData {
       'estimate_start_date': estimateStartDate,
       'note': note,
       'status': status,
+      'radius': radius,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
       'main_category_name': mainCategoryName,

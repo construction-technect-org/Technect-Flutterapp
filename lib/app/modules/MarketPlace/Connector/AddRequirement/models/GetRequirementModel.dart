@@ -44,6 +44,7 @@ class RequirementData {
   int? categoryProductId;
   int? productSubCategoryId;
   int? quantity;
+  int? radius;
   String? uom;
   int? siteAddressId;
   String? estimateDeliveryDate;
@@ -69,6 +70,7 @@ class RequirementData {
     this.siteAddressId,
     this.estimateDeliveryDate,
     this.note,
+    this.radius,
     this.status,
     this.createdAt,
     this.updatedAt,
@@ -92,6 +94,7 @@ class RequirementData {
       siteAddressId: json['site_address_id'],
       estimateDeliveryDate: json['estimate_delivery_date'],
       note: json['note'],
+      radius: json['radius'],
       status: json['status'],
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
@@ -122,6 +125,7 @@ class RequirementData {
       'site_address_id': siteAddressId,
       'estimate_delivery_date': estimateDeliveryDate,
       'note': note,
+      'radius': radius,
       'status': status,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
