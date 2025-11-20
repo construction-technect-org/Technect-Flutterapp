@@ -36,6 +36,7 @@ class AddServiceRequirementController extends GetxController {
 
   Rxn<DateTime> estimateStartDate = Rxn<DateTime>();
   final estimateStartDateController = TextEditingController();
+  final radiusController = TextEditingController();
 
   final serviceRequirementService = AddServiceRequirementService();
 

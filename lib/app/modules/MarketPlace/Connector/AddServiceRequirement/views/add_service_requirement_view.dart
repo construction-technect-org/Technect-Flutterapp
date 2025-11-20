@@ -151,6 +151,29 @@ class AddServiceRequirementView
                   ),
                   SizedBox(height: 2.h),
                   CommonTextField(
+                    controller: controller.radiusController,
+                    headerText: "Estimated Radius (in km)",
+                    hintText: "Enter radius",
+                    maxLine: 1,
+                    keyboardType: TextInputType.number,
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return "Please enter radius";
+                      }
+                      if (double.tryParse(val) == null) {
+                        return "Enter valid radius";
+                      }
+                      if (int.tryParse(val) == 0) {
+                        return "Radius can not be zero";
+                      }
+                      return null;
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+                  SizedBox(height: 2.h),
+                  CommonTextField(
                     headerText: 'Note',
                     hintText: "Write a note",
                     maxLine: 4,

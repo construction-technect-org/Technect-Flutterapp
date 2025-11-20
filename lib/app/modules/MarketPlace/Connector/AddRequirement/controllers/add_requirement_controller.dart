@@ -18,6 +18,7 @@ class AddRequirementController extends GetxController {
   // Form Controllers
   final quantityController = TextEditingController();
   final noteController = TextEditingController();
+  final radiusController = TextEditingController();
 
   // Filters
   RxList<FilterData> filters = <FilterData>[].obs;
