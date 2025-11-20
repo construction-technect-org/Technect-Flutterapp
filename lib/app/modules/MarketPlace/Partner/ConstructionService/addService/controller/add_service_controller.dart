@@ -258,21 +258,19 @@ class AddServiceController extends GetxController {
         imageSlots[i] =
             "${APIConstants.bucketUrl}${existingImages[i].mediaS3Key!}";
       }
-      final existingVideo = service.video ?? ServiceMediaItem();
 
-      if (existingVideo != null) {
-        WidgetsBinding.instance.addPostFrameCallback((val) async {
-          selectedVideo.value = File("abc");
-          videoPlayerController?.dispose();
-          videoPlayerController = VideoPlayerController.networkUrl(
-            Uri.parse(
-              APIConstants.bucketUrl + existingVideo.mediaS3Key.toString(),
-            ),
-          );
-          await videoPlayerController!.initialize();
-          videoPlayerController!.setLooping(false);
-        });
-      }
+      final existingVideo = serviceVid.value;
+      WidgetsBinding.instance.addPostFrameCallback((val) async {
+        selectedVideo.value = File("abc");
+        videoPlayerController?.dispose();
+        videoPlayerController = VideoPlayerController.networkUrl(
+          Uri.parse(
+            APIConstants.bucketUrl + existingVideo.mediaS3Key.toString(),
+          ),
+        );
+        await videoPlayerController!.initialize();
+        videoPlayerController!.setLooping(false);
+      });
 
       log("✅ Prefilled service edit data");
     } catch (e) {

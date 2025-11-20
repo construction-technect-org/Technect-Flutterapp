@@ -502,9 +502,9 @@ class AddServiceScreen extends GetView<AddServiceController> {
                       return Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: MyColors.grayF7,
+                          color: Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: MyColors.grayEA),
+                          border: Border.all(color: Colors.transparent),
                         ),
                         child: Column(
                           children: [
@@ -529,12 +529,9 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                         ClipRRect(
                                           borderRadius: BorderRadius.circular(12),
                                           child: AspectRatio(
-                                            // aspectRatio isPortrait ?
-                                            //     9 / 16
-                                            //     : 16 / 9,
                                             aspectRatio: 16 / 9,
                                             child: ColoredBox(
-                                              color: Colors.black,
+                                              color: Colors.transparent,
                                               child: Center(
                                                 child: AspectRatio(
                                                   aspectRatio: controller.isVideoPortrait.value
@@ -611,12 +608,9 @@ class AddServiceScreen extends GetView<AddServiceController> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
                                         child: AspectRatio(
-                                          // aspectRatio isPortrait ?
-                                          //     9 / 16
-                                          //     : 16 / 9,
                                           aspectRatio: 16 / 9,
                                           child: ColoredBox(
-                                            color: Colors.black,
+                                            color: Colors.transparent,
                                             child: Center(
                                               child: AspectRatio(
                                                 aspectRatio: controller.isVideoPortrait.value
@@ -743,12 +737,9 @@ class AddServiceScreen extends GetView<AddServiceController> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: AspectRatio(
-                                  // aspectRatio isPortrait ?
-                                  //     9 / 16
-                                  //     : 16 / 9,
                                   aspectRatio: 16 / 9,
                                   child: ColoredBox(
-                                    color: Colors.black,
+                                    color: Colors.transparent,
                                     child: Center(
                                       child: AspectRatio(
                                         aspectRatio: controller.isVideoPortrait.value
