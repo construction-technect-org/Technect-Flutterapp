@@ -172,11 +172,16 @@ class SearchProductView extends GetView<SearchProductController> {
                             item,
                             isFromIn: true,
 
-                            onTap: () async {
+                            onTap: (message, date, radius) async {
                               Get.back();
                               await homeController.addToConnectApi(
                                 mID: item.merchantProfileId ?? 0,
-                                message: '',
+                                message: message,
+                                uom: item.filterValues?["uom"]["value"]??"",
+
+                                quantity: item.stockQty.toString(),
+                                radius: radius,
+                                date: date,
                                 pID: item.id ?? 0,
                                 onSuccess: () async {
                                   await controller.performSearch(

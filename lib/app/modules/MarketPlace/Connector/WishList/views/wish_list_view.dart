@@ -32,11 +32,7 @@ class WishListView extends GetView<WishListController> {
                       },
                       child: const Padding(
                         padding: EdgeInsets.zero,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_sharp,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
                   ),
@@ -52,11 +48,7 @@ class WishListView extends GetView<WishListController> {
                               },
                               borderRadius: 22,
                               hintText: 'Search',
-                              prefixIcon: SvgPicture.asset(
-                                Asset.searchIcon,
-                                height: 16,
-                                width: 16,
-                              ),
+                              prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                             ),
                             Obx(() {
                               if (controller.filteredProducts.isEmpty &&
@@ -67,8 +59,7 @@ class WishListView extends GetView<WishListController> {
                                   ),
                                   child: Center(
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           'No products found',
@@ -79,9 +70,7 @@ class WishListView extends GetView<WishListController> {
                                         SizedBox(height: 0.5.h),
                                         Text(
                                           'Try searching with different keywords',
-                                          style: MyTexts.regular14.copyWith(
-                                            color: MyColors.grey,
-                                          ),
+                                          style: MyTexts.regular14.copyWith(color: MyColors.grey),
                                         ),
                                       ],
                                     ),
@@ -94,8 +83,7 @@ class WishListView extends GetView<WishListController> {
                                   ),
                                   child: Center(
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           'No products available',
@@ -106,9 +94,7 @@ class WishListView extends GetView<WishListController> {
                                         SizedBox(height: 0.5.h),
                                         Text(
                                           'Add your first product to get started',
-                                          style: MyTexts.regular14.copyWith(
-                                            color: MyColors.grey,
-                                          ),
+                                          style: MyTexts.regular14.copyWith(color: MyColors.grey),
                                         ),
                                         const Gap(20),
                                       ],
@@ -119,16 +105,13 @@ class WishListView extends GetView<WishListController> {
                               return GridView.builder(
                                 shrinkWrap: true,
                                 physics: const ScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.6,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 12,
                                 ),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 0.6,
-                                      crossAxisSpacing: 12,
-                                      mainAxisSpacing: 12,
-                                    ),
                                 itemCount: controller.filteredProducts.length,
                                 itemBuilder: (context, index) {
                                   final item = controller.filteredProducts[index];
@@ -142,28 +125,24 @@ class WishListView extends GetView<WishListController> {
                                     onWishlistTap: () async {
                                       controller.isLoaderWrapper.value = true;
 
-                                      await Get.find<HomeController>()
-                                          .wishListApi(
-                                            status: item.isInWishList == true
-                                                ? "remove"
-                                                : "add",
-                                            mID: item.id ?? 0,
-                                            onSuccess: () async {
-                                              await controller.fetchWishList();
-                                            },
-                                          );
+                                      await Get.find<HomeController>().wishListApi(
+                                        status: item.isInWishList == true ? "remove" : "add",
+                                        mID: item.id ?? 0,
+                                        onSuccess: () async {
+                                          await controller.fetchWishList();
+                                        },
+                                      );
                                       controller.isLoaderWrapper.value = false;
                                     },
                                     onNotifyTap: () async {
                                       controller.isLoaderWrapper.value = true;
 
-                                      await Get.find<HomeController>()
-                                          .notifyMeApi(
-                                            mID: item.id ?? 0,
-                                            onSuccess: () async {
-                                              await controller.fetchWishList();
-                                            },
-                                          );
+                                      await Get.find<HomeController>().notifyMeApi(
+                                        mID: item.id ?? 0,
+                                        onSuccess: () async {
+                                          await controller.fetchWishList();
+                                        },
+                                      );
                                       controller.isLoaderWrapper.value = false;
                                     },
                                     onConnectTap: () {
@@ -172,23 +151,22 @@ class WishListView extends GetView<WishListController> {
                                         item,
                                         isFromIn: true,
 
-                                        onTap: () async {
+                                        onTap: (message, date, radius) async {
                                           Get.back();
-                                          controller.isLoaderWrapper.value =
-                                              true;
-                                          await Get.find<HomeController>()
-                                              .addToConnectApi(
-                                                mID:
-                                                    item.merchantProfileId ?? 0,
-                                                message: '',
-                                                pID: item.id ?? 0,
-                                                onSuccess: () async {
-                                                  await controller
-                                                      .fetchWishList();
-                                                },
-                                              );
-                                          controller.isLoaderWrapper.value =
-                                              false;
+                                          controller.isLoaderWrapper.value = true;
+                                          await Get.find<HomeController>().addToConnectApi(
+                                            uom: item.filterValues?["uom"]["value"]??"",
+                                            quantity: item.stockQty.toString(),
+                                            mID: item.merchantProfileId ?? 0,
+                                            message: message,
+                                            radius: radius,
+                                            date: date,
+                                            pID: item.id ?? 0,
+                                            onSuccess: () async {
+                                              await controller.fetchWishList();
+                                            },
+                                          );
+                                          controller.isLoaderWrapper.value = false;
                                         },
                                       );
                                     },

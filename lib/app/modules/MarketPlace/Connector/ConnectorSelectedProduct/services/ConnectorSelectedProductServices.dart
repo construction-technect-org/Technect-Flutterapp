@@ -17,10 +17,8 @@ class ConnectorSelectedProductServices {
     try {
       const String url = APIConstants.connectorProduct;
       final Map<String, dynamic> body = {
-        if (mainCategoryId != null && mainCategoryId.isNotEmpty)
-          "main_category_id": mainCategoryId,
-        if (subCategoryId != null && subCategoryId.isNotEmpty)
-          "sub_category_id": subCategoryId,
+        if (mainCategoryId != null && mainCategoryId.isNotEmpty) "main_category_id": mainCategoryId,
+        if (subCategoryId != null && subCategoryId.isNotEmpty) "sub_category_id": subCategoryId,
         if (categoryProductId != null && categoryProductId.isNotEmpty)
           "category_product_id": categoryProductId,
         if (productSubCategoryId != null && productSubCategoryId.isNotEmpty)
@@ -49,7 +47,6 @@ class ConnectorSelectedProductServices {
       const String url = APIConstants.notifyME;
       final Map<String, dynamic> body = {"merchant_product_id": mID};
       debugPrint('Calling API: $url');
-      // ✅ Send POST request via your apiManager
       final response = await apiManager.postObject(url: url, body: body);
       debugPrint('Response: $response');
 
@@ -65,13 +62,22 @@ class ConnectorSelectedProductServices {
     int? mID,
     int? pID,
     String? message,
+    String? radius,
+    String? date,
+    String? uom,
+    String? quantity,
   }) async {
     try {
       const String url = APIConstants.addToConnect;
       final Map<String, dynamic> body = {
         "merchant_profile_id": mID,
         "product_id": pID,
-        "message": message ?? "",
+        "message": "Hi, I would like to connect with you for business opportunities.",
+        "note": message ?? "",
+        "radius": radius ?? "",
+        "estimate_delivery_date": date ?? "",
+        "uom": uom ?? "",
+        "quantity": quantity ?? "",
       };
       debugPrint('Calling API: $url');
       final response = await apiManager.postObject(url: url, body: body);

@@ -35,6 +35,8 @@ class ConstructionLineServices {
     int? mID,
     int? sID,
     String? message,
+    String? radius,
+    String? date,
   }) async {
     try {
       const String url = APIConstants.addToConnect;
