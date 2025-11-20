@@ -90,12 +90,83 @@ class PointOfContentScreen extends StatelessWidget {
                                 ),
                               ),
                               Gap(2.h),
-                              CommonTextField(
-                                hintText: "Enter your email address",
-                                headerText: "Email",
-                                controller: eController.emailController,
-                                validator: (value) =>
-                                    Validate.validateEmail(value),
+                              Focus(
+                                onFocusChange: (hasFocus) {
+                                  if (!hasFocus) {
+                                    final email =
+                                        eController.emailController.text;
+                                    // Only validate availability if format is valid
+                                    final formatError = Validate.validateEmail(
+                                      email,
+                                    );
+                                    if (formatError == null) {
+                                      eController.validateEmailAvailability(
+                                        email,
+                                      );
+                                    } else {
+                                      // Format error - clear API error, validator will show format error
+                                      eController.emailError.value = "";
+                                    }
+                                  }
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CommonTextField(
+                                      hintText: "Enter your email address",
+                                      headerText: "Email",
+                                      controller: eController.emailController,
+                                      validator: (value) =>
+                                          Validate.validateEmail(value),
+                                      autofillHints: const [
+                                        AutofillHints.email,
+                                      ],
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(254),
+                                        EmailInputFormatter(),
+                                      ],
+
+                                      onChange: (value) {
+                                        eController.emailError.value = "";
+                                      },
+                                      onFieldSubmitted: (value) {
+                                        if (value != null) {
+                                          // Only validate availability if format is valid
+                                          final formatError =
+                                              Validate.validateEmail(value);
+                                          if (formatError == null) {
+                                            eController
+                                                .validateEmailAvailability(
+                                                  value,
+                                                );
+                                          } else {
+                                            // Format error - clear API error, validator will show format error
+                                            eController.emailError.value = "";
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    Obx(() {
+                                      if (eController
+                                          .emailError
+                                          .value
+                                          .isNotEmpty) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                          ),
+                                          child: Text(
+                                            eController.emailError.value,
+                                            style: MyTexts.medium13.copyWith(
+                                              color: MyColors.red33,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return const SizedBox.shrink();
+                                    }),
+                                  ],
+                                ),
                               ),
                               Gap(2.h),
 
@@ -140,10 +211,20 @@ class PointOfContentScreen extends StatelessWidget {
             padding: const EdgeInsets.all(24.0),
             child: RoundedButton(
               buttonName: "Save",
-              onTap: () {
-                if (eController.formKey.currentState!.validate()) {
-                  eController.updatePointOfContact();
+              onTap: () async {
+                if (!eController.formKey.currentState!.validate()) return;
+
+                await eController.validateEmailAvailability(
+                  eController.emailController.text,
+                );
+                if (eController.emailError.value.isNotEmpty) {
+                  SnackBars.errorSnackBar(
+                    content: eController.emailError.value,
+                  );
+                  return;
                 }
+
+                eController.updatePointOfContact();
               },
             ),
           ),
@@ -163,6 +244,10 @@ class PointOfContactController extends GetxController {
   final alternativeNumberController = TextEditingController();
   final HomeController homeController = Get.find<HomeController>();
 
+  // Email validation state
+  RxString emailError = "".obs;
+  RxBool isEmailValidating = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -178,6 +263,18 @@ class PointOfContactController extends GetxController {
 
   ApiManager apiManager = ApiManager();
   RxBool isLoading = false.obs;
+  Future<void> validateEmailAvailability(String email) async {
+    final formatError = Validate.validateEmail(email);
+    if (formatError != null) {
+      emailError.value = "";
+      isEmailValidating.value = false;
+      return;
+    }
+    isEmailValidating.value = true;
+    final apiError = await Validate.validateEmailAsync(email);
+    emailError.value = apiError ?? "";
+    isEmailValidating.value = false;
+  }
 
   Future<void> updatePointOfContact() async {
     isLoading.value = true;
