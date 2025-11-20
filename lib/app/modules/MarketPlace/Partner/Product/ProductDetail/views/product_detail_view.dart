@@ -589,7 +589,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                         children: [
                           rowText(
                             '₹ ${controller.product.price ?? 0}',
-
                             'Ex factory rate',
                           ),
                           const Gap(4),
@@ -1007,7 +1006,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Explore Other Similar Products',
+                                'Explore the other Products',
                                 style: MyTexts.bold18,
                               ),
                               // const Icon(Icons.arrow_forward_ios, size: 20),
