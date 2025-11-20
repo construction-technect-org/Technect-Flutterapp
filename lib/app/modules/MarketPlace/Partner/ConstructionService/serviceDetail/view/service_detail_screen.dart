@@ -493,7 +493,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color: MyColors.grayEA
+                                  color: MyColors.grayEA,
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
@@ -506,7 +506,11 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                       height: 200,
                                       color: MyColors.grayEA,
                                       child: const Center(
-                                        child: Icon(Icons.broken_image, size: 60, color: Colors.grey),
+                                        child: Icon(
+                                          Icons.broken_image,
+                                          size: 60,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
                                     loadingBuilder: (context, child, loadingProgress) {
@@ -604,7 +608,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Explore our other product', style: MyTexts.bold18),
+                              Text('Explore the other services', style: MyTexts.bold18),
                               // const Icon(Icons.arrow_forward_ios, size: 20),
                             ],
                           ),
