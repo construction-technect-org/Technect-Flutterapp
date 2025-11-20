@@ -491,14 +491,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                       ),
                       child: Column(
                         children: [
-<<<<<<< HEAD
-                          rowText(
-                            '₹ ${controller.product.price ?? 0}',
-                            'Ex factory rate',
-                          ),
-=======
                           rowText('₹ ${controller.product.price ?? 0}', 'Ex factory rate'),
->>>>>>> origin
                           const Gap(4),
                           rowText(
                             '₹ ${controller.product.gstPercentage?.split(".").first ?? 0}% - (₹${controller.product.gstAmount ?? 0})',
@@ -798,10 +791,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Explore the other Products',
-                                style: MyTexts.bold18,
-                              ),
+                              Text('Explore the other Products', style: MyTexts.bold18),
                               // const Icon(Icons.arrow_forward_ios, size: 20),
                             ],
                           ),
