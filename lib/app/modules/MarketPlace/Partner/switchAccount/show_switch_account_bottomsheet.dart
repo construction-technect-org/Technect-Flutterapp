@@ -40,12 +40,12 @@ void showSwitchAccountBottomSheet() {
         if (isPartner) {
           // Current: Partner
           if (!hasConnector) {
-            title = 'Contractor';
+            title = 'Connector';
             subtitle = 'Add Connector Account';
             trailingIcon = Icons.add;
             onTap = controller.addConnectorAccount;
           } else {
-            title = 'Contractor';
+            title = 'Connector';
             subtitle = 'Switch to Connector';
             onTap = controller.switchAccount;
           }
