@@ -612,9 +612,9 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                               // const Icon(Icons.arrow_forward_ios, size: 20),
                             ],
                           ),
-                          const Gap(12),
+                          const Gap(10),
                           SizedBox(
-                            height: 120,
+                            height: 150,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount:
@@ -678,7 +678,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                           data.subCategoryName ?? '',
                                           style: MyTexts.medium14,
                                           textAlign: TextAlign.center,
-                                          maxLines: 1,
+                                          maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
