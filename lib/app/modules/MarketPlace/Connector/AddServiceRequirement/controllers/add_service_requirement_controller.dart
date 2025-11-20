@@ -36,6 +36,7 @@ class AddServiceRequirementController extends GetxController {
 
   Rxn<DateTime> estimateStartDate = Rxn<DateTime>();
   final estimateStartDateController = TextEditingController();
+  final radiusController = TextEditingController();
 
   final serviceRequirementService = AddServiceRequirementService();
 
@@ -72,9 +73,7 @@ class AddServiceRequirementController extends GetxController {
     }
 
     selectedMainCategory.value = categoryName;
-    final selected = mainCategories.firstWhereOrNull(
-      (c) => c.name == categoryName,
-    );
+    final selected = mainCategories.firstWhereOrNull((c) => c.name == categoryName);
     selectedMainCategoryId.value = selected?.id;
 
     if (selected != null && selected.subCategories != null) {
@@ -95,9 +94,7 @@ class AddServiceRequirementController extends GetxController {
     }
 
     selectedSubCategory.value = subCategoryName;
-    final selectedSub = subCategories.firstWhereOrNull(
-      (s) => s.name == subCategoryName,
-    );
+    final selectedSub = subCategories.firstWhereOrNull((s) => s.name == subCategoryName);
     selectedSubCategoryId.value = selectedSub?.id;
 
     if (selectedSub != null && selectedSub.serviceCategories != null) {
@@ -119,9 +116,7 @@ class AddServiceRequirementController extends GetxController {
     }
 
     selectedServiceCategory.value = serviceCategoryName;
-    final selected = serviceCategories.firstWhereOrNull(
-      (s) => s.name == serviceCategoryName,
-    );
+    final selected = serviceCategories.firstWhereOrNull((s) => s.name == serviceCategoryName);
     selectedServiceCategoryId.value = selected?.id;
   }
 
@@ -141,8 +136,7 @@ class AddServiceRequirementController extends GetxController {
   }
 
   Future<void> _fetchSiteAddresses() async {
-    siteLocations.value =
-        homeController.profileData.value.data?.siteLocations ?? [];
+    siteLocations.value = homeController.profileData.value.data?.siteLocations ?? [];
     _syncSelectedSiteAddress();
   }
 
@@ -158,9 +152,7 @@ class AddServiceRequirementController extends GetxController {
 
   void _syncSelectedSiteAddress() {
     if (selectedSiteAddressId.value > 0) {
-      final site = siteLocations.firstWhereOrNull(
-        (s) => s.id == selectedSiteAddressId.value,
-      );
+      final site = siteLocations.firstWhereOrNull((s) => s.id == selectedSiteAddressId.value);
       selectedSiteAddress.value = site;
     } else {
       selectedSiteAddress.value = null;
@@ -198,6 +190,9 @@ class AddServiceRequirementController extends GetxController {
       if (args['note'] != null) {
         noteController.text = args['note'];
       }
+      if (args['radius'] != null) {
+        radiusController.text = args['radius'].toString();
+      }
 
       if (args['estimate_start_date'] != null) {
         try {
@@ -216,9 +211,7 @@ class AddServiceRequirementController extends GetxController {
 
       if (args['main_category_id'] != null) {
         final mainCatId = args['main_category_id'] as int;
-        final mainCat = mainCategories.firstWhereOrNull(
-          (c) => c.id == mainCatId,
-        );
+        final mainCat = mainCategories.firstWhereOrNull((c) => c.id == mainCatId);
         if (mainCat != null) {
           selectedMainCategoryId.value = mainCatId;
           selectedMainCategory.value = mainCat.name;
@@ -232,9 +225,7 @@ class AddServiceRequirementController extends GetxController {
 
             if (args['sub_category_id'] != null) {
               final subCatId = args['sub_category_id'] as int;
-              final subCat = subCategories.firstWhereOrNull(
-                (s) => s.id == subCatId,
-              );
+              final subCat = subCategories.firstWhereOrNull((s) => s.id == subCatId);
               if (subCat != null) {
                 selectedSubCategoryId.value = subCatId;
                 selectedSubCategory.value = subCat.name;
@@ -299,6 +290,7 @@ class AddServiceRequirementController extends GetxController {
           ? formattedEstimateStartDateForApi
           : null,
       "note": noteController.text.trim(),
+      "radius": radiusController.text.trim(),
     };
   }
 
@@ -315,15 +307,11 @@ class AddServiceRequirementController extends GetxController {
           data: data,
         );
         Get.back();
-        SnackBars.successSnackBar(
-          content: "Service requirement updated successfully",
-        );
+        SnackBars.successSnackBar(content: "Service requirement updated successfully");
       } else {
         await serviceRequirementService.createServiceRequirement(data: data);
         Get.back();
-        SnackBars.successSnackBar(
-          content: "Service requirement created successfully",
-        );
+        SnackBars.successSnackBar(content: "Service requirement created successfully");
       }
     } catch (e) {
       log(e.toString());

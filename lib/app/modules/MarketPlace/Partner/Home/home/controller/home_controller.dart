@@ -51,7 +51,6 @@ class HomeController extends GetxController {
     await fetchProfileData();
   }
 
-
   void _handleProfileDialogTap() {
     if ((profileData.value.data?.user?.roleName ?? "").toLowerCase() ==
         "House-Owner".toLowerCase()) {
@@ -86,10 +85,7 @@ class HomeController extends GetxController {
     if (myPref.role.val == "partner") {
       if (profileData.value.data?.addresses?.isNotEmpty == true) {
         final int index =
-            profileData.value.data?.addresses?.indexWhere(
-              (e) => e.isDefault == true,
-            ) ??
-            0;
+            profileData.value.data?.addresses?.indexWhere((e) => e.isDefault == true) ?? 0;
         final address = profileData.value.data?.addresses?[index];
 
         return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
@@ -98,10 +94,7 @@ class HomeController extends GetxController {
     } else {
       if (profileData.value.data?.siteLocations?.isNotEmpty == true) {
         final int index =
-            profileData.value.data?.siteLocations?.indexWhere(
-              (e) => e.isDefault == true,
-            ) ??
-            0;
+            profileData.value.data?.siteLocations?.indexWhere((e) => e.isDefault == true) ?? 0;
         final address = profileData.value.data?.siteLocations?[index];
 
         return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
@@ -115,14 +108,12 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final profileResponse = await homeService.getProfile();
 
-      if (profileResponse.success == true &&
-          profileResponse.data?.user != null) {
+      if (profileResponse.success == true && profileResponse.data?.user != null) {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
 
-        if ((profileData.value.data?.merchantProfile?.website ?? "")
-            .isNotEmpty) {
+        if ((profileData.value.data?.merchantProfile?.website ?? "").isNotEmpty) {
           Get.find<CommonController>().hasProfileComplete.value = true;
         } else {
           Get.find<CommonController>().hasProfileComplete.value = false;
@@ -211,8 +202,7 @@ class HomeController extends GetxController {
       }
 
       // Fetch fresh data from API
-      final apiCategoryHierarchy = await homeService
-          .getCategoryServiceHierarchy();
+      final apiCategoryHierarchy = await homeService.getCategoryServiceHierarchy();
       categoryHierarchyDataCM.value = apiCategoryHierarchy;
 
       // Store in local storage
@@ -245,18 +235,13 @@ class HomeController extends GetxController {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        Get.snackbar(
-          'Location Blocked',
-          'Please enable location access from app settings',
-        );
+        Get.snackbar('Location Blocked', 'Please enable location access from app settings');
         return;
       }
 
       // Get current position
       final Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
 
       currentLatitude.value = position.latitude;
@@ -272,11 +257,7 @@ class HomeController extends GetxController {
     {"title": "ERP", "icon": Asset.erp, "available": false},
     {"title": "Project Management", "icon": Asset.project, "available": false},
     {"title": "HRMS", "icon": Asset.hrms, "available": false},
-    {
-      "title": "Portfolio Management",
-      "icon": Asset.portfolio,
-      "available": false,
-    },
+    {"title": "Portfolio Management", "icon": Asset.portfolio, "available": false},
     {"title": "OVP", "icon": Asset.ovp, "available": false},
     {"title": "Construction Taxi", "icon": Asset.taxi, "available": false},
   ];
@@ -286,15 +267,11 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final res = await ConnectorSelectedProductServices().notifyMe(mID: mID);
       if (res.success == true) {
-        SnackBars.successSnackBar(
-          content: "You’ll be notified when it’s restocked!",
-        );
+        SnackBars.successSnackBar(content: "You’ll be notified when it’s restocked!");
         if (onSuccess != null) onSuccess();
       }
     } catch (e) {
-      SnackBars.errorSnackBar(
-        content: "Something went wrong. Please try again.",
-      );
+      SnackBars.errorSnackBar(content: "Something went wrong. Please try again.");
     } finally {
       isLoading.value = false;
     }
@@ -304,6 +281,10 @@ class HomeController extends GetxController {
     int? mID,
     int? pID,
     String? message,
+    String? uom,
+    String? quantity,
+    String? radius,
+    String? date,
     VoidCallback? onSuccess,
   }) async {
     try {
@@ -311,7 +292,11 @@ class HomeController extends GetxController {
       final res = await ConnectorSelectedProductServices().addToConnect(
         mID: mID,
         message: message,
+        radius: radius,
+        date: date,
         pID: pID,
+        uom: uom,
+        quantity: quantity,
       );
       if (res.success == true) {
         if (onSuccess != null) onSuccess();
@@ -328,6 +313,8 @@ class HomeController extends GetxController {
     int? mID,
     int? sID,
     String? message,
+    String? date,
+    String? radius,
     VoidCallback? onSuccess,
   }) async {
     try {
@@ -336,12 +323,12 @@ class HomeController extends GetxController {
         mID: mID,
         sID: sID,
         message: message,
+        radius: radius,
+        date: date,
       );
       if (res.success == true) {
         if (onSuccess != null) onSuccess();
-        SnackBars.successSnackBar(
-          content: "Connection request sent successfully!",
-        );
+        SnackBars.successSnackBar(content: "Connection request sent successfully!");
       }
     } catch (e) {
       SnackBars.errorSnackBar(content: "Unable to send connection request.");
@@ -400,10 +387,7 @@ class HomeController extends GetxController {
         backgroundColor: Colors.white,
         titlePadding: const EdgeInsets.all(20),
         contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-        actionsPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         title: Container(
           decoration: BoxDecoration(
             border: Border.all(color: const Color(0xFFF9D0CB)),
@@ -469,16 +453,11 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> setDefaultAddress(
-    String addressId, {
-    VoidCallback? onSuccess,
-  }) async {
+  Future<void> setDefaultAddress(String addressId, {VoidCallback? onSuccess}) async {
     try {
       isLoading.value = true;
 
-      await DeliveryAddressService.updateDeliveryAddress(addressId, {
-        "is_default": true,
-      });
+      await DeliveryAddressService.updateDeliveryAddress(addressId, {"is_default": true});
 
       await fetchProfileData();
 

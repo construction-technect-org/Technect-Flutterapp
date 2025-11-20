@@ -85,6 +85,7 @@ class RequirementController extends GetxController {
         'site_address_id': requirement?.siteAddressId,
         'estimate_delivery_date': requirement?.estimateDeliveryDate,
         'note': requirement?.note,
+        'radius': requirement?.radius,
       },
     );
   }
@@ -212,6 +213,7 @@ class RequirementController extends GetxController {
         'site_address_id': serviceRequirement?.siteAddressId,
         'estimate_start_date': serviceRequirement?.estimateStartDate,
         'note': serviceRequirement?.note,
+        'radius': serviceRequirement?.radius,
       },
     )?.then((_) {
       fetchServiceRequirementsList();

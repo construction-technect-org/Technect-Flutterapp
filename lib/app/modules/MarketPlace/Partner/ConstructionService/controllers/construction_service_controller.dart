@@ -23,9 +23,7 @@ class ConstructionServiceController extends GetxController {
 
   Rx<ServiceCategoryData?> mainCategory = ServiceCategoryData().obs;
   RxList<ServicesSubCategories> subCategories = <ServicesSubCategories>[].obs;
-  Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(
-    null,
-  );
+  Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(null);
   RxList<ServiceCategories> serviceCategoryList = <ServiceCategories>[].obs;
   Rx<ServiceCategories?> selectedServiceCategory = Rx<ServiceCategories?>(null);
 
@@ -34,8 +32,7 @@ class ConstructionServiceController extends GetxController {
   RxInt selectedSubCategoryId = 0.obs;
   double radiusKm = 50000000;
 
-  final ConstructionLineServices constructionLineServices =
-      ConstructionLineServices();
+  final ConstructionLineServices constructionLineServices = ConstructionLineServices();
 
   @override
   void onInit() {
@@ -72,21 +69,17 @@ class ConstructionServiceController extends GetxController {
       final categoryHierarchy = myPref.getServiceCategoryHierarchyModel();
 
       mainCategory.value =
-          categoryHierarchy?.data!.firstWhere(
-            (category) => category.id == mainCategoryId,
-          ) ??
+          categoryHierarchy?.data!.firstWhere((category) => category.id == mainCategoryId) ??
           ServiceCategoryData();
 
-      subCategories.value =
-          mainCategory.value?.subCategories ?? <ServicesSubCategories>[];
+      subCategories.value = mainCategory.value?.subCategories ?? <ServicesSubCategories>[];
 
       if (selectedSubCategoryId.value != 0) {
         selectedSubCategory.value = subCategories.firstWhere((element) {
           return selectedSubCategoryId.value == element.id;
         });
         serviceCategoryList.value =
-            selectedSubCategory.value?.serviceCategories ??
-            <ServiceCategories>[];
+            selectedSubCategory.value?.serviceCategories ?? <ServiceCategories>[];
       }
     }
   }
@@ -102,8 +95,7 @@ class ConstructionServiceController extends GetxController {
     navigationIndex.value = 0;
     selectedSubCategoryId.value = subCategories[index].id ?? 0;
     selectedSubCategory.value = subCategories[index];
-    serviceCategoryList.value =
-        selectedSubCategory.value?.serviceCategories ?? [];
+    serviceCategoryList.value = selectedSubCategory.value?.serviceCategories ?? [];
   }
 
   void rightSide0RightView(int index) {
@@ -127,8 +119,7 @@ class ConstructionServiceController extends GetxController {
   void selectServiceCategoryFromGrid(int index) {
     selectedServiceCategoryIndex.value = index;
     selectedServiceCategory.value =
-        serviceCategories.value.serviceCategories?[index] ??
-        ServiceCategories();
+        serviceCategories.value.serviceCategories?[index] ?? ServiceCategories();
     fetchServicesFromApi();
   }
 
@@ -189,26 +180,18 @@ class ConstructionServiceController extends GetxController {
     selectedSort.value = sortType;
 
     if (serviceListModel.value.data?.services != null) {
-      final services = List<Service>.from(
-        serviceListModel.value.data!.services ?? [],
-      );
+      final services = List<Service>.from(serviceListModel.value.data!.services ?? []);
       switch (sortType) {
         case 'Price (Low to High)':
           services.sort(
-            (a, b) => double.parse(
-              a.price ?? '0',
-            ).compareTo(double.parse(b.price ?? '0')),
+            (a, b) => double.parse(a.price ?? '0').compareTo(double.parse(b.price ?? '0')),
           );
         case 'Price (High to Low)':
           services.sort(
-            (a, b) => double.parse(
-              b.price ?? '0',
-            ).compareTo(double.parse(a.price ?? '0')),
+            (a, b) => double.parse(b.price ?? '0').compareTo(double.parse(a.price ?? '0')),
           );
         case 'New Arrivals':
-          services.sort(
-            (a, b) => (b.createdAt ?? '').compareTo(a.createdAt ?? ''),
-          );
+          services.sort((a, b) => (b.createdAt ?? '').compareTo(a.createdAt ?? ''));
         default:
           break;
       }
@@ -217,8 +200,7 @@ class ConstructionServiceController extends GetxController {
         message: serviceListModel.value.message,
         data: ConnectorServiceData(
           services: services,
-          pagination:
-              serviceListModel.value.data?.pagination ?? ServicePagination(),
+          pagination: serviceListModel.value.data?.pagination ?? ServicePagination(),
         ),
       );
       serviceListModel.refresh();
@@ -239,14 +221,9 @@ class ConstructionServiceController extends GetxController {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 8),
-              Center(
-                child: Container(height: 4, width: 40, color: Colors.grey[400]),
-              ),
+              Center(child: Container(height: 4, width: 40, color: Colors.grey[400])),
               const SizedBox(height: 16),
-              Text(
-                'Sort by',
-                style: MyTexts.medium16.copyWith(color: MyColors.black),
-              ),
+              Text('Sort by', style: MyTexts.medium16.copyWith(color: MyColors.black)),
               const SizedBox(height: 12),
               RadioGroup<String>(
                 groupValue: selectedSort.value,
@@ -266,9 +243,7 @@ class ConstructionServiceController extends GetxController {
                           dense: true,
                           controlAffinity: ListTileControlAffinity.trailing,
                           selectedTileColor: MyColors.primary,
-                          fillColor: WidgetStateProperty.resolveWith<Color>((
-                            states,
-                          ) {
+                          fillColor: WidgetStateProperty.resolveWith<Color>((states) {
                             if (states.contains(WidgetState.selected)) {
                               return MyColors.primary;
                             }
@@ -276,13 +251,10 @@ class ConstructionServiceController extends GetxController {
                           }),
                           visualDensity: VisualDensity.compact,
                           contentPadding: EdgeInsets.zero,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           title: Text(
                             sortType,
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.gray2E,
-                            ),
+                            style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                           ),
                           value: sortType,
                         );
@@ -316,14 +288,9 @@ class ConstructionServiceController extends GetxController {
                 children: [
                   Text(
                     'Select the radius',
-                    style: MyTexts.medium16.copyWith(
-                      color: MyColors.veryDarkGray,
-                    ),
+                    style: MyTexts.medium16.copyWith(color: MyColors.veryDarkGray),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Get.back(),
-                  ),
+                  IconButton(icon: const Icon(Icons.close), onPressed: () => Get.back()),
                 ],
               ),
               const SizedBox(height: 10),
@@ -341,23 +308,16 @@ class ConstructionServiceController extends GetxController {
                     }
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: moreThenHundred.value == true
-                          ? MyColors.primary
-                          : MyColors.white,
+                      color: moreThenHundred.value == true ? MyColors.primary : MyColors.white,
                       borderRadius: BorderRadius.circular(44),
                       border: Border.all(color: MyColors.grayEA),
                     ),
                     child: Text(
                       'More than 100 km',
                       style: MyTexts.medium14.copyWith(
-                        color: moreThenHundred.value == true
-                            ? MyColors.white
-                            : Colors.black,
+                        color: moreThenHundred.value == true ? MyColors.white : Colors.black,
                       ),
                     ),
                   ),
@@ -366,10 +326,7 @@ class ConstructionServiceController extends GetxController {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  Text(
-                    '0 km',
-                    style: MyTexts.medium14.copyWith(color: Colors.black),
-                  ),
+                  Text('0 km', style: MyTexts.medium14.copyWith(color: Colors.black)),
                   Expanded(
                     child: Slider(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -381,10 +338,7 @@ class ConstructionServiceController extends GetxController {
                       activeColor: MyColors.primary,
                     ),
                   ),
-                  Text(
-                    '100 km',
-                    style: MyTexts.medium14.copyWith(color: Colors.black),
-                  ),
+                  Text('100 km', style: MyTexts.medium14.copyWith(color: Colors.black)),
                 ],
               ),
               const SizedBox(height: 20),
@@ -398,16 +352,11 @@ class ConstructionServiceController extends GetxController {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MyColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Text(
-                      'Continue',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: Text('Continue', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ),
@@ -423,6 +372,8 @@ class ConstructionServiceController extends GetxController {
     int? merchantProfileId,
     int? serviceId,
     String? message,
+    String? radius,
+    String? date,
     VoidCallback? onSuccess,
   }) async {
     try {
@@ -431,6 +382,8 @@ class ConstructionServiceController extends GetxController {
         mID: merchantProfileId,
         sID: serviceId,
         message: message,
+        radius: radius,
+        date: date,
       );
       await fetchServicesFromApi(isLoading: false);
     } catch (e) {
@@ -440,9 +393,7 @@ class ConstructionServiceController extends GetxController {
     }
   }
 
-  void openSelectAddressBottomSheet({
-    required Future<void> Function() onAddressChanged,
-  }) {
+  void openSelectAddressBottomSheet({required Future<void> Function() onAddressChanged}) {
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(16),
@@ -467,15 +418,11 @@ class ConstructionServiceController extends GetxController {
                   ),
                 ),
               ),
-              Text(
-                "Select Address",
-                style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
-              ),
+              Text("Select Address", style: MyTexts.medium16.copyWith(color: MyColors.gray2E)),
               const SizedBox(height: 16),
 
               Obx(() {
-                final addresses =
-                    homeController.profileData.value.data?.siteLocations ?? [];
+                final addresses = homeController.profileData.value.data?.siteLocations ?? [];
 
                 if (addresses.isEmpty) {
                   return const Center(

@@ -164,17 +164,13 @@ class RequirementView extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       itemCount: controller.serviceRequirementListModel.value.data?.length ?? 0,
       itemBuilder: (context, index) {
-        final serviceRequirement =
-            controller.serviceRequirementListModel.value.data?[index];
+        final serviceRequirement = controller.serviceRequirementListModel.value.data?[index];
         return _buildServiceRequirementCard(context, serviceRequirement);
       },
     );
   }
 
-  Widget _buildRequirementCard(
-    BuildContext context,
-    RequirementData? requirement,
-  ) {
+  Widget _buildRequirementCard(BuildContext context, RequirementData? requirement) {
     Color statusColor;
     switch (requirement?.status?.toLowerCase()) {
       case "pending":
@@ -209,17 +205,13 @@ class RequirementView extends StatelessWidget {
                     children: [
                       Text(
                         requirement?.categoryProductName ?? 'N/A',
-                        style: MyTexts.bold16.copyWith(
-                          color: MyColors.fontBlack,
-                        ),
+                        style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
                       ),
                       SizedBox(height: 0.5.h),
                       if (requirement?.mainCategoryName != null)
                         Text(
                           '${requirement?.mainCategoryName} > ${requirement?.subCategoryName ?? ''}',
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.black,
-                          ),
+                          style: MyTexts.regular14.copyWith(color: MyColors.black),
                         ),
                     ],
                   ),
@@ -228,10 +220,7 @@ class RequirementView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: statusColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
@@ -243,8 +232,7 @@ class RequirementView extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
-                      onTap: () =>
-                          controller.navigateToEditRequirement(requirement),
+                      onTap: () => controller.navigateToEditRequirement(requirement),
                       behavior: HitTestBehavior.opaque,
                       child: Container(
                         padding: const EdgeInsets.all(6),
@@ -252,18 +240,12 @@ class RequirementView extends StatelessWidget {
                           color: MyColors.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Icon(
-                          Icons.edit,
-                          size: 18,
-                          color: MyColors.primary,
-                        ),
+                        child: const Icon(Icons.edit, size: 18, color: MyColors.primary),
                       ),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
-                      onTap: () => controller.showDeleteConfirmationDialog(
-                        requirement?.id ?? 0,
-                      ),
+                      onTap: () => controller.showDeleteConfirmationDialog(requirement?.id ?? 0),
                       behavior: HitTestBehavior.opaque,
                       child: Container(
                         padding: const EdgeInsets.all(6),
@@ -271,11 +253,7 @@ class RequirementView extends StatelessWidget {
                           color: Colors.red.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Icon(
-                          Icons.delete,
-                          size: 18,
-                          color: Colors.red,
-                        ),
+                        child: const Icon(Icons.delete, size: 18, color: Colors.red),
                       ),
                     ),
                   ],
@@ -289,6 +267,11 @@ class RequirementView extends StatelessWidget {
                   'Quantity: ${requirement?.quantity ?? 0} ${requirement?.uom ?? ''}',
                   style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
                 ),
+                const Gap(20),
+                Text(
+                  'Radius: ${requirement?.radius ?? 0}',
+                  style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
+                ),
               ],
             ),
             const Gap(8),
@@ -296,11 +279,7 @@ class RequirementView extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.location_on_rounded,
-                    size: 16,
-                    color: MyColors.grey,
-                  ),
+                  const Icon(Icons.location_on_rounded, size: 16, color: MyColors.grey),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -308,23 +287,14 @@ class RequirementView extends StatelessWidget {
                       children: [
                         if (requirement?.siteAddress?.siteName != null)
                           Text(
-                            requirement!
-                                    .siteAddress!
-                                    .siteName!
-                                    .capitalizeFirst ??
-                                "",
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.fontBlack,
-                            ),
+                            requirement!.siteAddress!.siteName!.capitalizeFirst ?? "",
+                            style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                           ),
                         if (requirement?.siteAddress?.fullAddress != null) ...[
-                          if (requirement?.siteAddress?.siteName != null)
-                            const SizedBox(height: 4),
+                          if (requirement?.siteAddress?.siteName != null) const SizedBox(height: 4),
                           Text(
                             requirement!.siteAddress!.fullAddress!,
-                            style: MyTexts.regular12.copyWith(
-                              color: MyColors.grey,
-                            ),
+                            style: MyTexts.regular12.copyWith(color: MyColors.grey),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -339,24 +309,17 @@ class RequirementView extends StatelessWidget {
             if (requirement?.estimateDeliveryDate != null) ...[
               Row(
                 children: [
-                  const Icon(
-                    Icons.calendar_today,
-                    size: 16,
-                    color: MyColors.grey,
-                  ),
+                  const Icon(Icons.calendar_today, size: 16, color: MyColors.grey),
                   const SizedBox(width: 8),
                   Text(
                     'Est. Delivery: ${_formatDateString(requirement?.estimateDeliveryDate! ?? '')}',
-                    style: MyTexts.regular14.copyWith(
-                      color: MyColors.fontBlack,
-                    ),
+                    style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
                   ),
                 ],
               ),
               const Gap(8),
             ],
-            if (requirement?.note != null &&
-                (requirement?.note!.isNotEmpty ?? false)) ...[
+            if (requirement?.note != null && (requirement?.note!.isNotEmpty ?? false)) ...[
               const Gap(4),
               Text(
                 requirement?.note! ?? '',
@@ -423,17 +386,13 @@ class RequirementView extends StatelessWidget {
                     children: [
                       Text(
                         serviceRequirement?.serviceCategoryName ?? 'N/A',
-                        style: MyTexts.bold16.copyWith(
-                          color: MyColors.fontBlack,
-                        ),
+                        style: MyTexts.bold16.copyWith(color: MyColors.fontBlack),
                       ),
                       SizedBox(height: 0.5.h),
                       if (serviceRequirement?.mainCategoryName != null)
                         Text(
                           '${serviceRequirement?.mainCategoryName} > ${serviceRequirement?.subCategoryName ?? ''}',
-                          style: MyTexts.regular14.copyWith(
-                            color: MyColors.black,
-                          ),
+                          style: MyTexts.regular14.copyWith(color: MyColors.black),
                         ),
                     ],
                   ),
@@ -442,10 +401,7 @@ class RequirementView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: statusColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
@@ -457,9 +413,7 @@ class RequirementView extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
-                      onTap: () => controller.navigateToEditServiceRequirement(
-                        serviceRequirement,
-                      ),
+                      onTap: () => controller.navigateToEditServiceRequirement(serviceRequirement),
                       behavior: HitTestBehavior.opaque,
                       child: Container(
                         padding: const EdgeInsets.all(6),
@@ -467,19 +421,14 @@ class RequirementView extends StatelessWidget {
                           color: MyColors.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Icon(
-                          Icons.edit,
-                          size: 18,
-                          color: MyColors.primary,
-                        ),
+                        child: const Icon(Icons.edit, size: 18, color: MyColors.primary),
                       ),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
-                      onTap: () => controller
-                          .showDeleteServiceRequirementConfirmationDialog(
-                            serviceRequirement?.id ?? 0,
-                          ),
+                      onTap: () => controller.showDeleteServiceRequirementConfirmationDialog(
+                        serviceRequirement?.id ?? 0,
+                      ),
                       behavior: HitTestBehavior.opaque,
                       child: Container(
                         padding: const EdgeInsets.all(6),
@@ -487,11 +436,7 @@ class RequirementView extends StatelessWidget {
                           color: Colors.red.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Icon(
-                          Icons.delete,
-                          size: 18,
-                          color: Colors.red,
-                        ),
+                        child: const Icon(Icons.delete, size: 18, color: Colors.red),
                       ),
                     ),
                   ],
@@ -503,11 +448,7 @@ class RequirementView extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.location_on_rounded,
-                    size: 16,
-                    color: MyColors.grey,
-                  ),
+                  const Icon(Icons.location_on_rounded, size: 16, color: MyColors.grey),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -515,24 +456,15 @@ class RequirementView extends StatelessWidget {
                       children: [
                         if (serviceRequirement?.siteAddress?.siteName != null)
                           Text(
-                            serviceRequirement!
-                                    .siteAddress!
-                                    .siteName!
-                                    .capitalizeFirst ??
-                                "",
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.fontBlack,
-                            ),
+                            serviceRequirement!.siteAddress!.siteName!.capitalizeFirst ?? "",
+                            style: MyTexts.medium14.copyWith(color: MyColors.fontBlack),
                           ),
-                        if (serviceRequirement?.siteAddress?.fullAddress !=
-                            null) ...[
+                        if (serviceRequirement?.siteAddress?.fullAddress != null) ...[
                           if (serviceRequirement?.siteAddress?.siteName != null)
                             const SizedBox(height: 4),
                           Text(
                             serviceRequirement!.siteAddress!.fullAddress!,
-                            style: MyTexts.regular12.copyWith(
-                              color: MyColors.grey,
-                            ),
+                            style: MyTexts.regular12.copyWith(color: MyColors.grey),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -547,17 +479,16 @@ class RequirementView extends StatelessWidget {
             if (serviceRequirement?.estimateStartDate != null) ...[
               Row(
                 children: [
-                  const Icon(
-                    Icons.calendar_today,
-                    size: 16,
-                    color: MyColors.grey,
-                  ),
+                  const Icon(Icons.calendar_today, size: 16, color: MyColors.grey),
                   const SizedBox(width: 8),
                   Text(
                     'Est. Start: ${_formatDateString(serviceRequirement?.estimateStartDate! ?? '')}',
-                    style: MyTexts.regular14.copyWith(
-                      color: MyColors.fontBlack,
-                    ),
+                    style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
+                  ),
+                  const Gap(20),
+                  Text(
+                    'Radius: ${serviceRequirement?.radius ?? 0}',
+                    style: MyTexts.regular14.copyWith(color: MyColors.fontBlack),
                   ),
                 ],
               ),

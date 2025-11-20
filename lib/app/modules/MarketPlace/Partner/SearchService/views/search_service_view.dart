@@ -142,10 +142,12 @@ class SearchServiceView extends GetView<SearchServiceController> {
                                   context,
                                   service,
                                   isFromIn: true,
-                                  onTap: (message) async {
+                                   onTap: (message,date,radius) async {
                                     await homeController.addServiceToConnectApi(
                                       mID: service.merchantProfileId ?? 0,
                                       message: message,
+                                      radius: radius,
+                                      date: date,
                                       sID: service.id ?? 0,
                                       onSuccess: () async {
                                         Get.back();
@@ -167,10 +169,12 @@ class SearchServiceView extends GetView<SearchServiceController> {
                                   context,
                                   service,
                                   isFromIn: true,
-                                  onTap: (message) async {
+                                   onTap: (message,date,radius) async {
                                     await homeController.addServiceToConnectApi(
                                       mID: service.merchantProfileId ?? 0,
                                       message: message,
+                                      radius: radius,
+                                      date: date,
                                       sID: service.id ?? 0,
                                       onSuccess: () async {
                                         await controller.performSearch(

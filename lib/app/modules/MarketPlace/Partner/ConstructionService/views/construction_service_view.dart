@@ -401,7 +401,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       itemBuilder: (context, rowIndex) {
         final startIndex = rowIndex * _itemsPerRow;
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: 4),
           child: Row(
             children: List.generate(_itemsPerRow, (colIndex) {
               final index = startIndex + colIndex;
@@ -435,7 +435,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        height: _itemHeight,
+        height: 140,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -445,7 +445,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                     'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg',
               ),
             ),
-            const SizedBox(height: _itemSpacing),
+            const SizedBox(height: 2),
             SizedBox(
               height: _textHeight,
               child: Text(
@@ -594,10 +594,12 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                   context,
                   service,
                   isFromIn: true,
-                  onTap: (message) async {
+                   onTap: (message,date,radius) async {
                     await Get.find<HomeController>().addServiceToConnectApi(
                       mID: service.merchantProfileId ?? 0,
                       message: message,
+                      radius: radius,
+                      date: date,
                       sID: service.id ?? 0,
                       onSuccess: () async {
                         Get.back();
@@ -702,11 +704,13 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                     context,
                                     service,
                                     isFromIn: true,
-                                    onTap: (message) async {
+                                     onTap: (message,date,radius) async {
                                       await controller.addServiceToConnect(
                                         merchantProfileId: service.merchantProfileId ?? 0,
                                         serviceId: service.id ?? 0,
                                         message: message,
+                                        radius: radius,
+                                        date: date,
                                         onSuccess: () async {
                                           await controller.fetchServicesFromApi(isLoading: false);
                                         },
@@ -788,10 +792,12 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                   context,
                   service,
                   isFromIn: true,
-                  onTap: (message) async {
+                   onTap: (message,date,radius) async {
                     await Get.find<HomeController>().addServiceToConnectApi(
                       mID: service.merchantProfileId ?? 0,
                       message: message,
+                      radius: radius,
+                      date: date,
                       sID: service.id ?? 0,
                       onSuccess: () async {
                         Get.back();
@@ -906,11 +912,13 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                   context,
                                   service,
                                   isFromIn: true,
-                                  onTap: (message) async {
+                                   onTap: (message,date,radius) async {
                                     await controller.addServiceToConnect(
                                       merchantProfileId: service.merchantProfileId ?? 0,
                                       serviceId: service.id ?? 0,
                                       message: message,
+                                      radius: radius,
+                                      date: date,
                                       onSuccess: () async {
                                         await controller.fetchServicesFromApi(isLoading: false);
                                       },

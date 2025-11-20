@@ -6,10 +6,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
 class ConnectionDialogs {
-  static void showAcceptConnectionDialog(
-      BuildContext context,
-      Connection connection,
-      ) {
+  static void showAcceptConnectionDialog(BuildContext context, Connection connection) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Welcome! Let's connect";
 
@@ -18,23 +15,16 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   "Accept Connection",
-                  style: MyTexts.bold18.copyWith(
-                    color: MyColors.primary,
-                  ),
+                  style: MyTexts.bold18.copyWith(color: MyColors.primary),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 2.h),
@@ -48,9 +38,7 @@ class ConnectionDialogs {
                   ),
                   child: Text(
                     "Send a response message to ${connection.connectorName ?? 'the user'}.",
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.black,
-                    ),
+                    style: MyTexts.medium14.copyWith(color: MyColors.black),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -101,11 +89,7 @@ class ConnectionDialogs {
     );
   }
 
-
-  static void showRejectConnectionDialog(
-      BuildContext context,
-      Connection connection,
-      ) {
+  static void showRejectConnectionDialog(BuildContext context, Connection connection) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Not interested at this time";
 
@@ -114,23 +98,16 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   "Reject Connection",
-                  style: MyTexts.bold18.copyWith(
-                    color: MyColors.red,
-                  ),
+                  style: MyTexts.bold18.copyWith(color: MyColors.red),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 2.h),
@@ -144,9 +121,7 @@ class ConnectionDialogs {
                   ),
                   child: Text(
                     "Send a rejection message to ${connection.connectorName ?? 'the user'}.",
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.black,
-                    ),
+                    style: MyTexts.medium14.copyWith(color: MyColors.black),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -198,192 +173,332 @@ class ConnectionDialogs {
   }
 
   static void showSendConnectionDialog(
-      BuildContext context,
-      Product product, {
-        bool? isFromIn = false,
-        void Function()? onTap,
-      }) {
+    BuildContext context,
+    Product product, {
+    bool? isFromIn = false,
+    void Function(String note, String date, String raduis)? onTap,
+  }) {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
     final TextEditingController messageController = TextEditingController();
-    messageController.text =
-    "Hi, I would like to connect with you for business opportunities.";
+    final TextEditingController deliveryDateController = TextEditingController();
+    final TextEditingController radiusController = TextEditingController();
+    //
+    // messageController.text =
+    // "Hi, I would like to connect with you for business opportunities.";
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Connect to CRM!",
-                  style: MyTexts.bold18.copyWith(
-                    color: MyColors.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-
-                SizedBox(height: 2.h),
-
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14,horizontal: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: const Color(0xFFFEF7E8),
-                    border: Border.all(color: const Color(0xFFFDEBC8)),
-                  ),
-                  child: Text(
-                    "To proceed with your request, please connect to CRM.",
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-
-                SizedBox(height: 2.h),
-                CommonTextField(
-                  controller: messageController,
-                  hintText: "Enter your message",
-                  maxLine: 3,
-                ),
-
-                SizedBox(height: 2.h),
-                Row(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: GestureDetector(
+            onTap: hideKeyboard,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+              ),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: RoundedButton(
-                        onTap: () => Navigator.of(context).pop(),
-                        buttonName: 'Cancel',
-                        borderRadius: 12,
-                        verticalPadding: 0,
-                        height: 45,
-                        fontColor: MyColors.white,
-                        color: MyColors.grayCD,
+                    Text(
+                      "Connect to CRM!",
+                      style: MyTexts.bold18.copyWith(color: MyColors.primary),
+                      textAlign: TextAlign.center,
+                    ),
+
+                    SizedBox(height: 2.h),
+
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color(0xFFFEF7E8),
+                        border: Border.all(color: const Color(0xFFFDEBC8)),
+                      ),
+                      child: Text(
+                        "To proceed with your request, please connect to CRM.",
+                        style: MyTexts.medium14.copyWith(color: MyColors.black),
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    SizedBox(width: 2.w),
-                    Expanded(
-                      child: RoundedButton(
-                        onTap: onTap,
-                        buttonName: 'Connect',
-                        borderRadius: 12,
-                        verticalPadding: 0,
-                        height: 45,
-                        color: MyColors.primary,
-                      ),
+
+                    SizedBox(height: 2.h),
+                    CommonTextField(
+                      controller: deliveryDateController,
+                      headerText: "Estimated Delivery Date",
+                      hintText: "Select estimate delivery date",
+                      suffixIcon: const Icon(Icons.calendar_today, color: Colors.black),
+                      maxLine: 1,
+                      readOnly: true,
+                      validator: (val) {
+                        if (val == null || val.isEmpty) {
+                          return "Please select delivery date";
+                        }
+                        return null;
+                      },
+                      onTap: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+
+                        if (pickedDate != null) {
+                          deliveryDateController.text =
+                              "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+                        }
+                      },
+                    ),
+
+                    SizedBox(height: 1.h),
+
+                    CommonTextField(
+                      controller: radiusController,
+                      headerText: "Estimated Radius (in km)",
+                      hintText: "Enter radius",
+                      maxLine: 1,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      validator: (val) {
+                        if (val == null || val.isEmpty) {
+                          return "Please enter radius";
+                        }
+                        if (double.tryParse(val) == null) {
+                          return "Enter valid radius";
+                        }
+                        if (int.tryParse(val) == 0) {
+                          return "Radius cannot be zero";
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 1.h),
+
+                    // MESSAGE FIELD
+                    CommonTextField(
+                      headerText: "Note",
+                      controller: messageController,
+                      hintText: "Enter your note",
+                      maxLine: 3,
+                      validator: (val) {
+                        if (val == null || val.trim().isEmpty) {
+                          return "Please enter your note";
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 2.h),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RoundedButton(
+                            onTap: () => Navigator.of(context).pop(),
+                            buttonName: 'Cancel',
+                            borderRadius: 12,
+                            verticalPadding: 0,
+                            height: 45,
+                            fontColor: MyColors.white,
+                            color: MyColors.grayCD,
+                          ),
+                        ),
+
+                        SizedBox(width: 2.w),
+
+                        Expanded(
+                          child: RoundedButton(
+                            onTap: () {
+                              if (formKey.currentState!.validate()) {
+                                if (onTap != null) {
+                                  onTap(
+                                    messageController.text,
+                                    deliveryDateController.text,
+                                    radiusController.text,
+                                  );
+                                }
+                              }
+                            },
+                            buttonName: 'Connect',
+                            borderRadius: 12,
+                            verticalPadding: 0,
+                            height: 45,
+                            color: MyColors.primary,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         );
       },
     );
   }
-
 
   static void showSendServiceConnectionDialog(
-      BuildContext context,
-      dynamic service, {
-        bool? isFromIn = false,
-        void Function(String message)? onTap,
-      }) {
+    BuildContext context,
+    dynamic service, {
+    bool? isFromIn = false,
+    void Function(String note, String date, String raduis)? onTap,
+  }) {
+    final _formKey = GlobalKey<FormState>();
     final TextEditingController messageController = TextEditingController();
-    messageController.text =
-    "Hi, I would like to connect with you for business opportunities.";
+    final TextEditingController radiusController = TextEditingController();
+    final TextEditingController dateController = TextEditingController();
+    // messageController.text =
+    // "Hi, I would like to connect with you for business opportunities.";
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Connect to CRM!",
-                  style: MyTexts.bold18.copyWith(
-                    color: MyColors.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 2.h),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: const Color(0xFFFEF7E8),
-                    border: Border.all(color: const Color(0xFFFDEBC8)),
-                  ),
-                  child: Text(
-                    "To proceed with your request, please connect to CRM.",
-                    style: MyTexts.medium14.copyWith(
-                      color: MyColors.black,
-                    ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Connect to CRM!",
+                    style: MyTexts.bold18.copyWith(color: MyColors.primary),
                     textAlign: TextAlign.center,
                   ),
-                ),
-                SizedBox(height: 2.h),
-                CommonTextField(
-                  controller: messageController,
-                  hintText: "Enter your message",
-                  maxLine: 3,
-                ),
-                SizedBox(height: 2.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: RoundedButton(
-                        onTap: () => Navigator.of(context).pop(),
-                        buttonName: 'Cancel',
-                        borderRadius: 12,
-                        verticalPadding: 0,
-                        height: 45,
-                        fontColor: MyColors.white,
-                        color: MyColors.grayCD,
-                      ),
+                  SizedBox(height: 2.h),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: const Color(0xFFFEF7E8),
+                      border: Border.all(color: const Color(0xFFFDEBC8)),
                     ),
-                    SizedBox(width: 2.w),
-                    Expanded(
-                      child: RoundedButton(
-                        onTap: () {
-                          if (onTap != null) {
-                            onTap(messageController.text);
-                          }
-                          Navigator.of(context).pop();
-                        },
-                        buttonName: 'Connect',
-                        borderRadius: 12,
-                        verticalPadding: 0,
-                        height: 45,
-                        color: MyColors.primary,
-                      ),
+                    child: Text(
+                      "To proceed with your request, please connect to CRM.",
+                      style: MyTexts.medium14.copyWith(color: MyColors.black),
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(height: 2.h),
+                  CommonTextField(
+                    controller: dateController,
+                    headerText: "Estimated Delivery Date",
+                    hintText: "Select estimate delivery date",
+                    suffixIcon: const Icon(Icons.calendar_today, color: Colors.black),
+                    maxLine: 1,
+                    readOnly: true,
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return "Please select delivery date";
+                      }
+                      return null;
+                    },
+                    onTap: () async {
+                      final DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+
+                      if (pickedDate != null) {
+                        dateController.text =
+                            "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+                      }
+                    },
+                  ),
+
+                  SizedBox(height: 1.h),
+
+                  CommonTextField(
+                    controller: radiusController,
+                    headerText: "Estimated Radius (in km)",
+                    hintText: "Enter radius",
+                    maxLine: 1,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return "Please enter radius";
+                      }
+                      if (double.tryParse(val) == null) {
+                        return "Enter valid radius";
+                      }
+                      if (int.tryParse(val) == 0) {
+                        return "Radius cannot be zero";
+                      }
+                      return null;
+                    },
+                  ),
+
+                  SizedBox(height: 1.h),
+                  CommonTextField(
+                    headerText: "Note",
+                    controller: messageController,
+                    hintText: "Enter your note",
+                    maxLine: 3,
+                    validator: (val) {
+                      if (val == null || val.trim().isEmpty) {
+                        return "Please enter your note";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 2.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RoundedButton(
+                          onTap: () => Navigator.of(context).pop(),
+                          buttonName: 'Cancel',
+                          borderRadius: 12,
+                          verticalPadding: 0,
+                          height: 45,
+                          fontColor: MyColors.white,
+                          color: MyColors.grayCD,
+                        ),
+                      ),
+                      SizedBox(width: 2.w),
+                      Expanded(
+                        child: RoundedButton(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (onTap != null) {
+                                onTap(
+                                  messageController.text,
+                                  dateController.text,
+                                  radiusController.text,
+                                );
+                              }
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          buttonName: 'Connect',
+                          borderRadius: 12,
+                          verticalPadding: 0,
+                          height: 45,
+                          color: MyColors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -391,25 +506,16 @@ class ConnectionDialogs {
     );
   }
 
-
-  static void showRemoveConnectionDialog(
-    BuildContext context,
-    Connection connection,
-  ) {
+  static void showRemoveConnectionDialog(BuildContext context, Connection connection) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -419,8 +525,7 @@ class ConnectionDialogs {
                       borderRadius: BorderRadius.circular(100),
                       child: getImageView(
                         finalUrl:
-                            APIConstants.bucketUrl +
-                            (connection.merchantProfileImageUrl ?? ""),
+                            APIConstants.bucketUrl + (connection.merchantProfileImageUrl ?? ""),
                         height: 36,
                         width: 36,
                         fit: BoxFit.cover,
@@ -432,9 +537,7 @@ class ConnectionDialogs {
                       children: [
                         Text(
                           connection.merchantName ?? "",
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.black,
-                          ),
+                          style: MyTexts.medium14.copyWith(color: MyColors.black),
                           textAlign: TextAlign.center,
                         ),
                         Row(
@@ -447,9 +550,7 @@ class ConnectionDialogs {
                             const Gap(4),
                             Text(
                               connection.productName ?? "",
-                              style: MyTexts.regular13.copyWith(
-                                color: MyColors.black,
-                              ),
+                              style: MyTexts.regular13.copyWith(color: MyColors.black),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -518,15 +619,10 @@ class ConnectionDialogs {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -536,8 +632,7 @@ class ConnectionDialogs {
                       borderRadius: BorderRadius.circular(100),
                       child: getImageView(
                         finalUrl:
-                            APIConstants.bucketUrl +
-                            (connection.merchantProfileImageUrl ?? ""),
+                            APIConstants.bucketUrl + (connection.merchantProfileImageUrl ?? ""),
                         height: 36,
                         width: 36,
                         fit: BoxFit.cover,
@@ -549,9 +644,7 @@ class ConnectionDialogs {
                       children: [
                         Text(
                           connection.merchantName ?? "",
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.black,
-                          ),
+                          style: MyTexts.medium14.copyWith(color: MyColors.black),
                           textAlign: TextAlign.center,
                         ),
                         Row(
@@ -564,9 +657,7 @@ class ConnectionDialogs {
                             const Gap(4),
                             Text(
                               connection.productName ?? "",
-                              style: MyTexts.regular13.copyWith(
-                                color: MyColors.black,
-                              ),
+                              style: MyTexts.regular13.copyWith(color: MyColors.black),
                               textAlign: TextAlign.center,
                             ),
                           ],

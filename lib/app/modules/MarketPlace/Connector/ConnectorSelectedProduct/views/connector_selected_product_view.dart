@@ -13,7 +13,7 @@ class SelectedProductView extends StatelessWidget {
 
   // Constants
   static const double _leftPanelWidth = 0.27;
-  static const double _itemHeight = 140.0;
+  static const double _itemHeight = 120.0;
   static const double _imageHeight = 80.0;
   static const double _selectionBarWidth = 5.0;
   static const double _textHeight = 40.0;
@@ -518,7 +518,7 @@ class SelectedProductView extends StatelessWidget {
       itemBuilder: (context, rowIndex) {
         final startIndex = rowIndex * _itemsPerRow;
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: 4),
           child: Row(
             children: List.generate(_itemsPerRow, (colIndex) {
               final index = startIndex + colIndex;
@@ -674,11 +674,15 @@ class SelectedProductView extends StatelessWidget {
               context,
               item,
               isFromIn: true,
-              onTap: () async {
+              onTap: (message, date, radius) async {
                 Get.back();
                 await Get.find<HomeController>().addToConnectApi(
                   mID: item.merchantProfileId ?? 0,
-                  message: '',
+                  uom: item.filterValues?["uom"]["value"]??"",
+                  quantity: item.stockQty.toString(),
+                  message: message,
+                  radius: radius,
+                  date: date,
                   pID: item.id ?? 0,
                   onSuccess: () async {
                     await controller.fetchProductsFromApi(isLoading: false);
@@ -959,11 +963,16 @@ class SelectedProductView extends StatelessWidget {
                             context,
                             item,
                             isFromIn: true,
-                            onTap: () async {
+                            onTap: (message, date, radius) async {
                               Get.back();
                               await Get.find<HomeController>().addToConnectApi(
                                 mID: item.merchantProfileId ?? 0,
-                                message: '',
+                                uom: item.filterValues?["uom"]["value"]??"",
+
+                                quantity: item.stockQty.toString(),
+                                message: message,
+                                radius: radius,
+                                date: date,
                                 pID: item.id ?? 0,
                                 onSuccess: () async {
                                   await controller.fetchProductsFromApi(
