@@ -158,5 +158,6 @@ class APIConstants {
   static const String connectorChatList = "connector/chat/conversations";
   static const String messages = "messages/";
   static const String autoFill = "crm/lead/auto-fill";
+  static const String addLead = "crm/lead";
 
 }

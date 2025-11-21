@@ -5,18 +5,20 @@ import 'package:construction_technect/app/modules/CRM/lead/addLead/services/AddL
 
 class AddLeadController extends GetxController {
   final formKey = GlobalKey<FormState>();
+  RxBool isLoading = false.obs;
 
-  // Dropdowns
   RxString selectedCustomerType = ''.obs;
   RxString selectedSource = ''.obs;
-
-  // Text controllers
   final unitOfMeasureCtrl = TextEditingController();
   final customerNameCtrl = TextEditingController();
   final customerIdCtrl = TextEditingController();
   final customerPhoneCtrl = TextEditingController();
   final productNameCtrl = TextEditingController();
   final productCodeCtrl = TextEditingController();
+  final productQtyCtrl = TextEditingController();
+  final radiusCtrl = TextEditingController();
+  final noteCtrl = TextEditingController();
+  final eDateCtrl = TextEditingController();
   final contactedPersonCtrl = TextEditingController();
   final referenceCtrl = TextEditingController();
   final referralPhoneCtrl = TextEditingController();
@@ -31,12 +33,7 @@ class AddLeadController extends GetxController {
 
   void onSubmit() {
     if (formKey.currentState!.validate()) {
-      Get.snackbar(
-        "Success",
-        "Lead added successfully",
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+      createLead();
     }
   }
 
@@ -152,6 +149,50 @@ class AddLeadController extends GetxController {
       }
     } finally {
       isInfoLoad.value = false;
+    }
+  }
+
+  Map<String, dynamic> buildLeadBody() {
+    return {
+      "customer_phone": customerPhone.value,
+      "customer_name": customerNameCtrl.text,
+      "customer_type": selectedCustomerType.value,
+      "customer_id": customerIdCtrl.text,
+      "product_name": productNameCtrl.text,
+      "product_code": productCodeCtrl.text,
+      "unit_of_measure": unitOfMeasureCtrl.text,
+      "quantity": productQtyCtrl.text,
+      "estimate_delivery_date": eDateCtrl.text,
+      "radius": radiusCtrl.text,
+      "company_phone": companyPhoneCtrl.text,
+      "source": selectedSource.value,
+      "reference": referenceCtrl.text,
+      "referral_phone": referralPhoneCtrl.text,
+      "site_location": siteLocationCtrl.text,
+      "company_name": companyNameCtrl.text,
+      "gst_number": gstNumberCtrl.text,
+      "company_address": companyAddressCtrl.text,
+      "status": "new",
+      "notes": noteCtrl.text,
+    };
+  }
+
+  Future<void> createLead() async {
+    isLoading.value = true;
+
+    try {
+      final result = await AddLeadServices().addManualLead(data: buildLeadBody());
+
+      if (result.success == true) {
+        Get.back();
+        SnackBars.successSnackBar(content: "Lead created successfully");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
     }
   }
 }

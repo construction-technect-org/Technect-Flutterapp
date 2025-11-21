@@ -755,7 +755,7 @@ class SelectedProductView extends StatelessWidget {
                               imageUrl: imageUrl,
                               width: 100,
                               height: 140,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                               placeholder: (context, url) => const SizedBox(
                                 width: 100,
                                 height: 100,
