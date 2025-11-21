@@ -9,12 +9,12 @@ class AddNewLeadButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // height: 56,
-        margin: const EdgeInsets.symmetric(horizontal: 5),
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 11),
         decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade800,),
+          border: Border.all(color: MyColors.grayEA,),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -40,24 +40,14 @@ class MarketingScreen extends GetView<MarketingController> {
                   ),
                   // const TopBarHeader(),
                   const SegmentFiltersWidget(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(18),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                        child: Obx(() {
+                          return c.filterScreens[c.activeFilter.value] ?? const LeadScreen();
+                        }),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-
-                      child: Obx(() {
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.75,
-                          child: SingleChildScrollView(
-                            child: c.filterScreens[c.activeFilter.value] ?? const LeadScreen(),
-                          ),
-                        );
-                      }),
                     ),
                   ),
                 ],

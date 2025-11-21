@@ -115,7 +115,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                   children: [
                     Expanded(
                       child: Text(
-                        "Lead Id - #CT01256",
+                        "Lead Id - ${controller.lead.leadId}",
                         style: MyTexts.medium14.copyWith(color: Colors.black),
                       ),
                     ),
@@ -123,15 +123,15 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                   ],
                 ),
                 const Gap(5),
-                Text("Buyer Details -", style: MyTexts.regular14),
+                Text("Buyer Details - ", style: MyTexts.regular14),
                 const Gap(3),
                 Text("POC Phone Number", style: MyTexts.regular14),
                 const Gap(3),
                 Text("POC Name -", style: MyTexts.regular14),
                 const Gap(3),
-                Text("Product Name -", style: MyTexts.regular14),
+                Text("Product Name - ${controller.lead.productName}", style: MyTexts.regular14),
                 const Gap(3),
-                Text("Quantity -", style: MyTexts.regular14.copyWith(color: MyColors.black)),
+                Text("Quantity - ${controller.lead.quantity}", style: MyTexts.regular14.copyWith(color: MyColors.black)),
               ],
             ),
           ),
@@ -238,7 +238,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                       style: MyTexts.medium12.copyWith(color: const Color(0xFF737272)),
                     ),
                     const Gap(8),
-                    const Text("Notes will be added here", style: TextStyle(color: Colors.black54)),
+                     Text("${controller.lead.notes}", style: const TextStyle(color: Colors.black54)),
                     const Gap(16),
                   ],
                 ),
@@ -301,11 +301,10 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _reqText("Product"),
-              _reqText("Qty"),
-              _reqText("Location"),
-              _reqText("Delivery Date"),
-              _reqText("Quantity"),
+              _reqText("Product : ${controller.lead.productName}"),
+              _reqText("Quantity : ${controller.lead.quantity}"),
+              _reqText("Location : ${controller.lead.siteLocation}"),
+              _reqText("Delivery Date : ${controller.lead.estimateDeliveryDate}"),
               const Gap(10),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),

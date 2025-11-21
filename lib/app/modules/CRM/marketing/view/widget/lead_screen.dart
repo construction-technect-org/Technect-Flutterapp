@@ -12,14 +12,14 @@ class LeadScreen extends GetView<MarketingController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+
+        const TodaysLeadsCard(),
+        const SizedBox(height: 18),
         AddNewLeadButton(
           onTap: () {
-            // controller.onAdd(context);
             Get.toNamed(Routes.ADD_LEAD);
           },
         ),
-        const SizedBox(height: 18),
-        const TodaysLeadsCard(),
         const SizedBox(height: 21),
         Align(
           alignment: Alignment.centerLeft,
@@ -27,7 +27,7 @@ class LeadScreen extends GetView<MarketingController> {
         ),
         Obx(
           () => Column(
-            children: controller.leads
+            children: controller.allLeadList
                 .map(
                   (l) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),

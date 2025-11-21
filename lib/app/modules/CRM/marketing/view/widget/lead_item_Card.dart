@@ -4,9 +4,10 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
+import 'package:intl/intl.dart';
 
 class LeadItemCard extends StatelessWidget {
-  final LeadModel lead;
+  final Leads lead;
   final MarketingController controller;
 
   const LeadItemCard({required this.lead, required this.controller});
@@ -15,91 +16,93 @@ class LeadItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.LEAD_DETAIL);
+        Get.toNamed(Routes.LEAD_DETAIL, arguments: {"lead": lead});
       },
       child: Container(
         decoration: BoxDecoration(
-          // color: const Color(0xFFEFF6FF),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey.shade300),
+          gradient: const LinearGradient(
+            begin: AlignmentGeometry.topCenter,
+            end: AlignmentGeometry.bottomCenter,
+            colors: [Colors.white, Color(0xFFFFFBCC)],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: MyColors.grayD6),
         ),
         padding: const EdgeInsets.all(12),
-        child: Column(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: CachedNetworkImage(
-                    imageUrl: lead.avatarUrl,
-                    width: 80,
-                    height: 97,
-                    fit: BoxFit.cover,
-                    placeholder: (c, s) =>
-                        Container(color: Colors.grey.shade200,     width: 80,
-                          height: 97,),
-                    errorWidget: (c, s, e) => Container(
-                      color: Colors.grey.shade200,
-                      width: 80,
-                      height: 97,
-                      child: const Icon(Icons.person),
-                    ),
-                  ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: "https://i.pravatar.cc/150?img=36",
+                width: 80,
+                height: 97,
+                fit: BoxFit.cover,
+                placeholder: (c, s) =>
+                    Container(color: Colors.grey.shade200, width: 80, height: 97),
+                errorWidget: (c, s, e) => Container(
+                  color: Colors.grey.shade200,
+                  width: 80,
+                  height: 97,
+                  child: const Icon(Icons.person),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 3),
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 3),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Connector - ${lead.connector}',
-                              style: MyTexts.medium13.copyWith(fontWeight: FontWeight.w700),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            '${_formatTime(lead.dateTime)}, ${_formatDate(lead.dateTime)}',
-                            style: MyTexts.medium12.copyWith(color: MyColors.black),
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
+                      Expanded(
+                        child: Text(
+                          'Connector - ${lead.customerName}',
+                          style: MyTexts.medium13.copyWith(fontWeight: FontWeight.w700),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      const SizedBox(height: 3),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      const SizedBox(width: 6),
+                      Text(
+                        '${_formatTime(DateTime.parse(lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(lead.createdAt ?? ""))}',
+                        style: MyTexts.medium12.copyWith(color: MyColors.black),
+                        textAlign: TextAlign.right,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Lead Id - ${lead.leadId}',
+                              style: MyTexts.medium13.copyWith(color: MyColors.black),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              'Product Interested - ${lead.productName}',
+                              style: MyTexts.medium13.copyWith(color: MyColors.black),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
                               children: [
+                                SvgPicture.asset(Asset.location, height: 14, width: 14),
+                                const SizedBox(width: 3),
                                 Text(
-                                  'Lead Id - ${lead.id}',
+                                  '${lead.radius} km away',
                                   style: MyTexts.medium13.copyWith(color: MyColors.black),
                                 ),
-                                const SizedBox(height: 3),
-                                Text(
-                                  'Product Interested - ${lead.product}',
-                                  style: MyTexts.medium13.copyWith(color: MyColors.black),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(Asset.location, height: 14, width: 14),
-                                    const SizedBox(width: 3),
-                                    Text(
-                                      '${lead.distanceKm} km away',
-                                      style: MyTexts.medium13.copyWith(color: MyColors.black),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 6),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                   decoration: BoxDecoration(
@@ -113,56 +116,40 @@ class LeadItemCard extends StatelessWidget {
                                         "Lead",
                                         style: MyTexts.medium13.copyWith(color: Colors.white),
                                       ),
-                                      const Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        color: Colors.white,
-                                        size: 12,
+                                    ],
+                                  ),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    _openTeamBottomSheet();
+                                  },
+                                  child: Stack(
+                                    alignment: AlignmentGeometry.center,
+                                    children: [
+                                      Image.asset(Asset.explore, width: 65),
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(Asset.userPlus,colorFilter: const ColorFilter.mode(Colors.white,BlendMode.srcIn),height: 12,),
+                                          const Gap(4),
+                                          Text(
+                                            "Assign",
+                                            style: MyTexts.medium12.copyWith(color: MyColors.white),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          const Gap(20),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.All_CHAT_LIST);
-                            },
-                            child: SvgPicture.asset(Asset.message),
-                          ),
-                          const Gap(20),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ActionButton(
-                  icon: Asset.userPlus,
-                  label: 'Assign To',
-                  onTap: () {
-                    _openTeamBottomSheet();
-                  },
-                ),
-                ActionButton(
-                  icon: Asset.chat,
-                  label: 'Add Conversation',
-                  onTap: () => _openAddConversationBottomSheet(context, lead),
-                ),
-                ActionButton(
-                  icon: Asset.clock,
-                  label: 'Set a Reminder',
-                  onTap: () =>
-                      controller.setReminder(lead.id, DateTime.now().add(const Duration(days: 1))),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -173,7 +160,9 @@ class LeadItemCard extends StatelessWidget {
   static String _formatTime(DateTime d) =>
       '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')} AM';
 
-  static String _formatDate(DateTime d) => '${d.month}, ${d.day}';
+  static String _formatDate(DateTime d) {
+    return DateFormat('MMM d').format(d);
+  }
 
   void _openTeamBottomSheet() {
     Get.bottomSheet(
@@ -321,7 +310,7 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
-  void _openAddConversationBottomSheet(BuildContext context, LeadModel lead) {
+  void _openAddConversationBottomSheet(BuildContext context, Leads lead) {
     final TextEditingController lastController = TextEditingController();
     final TextEditingController nextController = TextEditingController();
 
@@ -402,7 +391,6 @@ class LeadItemCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
 
-
                 CommonTextField(
                   controller: nextController,
                   maxLine: 5,
@@ -437,19 +425,22 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
-  Widget _userInfo(LeadModel lead) {
+  Widget _userInfo(Leads lead) {
     return Column(
       children: [
         Row(
           children: [
-            CircleAvatar(radius: 12, backgroundImage: NetworkImage(lead.avatarUrl)),
+            const CircleAvatar(
+              radius: 12,
+              backgroundImage: NetworkImage("https://i.pravatar.cc/150?img=8"),
+            ),
             const SizedBox(width: 8),
-            Text(lead.name, style: MyTexts.medium14),
+            Text(lead.customerName ?? "", style: MyTexts.medium14),
           ],
         ),
         const SizedBox(height: 4),
         Text(
-          "${_formatTime(lead.dateTime)} , ${_formatDate(lead.dateTime)}",
+          "${_formatTime(DateTime.parse(lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(lead.createdAt ?? ""))}}",
           style: MyTexts.medium12.copyWith(color: Colors.black54),
         ),
       ],
@@ -505,14 +496,14 @@ class ActionButton extends StatelessWidget {
   final double? hPadding;
   final VoidCallback onTap;
 
-  const ActionButton({required this.icon, required this.label, required this.onTap,this.hPadding});
+  const ActionButton({required this.icon, required this.label, required this.onTap, this.hPadding});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal:hPadding?? 6, vertical: 5),
+        padding: EdgeInsets.symmetric(horizontal: hPadding ?? 6, vertical: 5),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -520,7 +511,11 @@ class ActionButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            SvgPicture.asset(icon, height: 12,colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn)),
+            SvgPicture.asset(
+              icon,
+              height: 12,
+              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+            ),
             const SizedBox(width: 8),
             Text(label, style: MyTexts.regular12),
           ],

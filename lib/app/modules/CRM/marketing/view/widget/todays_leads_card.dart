@@ -10,12 +10,8 @@ class TodaysLeadsCard extends GetView<MarketingController> {
       width: double.infinity,
       padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12, top: 9),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border.all(color: MyColors.grayD4),
-        gradient: const LinearGradient(
-          colors: [Color(0xFFEFF6FF), Color(0xFFE7F0FF)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
         borderRadius: BorderRadius.circular(26),
       ),
       child: Column(

@@ -1,7 +1,7 @@
 import 'dart:developer';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/services/MarketingService.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/followup_screen.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/lead_screen.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/prospect_screen.dart';
@@ -10,37 +10,25 @@ import 'package:construction_technect/app/modules/CRM/marketing/view/widget/qual
 class MarketingController extends GetxController {
   @override
   void onInit() {
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      fetchAllLead(isLoad: true, status: "new");
+    });
     filterFollowupStatus();
     filterProspectStatus();
     super.onInit();
   }
 
   final isLoading = false.obs;
-  // Notification counts
+
   final chatNotificationCount = 2.obs;
   final alertNotificationCount = 2.obs;
   final bellNotificationCount = 2.obs;
 
-  // filters
   RxString activeFilter = 'Lead'.obs;
   RxString activeStatusFilter = 'All'.obs;
   RxString activeProspectStatusFilter = 'Fresh'.obs;
   RxString category = 'Marketing'.obs;
 
-  // sample months for chart (kept from previous widget if needed)
-  final months = <String>[
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-  ];
   final items = ['Lead', 'Follow Up', 'Prospect', 'Qualified'];
   final filterScreens = {
     'Lead': const LeadScreen(),
@@ -175,42 +163,37 @@ class MarketingController extends GetxController {
   ].obs;
 
   RxList<LeadModel> followups = <LeadModel>[].obs;
+
   void filterFollowupStatus() {
     if (activeStatusFilter.value == 'All') {
       followups.value = leads;
     } else {
       followups.value = leads
-          .where(
-            (lead) =>
-                lead.status.name.toLowerCase() ==
-                activeStatusFilter.value.toLowerCase(),
-          )
+          .where((lead) => lead.status.name.toLowerCase() == activeStatusFilter.value.toLowerCase())
           .toList();
     }
   }
 
   RxList<LeadModel> prospectLeads = <LeadModel>[].obs;
+
   void filterProspectStatus() {
     if (activeProspectStatusFilter.value == 'Fresh') {
       prospectLeads.value = leads;
     } else {
       prospectLeads.value = leads.where((lead) {
-        if (activeProspectStatusFilter.value.toLowerCase() ==
-            "Reached Out".toLowerCase()) {
+        if (activeProspectStatusFilter.value.toLowerCase() == "Reached Out".toLowerCase()) {
           if (lead.status == Status.completed) {
             return true;
           } else {
             return false;
           }
-        } else if (activeProspectStatusFilter.value.toLowerCase() ==
-            "On Hold".toLowerCase()) {
+        } else if (activeProspectStatusFilter.value.toLowerCase() == "On Hold".toLowerCase()) {
           if (lead.status == Status.pending) {
             return true;
           } else {
             return false;
           }
-        } else if (activeProspectStatusFilter.value.toLowerCase() ==
-            "Converted".toLowerCase()) {
+        } else if (activeProspectStatusFilter.value.toLowerCase() == "Converted".toLowerCase()) {
           if (lead.status == Status.closed) {
             return true;
           } else {
@@ -231,27 +214,19 @@ class MarketingController extends GetxController {
     //     .toList();
   }
 
-  final List<String> statusItems = <String>[
-    "All",
-    "Pending",
-    "Completed",
-    "Missed",
-  ];
+  final List<String> statusItems = <String>["All", "Pending", "Completed", "Missed"];
 
-  final List<String> statusProspectItems = <String>[
-    "Fresh",
-    "Reached Out",
-    "On Hold",
-    "Converted",
-  ];
+  final List<String> statusProspectItems = <String>["Fresh", "Reached Out", "On Hold", "Converted"];
 
-  // Notifications counts
   RxInt messagesCount = 2.obs;
   RxInt remindersCount = 2.obs;
   RxInt alertsCount = 2.obs;
 
-  // Actions
-  void setFilter(String f) => activeFilter.value = f;
+  void setFilter(String f) {
+    activeFilter.value = f;
+    fetchAllLead(isLoad: true, status: "new");
+  }
+
   void setStatusFilter(String f) {
     activeStatusFilter.value = f;
     filterFollowupStatus();
@@ -265,13 +240,7 @@ class MarketingController extends GetxController {
 
   void setCategory(String c) => category.value = c;
 
-  void addLead(LeadModel l) {
-    leads.insert(0, l);
-    update();
-  }
-
   void assignTo(String leadId, String user) {
-    // Implement assignment logic, for now just print
     debugPrint('Assign $leadId to $user');
   }
 
@@ -283,5 +252,29 @@ class MarketingController extends GetxController {
   void chatNow(String leadId) {
     Get.toNamed(Routes.All_CHAT_LIST);
     debugPrint('Open chat for $leadId');
+  }
+
+  Rx<AllLeadModel> allLeadModel = AllLeadModel().obs;
+  RxList<Leads> allLeadList = <Leads>[].obs;
+
+  Future<void> fetchAllLead({bool? isLoad, required String status}) async {
+    try {
+      isLoading.value = isLoad ?? false;
+      final result = await MarketingServices().getAllLead(status: status);
+      if (result.success == true) {
+        allLeadModel.value = result;
+        if (status == "new") {
+          allLeadList.clear();
+          allLeadList.addAll(allLeadModel.value.data?.leads ?? []);
+        }
+      }
+      isLoading.value = false;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
   }
 }
