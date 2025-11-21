@@ -219,7 +219,7 @@ class SelectedProductView extends StatelessWidget {
                       const SizedBox(height: _itemSpacing),
                       Text(
                         getName(items[index]),
-                        style: MyTexts.medium14,
+                        style: MyTexts.medium13,
                         textAlign: TextAlign.center,
                       ).paddingOnly(
                         right: _horizontalPadding,
@@ -705,7 +705,7 @@ class SelectedProductView extends StatelessWidget {
       itemBuilder: (context, index) {
         final item =
             controller.productListModel.value?.data?.products[index] ??
-                Product();
+            Product();
 
         return ProductCard(
           product: item,

@@ -452,7 +452,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                 product.name ?? '',
                 style: MyTexts.medium13,
                 textAlign: TextAlign.center,
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.fade,
               ),
             ),
@@ -594,7 +594,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                   context,
                   service,
                   isFromIn: true,
-                   onTap: (message,date,radius) async {
+                  onTap: (message, date, radius) async {
                     await Get.find<HomeController>().addServiceToConnectApi(
                       mID: service.merchantProfileId ?? 0,
                       message: message,
@@ -704,7 +704,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                     context,
                                     service,
                                     isFromIn: true,
-                                     onTap: (message,date,radius) async {
+                                    onTap: (message, date, radius) async {
                                       await controller.addServiceToConnect(
                                         merchantProfileId: service.merchantProfileId ?? 0,
                                         serviceId: service.id ?? 0,
@@ -792,7 +792,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                   context,
                   service,
                   isFromIn: true,
-                   onTap: (message,date,radius) async {
+                  onTap: (message, date, radius) async {
                     await Get.find<HomeController>().addServiceToConnectApi(
                       mID: service.merchantProfileId ?? 0,
                       message: message,
@@ -912,7 +912,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                                   context,
                                   service,
                                   isFromIn: true,
-                                   onTap: (message,date,radius) async {
+                                  onTap: (message, date, radius) async {
                                     await controller.addServiceToConnect(
                                       merchantProfileId: service.merchantProfileId ?? 0,
                                       serviceId: service.id ?? 0,
