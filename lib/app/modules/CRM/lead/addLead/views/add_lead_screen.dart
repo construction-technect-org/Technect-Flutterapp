@@ -48,16 +48,46 @@ class AddLeadScreen extends GetView<AddLeadController> {
                           const Gap(20),
 
                           CommonTextField(
-                            controller: controller.unitOfMeasureCtrl,
-                            headerText: "Unit of Measure",
-                            hintText: "Enter the Unit of Measure",
+                            controller: controller.customerPhoneCtrl,
+                            headerText: "Customer Phone no",
+                            hintText: "Enter customer phone number",
+                            keyboardType: TextInputType.phone,
+                            readOnly: true,
+                            onTap: () {
+                              controller.openPhoneNumberBottomSheet();
+                            },
                             validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return "Please enter Unit of Measure";
+                              if (controller.customerPhone.value.isEmpty) {
+
+
+                                return "Please enter customer phone number";
                               }
                               return null;
                             },
+                            suffixIcon: const Icon(Icons.add_circle_outline, color: Colors.black54),
                           ),
+                          Obx(() {
+                            return Visibility(
+                              visible: controller.isCustomerIdVisible.value,
+                              child: Column(
+                                children: [
+                                  const Gap(20),
+                                  CommonTextField(
+                                    readOnly: true,
+                                    controller: controller.customerIdCtrl,
+                                    headerText: "Customer ID",
+                                    hintText: "Enter the Customer ID",
+                                    validator: (val) {
+                                      if (val == null || val.isEmpty) {
+                                        return "Please enter customer ID";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
                           const Gap(20),
                           CommonTextField(
                             controller: controller.customerNameCtrl,
@@ -85,74 +115,6 @@ class AddLeadScreen extends GetView<AddLeadController> {
                             },
                           ),
                           const Gap(20),
-                          CommonTextField(
-                            controller: controller.customerIdCtrl,
-                            headerText: "Customer ID",
-                            hintText: "Enter the Customer ID",
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return "Please enter customer ID";
-                              }
-                              return null;
-                            },
-                          ),
-                          const Gap(20),
-
-                          CommonTextField(
-                            controller: controller.customerPhoneCtrl,
-                            headerText: "Customer Phone no",
-                            hintText: "Enter customer phone number",
-                            keyboardType: TextInputType.phone,
-                            readOnly: true,
-                            onTap: () {
-                              controller.openPhoneNumberBottomSheet();
-                            },
-                            validator: (val) {
-                              if (controller.numList.isEmpty) {
-                                return "Please enter at least one phone number";
-                              }
-                              return null;
-                            },
-                            suffixIcon: const Icon(Icons.add_circle_outline, color: Colors.black54),
-                          ),
-                          Obx(() {
-                            if (controller.numList.isEmpty) return const SizedBox();
-                            return Column(
-                              children: [
-                                const Gap(10),
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: controller.numList.map<Widget>((number) => Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFE9EDFF),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(number.toString(), style: MyTexts.medium14),
-                                          const SizedBox(width: 6),
-                                          GestureDetector(
-                                            onTap: () => controller.numList.remove(number),
-                                            child: const Icon(
-                                              Icons.close,
-                                              size: 16,
-                                              color: Colors.black54,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )).toList(),
-                                ),
-                              ],
-                            );
-                          }),
-                          const Gap(20),
 
                           CommonTextField(
                             controller: controller.productNameCtrl,
@@ -166,7 +128,18 @@ class AddLeadScreen extends GetView<AddLeadController> {
                             },
                           ),
                           const Gap(20),
-
+                          CommonTextField(
+                            controller: controller.unitOfMeasureCtrl,
+                            headerText: "Unit of Measure",
+                            hintText: "Enter the Unit of Measure",
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return "Please enter Unit of Measure";
+                              }
+                              return null;
+                            },
+                          ),
+                          const Gap(20),
                           // Product Code
                           CommonTextField(
                             controller: controller.productCodeCtrl,
@@ -176,20 +149,6 @@ class AddLeadScreen extends GetView<AddLeadController> {
                             validator: (val) {
                               if (val == null || val.isEmpty) {
                                 return "Please enter product name";
-                              }
-                              return null;
-                            },
-                          ),
-                          const Gap(20),
-
-                          // Contacted Person
-                          CommonTextField(
-                            controller: controller.contactedPersonCtrl,
-                            headerText: "Contacted Person",
-                            hintText: "Enter Contacted Person Name",
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return "Please enter contact person name";
                               }
                               return null;
                             },
@@ -274,7 +233,6 @@ class AddLeadScreen extends GetView<AddLeadController> {
                             },
                           ),
                           const Gap(20),
-
                           CommonTextField(
                             controller: controller.gstNumberCtrl,
                             headerText: "GST Number",
@@ -287,7 +245,6 @@ class AddLeadScreen extends GetView<AddLeadController> {
                             },
                           ),
                           const Gap(20),
-
                           CommonTextField(
                             controller: controller.companyAddressCtrl,
                             headerText: "Company Address",
@@ -295,19 +252,6 @@ class AddLeadScreen extends GetView<AddLeadController> {
                             validator: (val) {
                               if (val == null || val.isEmpty) {
                                 return "Please enter company address";
-                              }
-                              return null;
-                            },
-                          ),
-                          const Gap(20),
-
-                          CommonTextField(
-                            controller: controller.contactPersonCtrl,
-                            headerText: "Contact Person",
-                            hintText: "Enter Contact Person",
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return "Please enter contact person detail";
                               }
                               return null;
                             },
