@@ -147,7 +147,7 @@ class AddServiceRequirementView
                       }
                       return null;
                     },
-                    suffixIcon: const Icon(Icons.calendar_today),
+                    suffixIcon: const Icon(Icons.calendar_today,color: Colors.black,),
                   ),
                   SizedBox(height: 2.h),
                   CommonTextField(

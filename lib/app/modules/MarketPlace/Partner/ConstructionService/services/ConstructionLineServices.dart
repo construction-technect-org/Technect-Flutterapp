@@ -43,7 +43,11 @@ class ConstructionLineServices {
       final Map<String, dynamic> body = {
         "merchant_profile_id": mID,
         "service_id": sID,
-        "request_message": message ?? "",
+        "request_message":
+            "Need professional electrical installation service for residential property",
+        "estimate_start_date": date,
+        "radius": radius,
+        "note": message ?? "",
       };
       final response = await apiManager.postObject(url: url, body: body);
 

@@ -366,138 +366,141 @@ class ConnectionDialogs {
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Connect to CRM!",
-                    style: MyTexts.bold18.copyWith(color: MyColors.primary),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 2.h),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color(0xFFFEF7E8),
-                      border: Border.all(color: const Color(0xFFFDEBC8)),
-                    ),
-                    child: Text(
-                      "To proceed with your request, please connect to CRM.",
-                      style: MyTexts.medium14.copyWith(color: MyColors.black),
+          child: GestureDetector(
+            onTap: hideKeyboard,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Connect to CRM!",
+                      style: MyTexts.bold18.copyWith(color: MyColors.primary),
                       textAlign: TextAlign.center,
                     ),
-                  ),
-                  SizedBox(height: 2.h),
-                  CommonTextField(
-                    controller: dateController,
-                    headerText: "Estimated Delivery Date",
-                    hintText: "Select estimate delivery date",
-                    suffixIcon: const Icon(Icons.calendar_today, color: Colors.black),
-                    maxLine: 1,
-                    readOnly: true,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return "Please select delivery date";
-                      }
-                      return null;
-                    },
-                    onTap: () async {
-                      final DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                      );
-
-                      if (pickedDate != null) {
-                        dateController.text =
-                            "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
-                      }
-                    },
-                  ),
-
-                  SizedBox(height: 1.h),
-
-                  CommonTextField(
-                    controller: radiusController,
-                    headerText: "Estimated Radius (in km)",
-                    hintText: "Enter radius",
-                    maxLine: 1,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return "Please enter radius";
-                      }
-                      if (double.tryParse(val) == null) {
-                        return "Enter valid radius";
-                      }
-                      if (int.tryParse(val) == 0) {
-                        return "Radius cannot be zero";
-                      }
-                      return null;
-                    },
-                  ),
-
-                  SizedBox(height: 1.h),
-                  CommonTextField(
-                    headerText: "Note",
-                    controller: messageController,
-                    hintText: "Enter your note",
-                    maxLine: 3,
-                    validator: (val) {
-                      if (val == null || val.trim().isEmpty) {
-                        return "Please enter your note";
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 2.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RoundedButton(
-                          onTap: () => Navigator.of(context).pop(),
-                          buttonName: 'Cancel',
-                          borderRadius: 12,
-                          verticalPadding: 0,
-                          height: 45,
-                          fontColor: MyColors.white,
-                          color: MyColors.grayCD,
-                        ),
+                    SizedBox(height: 2.h),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color(0xFFFEF7E8),
+                        border: Border.all(color: const Color(0xFFFDEBC8)),
                       ),
-                      SizedBox(width: 2.w),
-                      Expanded(
-                        child: RoundedButton(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              if (onTap != null) {
-                                onTap(
-                                  messageController.text,
-                                  dateController.text,
-                                  radiusController.text,
-                                );
+                      child: Text(
+                        "To proceed with your request, please connect to CRM.",
+                        style: MyTexts.medium14.copyWith(color: MyColors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    CommonTextField(
+                      controller: dateController,
+                      headerText: "Estimated Delivery Date",
+                      hintText: "Select estimate delivery date",
+                      suffixIcon: const Icon(Icons.calendar_today, color: Colors.black),
+                      maxLine: 1,
+                      readOnly: true,
+                      validator: (val) {
+                        if (val == null || val.isEmpty) {
+                          return "Please select delivery date";
+                        }
+                        return null;
+                      },
+                      onTap: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+
+                        if (pickedDate != null) {
+                          dateController.text =
+                              "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+                        }
+                      },
+                    ),
+
+                    SizedBox(height: 1.h),
+
+                    CommonTextField(
+                      controller: radiusController,
+                      headerText: "Estimated Radius (in km)",
+                      hintText: "Enter radius",
+                      maxLine: 1,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      validator: (val) {
+                        if (val == null || val.isEmpty) {
+                          return "Please enter radius";
+                        }
+                        if (double.tryParse(val) == null) {
+                          return "Enter valid radius";
+                        }
+                        if (int.tryParse(val) == 0) {
+                          return "Radius cannot be zero";
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 1.h),
+                    CommonTextField(
+                      headerText: "Note",
+                      controller: messageController,
+                      hintText: "Enter your note",
+                      maxLine: 3,
+                      validator: (val) {
+                        if (val == null || val.trim().isEmpty) {
+                          return "Please enter your note";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 2.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RoundedButton(
+                            onTap: () => Navigator.of(context).pop(),
+                            buttonName: 'Cancel',
+                            borderRadius: 12,
+                            verticalPadding: 0,
+                            height: 45,
+                            fontColor: MyColors.white,
+                            color: MyColors.grayCD,
+                          ),
+                        ),
+                        SizedBox(width: 2.w),
+                        Expanded(
+                          child: RoundedButton(
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (onTap != null) {
+                                  onTap(
+                                    messageController.text,
+                                    dateController.text,
+                                    radiusController.text,
+                                  );
+                                }
+                                Navigator.of(context).pop();
                               }
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          buttonName: 'Connect',
-                          borderRadius: 12,
-                          verticalPadding: 0,
-                          height: 45,
-                          color: MyColors.primary,
+                            },
+                            buttonName: 'Connect',
+                            borderRadius: 12,
+                            verticalPadding: 0,
+                            height: 45,
+                            color: MyColors.primary,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
