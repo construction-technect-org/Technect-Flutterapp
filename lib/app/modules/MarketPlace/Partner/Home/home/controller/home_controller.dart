@@ -221,7 +221,6 @@ class HomeController extends GetxController {
 
   RxDouble currentLatitude = 0.0.obs;
   RxDouble currentLongitude = 0.0.obs;
-  // add to controller fields
   final RxBool isLocationDialogShowing = false.obs;
 
   Future<void> fetchCurrentLocation() async {
@@ -248,10 +247,8 @@ class HomeController extends GetxController {
         return;
       }
 
-      // For other states (just in case), request again or show snackbar
       if (permission == LocationPermission.unableToDetermine ||
           permission == LocationPermission.denied) {
-        // either re-try or inform user
         _showMandatoryLocationDialog();
       }
     } catch (e) {
