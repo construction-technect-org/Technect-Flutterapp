@@ -678,7 +678,7 @@ class SelectedProductView extends StatelessWidget {
                 Get.back();
                 await Get.find<HomeController>().addToConnectApi(
                   mID: item.merchantProfileId ?? 0,
-                  uom: item.filterValues?["uom"]["value"]??"",
+                  uom: item.filterValues?["uom"]["value"] ?? "",
                   quantity: item.stockQty.toString(),
                   message: message,
                   radius: radius,
@@ -927,25 +927,29 @@ class SelectedProductView extends StatelessWidget {
                         vertical: 6,
                         horizontal: 8,
                       ),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Ex factory price ',
-                            style: MyTexts.medium10.copyWith(
-                              color: MyColors.custom('545454'),
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                "₹ ${item.price ?? 'N/A'}",
+                                style: MyTexts.medium14.copyWith(
+                                  color: MyColors.custom('0B1429'),
+                                ),
+                              ),
+                              Text(
+                                '/ unit',
+                                style: MyTexts.medium12.copyWith(
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
                           ),
-
                           Text(
-                            item.price ?? 'N/A',
-                            style: MyTexts.medium14.copyWith(
-                              color: MyColors.custom('0B1429'),
-                            ),
-                          ),
-                          Text(
-                            '/ unit',
+                            'Ex factory price',
                             style: MyTexts.medium12.copyWith(
-                              color: Colors.grey[600],
+                              color: MyColors.custom('545454'),
                             ),
                           ),
                         ],
@@ -967,7 +971,7 @@ class SelectedProductView extends StatelessWidget {
                               Get.back();
                               await Get.find<HomeController>().addToConnectApi(
                                 mID: item.merchantProfileId ?? 0,
-                                uom: item.filterValues?["uom"]["value"]??"",
+                                uom: item.filterValues?["uom"]["value"] ?? "",
 
                                 quantity: item.stockQty.toString(),
                                 message: message,
