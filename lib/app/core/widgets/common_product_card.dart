@@ -31,50 +31,24 @@ class ProductCard extends StatelessWidget {
 
   }
   Widget _buildGridUI(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 3,
-          child: ProductImage(
-            product: product,
-            onWishlistTap: onWishlistTap,
-            isFromConnector: isFromConnector,
-            isFromAdd: isFromAdd,
-          ),
-        ),
-        const SizedBox(height: 10),
-        _buildProductInfo(),
-        const SizedBox(height: 6),
-        _buildLocationRow(),
-        const SizedBox(height: 6),
-        _buildPriceSection(),
-        if (myPref.role.val == "connector")
-          if (isFromAdd == false && isFromConnector == true) ...[
-            const SizedBox(height: 8),
-            ProductActionButton(
-              product: product,
-              onNotifyTap: onNotifyTap,
-              onConnectTap: onConnectTap,
-            ),
-          ],
-      ],
-    );
-  }
-  Widget _buildListUI(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.zero,
-      decoration: BoxDecoration(
-        color: MyColors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(
+          Routes.PRODUCT_DETAILS,
+          arguments: {
+            "product": product,
+            "isFromAdd": isFromAdd,
+            "isFromConnector": isFromConnector,
+            "onApiCall": onApiCall,
+          },
+        );
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 100,
-            height: 140,
+          Expanded(
+            flex: 3,
             child: ProductImage(
               product: product,
               onWishlistTap: onWishlistTap,
@@ -82,28 +56,82 @@ class ProductCard extends StatelessWidget {
               isFromAdd: isFromAdd,
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildProductInfo(),
-                const SizedBox(height: 6),
-                _buildLocationRow(),
-                const SizedBox(height: 6),
-                _buildPriceSection(),
-                if (myPref.role.val == "connector") ...[
-                  const SizedBox(height: 8),
-                  ProductActionButton(
-                    product: product,
-                    onNotifyTap: onNotifyTap,
-                    onConnectTap: onConnectTap,
-                  ),
-                ],
-              ],
-            ),
-          ),
+          const SizedBox(height: 10),
+          _buildProductInfo(),
+          const SizedBox(height: 6),
+          _buildLocationRow(),
+          const SizedBox(height: 6),
+          _buildPriceSection(),
+          if (myPref.role.val == "connector")
+            if (isFromAdd == false && isFromConnector == true) ...[
+              const SizedBox(height: 8),
+              ProductActionButton(
+                product: product,
+                onNotifyTap: onNotifyTap,
+                onConnectTap: onConnectTap,
+              ),
+            ],
         ],
+      ),
+    );
+  }
+  Widget _buildListUI(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(
+          Routes.PRODUCT_DETAILS,
+          arguments: {
+            "product": product,
+            "isFromAdd": isFromAdd,
+            "isFromConnector": isFromConnector,
+            "onApiCall": onApiCall,
+          },
+        );
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: EdgeInsets.zero,
+        decoration: BoxDecoration(
+          color: MyColors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 100,
+              height: 140,
+              child: ProductImage(
+                product: product,
+                onWishlistTap: onWishlistTap,
+                isFromConnector: isFromConnector,
+                isFromAdd: isFromAdd,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProductInfo(),
+                  const SizedBox(height: 6),
+                  _buildLocationRow(),
+                  const SizedBox(height: 6),
+                  _buildPriceSection(),
+                  if (myPref.role.val == "connector") ...[
+                    const SizedBox(height: 8),
+                    ProductActionButton(
+                      product: product,
+                      onNotifyTap: onNotifyTap,
+                      onConnectTap: onConnectTap,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
