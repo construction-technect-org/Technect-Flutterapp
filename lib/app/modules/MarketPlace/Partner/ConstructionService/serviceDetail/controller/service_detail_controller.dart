@@ -33,36 +33,56 @@ class ServiceDetailController extends GetxController {
       serviceDetails(service.value.id ?? 0);
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((val) async {
-      final List<Future<void>> videoInitTasks = [];
-
-      if (service.value.reference != null &&
-          service.value.reference?.referenceType?.toLowerCase() == 'video') {
-        final referencePath =
-            service.value.reference?.referenceS3Key ??
-            service.value.reference?.referenceUrl ??
-            "";
-
-        if (referencePath.isNotEmpty) {
-          videoInitTasks.add(_initializeReferenceVideo(referencePath));
-        }
-      }
-
-      if (service.value.video != null) {
-        final videoPath =
-            service.value.video?.mediaS3Key ??
-            service.value.video?.mediaUrl ??
-            "";
-
-        if (videoPath.isNotEmpty) {
-          videoInitTasks.add(_initializeMainVideo(videoPath));
-        }
-      }
-
-      if (videoInitTasks.isNotEmpty) {
-        await Future.wait(videoInitTasks);
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeVideosForService(service.value, token: _initToken);
     });
+  }
+
+  int _initToken = 0;
+
+  Future<void> loadService(Service newService) async {
+    _initToken++;
+    final currentToken = _initToken;
+    await _disposeVideoControllers();
+
+    service.value = newService;
+    isVideoReady.value = false;
+    isRefVideo.value = false;
+    currentIndex.value = 0;
+    update();
+
+    if (!isEdit.value) {
+      await serviceDetails(service.value.id ?? 0);
+    }
+
+    await _initializeVideosForService(service.value, token: currentToken);
+  }
+
+  Future<void> _initializeVideosForService(
+    Service svc, {
+    required int token,
+  }) async {
+    final List<Future<void>> inits = [];
+
+    if (svc.reference != null &&
+        svc.reference?.referenceType?.toLowerCase() == 'video') {
+      final refPath =
+          svc.reference?.referenceS3Key ?? svc.reference?.referenceUrl ?? '';
+      if (refPath.isNotEmpty) {
+        inits.add(_initializeReferenceVideo(refPath, token: token));
+      }
+    }
+
+    if (svc.video != null) {
+      final videoPath = svc.video?.mediaS3Key ?? svc.video?.mediaUrl ?? '';
+      if (videoPath.isNotEmpty) {
+        inits.add(_initializeMainVideo(videoPath, token: token));
+      }
+    }
+
+    if (inits.isNotEmpty) {
+      await Future.wait(inits);
+    }
   }
 
   double displayAspectRatio(VideoPlayerController? vController) {
@@ -80,15 +100,17 @@ class ServiceDetailController extends GetxController {
     }
   }
 
-  Future<void> _initializeReferenceVideo(String referencePath) async {
+  Future<void> _initializeReferenceVideo(
+    String referencePath, {
+    required int token,
+  }) async {
     final referenceVideoUrl = referencePath.startsWith('http')
         ? referencePath
         : APIConstants.bucketUrl + referencePath;
     log('Reference video path: $referencePath');
     log('Reference video URL: $referenceVideoUrl');
-
     try {
-      refVideoPlayerController = VideoPlayerController.networkUrl(
+      final localController = VideoPlayerController.networkUrl(
         Uri.parse(referenceVideoUrl),
         httpHeaders: {
           'Range': 'bytes=0-',
@@ -98,37 +120,67 @@ class ServiceDetailController extends GetxController {
         videoPlayerOptions: VideoPlayerOptions(),
       );
 
-      await refVideoPlayerController
-          ?.initialize()
-          .timeout(
-            const Duration(seconds: 30),
-            onTimeout: () {
-              log('Reference video initialization timeout');
-              throw TimeoutException('Video initialization took too long');
-            },
-          )
-          .then((val) {
-            isRefVideo.value = true;
-          });
-      log('Reference video initialized successfully');
+      await localController.initialize().timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw TimeoutException(
+            'Reference video initialization took too long',
+          );
+        },
+      );
+
+      if (token != _initToken) {
+        try {
+          await localController.pause();
+          localController.dispose();
+        } catch (_) {}
+        return;
+      }
+
+      try {
+        await refVideoPlayerController?.pause();
+        refVideoPlayerController?.dispose();
+      } catch (_) {}
+      refVideoPlayerController = localController;
+      isRefVideo.value = true;
       update();
     } catch (e) {
-      log('Error initializing reference video: $e');
-      if (kDebugMode) {
-        print('Reference video initialization failed: $e');
+      if (token == _initToken) {
+        isRefVideo.value = false;
+        update();
       }
     }
   }
 
-  Future<void> _initializeMainVideo(String videoPath) async {
+  Future<void> _disposeVideoControllers() async {
+    try {
+      await videoPlayerController?.pause();
+      videoPlayerController?.dispose();
+    } catch (_) {}
+    videoPlayerController = null;
+
+    try {
+      await refVideoPlayerController?.pause();
+      refVideoPlayerController?.dispose();
+    } catch (_) {}
+    refVideoPlayerController = null;
+
+    isVideoReady.value = false;
+    isRefVideo.value = false;
+    update();
+  }
+
+  Future<void> _initializeMainVideo(
+    String videoPath, {
+    required int token,
+  }) async {
     final videoUrl = videoPath.startsWith('http')
         ? videoPath
         : APIConstants.bucketUrl + videoPath;
     log('Main video path: $videoPath');
     log('Full main video URL: $videoUrl');
-
     try {
-      videoPlayerController = VideoPlayerController.networkUrl(
+      final localController = VideoPlayerController.networkUrl(
         Uri.parse(videoUrl),
         httpHeaders: {
           'Range': 'bytes=0-',
@@ -138,25 +190,32 @@ class ServiceDetailController extends GetxController {
         videoPlayerOptions: VideoPlayerOptions(),
       );
 
-      await videoPlayerController
-          ?.initialize()
-          .timeout(
-            const Duration(seconds: 30),
-            onTimeout: () {
-              log('Video initialization timeout');
-              throw TimeoutException('Video initialization took too long');
-            },
-          )
-          .then((_) {
-            isVideoReady.value = true;
-          });
+      await localController.initialize().timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw TimeoutException('Video initialization took too long');
+        },
+      );
 
-      log('Main video initialized successfully');
+      if (token != _initToken) {
+        try {
+          await localController.pause();
+          localController.dispose();
+        } catch (_) {}
+        return;
+      }
+
+      try {
+        await videoPlayerController?.pause();
+        videoPlayerController?.dispose();
+      } catch (_) {}
+      videoPlayerController = localController;
+      isVideoReady.value = true;
       update();
     } catch (e) {
-      log('Error initializing main video: $e');
-      if (kDebugMode) {
-        print('Main video initialization failed: $e');
+      if (token == _initToken) {
+        isVideoReady.value = false;
+        update();
       }
     }
   }
@@ -174,8 +233,7 @@ class ServiceDetailController extends GetxController {
 
   @override
   void onClose() {
-    videoPlayerController?.dispose();
-    refVideoPlayerController?.dispose();
+    _disposeVideoControllers();
     super.onClose();
   }
 

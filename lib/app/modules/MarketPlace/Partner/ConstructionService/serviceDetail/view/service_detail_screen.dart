@@ -126,6 +126,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                               if (isReady &&
                                   videoController != null &&
                                   videoController.value.isInitialized) {
+                                //Ready to play video
                                 return GestureDetector(
                                   onTap: () => controller.openVideoDialog(context, videoUrl, true),
                                   child: Stack(
@@ -145,6 +146,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                 );
                               } else if (videoController != null &&
                                   videoController.value.hasError) {
+                                //Failed to load video
                                 return Container(
                                   height: 200,
                                   decoration: BoxDecoration(
@@ -171,6 +173,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                                   ),
                                 );
                               } else {
+                                //Circular Progress Indicator
                                 return Center(
                                   child: CircularProgressIndicator(
                                     color: Colors.grey.withValues(alpha: 0.5),
@@ -227,6 +230,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                         },
                       ),
                     ),
+                    // Dots indicator
                     Positioned(
                       bottom: 8,
                       child: Obx(
