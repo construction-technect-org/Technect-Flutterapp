@@ -698,312 +698,67 @@ class SelectedProductView extends StatelessWidget {
 
   Widget _buildProductsList(BuildContext context) {
     final controller = Get.find<ConnectorSelectedProductController>();
+
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: controller.productListModel.value?.data?.products.length ?? 0,
       itemBuilder: (context, index) {
         final item =
             controller.productListModel.value?.data?.products[index] ??
-            Product();
-        return _buildProductListItem(context, item, controller);
-      },
-    );
-  }
+                Product();
 
-  Widget _buildProductListItem(
-    BuildContext context,
-    Product item,
-    ConnectorSelectedProductController controller,
-  ) {
-    final String? imageUrl = ProductUtils.getFirstImageUrl(item);
-
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(
-          Routes.PRODUCT_DETAILS,
-          arguments: {
-            "product": item,
-            "isFromAdd": false,
-            "isFromConnector": true,
-            "onApiCall": () async {
-              await controller.fetchProductsFromApi(isLoading: false);
-            },
+        return ProductCard(
+          product: item,
+          isFromAdd: false,
+          isFromConnector: true,
+          isListView: true,
+          onApiCall: () async {
+            await controller.fetchProductsFromApi(isLoading: false);
+          },
+          onWishlistTap: () async {
+            await Get.find<HomeController>().wishListApi(
+              status: item.isInWishList == true ? "remove" : "add",
+              mID: item.id ?? 0,
+              onSuccess: () async {
+                await controller.fetchProductsFromApi(isLoading: false);
+              },
+            );
+          },
+          onNotifyTap: () async {
+            await Get.find<HomeController>().notifyMeApi(
+              mID: item.id ?? 0,
+              onSuccess: () async {
+                await controller.fetchProductsFromApi(isLoading: false);
+              },
+            );
+          },
+          onConnectTap: () {
+            ConnectionDialogs.showSendConnectionDialog(
+              context,
+              item,
+              isFromIn: true,
+              onTap: (message, date, radius) async {
+                Get.back();
+                await Get.find<HomeController>().addToConnectApi(
+                  mID: item.merchantProfileId ?? 0,
+                  uom: item.filterValues?["uom"]["value"] ?? "",
+                  quantity: item.stockQty.toString(),
+                  message: message,
+                  radius: radius,
+                  date: date,
+                  pID: item.id ?? 0,
+                  onSuccess: () async {
+                    await controller.fetchProductsFromApi(isLoading: false);
+                  },
+                );
+              },
+            );
           },
         );
       },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          color: MyColors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: EdgeInsets.zero,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Left side - Image with wishlist button overlay
-              SizedBox(
-                width: 100,
-                height: 140,
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: imageUrl != null
-                          ? CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              width: 100,
-                              height: 140,
-                              fit: BoxFit.contain,
-                              placeholder: (context, url) => const SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                width: 100,
-                                height: 140,
-                                color: Colors.grey[200],
-                                child: const Icon(
-                                  Icons.inventory_2,
-                                  size: 40,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            )
-                          : Container(
-                              width: 100,
-                              height: 140,
-                              color: Colors.grey[200],
-                              child: const Icon(
-                                Icons.inventory_2,
-                                size: 40,
-                                color: Colors.grey,
-                              ),
-                            ),
-                    ),
-                    // Location distance overlay (top left)
-                    if (myPref.role.val == "connector")
-                      if ((item.distanceKm ?? "").isNotEmpty)
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 6,
-                            ),
-                            color: Colors.white,
-                            child: Text(
-                              "${double.parse(item.distanceKm ?? '0').toStringAsFixed(1)} km",
-                              style: MyTexts.light12,
-                            ),
-                          ),
-                        ),
-                    if (myPref.role.val == "connector")
-                      Positioned(
-                        top: 4,
-                        right: 4,
-                        child: GestureDetector(
-                          onTap: () async {
-                            await Get.find<HomeController>().wishListApi(
-                              status: item.isInWishList == true
-                                  ? "remove"
-                                  : "add",
-                              mID: item.id ?? 0,
-                              onSuccess: () async {
-                                await controller.fetchProductsFromApi(
-                                  isLoading: false,
-                                );
-                              },
-                            );
-                          },
-                          child: Icon(
-                            item.isInWishList == true
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            size: 18,
-                            color: item.isInWishList == true
-                                ? MyColors.custom('E53D26')
-                                : MyColors.gray54,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              // Right side - Details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Product name
-                    Text(
-                      item.categoryProductName ?? 'Unknown Product',
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.custom('2E2E2E'),
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 6),
-                    // Brand
-                    Row(
-                      children: [
-                        if (item.merchantLogo != null)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  APIConstants.bucketUrl +
-                                  (item.merchantLogo ?? ""),
-                              fit: BoxFit.cover,
-                              height: 20,
-                              width: 20,
-                              placeholder: (context, url) => Container(
-                                height: 20,
-                                width: 20,
-                                color: Colors.grey[300],
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                height: 20,
-                                width: 20,
-                                color: Colors.grey[300],
-                              ),
-                            ),
-                          ),
-                        if (item.merchantLogo != null) const Gap(4),
-                        Expanded(
-                          child: Text(
-                            item.brand ?? 'Unknown Brand',
-                            style: MyTexts.medium12.copyWith(
-                              color: MyColors.custom('545454'),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    // Location
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 12,
-                          color: Colors.grey[600],
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            item.address ?? 'Unknown Address',
-                            style: MyTexts.regular12.copyWith(
-                              color: MyColors.custom('545454'),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    // Price
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        gradient: LinearGradient(
-                          colors: [
-                            MyColors.custom('FFF9BD'),
-                            MyColors.custom('FFF9BD').withValues(alpha: 0.1),
-                          ],
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 6,
-                        horizontal: 8,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "₹ ${item.price ?? 'N/A'}",
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.custom('0B1429'),
-                                ),
-                              ),
-                              Text(
-                                '/ unit',
-                                style: MyTexts.medium12.copyWith(
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            'Ex factory price',
-                            style: MyTexts.medium12.copyWith(
-                              color: MyColors.custom('545454'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Action buttons (for connector)
-                    if (myPref.role.val == "connector") ...[
-                      const SizedBox(height: 8),
-                      RoundedButton(
-                        buttonName: 'Connect',
-                        color: MyColors.primary,
-                        fontColor: Colors.white,
-                        onTap: () {
-                          ConnectionDialogs.showSendConnectionDialog(
-                            context,
-                            item,
-                            isFromIn: true,
-                            onTap: (message, date, radius) async {
-                              Get.back();
-                              await Get.find<HomeController>().addToConnectApi(
-                                mID: item.merchantProfileId ?? 0,
-                                uom: item.filterValues?["uom"]["value"] ?? "",
-
-                                quantity: item.stockQty.toString(),
-                                message: message,
-                                radius: radius,
-                                date: date,
-                                pID: item.id ?? 0,
-                                onSuccess: () async {
-                                  await controller.fetchProductsFromApi(
-                                    isLoading: false,
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                        height: 32,
-                        borderRadius: 8,
-                        verticalPadding: 0,
-                        style: MyTexts.medium14.copyWith(color: Colors.white),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
-  // Circular Category Tiles
   Widget _buildCircularCategoryTile({
     required ProductCategory product,
     required int index,

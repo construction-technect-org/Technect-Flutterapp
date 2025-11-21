@@ -130,7 +130,7 @@ class AddLeadController extends GetxController {
             isCustomerIdVisible.value = true;
             companyPhoneCtrl.text = result.data?.merchantProfile?.businessContactNumber ?? "";
             companyNameCtrl.text = result.data?.merchantProfile?.businessName ?? "";
-            gstNumberCtrl.text = result.data?.user?.gstNumber ?? "";
+            gstNumberCtrl.text = result.data?.user?.gstNumber ?? (result.data?.merchantProfile?.gstinNumber ?? "");
             siteLocationCtrl.text =
                 (result.data?.siteLocations ?? [])
                     .where((e) => e.isDefault == true)
@@ -159,7 +159,7 @@ class AddLeadController extends GetxController {
       "customer_type": selectedCustomerType.value,
       "customer_id": customerIdCtrl.text,
       "product_name": productNameCtrl.text,
-      "product_code": productCodeCtrl.text,
+      "product_code": "PC-${productCodeCtrl.text}",
       "unit_of_measure": unitOfMeasureCtrl.text,
       "quantity": productQtyCtrl.text,
       "estimate_delivery_date": eDateCtrl.text,
