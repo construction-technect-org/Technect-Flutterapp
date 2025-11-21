@@ -5,7 +5,9 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 
 class HomeView extends StatelessWidget {
   final CommonController commonController = Get.find();
-  final HomeController controller = Get.find<HomeController>();
+  final HomeController controller = Get.isRegistered<HomeController>()
+      ? Get.find<HomeController>()
+      : Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +19,7 @@ class HomeView extends StatelessWidget {
           children: [
             Container(
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Asset.categoryBg),
-                  fit: BoxFit.cover,
-                ),
+                image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
               ),
             ),
             Column(
@@ -83,9 +82,7 @@ class HomeView extends StatelessWidget {
                                 begin: AlignmentGeometry.topCenter,
                                 end: AlignmentGeometry.bottomCenter,
                                 colors: [
-                                  MyColors.custom(
-                                    'FFF9BD',
-                                  ).withValues(alpha: 0.1),
+                                  MyColors.custom('FFF9BD').withValues(alpha: 0.1),
                                   MyColors.white,
                                 ],
                               ),
@@ -97,42 +94,25 @@ class HomeView extends StatelessWidget {
                               Obx(() {
                                 if (controller.marketPlace.value == 0) {
                                   /// ------------------- MATERIAL MARKETPLACE -------------------
-                                  final materialList = controller
-                                      .categoryHierarchyData
-                                      .value
-                                      .data;
+                                  final materialList = controller.categoryHierarchyData.value.data;
 
-                                  if (materialList == null ||
-                                      materialList.isEmpty) {
+                                  if (materialList == null || materialList.isEmpty) {
                                     return _buildComingSoon(context);
                                   }
 
-                                  return _buildMaterialList(
-                                    context,
-                                    materialList,
-                                  );
+                                  return _buildMaterialList(context, materialList);
                                 } else if (controller.marketPlace.value == 1) {
                                   /// ------------------- CONSTRUCTION MARKETPLACE -------------------
-                                  final serviceList = controller
-                                      .categoryHierarchyDataCM
-                                      .value
-                                      .data;
+                                  final serviceList = controller.categoryHierarchyDataCM.value.data;
 
-                                  if (serviceList == null ||
-                                      serviceList.isEmpty) {
+                                  if (serviceList == null || serviceList.isEmpty) {
                                     return _buildComingSoon(context);
                                   }
 
-                                  return _buildServiceList(
-                                    context,
-                                    serviceList,
-                                  );
+                                  return _buildServiceList(context, serviceList);
                                 } else {
                                   /// ------------------- TOOLS MARKETPLACE -------------------
-                                  final toolsList = controller
-                                      .categoryHierarchyData2
-                                      .value
-                                      .data;
+                                  final toolsList = controller.categoryHierarchyData2.value.data;
 
                                   if (toolsList == null || toolsList.isEmpty) {
                                     return _buildComingSoon(context);
@@ -177,11 +157,7 @@ class HomeView extends StatelessWidget {
       itemBuilder: (context, mainIndex) {
         final mainCategory = data[mainIndex];
 
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          route: Routes.SELECT_PRODUCT,
-        );
+        return _buildCategorySection(context, mainCategory, route: Routes.SELECT_PRODUCT);
       },
     );
   }
@@ -197,11 +173,7 @@ class HomeView extends StatelessWidget {
       itemCount: data.length,
       itemBuilder: (context, mainIndex) {
         final mainCategory = data[mainIndex];
-        return _buildCategorySection(
-          context,
-          mainCategory,
-          route: Routes.SELECT_SERVICE,
-        );
+        return _buildCategorySection(context, mainCategory, route: Routes.SELECT_SERVICE);
       },
     );
   }
@@ -240,8 +212,7 @@ class HomeView extends StatelessWidget {
         GestureDetector(
           onTap: () {
             if (myPref.role.val == "connector") {
-              if ((controller.profileData.value.data?.siteLocations ?? [])
-                  .isEmpty) {
+              if ((controller.profileData.value.data?.siteLocations ?? []).isEmpty) {
                 _showAddAddressDialog();
                 return;
               }
@@ -285,9 +256,7 @@ class HomeView extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     if (myPref.role.val == "connector") {
-                      if ((controller.profileData.value.data?.siteLocations ??
-                              [])
-                          .isEmpty) {
+                      if ((controller.profileData.value.data?.siteLocations ?? []).isEmpty) {
                         _showAddAddressDialog();
                         return;
                       }
@@ -314,13 +283,10 @@ class HomeView extends StatelessWidget {
                                 (subCategory.image ??
                                     'profile-images/1762584125856-184688724-WhatsApp Image 2025-11-08 at 12.07.08 PM.jpg'),
                             fit: BoxFit.fill,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.category,
-                              color: MyColors.primary,
-                            ),
+                            placeholder: (context, url) =>
+                                const Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.category, color: MyColors.primary),
                           ),
                         ),
                       ),
@@ -394,9 +360,7 @@ class HomeView extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: const Text("Add Address"),
           ),
@@ -416,10 +380,7 @@ class HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: MyTexts.medium17.copyWith(
-        color: MyColors.black,
-        fontFamily: MyTexts.SpaceGrotesk,
-      ),
+      style: MyTexts.medium17.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }
 }
