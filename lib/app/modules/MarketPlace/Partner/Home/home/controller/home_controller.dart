@@ -221,34 +221,131 @@ class HomeController extends GetxController {
 
   RxDouble currentLatitude = 0.0.obs;
   RxDouble currentLongitude = 0.0.obs;
+  // add to controller fields
+  final RxBool isLocationDialogShowing = false.obs;
 
-  /// Fetch only current latitude & longitude
   Future<void> fetchCurrentLocation() async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          Get.snackbar('Permission Denied', 'Please enable location access');
-          return;
-        }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        Get.snackbar('Location Blocked', 'Please enable location access from app settings');
+        if (!isLocationDialogShowing.value) {
+          _showMandatoryLocationDialog();
+        }
         return;
       }
 
-      // Get current position
-      final Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
-      );
+      if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+        final Position position = await Geolocator.getCurrentPosition(
+          locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+        );
 
-      currentLatitude.value = position.latitude;
-      currentLongitude.value = position.longitude;
+        currentLatitude.value = position.latitude;
+        currentLongitude.value = position.longitude;
+        return;
+      }
+
+      // For other states (just in case), request again or show snackbar
+      if (permission == LocationPermission.unableToDetermine ||
+          permission == LocationPermission.denied) {
+        // either re-try or inform user
+        _showMandatoryLocationDialog();
+      }
     } catch (e) {
       Get.printError(info: 'Error fetching location: $e');
     }
+  }
+
+  void _showMandatoryLocationDialog() {
+    isLocationDialogShowing.value = true;
+
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          backgroundColor: Colors.white,
+          titlePadding: const EdgeInsets.all(20),
+          contentPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          title: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFFF9D0CB)),
+              color: const Color(0xFFFCECE9),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Center(
+              child: Text(
+                'Enable Location',
+                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          content: Text(
+            'Location permission is required to continue. Please enable location access in settings.',
+            style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            RoundedButton(
+              onTap: () async {
+                try {
+                  final openedApp = await Geolocator.openAppSettings();
+                  if (!openedApp) {
+                    await Geolocator.openLocationSettings();
+                  }
+                } catch (e) {
+                  Get.printError(info: 'Error opening settings: $e');
+                }
+                const int maxAttempts = 6;
+                const Duration interval = Duration(seconds: 1);
+
+                for (int attempt = 0; attempt < maxAttempts; attempt++) {
+                  await Future.delayed(interval);
+                  final LocationPermission after = await Geolocator.checkPermission();
+
+                  if (after == LocationPermission.always ||
+                      after == LocationPermission.whileInUse) {
+                    if (Get.isDialogOpen ?? false) Get.back();
+                    isLocationDialogShowing.value = false;
+                    await fetchCurrentLocation();
+                    return;
+                  }
+
+                  if (after == LocationPermission.denied) {
+                    final requested = await Geolocator.requestPermission();
+                    if (requested == LocationPermission.always ||
+                        requested == LocationPermission.whileInUse) {
+                      if (Get.isDialogOpen ?? false) Get.back();
+                      isLocationDialogShowing.value = false;
+                      await fetchCurrentLocation();
+                      return;
+                    }
+                  }
+                }
+                if (Get.isDialogOpen ?? false) Get.back();
+                isLocationDialogShowing.value = false;
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  if (!isLocationDialogShowing.value) _showMandatoryLocationDialog();
+                });
+              },
+              buttonName: 'Continue',
+              borderRadius: 12,
+              verticalPadding: 0,
+              height: 45,
+              color: const Color(0xFFE53D26),
+            ),
+          ],
+        ),
+      ),
+      barrierDismissible: false,
+    ).then((_) {
+      isLocationDialogShowing.value = false;
+    });
   }
 
   final features = [
