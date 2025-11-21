@@ -260,29 +260,15 @@ class ConnectionInboxView extends StatelessWidget {
                           ),
                         ),
                         const Gap(2),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SvgPicture.asset(
-                              Asset.location,
-                              colorFilter: const ColorFilter.mode(MyColors.gra54, BlendMode.srcIn),
-                              height: 14,
-                              width: 14,
-                            ),
-                            const Gap(4),
-                            Expanded(
-                              child: Text(
-                                connection.productName != null
-                                    ? connection.productName ?? 'Unknown'
-                                    : connection.serviceName ?? 'Unknown',
-                                maxLines: 2,
-                                style: MyTexts.medium13.copyWith(
-                                  color: MyColors.gra54,
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
-                              ),
-                            ),
-                          ],
+                        Text(
+                          connection.productName != null
+                              ? connection.productName ?? 'Unknown'
+                              : connection.serviceName ?? 'Unknown',
+                          maxLines: 2,
+                          style: MyTexts.medium13.copyWith(
+                            color: MyColors.gra54,
+                            fontFamily: MyTexts.SpaceGrotesk,
+                          ),
                         ),
                         const Gap(8),
                         GestureDetector(
@@ -351,9 +337,11 @@ class ConnectionInboxView extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: ((connection.itemType?.toLowerCase() == 'service')
-                          ? MyColors.primary
-                          : MyColors.greenBtn).withValues(alpha: 0.1),
+                      color:
+                          ((connection.itemType?.toLowerCase() == 'service')
+                                  ? MyColors.primary
+                                  : MyColors.greenBtn)
+                              .withValues(alpha: 0.1),
                       borderRadius: const BorderRadius.only(topRight: Radius.circular(6)),
                     ),
                     child: Text(
@@ -597,9 +585,11 @@ class ConnectionInboxView extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: ((connection.itemType?.toLowerCase() == 'service')
-                          ? MyColors.primary
-                          : MyColors.greenBtn).withValues(alpha: 0.1),
+                      color:
+                          ((connection.itemType?.toLowerCase() == 'service')
+                                  ? MyColors.primary
+                                  : MyColors.greenBtn)
+                              .withValues(alpha: 0.1),
                       borderRadius: const BorderRadius.only(topRight: Radius.circular(6)),
                     ),
                     child: Text(
