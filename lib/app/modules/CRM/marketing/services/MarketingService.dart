@@ -6,7 +6,7 @@ class MarketingServices {
 
   Future<AllLeadModel> getAllLead({String? status,}) async {
     try {
-      final data = {"status": status,};
+      // final data = {"status": status,};
       const String url = APIConstants.addLead;
       debugPrint('Calling API: $url');
       // final response = await _apiManager.get(url: url, params: data);
