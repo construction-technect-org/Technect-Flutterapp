@@ -156,7 +156,14 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
   }
 
   void onSellTap() {
-    Get.toNamed(Routes.ADD_LEAD);
+    Get.toNamed(
+      Routes.ADD_LEAD,
+      arguments: {
+        "onLeadCreate": () {
+          Get.back();
+        },
+      },
+    );
   }
 
   void _showProfileIncompleteDialog() {

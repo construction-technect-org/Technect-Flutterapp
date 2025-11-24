@@ -7,6 +7,8 @@ class AddLeadController extends GetxController {
   final formKey = GlobalKey<FormState>();
   RxBool isLoading = false.obs;
 
+  VoidCallback? onLeadCreate;
+
   RxString selectedCustomerType = ''.obs;
   RxString selectedSource = ''.obs;
   final unitOfMeasureCtrl = TextEditingController();
@@ -130,7 +132,8 @@ class AddLeadController extends GetxController {
             isCustomerIdVisible.value = true;
             companyPhoneCtrl.text = result.data?.merchantProfile?.businessContactNumber ?? "";
             companyNameCtrl.text = result.data?.merchantProfile?.businessName ?? "";
-            gstNumberCtrl.text = result.data?.user?.gstNumber ?? (result.data?.merchantProfile?.gstinNumber ?? "");
+            gstNumberCtrl.text =
+                result.data?.user?.gstNumber ?? (result.data?.merchantProfile?.gstinNumber ?? "");
             siteLocationCtrl.text =
                 (result.data?.siteLocations ?? [])
                     .where((e) => e.isDefault == true)
@@ -154,18 +157,17 @@ class AddLeadController extends GetxController {
 
   Map<String, dynamic> buildLeadBody() {
     return {
-      "customer_phone": customerPhone.value,
-      "customer_name": customerNameCtrl.text,
-      "customer_type": selectedCustomerType.value,
-      "customer_id": customerIdCtrl.text,
+      "connector_phone": customerPhone.value,
+      "connector_name": customerNameCtrl.text,
+      "connector_type": selectedCustomerType.value,
+      "connector_id": customerIdCtrl.text,
       "product_name": productNameCtrl.text,
-      "product_code": "PC-${productCodeCtrl.text}",
+      "product_code": "PC-${productCodeCtrl.text}".toUpperCase(),
       "unit_of_measure": unitOfMeasureCtrl.text,
       "quantity": productQtyCtrl.text,
       "estimate_delivery_date": eDateCtrl.text,
       "radius": radiusCtrl.text,
       "company_phone": companyPhoneCtrl.text,
-
       "source": selectedSource.value,
       "reference": referenceCtrl.text,
       "referral_phone": referralPhoneCtrl.text,
@@ -176,6 +178,7 @@ class AddLeadController extends GetxController {
       "status": "new",
       "notes": noteCtrl.text,
     };
+
   }
 
   Future<void> createLead() async {
@@ -185,7 +188,7 @@ class AddLeadController extends GetxController {
       final result = await AddLeadServices().addManualLead(data: buildLeadBody());
 
       if (result.success == true) {
-        Get.back();
+        onLeadCreate?.call();
         SnackBars.successSnackBar(content: "Lead created successfully");
       }
     } catch (e) {
@@ -194,6 +197,15 @@ class AddLeadController extends GetxController {
       }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    if (Get.arguments != null) {
+      onLeadCreate = Get.arguments["onLeadCreate"];
     }
   }
 }

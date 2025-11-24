@@ -2,6 +2,8 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
 
 class CRMDashboardController extends GetxController{
   final isLoading = false.obs;
@@ -60,11 +62,41 @@ class CRMDashboardController extends GetxController{
     }
   }
 
+  RxList<TeamListData> teamList = <TeamListData>[].obs;
+
+  Future<void> _loadTeamFromStorage() async {
+    final cachedTeamModel = myPref.getTeamModelData();
+    if (cachedTeamModel != null &&
+        cachedTeamModel.data != null &&
+        cachedTeamModel.data!.isNotEmpty) {
+      teamList.assignAll(cachedTeamModel.data!);
+    } else {
+      await fetchTeamList();
+    }
+  }
+
+
+  Future<void> fetchTeamList() async {
+    try {
+      isLoading.value = true;
+      final TeamListModel result = await GetAllRoleService().fetchAllTeam();
+      teamList.clear();
+      teamList.addAll(result.data ?? []);
+      myPref.setTeamModelData(result);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     fetchProfileData();
+    _loadTeamFromStorage();
   }
 }

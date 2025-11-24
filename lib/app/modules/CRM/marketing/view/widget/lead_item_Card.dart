@@ -14,6 +14,7 @@ class LeadItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String status = lead.status ?? "";
     return GestureDetector(
       onTap: () {
         Get.toNamed(Routes.LEAD_DETAIL, arguments: {"lead": lead});
@@ -35,7 +36,7 @@ class LeadItemCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
-                imageUrl: "https://i.pravatar.cc/150?img=36",
+                imageUrl: lead.image ?? "",
                 width: 80,
                 height: 97,
                 fit: BoxFit.cover,
@@ -45,7 +46,7 @@ class LeadItemCard extends StatelessWidget {
                   color: Colors.grey.shade200,
                   width: 80,
                   height: 97,
-                  child: const Icon(Icons.person),
+                  child: Image.asset(Asset.appLogo),
                 ),
               ),
             ),
@@ -59,16 +60,26 @@ class LeadItemCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: Text(
-                          'Connector - ${lead.customerName}',
-                          style: MyTexts.medium13.copyWith(fontWeight: FontWeight.w700),
+                        child: RichText(
                           overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Connector - ',
+                                style: MyTexts.regular14.copyWith(color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: lead.connectorName ?? '',
+                                style: MyTexts.medium14.copyWith(color: Colors.black),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(width: 6),
                       Text(
                         '${_formatTime(DateTime.parse(lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(lead.createdAt ?? ""))}',
-                        style: MyTexts.medium12.copyWith(color: MyColors.black),
+                        style: MyTexts.regular12.copyWith(color: MyColors.black),
                         textAlign: TextAlign.right,
                       ),
                     ],
@@ -82,12 +93,12 @@ class LeadItemCard extends StatelessWidget {
                           children: [
                             Text(
                               'Lead Id - ${lead.leadId}',
-                              style: MyTexts.medium13.copyWith(color: MyColors.black),
+                              style: MyTexts.regular13.copyWith(color: MyColors.black),
                             ),
                             const SizedBox(height: 3),
                             Text(
                               'Product Interested - ${lead.productName}',
-                              style: MyTexts.medium13.copyWith(color: MyColors.black),
+                              style: MyTexts.regular13.copyWith(color: MyColors.black),
                             ),
                             const SizedBox(height: 4),
                             Row(
@@ -96,51 +107,116 @@ class LeadItemCard extends StatelessWidget {
                                 const SizedBox(width: 3),
                                 Text(
                                   '${lead.radius} km away',
-                                  style: MyTexts.medium13.copyWith(color: MyColors.black),
+                                  style: MyTexts.regular13.copyWith(color: MyColors.black),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 6),
                             Row(
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: MyColors.primary,
+                                if (status == "new")
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: MyColors.veryPaleBlue,
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          "Lead",
+                                          style: MyTexts.medium13.copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        "Lead",
-                                        style: MyTexts.medium13.copyWith(color: Colors.white),
-                                      ),
-                                    ],
+                                if (status == "follow up")
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: MyColors.paleRed,
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          "FollowUp",
+                                          style: MyTexts.medium13.copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
                                 const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    _openTeamBottomSheet();
-                                  },
-                                  child: Stack(
-                                    alignment: AlignmentGeometry.center,
-                                    children: [
-                                      Image.asset(Asset.explore, width: 65),
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(Asset.userPlus,colorFilter: const ColorFilter.mode(Colors.white,BlendMode.srcIn),height: 12,),
-                                          const Gap(4),
-                                          Text(
-                                            "Assign",
-                                            style: MyTexts.medium12.copyWith(color: MyColors.white),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                if (status == "new")
+                                  GestureDetector(
+                                    onTap: () {
+                                      _openTeamBottomSheet();
+                                    },
+                                    child: Stack(
+                                      alignment: AlignmentGeometry.center,
+                                      children: [
+                                        Image.asset(Asset.explore, width: 65),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              Asset.userPlus,
+                                              colorFilter: const ColorFilter.mode(
+                                                Colors.white,
+                                                BlendMode.srcIn,
+                                              ),
+                                              height: 12,
+                                            ),
+                                            const Gap(4),
+                                            Text(
+                                              "Assign",
+                                              style: MyTexts.medium12.copyWith(
+                                                color: MyColors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                if (status == "follow up")
+                                  GestureDetector(
+                                    onTapDown: (TapDownDetails details) {
+                                      _openConversationMenu(context, details.globalPosition, lead);
+                                    },
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Image.asset(Asset.explore, width: 65),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              Asset.userPlus,
+                                              colorFilter: const ColorFilter.mode(
+                                                Colors.white,
+                                                BlendMode.srcIn,
+                                              ),
+                                              height: 12,
+                                            ),
+                                            const Gap(4),
+                                            Text(
+                                              "Contact",
+                                              style: MyTexts.medium12.copyWith(
+                                                color: MyColors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                               ],
                             ),
                           ],
@@ -163,6 +239,128 @@ class LeadItemCard extends StatelessWidget {
   static String _formatDate(DateTime d) {
     return DateFormat('MMM d').format(d);
   }
+
+  void openAssignPopup(BuildContext context, Offset position) {
+    final TextEditingController searchCtrl = TextEditingController();
+
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(position.dx, position.dy, 0, 0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      items: [
+        PopupMenuItem(
+          enabled: false, // so menu doesn't close on tap
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              final List<String> names = [
+                "Akash",
+                "Swathi",
+                "Bhuvana",
+                "Chanadan",
+                "Darshan",
+              ];
+
+              // Filter based on search
+              final filtered = names
+                  .where((e) =>
+                  e.toLowerCase().contains(searchCtrl.text.toLowerCase()))
+                  .toList();
+
+              return Container(
+                width: 250, // control popup width
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // SEARCH BOX
+                    TextField(
+                      controller: searchCtrl,
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      onChanged: (v) => setState(() {}),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // LIST
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 250),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: filtered.length,
+                        itemBuilder: (_, i) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(14),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    const CircleAvatar(
+                                      radius: 18,
+                                      backgroundImage:
+                                      AssetImage("assets/user.png"),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(filtered[i],
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600)),
+                                  ],
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    // Call your assign method here
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 4),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18),
+                                    ),
+                                  ),
+                                  child: const Text("Assign"),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        )
+      ],
+    );
+  }
+
 
   void _openTeamBottomSheet() {
     Get.bottomSheet(
@@ -425,17 +623,57 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
+  void _openConversationMenu(BuildContext context, Offset position, Leads lead) {
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(position.dx, position.dy, position.dx + 1, position.dy + 1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      items: [
+        PopupMenuItem(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Last Conversation", style: MyTexts.medium15),
+              SvgPicture.asset(Asset.chat),
+            ],
+          ),
+          onTap: () {
+            Future.delayed(Duration.zero, () {
+              _openAddConversationBottomSheet(context, lead);
+            });
+          },
+        ),
+        PopupMenuItem(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Next Conversation", style: MyTexts.medium15),
+              SvgPicture.asset(Asset.chat),
+            ],
+          ),
+          onTap: () {
+            Future.delayed(Duration.zero, () {
+              _openAddConversationBottomSheet(context, lead);
+            });
+          },
+        ),
+      ],
+    );
+  }
+
   Widget _userInfo(Leads lead) {
     return Column(
       children: [
         Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 12,
-              backgroundImage: NetworkImage("https://i.pravatar.cc/150?img=8"),
+              backgroundImage: (lead.image ?? "").isNotEmpty
+                  ? NetworkImage(lead.image ?? "")
+                  : const AssetImage(Asset.appLogo),
             ),
             const SizedBox(width: 8),
-            Text(lead.customerName ?? "", style: MyTexts.medium14),
+            Text(lead.connectorName ?? "", style: MyTexts.medium14),
           ],
         ),
         const SizedBox(height: 4),

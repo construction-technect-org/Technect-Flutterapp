@@ -12,12 +12,19 @@ class LeadScreen extends GetView<MarketingController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-
         const TodaysLeadsCard(),
         const SizedBox(height: 18),
         AddNewLeadButton(
           onTap: () {
-            Get.toNamed(Routes.ADD_LEAD);
+            Get.toNamed(
+              Routes.ADD_LEAD,
+              arguments: {
+                "onLeadCreate": () {
+                  controller.fetchAllLead(status: "new");
+                  Get.back();
+                },
+              },
+            );
           },
         ),
         const SizedBox(height: 21),
@@ -25,8 +32,20 @@ class LeadScreen extends GetView<MarketingController> {
           alignment: Alignment.centerLeft,
           child: Text('Lead Details', style: MyTexts.medium18),
         ),
-        Obx(
-          () => Column(
+        Obx(() {
+          if (controller.allLeadList.isEmpty) {
+            return Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
+              child: Center(
+                child: Text(
+                  "No lead found",
+                  style: MyTexts.regular14.copyWith(color: MyColors.dustyGray),
+                ),
+              ),
+            );
+          }
+
+          return Column(
             children: controller.allLeadList
                 .map(
                   (l) => Padding(
@@ -35,8 +54,8 @@ class LeadScreen extends GetView<MarketingController> {
                   ),
                 )
                 .toList(),
-          ),
-        ),
+          );
+        }),
 
         const SizedBox(height: 24),
       ],

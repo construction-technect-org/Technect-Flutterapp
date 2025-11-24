@@ -141,7 +141,6 @@ class HomeController extends GetxController {
     }
   }
 
-  Rx<Statistics> statistics = Statistics().obs;
 
   Future<void> fetchTeamList() async {
     try {
@@ -164,6 +163,7 @@ class HomeController extends GetxController {
   Future<void> refreshTeamList() async {
     await fetchTeamList();
   }
+  Rx<Statistics> statistics = Statistics().obs;
 
   Future<void> fetchCategoryHierarchy() async {
     try {

@@ -87,117 +87,171 @@ class AllLeads {
 class Leads {
   int? id;
   String? leadId;
-  String? customerName;
-  String? customerType;
-  String? customerId;
-  String? customerPhone;
+
+  int? createdUserId;
+
+  String? connectorName;
+  String? image;
+  String? connectorType;
+  String? connectorId;
+  String? connectorPhone;
+  String? connectorProfileImage;
+
   String? productName;
   String? productCode;
   String? unitOfMeasure;
   String? quantity;
   String? estimateDeliveryDate;
   String? radius;
+
+  String? leadStage;
   String? companyPhone;
   String? source;
   String? reference;
   String? referralPhone;
+
   String? siteLocation;
+  String? siteLatitude;
+  String? siteLongitude;
+
   String? companyName;
   String? gstNumber;
   String? companyAddress;
-  int? createdBy;
+
   bool? isAutoCreated;
   String? status;
   String? notes;
+
+  int? assignedToUserId;
+  String? reminderAt;
+  int? qualifiedByUserId;
+  String? qualifiedAt;
+
   String? createdAt;
   String? updatedAt;
 
-  Leads(
-      {this.id,
-        this.leadId,
-        this.customerName,
-        this.customerType,
-        this.customerId,
-        this.customerPhone,
-        this.productName,
-        this.productCode,
-        this.unitOfMeasure,
-        this.quantity,
-        this.estimateDeliveryDate,
-        this.radius,
-        this.companyPhone,
-        this.source,
-        this.reference,
-        this.referralPhone,
-        this.siteLocation,
-        this.companyName,
-        this.gstNumber,
-        this.companyAddress,
-        this.createdBy,
-        this.isAutoCreated,
-        this.status,
-        this.notes,
-        this.createdAt,
-        this.updatedAt});
+  Leads({
+    this.id,
+    this.leadId,
+    this.createdUserId,
+    this.connectorName,
+    this.connectorType,
+    this.connectorId,
+    this.connectorPhone,
+    this.connectorProfileImage,
+    this.productName,
+    this.productCode,
+    this.unitOfMeasure,
+    this.image,
+    this.quantity,
+    this.estimateDeliveryDate,
+    this.radius,
+    this.leadStage,
+    this.companyPhone,
+    this.source,
+    this.reference,
+    this.referralPhone,
+    this.siteLocation,
+    this.siteLatitude,
+    this.siteLongitude,
+    this.companyName,
+    this.gstNumber,
+    this.companyAddress,
+    this.isAutoCreated,
+    this.status,
+    this.notes,
+    this.assignedToUserId,
+    this.reminderAt,
+    this.qualifiedByUserId,
+    this.qualifiedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   Leads.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    leadId = json['lead_id'];
-    customerName = json['customer_name'];
-    customerType = json['customer_type'];
-    customerId = json['customer_id'];
-    customerPhone = json['customer_phone'];
-    productName = json['product_name'];
-    productCode = json['product_code'];
-    unitOfMeasure = json['unit_of_measure'];
-    quantity = json['quantity'];
-    estimateDeliveryDate = json['estimate_delivery_date'];
-    radius = json['radius'];
-    companyPhone = json['company_phone'];
-    source = json['source'];
-    reference = json['reference'];
-    referralPhone = json['referral_phone'];
-    siteLocation = json['site_location'];
-    companyName = json['company_name'];
-    gstNumber = json['gst_number'];
-    companyAddress = json['company_address'];
-    createdBy = json['created_by'];
-    isAutoCreated = json['is_auto_created'];
-    status = json['status'];
-    notes = json['notes'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = json["id"];
+    leadId = json["lead_id"];
+    createdUserId = json["created_user_id"];
+    image = json["image"];
+
+    connectorName = json["connector_name"];
+    connectorType = json["connector_type"];
+    connectorId = json["connector_id"];
+    connectorPhone = json["connector_phone"];
+    connectorProfileImage = json["connector_profile_image"];
+
+    productName = json["product_name"];
+    productCode = json["product_code"];
+    unitOfMeasure = json["unit_of_measure"];
+    quantity = json["quantity"];
+    estimateDeliveryDate = json["estimate_delivery_date"];
+    radius = json["radius"];
+
+    leadStage = json["lead_stage"];
+    companyPhone = json["company_phone"];
+    source = json["source"];
+    reference = json["reference"];
+    referralPhone = json["referral_phone"];
+
+    siteLocation = json["site_location"];
+    siteLatitude = json["site_latitude"]?.toString();
+    siteLongitude = json["site_longitude"]?.toString();
+
+    companyName = json["company_name"];
+    gstNumber = json["gst_number"];
+    companyAddress = json["company_address"];
+
+    isAutoCreated = json["is_auto_created"];
+    status = json["status"];
+    notes = json["notes"];
+
+    assignedToUserId = json["assigned_to_user_id"];
+    reminderAt = json["reminder_at"];
+    qualifiedByUserId = json["qualified_by_user_id"];
+    qualifiedAt = json["qualified_at"];
+
+    createdAt = json["created_at"];
+    updatedAt = json["updated_at"];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['lead_id'] = leadId;
-    data['customer_name'] = customerName;
-    data['customer_type'] = customerType;
-    data['customer_id'] = customerId;
-    data['customer_phone'] = customerPhone;
-    data['product_name'] = productName;
-    data['product_code'] = productCode;
-    data['unit_of_measure'] = unitOfMeasure;
-    data['quantity'] = quantity;
-    data['estimate_delivery_date'] = estimateDeliveryDate;
-    data['radius'] = radius;
-    data['company_phone'] = companyPhone;
-    data['source'] = source;
-    data['reference'] = reference;
-    data['referral_phone'] = referralPhone;
-    data['site_location'] = siteLocation;
-    data['company_name'] = companyName;
-    data['gst_number'] = gstNumber;
-    data['company_address'] = companyAddress;
-    data['created_by'] = createdBy;
-    data['is_auto_created'] = isAutoCreated;
-    data['status'] = status;
-    data['notes'] = notes;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    return data;
+    return {
+      "id": id,
+      "lead_id": leadId,
+      "created_user_id": createdUserId,
+      "connector_name": connectorName,
+      "connector_type": connectorType,
+      "connector_id": connectorId,
+      "connector_phone": connectorPhone,
+      "connector_profile_image": connectorProfileImage,
+      "product_name": productName,
+      "image": image,
+      "product_code": productCode,
+      "unit_of_measure": unitOfMeasure,
+      "quantity": quantity,
+      "estimate_delivery_date": estimateDeliveryDate,
+      "radius": radius,
+      "lead_stage": leadStage,
+      "company_phone": companyPhone,
+      "source": source,
+      "reference": reference,
+      "referral_phone": referralPhone,
+      "site_location": siteLocation,
+      "site_latitude": siteLatitude,
+      "site_longitude": siteLongitude,
+      "company_name": companyName,
+      "gst_number": gstNumber,
+      "company_address": companyAddress,
+      "is_auto_created": isAutoCreated,
+      "status": status,
+      "notes": notes,
+      "assigned_to_user_id": assignedToUserId,
+      "reminder_at": reminderAt,
+      "qualified_by_user_id": qualifiedByUserId,
+      "qualified_at": qualifiedAt,
+      "created_at": createdAt,
+      "updated_at": updatedAt,
+    };
   }
 }
 
