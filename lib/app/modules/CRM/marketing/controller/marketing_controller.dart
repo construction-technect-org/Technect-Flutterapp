@@ -11,12 +11,14 @@ class MarketingController extends GetxController {
   @override
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback((val) {
-      fetchAllLead(isLoad: true, status: "new");
+      fetchAllLead(isLoad: true);
     });
     filterFollowupStatus();
     filterProspectStatus();
     super.onInit();
   }
+
+  RxString selectedPriority = "High".obs;
 
   final isLoading = false.obs;
 
@@ -204,14 +206,6 @@ class MarketingController extends GetxController {
         }
       }).toList();
     }
-
-    // prospectLeads.value = leads
-    //     .where(
-    //       (lead) =>
-    //           lead.status.name.toLowerCase() ==
-    //           activeProspectStatusFilter.value.toLowerCase(),
-    //     )
-    //     .toList();
   }
 
   final List<String> statusItems = <String>["All", "Pending", "Completed", "Missed"];
@@ -224,7 +218,23 @@ class MarketingController extends GetxController {
 
   void setFilter(String f) {
     activeFilter.value = f;
-    fetchAllLead(isLoad: true, status: "new");
+    filterLead();
+  }
+
+  String getFilterStatusName() {
+    if (activeFilter.value == "Lead") {
+      return "lead";
+    }
+    if (activeFilter.value == "Follow Up") {
+      return "follow_up";
+    }
+    if (activeFilter.value == "Prospect") {
+      return "new";
+    }
+    if (activeFilter.value == "Qualified") {
+      return "new";
+    }
+    return "new";
   }
 
   void setStatusFilter(String f) {
@@ -254,21 +264,58 @@ class MarketingController extends GetxController {
     debugPrint('Open chat for $leadId');
   }
 
+
+  void filterLead(){
+    if (getFilterStatusName() == "lead") {
+      allLeadList.clear();
+      allLeadList.addAll((allLeadModel.value.data?.leads ?? []).where((e)=>e.leadStage=="lead"));
+    }
+    else if (getFilterStatusName() == "follow_up") {
+      allFollowUpList.clear();
+      allFollowUpList.addAll((allLeadModel.value.data?.leads ?? []).where((e)=>e.leadStage=="follow_up"));
+    }
+  }
+
   Rx<AllLeadModel> allLeadModel = AllLeadModel().obs;
   RxList<Leads> allLeadList = <Leads>[].obs;
+  RxList<Leads> allFollowUpList = <Leads>[].obs;
 
-  Future<void> fetchAllLead({bool? isLoad, required String status}) async {
+  Future<void> fetchAllLead({bool? isLoad}) async {
     try {
       isLoading.value = isLoad ?? false;
-      final result = await MarketingServices().getAllLead(status: status);
-      if (result.success == true) {
-        allLeadModel.value = result;
-        if (status == "new") {
-          allLeadList.clear();
-          allLeadList.addAll(allLeadModel.value.data?.leads ?? []);
-        }
-      }
+      allLeadModel.value = await MarketingServices().getAllLead();
+      filterLead();
       isLoading.value = false;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> updateStatusLeadToFollowUp({
+    required String leadID,
+    required String assignTo,
+    required String remindAt,
+    VoidCallback? onSuccess,
+  }) async {
+    try {
+      isLoading.value = true;
+      final response = await MarketingServices().updateLeadStatus(
+        remindAt: remindAt,
+        leadID: leadID,
+        assignTo: assignTo,
+      );
+
+      if (response.success == true) {
+        if (onSuccess != null) onSuccess();
+        SnackBars.successSnackBar(content: 'Lead moved to the follow up successfully');
+        // await fetchConnections();
+      } else {
+        SnackBars.errorSnackBar(content: response.message ?? 'Failed to accept connection');
+      }
     } catch (e) {
       if (kDebugMode) {
         print(e);

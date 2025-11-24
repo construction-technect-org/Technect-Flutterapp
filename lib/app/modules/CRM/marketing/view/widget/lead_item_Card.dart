@@ -2,8 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/priority_dropdown.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:intl/intl.dart';
 
 class LeadItemCard extends StatelessWidget {
@@ -14,7 +17,7 @@ class LeadItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String status = lead.status ?? "";
+    final String status = lead.leadStage ?? "";
     return GestureDetector(
       onTap: () {
         Get.toNamed(Routes.LEAD_DETAIL, arguments: {"lead": lead});
@@ -114,7 +117,7 @@ class LeadItemCard extends StatelessWidget {
                             const SizedBox(height: 6),
                             Row(
                               children: [
-                                if (status == "new")
+                                if (status == "lead")
                                   Container(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -134,7 +137,7 @@ class LeadItemCard extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                if (status == "follow up")
+                                if (status == "follow_up")
                                   Container(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -155,10 +158,10 @@ class LeadItemCard extends StatelessWidget {
                                     ),
                                   ),
                                 const Spacer(),
-                                if (status == "new")
+                                if (status == "lead")
                                   GestureDetector(
-                                    onTap: () {
-                                      _openTeamBottomSheet();
+                                    onTapDown: (TapDownDetails details) {
+                                      openAssignPopupMenu(context, details.globalPosition);
                                     },
                                     child: Stack(
                                       alignment: AlignmentGeometry.center,
@@ -186,7 +189,7 @@ class LeadItemCard extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                if (status == "follow up")
+                                if (status == "follow_up")
                                   GestureDetector(
                                     onTapDown: (TapDownDetails details) {
                                       _openConversationMenu(context, details.globalPosition, lead);
@@ -240,132 +243,113 @@ class LeadItemCard extends StatelessWidget {
     return DateFormat('MMM d').format(d);
   }
 
-  void openAssignPopup(BuildContext context, Offset position) {
+  void openAssignPopupMenu(BuildContext context, Offset position) {
+    final CommonController commonCtrl = Get.find<CommonController>();
     final TextEditingController searchCtrl = TextEditingController();
 
     showMenu(
       context: context,
       position: RelativeRect.fromLTRB(position.dx, position.dy, 0, 0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       items: [
         PopupMenuItem(
-          enabled: false, // so menu doesn't close on tap
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              final List<String> names = [
-                "Akash",
-                "Swathi",
-                "Bhuvana",
-                "Chanadan",
-                "Darshan",
-              ];
+          enabled: false,
+          child: Obx(() {
+            final List<TeamListData> team = commonCtrl.teamList;
 
-              // Filter based on search
-              final filtered = names
-                  .where((e) =>
-                  e.toLowerCase().contains(searchCtrl.text.toLowerCase()))
-                  .toList();
+            final List<TeamListData> filtered = team
+                .where(
+                  (e) =>
+                      (e.firstName ?? "").toLowerCase().contains(searchCtrl.text.toLowerCase()) ||
+                      (e.roleTitle ?? "").toLowerCase().contains(searchCtrl.text.toLowerCase()),
+                )
+                .toList();
 
-              return Container(
-                width: 250, // control popup width
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // SEARCH BOX
-                    TextField(
-                      controller: searchCtrl,
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return Container(
+                  width: 280,
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 200),
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemCount: filtered.length,
+                          itemBuilder: (_, i) {
+                            final item = filtered[i];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: _assignItemCard(context, item),
+                            );
+                          },
                         ),
                       ),
-                      onChanged: (v) => setState(() {}),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    // LIST
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxHeight: 250),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: filtered.length,
-                        itemBuilder: (_, i) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(14),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                )
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 18,
-                                      backgroundImage:
-                                      AssetImage("assets/user.png"),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(filtered[i],
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600)),
-                                  ],
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    // Call your assign method here
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 4),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                    ),
-                                  ),
-                                  child: const Text("Assign"),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        )
+                    ],
+                  ),
+                );
+              },
+            );
+          }),
+        ),
       ],
     );
   }
 
+  Widget _assignItemCard(BuildContext context, TeamListData item) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.network(
+                item.profilePhotoUrl ?? "",
+                width: 32,
+                height: 32,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Image.asset(Asset.appLogo, width: 32, height: 32),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text("${item.firstName ?? ""} ${item.lastName ?? ""}", style: MyTexts.medium13),
+            const Gap(10),
+          ],
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+            _openTeamBottomSheet(context, item);
+          },
+          child: Stack(
+            alignment: AlignmentGeometry.center,
+            children: [
+              Image.asset(Asset.explore, width: 65),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    Asset.userPlus,
+                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    height: 12,
+                  ),
+                  const Gap(4),
+                  Text("Assign", style: MyTexts.medium12.copyWith(color: MyColors.white)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
-  void _openTeamBottomSheet() {
+  void _openTeamBottomSheet(BuildContext context, TeamListData item) {
     Get.bottomSheet(
       Container(
-        height: Get.height * 0.7,
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -374,6 +358,7 @@ class LeadItemCard extends StatelessWidget {
         child: GestureDetector(
           onTap: hideKeyboard,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
@@ -391,25 +376,164 @@ class LeadItemCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _teamCard(
-                        image: "https://picsum.photos/200/300",
-                        name: "Name",
-                        designation: "Designation",
-                        ratio: "Conversation Ration",
-                      ),
-                      const SizedBox(height: 20),
-                      _teamCard(
-                        image: "https://picsum.photos/200/400",
-                        name: "Name",
-                        designation: "Designation",
-                        ratio: "Conversation Ration",
-                      ),
-                    ],
+              Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: AlignmentGeometry.topCenter,
+                    end: AlignmentGeometry.bottomCenter,
+                    colors: [Colors.white, Color(0xFFFFFBCC)],
                   ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: MyColors.grayD6),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(34),
+                          child: CachedNetworkImage(
+                            imageUrl: APIConstants.bucketUrl + (item.profilePhotoUrl ?? ""),
+                            width: 65,
+                            height: 65,
+                            fit: BoxFit.cover,
+                            placeholder: (c, s) =>
+                                Container(color: Colors.grey.shade200, width: 65, height: 65),
+                            errorWidget: (c, s, e) => Container(
+                              color: Colors.grey.shade200,
+                              width: 65,
+                              height: 65,
+                              child: Image.asset(Asset.appLogo),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 3),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: RichText(
+                                      overflow: TextOverflow.ellipsis,
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Team : ',
+                                            style: MyTexts.regular14.copyWith(color: Colors.black),
+                                          ),
+                                          TextSpan(
+                                            text: "${item.firstName ?? ""} ${item.lastName ?? ""}",
+                                            style: MyTexts.medium14.copyWith(color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    '${_formatTime(DateTime.parse(item.createdAt ?? ""))}, ${_formatDate(DateTime.parse(item.createdAt ?? ""))}',
+                                    style: MyTexts.regular12.copyWith(color: MyColors.black),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 3),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Team Id : ${item.id ?? ""}',
+                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                        ),
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          'Designation : ${item.roleTitle}',
+                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Conversation Ration : 4/10 ',
+                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                        ),
+                                        const SizedBox(height: 6),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(4),
+                    Row(
+                      children: [
+                        Obx(() {
+                          return PriorityDropdown(
+                            value: controller.selectedPriority.value,
+                            onChanged: (v) {
+                              controller.selectedPriority.value = v;
+                            },
+                          );
+                        }),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                            Get.toNamed(
+                              Routes.SetReminder,
+                              arguments: {
+                                "leadID": lead.id ?? "",
+                                "assignTo": item.id ?? "",
+                                "priority": controller.selectedPriority.value,
+                              },
+                            );
+                          },
+                          child: Stack(
+                            alignment: AlignmentGeometry.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadiusGeometry.circular(12),
+                                child: Image.asset(
+                                  Asset.explore,
+                                  width: 98,
+                                  height: 30,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    Asset.calendar,
+                                    colorFilter: const ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.srcIn,
+                                    ),
+                                    height: 12,
+                                  ),
+                                  const Gap(4),
+                                  Text(
+                                    "Set Reminder",
+                                    style: MyTexts.medium12.copyWith(color: MyColors.white),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -417,94 +541,6 @@ class LeadItemCard extends StatelessWidget {
         ),
       ),
       isScrollControlled: true,
-    );
-  }
-
-  Widget _teamCard({
-    required String image,
-    required String name,
-    required String designation,
-    required String ratio,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F8FF),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: MyColors.grayEA),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(image, height: 70, width: 70, fit: BoxFit.cover),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Name :", style: MyTexts.medium14),
-                    const Gap(7),
-                    Text("Designation :", style: MyTexts.medium14),
-                    const Gap(7),
-                    Text("Conversation Ration :", style: MyTexts.medium14),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF142243),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text("Assign", style: MyTexts.bold14.copyWith(color: Colors.white)),
-                  ),
-                  const Gap(8),
-                  SvgPicture.asset(Asset.calendar),
-                  const Gap(8),
-                  SvgPicture.asset(Asset.chat),
-                ],
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 2),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Colors.white),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("  Priority  ", style: MyTexts.medium14),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.green.shade700,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text("High", style: MyTexts.medium13.copyWith(color: Colors.white)),
-                      const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          const CommonTextField(hintText: "Note:Typing....", maxLine: 3),
-        ],
-      ),
     );
   }
 

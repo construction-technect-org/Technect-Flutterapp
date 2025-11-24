@@ -1,4 +1,4 @@
-import 'package:construction_technect/app/core/utils/custom_snackbar.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,10 +7,8 @@ class ReminderController extends GetxController {
   final Rx<DateTime?> selectedDay = DateTime.now().obs;
   final Rx<TimeOfDay> selectedTime = const TimeOfDay(hour: 10, minute: 30).obs;
 
-  // Keep a TextEditingController in the controller so view is stateless
   final TextEditingController noteController = TextEditingController();
 
-  /// Choose time using the framework time picker (uses Get.context)
   Future<void> pickTime() async {
     final context = Get.context;
     if (context == null) return;
@@ -21,9 +19,7 @@ class ReminderController extends GetxController {
         return Theme(
           data: Theme.of(c).copyWith(
             timePickerTheme: const TimePickerThemeData(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
             ),
           ),
           child: child!,
@@ -48,13 +44,40 @@ class ReminderController extends GetxController {
     return "$hour:$minute $period";
   }
 
-  void saveReminder() {
+  RxBool isLoading = false.obs;
+
+  Future<void> saveReminder() async {
     final note = noteController.text;
     final date = selectedDay.value ?? DateTime.now();
     final time = selectedTime.value;
     debugPrint("Save reminder -> date: $date, time: $time, note: $note");
-    Get.back();
-    SnackBars.successSnackBar(content: "Reminder set successfully");
+    isLoading.value = true;
+    await Get.find<MarketingController>().updateStatusLeadToFollowUp(
+      leadID: Get.arguments["leadID"].toString(),
+      assignTo: Get.arguments["assignTo"].toString(),
+      remindAt: getReminderUTCString(),
+      onSuccess: () {
+        isLoading.value = false;
+        Get.back();
+        Get.find<MarketingController>().activeStatusFilter.value = "Follow Up";
+        Get.find<MarketingController>().filterProspectStatus();
+      },
+    );
+    isLoading.value = false;
+  }
+
+  String getReminderUTCString() {
+    final date = selectedDay.value ?? DateTime.now();
+    final time = selectedTime.value;
+    final combined = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+    final iso = combined.toUtc().toIso8601String();
+    return iso.replaceAll('.000', '');
   }
 
   @override

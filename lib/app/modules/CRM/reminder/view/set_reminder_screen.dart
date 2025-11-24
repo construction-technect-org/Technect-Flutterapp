@@ -10,176 +10,178 @@ class SetReminderScreen extends GetView<ReminderController> {
 
   @override
   Widget build(BuildContext context) {
-    final ReminderController c = controller;
-    return GestureDetector(
-      onTap: hideKeyboard,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
+    return LoaderWrapper(
+      isLoading:  controller.isLoading,
+      child: GestureDetector(
+        onTap: hideKeyboard,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
+                ),
               ),
-            ),
-            Column(
-              children: [
-                CommonAppBar(
-                  backgroundColor: Colors.transparent,
-                  title: const Text("Set Reminder"),
-                  isCenter: false,
-                  leading: GestureDetector(
-                    onTap: () => Get.back(),
-                    child: const Padding(
-                      padding: EdgeInsets.zero,
-                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
+              Column(
+                children: [
+                  CommonAppBar(
+                    backgroundColor: Colors.transparent,
+                    title: const Text("Set Reminder"),
+                    isCenter: false,
+                    leading: GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Padding(
+                        padding: EdgeInsets.zero,
+                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(16, 5, 16, 16),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.10),
-                                blurRadius: 23,
-                                offset: const Offset(0, 10),
-                              ),
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.09),
-                                blurRadius: 42,
-                                offset: const Offset(0, 42),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Obx(
-                                () => TableCalendar(
-                                  firstDay: DateTime(2020),
-                                  lastDay: DateTime(2030),
-                                  focusedDay: c.focusedDay.value,
-                                  selectedDayPredicate: (day) =>
-                                      isSameDay(c.selectedDay.value, day),
-                                  onDaySelected: (selected, focused) {
-                                    c.selectedDay.value = selected;
-                                    c.focusedDay.value = focused;
-                                  },
-                                  headerStyle: HeaderStyle(
-                                    formatButtonVisible: false,
-                                    titleCentered: true,
-                                    titleTextStyle: MyTexts.medium18.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: MyColors.primary,
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(16, 5, 16, 16),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.10),
+                                  blurRadius: 23,
+                                  offset: const Offset(0, 10),
+                                ),
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.09),
+                                  blurRadius: 42,
+                                  offset: const Offset(0, 42),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Obx(
+                                  () => TableCalendar(
+                                    firstDay: DateTime(2020),
+                                    lastDay: DateTime(2030),
+                                    focusedDay: controller.focusedDay.value,
+                                    selectedDayPredicate: (day) =>
+                                        isSameDay(controller.selectedDay.value, day),
+                                    onDaySelected: (selected, focused) {
+                                      controller.selectedDay.value = selected;
+                                      controller.focusedDay.value = focused;
+                                    },
+                                    headerStyle: HeaderStyle(
+                                      formatButtonVisible: false,
+                                      titleCentered: true,
+                                      titleTextStyle: MyTexts.medium18.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: MyColors.primary,
+                                      ),
+                                      leftChevronIcon: const Icon(Icons.chevron_left, size: 28),
+                                      rightChevronIcon: const Icon(Icons.chevron_right, size: 28),
                                     ),
-                                    leftChevronIcon: const Icon(Icons.chevron_left, size: 28),
-                                    rightChevronIcon: const Icon(Icons.chevron_right, size: 28),
-                                  ),
-                                  daysOfWeekStyle: DaysOfWeekStyle(
-                                    weekendStyle: MyTexts.bold15.copyWith(color:  MyColors.primary,),
-                                    weekdayStyle: MyTexts.bold15.copyWith(color:  MyColors.primary,),
-                                  ),
-                                  calendarStyle: CalendarStyle(
-                                    selectedDecoration: const BoxDecoration(
-                                      color: MyColors.primary,
-                                      shape: BoxShape.circle,
+                                    daysOfWeekStyle: DaysOfWeekStyle(
+                                      weekendStyle: MyTexts.bold15.copyWith(color:  MyColors.primary,),
+                                      weekdayStyle: MyTexts.bold15.copyWith(color:  MyColors.primary,),
                                     ),
-                                    todayDecoration: BoxDecoration(
-                                      color: Colors.indigo.shade100,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    defaultTextStyle: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black87,
+                                    calendarStyle: CalendarStyle(
+                                      selectedDecoration: const BoxDecoration(
+                                        color: MyColors.primary,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      todayDecoration: BoxDecoration(
+                                        color: Colors.indigo.shade100,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      defaultTextStyle: const TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 16),
-                              Row(
-                                children: [
-                                  Text("Time", style: MyTexts.medium18),
-                                 const Spacer(),
-                                  GestureDetector(
-                                    onTap: () => c.pickTime(),
-                                    child: Obx(() {
-                                      final t = c.selectedTime.value;
-                                      final hh = t.hour.toString().padLeft(2, '0');
-                                      final mm = t.minute.toString().padLeft(2, '0');
-                                      return Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 12,
-                                          horizontal: 22,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: MyColors.primary.withValues(alpha: 0.12),
-                                          border: Border.all(color: Colors.indigo.shade200),
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        child: Text("$hh : $mm", style: MyTexts.medium18),
-                                      );
-                                    }),
-                                  ),
-                                ],
-                              ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Text("Time", style: MyTexts.medium18),
+                                   const Spacer(),
+                                    GestureDetector(
+                                      onTap: () => controller.pickTime(),
+                                      child: Obx(() {
+                                        final t = controller.selectedTime.value;
+                                        final hh = t.hour.toString().padLeft(2, '0');
+                                        final mm = t.minute.toString().padLeft(2, '0');
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 12,
+                                            horizontal: 22,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: MyColors.primary.withValues(alpha: 0.12),
+                                            border: Border.all(color: Colors.indigo.shade200),
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Text("$hh : $mm", style: MyTexts.medium18),
+                                        );
+                                      }),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Obx(() => _infoBox(label: "Date", value: controller.formattedSelectedDate())),
+                              Obx(() => _infoBox(label: "Time", value: controller.formattedSelectedTime())),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Obx(() => _infoBox(label: "Date", value: c.formattedSelectedDate())),
-                            Obx(() => _infoBox(label: "Time", value: c.formattedSelectedTime())),
-                          ],
-                        ),
-
-                        const SizedBox(height: 18),
-                        CommonTextField(
-                          controller: c.noteController,
-                          hintText: "Note...",
-
-                          maxLine: 5,
-                          bgColor: const Color(0xFFF3F6FF),
-                        ),
-
-                        const SizedBox(height: 30),
-                      ],
+      
+                          const SizedBox(height: 18),
+                          CommonTextField(
+                            controller: controller.noteController,
+                            hintText: "Note...",
+      
+                            maxLine: 5,
+                            bgColor: const Color(0xFFF3F6FF),
+                          ),
+      
+                          const SizedBox(height: 30),
+                        ],
+                      ),
                     ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          bottomNavigationBar:  Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: RoundedButton(
+                    color: Colors.transparent,
+                    fontColor: MyColors.primary,
+                    buttonName: "Cancel",
+                    borderColor: MyColors.primary,
+                    onTap: () => Get.back(),
+                  ),
+                ),
+                const Gap(24),
+                Expanded(
+                  child: RoundedButton(
+                    buttonName: "Save",
+                    onTap: () => controller.saveReminder(),
                   ),
                 ),
               ],
             ),
-          ],
-        ),
-        bottomNavigationBar:  Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: RoundedButton(
-                  color: Colors.transparent,
-                  fontColor: MyColors.primary,
-                  buttonName: "Cancel",
-                  borderColor: MyColors.primary,
-                  onTap: () => Get.back(),
-                ),
-              ),
-              const Gap(24),
-              Expanded(
-                child: RoundedButton(
-                  buttonName: "Save",
-                  onTap: () => c.saveReminder(),
-                ),
-              ),
-            ],
           ),
         ),
       ),

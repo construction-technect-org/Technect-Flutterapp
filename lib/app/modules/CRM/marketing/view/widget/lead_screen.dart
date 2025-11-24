@@ -20,7 +20,7 @@ class LeadScreen extends GetView<MarketingController> {
               Routes.ADD_LEAD,
               arguments: {
                 "onLeadCreate": () {
-                  controller.fetchAllLead(status: "new");
+                  controller.fetchAllLead();
                   Get.back();
                 },
               },
