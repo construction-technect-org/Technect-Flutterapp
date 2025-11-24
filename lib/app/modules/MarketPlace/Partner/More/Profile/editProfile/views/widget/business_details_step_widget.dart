@@ -116,17 +116,46 @@ class BusinessDetailsStep extends StatelessWidget {
             validator: ValidationUtils.validateGSTINNumber,
           ),
           SizedBox(height: 2.h),
-          CommonTextField(
-            hintText: "9292929929",
-            headerText: "Business Contact Number",
-            controller: controller.businessContactController,
-            keyboardType: TextInputType.phone,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(10),
-            ],
-            validator: (val) => Validate.validateMobileNumber(val),
+          Focus(
+            onFocusChange: (hasFocus) {
+              if (!hasFocus) {
+                final num = controller.businessContactController.text;
+                final formatError = Validate.validateMobileNumber(num);
+                if (formatError == null) {
+                  controller.validateNumAvailability();
+                } else {
+                  controller.numberError.value = "";
+                }
+              }
+            },
+            child: CommonTextField(
+              hintText: "9292929929",
+              headerText: "Business Contact Number",
+              controller: controller.businessContactController,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10),
+              ],
+              validator: (val) => Validate.validateMobileNumber(val),
+              onChange: (value) {
+                controller.numberError.value = "";
+              },
+            ),
           ),
+          Obx(() {
+            //6586568469
+            if (controller.numberError.value.isNotEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  controller.numberError.value,
+                  style: TextStyle(color: Colors.red[800], fontSize: 12),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
           SizedBox(height: 2.h),
           CommonTextField(
             hintText: "9292929929",
