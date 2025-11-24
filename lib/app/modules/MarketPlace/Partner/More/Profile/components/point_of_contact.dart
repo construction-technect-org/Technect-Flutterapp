@@ -4,7 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
 import 'package:construction_technect/app/core/utils/validation_utils.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 
 class PointOfContentScreen extends StatelessWidget {
   final PointOfContactController eController = Get.put(
@@ -242,7 +242,7 @@ class PointOfContactController extends GetxController {
   final designationController = TextEditingController();
   final numberController = TextEditingController();
   final alternativeNumberController = TextEditingController();
-  final HomeController homeController = Get.find<HomeController>();
+  final CommonController homeController = Get.find<CommonController>();
 
   // Email validation state
   RxString emailError = "".obs;
@@ -294,7 +294,7 @@ class PointOfContactController extends GetxController {
         body: requestBody,
       );
 
-      await Get.find<HomeController>().fetchProfileData();
+      await Get.find<CommonController>().fetchProfileData();
 
       Get.back();
     } catch (e) {

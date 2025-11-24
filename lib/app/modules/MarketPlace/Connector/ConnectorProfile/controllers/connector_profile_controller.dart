@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/services/AddKycService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
@@ -12,7 +13,7 @@ class ConnectorProfileController extends GetxController {
 
   HomeController get homeController => Get.find<HomeController>();
 
-  ProfileModel get profileData => homeController.profileData.value;
+  ProfileModel get profileData => Get.find<CommonController>().profileData.value;
 
   ConnectorProfile? get connectorProfile => profileData.data?.connectorProfile;
 

@@ -5,9 +5,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 
 class HomeView extends StatelessWidget {
   final CommonController commonController = Get.find();
-  final HomeController controller = Get.isRegistered<HomeController>()
-      ? Get.find<HomeController>()
-      : Get.put(HomeController());
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -41,27 +39,27 @@ class HomeView extends StatelessWidget {
                       children: [
                         tabBar(
                           onTap: () {
-                            controller.marketPlace.value = 0;
+                            Get.find<CommonController>().marketPlace.value = 0;
                           },
                           icon: Asset.MM,
                           name: 'Material\nMarketplace',
-                          isMarketPlace: controller.marketPlace.value == 0,
+                          isMarketPlace:  Get.find<CommonController>().marketPlace.value == 0,
                         ),
                         tabBar(
                           onTap: () {
-                            controller.marketPlace.value = 1;
+                            Get.find<CommonController>().marketPlace.value = 1;
                           },
                           icon: Asset.CM,
                           name: 'Construction line\nMarketplace',
-                          isMarketPlace: controller.marketPlace.value == 1,
+                          isMarketPlace:  Get.find<CommonController>().marketPlace.value == 1,
                         ),
                         tabBar(
                           onTap: () {
-                            controller.marketPlace.value = 2;
+                            Get.find<CommonController>().marketPlace.value = 2;
                           },
                           icon: Asset.TEM,
                           name: 'Tools & equipment\nMarketplace',
-                          isMarketPlace: controller.marketPlace.value == 2,
+                          isMarketPlace: Get.find<CommonController>().marketPlace.value == 2,
                         ),
                       ],
                     ),
@@ -92,7 +90,7 @@ class HomeView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Obx(() {
-                                if (controller.marketPlace.value == 0) {
+                                if (Get.find<CommonController>().marketPlace.value == 0) {
                                   /// ------------------- MATERIAL MARKETPLACE -------------------
                                   final materialList = controller.categoryHierarchyData.value.data;
 
@@ -101,7 +99,7 @@ class HomeView extends StatelessWidget {
                                   }
 
                                   return _buildMaterialList(context, materialList);
-                                } else if (controller.marketPlace.value == 1) {
+                                } else if (Get.find<CommonController>().marketPlace.value == 1) {
                                   /// ------------------- CONSTRUCTION MARKETPLACE -------------------
                                   final serviceList = controller.categoryHierarchyDataCM.value.data;
 
@@ -212,7 +210,7 @@ class HomeView extends StatelessWidget {
         GestureDetector(
           onTap: () {
             if (myPref.role.val == "connector") {
-              if ((controller.profileData.value.data?.siteLocations ?? []).isEmpty) {
+              if ((Get.find<CommonController>().profileData.value.data?.siteLocations ?? []).isEmpty) {
                 _showAddAddressDialog();
                 return;
               }
@@ -256,7 +254,7 @@ class HomeView extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     if (myPref.role.val == "connector") {
-                      if ((controller.profileData.value.data?.siteLocations ?? []).isEmpty) {
+                      if ((Get.find<CommonController>().profileData.value.data?.siteLocations ?? []).isEmpty) {
                         _showAddAddressDialog();
                         return;
                       }
@@ -371,15 +369,20 @@ class HomeView extends StatelessWidget {
   }
 }
 
-class HeaderText extends StatelessWidget {
+class HeaderText extends StatefulWidget {
   String text;
 
   HeaderText({super.key, required this.text});
 
   @override
+  State<HeaderText> createState() => _HeaderTextState();
+}
+
+class _HeaderTextState extends State<HeaderText> {
+  @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      widget.text,
       style: MyTexts.medium17.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }

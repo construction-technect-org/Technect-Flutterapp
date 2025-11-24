@@ -3,9 +3,9 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/controllers/wish_list_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 
 class WishListView extends GetView<WishListController> {
@@ -125,7 +125,7 @@ class WishListView extends GetView<WishListController> {
                                     onWishlistTap: () async {
                                       controller.isLoaderWrapper.value = true;
 
-                                      await Get.find<HomeController>().wishListApi(
+                                      await Get.find<CommonController>().wishListApi(
                                         status: item.isInWishList == true ? "remove" : "add",
                                         mID: item.id ?? 0,
                                         onSuccess: () async {
@@ -137,7 +137,7 @@ class WishListView extends GetView<WishListController> {
                                     onNotifyTap: () async {
                                       controller.isLoaderWrapper.value = true;
 
-                                      await Get.find<HomeController>().notifyMeApi(
+                                      await Get.find<CommonController>().notifyMeApi(
                                         mID: item.id ?? 0,
                                         onSuccess: () async {
                                           await controller.fetchWishList();
@@ -154,7 +154,7 @@ class WishListView extends GetView<WishListController> {
                                         onTap: (message, date, radius) async {
                                           Get.back();
                                           controller.isLoaderWrapper.value = true;
-                                          await Get.find<HomeController>().addToConnectApi(
+                                          await Get.find<CommonController>().addToConnectApi(
                                             uom: item.filterValues?["uom"]["value"]??"",
                                             quantity: item.stockQty.toString(),
                                             mID: item.merchantProfileId ?? 0,

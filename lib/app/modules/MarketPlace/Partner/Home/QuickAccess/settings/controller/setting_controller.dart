@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/services/SettingService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/settings/views/setting_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class SettingController extends GetxController {
@@ -145,14 +145,14 @@ class SettingController extends GetxController {
       );
 
       if (otpResponse.success == true) {
-        Get.find<HomeController>()
+        Get.find<CommonController>()
                 .profileData
                 .value
                 .data
                 ?.user
                 ?.isNotificationSend =
             isNotification;
-        Get.find<HomeController>().profileData.refresh();
+        Get.find<CommonController>().profileData.refresh();
 
         SnackBars.successSnackBar(content: otpResponse.message ?? "");
       } else {
@@ -172,7 +172,7 @@ class SettingController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     isNotification.value =
-        Get.find<HomeController>()
+        Get.find<CommonController>()
             .profileData
             .value
             .data

@@ -1,14 +1,14 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/models/ConnectorSelectedProductModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/service/AddProductService.dart';
 
 class ConnectorSelectedProductController extends GetxController {
-  HomeController homeController = Get.find<HomeController>();
+  CommonController homeController = Get.find<CommonController>();
   RxBool hasOpenedOnce = false.obs;
   RxInt selectedProductIndex = (-1).obs;
 
@@ -969,7 +969,7 @@ class ConnectorSelectedProductController extends GetxController {
 
               Obx(() {
                 final addresses =
-                    homeController.profileData.value.data?.siteLocations ?? [];
+                    Get.find<CommonController>().profileData.value.data?.siteLocations ?? [];
 
                 if (addresses.isEmpty) {
                   return const Center(

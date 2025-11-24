@@ -1,12 +1,12 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 
 void showSwitchAccountBottomSheet() {
   final controller = Get.find<SwitchAccountController>();
   controller.currentRole.value = myPref.role.val;
   controller.hasPartnerAccount.value =
-      (Get.find<HomeController>()
+      (Get.find<CommonController>()
                   .profileData
                   .value
                   .data
@@ -15,7 +15,7 @@ void showSwitchAccountBottomSheet() {
               "")
           .isNotEmpty;
   controller.hasConnectorAccount.value =
-      Get.find<HomeController>().profileData.value.data?.connectorProfile !=
+      Get.find<CommonController>().profileData.value.data?.connectorProfile !=
       null;
 
   Get.bottomSheet(

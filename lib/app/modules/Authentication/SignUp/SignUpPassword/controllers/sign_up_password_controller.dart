@@ -117,6 +117,7 @@
 
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/model/UserDataModel.dart';
 
@@ -207,6 +208,8 @@ class SignUpPasswordController extends GetxController {
             header: "Account created successfully !",
             image: Asset.forgetSImage,
             onTap: () {
+              Get.find<CommonController>().fetchProfileData();
+              Get.find<CommonController>().loadTeamFromStorage();
               Get.offAllNamed(Routes.MAIN);
             },
           ),

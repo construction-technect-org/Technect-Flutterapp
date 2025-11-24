@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/widget/statistic_tile_widget.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/views/widget/team_card_widget.dart';
@@ -7,7 +7,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 class TeamsViewWidget extends StatelessWidget {
   TeamsViewWidget({super.key});
   final roleManagementController = Get.find<RoleManagementController>();
-  final homeController = Get.find<HomeController>();
+  final commonController = Get.find<CommonController>();
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +15,7 @@ class TeamsViewWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
+
           const Gap(10),
           Row(
             children: [
@@ -24,7 +25,7 @@ class TeamsViewWidget extends StatelessWidget {
                     image: Asset.totalProduct,
                     title: 'Total Team',
                     value:
-                        homeController.statistics.value.totalTeamMember ?? '0',
+                        commonController.statistics.value.totalTeamMember ?? '0',
                   ),
                 ),
               ),
@@ -35,7 +36,7 @@ class TeamsViewWidget extends StatelessWidget {
                     image: Asset.totalProduct,
                     title: 'Active Team',
                     value:
-                        homeController.statistics.value.activeTeamMember ?? '0',
+                        commonController.statistics.value.activeTeamMember ?? '0',
                   ),
                 ),
               ),
@@ -43,7 +44,7 @@ class TeamsViewWidget extends StatelessWidget {
           ),
           const Gap(10),
           RefreshIndicator(
-            onRefresh: () async => await homeController.refreshTeamList(),
+            onRefresh: () async => await commonController.refreshTeamList(),
             child: Obx(() {
               if (roleManagementController.isLoadingTeam.value) {
                 return SizedBox(
@@ -51,7 +52,7 @@ class TeamsViewWidget extends StatelessWidget {
                   child: const Center(child: CircularProgressIndicator()),
                 );
               }
-              if (homeController.teamList.isEmpty) {
+              if (commonController.teamList.isEmpty) {
                 return Center(
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -67,9 +68,9 @@ class TeamsViewWidget extends StatelessWidget {
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: homeController.teamList.length,
+                itemCount: commonController.teamList.length,
                 itemBuilder: (context, index) {
-                  final team = homeController.teamList[index];
+                  final team = commonController.teamList[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: TeamCardWidget(user: team),

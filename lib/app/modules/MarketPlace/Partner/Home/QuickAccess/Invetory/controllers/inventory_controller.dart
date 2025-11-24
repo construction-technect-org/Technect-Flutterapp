@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/services/InventoryService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/service/product_management_service.dart';
 
@@ -17,7 +17,7 @@ class InventoryController extends GetxController {
   RxString searchQuery = ''.obs;
 
   RxString selectedStatus =
-      (Get.find<HomeController>().marketPlace.value == 0
+      (Get.find<CommonController>().marketPlace.value == 0
               ? "product"
               : "service")
           .obs;

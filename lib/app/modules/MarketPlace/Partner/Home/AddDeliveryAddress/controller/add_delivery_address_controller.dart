@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:geocoding/geocoding.dart';
@@ -183,7 +184,7 @@ class AddDeliveryAddressController extends GetxController {
         await DeliveryAddressService.submitDeliveryAddress(deliveryAddress);
       }
 
-      await homeController.fetchProfileData();
+      await Get.find<CommonController>().fetchProfileData();
 
       Get.back();
     } catch (e) {

@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
@@ -16,7 +15,6 @@ class AddTeamController extends GetxController {
   final emialIdController = TextEditingController();
   final phoneNumberController = TextEditingController();
   AddTeamService addTeamService = AddTeamService();
-  HomeController homeController = Get.find();
   RxBool isLoading = false.obs;
   final Rx<TeamListData> teamDetailsModel = TeamListData().obs;
   RxBool isEdit = false.obs;
@@ -142,12 +140,12 @@ class AddTeamController extends GetxController {
           files: files,
           id: '${teamDetailsModel.value.id ?? ''}',
         );
-        await homeController.refreshTeamList();
+        await  Get.find<CommonController>().refreshTeamList();
         isLoading.value = false;
         Get.back();
       } else {
         await addTeamService.addTeam(fields: fields, files: files);
-        await homeController.refreshTeamList();
+        await  Get.find<CommonController>().refreshTeamList();
         isLoading.value = false;
         Get.back();
       }
@@ -160,8 +158,8 @@ class AddTeamController extends GetxController {
     try {
       isLoading.value = true;
       await addTeamService.deleteTeamMember(teamMemberId);
-      await homeController.refreshTeamList();
-      await homeController.fetchTeamList();
+      await  Get.find<CommonController>().refreshTeamList();
+      await  Get.find<CommonController>().fetchTeamList();
     } catch (e) {
       // ignore: avoid_print
     } finally {

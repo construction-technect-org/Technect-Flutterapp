@@ -1,11 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -40,7 +39,7 @@ class EditProfileController extends GetxController {
 
   void _populateExistingData() {
     try {
-      final homeController = Get.find<HomeController>();
+      final homeController = Get.find<CommonController>();
       final merchantProfile = homeController.profileData.value.data?.merchantProfile;
 
       if (merchantProfile != null) {

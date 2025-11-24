@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/MainCategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/ProductModelForCategory.dart';
@@ -91,7 +91,7 @@ class AddProductController extends GetxController {
 
   Future<void> _fetchSiteAddresses() async {
     siteLocations.value =
-        Get.find<HomeController>().profileData.value.data?.addresses ?? [];
+        Get.find<CommonController>().profileData.value.data?.addresses ?? [];
     // Sync selected site address after loading
     _syncSelectedSiteAddress();
   }
@@ -690,7 +690,7 @@ class AddProductController extends GetxController {
       images: productImages,
       gstAmount: gstPriceController.text,
       merchantGstNumber:
-          Get.find<HomeController>()
+          Get.find<CommonController>()
               .profileData
               .value
               .data

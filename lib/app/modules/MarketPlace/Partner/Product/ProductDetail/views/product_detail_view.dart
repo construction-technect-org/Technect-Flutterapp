@@ -4,9 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/view/add_service_screen.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/controller/add_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/components/business_detail_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductDetail/controllers/product_detail_controller.dart';
@@ -16,8 +16,6 @@ import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
 class ProductDetailsView extends GetView<ProductDetailsController> {
-  final HomeController homeController = Get.find<HomeController>();
-
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -297,7 +295,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                   child: Obx(() {
                                     return GestureDetector(
                                       onTap: () async {
-                                        await Get.find<HomeController>().wishListApi(
+                                        await Get.find<CommonController>().wishListApi(
                                           status: controller.isLiked.value == true
                                               ? "remove"
                                               : "add",
@@ -537,7 +535,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                       const Gap(8),
 
                                       Text(
-                                        "Location : ${homeController.getCurrentAddress().value}",
+                                        "Location : ${Get.find<CommonController>().getCurrentAddress().value}",
                                         style: MyTexts.medium16.copyWith(color: MyColors.gray54),
                                       ),
                                       const Gap(12),
@@ -960,7 +958,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                             borderRadius: 8,
                             style: MyTexts.medium16.copyWith(color: Colors.white),
                             onTap: () async {
-                              await Get.find<HomeController>().notifyMeApi(
+                              await Get.find<CommonController>().notifyMeApi(
                                 mID: product.id ?? 0,
                                 onSuccess: () {
                                   controller.onApiCall?.call();
@@ -990,7 +988,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                               isFromIn: true,
                               onTap: (message, date, radius) async {
                                 Get.back();
-                                await Get.find<HomeController>().addToConnectApi(
+                                await Get.find<CommonController>().addToConnectApi(
                                   mID: controller.product.merchantProfileId ?? 0,
                                   message: message,
                                   radius: radius,

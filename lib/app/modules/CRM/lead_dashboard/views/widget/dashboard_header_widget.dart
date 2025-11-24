@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/controller/crm_dashboard_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/header_icon_widget.dart';
 
@@ -9,7 +9,7 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
 
   @override
   Widget build(BuildContext context) {
-    final dash = Get.find<CRMDashboardController>();
+    final dash = Get.find<CommonController>();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),

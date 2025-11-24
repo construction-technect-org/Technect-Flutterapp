@@ -4,9 +4,9 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
 import 'package:construction_technect/app/core/widgets/common_service_card.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Cart/controllers/cart_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 
 class CartListView extends GetView<CartListController> {
@@ -202,7 +202,7 @@ class CartListView extends GetView<CartListController> {
                                       },
                                       onWishlistTap: () async {
                                         controller.isLoading.value = true;
-                                        await Get.find<HomeController>().wishListApi(
+                                        await Get.find<CommonController>().wishListApi(
                                           status: item.isInWishList == true ? "remove" : "add",
                                           mID: item.id ?? 0,
                                           onSuccess: () async {
@@ -213,7 +213,7 @@ class CartListView extends GetView<CartListController> {
                                       },
                                       onNotifyTap: () async {
                                         controller.isLoading.value = true;
-                                        await Get.find<HomeController>().notifyMeApi(
+                                        await Get.find<CommonController>().notifyMeApi(
                                           mID: item.id ?? 0,
                                           onSuccess: () async {
                                             await controller.fetchCartList();
@@ -229,7 +229,7 @@ class CartListView extends GetView<CartListController> {
                                           onTap: (message, date, radius) async {
                                             Get.back();
                                             controller.isLoading.value = true;
-                                            await Get.find<HomeController>().addToConnectApi(
+                                            await Get.find<CommonController>().addToConnectApi(
                                               mID: item.merchantProfileId ?? 0,
                                               message: message,
                                               radius: radius,
@@ -332,7 +332,7 @@ class CartListView extends GetView<CartListController> {
                                           onTap: (message, date, radius) async {
                                             Get.back();
                                             controller.isLoading.value = true;
-                                            await Get.find<HomeController>().addServiceToConnectApi(
+                                            await Get.find<CommonController>().addServiceToConnectApi(
                                               mID: service.merchantProfileId ?? 0,
                                               message: message,
                                               radius: radius,

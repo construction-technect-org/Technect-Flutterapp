@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 
@@ -160,7 +160,7 @@ class InfoMetricsComponent extends StatelessWidget {
 
   Widget _buildBusinessMetricsContent() {
     return Obx(() {
-      final home = Get.find<HomeController>();
+      final home = Get.find<CommonController>();
       final merchant = home.profileData.value.data?.merchantProfile;
       final modelGstin = controller.businessModel.value.gstinNumber ?? '';
       final merchantGstin = merchant?.gstinNumber ?? '';
@@ -275,7 +275,7 @@ class InfoMetricsComponent extends StatelessWidget {
               Obx(() {
                 return buildRow(
                   title: "Address",
-                  data: Get.find<HomeController>().getCurrentAddress().value,
+                  data: Get.find<CommonController>().getCurrentAddress().value,
                 );
               }),
               const Gap(6),

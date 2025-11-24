@@ -3,13 +3,13 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/SearchProduct/controller/search_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 
 class SearchProductView extends GetView<SearchProductController> {
   SearchProductView({super.key});
-  final HomeController homeController = Get.find<HomeController>();
+  final CommonController commonController = Get.find<CommonController>();
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class SearchProductView extends GetView<SearchProductController> {
                           );
                         },
                         onWishlistTap: () async {
-                          await homeController.wishListApi(
+                          await commonController.wishListApi(
                             status: item.isInWishList == true
                                 ? "remove"
                                 : "add",
@@ -156,7 +156,7 @@ class SearchProductView extends GetView<SearchProductController> {
                           );
                         },
                         onNotifyTap: () async {
-                          await homeController.notifyMeApi(
+                          await commonController.notifyMeApi(
                             mID: item.id ?? 0,
                             onSuccess: () async {
                               await controller.performSearch(
@@ -174,7 +174,7 @@ class SearchProductView extends GetView<SearchProductController> {
 
                             onTap: (message, date, radius) async {
                               Get.back();
-                              await homeController.addToConnectApi(
+                              await commonController.addToConnectApi(
                                 mID: item.merchantProfileId ?? 0,
                                 message: message,
                                 uom: item.filterValues?["uom"]["value"]??"",

@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/document_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/services/edit_profile_service.dart';
@@ -40,7 +38,6 @@ class ProfileController extends GetxController {
     if (Get.arguments != null) {
       isSwitch.value = true;
     }
-    Get.lazyPut(() => HomeController());
     businessModel.value.gstinNumber =
         homeController.profileData.value.data?.user?.gst ?? "";
     if (merchantProfile != null) {
@@ -127,7 +124,7 @@ class ProfileController extends GetxController {
 
   final DocumentService _documentService = DocumentService();
 
-  HomeController get homeController => Get.find<HomeController>();
+  CommonController get homeController => Get.find<CommonController>();
 
   ProfileModel get profileData => homeController.profileData.value;
 
@@ -143,7 +140,7 @@ class ProfileController extends GetxController {
   List<Documents> get documents => merchantProfile?.documents ?? [];
 
   List<SiteLocation> get addressData =>
-      homeController.profileData.value.data?.siteLocations ?? [];
+      Get.find<CommonController>().profileData.value.data?.siteLocations ?? [];
 
   String? get businessWebsite => merchantProfile?.businessWebsite;
 
@@ -469,7 +466,7 @@ class ProfileController extends GetxController {
     try {
       isLoading.value = true;
 
-      final homeController = Get.find<HomeController>();
+      final homeController = Get.find<CommonController>();
       final merchantProfile =
           homeController.profileData.value.data?.merchantProfile;
       final bool isUpdate;

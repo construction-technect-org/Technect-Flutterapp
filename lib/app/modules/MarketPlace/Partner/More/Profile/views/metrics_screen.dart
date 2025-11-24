@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/point_of_contact.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
@@ -59,7 +60,7 @@ class MetricsScreen extends StatelessWidget {
           ],
         ),
         Obx(() {
-          if (homeController.teamList.isEmpty) {
+          if (Get.find<CommonController>().teamList.isEmpty) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 50),
@@ -74,9 +75,9 @@ class MetricsScreen extends StatelessWidget {
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: homeController.teamList.length,
+            itemCount: Get.find<CommonController>().teamList.length,
             itemBuilder: (context, index) {
-              final team = homeController.teamList[index];
+              final team = Get.find<CommonController>().teamList[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: _buildTeamCard(team, context),
@@ -90,7 +91,7 @@ class MetricsScreen extends StatelessWidget {
 
   Widget _buildPointOfViewContent() {
     return Obx(() {
-      final pointOfContact = homeController
+      final pointOfContact = Get.find<CommonController>()
           .profileData
           .value
           .data

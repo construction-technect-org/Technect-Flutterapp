@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/ReferAndCoupon/controller/refer_controller.dart';
 import 'package:share_plus/share_plus.dart';
@@ -77,7 +77,7 @@ class ReferAndEarnScreen extends GetView<ReferController> {
                                   SharePlus.instance.share(
                                     ShareParams(
                                       text:
-                                          'Hello Friend 👋\n\nDownload the CONSTRUCTION TECHNECT App from the link below and use my referral code to get instant discounts & rewards on your purchases.\n\n${APIConstants.appUrl}\n\nReferral Code: ${Get.find<HomeController>().profileData.value.data?.referral?.myReferralCode ?? ""}\n\nShared by: ${(Get.find<HomeController>().profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(Get.find<HomeController>().profileData.value.data?.user?.lastName ?? "").capitalizeFirst}',
+                                          'Hello Friend 👋\n\nDownload the CONSTRUCTION TECHNECT App from the link below and use my referral code to get instant discounts & rewards on your purchases.\n\n${APIConstants.appUrl}\n\nReferral Code: ${Get.find<CommonController>().profileData.value.data?.referral?.myReferralCode ?? ""}\n\nShared by: ${(Get.find<CommonController>().profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(Get.find<CommonController>().profileData.value.data?.user?.lastName ?? "").capitalizeFirst}',
                                     ),
                                   );
                                 },
@@ -155,7 +155,7 @@ class ReferAndEarnScreen extends GetView<ReferController> {
                                 ),
                                 child: Obx(() {
                                   return Text(
-                                    Get.find<HomeController>()
+                                    Get.find<CommonController>()
                                             .profileData
                                             .value
                                             .data

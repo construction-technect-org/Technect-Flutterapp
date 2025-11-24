@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/services/LoginService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
@@ -109,6 +110,8 @@ class LoginController extends GetxController {
             title: "Success!",
             header: "Thanks for Connecting !",
             onTap: () {
+              Get.find<CommonController>().fetchProfileData();
+              Get.find<CommonController>().loadTeamFromStorage();
               Get.offAllNamed(Routes.MAIN);
             },
           ),
@@ -167,6 +170,8 @@ class LoginController extends GetxController {
             title: "Success!",
             header: "Thanks for Connecting !",
             onTap: () {
+              Get.find<CommonController>().fetchProfileData();
+              Get.find<CommonController>().loadTeamFromStorage();
               Get.offAllNamed(Routes.MAIN);
             },
           ),

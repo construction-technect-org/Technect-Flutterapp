@@ -2,9 +2,9 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_product_card.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/controllers/connector_selected_product_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
@@ -653,7 +653,7 @@ class SelectedProductView extends StatelessWidget {
             await controller.fetchProductsFromApi(isLoading: false);
           },
           onWishlistTap: () async {
-            await Get.find<HomeController>().wishListApi(
+            await Get.find<CommonController>().wishListApi(
               status: item.isInWishList == true ? "remove" : "add",
               mID: item.id ?? 0,
               onSuccess: () async {
@@ -662,7 +662,7 @@ class SelectedProductView extends StatelessWidget {
             );
           },
           onNotifyTap: () async {
-            await Get.find<HomeController>().notifyMeApi(
+            await Get.find<CommonController>().notifyMeApi(
               mID: item.id ?? 0,
               onSuccess: () async {
                 await controller.fetchProductsFromApi(isLoading: false);
@@ -676,7 +676,7 @@ class SelectedProductView extends StatelessWidget {
               isFromIn: true,
               onTap: (message, date, radius) async {
                 Get.back();
-                await Get.find<HomeController>().addToConnectApi(
+                await Get.find<CommonController>().addToConnectApi(
                   mID: item.merchantProfileId ?? 0,
                   uom: item.filterValues?["uom"]["value"] ?? "",
                   quantity: item.stockQty.toString(),
@@ -716,7 +716,7 @@ class SelectedProductView extends StatelessWidget {
             await controller.fetchProductsFromApi(isLoading: false);
           },
           onWishlistTap: () async {
-            await Get.find<HomeController>().wishListApi(
+            await Get.find<CommonController>().wishListApi(
               status: item.isInWishList == true ? "remove" : "add",
               mID: item.id ?? 0,
               onSuccess: () async {
@@ -725,7 +725,7 @@ class SelectedProductView extends StatelessWidget {
             );
           },
           onNotifyTap: () async {
-            await Get.find<HomeController>().notifyMeApi(
+            await Get.find<CommonController>().notifyMeApi(
               mID: item.id ?? 0,
               onSuccess: () async {
                 await controller.fetchProductsFromApi(isLoading: false);
@@ -739,7 +739,7 @@ class SelectedProductView extends StatelessWidget {
               isFromIn: true,
               onTap: (message, date, radius) async {
                 Get.back();
-                await Get.find<HomeController>().addToConnectApi(
+                await Get.find<CommonController>().addToConnectApi(
                   mID: item.merchantProfileId ?? 0,
                   uom: item.filterValues?["uom"]["value"] ?? "",
                   quantity: item.stockQty.toString(),

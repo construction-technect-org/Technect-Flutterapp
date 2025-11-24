@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/connector_info_metrics_component.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/connector_point_of_contact.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorProfile/components/connector_team_member.dart';
@@ -238,7 +239,7 @@ class ConnectorMetrics extends StatelessWidget {
 
   Widget _buildPointOfContactContent() {
     return Obx(() {
-      final pointOfContact = homeController
+      final pointOfContact = Get.find<CommonController>()
           .profileData
           .value
           .data
@@ -325,7 +326,7 @@ class ConnectorMetrics extends StatelessWidget {
   Widget _buildTeamMemberContent() {
     return Obx(() {
       final teamMembers =
-          homeController.profileData.value.data?.connectorProfile?.teamMembers;
+          Get.find<CommonController>().profileData.value.data?.connectorProfile?.teamMembers;
       if (teamMembers?.name?.isEmpty ?? true) {
         return GestureDetector(
           onTap: () {

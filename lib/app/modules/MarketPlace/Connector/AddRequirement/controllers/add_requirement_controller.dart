@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/services/AddRequirementService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/controllers/requirement_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
@@ -286,8 +287,7 @@ class AddRequirementController extends GetxController {
   // Site Address
   Future<void> _fetchSiteAddresses() async {
     siteLocations.value =
-        homeController.profileData.value.data?.siteLocations ?? [];
-    // Sync selected site address after loading
+        Get.find<CommonController>().profileData.value.data?.siteLocations ?? [];
     _syncSelectedSiteAddress();
   }
 

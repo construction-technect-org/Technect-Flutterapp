@@ -1,12 +1,11 @@
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/CommonConstant.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/utils/validate.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -219,7 +218,7 @@ class EditProfileController extends GetxController {
       emailController.text = pController.userData?.email ?? "";
       image.value = pController.userData?.image ?? "";
     } else {
-      final pController = Get.find<HomeController>();
+      final pController = Get.find<CommonController>();
       lNameController.text =
           pController.profileData.value.data?.user?.lastName ?? "";
       fNameController.text =
@@ -299,7 +298,7 @@ class EditProfileController extends GetxController {
         fields: fields,
         files: files,
       );
-      await Get.find<HomeController>().fetchProfileData();
+      await Get.find<CommonController>().fetchProfileData();
 
       Get.back();
       SnackBars.successSnackBar(content: "Profile updated successfully!");

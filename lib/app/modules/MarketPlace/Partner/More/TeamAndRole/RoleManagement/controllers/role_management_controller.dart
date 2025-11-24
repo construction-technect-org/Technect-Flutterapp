@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
@@ -67,8 +68,8 @@ class RoleManagementController extends GetxController {
     try {
       isLoadingTeam.value = true;
       await addTeamService.deleteTeamMember(teamMemberId);
-      await homeController.refreshTeamList();
-      await homeController.fetchTeamList();
+      await  Get.find<CommonController>().refreshTeamList();
+      await  Get.find<CommonController>().fetchTeamList();
     } catch (e) {
       // ignore: avoid_print
     } finally {

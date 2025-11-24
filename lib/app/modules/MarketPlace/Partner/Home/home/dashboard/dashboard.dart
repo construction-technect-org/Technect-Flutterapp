@@ -1,19 +1,18 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/dashboard/dashbaord_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/show_switch_account_bottomsheet.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 
 class Dashboard extends StatelessWidget {
-  final HomeController controller = Get.isRegistered<HomeController>()
-      ? Get.find<HomeController>()
-      : Get.put(HomeController());
-
+  final DashBoardController controller =Get.put(DashBoardController());
+  final CommonController commonController =Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading: controller.isLoading,
+      isLoading: commonController.isLoading,
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
@@ -38,7 +37,7 @@ class Dashboard extends StatelessWidget {
                           },
                           behavior: HitTestBehavior.translucent,
                           child: Obx(() {
-                            return (controller.profileData.value.data?.user?.image ?? "").isEmpty
+                            return (commonController.profileData.value.data?.user?.image ?? "").isEmpty
                                 ? const Icon(
                                     Icons.account_circle_sharp,
                                     color: Colors.black,
@@ -47,7 +46,7 @@ class Dashboard extends StatelessWidget {
                                 : ClipOval(
                                     child: getImageView(
                                       finalUrl:
-                                          "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                                          "${APIConstants.bucketUrl}${commonController.profileData.value.data?.user?.image ?? ""}",
                                       fit: BoxFit.cover,
                                       height: 48,
                                       width: 48,
@@ -71,7 +70,7 @@ class Dashboard extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text:
-                                            '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                            '${(commonController.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(commonController.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
                                           fontFamily: MyTexts.SpaceGrotesk,
@@ -108,7 +107,7 @@ class Dashboard extends StatelessWidget {
                                               color: MyColors.custom('545454'),
                                             ),
                                             children: [
-                                              TextSpan(text: controller.getCurrentAddress().value),
+                                              TextSpan(text: commonController.getCurrentAddress().value),
                                               const WidgetSpan(
                                                 alignment: PlaceholderAlignment.middle,
                                                 child: Padding(
@@ -185,7 +184,7 @@ class Dashboard extends StatelessWidget {
                     Obx(() {
                       return CommonDashboard(
                         totalMerchant:
-                            controller
+                            commonController
                                 .profileData
                                 .value
                                 .data
@@ -194,7 +193,7 @@ class Dashboard extends StatelessWidget {
                                 ?.toString() ??
                             "0",
                         totalConnector:
-                            controller
+                            commonController
                                 .profileData
                                 .value
                                 .data

@@ -1,13 +1,13 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/models/ConnectorServiceModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/services/ConstructionLineServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/DeliveryLocation/views/delivery_location_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/QuickAccess/Invetory/model/all_service_model.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 
 class ConstructionServiceController extends GetxController {
-  HomeController homeController = Get.find<HomeController>();
+  CommonController homeController = Get.find<CommonController>();
   RxBool hasOpenedOnce = false.obs;
 
   RxInt navigationIndex = 0.obs;
@@ -422,7 +422,7 @@ class ConstructionServiceController extends GetxController {
               const SizedBox(height: 16),
 
               Obx(() {
-                final addresses = homeController.profileData.value.data?.siteLocations ?? [];
+                final addresses = Get.find<CommonController>().profileData.value.data?.siteLocations ?? [];
 
                 if (addresses.isEmpty) {
                   return const Center(

@@ -1,14 +1,14 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ManufacturerAddress/controller/manufacturer_address_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/add_certificate.dart';
 
 class ManufacturerAddressView extends GetView<ManufacturerAddressController> {
   ManufacturerAddressView({super.key});
 
-  final HomeController homeController = Get.find<HomeController>();
+  final CommonController homeController = Get.find<CommonController>();
 
   @override
   Widget build(BuildContext context) {

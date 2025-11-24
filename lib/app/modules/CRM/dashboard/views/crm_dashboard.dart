@@ -1,16 +1,18 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/controller/crm_dashboard_controller.dart';
 class CRMDashboardScreen extends StatelessWidget {
   CRMDashboardScreen({super.key});
 
+  final commonController = Get.find<CommonController>();
   final controller = Get.put<CRMDashboardController>(CRMDashboardController());
 
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading: controller.isLoading,
+      isLoading: commonController.isLoading,
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
@@ -35,7 +37,7 @@ class CRMDashboardScreen extends StatelessWidget {
                           },
                           behavior: HitTestBehavior.translucent,
                           child: Obx(() {
-                            return (controller.profileData.value.data?.user?.image ?? "").isEmpty
+                            return (commonController.profileData.value.data?.user?.image ?? "").isEmpty
                                 ? const Icon(
                                     Icons.account_circle_sharp,
                                     color: Colors.black,
@@ -44,7 +46,7 @@ class CRMDashboardScreen extends StatelessWidget {
                                 : ClipOval(
                                     child: getImageView(
                                       finalUrl:
-                                          "${APIConstants.bucketUrl}${controller.profileData.value.data?.user?.image ?? ""}",
+                                          "${APIConstants.bucketUrl}${commonController.profileData.value.data?.user?.image ?? ""}",
                                       fit: BoxFit.cover,
                                       height: 48,
                                       width: 48,
@@ -68,7 +70,7 @@ class CRMDashboardScreen extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text:
-                                            '${(controller.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(controller.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                            '${(commonController.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(commonController.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
                                           fontFamily: MyTexts.SpaceGrotesk,
@@ -105,7 +107,7 @@ class CRMDashboardScreen extends StatelessWidget {
                                               color: MyColors.custom('545454'),
                                             ),
                                             children: [
-                                              TextSpan(text: controller.getCurrentAddress().value),
+                                              TextSpan(text: commonController.getCurrentAddress().value),
                                               const WidgetSpan(
                                                 alignment: PlaceholderAlignment.middle,
                                                 child: Padding(
@@ -196,7 +198,7 @@ class CRMDashboardScreen extends StatelessWidget {
                     Obx(() {
                       return CommonDashboard(
                         totalMerchant:
-                            controller
+                            commonController
                                 .profileData
                                 .value
                                 .data
@@ -205,7 +207,7 @@ class CRMDashboardScreen extends StatelessWidget {
                                 ?.toString() ??
                             "0",
                         totalConnector:
-                            controller
+                            commonController
                                 .profileData
                                 .value
                                 .data
