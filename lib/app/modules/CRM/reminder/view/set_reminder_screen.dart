@@ -146,7 +146,6 @@ class SetReminderScreen extends GetView<ReminderController> {
                           CommonTextField(
                             controller: controller.noteController,
                             hintText: "Note...",
-      
                             maxLine: 5,
                             bgColor: const Color(0xFFF3F6FF),
                           ),
@@ -177,7 +176,14 @@ class SetReminderScreen extends GetView<ReminderController> {
                 Expanded(
                   child: RoundedButton(
                     buttonName: "Save",
-                    onTap: () => controller.saveReminder(),
+                    onTap: () {
+                      if(controller.noteController.text.isNotEmpty) {
+                        controller.saveReminder();
+                      }
+                      else{
+                        SnackBars.errorSnackBar(content: "Please add note");
+                      }
+                    },
                   ),
                 ),
               ],

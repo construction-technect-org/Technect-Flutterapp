@@ -293,7 +293,7 @@ class LeadItemCard extends StatelessWidget {
                                   "leadID": lead.id ?? "",
                                   "assignTo": 0,
                                   "assignToSelf":true,
-                                  "priority": controller.selectedPriority.value,
+                                  "priority": "",
                                 },
                               );
                             },
@@ -520,6 +520,7 @@ class LeadItemCard extends StatelessWidget {
                                 "leadID": lead.id ?? "",
                                 "assignTo": item.id ?? "",
                                 "priority": controller.selectedPriority.value,
+                                "assignToSelf":false,
                               },
                             );
                           },

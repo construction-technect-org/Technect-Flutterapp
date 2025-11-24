@@ -25,12 +25,16 @@ class MarketingServices {
     required String remindAt,
     required String leadID,
     String? assignTo,
+    String? note,
+    String? priority,
     bool? assignToMySelf,
   }) async {
     try {
       final body = {
         "reminder_at": remindAt,
         if (assignToMySelf == false) "team_member_id": assignTo,
+        if (assignToMySelf == false) "team_member_note": note ?? "",
+        if (assignToMySelf == false) "team_member_priority": (priority ?? "").toLowerCase(),
         if (assignToMySelf == true) "assign_to_self": assignToMySelf,
       };
       final response = await _apiManager.putObject(

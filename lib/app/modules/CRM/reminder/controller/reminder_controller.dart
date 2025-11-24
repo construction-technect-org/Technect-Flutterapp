@@ -47,14 +47,12 @@ class ReminderController extends GetxController {
   RxBool isLoading = false.obs;
 
   Future<void> saveReminder() async {
-    final note = noteController.text;
-    final date = selectedDay.value ?? DateTime.now();
-    final time = selectedTime.value;
-    debugPrint("Save reminder -> date: $date, time: $time, note: $note");
     isLoading.value = true;
     await Get.find<MarketingController>().updateStatusLeadToFollowUp(
       leadID: Get.arguments["leadID"].toString(),
       assignTo: Get.arguments["assignTo"].toString(),
+      note: noteController.text,
+      priority: Get.arguments["priority"].toString(),
       assignToMySelf: Get.arguments["assignToSelf"] ?? false,
       remindAt: getReminderUTCString(),
       onSuccess: () {

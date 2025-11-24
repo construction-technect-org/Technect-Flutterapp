@@ -264,15 +264,17 @@ class MarketingController extends GetxController {
     debugPrint('Open chat for $leadId');
   }
 
-
-  void filterLead(){
+  void filterLead() {
     if (getFilterStatusName() == "lead") {
       allLeadList.clear();
-      allLeadList.addAll((allLeadModel.value.data?.leads ?? []).where((e)=>e.leadStage=="lead"));
-    }
-    else if (getFilterStatusName() == "follow_up") {
+      allLeadList.addAll(
+        (allLeadModel.value.data?.leads ?? []).where((e) => e.leadStage == "lead"),
+      );
+    } else if (getFilterStatusName() == "follow_up") {
       allFollowUpList.clear();
-      allFollowUpList.addAll((allLeadModel.value.data?.leads ?? []).where((e)=>e.leadStage=="follow_up"));
+      allFollowUpList.addAll(
+        (allLeadModel.value.data?.leads ?? []).where((e) => e.leadStage == "follow_up"),
+      );
     }
   }
 
@@ -297,9 +299,11 @@ class MarketingController extends GetxController {
 
   Future<void> updateStatusLeadToFollowUp({
     required String leadID,
-     String? assignTo,
     required String remindAt,
-     bool? assignToMySelf=false,
+    String? assignTo,
+    String? note,
+    String? priority,
+    bool? assignToMySelf = false,
     VoidCallback? onSuccess,
   }) async {
     try {
@@ -308,7 +312,9 @@ class MarketingController extends GetxController {
         remindAt: remindAt,
         leadID: leadID,
         assignTo: assignTo,
-        assignToMySelf: assignToMySelf
+        assignToMySelf: assignToMySelf,
+        note: note,
+        priority: priority
       );
 
       if (response.success == true) {
