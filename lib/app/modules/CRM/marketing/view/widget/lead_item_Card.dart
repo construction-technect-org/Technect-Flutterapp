@@ -161,7 +161,14 @@ class LeadItemCard extends StatelessWidget {
                                 if (status == "lead")
                                   GestureDetector(
                                     onTapDown: (TapDownDetails details) {
-                                      openAssignPopupMenu(context, details.globalPosition);
+                                      openAssignPopupMenu(
+                                        context,
+                                        details.globalPosition,
+                                        Get.find<CommonController>().teamList,
+                                        () {
+                                          print("Assign to me clicked");
+                                        },
+                                      );
                                     },
                                     child: Stack(
                                       alignment: AlignmentGeometry.center,
@@ -243,10 +250,12 @@ class LeadItemCard extends StatelessWidget {
     return DateFormat('MMM d').format(d);
   }
 
-  void openAssignPopupMenu(BuildContext context, Offset position) {
-    final CommonController commonCtrl = Get.find<CommonController>();
-    final TextEditingController searchCtrl = TextEditingController();
-
+  void openAssignPopupMenu(
+    BuildContext context,
+    Offset position,
+    List<TeamListData> teamList,
+    VoidCallback onAssignToMe,
+  ) {
     showMenu(
       context: context,
       position: RelativeRect.fromLTRB(position.dx, position.dy, 0, 0),
@@ -254,46 +263,61 @@ class LeadItemCard extends StatelessWidget {
       items: [
         PopupMenuItem(
           enabled: false,
-          child: Obx(() {
-            final List<TeamListData> team = commonCtrl.teamList;
-
-            final List<TeamListData> filtered = team
-                .where(
-                  (e) =>
-                      (e.firstName ?? "").toLowerCase().contains(searchCtrl.text.toLowerCase()) ||
-                      (e.roleTitle ?? "").toLowerCase().contains(searchCtrl.text.toLowerCase()),
-                )
-                .toList();
-
-            return StatefulBuilder(
-              builder: (context, setState) {
-                return Container(
-                  width: 280,
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 200),
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemCount: filtered.length,
-                          itemBuilder: (_, i) {
-                            final item = filtered[i];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: _assignItemCard(context, item),
-                            );
-                          },
-                        ),
+          child: Container(
+            width: 280,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (teamList.isEmpty)
+                  GestureDetector(
+                    onTap: onAssignToMe,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            "You don't have any team members",
+                            style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+                          ),
+                          const Gap(10),
+                          RoundedButton(
+                            buttonName: "Assign to me only",
+                            height: 34,
+                            width: 120,
+                            style: MyTexts.medium14.copyWith(color: Colors.white),
+                            onTap: () {
+                              Get.back();
+                              Get.toNamed(
+                                Routes.SetReminder,
+                                arguments: {
+                                  "leadID": lead.id ?? "",
+                                  "assignTo": 0,
+                                  "assignToSelf":true,
+                                  "priority": controller.selectedPriority.value,
+                                },
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                );
-              },
-            );
-          }),
+                if (teamList.isNotEmpty)
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 200),
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: teamList.length,
+                      itemBuilder: (_, i) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: _assignItemCard(context, teamList[i]),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ],
     );

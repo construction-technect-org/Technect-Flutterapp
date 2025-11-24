@@ -55,12 +55,12 @@ class ReminderController extends GetxController {
     await Get.find<MarketingController>().updateStatusLeadToFollowUp(
       leadID: Get.arguments["leadID"].toString(),
       assignTo: Get.arguments["assignTo"].toString(),
+      assignToMySelf: Get.arguments["assignToSelf"] ?? false,
       remindAt: getReminderUTCString(),
       onSuccess: () {
         isLoading.value = false;
         Get.back();
-        Get.find<MarketingController>().activeStatusFilter.value = "Follow Up";
-        Get.find<MarketingController>().filterProspectStatus();
+        Get.find<MarketingController>().fetchAllLead();
       },
     );
     isLoading.value = false;
@@ -69,13 +69,7 @@ class ReminderController extends GetxController {
   String getReminderUTCString() {
     final date = selectedDay.value ?? DateTime.now();
     final time = selectedTime.value;
-    final combined = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
+    final combined = DateTime(date.year, date.month, date.day, time.hour, time.minute);
     final iso = combined.toUtc().toIso8601String();
     return iso.replaceAll('.000', '');
   }

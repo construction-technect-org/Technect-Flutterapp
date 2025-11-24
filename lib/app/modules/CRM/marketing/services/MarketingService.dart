@@ -24,10 +24,15 @@ class MarketingServices {
   Future<ApiResponse> updateLeadStatus({
     required String remindAt,
     required String leadID,
-    required String assignTo,
+    String? assignTo,
+    bool? assignToMySelf,
   }) async {
     try {
-      final body = {"reminder_at": remindAt, "team_member_id": assignTo};
+      final body = {
+        "reminder_at": remindAt,
+        if (assignToMySelf == false) "team_member_id": assignTo,
+        if (assignToMySelf == true) "assign_to_self": assignToMySelf,
+      };
       final response = await _apiManager.putObject(
         url: "${APIConstants.addLead}/$leadID/status",
         body: body,

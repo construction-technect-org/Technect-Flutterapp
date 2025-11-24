@@ -297,8 +297,9 @@ class MarketingController extends GetxController {
 
   Future<void> updateStatusLeadToFollowUp({
     required String leadID,
-    required String assignTo,
+     String? assignTo,
     required String remindAt,
+     bool? assignToMySelf=false,
     VoidCallback? onSuccess,
   }) async {
     try {
@@ -307,6 +308,7 @@ class MarketingController extends GetxController {
         remindAt: remindAt,
         leadID: leadID,
         assignTo: assignTo,
+        assignToMySelf: assignToMySelf
       );
 
       if (response.success == true) {
