@@ -18,7 +18,7 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   }
 }
 
-class EditProfileView extends GetView<EditProfileController> {
+class EditProfileView extends GetView<EditProfileControllerr> {
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(

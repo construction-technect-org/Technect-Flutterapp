@@ -8,7 +8,7 @@ import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDe
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
 
-class EditProfileController extends GetxController {
+class EditProfileControllerr extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   final businessNameController = TextEditingController();

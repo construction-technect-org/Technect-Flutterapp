@@ -7,7 +7,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profi
 import 'package:flutter/cupertino.dart';
 
 class BusinessDetailsStep extends StatelessWidget {
-  final EditProfileController controller;
+  final EditProfileControllerr controller;
   final GlobalKey<FormState> formKey;
 
   const BusinessDetailsStep({super.key, required this.controller, required this.formKey});
