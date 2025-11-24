@@ -795,7 +795,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           ),
                           const Gap(12),
                           SizedBox(
-                            height: 120,
+                            height: 140,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount:
@@ -857,8 +857,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                                           data.brand ?? '',
                                           style: MyTexts.medium14,
                                           textAlign: TextAlign.center,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.fade,
                                         ),
                                       ],
                                     ),
