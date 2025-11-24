@@ -3,7 +3,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddRequirement/services/AddRequirementService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/Requirement/controllers/requirement_controller.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/AddProduct/models/get_filter_model.dart';
@@ -14,7 +13,6 @@ class AddRequirementController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final scrollController = ScrollController();
   final isLoading = false.obs;
-  HomeController homeController = Get.find<HomeController>();
 
   // Form Controllers
   final quantityController = TextEditingController();
@@ -287,7 +285,8 @@ class AddRequirementController extends GetxController {
   // Site Address
   Future<void> _fetchSiteAddresses() async {
     siteLocations.value =
-        Get.find<CommonController>().profileData.value.data?.siteLocations ?? [];
+        Get.find<CommonController>().profileData.value.data?.siteLocations ??
+        [];
     _syncSelectedSiteAddress();
   }
 

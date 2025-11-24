@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/AddServiceRequirement/services/add_service_requirement_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/SerciveCategoryModel.dart';
 import 'package:intl/intl.dart';
@@ -12,7 +11,6 @@ class AddServiceRequirementController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final scrollController = ScrollController();
   final isLoading = false.obs;
-  HomeController homeController = Get.find<HomeController>();
 
   final noteController = TextEditingController();
 
