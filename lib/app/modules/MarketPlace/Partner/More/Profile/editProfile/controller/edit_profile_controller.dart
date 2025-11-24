@@ -27,6 +27,8 @@ class EditProfileControllerr extends GetxController {
   RxString emailError = "".obs;
   RxString websiteError = "".obs;
   RxBool isEmailValidating = false.obs;
+  RxBool isNumValidating = false.obs;
+  RxString numberError = "".obs;
 
   RxString businessHours = "".obs;
   RxList<Map<String, dynamic>> businessHoursData = <Map<String, dynamic>>[].obs;
@@ -157,6 +159,14 @@ class EditProfileControllerr extends GetxController {
     isEmailValidating.value = true;
     emailError.value = await Validate.validateEmailAsync(email) ?? "";
     isEmailValidating.value = false;
+  }
+
+  Future<void> validateNumAvailability() async {
+    final num = businessContactController.text;
+
+    isNumValidating.value = true;
+    numberError.value = await Validate.validateMobileNumberAsync(num) ?? "";
+    isNumValidating.value = false;
   }
 
   Future<void> validateUrlAvailability() async {

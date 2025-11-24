@@ -174,7 +174,7 @@ class Validate {
     try {
       final isAvailable = await SignUpService().checkAvailability(
         mobileNumber: mobileNumber?.trim(),
-        countryCode: countryCode,
+        countryCode: countryCode ?? "+91",
       );
       if (!isAvailable) {
         return "This mobile number is already registered";

@@ -34,10 +34,16 @@ class EditProfileView extends GetView<EditProfileControllerr> {
                 buttonName: 'Update',
                 onTap: () async {
                   if (!controller.formKey.currentState!.validate()) return;
-                  if (controller.emailError.value != '') {
-                    return;
-                  }
-                  if (controller.websiteError.value != '') {
+                  if (controller.emailError.value != '') return;
+                  if (controller.websiteError.value != '') return;
+                  if (controller.numberError.value != '') return;
+
+                  await controller.validateNumAvailability();
+                  final mobileError = controller.numberError.value;
+
+                  if (mobileError != "" && mobileError.isNotEmpty) {
+                    controller.numberError.value = mobileError;
+                    // controller.isValid.value = 1;
                     return;
                   }
                   controller.updateProfile();
