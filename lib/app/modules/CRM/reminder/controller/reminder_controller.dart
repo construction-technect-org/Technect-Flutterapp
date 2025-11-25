@@ -2,7 +2,7 @@ import 'package:construction_technect/app/modules/CRM/marketing/controller/marke
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ReminderController extends GetxController {
+class SetReminderController extends GetxController {
   final Rx<DateTime> focusedDay = DateTime.now().obs;
   final Rx<DateTime?> selectedDay = DateTime.now().obs;
   final Rx<TimeOfDay> selectedTime = const TimeOfDay(hour: 10, minute: 30).obs;
@@ -58,7 +58,6 @@ class ReminderController extends GetxController {
       onSuccess: () {
         isLoading.value = false;
         Get.back();
-        Get.find<MarketingController>().fetchAllLead();
       },
     );
     isLoading.value = false;

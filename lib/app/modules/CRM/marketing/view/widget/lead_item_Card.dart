@@ -7,17 +7,116 @@ import 'package:construction_technect/app/modules/CRM/marketing/controller/marke
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/priority_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
 class LeadItemCard extends StatelessWidget {
   final Leads lead;
   final MarketingController controller;
 
-  const LeadItemCard({required this.lead, required this.controller});
+  LeadItemCard({required this.lead, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final String status = lead.leadStage ?? "";
+    final String leadStatus = lead.leadStage ?? "";
+    final String status = lead.status ?? "";
+    final bool isFollowUpSwipable = leadStatus == "follow_up" && status == "pending";
+    final bool isProspectSwipable =
+        leadStatus == "prospect" &&
+        (status == "fresh" || status == "reached_out") &&
+        controller.activeFilter.value == "Prospect";
+
+    return isProspectSwipable
+        ? Slidable(
+            key: UniqueKey(),
+            startActionPane: ActionPane(
+              motion: const BehindMotion(),
+              extentRatio: 0.25,
+              dragDismissible: false,
+              children: [
+                SlidableAction(
+                  backgroundColor: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                  onPressed: (_) async {
+                    await controller.updateStatusLeadToFollowUp(
+                      leadID: lead.id.toString(),
+                      status: "on_hold",
+                    );
+                  },
+                  label: "On Hold",
+                ),
+              ],
+            ),
+
+            endActionPane: ActionPane(
+              motion: const BehindMotion(),
+              extentRatio: 0.25,
+              dragDismissible: false,
+              children: [
+                SlidableAction(
+                  backgroundColor: Colors.green,
+                  borderRadius: BorderRadius.circular(20),
+                  onPressed: (_) async {
+                    await controller.updateStatusLeadToFollowUp(
+                      leadID: lead.id.toString(),
+                      status: status == "fresh" ? "reached_out" : "converted",
+                    );
+                  },
+                  label: status == "fresh" ? "Reached Out" : "Converted",
+                ),
+              ],
+            ),
+
+            child: _card(context, status, leadStatus),
+          )
+        : isFollowUpSwipable
+        ? Slidable(
+            key: UniqueKey(),
+
+            startActionPane: ActionPane(
+              motion: const BehindMotion(),
+              extentRatio: 0.25,
+              dragDismissible: false,
+              children: [
+                SlidableAction(
+                  backgroundColor: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                  onPressed: (_) async {
+                    await controller.updateStatusLeadToFollowUp(
+                      leadID: lead.id.toString(),
+                      status: "missed",
+                    );
+                  },
+                  label: "Missed",
+                ),
+              ],
+            ),
+
+            endActionPane: ActionPane(
+              motion: const BehindMotion(),
+              extentRatio: 0.25,
+              dragDismissible: false,
+              children: [
+                SlidableAction(
+                  backgroundColor: Colors.green,
+                  borderRadius: BorderRadius.circular(20),
+                  onPressed: (_) async {
+                    await controller.updateStatusLeadToFollowUp(
+                      leadID: lead.id.toString(),
+                      status: "completed",
+                    );
+                  },
+                  label: "Completed",
+                ),
+              ],
+            ),
+
+            child: _card(context, status, leadStatus),
+          )
+        : _card(context, status, leadStatus);
+  }
+
+  Widget _card(BuildContext context, String status, String leadStatus) {
     return GestureDetector(
       onTap: () {
         Get.toNamed(Routes.LEAD_DETAIL, arguments: {"lead": lead});
@@ -25,8 +124,8 @@ class LeadItemCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            begin: AlignmentGeometry.topCenter,
-            end: AlignmentGeometry.bottomCenter,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [Colors.white, Color(0xFFFFFBCC)],
           ),
           borderRadius: BorderRadius.circular(20),
@@ -56,44 +155,32 @@ class LeadItemCard extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 3),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Connector - ',
-                                style: MyTexts.regular14.copyWith(color: Colors.black),
-                              ),
-                              TextSpan(
-                                text: lead.connectorName ?? '',
-                                style: MyTexts.medium14.copyWith(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        '${_formatTime(DateTime.parse(lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(lead.createdAt ?? ""))}',
-                        style: MyTexts.regular12.copyWith(color: MyColors.black),
-                        textAlign: TextAlign.right,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 3),
-                  Row(
                     children: [
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(height: 3),
+                            RichText(
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Connector - ',
+                                    style: MyTexts.regular14.copyWith(color: Colors.black),
+                                  ),
+                                  TextSpan(
+                                    text: lead.connectorName ?? '',
+                                    style: MyTexts.medium14.copyWith(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 3),
                             Text(
                               'Lead Id - ${lead.leadId}',
                               style: MyTexts.regular13.copyWith(color: MyColors.black),
@@ -114,126 +201,183 @@ class LeadItemCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                if (status == "lead")
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: MyColors.veryPaleBlue,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          "Lead",
-                                          style: MyTexts.medium13.copyWith(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                if (status == "follow_up")
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: MyColors.paleRed,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          "FollowUp",
-                                          style: MyTexts.medium13.copyWith(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                const Spacer(),
-                                if (status == "lead")
-                                  GestureDetector(
-                                    onTapDown: (TapDownDetails details) {
-                                      openAssignPopupMenu(
-                                        context,
-                                        details.globalPosition,
-                                        Get.find<CommonController>().teamList,
-                                        () {
-                                          print("Assign to me clicked");
-                                        },
-                                      );
-                                    },
-                                    child: Stack(
-                                      alignment: AlignmentGeometry.center,
-                                      children: [
-                                        Image.asset(Asset.explore, width: 65),
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              Asset.userPlus,
-                                              colorFilter: const ColorFilter.mode(
-                                                Colors.white,
-                                                BlendMode.srcIn,
-                                              ),
-                                              height: 12,
-                                            ),
-                                            const Gap(4),
-                                            Text(
-                                              "Assign",
-                                              style: MyTexts.medium12.copyWith(
-                                                color: MyColors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                if (status == "follow_up")
-                                  GestureDetector(
-                                    onTapDown: (TapDownDetails details) {
-                                      _openConversationMenu(context, details.globalPosition, lead);
-                                    },
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Image.asset(Asset.explore, width: 65),
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              Asset.userPlus,
-                                              colorFilter: const ColorFilter.mode(
-                                                Colors.white,
-                                                BlendMode.srcIn,
-                                              ),
-                                              height: 12,
-                                            ),
-                                            const Gap(4),
-                                            Text(
-                                              "Contact",
-                                              style: MyTexts.medium12.copyWith(
-                                                color: MyColors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if (leadStatus != "lead") ...[
+                            CircleAvatar(
+                              radius: 14,
+                              backgroundImage:
+                                  (lead.assignedTeamMember?.profilePhoto ?? "").isNotEmpty
+                                  ? NetworkImage(
+                                      APIConstants.bucketUrl +
+                                          (lead.assignedTeamMember?.profilePhoto ?? ""),
+                                    )
+                                  : const AssetImage(Asset.appLogo),
+                            ),
+                            const Gap(3),
+                            Text(
+                              "${lead.assignedTeamMember?.firstName ?? ""} ${lead.assignedTeamMember?.lastName ?? ""}",
+                              style: MyTexts.medium13,
+                            ),
+                          ] else ...[
+                            const Gap(3),
+                          ],
+
+                          Text(
+                            '${_formatTime(DateTime.parse(lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(lead.createdAt ?? ""))}',
+                            style: MyTexts.regular12.copyWith(color: MyColors.black),
+                            textAlign: TextAlign.right,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
+                  const Gap(6),
+                  if (leadStatus == "lead") ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: MyColors.veryPaleBlue,
+                          ),
+                          child: Text(
+                            "Lead",
+                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                          ),
+                        ),
+
+                        // const Spacer(),
+                        GestureDetector(
+                          onTapDown: (details) {
+                            openAssignPopupMenu(
+                              context,
+                              details.globalPosition,
+                              Get.find<CommonController>().teamList,
+                              () {},
+                            );
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(Asset.explore, width: 65),
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    Asset.userPlus,
+                                    colorFilter: const ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.srcIn,
+                                    ),
+                                    height: 12,
+                                  ),
+                                  const Gap(4),
+                                  Text(
+                                    "Assign",
+                                    style: MyTexts.medium12.copyWith(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ] else if (controller.activeFilter.value == "Follow Up") ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: MyColors.paleRed,
+                          ),
+                          child: Text(
+                            "FollowUp",
+                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTapDown: (details) {
+                            _openConversationMenu(context, details.globalPosition, lead);
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(Asset.explore, width: 65),
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    Asset.userPlus,
+                                    colorFilter: const ColorFilter.mode(
+                                      Colors.white,
+                                      BlendMode.srcIn,
+                                    ),
+                                    height: 12,
+                                  ),
+                                  const Gap(4),
+                                  Text(
+                                    "Contact",
+                                    style: MyTexts.medium12.copyWith(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ] else if (controller.activeFilter.value == "Prospect") ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: const Color(0xFFB3FDCE),
+                          ),
+                          child: Text(
+                            "Prospect",
+                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
+                  else if (controller.activeFilter.value == "Qualified") ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: MyColors.green,
+                            ),
+                            child: Text(
+                              "Qualified",
+                              style: MyTexts.medium13.copyWith(color: Colors.white),
+                            ),
+                          ),
+                          Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle
+                              ),
+                              padding: const EdgeInsets.all(4),
+                              child: SvgPicture.asset(Asset.chat,height: 18,))
+                        ],
+                      ),
+                    ],
                 ],
               ),
             ),
@@ -292,7 +436,7 @@ class LeadItemCard extends StatelessWidget {
                                 arguments: {
                                   "leadID": lead.id ?? "",
                                   "assignTo": 0,
-                                  "assignToSelf":true,
+                                  "assignToSelf": true,
                                   "priority": "",
                                 },
                               );
@@ -336,7 +480,7 @@ class LeadItemCard extends StatelessWidget {
                 width: 32,
                 height: 32,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Image.asset(Asset.appLogo, width: 32, height: 32),
+                errorBuilder: (_, _, _) => Image.asset(Asset.appLogo, width: 32, height: 32),
               ),
             ),
             const SizedBox(width: 8),
@@ -520,7 +664,7 @@ class LeadItemCard extends StatelessWidget {
                                 "leadID": lead.id ?? "",
                                 "assignTo": item.id ?? "",
                                 "priority": controller.selectedPriority.value,
-                                "assignToSelf":false,
+                                "assignToSelf": false,
                               },
                             );
                           },
@@ -569,22 +713,64 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
-  void _openAddConversationBottomSheet(BuildContext context, Leads lead) {
-    final TextEditingController lastController = TextEditingController();
-    final TextEditingController nextController = TextEditingController();
+  void _openConversationMenu(BuildContext context, Offset position, Leads lead) {
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(position.dx, position.dy, position.dx + 1, position.dy + 1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      items: [
+        PopupMenuItem(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Last Conversation", style: MyTexts.medium15),
+              SvgPicture.asset(Asset.chat),
+            ],
+          ),
+          onTap: () {
+            Future.delayed(Duration.zero, () {
+              _openLastConversationSheet(lead);
+            });
+          },
+        ),
+        PopupMenuItem(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Next Conversation", style: MyTexts.medium15),
+              SvgPicture.asset(Asset.chat),
+            ],
+          ),
+          onTap: () {
+            Future.delayed(Duration.zero, () {
+              _openNextConversationSheet(lead);
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  final lastFormKey = GlobalKey<FormState>();
+
+  void _openLastConversationSheet(Leads lead) {
+    final TextEditingController lastController = TextEditingController(
+      text: lead.lastConversation ?? "",
+    );
 
     Get.bottomSheet(
       GestureDetector(
         onTap: hideKeyboard,
         child: Container(
-          height: Get.height * 0.75,
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
           ),
-          child: SingleChildScrollView(
+          child: Form(
+            key: lastFormKey,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -609,10 +795,10 @@ class LeadItemCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Last Conversation", style: MyTexts.bold15),
-                    const SizedBox(width: 8),
                     _userInfo(lead),
                   ],
                 ),
+
                 const SizedBox(height: 10),
 
                 CommonTextField(
@@ -620,61 +806,51 @@ class LeadItemCard extends StatelessWidget {
                   maxLine: 5,
                   hintText: "Typing.....",
                   bgColor: const Color(0xFFE8F1FF),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return "Please enter last conversation";
+                    return null;
+                  },
                 ),
 
-                const SizedBox(height: 12),
+                const SizedBox(height: 20),
+
                 Row(
                   children: [
                     Expanded(
-                      child: _whiteButton(
-                        "Save",
+                      child: RoundedButton(
+                        buttonName: "Cancel",
                         onTap: () {
                           Get.back();
                         },
+                        height: 40,
+                        borderColor: MyColors.primary,
+                        color: Colors.transparent,
+                        fontColor: MyColors.primary,
                       ),
                     ),
-                    const SizedBox(width: 15),
-                    Expanded(child: _whiteButton("Cancel", onTap: Get.back)),
-                  ],
-                ),
-
-                const SizedBox(height: 25),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Next Conversation", style: MyTexts.bold15),
-                    const SizedBox(width: 8),
-                    _userInfo(lead),
-                  ],
-                ),
-                const SizedBox(height: 10),
-
-                CommonTextField(
-                  controller: nextController,
-                  maxLine: 5,
-                  hintText: "Typing.....",
-                  bgColor: const Color(0xFFFFF9BD),
-                ),
-
-                const SizedBox(height: 15),
-
-                Row(
-                  children: [
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: _whiteIconButton(
-                        icon: Icons.access_time,
-                        label: "Set Reminder",
-                        onTap: () {},
+                      child: RoundedButton(
+                        buttonName: "Save",
+                        onTap: () {
+                          if (lastFormKey.currentState!.validate()) {
+                            controller.updateStatusLeadToFollowUp(
+                              leadID: lead.id.toString(),
+                              lastConversation: lastController.text,
+                              onSuccess: () {
+                                Get.back();
+                                SnackBars.successSnackBar(
+                                  content: 'Last conversation added successfully',
+                                );
+                              },
+                            );
+                          }
+                        },
+                        height: 40,
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(child: _whiteButton("Save", onTap: () {})),
-                    const SizedBox(width: 10),
-                    Expanded(child: _whiteButton("Cancel", onTap: Get.back)),
                   ],
                 ),
-                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -684,63 +860,133 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
-  void _openConversationMenu(BuildContext context, Offset position, Leads lead) {
-    showMenu(
-      context: context,
-      position: RelativeRect.fromLTRB(position.dx, position.dy, position.dx + 1, position.dy + 1),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      items: [
-        PopupMenuItem(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Last Conversation", style: MyTexts.medium15),
-              SvgPicture.asset(Asset.chat),
-            ],
+  final GlobalKey<FormState> nextFormKey = GlobalKey<FormState>();
+
+  void _openNextConversationSheet(Leads lead) {
+    final TextEditingController nextController = TextEditingController(
+      text: lead.nextConversation ?? "",
+    );
+    Get.bottomSheet(
+      GestureDetector(
+        onTap: hideKeyboard,
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
           ),
-          onTap: () {
-            Future.delayed(Duration.zero, () {
-              _openAddConversationBottomSheet(context, lead);
-            });
-          },
-        ),
-        PopupMenuItem(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Next Conversation", style: MyTexts.medium15),
-              SvgPicture.asset(Asset.chat),
-            ],
+          child: Form(
+            key: nextFormKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    Text("Add Conversation", style: MyTexts.medium18),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: Get.back,
+                      child: const CircleAvatar(
+                        radius: 18,
+                        backgroundColor: MyColors.grayF7,
+                        child: Icon(Icons.close, color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Next Conversation", style: MyTexts.bold15),
+                    _userInfo(lead),
+                  ],
+                ),
+
+                const SizedBox(height: 10),
+
+                CommonTextField(
+                  controller: nextController,
+                  maxLine: 5,
+                  hintText: "Typing.....",
+                  bgColor: const Color(0xFFFFF9BD),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return "Please enter next conversation";
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: RoundedButton(
+                        buttonName: "Cancel",
+                        onTap: () {
+                          Get.back();
+                        },
+                        height: 40,
+                        borderColor: MyColors.primary,
+                        color: Colors.transparent,
+                        fontColor: MyColors.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: RoundedButton(
+                        buttonName: "Save",
+                        onTap: () {
+                          if (nextFormKey.currentState!.validate()) {
+                            controller.updateStatusLeadToFollowUp(
+                              leadID: lead.id.toString(),
+                              nextConversation: nextController.text,
+                              onSuccess: () {
+                                Get.back();
+                                SnackBars.successSnackBar(
+                                  content: 'Next conversation added successfully',
+                                );
+                              },
+                            );
+                          }
+                        },
+                        height: 40,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          onTap: () {
-            Future.delayed(Duration.zero, () {
-              _openAddConversationBottomSheet(context, lead);
-            });
-          },
         ),
-      ],
+      ),
+      isScrollControlled: true,
     );
   }
 
   Widget _userInfo(Leads lead) {
-    return Column(
+    return Row(
       children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 12,
-              backgroundImage: (lead.image ?? "").isNotEmpty
-                  ? NetworkImage(lead.image ?? "")
-                  : const AssetImage(Asset.appLogo),
-            ),
-            const SizedBox(width: 8),
-            Text(lead.connectorName ?? "", style: MyTexts.medium14),
-          ],
+        CircleAvatar(
+          radius: 18,
+          backgroundImage: (lead.assignedTeamMember?.profilePhoto ?? "").isNotEmpty
+              ? NetworkImage(APIConstants.bucketUrl + (lead.assignedTeamMember?.profilePhoto ?? ""))
+              : const AssetImage(Asset.appLogo),
         ),
-        const SizedBox(height: 4),
-        Text(
-          "${_formatTime(DateTime.parse(lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(lead.createdAt ?? ""))}}",
-          style: MyTexts.medium12.copyWith(color: Colors.black54),
+        const SizedBox(width: 8),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "${lead.assignedTeamMember?.firstName ?? ""} ${lead.assignedTeamMember?.lastName ?? ""}",
+              style: MyTexts.medium14,
+            ),
+            Text(lead.assignedTeamMember?.roleTitle ?? "", style: MyTexts.regular13),
+          ],
         ),
       ],
     );
@@ -782,41 +1028,6 @@ class LeadItemCard extends StatelessWidget {
             Icon(icon, size: 16),
             const SizedBox(width: 8),
             Text(label, style: MyTexts.medium14),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ActionButton extends StatelessWidget {
-  final String icon;
-  final String label;
-  final double? hPadding;
-  final VoidCallback onTap;
-
-  const ActionButton({required this.icon, required this.label, required this.onTap, this.hPadding});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: hPadding ?? 6, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              icon,
-              height: 12,
-              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-            ),
-            const SizedBox(width: 8),
-            Text(label, style: MyTexts.regular12),
           ],
         ),
       ),

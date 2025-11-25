@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class ReminderBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ReminderController>(() => ReminderController());
+    Get.lazyPut<SetReminderController>(() => SetReminderController());
   }
 }

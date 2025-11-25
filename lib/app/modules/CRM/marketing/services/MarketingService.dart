@@ -22,19 +22,25 @@ class MarketingServices {
   }
 
   Future<ApiResponse> updateLeadStatus({
-    required String remindAt,
     required String leadID,
     String? assignTo,
+    String? remindAt,
+    String? status,
     String? note,
     String? priority,
+    String? lastConversation,
+    String? nextConversation,
     bool? assignToMySelf,
   }) async {
     try {
       final body = {
-        "reminder_at": remindAt,
-        if (assignToMySelf == false) "team_member_id": assignTo,
-        if (assignToMySelf == false) "team_member_note": note ?? "",
-        if (assignToMySelf == false) "team_member_priority": (priority ?? "").toLowerCase(),
+        if ((remindAt ?? "").isNotEmpty) "reminder_at": remindAt,
+        if ((assignTo ?? "").isNotEmpty) "team_member_id": assignTo,
+        if ((note ?? "").isNotEmpty) "team_member_note": note ?? "",
+        if ((status ?? "").isNotEmpty) "status": status ?? "",
+        if ((lastConversation ?? "").isNotEmpty) "last_conversation": lastConversation ?? "",
+        if ((nextConversation ?? "").isNotEmpty) "next_conversation": nextConversation ?? "",
+        if ((priority ?? "").isNotEmpty) "team_member_priority": (priority ?? "").toLowerCase(),
         if (assignToMySelf == true) "assign_to_self": assignToMySelf,
       };
       final response = await _apiManager.putObject(

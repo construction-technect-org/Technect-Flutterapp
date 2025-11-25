@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/services/MarketingService.dart';
@@ -13,12 +12,8 @@ class MarketingController extends GetxController {
     WidgetsBinding.instance.addPostFrameCallback((val) {
       fetchAllLead(isLoad: true);
     });
-    filterFollowupStatus();
-    filterProspectStatus();
     super.onInit();
   }
-
-  RxString selectedPriority = "High".obs;
 
   final isLoading = false.obs;
 
@@ -27,9 +22,11 @@ class MarketingController extends GetxController {
   final bellNotificationCount = 2.obs;
 
   RxString activeFilter = 'Lead'.obs;
-  RxString activeStatusFilter = 'All'.obs;
+  RxString activeLeadStatusFilter = 'All'.obs;
+  RxString activeFollowUpStatusFilter = 'Pending'.obs;
   RxString activeProspectStatusFilter = 'Fresh'.obs;
-  RxString category = 'Marketing'.obs;
+  RxString activeQualifiedStatusFilter = 'Qualified'.obs;
+  RxString selectedPriority = "High".obs;
 
   final items = ['Lead', 'Follow Up', 'Prospect', 'Qualified'];
   final filterScreens = {
@@ -39,182 +36,64 @@ class MarketingController extends GetxController {
     'Qualified': const QualifiedScreen(),
   };
 
-  int get todaysTotal => leads.length;
+  RxInt todaysTotal = 0.obs;
 
-  RxList<LeadModel> leads = <LeadModel>[
-    LeadModel(
-      id: '#CTO1256',
-      name: 'Anand',
-      connector: 'Anand',
-      product: 'M Sand',
-      distanceKm: 2.8,
-      status: Status.completed,
-      dateTime: DateTime(2024, 11, 12, 10, 30),
-      avatarUrl: 'https://i.pravatar.cc/150?img=12',
-    ),
-    LeadModel(
-      id: '#CTO1259',
-      name: 'Shiva',
-      connector: 'Shiva',
-      product: 'M Sand',
-      distanceKm: 2.8,
-      status: Status.closed,
-      dateTime: DateTime(2024, 11, 12, 10, 40),
-      avatarUrl: 'https://i.pravatar.cc/150?img=5',
-    ),
-    LeadModel(
-      id: '#CTO1260',
-      name: 'Rahul',
-      connector: 'Mukesh',
-      product: 'Cement',
-      distanceKm: 5.4,
-      status: Status.pending,
-      dateTime: DateTime(2024, 11, 13, 11, 10),
-      avatarUrl: 'https://i.pravatar.cc/150?img=8',
-    ),
-    LeadModel(
-      id: '#CTO1261',
-      name: 'Priya',
-      connector: 'Anil',
-      product: 'Bricks',
-      distanceKm: 1.8,
-      status: Status.completed,
-      dateTime: DateTime(2024, 11, 13, 12, 5),
-      avatarUrl: 'https://i.pravatar.cc/150?img=22',
-    ),
-    LeadModel(
-      id: '#CTO1262',
-      name: 'Vikas',
-      connector: 'Kiran',
-      product: 'Steel',
-      distanceKm: 3.3,
-      status: Status.pending,
-      dateTime: DateTime(2024, 11, 14, 9, 20),
-      avatarUrl: 'https://i.pravatar.cc/150?img=14',
-    ),
-    LeadModel(
-      id: '#CTO1263',
-      name: 'Meena',
-      connector: 'Deepak',
-      product: 'Concrete',
-      distanceKm: 4.1,
-      status: Status.missed,
-      dateTime: DateTime(2024, 11, 14, 10, 45),
-      avatarUrl: 'https://i.pravatar.cc/150?img=17',
-    ),
-    LeadModel(
-      id: '#CTO1264',
-      name: 'Karthik',
-      connector: 'Suresh',
-      product: 'M Sand',
-      distanceKm: 2.0,
-      status: Status.closed,
-      dateTime: DateTime(2024, 11, 15, 13, 15),
-      avatarUrl: 'https://i.pravatar.cc/150?img=28',
-    ),
-    LeadModel(
-      id: '#CTO1265',
-      name: 'Sangeeta',
-      connector: 'Anand',
-      product: 'Tiles',
-      distanceKm: 6.2,
-      status: Status.completed,
-      dateTime: DateTime(2024, 11, 15, 16, 10),
-      avatarUrl: 'https://i.pravatar.cc/150?img=32',
-    ),
-    LeadModel(
-      id: '#CTO1266',
-      name: 'Rohan',
-      connector: 'Prakash',
-      product: 'Blocks',
-      distanceKm: 1.5,
-      status: Status.pending,
-      dateTime: DateTime(2024, 11, 16, 11, 45),
-      avatarUrl: 'https://i.pravatar.cc/150?img=36',
-    ),
-    LeadModel(
-      id: '#CTO1267',
-      name: 'Divya',
-      connector: 'Vivek',
-      product: 'Cement',
-      distanceKm: 3.9,
-      status: Status.closed,
-      dateTime: DateTime(2024, 11, 16, 14, 25),
-      avatarUrl: 'https://i.pravatar.cc/150?img=41',
-    ),
-    LeadModel(
-      id: '#CTO1268',
-      name: 'Harshal',
-      connector: 'Manish',
-      product: 'TMT Steel',
-      distanceKm: 4.7,
-      status: Status.completed,
-      dateTime: DateTime(2024, 11, 17, 10, 55),
-      avatarUrl: 'https://i.pravatar.cc/150?img=45',
-    ),
-    LeadModel(
-      id: '#CTO1269',
-      name: 'Aarti',
-      connector: 'Ganesh',
-      product: 'Concrete',
-      distanceKm: 5.1,
-      status: Status.missed,
-      dateTime: DateTime(2024, 11, 17, 12, 40),
-      avatarUrl: 'https://i.pravatar.cc/150?img=50',
-    ),
-  ].obs;
+  final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
 
-  RxList<LeadModel> followups = <LeadModel>[].obs;
-
-  void filterFollowupStatus() {
-    if (activeStatusFilter.value == 'All') {
-      followups.value = leads;
-    } else {
-      followups.value = leads
-          .where((lead) => lead.status.name.toLowerCase() == activeStatusFilter.value.toLowerCase())
-          .toList();
+  List<Leads> get filteredFollowups {
+    if (activeFollowUpStatusFilter.value.toLowerCase() == "pending") {
+      return allFollowUpList.where((e) => e.status == "pending").toList();
     }
+    if (activeFollowUpStatusFilter.value.toLowerCase() == "completed") {
+      return allFollowUpList.where((e) => e.status == "fresh").toList();
+    }
+    if (activeFollowUpStatusFilter.value.toLowerCase() == "missed") {
+      return allFollowUpList.where((e) => e.status == "missed").toList();
+    }
+    return allFollowUpList;
   }
 
-  RxList<LeadModel> prospectLeads = <LeadModel>[].obs;
+  final List<String> statusProspectItems = <String>["Fresh", "Reached Out", "Converted", "On Hold"];
 
-  void filterProspectStatus() {
-    if (activeProspectStatusFilter.value == 'Fresh') {
-      prospectLeads.value = leads;
-    } else {
-      prospectLeads.value = leads.where((lead) {
-        if (activeProspectStatusFilter.value.toLowerCase() == "Reached Out".toLowerCase()) {
-          if (lead.status == Status.completed) {
-            return true;
-          } else {
-            return false;
-          }
-        } else if (activeProspectStatusFilter.value.toLowerCase() == "On Hold".toLowerCase()) {
-          if (lead.status == Status.pending) {
-            return true;
-          } else {
-            return false;
-          }
-        } else if (activeProspectStatusFilter.value.toLowerCase() == "Converted".toLowerCase()) {
-          if (lead.status == Status.closed) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      }).toList();
+  List<Leads> get filteredProspect {
+    if (activeProspectStatusFilter.value.toLowerCase() == "fresh") {
+      return allProspectList.where((e) => e.status == "fresh").toList();
     }
+    if (activeProspectStatusFilter.value.toLowerCase() == "reached out") {
+      return allProspectList.where((e) => e.status == "reached_out").toList();
+    }
+    if (activeProspectStatusFilter.value.toLowerCase() == "converted") {
+      return allProspectList.where((e) => e.leadStage == "qualified").toList();
+    }
+    if (activeProspectStatusFilter.value.toLowerCase() == "on hold") {
+      return allProspectList.where((e) => e.status == "on_hold").toList();
+    }
+    return allProspectList;
   }
 
-  final List<String> statusItems = <String>["All", "Pending", "Completed", "Missed"];
+  final List<String> qualifiedStatus = <String>["Qualified", "Lost"];
 
-  final List<String> statusProspectItems = <String>["Fresh", "Reached Out", "On Hold", "Converted"];
+  List<Leads> get filteredQualified {
+    if (activeFollowUpStatusFilter.value.toLowerCase() == "qualified") {
+      return allQualifiedList.where((e) => e.status == "qualified").toList();
+    }
+    if (activeFollowUpStatusFilter.value.toLowerCase() == "lost") {
+      return allQualifiedList.where((e) => e.status == "lost").toList();
+    }
+    return allQualifiedList;
+  }
 
-  RxInt messagesCount = 2.obs;
-  RxInt remindersCount = 2.obs;
-  RxInt alertsCount = 2.obs;
+  final List<String> leadStatus = <String>["All", "Inbound", "Outbound"];
+
+  List<Leads> get filteredLead {
+    if (activeLeadStatusFilter.value.toLowerCase() == "inbound") {
+      return allLeadList.where((e) => e.isAutoCreated == true).toList();
+    }
+    if (activeLeadStatusFilter.value.toLowerCase() == "outbound") {
+      return allLeadList.where((e) => e.isAutoCreated == false).toList();
+    }
+    return allLeadList;
+  }
 
   void setFilter(String f) {
     activeFilter.value = f;
@@ -229,58 +108,79 @@ class MarketingController extends GetxController {
       return "follow_up";
     }
     if (activeFilter.value == "Prospect") {
-      return "new";
+      return "prospect";
     }
     if (activeFilter.value == "Qualified") {
-      return "new";
+      return "qualified";
     }
     return "new";
   }
 
   void setStatusFilter(String f) {
-    activeStatusFilter.value = f;
-    filterFollowupStatus();
+    activeFollowUpStatusFilter.value = f;
   }
 
   void setStatusProspectFilter(String f) {
     activeProspectStatusFilter.value = f;
-    log("setStatusProspectFilter: $f");
-    filterProspectStatus();
   }
 
-  void setCategory(String c) => category.value = c;
-
-  void assignTo(String leadId, String user) {
-    debugPrint('Assign $leadId to $user');
+  void setStatusQualifiedFilter(String f) {
+    activeQualifiedStatusFilter.value = f;
   }
 
-  void setReminder(String leadId, DateTime when) {
-    debugPrint('Reminder for $leadId at $when');
-    Get.toNamed(Routes.SetReminder);
+  void setStatusLeadFilter(String f) {
+    activeLeadStatusFilter.value = f;
   }
 
-  void chatNow(String leadId) {
-    Get.toNamed(Routes.All_CHAT_LIST);
-    debugPrint('Open chat for $leadId');
-  }
 
   void filterLead() {
+    final DateTime today = DateTime.now();
+    final String todayStr =
+        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+
+    final List<Leads> all = allLeadModel.value.data?.leads ?? [];
+
+    final List<Leads> todaysLeads = all.where((e) {
+      if (e.createdAt == null) return false;
+
+      final DateTime d = DateTime.parse(e.createdAt!);
+      final String dateStr =
+          "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
+      return dateStr == todayStr;
+    }).toList();
+
     if (getFilterStatusName() == "lead") {
-      allLeadList.clear();
-      allLeadList.addAll(
-        (allLeadModel.value.data?.leads ?? []).where((e) => e.leadStage == "lead"),
-      );
+      allLeadList
+        ..clear()
+        ..addAll(todaysLeads.where((e) => e.leadStage == "lead"));
+
+      todaysTotal.value = allLeadList.length;
     } else if (getFilterStatusName() == "follow_up") {
-      allFollowUpList.clear();
-      allFollowUpList.addAll(
-        (allLeadModel.value.data?.leads ?? []).where((e) => e.leadStage == "follow_up"),
-      );
+      allFollowUpList
+        ..clear()
+        ..addAll(todaysLeads.where((e) => e.leadStage == "follow_up" || e.leadStage == "prospect"));
+
+      todaysTotal.value = allFollowUpList.length;
+    } else if (getFilterStatusName() == "prospect") {
+      allProspectList
+        ..clear()
+        ..addAll(todaysLeads.where((e) => e.leadStage == "prospect" || e.leadStage == "qualified"));
+
+      todaysTotal.value = allProspectList.length;
+    } else if (getFilterStatusName() == "qualified") {
+      allQualifiedList
+        ..clear()
+        ..addAll(todaysLeads.where((e) => e.leadStage == "qualified"));
+
+      todaysTotal.value = allQualifiedList.length;
     }
   }
 
   Rx<AllLeadModel> allLeadModel = AllLeadModel().obs;
   RxList<Leads> allLeadList = <Leads>[].obs;
   RxList<Leads> allFollowUpList = <Leads>[].obs;
+  RxList<Leads> allProspectList = <Leads>[].obs;
+  RxList<Leads> allQualifiedList = <Leads>[].obs;
 
   Future<void> fetchAllLead({bool? isLoad}) async {
     try {
@@ -299,10 +199,13 @@ class MarketingController extends GetxController {
 
   Future<void> updateStatusLeadToFollowUp({
     required String leadID,
-    required String remindAt,
+    String? remindAt,
     String? assignTo,
     String? note,
     String? priority,
+    String? status,
+    String? lastConversation,
+    String? nextConversation,
     bool? assignToMySelf = false,
     VoidCallback? onSuccess,
   }) async {
@@ -314,13 +217,15 @@ class MarketingController extends GetxController {
         assignTo: assignTo,
         assignToMySelf: assignToMySelf,
         note: note,
-        priority: priority
+        priority: priority,
+        status: status,
+        lastConversation: lastConversation,
+        nextConversation: nextConversation,
       );
 
       if (response.success == true) {
         if (onSuccess != null) onSuccess();
-        SnackBars.successSnackBar(content: 'Lead moved to the follow up successfully');
-        // await fetchConnections();
+        await fetchAllLead(isLoad: true);
       } else {
         SnackBars.errorSnackBar(content: response.message ?? 'Failed to accept connection');
       }

@@ -55,6 +55,7 @@ dependencies:
   record: ^6.1.2
   just_audio: ^0.10.5
   table_calendar: ^3.2.0
+  flutter_slidable: ^4.0.3
 
 
 

@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/add_new_lead_button.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/lead_item_Card.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/lead_status_widget.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/todays_leads_card.dart';
 
 class LeadScreen extends GetView<MarketingController> {
@@ -27,26 +28,23 @@ class LeadScreen extends GetView<MarketingController> {
             );
           },
         ),
-        const SizedBox(height: 21),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text('Lead Details', style: MyTexts.medium18),
-        ),
+        const Gap(8),
+        const LeadStatusWidget(),
         Obx(() {
-          if (controller.allLeadList.isEmpty) {
+          if (controller.filteredLead.isEmpty) {
             return Padding(
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
               child: Center(
                 child: Text(
                   "No lead found",
-                  style: MyTexts.regular14.copyWith(color: MyColors.dustyGray),
+                  style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                 ),
               ),
             );
           }
 
           return Column(
-            children: controller.allLeadList
+            children: controller.filteredLead
                 .map(
                   (l) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),

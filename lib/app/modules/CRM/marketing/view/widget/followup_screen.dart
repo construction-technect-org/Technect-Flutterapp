@@ -16,19 +16,17 @@ class FollowupScreen extends GetView<MarketingController> {
         const StatusViewWidget(),
         Obx(
           () => Column(
-            children: controller.allFollowUpList.isEmpty
+            children: controller.filteredFollowups.isEmpty
                 ? [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
                       child: Text(
                         'No follow-ups available',
-                        style: MyTexts.medium16.copyWith(
-                          color: MyColors.gray54,
-                        ),
+                        style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                       ),
                     ),
                   ]
-                : controller.allFollowUpList
+                : controller.filteredFollowups
                       .map(
                         (l) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),

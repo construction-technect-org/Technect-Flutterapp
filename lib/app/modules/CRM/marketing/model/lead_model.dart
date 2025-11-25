@@ -1,35 +1,3 @@
-class LeadModel {
-  final String id;
-  final String name;
-  final String connector;
-  final String product;
-  final Status status;
-  final double distanceKm;
-  final DateTime dateTime;
-  final String avatarUrl;
-
-  LeadModel({
-    required this.id,
-    required this.name,
-    required this.connector,
-    required this.product,
-    required this.distanceKm,
-    required this.dateTime,
-    this.status = Status.pending,
-    required this.avatarUrl,
-  });
-}
-
-enum Status {
-  pending('Pending'),
-  completed('Completed'),
-  missed('Missed'),
-  closed('Closed');
-
-  final String text;
-  const Status(this.text);
-}
-
 class AllLeadModel {
   bool? success;
   String? message;
@@ -130,6 +98,17 @@ class Leads {
   String? createdAt;
   String? updatedAt;
 
+  bool? assignedToSelf;
+  int? assignedTeamMemberId;
+  String? teamMemberNote;
+  String? teamMemberPriority;
+
+  String? lastConversation;
+  String? nextConversation;
+
+  AssignedTeamMember? assignedTeamMember;
+  AssignedUser? assignedUser;
+
   Leads({
     this.id,
     this.leadId,
@@ -166,6 +145,14 @@ class Leads {
     this.qualifiedAt,
     this.createdAt,
     this.updatedAt,
+    this.assignedToSelf,
+    this.assignedTeamMemberId,
+    this.teamMemberNote,
+    this.teamMemberPriority,
+    this.lastConversation,
+    this.nextConversation,
+    this.assignedTeamMember,
+    this.assignedUser,
   });
 
   Leads.fromJson(Map<String, dynamic> json) {
@@ -212,6 +199,22 @@ class Leads {
 
     createdAt = json["created_at"];
     updatedAt = json["updated_at"];
+
+    assignedToSelf = json["assigned_to_self"];
+    assignedTeamMemberId = json["assigned_team_member_id"];
+    teamMemberNote = json["team_member_note"];
+    teamMemberPriority = json["team_member_priority"];
+
+    lastConversation = json["last_conversation"];
+    nextConversation = json["next_conversation"];
+
+    assignedTeamMember = json["assigned_team_member"] != null
+        ? AssignedTeamMember.fromJson(json["assigned_team_member"])
+        : null;
+
+    assignedUser = json["assigned_user"] != null
+        ? AssignedUser.fromJson(json["assigned_user"])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -225,7 +228,6 @@ class Leads {
       "connector_phone": connectorPhone,
       "connector_profile_image": connectorProfileImage,
       "product_name": productName,
-      "image": image,
       "product_code": productCode,
       "unit_of_measure": unitOfMeasure,
       "quantity": quantity,
@@ -251,6 +253,106 @@ class Leads {
       "qualified_at": qualifiedAt,
       "created_at": createdAt,
       "updated_at": updatedAt,
+      "assigned_to_self": assignedToSelf,
+      "assigned_team_member_id": assignedTeamMemberId,
+      "team_member_note": teamMemberNote,
+      "team_member_priority": teamMemberPriority,
+      "last_conversation": lastConversation,
+      "next_conversation": nextConversation,
+      "assigned_team_member": assignedTeamMember?.toJson(),
+      "assigned_user": assignedUser?.toJson(),
+    };
+  }
+}
+
+class AssignedTeamMember {
+  int? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? mobileNumber;
+  String? profilePhoto;
+  int? teamRoleId;
+  String? roleTitle;
+
+  AssignedTeamMember({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.mobileNumber,
+    this.profilePhoto,
+    this.teamRoleId,
+    this.roleTitle,
+  });
+
+  AssignedTeamMember.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    firstName = json["firstName"];
+    lastName = json["lastName"];
+    email = json["email"];
+    mobileNumber = json["mobileNumber"];
+    profilePhoto = json["profilePhoto"];
+    teamRoleId = json["teamRoleId"];
+    roleTitle = json["roleTitle"];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "mobileNumber": mobileNumber,
+      "profilePhoto": profilePhoto,
+      "teamRoleId": teamRoleId,
+      "roleTitle": roleTitle,
+    };
+  }
+}
+
+class AssignedUser {
+  int? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? mobileNumber;
+  String? countryCode;
+  String? profileImage;
+  String? roleName;
+
+  AssignedUser({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.mobileNumber,
+    this.countryCode,
+    this.profileImage,
+    this.roleName,
+  });
+
+  AssignedUser.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    firstName = json["firstName"];
+    lastName = json["lastName"];
+    email = json["email"];
+    mobileNumber = json["mobileNumber"];
+    countryCode = json["countryCode"];
+    profileImage = json["profileImage"];
+    roleName = json["roleName"];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "mobileNumber": mobileNumber,
+      "countryCode": countryCode,
+      "profileImage": profileImage,
+      "roleName": roleName,
     };
   }
 }

@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
 
-class ProspectStatusWidget extends GetView<MarketingController> {
-  const ProspectStatusWidget({super.key});
+class QualifiedStatusWidget extends GetView<MarketingController> {
+  const QualifiedStatusWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,21 +11,20 @@ class ProspectStatusWidget extends GetView<MarketingController> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Obx(() {
-          final String active = controller.activeProspectStatusFilter.value;
+          final String active = controller.activeQualifiedStatusFilter.value;
 
           return ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            itemCount: controller.statusProspectItems.length,
+            itemCount: controller.qualifiedStatus.length,
             separatorBuilder: (_, _) => const SizedBox(width: 20),
             itemBuilder: (context, index) {
-              final String label = controller.statusProspectItems[index];
+              final String label = controller.qualifiedStatus[index];
               final bool isActive = active == label;
-
               return Center(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () => controller.setStatusProspectFilter(label),
+                  onTap: () => controller.setStatusQualifiedFilter(label),
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 200),
                     style: MyTexts.medium15.copyWith(

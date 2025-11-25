@@ -5,7 +5,7 @@ import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/CRM/reminder/controller/reminder_controller.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class SetReminderScreen extends GetView<ReminderController> {
+class SetReminderScreen extends GetView<SetReminderController> {
   const SetReminderScreen({super.key});
 
   @override
