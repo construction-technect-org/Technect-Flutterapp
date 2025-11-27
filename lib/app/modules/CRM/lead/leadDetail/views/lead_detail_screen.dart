@@ -237,7 +237,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                     SvgPicture.asset(Asset.location, height: 14, width: 14),
                     const SizedBox(width: 3),
                     Text(
-                      '${controller.lead.radius} km away',
+                      '${(controller.lead.distanceKM??0.0).toStringAsFixed(2)} km away',
                       style: MyTexts.regular13.copyWith(color: MyColors.black),
                     ),
                   ],
