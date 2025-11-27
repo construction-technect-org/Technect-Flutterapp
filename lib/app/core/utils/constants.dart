@@ -139,13 +139,14 @@ class Asset {
   static const String center = '${newIcons}center.svg';
   static const String notification = '${newIcons}notification.svg';
   static const String MM = '${newIcons}MM.svg';
+  static const String bar_chart = '${newIcons}bar-chart.svg';
+  static const String users = '${newIcons}users.svg';
   static const String TEM = '${newIcons}TEM.svg';
   static const String CM = '${newIcons}CM.svg';
 }
 
 class Constants {
-  static const String privacyPolicy =
-      'http://43.205.117.97/privacy-policy';
+  static const String privacyPolicy = 'http://43.205.117.97/privacy-policy';
   static const String termsCondition =
       'http://43.205.117.97/terms-and-conditions';
   static const String aboutUS = 'http://43.205.117.97/about-us';
