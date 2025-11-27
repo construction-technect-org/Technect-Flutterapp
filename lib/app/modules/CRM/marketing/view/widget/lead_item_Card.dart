@@ -21,7 +21,7 @@ class LeadItemCard extends StatelessWidget {
     final String leadStatus = lead.leadStage ?? "";
     final String status = lead.status ?? "";
     final bool isFollowUpSwipable = leadStatus == "follow_up" && status == "pending";
-    final bool isQualifiedSwipable = status == "pending" && leadStatus == "qualified";
+    final bool isQualifiedSwipable = status == "pending" && leadStatus == "qualified" && controller.activeFilter.value == "Qualified";
     final bool isProspectSwipable =
         leadStatus == "prospect" &&
         (status == "fresh" || status == "reached_out") &&
@@ -181,19 +181,11 @@ class LeadItemCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                imageUrl: lead.image ?? "",
+              child: getImageView(
+                finalUrl: APIConstants.bucketUrl + (lead.image ?? ""),
                 width: 80,
                 height: 97,
                 fit: BoxFit.cover,
-                placeholder: (c, s) =>
-                    Container(color: Colors.grey.shade200, width: 80, height: 97),
-                errorWidget: (c, s, e) => Container(
-                  color: Colors.grey.shade200,
-                  width: 80,
-                  height: 97,
-                  child: Image.asset(Asset.appLogo),
-                ),
               ),
             ),
             const SizedBox(width: 8),
@@ -252,6 +244,7 @@ class LeadItemCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          if(lead.assignedToSelf==false)
                           if (leadStatus != "lead") ...[
                             CircleAvatar(
                               radius: 14,

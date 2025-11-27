@@ -2,9 +2,10 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 
 class PriorityDropdown extends StatefulWidget {
   final String value;
+  bool? isEnable;
   final Function(String) onChanged;
 
-  const PriorityDropdown({super.key, required this.value, required this.onChanged});
+  PriorityDropdown({super.key, required this.value, required this.onChanged, this.isEnable = true});
 
   @override
   State<PriorityDropdown> createState() => _PriorityDropdownState();
@@ -29,7 +30,7 @@ class _PriorityDropdownState extends State<PriorityDropdown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
         color: getColor(widget.value),
         borderRadius: BorderRadius.circular(10),
@@ -37,12 +38,15 @@ class _PriorityDropdownState extends State<PriorityDropdown> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: widget.value,
+
           icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white),
           dropdownColor: Colors.white,
           style: const TextStyle(color: Colors.black, fontSize: 14),
-          onChanged: (value) {
-            if (value != null) widget.onChanged(value);
-          },
+          onChanged: widget.isEnable == true
+              ? (value) {
+                  if (value != null) widget.onChanged(value);
+                }
+              : null,
           isDense: true,
           items: items.map((e) {
             return DropdownMenuItem(
@@ -55,10 +59,7 @@ class _PriorityDropdownState extends State<PriorityDropdown> {
                       color: getColor(e),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      e,
-                      style: MyTexts.medium14.copyWith(color: Colors.white),
-                    ),
+                    child: Text(e, style: MyTexts.medium14.copyWith(color: Colors.white)),
                   ),
                 ],
               ),

@@ -47,28 +47,19 @@ CachedNetworkImage getImageView({
       margin: const EdgeInsets.all(10),
       height: height,
       width: width,
-      decoration: const BoxDecoration(
-        color: MyColors.grayD4,
-        shape: BoxShape.circle,
-      ),
+      decoration: const BoxDecoration(color: MyColors.grayF7),
       child: const Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: MyColors.primary,
-        ),
+        child: CircularProgressIndicator(strokeWidth: 2, color: MyColors.primary),
       ),
     ),
     errorWidget: (context, url, error) => SizedBox(
       height: height,
       width: width,
-      child: Container(
+      child: SizedBox(
         height: height,
         width: width,
-        decoration: const BoxDecoration(
-          color: MyColors.grayD4,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(Icons.error, color: MyColors.black),
+        // decoration: const BoxDecoration(color: MyColors.grayD4, shape: BoxShape.circle),
+        child: Image.asset(Asset.appLogo, height: height, width: width, fit: BoxFit.contain),
       ),
     ),
   );

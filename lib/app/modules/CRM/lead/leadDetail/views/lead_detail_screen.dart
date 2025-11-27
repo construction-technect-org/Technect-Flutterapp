@@ -1,9 +1,11 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/controller/lead_detail_controller.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/view/widget/priority_dropdown.dart';
+import 'package:intl/intl.dart';
 
 class LeadDetailScreen extends GetView<LeadDetailController> {
   const LeadDetailScreen({super.key});
@@ -51,11 +53,13 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                         children: [
                           _topLeadCard(),
                           const Gap(16),
+                          _topTeamMemberCard(),
+                          const Gap(16),
                           Text("Status", style: MyTexts.medium16),
                           const Gap(9),
                           CommonDropdown(
                             hintText: "Select lead status",
-                            items: const ["Follow Up", "Pending"],
+                            items: [Get.find<MarketingController>().activeFilter.value],
                             selectedValue: controller.selectedCustomerType,
                             enabled: false,
                             itemLabel: (item) => item,
@@ -65,12 +69,12 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                           Text("Status Pipeline Representation", style: MyTexts.medium16),
                           const Gap(20),
                           _pipelineSection(),
-                          const Gap(28),
-                          _followUpSection(),
                           const Gap(24),
                           _requirementSection(),
                           const Gap(24),
                           _conversationSection(),
+                          const Gap(20),
+                          buildNote(),
                           const Gap(20),
                         ],
                       ),
@@ -85,12 +89,43 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
     );
   }
 
+  Container buildNote() {
+    return Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: const Color(0xFFFFFCF5),
+                            border: Border.all(color: MyColors.grayDC),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Notes : ",
+                                style: MyTexts.medium12.copyWith(color: const Color(0xFF737272)),
+                              ),
+                              const Gap(8),
+                              Text(
+                                "${controller.lead.notes}",
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                              const Gap(8),
+                            ],
+                          ),
+                        );
+  }
+
   Widget _topLeadCard() {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: MyColors.grayD6),
         borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(colors: [Color(0xFFF3F8FF), Color(0xFFE7F0FF)]),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFFFFFF), Color(0xFFFFFBCC)],
+          end: Alignment.bottomCenter,
+          begin: Alignment.topCenter,
+        ),
       ),
       padding: const EdgeInsets.all(8),
       child: Row(
@@ -98,15 +133,13 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: getImageView(
-              finalUrl: "https://picsum.photos/200/300",
-              height: 114,
-              width: 90,
+              finalUrl: APIConstants.bucketUrl + (controller.lead.connectorProfileImage ?? ""),
+              height: 90,
+              width: 80,
               fit: BoxFit.cover,
             ),
           ),
           const Gap(10),
-
-          /// TEXT AREA
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,27 +147,175 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        "Lead Id - ${controller.lead.leadId}",
-                        style: MyTexts.medium14.copyWith(color: Colors.black),
+                      child: RichText(
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Connector - ',
+                              style: MyTexts.regular14.copyWith(color: Colors.black),
+                            ),
+                            TextSpan(
+                              text: controller.lead.connectorName ?? '',
+                              style: MyTexts.medium14.copyWith(color: Colors.black),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Text("10:30 AM, Nov 12", style: MyTexts.medium10.copyWith(color: Colors.black)),
+                    const Gap(4),
+                    Text(
+                      '${_formatTime(DateTime.parse(controller.lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(controller.lead.createdAt ?? ""))}',
+                      style: MyTexts.regular12.copyWith(color: MyColors.black),
+                      textAlign: TextAlign.right,
+                    ),
                   ],
                 ),
-                const Gap(5),
-                Text("Buyer Details - ", style: MyTexts.regular14),
                 const Gap(3),
-                Text("POC Phone Number", style: MyTexts.regular14),
+                Text(
+                  'Lead Id - ${controller.lead.leadId}',
+                  style: MyTexts.regular13.copyWith(color: MyColors.black),
+                ),
                 const Gap(3),
-                Text("POC Name -", style: MyTexts.regular14),
+                Text(
+                  'Product Interested - ${controller.lead.productName}',
+                  style: MyTexts.regular13.copyWith(color: MyColors.black),
+                ),
                 const Gap(3),
-                Text("Product Name - ${controller.lead.productName}", style: MyTexts.regular14),
-                const Gap(3),
-                Text("Quantity - ${controller.lead.quantity}", style: MyTexts.regular14.copyWith(color: MyColors.black)),
+                Row(
+                  children: [
+                    SvgPicture.asset(Asset.location, height: 14, width: 14),
+                    const SizedBox(width: 3),
+                    Text(
+                      '${controller.lead.radius} km away',
+                      style: MyTexts.regular13.copyWith(color: MyColors.black),
+                    ),
+                  ],
+                ),
+                // const Gap(8),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(8),
+                //     color: MyColors.veryPaleBlue,
+                //   ),
+                //   child: Text(
+                //     (controller.lead.status ?? "").capitalize.toString(),
+                //     style: MyTexts.medium13.copyWith(color: Colors.black),
+                //   ),
+                // ),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _topTeamMemberCard() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: MyColors.grayD6),
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFFFFFF), Color(0xFFE6EDFF)],
+          end: Alignment.bottomCenter,
+          begin: Alignment.topCenter,
+        ),
+      ),
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: getImageView(
+                  finalUrl:
+                      APIConstants.bucketUrl +
+                      (controller.lead.assignedTeamMember?.profilePhoto ?? ""),
+                  height: 90,
+                  width: 80,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 3),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: RichText(
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Team : ',
+                                  style: MyTexts.regular14.copyWith(color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text:
+                                      "${controller.lead.assignedTeamMember?.firstName ?? ""} ${controller.lead.assignedTeamMember?.lastName ?? ""}",
+                                  style: MyTexts.medium14.copyWith(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          '${_formatTime(DateTime.parse(controller.lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(controller.lead.createdAt ?? ""))}',
+                          style: MyTexts.regular12.copyWith(color: MyColors.black),
+                          textAlign: TextAlign.right,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Team Id : ${controller.lead.assignedTeamMember?.id ?? ""}',
+                                style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                'Designation : ${controller.lead.assignedTeamMember?.roleTitle}',
+                                style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Conversation Ration : 4/10 ',
+                                style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              ),
+                              const SizedBox(height: 6),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const Gap(4),
+          if ((controller.lead.teamMemberPriority ?? "").isNotEmpty)
+            PriorityDropdown(
+              isEnable: false,
+              value: (controller.lead.teamMemberPriority ?? "").capitalizeFirst.toString(),
+              onChanged: (v) {},
+            ),
         ],
       ),
     );
@@ -199,83 +380,6 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
     );
   }
 
-  Widget _followUpSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text("Follow Up", style: MyTexts.medium16),
-            const Spacer(),
-            SvgPicture.asset(Asset.pin),
-          ],
-        ),
-        const Gap(20),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: MyColors.grayEA),
-            borderRadius: BorderRadius.circular(16),
-            color: const Color(0xFFF3F8FF),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Gap(8),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: const Color(0xFFFFFCF5),
-                  border: Border.all(color: MyColors.grayDC),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Notes : ",
-                      style: MyTexts.medium12.copyWith(color: const Color(0xFF737272)),
-                    ),
-                    const Gap(8),
-                     Text("${controller.lead.notes}", style: const TextStyle(color: Colors.black54)),
-                    const Gap(16),
-                  ],
-                ),
-              ),
-              const Gap(12),
-              CommonTextField(
-                bgColor: const Color(0xFFE8EBFE),
-                controller: controller.quoteController,
-                maxLine: 2,
-              ),
-              const Gap(24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _followIcon(Asset.calendar, "Date & time"),
-                  _followIcon(Asset.userPlus, "Collaboration"),
-                  _followIcon(Asset.paperclip, "Attach"),
-                  _followIcon(Asset.moreV, "More"),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _followIcon(String icon, String text) {
-    return Column(
-      children: [
-        SvgPicture.asset(icon, height: 24, width: 24),
-        const Gap(8),
-        Text(text, style: MyTexts.medium12),
-      ],
-    );
-  }
-
   Widget _requirementSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,9 +388,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
           children: [
             Text("Requirement", style: MyTexts.medium16),
             const Spacer(),
-            GestureDetector(
-              child: SvgPicture.asset(Asset.edit),
-            ),
+            GestureDetector(child: SvgPicture.asset(Asset.edit)),
           ],
         ),
         const Gap(16),
@@ -305,23 +407,23 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
               _reqText("Quantity : ${controller.lead.quantity}"),
               _reqText("Location : ${controller.lead.siteLocation}"),
               _reqText("Delivery Date : ${controller.lead.estimateDeliveryDate}"),
-              const Gap(10),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE7EAFF),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.picture_as_pdf, color: Colors.red),
-                    Gap(16),
-                    Text("Adobe.pdf"),
-                    Spacer(),
-                    Icon(Icons.visibility, size: 18),
-                  ],
-                ),
-              ),
+              // const Gap(10),
+              // Container(
+              //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              //   decoration: BoxDecoration(
+              //     color: const Color(0xFFE7EAFF),
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.picture_as_pdf, color: Colors.red),
+              //       Gap(16),
+              //       Text("Adobe.pdf"),
+              //       Spacer(),
+              //       Icon(Icons.visibility, size: 18),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -342,20 +444,16 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
       children: [
         Text("Conversation", style: MyTexts.medium16),
         const Gap(14),
-
-        Row(
-          children: [
-            Expanded(child: _conversationCard("Last")),
-            const Gap(14),
-            Expanded(child: _conversationCard("Next")),
-          ],
-        ),
+        _conversationCard("Last", controller.lead.lastConversation ?? ""),
+        const Gap(14),
+        _conversationCard("Next", controller.lead.nextConversation ?? ""),
       ],
     );
   }
 
-  Widget _conversationCard(String title) {
+  Widget _conversationCard(String title, String text) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         border: Border.all(color: MyColors.grayE6),
@@ -365,30 +463,18 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: MyTexts.medium16),
+          Text(title, style: MyTexts.regular14),
           const Gap(6),
-          Text(
-            "Quote was shared and negotiations is going on",
-            style: MyTexts.regular14.copyWith(color: Colors.black),
-          ),
-          const Gap(10),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: MyColors.primary,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Text(
-                "Team member & Time",
-                style: MyTexts.medium13.copyWith(color: Colors.white),
-              ),
-            ),
-          ),
+          Text("Sent : $text", style: MyTexts.medium14.copyWith(color: Colors.black)),
         ],
       ),
     );
   }
 
+  static String _formatTime(DateTime d) =>
+      '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')} AM';
 
+  static String _formatDate(DateTime d) {
+    return DateFormat('MMM d').format(d);
+  }
 }
