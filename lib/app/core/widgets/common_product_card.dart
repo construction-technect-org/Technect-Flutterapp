@@ -28,8 +28,8 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return isListView ? _buildListUI(context) : _buildGridUI(context);
-
   }
+
   Widget _buildGridUI(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -75,6 +75,7 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildListUI(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -135,7 +136,6 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildProductInfo() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,27 +298,31 @@ class ProductImage extends StatelessWidget {
     children: [
       if (myPref.role.val == "connector")
         if ((product.distanceKm ?? "").isNotEmpty)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            color: Colors.white,
-            child: Text(
-              "${double.parse(product.distanceKm ?? '0').toStringAsFixed(1)} km",
-              style: MyTexts.light14,
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+              color: Colors.white,
+              child: Text(
+                "${double.parse(product.distanceKm ?? '0').toStringAsFixed(1)} km",
+                style: MyTexts.light14,
+              ),
             ),
           ),
-      const Spacer(),
+      // const Spacer(),
       if (myPref.role.val == "connector")
         if (isFromAdd == false && isFromConnector == true)
-          GestureDetector(
-            onTap: onWishlistTap,
-            child: Icon(
-              (product.isInWishList ?? false)
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              size: 24,
-              color: (product.isInWishList ?? false)
-                  ? MyColors.custom('E53D26')
-                  : MyColors.gray54,
+          Expanded(
+            child: GestureDetector(
+              onTap: onWishlistTap,
+              child: Icon(
+                (product.isInWishList ?? false)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                size: 24,
+                color: (product.isInWishList ?? false)
+                    ? MyColors.custom('E53D26')
+                    : MyColors.gray54,
+              ),
             ),
           ),
     ],
