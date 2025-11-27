@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/controllers/profile_controller.dart';
+import 'package:readmore/readmore.dart';
 
 class InfoMetricsComponent extends StatelessWidget {
   InfoMetricsComponent({super.key});
@@ -273,7 +274,7 @@ class InfoMetricsComponent extends StatelessWidget {
 
               const Gap(6),
               Obx(() {
-                return buildRow(
+                return buildAddressRow(
                   title: "Address",
                   data: Get.find<CommonController>().getCurrentAddress().value,
                 );
@@ -414,6 +415,30 @@ class InfoMetricsComponent extends StatelessWidget {
             textAlign: TextAlign.right,
             overflow: TextOverflow.ellipsis,
             style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildAddressRow({String? data, required String title}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
+        const SizedBox(width: 20),
+        Flexible(
+          child: ReadMoreText(
+            data ?? "",
+            trimMode: TrimMode.Line,
+            trimLines: 1,
+            colorClickableText: const Color.fromRGBO(33, 150, 243, 1),
+            trimCollapsedText: '       ',
+            style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+            trimExpandedText: '  Show less',
+            textAlign: TextAlign.right,
+            moreStyle: MyTexts.medium15.copyWith(color: MyColors.gray2E),
           ),
         ),
       ],
