@@ -6,48 +6,54 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.zero,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: AlignmentGeometry.topCenter,
+          end: AlignmentGeometry.center,
+          colors: [MyColors.custom("FFF9BD"), Colors.white],
+        ),
+      ),
+      padding: const EdgeInsets.only(right: 5),
       child: Obx(
         () => SizedBox(
           height: 40,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: controller.items.map((it) {
-                final bool isActive = controller.activeFilter.value == it;
-                return Padding(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: controller.items.map((it) {
+              final bool isActive = controller.activeFilter.value == it;
+              return GestureDetector(
+                onTap: () => controller.setFilter(it),
+                child: Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: GestureDetector(
-                    onTap: () => controller.setFilter(it),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isActive
-                            ? const Color(0xFF17345A)
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: isActive
-                            ? const [
-                                BoxShadow(color: Colors.black12, blurRadius: 6),
-                              ]
-                            : null,
-                      ),
-                      child: Text(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
                         it,
-                        style: MyTexts.medium14.copyWith(
-                          color: isActive ? Colors.white : MyColors.black,
-                        ),
+                        style: MyTexts.medium14.copyWith(color: MyColors.black),
                       ),
-                    ),
+                      const Gap(10),
+                      if (isActive)
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          height: 3,
+                          width: 73,
+                          decoration: const BoxDecoration(
+                            color: MyColors.primary,
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(10),
+                            ),
+                          ),
+                        )
+                      else
+                        const SizedBox(height: 3, width: 73),
+                    ],
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              );
+            }).toList(),
           ),
         ),
       ),
