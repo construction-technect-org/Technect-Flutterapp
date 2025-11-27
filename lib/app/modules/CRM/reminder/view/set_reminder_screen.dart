@@ -11,7 +11,7 @@ class SetReminderScreen extends GetView<SetReminderController> {
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
-      isLoading:  controller.isLoading,
+      isLoading: controller.isLoading,
       child: GestureDetector(
         onTap: hideKeyboard,
         child: Scaffold(
@@ -84,8 +84,12 @@ class SetReminderScreen extends GetView<SetReminderController> {
                                       rightChevronIcon: const Icon(Icons.chevron_right, size: 28),
                                     ),
                                     daysOfWeekStyle: DaysOfWeekStyle(
-                                      weekendStyle: MyTexts.bold15.copyWith(color:  MyColors.primary,),
-                                      weekdayStyle: MyTexts.bold15.copyWith(color:  MyColors.primary,),
+                                      weekendStyle: MyTexts.bold15.copyWith(
+                                        color: MyColors.primary,
+                                      ),
+                                      weekdayStyle: MyTexts.bold15.copyWith(
+                                        color: MyColors.primary,
+                                      ),
                                     ),
                                     calendarStyle: CalendarStyle(
                                       selectedDecoration: const BoxDecoration(
@@ -107,7 +111,7 @@ class SetReminderScreen extends GetView<SetReminderController> {
                                 Row(
                                   children: [
                                     Text("Time", style: MyTexts.medium18),
-                                   const Spacer(),
+                                    const Spacer(),
                                     GestureDetector(
                                       onTap: () => controller.pickTime(),
                                       child: Obx(() {
@@ -116,7 +120,7 @@ class SetReminderScreen extends GetView<SetReminderController> {
                                         final mm = t.minute.toString().padLeft(2, '0');
                                         return Container(
                                           padding: const EdgeInsets.symmetric(
-                                            vertical: 12,
+                                            vertical: 6,
                                             horizontal: 22,
                                           ),
                                           decoration: BoxDecoration(
@@ -124,7 +128,7 @@ class SetReminderScreen extends GetView<SetReminderController> {
                                             border: Border.all(color: Colors.indigo.shade200),
                                             borderRadius: BorderRadius.circular(12),
                                           ),
-                                          child: Text("$hh : $mm", style: MyTexts.medium18),
+                                          child: Text("$hh : $mm", style: MyTexts.medium16),
                                         );
                                       }),
                                     ),
@@ -134,14 +138,51 @@ class SetReminderScreen extends GetView<SetReminderController> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Obx(() => _infoBox(label: "Date", value: controller.formattedSelectedDate())),
-                              Obx(() => _infoBox(label: "Time", value: controller.formattedSelectedTime())),
-                            ],
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: MyColors.greyE5),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Selected Date : ',
+                                        style: MyTexts.regular15.copyWith(color: Colors.black),
+                                      ),
+                                      TextSpan(
+                                        text: controller.formattedSelectedDate(),
+                                        style: MyTexts.medium16.copyWith(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Gap(10),
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Selected Time : ',
+                                        style: MyTexts.regular15.copyWith(color: Colors.black),
+                                      ),
+                                      TextSpan(
+                                        text: controller.formattedSelectedTime(),
+                                        style: MyTexts.medium16.copyWith(color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-      
                           const SizedBox(height: 18),
                           CommonTextField(
                             controller: controller.noteController,
@@ -149,7 +190,7 @@ class SetReminderScreen extends GetView<SetReminderController> {
                             maxLine: 5,
                             bgColor: const Color(0xFFF3F6FF),
                           ),
-      
+
                           const SizedBox(height: 30),
                         ],
                       ),
@@ -159,7 +200,7 @@ class SetReminderScreen extends GetView<SetReminderController> {
               ),
             ],
           ),
-          bottomNavigationBar:  Padding(
+          bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(24.0),
             child: Row(
               children: [
@@ -177,10 +218,9 @@ class SetReminderScreen extends GetView<SetReminderController> {
                   child: RoundedButton(
                     buttonName: "Save",
                     onTap: () {
-                      if(controller.noteController.text.isNotEmpty) {
+                      if (controller.noteController.text.isNotEmpty) {
                         controller.saveReminder();
-                      }
-                      else{
+                      } else {
                         SnackBars.errorSnackBar(content: "Please add note");
                       }
                     },
@@ -199,7 +239,7 @@ class SetReminderScreen extends GetView<SetReminderController> {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color :MyColors.primary),
+        border: Border.all(color: MyColors.primary),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(

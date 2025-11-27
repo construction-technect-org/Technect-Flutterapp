@@ -162,6 +162,12 @@ class MyTexts {
     color: MyColors.black,
   );
 
+  static TextStyle get regular15 => TextStyle(
+    fontFamily: SpaceGrotesk,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+    color: MyColors.black,
+  );
   static TextStyle get regular16 => TextStyle(
     fontFamily: SpaceGrotesk,
     fontSize: 16.sp,
