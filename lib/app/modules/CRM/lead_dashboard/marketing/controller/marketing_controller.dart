@@ -32,7 +32,7 @@ class MarketingController extends GetxController {
   RxString activeLeadStatusFilter = 'All'.obs;
   RxString activeFollowUpStatusFilter = 'Pending'.obs;
   RxString activeProspectStatusFilter = 'Fresh'.obs;
-  RxString activeQualifiedStatusFilter = 'All'.obs;
+  RxString activeQualifiedStatusFilter = 'Pending'.obs;
   RxString selectedPriority = "High".obs;
 
   final items = ['Lead', 'Follow Up', 'Prospect', 'Qualified'];
@@ -85,7 +85,7 @@ class MarketingController extends GetxController {
     return allProspectList;
   }
 
-  final List<String> qualifiedStatus = <String>["All", "Qualified", "Lost"];
+  final List<String> qualifiedStatus = <String>["Pending", "Qualified", "Lost"];
 
   List<Leads> get filteredQualified {
     if (activeQualifiedStatusFilter.value.toLowerCase() == "qualified") {
