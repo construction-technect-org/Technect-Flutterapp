@@ -1,9 +1,10 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/widgets/common_dropdown.dart';
+import 'package:construction_technect/app/modules/CRM/lead/leadDetail/components/pipeline_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/controller/lead_detail_controller.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/CRM/marketing/view/widget/priority_dropdown.dart';
 import 'package:intl/intl.dart';
 
@@ -52,23 +53,39 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _topLeadCard(),
-                          const Gap(16),
-                          _topTeamMemberCard(),
+                          if (controller.lead.assignedToSelf == false &&
+                              controller.lead.leadStage != "lead") ...[
+                            const Gap(16),
+                            _topTeamMemberCard(),
+                          ],
                           const Gap(16),
                           Text("Status", style: MyTexts.medium16),
                           const Gap(9),
-                          CommonDropdown(
-                            hintText: "Select lead status",
-                            items: [Get.find<MarketingController>().activeFilter.value],
-                            selectedValue: controller.selectedCustomerType,
-                            enabled: false,
-                            itemLabel: (item) => item,
-                            validator: (val) => val == null ? "Select status" : null,
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: const Color(0xFFB9B9B9)),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    Get.find<MarketingController>().activeFilter.value,
+                                    style: MyTexts.medium15.copyWith(color: Colors.black),
+                                  ),
+                                ),
+                                const Icon(Icons.keyboard_arrow_down_rounded),
+                              ],
+                            ),
                           ),
                           const Gap(20),
                           Text("Status Pipeline Representation", style: MyTexts.medium16),
                           const Gap(20),
-                          _pipelineSection(),
+                          PipelineView(
+                            currentStage: getCurrentPipelineStage(controller.lead),
+                            currentSubStage:getCurrentPipelineSubStage(controller.lead),
+                          ),
                           const Gap(24),
                           _requirementSection(),
                           const Gap(24),
@@ -91,29 +108,23 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
 
   Container buildNote() {
     return Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: const Color(0xFFFFFCF5),
-                            border: Border.all(color: MyColors.grayDC),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Notes : ",
-                                style: MyTexts.medium12.copyWith(color: const Color(0xFF737272)),
-                              ),
-                              const Gap(8),
-                              Text(
-                                "${controller.lead.notes}",
-                                style: const TextStyle(color: Colors.black),
-                              ),
-                              const Gap(8),
-                            ],
-                          ),
-                        );
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFFFFFCF5),
+        border: Border.all(color: MyColors.grayDC),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Notes : ", style: MyTexts.medium12.copyWith(color: const Color(0xFF737272))),
+          const Gap(8),
+          Text("${controller.lead.notes}", style: const TextStyle(color: Colors.black)),
+          const Gap(8),
+        ],
+      ),
+    );
   }
 
   Widget _topLeadCard() {
@@ -387,8 +398,8 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
         Row(
           children: [
             Text("Requirement", style: MyTexts.medium16),
-            const Spacer(),
-            GestureDetector(child: SvgPicture.asset(Asset.edit)),
+            // const Spacer(),
+            // GestureDetector(child: SvgPicture.asset(Asset.edit)),
           ],
         ),
         const Gap(16),
@@ -444,9 +455,9 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
       children: [
         Text("Conversation", style: MyTexts.medium16),
         const Gap(14),
-        _conversationCard("Last", controller.lead.lastConversation ?? ""),
+        _conversationCard("Last", controller.lead.lastConversation ?? "-"),
         const Gap(14),
-        _conversationCard("Next", controller.lead.nextConversation ?? ""),
+        _conversationCard("Next", controller.lead.nextConversation ?? "-"),
       ],
     );
   }
@@ -477,4 +488,48 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
   static String _formatDate(DateTime d) {
     return DateFormat('MMM d').format(d);
   }
+  int getCurrentPipelineStage(Leads lead) {
+    switch (lead.leadStage) {
+      case "lead":
+        return 0;
+      case "follow_up":
+        return 1;
+      case "prospect":
+        return 2;
+      case "qualified":
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
+  int getCurrentPipelineSubStage(Leads lead) {
+    switch (lead.leadStage) {
+      case "lead":
+        if (lead.status == "new") return 0;
+        return 0;
+      case "follow_up":
+        if (lead.status == "pending") return 0;
+        if (lead.status == "fresh") return 1;
+        if (lead.status == "missed") return 2;
+        return 0;
+
+      case "prospect":
+        if (lead.status == "fresh") return 0;
+        if (lead.status == "reached_out") return 1;
+        if (lead.status == "on_hold") return 3;
+        if (lead.status == "pending") return 2;
+        return 0;
+
+      case "qualified":
+        if (lead.status == "pending") return 0;
+        if (lead.status == "qualified") return 1;
+        if (lead.status == "lost") return 2;
+        return 0;
+
+      default:
+        return 0;
+    }
+  }
+
 }
