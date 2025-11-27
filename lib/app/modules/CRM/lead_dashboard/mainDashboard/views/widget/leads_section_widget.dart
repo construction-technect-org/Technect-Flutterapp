@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/stat_card_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/widget/stat_card_widget.dart';
 
 class LeadsSectionWidget extends GetView<LeadDashController> {
   const LeadsSectionWidget({super.key});

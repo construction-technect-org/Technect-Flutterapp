@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/controller/lead_dash_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class ProductChartWidget extends GetView<LeadDashController> {
@@ -10,17 +10,14 @@ class ProductChartWidget extends GetView<LeadDashController> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: const Color(0xFFE0E0E0))
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Text(
-            'Product A and Product B',
-            style:MyTexts.bold17,
-          ),
+          Text('Product A and Product B', style: MyTexts.bold17),
           const Gap(15),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -84,7 +81,10 @@ class ProductChartWidget extends GetView<LeadDashController> {
               color: visible ? color : color.withValues(alpha: 0.25),
               border: Border.all(color: Colors.white, width: 0),
               boxShadow: [
-                BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 2),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 2,
+                ),
               ],
             ),
           ),
@@ -138,10 +138,7 @@ class ProductChartWidget extends GetView<LeadDashController> {
               if (v % 300 != 0) return const SizedBox.shrink();
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: Text(
-                  '\$${v}K',
-                    style: MyTexts.regular14
-                ),
+                child: Text('\$${v}K', style: MyTexts.regular14),
               );
             },
           ),
@@ -157,10 +154,7 @@ class ProductChartWidget extends GetView<LeadDashController> {
               }
               return Padding(
                 padding: const EdgeInsets.only(top: 6.0),
-                child: Text(
-                  controller.months[idx],
-                  style: MyTexts.regular14
-                ),
+                child: Text(controller.months[idx], style: MyTexts.regular14),
               );
             },
             interval: 1,

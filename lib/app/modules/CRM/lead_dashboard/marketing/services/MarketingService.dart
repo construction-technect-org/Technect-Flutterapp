@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/service/add_constrcution_Service.dart';
 
 class MarketingServices {
@@ -38,9 +38,12 @@ class MarketingServices {
         if ((assignTo ?? "").isNotEmpty) "team_member_id": assignTo,
         if ((note ?? "").isNotEmpty) "team_member_note": note ?? "",
         if ((status ?? "").isNotEmpty) "status": status ?? "",
-        if ((lastConversation ?? "").isNotEmpty) "last_conversation": lastConversation ?? "",
-        if ((nextConversation ?? "").isNotEmpty) "next_conversation": nextConversation ?? "",
-        if ((priority ?? "").isNotEmpty) "team_member_priority": (priority ?? "").toLowerCase(),
+        if ((lastConversation ?? "").isNotEmpty)
+          "last_conversation": lastConversation ?? "",
+        if ((nextConversation ?? "").isNotEmpty)
+          "next_conversation": nextConversation ?? "",
+        if ((priority ?? "").isNotEmpty)
+          "team_member_priority": (priority ?? "").toLowerCase(),
         if (assignToMySelf == true) "assign_to_self": assignToMySelf,
       };
       final response = await _apiManager.putObject(

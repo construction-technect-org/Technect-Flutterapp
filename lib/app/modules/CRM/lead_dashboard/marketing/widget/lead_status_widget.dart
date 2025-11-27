@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
 
-class QualifiedStatusWidget extends GetView<MarketingController> {
-  const QualifiedStatusWidget({super.key});
+class LeadStatusWidget extends GetView<MarketingController> {
+  const LeadStatusWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,20 +11,20 @@ class QualifiedStatusWidget extends GetView<MarketingController> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Obx(() {
-          final String active = controller.activeQualifiedStatusFilter.value;
+          final String active = controller.activeLeadStatusFilter.value;
 
           return ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            itemCount: controller.qualifiedStatus.length,
+            itemCount: controller.leadStatus.length,
             separatorBuilder: (_, _) => const SizedBox(width: 20),
             itemBuilder: (context, index) {
-              final String label = controller.qualifiedStatus[index];
+              final String label = controller.leadStatus[index];
               final bool isActive = active == label;
               return Center(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () => controller.setStatusQualifiedFilter(label),
+                  onTap: () => controller.setStatusLeadFilter(label),
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 200),
                     style: MyTexts.medium15.copyWith(

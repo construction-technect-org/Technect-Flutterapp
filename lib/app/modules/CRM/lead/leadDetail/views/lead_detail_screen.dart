@@ -3,9 +3,9 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/components/pipeline_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/controller/lead_detail_controller.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/priority_dropdown.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/priority_dropdown.dart';
 import 'package:intl/intl.dart';
 
 class LeadDetailScreen extends GetView<LeadDetailController> {
@@ -21,7 +21,10 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
           children: [
             Container(
               decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
+                image: DecorationImage(
+                  image: AssetImage(Asset.categoryBg),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Column(
@@ -34,7 +37,11 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                     onTap: Get.back,
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
+                      child: Icon(
+                        Icons.arrow_back_ios_new_sharp,
+                        color: Colors.black,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
@@ -44,7 +51,10 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Container(
                       margin: const EdgeInsets.only(top: 20),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 24),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 24,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -62,17 +72,26 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                           Text("Status", style: MyTexts.medium16),
                           const Gap(9),
                           Container(
-                            padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 20),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 11,
+                              horizontal: 20,
+                            ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: const Color(0xFFB9B9B9)),
+                              border: Border.all(
+                                color: const Color(0xFFB9B9B9),
+                              ),
                             ),
                             child: Row(
                               children: [
                                 Expanded(
                                   child: Text(
-                                    Get.find<MarketingController>().activeFilter.value,
-                                    style: MyTexts.medium15.copyWith(color: Colors.black),
+                                    Get.find<MarketingController>()
+                                        .activeFilter
+                                        .value,
+                                    style: MyTexts.medium15.copyWith(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                                 const Icon(Icons.keyboard_arrow_down_rounded),
@@ -80,11 +99,18 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                             ),
                           ),
                           const Gap(20),
-                          Text("Status Pipeline Representation", style: MyTexts.medium16),
+                          Text(
+                            "Status Pipeline Representation",
+                            style: MyTexts.medium16,
+                          ),
                           const Gap(20),
                           PipelineView(
-                            currentStage: getCurrentPipelineStage(controller.lead),
-                            currentSubStage:getCurrentPipelineSubStage(controller.lead),
+                            currentStage: getCurrentPipelineStage(
+                              controller.lead,
+                            ),
+                            currentSubStage: getCurrentPipelineSubStage(
+                              controller.lead,
+                            ),
                           ),
                           const Gap(24),
                           _requirementSection(),
@@ -118,9 +144,15 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Notes : ", style: MyTexts.medium12.copyWith(color: const Color(0xFF737272))),
+          Text(
+            "Notes : ",
+            style: MyTexts.medium12.copyWith(color: const Color(0xFF737272)),
+          ),
           const Gap(8),
-          Text("${controller.lead.notes}", style: const TextStyle(color: Colors.black)),
+          Text(
+            "${controller.lead.notes}",
+            style: const TextStyle(color: Colors.black),
+          ),
           const Gap(8),
         ],
       ),
@@ -144,7 +176,9 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: getImageView(
-              finalUrl: APIConstants.bucketUrl + (controller.lead.connectorProfileImage ?? ""),
+              finalUrl:
+                  APIConstants.bucketUrl +
+                  (controller.lead.connectorProfileImage ?? ""),
               height: 90,
               width: 80,
               fit: BoxFit.cover,
@@ -165,11 +199,15 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                           children: [
                             TextSpan(
                               text: 'Connector - ',
-                              style: MyTexts.regular14.copyWith(color: Colors.black),
+                              style: MyTexts.regular14.copyWith(
+                                color: Colors.black,
+                              ),
                             ),
                             TextSpan(
                               text: controller.lead.connectorName ?? '',
-                              style: MyTexts.medium14.copyWith(color: Colors.black),
+                              style: MyTexts.medium14.copyWith(
+                                color: Colors.black,
+                              ),
                             ),
                           ],
                         ),
@@ -269,12 +307,16 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                               children: [
                                 TextSpan(
                                   text: 'Team : ',
-                                  style: MyTexts.regular14.copyWith(color: Colors.black),
+                                  style: MyTexts.regular14.copyWith(
+                                    color: Colors.black,
+                                  ),
                                 ),
                                 TextSpan(
                                   text:
                                       "${controller.lead.assignedTeamMember?.firstName ?? ""} ${controller.lead.assignedTeamMember?.lastName ?? ""}",
-                                  style: MyTexts.medium14.copyWith(color: Colors.black),
+                                  style: MyTexts.medium14.copyWith(
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ],
                             ),
@@ -283,7 +325,9 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                         const SizedBox(width: 6),
                         Text(
                           '${_formatTime(DateTime.parse(controller.lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(controller.lead.createdAt ?? ""))}',
-                          style: MyTexts.regular12.copyWith(color: MyColors.black),
+                          style: MyTexts.regular12.copyWith(
+                            color: MyColors.black,
+                          ),
                           textAlign: TextAlign.right,
                         ),
                       ],
@@ -297,17 +341,23 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                             children: [
                               Text(
                                 'Team Id : ${controller.lead.assignedTeamMember?.id ?? ""}',
-                                style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                style: MyTexts.regular13.copyWith(
+                                  color: MyColors.black,
+                                ),
                               ),
                               const SizedBox(height: 3),
                               Text(
                                 'Designation : ${controller.lead.assignedTeamMember?.roleTitle}',
-                                style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                style: MyTexts.regular13.copyWith(
+                                  color: MyColors.black,
+                                ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 'Conversation Ration : 4/10 ',
-                                style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                style: MyTexts.regular13.copyWith(
+                                  color: MyColors.black,
+                                ),
                               ),
                               const SizedBox(height: 6),
                             ],
@@ -324,7 +374,8 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
           if ((controller.lead.teamMemberPriority ?? "").isNotEmpty)
             PriorityDropdown(
               isEnable: false,
-              value: (controller.lead.teamMemberPriority ?? "").capitalizeFirst.toString(),
+              value: (controller.lead.teamMemberPriority ?? "").capitalizeFirst
+                  .toString(),
               onChanged: (v) {},
             ),
         ],
@@ -358,7 +409,10 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
             Container(
               height: 14,
               width: 14,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: dotColor),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: dotColor,
+              ),
             ),
             Container(width: 2, height: 50, color: dotColor),
           ],
@@ -381,7 +435,10 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                     color: dotColor.withValues(alpha: 0.4),
                   ),
                   padding: const EdgeInsets.all(8),
-                  child: Text(label, style: MyTexts.regular14.copyWith(color: MyColors.gray54)),
+                  child: Text(
+                    label,
+                    style: MyTexts.regular14.copyWith(color: MyColors.gray54),
+                  ),
                 ),
               ],
             ),
@@ -417,7 +474,9 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
               _reqText("Product : ${controller.lead.productName}"),
               _reqText("Quantity : ${controller.lead.quantity}"),
               _reqText("Location : ${controller.lead.siteLocation}"),
-              _reqText("Delivery Date : ${controller.lead.estimateDeliveryDate}"),
+              _reqText(
+                "Delivery Date : ${controller.lead.estimateDeliveryDate}",
+              ),
               // const Gap(10),
               // Container(
               //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -476,7 +535,10 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
         children: [
           Text(title, style: MyTexts.regular14),
           const Gap(6),
-          Text("Sent : $text", style: MyTexts.medium14.copyWith(color: Colors.black)),
+          Text(
+            "Sent : $text",
+            style: MyTexts.medium14.copyWith(color: Colors.black),
+          ),
         ],
       ),
     );
@@ -488,6 +550,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
   static String _formatDate(DateTime d) {
     return DateFormat('MMM d').format(d);
   }
+
   int getCurrentPipelineStage(Leads lead) {
     switch (lead.leadStage) {
       case "lead":
@@ -531,5 +594,4 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
         return 0;
     }
   }
-
 }

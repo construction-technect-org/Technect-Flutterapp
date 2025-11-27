@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/pill_button.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/widget/pill_button.dart';
 
 class CRMVRMToggleWidget extends GetView<LeadDashController> {
   const CRMVRMToggleWidget({super.key});

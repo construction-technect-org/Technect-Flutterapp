@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/header_icon_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/widget/header_icon_widget.dart';
 
 class DashboardHeaderWidget extends GetView<LeadDashController> {
   const DashboardHeaderWidget({super.key});
@@ -20,7 +20,11 @@ class DashboardHeaderWidget extends GetView<LeadDashController> {
             behavior: HitTestBehavior.translucent,
             child: Obx(() {
               return (dash.profileData.value.data?.user?.image ?? "").isEmpty
-                  ? const Icon(Icons.account_circle_sharp, color: MyColors.primary, size: 30)
+                  ? const Icon(
+                      Icons.account_circle_sharp,
+                      color: MyColors.primary,
+                      size: 30,
+                    )
                   : ClipOval(
                       child: getImageView(
                         finalUrl:

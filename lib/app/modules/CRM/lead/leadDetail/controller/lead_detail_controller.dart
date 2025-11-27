@@ -1,10 +1,12 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
 
 class LeadDetailController extends GetxController {
   RxString selectedCustomerType = "".obs;
-  TextEditingController quoteController = TextEditingController(text: "Send a Quote");
+  TextEditingController quoteController = TextEditingController(
+    text: "Send a Quote",
+  );
 
   Leads lead = Leads();
 
@@ -14,8 +16,8 @@ class LeadDetailController extends GetxController {
     super.onInit();
     if (Get.arguments != null) {
       lead = Get.arguments["lead"];
-      selectedCustomerType.value=Get.find<MarketingController>().activeFilter.value;
-
+      selectedCustomerType.value =
+          Get.find<MarketingController>().activeFilter.value;
     }
   }
 }

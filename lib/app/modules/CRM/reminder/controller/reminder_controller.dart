@@ -1,4 +1,4 @@
-import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +19,9 @@ class SetReminderController extends GetxController {
         return Theme(
           data: Theme.of(c).copyWith(
             timePickerTheme: const TimePickerThemeData(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
             ),
           ),
           child: child!,
@@ -66,7 +68,13 @@ class SetReminderController extends GetxController {
   String getReminderUTCString() {
     final date = selectedDay.value ?? DateTime.now();
     final time = selectedTime.value;
-    final combined = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    final combined = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
     final iso = combined.toUtc().toIso8601String();
     return iso.replaceAll('.000', '');
   }
