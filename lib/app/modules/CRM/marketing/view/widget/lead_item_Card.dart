@@ -21,12 +21,56 @@ class LeadItemCard extends StatelessWidget {
     final String leadStatus = lead.leadStage ?? "";
     final String status = lead.status ?? "";
     final bool isFollowUpSwipable = leadStatus == "follow_up" && status == "pending";
+    final bool isQualifiedSwipable = status == "pending" && leadStatus == "qualified";
     final bool isProspectSwipable =
         leadStatus == "prospect" &&
         (status == "fresh" || status == "reached_out") &&
         controller.activeFilter.value == "Prospect";
 
-    return isProspectSwipable
+    return isQualifiedSwipable
+        ? Slidable(
+            key: UniqueKey(),
+            startActionPane: ActionPane(
+              motion: const BehindMotion(),
+              extentRatio: 0.25,
+              dragDismissible: false,
+              children: [
+                SlidableAction(
+                  backgroundColor: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                  onPressed: (_) async {
+                    await controller.updateStatusLeadToFollowUp(
+                      leadID: lead.id.toString(),
+                      status: "unqualified",
+                    );
+                  },
+                  label: "Lost",
+                ),
+              ],
+            ),
+
+            endActionPane: ActionPane(
+              motion: const BehindMotion(),
+              extentRatio: 0.25,
+              dragDismissible: false,
+              children: [
+                SlidableAction(
+                  backgroundColor: Colors.green,
+                  borderRadius: BorderRadius.circular(20),
+                  onPressed: (_) async {
+                    await controller.updateStatusLeadToFollowUp(
+                      leadID: lead.id.toString(),
+                      status: "qualified",
+                    );
+                  },
+                  label: "Qualified",
+                ),
+              ],
+            ),
+
+            child: _card(context, status, leadStatus),
+          )
+        : isProspectSwipable
         ? Slidable(
             key: UniqueKey(),
             startActionPane: ActionPane(
@@ -352,32 +396,32 @@ class LeadItemCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ]
-                  else if (controller.activeFilter.value == "Qualified") ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: MyColors.green,
-                            ),
-                            child: Text(
-                              "Qualified",
-                              style: MyTexts.medium13.copyWith(color: Colors.white),
-                            ),
+                  ] else if (controller.activeFilter.value == "Qualified") ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: MyColors.green,
                           ),
-                          Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child: SvgPicture.asset(Asset.chat,height: 18,))
-                        ],
-                      ),
-                    ],
+                          child: Text(
+                            status == "pending" ? "Unqualified" : status,
+                            style: MyTexts.medium13.copyWith(color: Colors.white),
+                          ),
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(4),
+                          child: SvgPicture.asset(Asset.chat, height: 18),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -515,9 +559,12 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
+  RxBool isDropdownOpen = false.obs;
+
   void _openTeamBottomSheet(BuildContext context, TeamListData item) {
     Get.bottomSheet(
       Container(
+        height: isDropdownOpen.value == true ? 270 : 230,
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -647,11 +694,15 @@ class LeadItemCard extends StatelessWidget {
                     Row(
                       children: [
                         Obx(() {
-                          return PriorityDropdown(
-                            value: controller.selectedPriority.value,
-                            onChanged: (v) {
-                              controller.selectedPriority.value = v;
-                            },
+                          return GestureDetector(
+                            onTap: () => isDropdownOpen.value = true,
+                            child: PriorityDropdown(
+                              value: controller.selectedPriority.value,
+                              onChanged: (v) {
+                                controller.selectedPriority.value = v;
+                                isDropdownOpen.value = false;
+                              },
+                            ),
                           );
                         }),
                         const Spacer(),
