@@ -10,7 +10,7 @@ class SegmentFiltersWidget extends GetView<MarketingController> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: AlignmentGeometry.topCenter,
-          end: AlignmentGeometry.center,
+          end: AlignmentGeometry.bottomCenter,
           colors: [MyColors.custom("FFF9BD"), Colors.white],
         ),
       ),
