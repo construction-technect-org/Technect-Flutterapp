@@ -41,7 +41,7 @@ class LeadItemCard extends StatelessWidget {
                   onPressed: (_) async {
                     await controller.updateStatusLeadToFollowUp(
                       leadID: lead.id.toString(),
-                      status: "unqualified",
+                      status: "lost",
                     );
                   },
                   label: "Lost",
@@ -297,8 +297,6 @@ class LeadItemCard extends StatelessWidget {
                             style: MyTexts.medium13.copyWith(color: Colors.black),
                           ),
                         ),
-
-                        // const Spacer(),
                         GestureDetector(
                           onTapDown: (details) {
                             openAssignPopupMenu(
@@ -404,10 +402,14 @@ class LeadItemCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: MyColors.green,
+                            color: status == "pending"
+                                ? MyColors.red
+                                : status == "lost"
+                                ? MyColors.red
+                                : MyColors.green,
                           ),
                           child: Text(
-                            status == "pending" ? "Unqualified" : status,
+                            status == "pending" ? "Unqualified" : status.capitalizeFirst.toString(),
                             style: MyTexts.medium13.copyWith(color: Colors.white),
                           ),
                         ),

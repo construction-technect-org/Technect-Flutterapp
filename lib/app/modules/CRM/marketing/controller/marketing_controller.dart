@@ -63,7 +63,7 @@ class MarketingController extends GetxController {
       return allProspectList.where((e) => e.status == "reached_out").toList();
     }
     if (activeProspectStatusFilter.value.toLowerCase() == "converted") {
-      return allProspectList.where((e) => e.leadStage == "qualified").toList();
+      return allProspectList.where((e) => e.leadStage == "qualified" && e.status=="pending").toList();
     }
     if (activeProspectStatusFilter.value.toLowerCase() == "on hold") {
       return allProspectList.where((e) => e.status == "on_hold").toList();
@@ -71,14 +71,14 @@ class MarketingController extends GetxController {
     return allProspectList;
   }
 
-  final List<String> qualifiedStatus = <String>["All","Qualified", "Lost"];
+  final List<String> qualifiedStatus = <String>["All", "Qualified", "Lost"];
 
   List<Leads> get filteredQualified {
     if (activeQualifiedStatusFilter.value.toLowerCase() == "qualified") {
       return allQualifiedList.where((e) => e.status == "qualified").toList();
     }
     if (activeQualifiedStatusFilter.value.toLowerCase() == "lost") {
-      return allQualifiedList.where((e) => e.status == "unqualified").toList();
+      return allQualifiedList.where((e) => e.status == "lost").toList();
     }
     return allQualifiedList;
   }
@@ -132,7 +132,6 @@ class MarketingController extends GetxController {
     activeLeadStatusFilter.value = f;
   }
 
-
   void filterLead() {
     final DateTime today = DateTime.now();
     final String todayStr =
@@ -158,13 +157,18 @@ class MarketingController extends GetxController {
     } else if (getFilterStatusName() == "follow_up") {
       allFollowUpList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.leadStage == "follow_up" || e.leadStage == "prospect"));
+        ..addAll(todaysLeads.where((e) => e.leadStage == "follow_up" || (e.leadStage == "prospect" && e.status=="fresh")));
 
       todaysTotal.value = allFollowUpList.length;
     } else if (getFilterStatusName() == "prospect") {
       allProspectList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.leadStage == "prospect" || e.leadStage == "qualified"));
+        ..addAll(
+          todaysLeads.where(
+            (e) =>
+                e.leadStage == "prospect" || (e.status == "pending" && e.leadStage == "qualified"),
+          ),
+        );
 
       todaysTotal.value = allProspectList.length;
     } else if (getFilterStatusName() == "qualified") {
