@@ -248,7 +248,7 @@ class LeadItemCard extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 3),
                                 Text(
-                                  '${lead.radius} km away',
+                                  '${(lead.distanceKM??0.0).toStringAsFixed(2)} km away',
                                   style: MyTexts.regular13.copyWith(
                                     color: MyColors.black,
                                   ),

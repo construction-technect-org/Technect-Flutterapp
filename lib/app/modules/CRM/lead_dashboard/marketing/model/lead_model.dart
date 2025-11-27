@@ -71,6 +71,7 @@ class Leads {
   String? quantity;
   String? estimateDeliveryDate;
   String? radius;
+  double? distanceKM;
 
   String? leadStage;
   String? companyPhone;
@@ -123,6 +124,7 @@ class Leads {
     this.unitOfMeasure,
     this.image,
     this.quantity,
+    this.distanceKM,
     this.estimateDeliveryDate,
     this.radius,
     this.leadStage,
@@ -173,6 +175,7 @@ class Leads {
     quantity = json["quantity"];
     estimateDeliveryDate = json["estimate_delivery_date"];
     radius = json["radius"];
+    distanceKM = json["distance_km"];
 
     leadStage = json["lead_stage"];
     companyPhone = json["company_phone"];
@@ -236,6 +239,7 @@ class Leads {
       "lead_stage": leadStage,
       "company_phone": companyPhone,
       "source": source,
+      "distance_km": distanceKM,
       "reference": reference,
       "referral_phone": referralPhone,
       "site_location": siteLocation,

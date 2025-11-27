@@ -147,7 +147,6 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                 Asset.task1,
                 'Task',
                 onTap: () {
-                  Get.toNamed(Routes.LEAD_DETAIL);
                   controller.currentIndex.value = 2;
                 },
                 index: 2,
