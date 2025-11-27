@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/controller/lead_dash_controller.dart';
 
 class FilterTabsWidget extends GetView<LeadDashController> {
   const FilterTabsWidget({super.key});

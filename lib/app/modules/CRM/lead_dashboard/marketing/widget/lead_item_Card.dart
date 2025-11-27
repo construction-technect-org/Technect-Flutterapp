@@ -3,9 +3,9 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/controller/marketing_controller.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/priority_dropdown.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/priority_dropdown.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -20,8 +20,12 @@ class LeadItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final String leadStatus = lead.leadStage ?? "";
     final String status = lead.status ?? "";
-    final bool isFollowUpSwipable = leadStatus == "follow_up" && status == "pending";
-    final bool isQualifiedSwipable = status == "pending" && leadStatus == "qualified" && controller.activeFilter.value == "Qualified";
+    final bool isFollowUpSwipable =
+        leadStatus == "follow_up" && status == "pending";
+    final bool isQualifiedSwipable =
+        status == "pending" &&
+        leadStatus == "qualified" &&
+        controller.activeFilter.value == "Qualified";
     final bool isProspectSwipable =
         leadStatus == "prospect" &&
         (status == "fresh" || status == "reached_out") &&
@@ -207,11 +211,15 @@ class LeadItemCard extends StatelessWidget {
                                 children: [
                                   TextSpan(
                                     text: 'Connector - ',
-                                    style: MyTexts.regular14.copyWith(color: Colors.black),
+                                    style: MyTexts.regular14.copyWith(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                   TextSpan(
                                     text: lead.connectorName ?? '',
-                                    style: MyTexts.medium14.copyWith(color: Colors.black),
+                                    style: MyTexts.medium14.copyWith(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -219,21 +227,31 @@ class LeadItemCard extends StatelessWidget {
                             const SizedBox(height: 3),
                             Text(
                               'Lead Id - ${lead.leadId}',
-                              style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              style: MyTexts.regular13.copyWith(
+                                color: MyColors.black,
+                              ),
                             ),
                             const SizedBox(height: 3),
                             Text(
                               'Product Interested - ${lead.productName}',
-                              style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              style: MyTexts.regular13.copyWith(
+                                color: MyColors.black,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                SvgPicture.asset(Asset.location, height: 14, width: 14),
+                                SvgPicture.asset(
+                                  Asset.location,
+                                  height: 14,
+                                  width: 14,
+                                ),
                                 const SizedBox(width: 3),
                                 Text(
                                   '${lead.radius} km away',
-                                  style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                  style: MyTexts.regular13.copyWith(
+                                    color: MyColors.black,
+                                  ),
                                 ),
                               ],
                             ),
@@ -244,30 +262,37 @@ class LeadItemCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          if(lead.assignedToSelf==false)
-                          if (leadStatus != "lead") ...[
-                            CircleAvatar(
-                              radius: 14,
-                              backgroundImage:
-                                  (lead.assignedTeamMember?.profilePhoto ?? "").isNotEmpty
-                                  ? NetworkImage(
-                                      APIConstants.bucketUrl +
-                                          (lead.assignedTeamMember?.profilePhoto ?? ""),
-                                    )
-                                  : const AssetImage(Asset.appLogo),
-                            ),
-                            const Gap(3),
-                            Text(
-                              "${lead.assignedTeamMember?.firstName ?? ""} ${lead.assignedTeamMember?.lastName ?? ""}",
-                              style: MyTexts.medium13,
-                            ),
-                          ] else ...[
-                            const Gap(3),
-                          ],
+                          if (lead.assignedToSelf == false)
+                            if (leadStatus != "lead") ...[
+                              CircleAvatar(
+                                radius: 14,
+                                backgroundImage:
+                                    (lead.assignedTeamMember?.profilePhoto ??
+                                            "")
+                                        .isNotEmpty
+                                    ? NetworkImage(
+                                        APIConstants.bucketUrl +
+                                            (lead
+                                                    .assignedTeamMember
+                                                    ?.profilePhoto ??
+                                                ""),
+                                      )
+                                    : const AssetImage(Asset.appLogo),
+                              ),
+                              const Gap(3),
+                              Text(
+                                "${lead.assignedTeamMember?.firstName ?? ""} ${lead.assignedTeamMember?.lastName ?? ""}",
+                                style: MyTexts.medium13,
+                              ),
+                            ] else ...[
+                              const Gap(3),
+                            ],
 
                           Text(
                             '${_formatTime(DateTime.parse(lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(lead.createdAt ?? ""))}',
-                            style: MyTexts.regular12.copyWith(color: MyColors.black),
+                            style: MyTexts.regular12.copyWith(
+                              color: MyColors.black,
+                            ),
                             textAlign: TextAlign.right,
                           ),
                         ],
@@ -280,14 +305,19 @@ class LeadItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: MyColors.veryPaleBlue,
                           ),
                           child: Text(
                             "Lead",
-                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                            style: MyTexts.medium13.copyWith(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         GestureDetector(
@@ -316,7 +346,9 @@ class LeadItemCard extends StatelessWidget {
                                   const Gap(4),
                                   Text(
                                     "Assign",
-                                    style: MyTexts.medium12.copyWith(color: Colors.white),
+                                    style: MyTexts.medium12.copyWith(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -330,19 +362,28 @@ class LeadItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: MyColors.paleRed,
                           ),
                           child: Text(
                             "FollowUp",
-                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                            style: MyTexts.medium13.copyWith(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         GestureDetector(
                           onTapDown: (details) {
-                            _openConversationMenu(context, details.globalPosition, lead);
+                            _openConversationMenu(
+                              context,
+                              details.globalPosition,
+                              lead,
+                            );
                           },
                           child: Stack(
                             alignment: Alignment.center,
@@ -361,7 +402,9 @@ class LeadItemCard extends StatelessWidget {
                                   const Gap(4),
                                   Text(
                                     "Contact",
-                                    style: MyTexts.medium12.copyWith(color: Colors.white),
+                                    style: MyTexts.medium12.copyWith(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -375,14 +418,19 @@ class LeadItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: const Color(0xFFB3FDCE),
                           ),
                           child: Text(
                             "Prospect",
-                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                            style: MyTexts.medium13.copyWith(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ],
@@ -392,7 +440,10 @@ class LeadItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: status == "pending"
@@ -402,8 +453,12 @@ class LeadItemCard extends StatelessWidget {
                                 : MyColors.green,
                           ),
                           child: Text(
-                            status == "pending" ? "Unqualified" : status.capitalizeFirst.toString(),
-                            style: MyTexts.medium13.copyWith(color: Colors.white),
+                            status == "pending"
+                                ? "Unqualified"
+                                : status.capitalizeFirst.toString(),
+                            style: MyTexts.medium13.copyWith(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         Container(
@@ -460,14 +515,18 @@ class LeadItemCard extends StatelessWidget {
                         children: [
                           Text(
                             "You don't have any team members",
-                            style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.gray54,
+                            ),
                           ),
                           const Gap(10),
                           RoundedButton(
                             buttonName: "Assign to me only",
                             height: 34,
                             width: 120,
-                            style: MyTexts.medium14.copyWith(color: Colors.white),
+                            style: MyTexts.medium14.copyWith(
+                              color: Colors.white,
+                            ),
                             onTap: () {
                               Get.back();
                               Get.toNamed(
@@ -519,11 +578,15 @@ class LeadItemCard extends StatelessWidget {
                 width: 32,
                 height: 32,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => Image.asset(Asset.appLogo, width: 32, height: 32),
+                errorBuilder: (_, _, _) =>
+                    Image.asset(Asset.appLogo, width: 32, height: 32),
               ),
             ),
             const SizedBox(width: 8),
-            Text("${item.firstName ?? ""} ${item.lastName ?? ""}", style: MyTexts.medium13),
+            Text(
+              "${item.firstName ?? ""} ${item.lastName ?? ""}",
+              style: MyTexts.medium13,
+            ),
             const Gap(10),
           ],
         ),
@@ -540,11 +603,17 @@ class LeadItemCard extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     Asset.userPlus,
-                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
                     height: 12,
                   ),
                   const Gap(4),
-                  Text("Assign", style: MyTexts.medium12.copyWith(color: MyColors.white)),
+                  Text(
+                    "Assign",
+                    style: MyTexts.medium12.copyWith(color: MyColors.white),
+                  ),
                 ],
               ),
             ],
@@ -605,12 +674,17 @@ class LeadItemCard extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(34),
                           child: CachedNetworkImage(
-                            imageUrl: APIConstants.bucketUrl + (item.profilePhotoUrl ?? ""),
+                            imageUrl:
+                                APIConstants.bucketUrl +
+                                (item.profilePhotoUrl ?? ""),
                             width: 65,
                             height: 65,
                             fit: BoxFit.cover,
-                            placeholder: (c, s) =>
-                                Container(color: Colors.grey.shade200, width: 65, height: 65),
+                            placeholder: (c, s) => Container(
+                              color: Colors.grey.shade200,
+                              width: 65,
+                              height: 65,
+                            ),
                             errorWidget: (c, s, e) => Container(
                               color: Colors.grey.shade200,
                               width: 65,
@@ -635,11 +709,16 @@ class LeadItemCard extends StatelessWidget {
                                         children: [
                                           TextSpan(
                                             text: 'Team : ',
-                                            style: MyTexts.regular14.copyWith(color: Colors.black),
+                                            style: MyTexts.regular14.copyWith(
+                                              color: Colors.black,
+                                            ),
                                           ),
                                           TextSpan(
-                                            text: "${item.firstName ?? ""} ${item.lastName ?? ""}",
-                                            style: MyTexts.medium14.copyWith(color: Colors.black),
+                                            text:
+                                                "${item.firstName ?? ""} ${item.lastName ?? ""}",
+                                            style: MyTexts.medium14.copyWith(
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -648,7 +727,9 @@ class LeadItemCard extends StatelessWidget {
                                   const SizedBox(width: 6),
                                   Text(
                                     '${_formatTime(DateTime.parse(item.createdAt ?? ""))}, ${_formatDate(DateTime.parse(item.createdAt ?? ""))}',
-                                    style: MyTexts.regular12.copyWith(color: MyColors.black),
+                                    style: MyTexts.regular12.copyWith(
+                                      color: MyColors.black,
+                                    ),
                                     textAlign: TextAlign.right,
                                   ),
                                 ],
@@ -658,21 +739,28 @@ class LeadItemCard extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Team Id : ${item.id ?? ""}',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                          style: MyTexts.regular13.copyWith(
+                                            color: MyColors.black,
+                                          ),
                                         ),
                                         const SizedBox(height: 3),
                                         Text(
                                           'Designation : ${item.roleTitle}',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                          style: MyTexts.regular13.copyWith(
+                                            color: MyColors.black,
+                                          ),
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
                                           'Conversation Ration : 4/10 ',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                          style: MyTexts.regular13.copyWith(
+                                            color: MyColors.black,
+                                          ),
                                         ),
                                         const SizedBox(height: 6),
                                       ],
@@ -739,7 +827,9 @@ class LeadItemCard extends StatelessWidget {
                                   const Gap(4),
                                   Text(
                                     "Set Reminder",
-                                    style: MyTexts.medium12.copyWith(color: MyColors.white),
+                                    style: MyTexts.medium12.copyWith(
+                                      color: MyColors.white,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -759,10 +849,19 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
-  void _openConversationMenu(BuildContext context, Offset position, Leads lead) {
+  void _openConversationMenu(
+    BuildContext context,
+    Offset position,
+    Leads lead,
+  ) {
     showMenu(
       context: context,
-      position: RelativeRect.fromLTRB(position.dx, position.dy, position.dx + 1, position.dy + 1),
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy,
+        position.dx + 1,
+        position.dy + 1,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       items: [
         PopupMenuItem(
@@ -853,7 +952,9 @@ class LeadItemCard extends StatelessWidget {
                   hintText: "Typing.....",
                   bgColor: const Color(0xFFE8F1FF),
                   validator: (v) {
-                    if (v == null || v.isEmpty) return "Please enter last conversation";
+                    if (v == null || v.isEmpty) {
+                      return "Please enter last conversation";
+                    }
                     return null;
                   },
                 ),
@@ -886,7 +987,8 @@ class LeadItemCard extends StatelessWidget {
                               onSuccess: () {
                                 Get.back();
                                 SnackBars.successSnackBar(
-                                  content: 'Last conversation added successfully',
+                                  content:
+                                      'Last conversation added successfully',
                                 );
                               },
                             );
@@ -961,7 +1063,9 @@ class LeadItemCard extends StatelessWidget {
                   hintText: "Typing.....",
                   bgColor: const Color(0xFFFFF9BD),
                   validator: (v) {
-                    if (v == null || v.isEmpty) return "Please enter next conversation";
+                    if (v == null || v.isEmpty) {
+                      return "Please enter next conversation";
+                    }
                     return null;
                   },
                 ),
@@ -994,7 +1098,8 @@ class LeadItemCard extends StatelessWidget {
                               onSuccess: () {
                                 Get.back();
                                 SnackBars.successSnackBar(
-                                  content: 'Next conversation added successfully',
+                                  content:
+                                      'Next conversation added successfully',
                                 );
                               },
                             );
@@ -1019,8 +1124,12 @@ class LeadItemCard extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 18,
-          backgroundImage: (lead.assignedTeamMember?.profilePhoto ?? "").isNotEmpty
-              ? NetworkImage(APIConstants.bucketUrl + (lead.assignedTeamMember?.profilePhoto ?? ""))
+          backgroundImage:
+              (lead.assignedTeamMember?.profilePhoto ?? "").isNotEmpty
+              ? NetworkImage(
+                  APIConstants.bucketUrl +
+                      (lead.assignedTeamMember?.profilePhoto ?? ""),
+                )
               : const AssetImage(Asset.appLogo),
         ),
         const SizedBox(width: 8),
@@ -1031,7 +1140,10 @@ class LeadItemCard extends StatelessWidget {
               "${lead.assignedTeamMember?.firstName ?? ""} ${lead.assignedTeamMember?.lastName ?? ""}",
               style: MyTexts.medium14,
             ),
-            Text(lead.assignedTeamMember?.roleTitle ?? "", style: MyTexts.regular13),
+            Text(
+              lead.assignedTeamMember?.roleTitle ?? "",
+              style: MyTexts.regular13,
+            ),
           ],
         ),
       ],

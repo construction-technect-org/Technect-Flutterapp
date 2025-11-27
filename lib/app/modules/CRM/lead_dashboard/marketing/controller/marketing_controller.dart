@@ -1,21 +1,28 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/model/lead_model.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/services/MarketingService.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/followup_screen.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/lead_screen.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/prospect_screen.dart';
-import 'package:construction_technect/app/modules/CRM/marketing/view/widget/qualified_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/services/MarketingService.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/followup_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/lead_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/prospect_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/qualified_screen.dart';
 
 class MarketingController extends GetxController {
   @override
   void onInit() {
+    if (Get.arguments != null) {
+      isMarketing.value = Get.arguments["isMarketing"];
+    }
     WidgetsBinding.instance.addPostFrameCallback((val) {
-      fetchAllLead(isLoad: true);
+      if (isMarketing.value == true) {
+        fetchAllLead(isLoad: true);
+      }
     });
     super.onInit();
   }
 
   final isLoading = false.obs;
+
+  final isMarketing = false.obs;
 
   final chatNotificationCount = 2.obs;
   final alertNotificationCount = 2.obs;
@@ -53,7 +60,12 @@ class MarketingController extends GetxController {
     return allFollowUpList;
   }
 
-  final List<String> statusProspectItems = <String>["Fresh", "Reached Out", "Converted", "On Hold"];
+  final List<String> statusProspectItems = <String>[
+    "Fresh",
+    "Reached Out",
+    "Converted",
+    "On Hold",
+  ];
 
   List<Leads> get filteredProspect {
     if (activeProspectStatusFilter.value.toLowerCase() == "fresh") {
@@ -63,7 +75,9 @@ class MarketingController extends GetxController {
       return allProspectList.where((e) => e.status == "reached_out").toList();
     }
     if (activeProspectStatusFilter.value.toLowerCase() == "converted") {
-      return allProspectList.where((e) => e.leadStage == "qualified" && e.status=="pending").toList();
+      return allProspectList
+          .where((e) => e.leadStage == "qualified" && e.status == "pending")
+          .toList();
     }
     if (activeProspectStatusFilter.value.toLowerCase() == "on hold") {
       return allProspectList.where((e) => e.status == "on_hold").toList();
@@ -157,7 +171,13 @@ class MarketingController extends GetxController {
     } else if (getFilterStatusName() == "follow_up") {
       allFollowUpList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.leadStage == "follow_up" || (e.leadStage == "prospect" && e.status=="fresh")));
+        ..addAll(
+          todaysLeads.where(
+            (e) =>
+                e.leadStage == "follow_up" ||
+                (e.leadStage == "prospect" && e.status == "fresh"),
+          ),
+        );
 
       todaysTotal.value = allFollowUpList.length;
     } else if (getFilterStatusName() == "prospect") {
@@ -166,7 +186,8 @@ class MarketingController extends GetxController {
         ..addAll(
           todaysLeads.where(
             (e) =>
-                e.leadStage == "prospect" || (e.status == "pending" && e.leadStage == "qualified"),
+                e.leadStage == "prospect" ||
+                (e.status == "pending" && e.leadStage == "qualified"),
           ),
         );
 
@@ -231,7 +252,9 @@ class MarketingController extends GetxController {
         if (onSuccess != null) onSuccess();
         await fetchAllLead(isLoad: true);
       } else {
-        SnackBars.errorSnackBar(content: response.message ?? 'Failed to accept connection');
+        SnackBars.errorSnackBar(
+          content: response.message ?? 'Failed to accept connection',
+        );
       }
     } catch (e) {
       if (kDebugMode) {

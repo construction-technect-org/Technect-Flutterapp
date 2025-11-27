@@ -60,11 +60,12 @@ class LeadDashController extends GetxController {
       totalMarketing.value = true;
       totalSales.value = false;
       totalAccounts.value = false;
-      Get.toNamed(Routes.Marketing);
+      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
     } else if (type == 'Sales') {
       totalMarketing.value = false;
       totalSales.value = true;
       totalAccounts.value = false;
+      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
     } else if (type == 'Accounts') {
       totalMarketing.value = false;
       totalSales.value = false;
@@ -114,7 +115,6 @@ class LeadDashController extends GetxController {
     1150,
     1200,
     1100,
-
   ].obs;
   final showA = true.obs;
   final showB = true.obs;

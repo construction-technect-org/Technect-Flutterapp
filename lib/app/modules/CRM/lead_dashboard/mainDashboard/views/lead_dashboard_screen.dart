@@ -1,11 +1,11 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/lead_dash_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/analysis_section_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/lead_conversation_section_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/leads_section_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/product_chart_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/widget/analysis_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/widget/lead_conversation_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/widget/leads_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/widget/product_chart_widget.dart';
 
 class LeadDashboardScreen extends GetView<LeadDashController> {
   const LeadDashboardScreen({super.key});
