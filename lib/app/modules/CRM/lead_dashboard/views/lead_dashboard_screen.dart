@@ -5,7 +5,6 @@ import 'package:construction_technect/app/modules/CRM/lead_dashboard/controller/
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/analysis_section_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/lead_conversation_section_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/leads_section_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/pill_button.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/views/widget/product_chart_widget.dart';
 
 class LeadDashboardScreen extends GetView<LeadDashController> {
@@ -22,7 +21,10 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
+                  image: DecorationImage(
+                    image: AssetImage(Asset.categoryBg),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               SafeArea(
@@ -38,104 +40,143 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                     ),
                     Expanded(
                       child: SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             const Gap(8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Obx(
-                                  () => Expanded(
-                                    child: PillButtonWithOuter(
-                                      title: "Marketing",
-                                      isSelected: controller.totalMarketing.value,
-                                      onTap: () =>
-                                          controller.toggleMarketingSalesAccounts("Marketing"),
-                                    ),
-                                  ),
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: AlignmentGeometry.topCenter,
+                                  end: AlignmentGeometry.center,
+                                  colors: [
+                                    MyColors.custom("FFF9BD"),
+                                    Colors.white,
+                                  ],
                                 ),
-                                const Gap(8),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                              ),
 
-                                Obx(
-                                  () => Expanded(
-                                    child: PillButtonWithOuter(
-                                      title: "Sales",
-                                      isSelected: controller.totalSales.value,
-                                      onTap: () => controller.toggleMarketingSalesAccounts("Sales"),
+                              child: Obx(
+                                () => Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    tabBar(
+                                      onTap: () => controller
+                                          .toggleMarketingSalesAccounts(
+                                            "Marketing",
+                                          ),
+                                      icon: Asset.MM,
+                                      name: 'Marketing',
+                                      isMarketPlace:
+                                          controller.totalMarketing.value,
                                     ),
-                                  ),
-                                ),
-                                const Gap(8),
-
-                                Obx(
-                                  () => Expanded(
-                                    child: PillButtonWithOuter(
-                                      title: "Accounts",
-                                      isSelected: controller.totalAccounts.value,
-                                      onTap: () =>
-                                          controller.toggleMarketingSalesAccounts("Accounts"),
+                                    tabBar(
+                                      onTap: () => controller
+                                          .toggleMarketingSalesAccounts(
+                                            "Sales",
+                                          ),
+                                      icon: Asset.bar_chart,
+                                      name: 'Sales',
+                                      isMarketPlace:
+                                          controller.totalSales.value,
                                     ),
-                                  ),
+                                    tabBar(
+                                      onTap: () => controller
+                                          .toggleMarketingSalesAccounts(
+                                            "Accounts",
+                                          ),
+                                      icon: Asset.users,
+                                      name: 'Accounts',
+                                      isMarketPlace:
+                                          controller.totalAccounts.value,
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                             const Gap(24),
-                            Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: MyColors.grayD4),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(14),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
                               ),
-                              width: double.infinity,
-                              child: Row(
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                  Container(
+                                    padding: const EdgeInsets.all(14),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: MyColors.grayD4,
+                                      ),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    width: double.infinity,
+                                    child: Row(
                                       children: [
-                                        Text("Total Leads", style: MyTexts.medium18),
-                                        const Gap(11),
-                                        Text("98", style: MyTexts.medium18),
-                                        const Gap(11),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 2,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFE1FFD4),
-                                            borderRadius: BorderRadius.circular(14),
-                                          ),
-                                          child: Text(
-                                            "+5.2%",
-                                            style: MyTexts.bold16.copyWith(
-                                              color: const Color(0xFF4FB523),
-                                            ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Total Leads",
+                                                style: MyTexts.medium18,
+                                              ),
+                                              const Gap(11),
+                                              Text(
+                                                "98",
+                                                style: MyTexts.medium18,
+                                              ),
+                                              const Gap(11),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 2,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(
+                                                    0xFFE1FFD4,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
+                                                ),
+                                                child: Text(
+                                                  "+5.2%",
+                                                  style: MyTexts.bold16
+                                                      .copyWith(
+                                                        color: const Color(
+                                                          0xFF4FB523,
+                                                        ),
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
+                                        SvgPicture.asset(Asset.chartGreen),
+                                        const Gap(20),
                                       ],
                                     ),
                                   ),
-                                  SvgPicture.asset(Asset.chartGreen),
-                                  const Gap(20),
+                                  const Gap(24),
+                                  const LeadsSectionWidget(),
+                                  const Gap(24),
+                                  FunnelChartWidget(
+                                    funnelData: controller.funnelData,
+                                  ),
+                                  const Gap(24),
+                                  const ProductChartWidget(),
+                                  const Gap(24),
+                                  const ConversionRateChart(percentage: 78),
+                                  const Gap(24),
                                 ],
                               ),
                             ),
-                            const Gap(24),
-                            const LeadsSectionWidget(),
-                            const Gap(24),
-                             FunnelChartWidget(
-                              funnelData: controller.funnelData,
-                            ),
-                            const Gap(24),
-                            const ProductChartWidget(),
-                            const Gap(24),
-                            const ConversionRateChart(percentage: 78),
-                            const Gap(24),
                           ],
                         ),
                       ),
@@ -149,4 +190,34 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
       ),
     );
   }
+}
+
+Widget tabBar({
+  required String icon,
+  required String name,
+  required bool isMarketPlace,
+  required void Function()? onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Column(
+      children: [
+        SvgPicture.asset(icon, height: 24, width: 24),
+        Text(name, style: MyTexts.medium14, textAlign: TextAlign.center),
+        const Gap(10),
+        if (isMarketPlace)
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 100),
+            height: 3,
+            width: 73,
+            decoration: const BoxDecoration(
+              color: MyColors.primary,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+            ),
+          )
+        else
+          const SizedBox(height: 3, width: 73),
+      ],
+    ),
+  );
 }
