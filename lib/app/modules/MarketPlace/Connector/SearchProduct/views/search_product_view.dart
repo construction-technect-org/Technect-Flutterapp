@@ -9,6 +9,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection
 
 class SearchProductView extends GetView<SearchProductController> {
   SearchProductView({super.key});
+
   final CommonController commonController = Get.find<CommonController>();
 
   @override
@@ -29,10 +30,7 @@ class SearchProductView extends GetView<SearchProductController> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
-                      BoxShadow(
-                        color: MyColors.grayEA.withValues(alpha: 0.32),
-                        blurRadius: 4,
-                      ),
+                      BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4),
                     ],
                   ),
                   child: CommonTextField(
@@ -41,20 +39,13 @@ class SearchProductView extends GetView<SearchProductController> {
                     },
                     borderRadius: 12,
                     hintText: 'Search for products...',
-                    prefixIcon: SvgPicture.asset(
-                      Asset.searchIcon,
-                      height: 16,
-                      width: 16,
-                    ),
+                    prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                     controller: controller.searchController,
                     suffixIcon: Obx(
                       () => controller.searchQuery.value.isNotEmpty
                           ? GestureDetector(
                               onTap: controller.clearSearch,
-                              child: const Icon(
-                                Icons.clear,
-                                color: MyColors.gray54,
-                              ),
+                              child: const Icon(Icons.clear, color: MyColors.gray54),
                             )
                           : const SizedBox.shrink(),
                     ),
@@ -77,26 +68,18 @@ class SearchProductView extends GetView<SearchProductController> {
                                 color: MyColors.grayEA,
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
-                                Icons.search,
-                                size: 48,
-                                color: MyColors.gray54,
-                              ),
+                              child: const Icon(Icons.search, size: 48, color: MyColors.gray54),
                             ),
                             const SizedBox(height: 16),
                             Text(
                               'Search products',
-                              style: MyTexts.medium18.copyWith(
-                                color: MyColors.gray2E,
-                              ),
+                              style: MyTexts.medium18.copyWith(color: MyColors.gray2E),
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 8),
                             Text(
                               'Type a product name to see matching items',
-                              style: MyTexts.medium14.copyWith(
-                                color: MyColors.gray54,
-                              ),
+                              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -105,8 +88,7 @@ class SearchProductView extends GetView<SearchProductController> {
                     );
                   }
 
-                  final products =
-                      controller.productListModel.value?.data?.products ?? [];
+                  final products = controller.productListModel.value?.data?.products ?? [];
                   if (controller.isLoading.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
@@ -121,19 +103,18 @@ class SearchProductView extends GetView<SearchProductController> {
 
                   return GridView.builder(
                     padding: const EdgeInsets.all(16),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.6,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.6,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                    ),
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final item = products[index];
                       return ProductCard(
                         isFromAdd: false,
-                        isFromConnector: myPref.role.val == "connector",
+                        isFromConnector: true,
                         product: item,
                         onApiCall: () async {
                           await controller.performSearch(
@@ -143,9 +124,7 @@ class SearchProductView extends GetView<SearchProductController> {
                         },
                         onWishlistTap: () async {
                           await commonController.wishListApi(
-                            status: item.isInWishList == true
-                                ? "remove"
-                                : "add",
+                            status: item.isInWishList == true ? "remove" : "add",
                             mID: item.id ?? 0,
                             onSuccess: () async {
                               await controller.performSearch(
@@ -177,7 +156,7 @@ class SearchProductView extends GetView<SearchProductController> {
                               await commonController.addToConnectApi(
                                 mID: item.merchantProfileId ?? 0,
                                 message: message,
-                                uom: item.filterValues?["uom"]["value"]??"",
+                                uom: item.filterValues?["uom"]["value"] ?? "",
 
                                 quantity: item.stockQty.toString(),
                                 radius: radius,

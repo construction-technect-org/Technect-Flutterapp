@@ -9,7 +9,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/
 
 class ConstructionServiceView extends GetView<ConstructionServiceController> {
   static const double _leftPanelWidth = 0.27;
-  static const double _itemHeight = 170.0;
+  static const double _itemHeight = 150.0;
   static const double _imageHeight = 80.0;
   static const double _selectionBarWidth = 5.0;
   static const double _textHeight = 40.0;
