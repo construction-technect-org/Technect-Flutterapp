@@ -612,7 +612,7 @@ class ServiceDetailScreen extends GetView<ServiceDetailController> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Explore the other services', style: MyTexts.bold18),
+                              Text('Explore our other services', style: MyTexts.bold18),
                               // const Icon(Icons.arrow_forward_ios, size: 20),
                             ],
                           ),
