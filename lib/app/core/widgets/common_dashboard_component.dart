@@ -161,7 +161,7 @@ class CommonDashboardController extends GetxController {
       "available": true,
       "value": "marketplace",
     },
-    {"title": "CRM", "icon": Asset.crm, "available": true, "value": "crm"},
+    {"title": "CRM", "icon": Asset.crm, "available": false, "value": "crm"},
     {"title": "ERP", "icon": Asset.erp, "available": false, "value": "erp"},
     {
       "title": "Project Management",
