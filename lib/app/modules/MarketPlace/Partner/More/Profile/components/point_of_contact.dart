@@ -170,17 +170,82 @@ class PointOfContentScreen extends StatelessWidget {
                               ),
                               Gap(2.h),
 
-                              CommonTextField(
-                                hintText: "9292929929",
-                                headerText: "Business Contact Number",
-                                controller: eController.numberController,
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(10),
-                                ],
-                                validator: ValidationUtils
-                                    .validateBusinessContactNumber,
+                              Focus(
+                                onFocusChange: (hasFocus) {
+                                  if (!hasFocus) {
+                                    final mobileNumber =
+                                        eController.numberController.text;
+                                    final formatError =
+                                        ValidationUtils.validateBusinessContactNumber(
+                                          mobileNumber,
+                                        );
+                                    if (formatError == null) {
+                                      eController.validateNumberAvailability(
+                                        mobileNumber,
+                                      );
+                                    } else {
+                                      eController.numberError.value = "";
+                                    }
+                                  }
+                                },
+
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CommonTextField(
+                                      hintText: "9292929929",
+                                      headerText: "Business Contact Number",
+                                      controller: eController.numberController,
+                                      keyboardType: TextInputType.phone,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        LengthLimitingTextInputFormatter(10),
+                                      ],
+                                      validator: ValidationUtils
+                                          .validateBusinessContactNumber,
+                                      onChange: (value) {
+                                        eController.numberError.value = "";
+                                      },
+                                      onFieldSubmitted: (value) {
+                                        if (value != null) {
+                                          final formatError =
+                                              ValidationUtils.validateBusinessContactNumber(
+                                                value,
+                                              );
+
+                                          if (formatError == null) {
+                                            eController
+                                                .validateEmailAvailability(
+                                                  value,
+                                                );
+                                          } else {
+                                            eController.emailError.value = "";
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    Obx(() {
+                                      if (eController
+                                          .numberError
+                                          .value
+                                          .isNotEmpty) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                          ),
+                                          child: Text(
+                                            textAlign: TextAlign.start,
+                                            eController.numberError.value,
+                                            style: MyTexts.medium13.copyWith(
+                                              color: MyColors.red33,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return const SizedBox.shrink();
+                                    }),
+                                  ],
+                                ),
                               ),
                               Gap(2.h),
 
@@ -213,6 +278,13 @@ class PointOfContentScreen extends StatelessWidget {
               buttonName: "Save",
               onTap: () async {
                 if (!eController.formKey.currentState!.validate()) return;
+                await eController.validateNumberAvailability(
+                  eController.numberController.text,
+                );
+                if (eController.numberError.value.isNotEmpty ||
+                    eController.numberError.value != "") {
+                  return;
+                }
 
                 await eController.validateEmailAvailability(
                   eController.emailController.text,
@@ -247,7 +319,8 @@ class PointOfContactController extends GetxController {
   // Email validation state
   RxString emailError = "".obs;
   RxBool isEmailValidating = false.obs;
-
+  RxString countryCode = "+91".obs;
+  RxString numberError = "".obs;
   @override
   void onInit() {
     super.onInit();
@@ -274,6 +347,19 @@ class PointOfContactController extends GetxController {
     final apiError = await Validate.validateEmailAsync(email);
     emailError.value = apiError ?? "";
     isEmailValidating.value = false;
+  }
+
+  Future<void> validateNumberAvailability(String number) async {
+    final formatError = ValidationUtils.validateBusinessContactNumber(number);
+    if (formatError != null) {
+      numberError.value = formatError;
+      return;
+    }
+    final error = await Validate.validateMobileNumberAsync(
+      number,
+      countryCode: countryCode.value,
+    );
+    numberError.value = error ?? "";
   }
 
   Future<void> updatePointOfContact() async {
