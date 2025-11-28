@@ -23,7 +23,7 @@ class AddLeadServices {
 
   Future<UserInfoModel> addManualLead({required Map<String, dynamic> data}) async {
     try {
-      const String url = APIConstants.addLead;
+      const String url = APIConstants.crmLead;
       final Map<String, dynamic> body = data;
 
       final response = await _apiManager.postObject(url: url, body: body);

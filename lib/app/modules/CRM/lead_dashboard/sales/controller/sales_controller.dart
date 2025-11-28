@@ -1,103 +1,41 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/services/MarketingService.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/followup_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/lead_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/prospect_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/qualified_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/model/sales_model.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/services/SalesService.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/widget/sale_prospect_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/widget/sale_qualified_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/widget/sale_followup_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/widget/sale_lead_screen.dart';
 
-class MarketingController extends GetxController {
+class SalesController extends GetxController {
   @override
   void onInit() {
-    if (Get.arguments != null) {
-      isMarketing.value = Get.arguments["isMarketing"];
-    }
     WidgetsBinding.instance.addPostFrameCallback((val) {
-        fetchAllLead(isLoad: true);
+      fetchAllLead(isLoad: true);
     });
     super.onInit();
   }
 
   final isLoading = false.obs;
-
-  final isMarketing = false.obs;
-
-  final chatNotificationCount = 2.obs;
-  final alertNotificationCount = 2.obs;
-  final bellNotificationCount = 2.obs;
-
   RxString activeFilter = 'Lead'.obs;
   RxString activeLeadStatusFilter = 'All'.obs;
   RxString activeFollowUpStatusFilter = 'Pending'.obs;
-  RxString activeProspectStatusFilter = 'Fresh'.obs;
+  RxString activeProspectStatusFilter = 'Sent'.obs;
   RxString activeQualifiedStatusFilter = 'Pending'.obs;
   RxString selectedPriority = "High".obs;
 
-  final items = ['Lead', 'Follow Up', 'Prospect', 'Qualified'];
+  final items = ['Lead', 'Follow Up', 'Quote Sent', 'Closing'];
   final filterScreens = {
-    'Lead': const LeadScreen(),
-    'Follow Up': const FollowupScreen(),
-    'Prospect': const ProspectScreen(),
-    'Qualified': const QualifiedScreen(),
+    'Lead': const SaleLeadScreen(),
+    'Follow Up': const SaleFollowupScreen(),
+    'Quote Sent': const SaleProspectScreen(),
+    'Closing': const SaleQualifiedScreen(),
   };
 
   RxInt todaysTotal = 0.obs;
 
-  final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
-
-  List<Leads> get filteredFollowups {
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "pending") {
-      return allFollowUpList.where((e) => e.status == "pending").toList();
-    }
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "completed") {
-      return allFollowUpList.where((e) => e.status == "fresh").toList();
-    }
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "missed") {
-      return allFollowUpList.where((e) => e.status == "missed").toList();
-    }
-    return allFollowUpList;
-  }
-
-  final List<String> statusProspectItems = <String>["Fresh", "Reached Out", "Converted", "On Hold"];
-
-  List<Leads> get filteredProspect {
-    if (activeProspectStatusFilter.value.toLowerCase() == "fresh") {
-      return allProspectList.where((e) => e.status == "fresh").toList();
-    }
-    if (activeProspectStatusFilter.value.toLowerCase() == "reached out") {
-      return allProspectList.where((e) => e.status == "reached_out").toList();
-    }
-    if (activeProspectStatusFilter.value.toLowerCase() == "converted") {
-      return allProspectList
-          .where((e) => e.leadStage == "qualified" && e.status == "pending")
-          .toList();
-    }
-    if (activeProspectStatusFilter.value.toLowerCase() == "on hold") {
-      return allProspectList.where((e) => e.status == "on_hold").toList();
-    }
-    return allProspectList;
-  }
-
-  final List<String> qualifiedStatus = <String>["Pending", "Qualified", "Lost"];
-
-  List<Leads> get filteredQualified {
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "pending") {
-      return allQualifiedList
-          .where((e) => e.leadStage == "qualified" && e.status == "pending")
-          .toList();
-    }
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "qualified") {
-      return allQualifiedList.where((e) => e.status == "qualified").toList();
-    }
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "lost") {
-      return allQualifiedList.where((e) => e.status == "lost").toList();
-    }
-    return allQualifiedList;
-  }
-
   final List<String> leadStatus = <String>["All", "Inbound", "Outbound"];
 
-  List<Leads> get filteredLead {
+  List<SaleLeads> get filteredLead {
     if (activeLeadStatusFilter.value.toLowerCase() == "inbound") {
       return allLeadList.where((e) => e.isAutoCreated == true).toList();
     }
@@ -106,6 +44,57 @@ class MarketingController extends GetxController {
     }
     return allLeadList;
   }
+
+
+  final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
+
+  List<SaleLeads> get filteredFollowups {
+    print(activeFollowUpStatusFilter.value.toLowerCase());
+    if (activeFollowUpStatusFilter.value.toLowerCase() == "pending") {
+      return allFollowUpList.where((e) => e.status == "pending").toList();
+    }
+    if (activeFollowUpStatusFilter.value.toLowerCase() == "completed") {
+      return allFollowUpList.where((e) => e.status == "sent").toList();
+    }
+    if (activeFollowUpStatusFilter.value.toLowerCase() == "missed") {
+      return allFollowUpList.where((e) => e.status == "missed").toList();
+    }
+    return allFollowUpList;
+  }
+
+  final List<String> statusProspectItems = <String>[ "Sent","Accepted", "Negotiation",];
+
+  List<SaleLeads> get filteredProspect {
+    if (activeProspectStatusFilter.value.toLowerCase() == "sent") {
+      return allProspectList.where((e) => e.status == "sent").toList();
+    }
+    if (activeProspectStatusFilter.value.toLowerCase() == "accepted") {
+      return allProspectList
+          .where((e) => e.salesLeadsStage == "closing" && e.status == "won")
+          .toList();
+    }
+    if (activeProspectStatusFilter.value.toLowerCase() == "negotiation") {
+      return allProspectList.where((e) => e.status == "negotiation").toList();
+    }
+    return allProspectList;
+  }
+
+  final List<String> qualifiedStatus = <String>["Pending", "Won", "Lost"];
+
+  List<SaleLeads> get filteredQualified {
+    if (activeQualifiedStatusFilter.value.toLowerCase() == "pending") {
+      return allQualifiedList.where((e) => e.status == "pending").toList();
+    }
+    if (activeQualifiedStatusFilter.value.toLowerCase() == "won") {
+      return allQualifiedList.where((e) => e.status == "won").toList();
+    }
+    if (activeQualifiedStatusFilter.value.toLowerCase() == "lost") {
+      return allQualifiedList.where((e) => e.status == "lost").toList();
+    }
+    return allQualifiedList;
+  }
+
+
 
   void setFilter(String f) {
     activeFilter.value = f;
@@ -119,13 +108,13 @@ class MarketingController extends GetxController {
     if (activeFilter.value == "Follow Up") {
       return "follow_up";
     }
-    if (activeFilter.value == "Prospect") {
-      return "prospect";
+    if (activeFilter.value == "Quote Sent") {
+      return "quote_sent";
     }
-    if (activeFilter.value == "Qualified") {
-      return "qualified";
+    if (activeFilter.value == "Closing") {
+      return "closing";
     }
-    return "new";
+    return "lead";
   }
 
   void setStatusFilter(String f) {
@@ -149,9 +138,9 @@ class MarketingController extends GetxController {
     final String todayStr =
         "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
 
-    final List<Leads> all = allLeadModel.value.data?.leads ?? [];
+    final List<SaleLeads> all = allLeadModel.value.data?.leads ?? [];
 
-    final List<Leads> todaysLeads = all.where((e) {
+    final List<SaleLeads> todaysLeads = all.where((e) {
       if (e.createdAt == null) return false;
 
       final DateTime d = DateTime.parse(e.createdAt!);
@@ -163,7 +152,7 @@ class MarketingController extends GetxController {
     if (getFilterStatusName() == "lead") {
       allLeadList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.leadStage == "lead"));
+        ..addAll(todaysLeads.where((e) => e.salesLeadsStage == "sales"));
 
       todaysTotal.value = allLeadList.length;
     } else if (getFilterStatusName() == "follow_up") {
@@ -171,41 +160,44 @@ class MarketingController extends GetxController {
         ..clear()
         ..addAll(
           todaysLeads.where(
-            (e) => e.leadStage == "follow_up" || (e.leadStage == "prospect" && e.status == "fresh"),
+            (e) =>
+                e.salesLeadsStage == "follow_up" ||
+                (e.salesLeadsStage == "quote_sent" && e.status == "sent"),
           ),
         );
 
       todaysTotal.value = allFollowUpList.length;
-    } else if (getFilterStatusName() == "prospect") {
+    } else if (getFilterStatusName() == "quote_sent") {
       allProspectList
         ..clear()
         ..addAll(
           todaysLeads.where(
             (e) =>
-                e.leadStage == "prospect" || (e.status == "pending" && e.leadStage == "qualified"),
+                e.salesLeadsStage == "quote_sent" ||
+                (e.status == "pending" && e.salesLeadsStage == "closing"),
           ),
         );
 
       todaysTotal.value = allProspectList.length;
-    } else if (getFilterStatusName() == "qualified") {
+    } else if (getFilterStatusName() == "closing") {
       allQualifiedList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.leadStage == "qualified"));
+        ..addAll(todaysLeads.where((e) => e.salesLeadsStage == "closing"));
 
       todaysTotal.value = allQualifiedList.length;
     }
   }
 
-  Rx<AllLeadModel> allLeadModel = AllLeadModel().obs;
-  RxList<Leads> allLeadList = <Leads>[].obs;
-  RxList<Leads> allFollowUpList = <Leads>[].obs;
-  RxList<Leads> allProspectList = <Leads>[].obs;
-  RxList<Leads> allQualifiedList = <Leads>[].obs;
+  Rx<AllSalesModel> allLeadModel = AllSalesModel().obs;
+  RxList<SaleLeads> allLeadList = <SaleLeads>[].obs;
+  RxList<SaleLeads> allFollowUpList = <SaleLeads>[].obs;
+  RxList<SaleLeads> allProspectList = <SaleLeads>[].obs;
+  RxList<SaleLeads> allQualifiedList = <SaleLeads>[].obs;
 
   Future<void> fetchAllLead({bool? isLoad}) async {
     try {
       isLoading.value = isLoad ?? false;
-      allLeadModel.value = await MarketingServices().getAllLead(isMarketing: isMarketing.value);
+      allLeadModel.value = await SalesServices().getAllLead();
       filterLead();
       isLoading.value = false;
     } catch (e) {
@@ -218,7 +210,7 @@ class MarketingController extends GetxController {
   }
 
   Future<void> updateStatusLeadToFollowUp({
-    required String leadID,
+    required String saleLeadID,
     String? remindAt,
     String? assignTo,
     String? note,
@@ -231,9 +223,9 @@ class MarketingController extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-      final response = await MarketingServices().updateLeadStatus(
+      final response = await SalesServices().updateSaleLeadStatus(
         remindAt: remindAt,
-        leadID: leadID,
+        saleLeadID: saleLeadID,
         assignTo: assignTo,
         assignToMySelf: assignToMySelf,
         note: note,

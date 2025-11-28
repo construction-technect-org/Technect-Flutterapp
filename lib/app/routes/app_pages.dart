@@ -17,6 +17,10 @@ import 'package:construction_technect/app/modules/CRM/lead/leadDetail/bindings/l
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/views/lead_detail_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/bindings/marketing_bindings.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/view/marketing_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/bindings/sales_bindings.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/saleDetail/bindings/sale_detail_binding.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/saleDetail/views/sale_lead_detail_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/view/sales_screen.dart';
 import 'package:construction_technect/app/modules/CRM/reminder/bindings/reminder_bindings.dart';
 import 'package:construction_technect/app/modules/CRM/reminder/view/set_reminder_screen.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/add/bindings/add_new_requ_binding.dart';
@@ -405,15 +409,23 @@ class AppPages {
       binding: LeadDetailBinding(),
     ),
     GetPage(
+      name: _Paths.SALE_LEAD_DETAIL,
+      page: () => const SaleLeadDetailScreen(),
+      binding: SaleLeadDetailBinding(),
+    ),
+    GetPage(
       name: Routes.Requ_DetailS,
       page: () => const RequirementDetailScreen(),
       // binding: AddNewRequBinding(),
     ),
-
     GetPage(
       name: Routes.Marketing,
       page: () => const MarketingScreen(),
       binding: MarketingBindings(),
+    ),    GetPage(
+      name: Routes.SALES,
+      page: () => const SalesScreen(),
+      binding: SalesBindings(),
     ),
     GetPage(
       name: Routes.SetReminder,

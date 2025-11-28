@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/controller/sales_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,18 +51,35 @@ class SetReminderController extends GetxController {
 
   Future<void> saveReminder() async {
     isLoading.value = true;
-    await Get.find<MarketingController>().updateStatusLeadToFollowUp(
-      leadID: Get.arguments["leadID"].toString(),
-      assignTo: Get.arguments["assignTo"].toString(),
-      note: noteController.text,
-      priority: Get.arguments["priority"].toString(),
-      assignToMySelf: Get.arguments["assignToSelf"] ?? false,
-      remindAt: getReminderUTCString(),
-      onSuccess: () {
-        isLoading.value = false;
-        Get.back();
-      },
-    );
+    if(Get.arguments["leadID"]==""){
+      await Get.find<SalesController>().updateStatusLeadToFollowUp(
+        saleLeadID: Get.arguments["saleLeadID"].toString(),
+        assignTo: Get.arguments["assignTo"].toString(),
+        note: noteController.text,
+        priority: Get.arguments["priority"].toString(),
+        assignToMySelf: Get.arguments["assignToSelf"] ?? false,
+        remindAt: getReminderUTCString(),
+        onSuccess: () {
+          isLoading.value = false;
+          Get.back();
+        },
+      );
+    }
+    else{
+      await Get.find<MarketingController>().updateStatusLeadToFollowUp(
+        leadID: Get.arguments["leadID"].toString(),
+        assignTo: Get.arguments["assignTo"].toString(),
+        note: noteController.text,
+        priority: Get.arguments["priority"].toString(),
+        assignToMySelf: Get.arguments["assignToSelf"] ?? false,
+        remindAt: getReminderUTCString(),
+        onSuccess: () {
+          isLoading.value = false;
+          Get.back();
+        },
+      );
+    }
+
     isLoading.value = false;
   }
 

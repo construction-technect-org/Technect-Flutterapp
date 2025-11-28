@@ -110,6 +110,8 @@ class Leads {
   AssignedTeamMember? assignedTeamMember;
   AssignedUser? assignedUser;
 
+  String? salesLeadStage;
+
   Leads({
     this.id,
     this.leadId,
@@ -154,6 +156,7 @@ class Leads {
     this.lastConversation,
     this.nextConversation,
     this.assignedTeamMember,
+    this.salesLeadStage,
     this.assignedUser,
   });
 
@@ -210,6 +213,9 @@ class Leads {
 
     lastConversation = json["last_conversation"];
     nextConversation = json["next_conversation"];
+
+
+    salesLeadStage = json["sales_leads_stage"];
 
     assignedTeamMember = json["assigned_team_member"] != null
         ? AssignedTeamMember.fromJson(json["assigned_team_member"])

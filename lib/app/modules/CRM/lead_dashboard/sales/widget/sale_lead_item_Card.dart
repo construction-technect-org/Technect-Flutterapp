@@ -3,34 +3,34 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/widget/priority_dropdown.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/controller/sales_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/model/sales_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
-class LeadItemCard extends StatelessWidget {
-  final Leads lead;
-  final MarketingController controller;
+class SaleItemCard extends StatelessWidget {
+  final SaleLeads lead;
+  final SalesController controller;
 
-  LeadItemCard({required this.lead, required this.controller});
+  SaleItemCard({required this.lead, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final String leadStatus = lead.leadStage ?? "";
+    final String leadStatus = lead.salesLeadsStage ?? "";
     final String status = lead.status ?? "";
     final bool isFollowUpSwipable = leadStatus == "follow_up" && status == "pending";
-    final bool isQualifiedSwipable =
+    final bool isClosingSwipable =
         status == "pending" &&
-        leadStatus == "qualified" &&
-        controller.activeFilter.value == "Qualified";
-    final bool isProspectSwipable =
-        leadStatus == "prospect" &&
-        (status == "fresh" || status == "reached_out") &&
-        controller.activeFilter.value == "Prospect";
+        leadStatus == "closing" &&
+        controller.activeFilter.value == "Closing";
+    final bool isQuoteSentSwipable =
+        leadStatus == "quote_sent" &&
+        (status == "sent") &&
+        controller.activeFilter.value == "Quote Sent";
 
-    return isQualifiedSwipable
+    return isClosingSwipable
         ? Slidable(
             key: UniqueKey(),
             startActionPane: ActionPane(
@@ -43,7 +43,7 @@ class LeadItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   onPressed: (_) async {
                     await controller.updateStatusLeadToFollowUp(
-                      leadID: lead.id.toString(),
+                      saleLeadID: lead.salesLeadId.toString(),
                       status: "lost",
                     );
                   },
@@ -62,18 +62,18 @@ class LeadItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   onPressed: (_) async {
                     await controller.updateStatusLeadToFollowUp(
-                      leadID: lead.id.toString(),
-                      status: "qualified",
+                      saleLeadID: lead.salesLeadId.toString(),
+                      status: "won",
                     );
                   },
-                  label: "Qualified",
+                  label: "Won",
                 ),
               ],
             ),
 
             child: _card(context, status, leadStatus),
           )
-        : isProspectSwipable
+        : isQuoteSentSwipable
         ? Slidable(
             key: UniqueKey(),
             startActionPane: ActionPane(
@@ -86,11 +86,11 @@ class LeadItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   onPressed: (_) async {
                     await controller.updateStatusLeadToFollowUp(
-                      leadID: lead.id.toString(),
-                      status: "on_hold",
+                      saleLeadID: lead.salesLeadId.toString(),
+                      status: "negotiation",
                     );
                   },
-                  label: "On Hold",
+                  label: "Negotiation",
                 ),
               ],
             ),
@@ -105,11 +105,11 @@ class LeadItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   onPressed: (_) async {
                     await controller.updateStatusLeadToFollowUp(
-                      leadID: lead.id.toString(),
-                      status: status == "fresh" ? "reached_out" : "converted",
+                      saleLeadID: lead.salesLeadId.toString(),
+                      status: "accepted",
                     );
                   },
-                  label: status == "fresh" ? "Reached Out" : "Converted",
+                  label: "Accepted",
                 ),
               ],
             ),
@@ -130,7 +130,7 @@ class LeadItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   onPressed: (_) async {
                     await controller.updateStatusLeadToFollowUp(
-                      leadID: lead.id.toString(),
+                      saleLeadID: lead.salesLeadId.toString(),
                       status: "missed",
                     );
                   },
@@ -149,7 +149,7 @@ class LeadItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   onPressed: (_) async {
                     await controller.updateStatusLeadToFollowUp(
-                      leadID: lead.id.toString(),
+                      saleLeadID: lead.salesLeadId.toString(),
                       status: "completed",
                     );
                   },
@@ -166,7 +166,7 @@ class LeadItemCard extends StatelessWidget {
   Widget _card(BuildContext context, String status, String leadStatus) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.LEAD_DETAIL, arguments: {"lead": lead});
+        Get.toNamed(Routes.SALE_LEAD_DETAIL, arguments: {"lead": lead});
       },
       child: Container(
         decoration: BoxDecoration(
@@ -221,7 +221,7 @@ class LeadItemCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 3),
                             Text(
-                              'Lead Id - ${lead.leadId}',
+                              'Sales Id - ${lead.salesId}',
                               style: MyTexts.regular13.copyWith(color: MyColors.black),
                             ),
                             const SizedBox(height: 3),
@@ -235,7 +235,7 @@ class LeadItemCard extends StatelessWidget {
                                 SvgPicture.asset(Asset.location, height: 14, width: 14),
                                 const SizedBox(width: 3),
                                 Text(
-                                  '${(lead.distanceKM ?? 0.0).toStringAsFixed(2)} km away',
+                                  '${(lead.distanceKm ?? 0.0).toStringAsFixed(2)} km away',
                                   style: MyTexts.regular13.copyWith(color: MyColors.black),
                                 ),
                               ],
@@ -248,7 +248,7 @@ class LeadItemCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           if (lead.assignedToSelf == false)
-                            if (leadStatus != "lead") ...[
+                            if (leadStatus != "sales") ...[
                               CircleAvatar(
                                 radius: 14,
                                 backgroundImage:
@@ -278,7 +278,7 @@ class LeadItemCard extends StatelessWidget {
                     ],
                   ),
                   const Gap(6),
-                  if (leadStatus == "lead") ...[
+                  if (leadStatus == "sales") ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -373,7 +373,7 @@ class LeadItemCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ] else if (controller.activeFilter.value == "Prospect") ...[
+                  ] else if (controller.activeFilter.value == "Quote Sent") ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -384,13 +384,13 @@ class LeadItemCard extends StatelessWidget {
                             color: const Color(0xFFB3FDCE),
                           ),
                           child: Text(
-                            "Prospect",
+                            "Quote Sent",
                             style: MyTexts.medium13.copyWith(color: Colors.black),
                           ),
                         ),
                       ],
                     ),
-                  ] else if (controller.activeFilter.value == "Qualified") ...[
+                  ] else if (controller.activeFilter.value == "Closing") ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -405,7 +405,7 @@ class LeadItemCard extends StatelessWidget {
                                 : MyColors.green,
                           ),
                           child: Text(
-                            status == "pending" ? "Unqualified" : status.capitalizeFirst.toString(),
+                            status == "pending" ? "Pending" : status.capitalizeFirst.toString(),
                             style: MyTexts.medium13.copyWith(color: Colors.white),
                           ),
                         ),
@@ -476,7 +476,8 @@ class LeadItemCard extends StatelessWidget {
                               Get.toNamed(
                                 Routes.SetReminder,
                                 arguments: {
-                                  "leadID": lead.id ?? "",
+                                  "leadID": "",
+                                  "saleLeadID": lead.salesLeadId ?? "",
                                   "assignTo": 0,
                                   "assignToSelf": true,
                                   "priority": "",
@@ -710,7 +711,8 @@ class LeadItemCard extends StatelessWidget {
                             Get.toNamed(
                               Routes.SetReminder,
                               arguments: {
-                                "leadID": lead.id ?? "",
+                                "leadID": "",
+                                "saleLeadID": lead.salesLeadId ?? "",
                                 "assignTo": item.id ?? "",
                                 "priority": controller.selectedPriority.value,
                                 "assignToSelf": false,
@@ -762,7 +764,7 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
-  void _openConversationMenu(BuildContext context, Offset position, Leads lead) {
+  void _openConversationMenu(BuildContext context, Offset position, SaleLeads lead) {
     showMenu(
       context: context,
       position: RelativeRect.fromLTRB(position.dx, position.dy, position.dx + 1, position.dy + 1),
@@ -802,7 +804,7 @@ class LeadItemCard extends StatelessWidget {
 
   final lastFormKey = GlobalKey<FormState>();
 
-  void _openLastConversationSheet(Leads lead) {
+  void _openLastConversationSheet(SaleLeads lead) {
     final TextEditingController lastController = TextEditingController(
       text: lead.lastConversation ?? "",
     );
@@ -886,7 +888,7 @@ class LeadItemCard extends StatelessWidget {
                         onTap: () {
                           if (lastFormKey.currentState!.validate()) {
                             controller.updateStatusLeadToFollowUp(
-                              leadID: lead.id.toString(),
+                              saleLeadID: lead.salesLeadId.toString(),
                               lastConversation: lastController.text,
                               onSuccess: () {
                                 Get.back();
@@ -913,7 +915,7 @@ class LeadItemCard extends StatelessWidget {
 
   final GlobalKey<FormState> nextFormKey = GlobalKey<FormState>();
 
-  void _openNextConversationSheet(Leads lead) {
+  void _openNextConversationSheet(SaleLeads lead) {
     final TextEditingController nextController = TextEditingController(
       text: lead.nextConversation ?? "",
     );
@@ -996,7 +998,7 @@ class LeadItemCard extends StatelessWidget {
                         onTap: () {
                           if (nextFormKey.currentState!.validate()) {
                             controller.updateStatusLeadToFollowUp(
-                              leadID: lead.id.toString(),
+                              saleLeadID: lead.salesLeadId.toString(),
                               nextConversation: nextController.text,
                               onSuccess: () {
                                 Get.back();
@@ -1021,7 +1023,7 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
-  Widget _userInfo(Leads lead) {
+  Widget _userInfo(SaleLeads lead) {
     return Row(
       children: [
         CircleAvatar(
