@@ -14,13 +14,14 @@ class LeadItemCard extends StatelessWidget {
   final Leads lead;
   final MarketingController controller;
 
-  LeadItemCard({required this.lead, required this.controller});
+  LeadItemCard({super.key, required this.lead, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     final String leadStatus = lead.leadStage ?? "";
     final String status = lead.status ?? "";
-    final bool isFollowUpSwipable = leadStatus == "follow_up" && status == "pending";
+    final bool isFollowUpSwipable =
+        leadStatus == "follow_up" && status == "pending";
     final bool isQualifiedSwipable =
         status == "pending" &&
         leadStatus == "qualified" &&
@@ -185,7 +186,8 @@ class LeadItemCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: getImageView(
-                finalUrl: APIConstants.bucketUrl + (lead.connectorProfileImage ?? ""),
+                finalUrl:
+                    APIConstants.bucketUrl + (lead.connectorProfileImage ?? ""),
                 width: 80,
                 height: 97,
                 fit: BoxFit.cover,
@@ -210,11 +212,15 @@ class LeadItemCard extends StatelessWidget {
                                 children: [
                                   TextSpan(
                                     text: 'Connector - ',
-                                    style: MyTexts.regular14.copyWith(color: Colors.black),
+                                    style: MyTexts.regular14.copyWith(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                   TextSpan(
                                     text: lead.connectorName ?? '',
-                                    style: MyTexts.medium14.copyWith(color: Colors.black),
+                                    style: MyTexts.medium14.copyWith(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -222,21 +228,31 @@ class LeadItemCard extends StatelessWidget {
                             const SizedBox(height: 3),
                             Text(
                               'Lead Id - ${lead.leadId}',
-                              style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              style: MyTexts.regular13.copyWith(
+                                color: MyColors.black,
+                              ),
                             ),
                             const SizedBox(height: 3),
                             Text(
                               'Product Interested - ${lead.productName}',
-                              style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              style: MyTexts.regular13.copyWith(
+                                color: MyColors.black,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                SvgPicture.asset(Asset.location, height: 14, width: 14),
+                                SvgPicture.asset(
+                                  Asset.location,
+                                  height: 14,
+                                  width: 14,
+                                ),
                                 const SizedBox(width: 3),
                                 Text(
                                   '${(lead.distanceKM ?? 0.0).toStringAsFixed(2)} km away',
-                                  style: MyTexts.regular13.copyWith(color: MyColors.black),
+                                  style: MyTexts.regular13.copyWith(
+                                    color: MyColors.black,
+                                  ),
                                 ),
                               ],
                             ),
@@ -252,10 +268,15 @@ class LeadItemCard extends StatelessWidget {
                               CircleAvatar(
                                 radius: 14,
                                 backgroundImage:
-                                    (lead.assignedTeamMember?.profilePhoto ?? "").isNotEmpty
+                                    (lead.assignedTeamMember?.profilePhoto ??
+                                            "")
+                                        .isNotEmpty
                                     ? NetworkImage(
                                         APIConstants.bucketUrl +
-                                            (lead.assignedTeamMember?.profilePhoto ?? ""),
+                                            (lead
+                                                    .assignedTeamMember
+                                                    ?.profilePhoto ??
+                                                ""),
                                       )
                                     : const AssetImage(Asset.appLogo),
                               ),
@@ -270,7 +291,9 @@ class LeadItemCard extends StatelessWidget {
 
                           Text(
                             '${_formatTime(DateTime.parse(lead.createdAt ?? ""))}, ${_formatDate(DateTime.parse(lead.createdAt ?? ""))}',
-                            style: MyTexts.regular12.copyWith(color: MyColors.black),
+                            style: MyTexts.regular12.copyWith(
+                              color: MyColors.black,
+                            ),
                             textAlign: TextAlign.right,
                           ),
                         ],
@@ -283,14 +306,19 @@ class LeadItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: MyColors.veryPaleBlue,
                           ),
                           child: Text(
                             "Lead",
-                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                            style: MyTexts.medium13.copyWith(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         GestureDetector(
@@ -319,7 +347,9 @@ class LeadItemCard extends StatelessWidget {
                                   const Gap(4),
                                   Text(
                                     "Assign",
-                                    style: MyTexts.medium12.copyWith(color: Colors.white),
+                                    style: MyTexts.medium12.copyWith(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -333,19 +363,28 @@ class LeadItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: MyColors.paleRed,
                           ),
                           child: Text(
                             "FollowUp",
-                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                            style: MyTexts.medium13.copyWith(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         GestureDetector(
                           onTapDown: (details) {
-                            _openConversationMenu(context, details.globalPosition, lead);
+                            _openConversationMenu(
+                              context,
+                              details.globalPosition,
+                              lead,
+                            );
                           },
                           child: Stack(
                             alignment: Alignment.center,
@@ -364,7 +403,9 @@ class LeadItemCard extends StatelessWidget {
                                   const Gap(4),
                                   Text(
                                     "Contact",
-                                    style: MyTexts.medium12.copyWith(color: Colors.white),
+                                    style: MyTexts.medium12.copyWith(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -378,14 +419,19 @@ class LeadItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: const Color(0xFFB3FDCE),
                           ),
                           child: Text(
                             "Prospect",
-                            style: MyTexts.medium13.copyWith(color: Colors.black),
+                            style: MyTexts.medium13.copyWith(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ],
@@ -395,7 +441,10 @@ class LeadItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: status == "pending"
@@ -405,8 +454,12 @@ class LeadItemCard extends StatelessWidget {
                                 : MyColors.green,
                           ),
                           child: Text(
-                            status == "pending" ? "Unqualified" : status.capitalizeFirst.toString(),
-                            style: MyTexts.medium13.copyWith(color: Colors.white),
+                            status == "pending"
+                                ? "Unqualified"
+                                : status.capitalizeFirst.toString(),
+                            style: MyTexts.medium13.copyWith(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         Container(
@@ -463,14 +516,18 @@ class LeadItemCard extends StatelessWidget {
                         children: [
                           Text(
                             "You don't have any team members",
-                            style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+                            style: MyTexts.medium14.copyWith(
+                              color: MyColors.gray54,
+                            ),
                           ),
                           const Gap(10),
                           RoundedButton(
                             buttonName: "Assign to me only",
                             height: 34,
                             width: 120,
-                            style: MyTexts.medium14.copyWith(color: Colors.white),
+                            style: MyTexts.medium14.copyWith(
+                              color: Colors.white,
+                            ),
                             onTap: () {
                               Get.back();
                               Get.toNamed(
@@ -522,11 +579,15 @@ class LeadItemCard extends StatelessWidget {
                 width: 32,
                 height: 32,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => Image.asset(Asset.appLogo, width: 32, height: 32),
+                errorBuilder: (_, _, _) =>
+                    Image.asset(Asset.appLogo, width: 32, height: 32),
               ),
             ),
             const SizedBox(width: 8),
-            Text("${item.firstName ?? ""} ${item.lastName ?? ""}", style: MyTexts.medium13),
+            Text(
+              "${item.firstName ?? ""} ${item.lastName ?? ""}",
+              style: MyTexts.medium13,
+            ),
             const Gap(10),
           ],
         ),
@@ -543,11 +604,17 @@ class LeadItemCard extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     Asset.userPlus,
-                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
                     height: 12,
                   ),
                   const Gap(4),
-                  Text("Assign", style: MyTexts.medium12.copyWith(color: MyColors.white)),
+                  Text(
+                    "Assign",
+                    style: MyTexts.medium12.copyWith(color: MyColors.white),
+                  ),
                 ],
               ),
             ],
@@ -561,200 +628,223 @@ class LeadItemCard extends StatelessWidget {
 
   void _openTeamBottomSheet(BuildContext context, TeamListData item) {
     Get.bottomSheet(
-      Container(
-        height: isDropdownOpen.value == true ? 270 : 230,
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        ),
-        child: GestureDetector(
-          onTap: hideKeyboard,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  const Gap(10),
-                  Text("Team", style: MyTexts.bold20),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: Get.back,
-                    child: const CircleAvatar(
-                      radius: 18,
-                      backgroundColor: MyColors.grayF7,
-                      child: Icon(Icons.close, color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: AlignmentGeometry.topCenter,
-                    end: AlignmentGeometry.bottomCenter,
-                    colors: [Colors.white, Color(0xFFFFFBCC)],
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: MyColors.grayD6),
-                ),
-                padding: const EdgeInsets.all(12),
-                child: Column(
+      Obx(
+        () => Container(
+          height: isDropdownOpen.value ? 365 : 240,
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+          ),
+          child: GestureDetector(
+            onTap: hideKeyboard,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(34),
-                          child: CachedNetworkImage(
-                            imageUrl: item.profilePhotoUrl ?? "",
-                            width: 65,
-                            height: 65,
-                            fit: BoxFit.cover,
-                            placeholder: (c, s) =>
-                                Container(color: Colors.grey.shade200, width: 65, height: 65),
-                            errorWidget: (c, s, e) => Container(
-                              color: Colors.grey.shade200,
-                              width: 65,
-                              height: 65,
-                              child: Image.asset(Asset.appLogo),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 3),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: 'Team : ',
-                                            style: MyTexts.regular14.copyWith(color: Colors.black),
-                                          ),
-                                          TextSpan(
-                                            text: "${item.firstName ?? ""} ${item.lastName ?? ""}",
-                                            style: MyTexts.medium14.copyWith(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    '${_formatTime(DateTime.parse(item.createdAt ?? ""))}, ${_formatDate(DateTime.parse(item.createdAt ?? ""))}',
-                                    style: MyTexts.regular12.copyWith(color: MyColors.black),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 3),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Team Id : ${item.id ?? ""}',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          'Designation : ${item.roleTitle}',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'Conversation Ration : 4/10 ',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
-                                        ),
-                                        const SizedBox(height: 6),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Gap(4),
-                    Row(
-                      children: [
-                        Obx(() {
-                          return GestureDetector(
-                            onTap: () => isDropdownOpen.value = true,
-                            child: PriorityDropdown(
-                              value: controller.selectedPriority.value,
-                              onChanged: (v) {
-                                controller.selectedPriority.value = v;
-                                isDropdownOpen.value = false;
-                              },
-                            ),
-                          );
-                        }),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                            Get.toNamed(
-                              Routes.SetReminder,
-                              arguments: {
-                                "leadID": lead.id ?? "",
-                                "assignTo": item.id ?? "",
-                                "priority": controller.selectedPriority.value,
-                                "assignToSelf": false,
-                              },
-                            );
-                          },
-                          child: Stack(
-                            alignment: AlignmentGeometry.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadiusGeometry.circular(12),
-                                child: Image.asset(
-                                  Asset.explore,
-                                  width: 98,
-                                  height: 30,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    Asset.calendar,
-                                    colorFilter: const ColorFilter.mode(
-                                      Colors.white,
-                                      BlendMode.srcIn,
-                                    ),
-                                    height: 12,
-                                  ),
-                                  const Gap(4),
-                                  Text(
-                                    "Set Reminder",
-                                    style: MyTexts.medium12.copyWith(color: MyColors.white),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    const Gap(10),
+                    Text("Team", style: MyTexts.bold20),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: Get.back,
+                      child: const CircleAvatar(
+                        radius: 18,
+                        backgroundColor: MyColors.grayF7,
+                        child: Icon(Icons.close, color: Colors.black),
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: AlignmentGeometry.topCenter,
+                      end: AlignmentGeometry.bottomCenter,
+                      colors: [Colors.white, Color(0xFFFFFBCC)],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: MyColors.grayD6),
+                  ),
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(34),
+                            child: CachedNetworkImage(
+                              imageUrl: item.profilePhotoUrl ?? "",
+                              width: 65,
+                              height: 65,
+                              fit: BoxFit.cover,
+                              placeholder: (c, s) => Container(
+                                color: Colors.grey.shade200,
+                                width: 65,
+                                height: 65,
+                              ),
+                              errorWidget: (c, s, e) => Container(
+                                color: Colors.grey.shade200,
+                                width: 65,
+                                height: 65,
+                                child: Image.asset(Asset.appLogo),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 3),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: 'Team : ',
+                                              style: MyTexts.regular14.copyWith(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  "${item.firstName ?? ""} ${item.lastName ?? ""}",
+                                              style: MyTexts.medium14.copyWith(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      '${_formatTime(DateTime.parse(item.createdAt ?? ""))}, ${_formatDate(DateTime.parse(item.createdAt ?? ""))}',
+                                      style: MyTexts.regular12.copyWith(
+                                        color: MyColors.black,
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 3),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Team Id : ${item.id ?? ""}',
+                                            style: MyTexts.regular13.copyWith(
+                                              color: MyColors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 3),
+                                          Text(
+                                            'Designation : ${item.roleTitle}',
+                                            style: MyTexts.regular13.copyWith(
+                                              color: MyColors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Conversation Ration : 4/10 ',
+                                            style: MyTexts.regular13.copyWith(
+                                              color: MyColors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 6),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(4),
+                      Row(
+                        children: [
+                          Obx(() {
+                            return GestureDetector(
+                              onTap: () => isDropdownOpen.value = true,
+                              child: PriorityDropdown(
+                                value: controller.selectedPriority.value,
+                                onChanged: (v) =>
+                                    controller.selectedPriority.value = v,
+                                onMenuStateChange: (isOpen) =>
+                                    isDropdownOpen.value = isOpen,
+                              ),
+                            );
+                          }),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Get.back();
+                              Get.toNamed(
+                                Routes.SetReminder,
+                                arguments: {
+                                  "leadID": lead.id ?? "",
+                                  "assignTo": item.id ?? "",
+                                  "priority": controller.selectedPriority.value,
+                                  "assignToSelf": false,
+                                },
+                              );
+                            },
+                            child: Stack(
+                              alignment: AlignmentGeometry.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    12,
+                                  ),
+                                  child: Image.asset(
+                                    Asset.explore,
+                                    width: 98,
+                                    height: 30,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      Asset.calendar,
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.srcIn,
+                                      ),
+                                      height: 12,
+                                    ),
+                                    const Gap(4),
+                                    Text(
+                                      "Set Reminder",
+                                      style: MyTexts.medium12.copyWith(
+                                        color: MyColors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -762,10 +852,19 @@ class LeadItemCard extends StatelessWidget {
     );
   }
 
-  void _openConversationMenu(BuildContext context, Offset position, Leads lead) {
+  void _openConversationMenu(
+    BuildContext context,
+    Offset position,
+    Leads lead,
+  ) {
     showMenu(
       context: context,
-      position: RelativeRect.fromLTRB(position.dx, position.dy, position.dx + 1, position.dy + 1),
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy,
+        position.dx + 1,
+        position.dy + 1,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       items: [
         PopupMenuItem(
@@ -891,7 +990,8 @@ class LeadItemCard extends StatelessWidget {
                               onSuccess: () {
                                 Get.back();
                                 SnackBars.successSnackBar(
-                                  content: 'Last conversation added successfully',
+                                  content:
+                                      'Last conversation added successfully',
                                 );
                               },
                             );
@@ -1001,7 +1101,8 @@ class LeadItemCard extends StatelessWidget {
                               onSuccess: () {
                                 Get.back();
                                 SnackBars.successSnackBar(
-                                  content: 'Next conversation added successfully',
+                                  content:
+                                      'Next conversation added successfully',
                                 );
                               },
                             );
@@ -1026,8 +1127,12 @@ class LeadItemCard extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 18,
-          backgroundImage: (lead.assignedTeamMember?.profilePhoto ?? "").isNotEmpty
-              ? NetworkImage(APIConstants.bucketUrl + (lead.assignedTeamMember?.profilePhoto ?? ""))
+          backgroundImage:
+              (lead.assignedTeamMember?.profilePhoto ?? "").isNotEmpty
+              ? NetworkImage(
+                  APIConstants.bucketUrl +
+                      (lead.assignedTeamMember?.profilePhoto ?? ""),
+                )
               : const AssetImage(Asset.appLogo),
         ),
         const SizedBox(width: 8),
@@ -1038,7 +1143,10 @@ class LeadItemCard extends StatelessWidget {
               "${lead.assignedTeamMember?.firstName ?? ""} ${lead.assignedTeamMember?.lastName ?? ""}",
               style: MyTexts.medium14,
             ),
-            Text(lead.assignedTeamMember?.roleTitle ?? "", style: MyTexts.regular13),
+            Text(
+              lead.assignedTeamMember?.roleTitle ?? "",
+              style: MyTexts.regular13,
+            ),
           ],
         ),
       ],
