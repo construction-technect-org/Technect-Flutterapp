@@ -21,6 +21,9 @@ class LeadDashController extends GetxController {
   final rawLeads = 2.obs;
   final followUpLeads = 9.obs;
   final pendingLeads = 4.obs;
+  final rawLeadsText = "Raw Leads".obs;
+  final followUpLeadsText = "Follow up Leads".obs;
+  final pendingLeadsText = "Pending Leads".obs;
 
   final funnelData = [
     {'label': 'Lead Generated', 'count': 45, 'color': const Color(0xFFEF4444)},
@@ -51,6 +54,60 @@ class LeadDashController extends GetxController {
     }
   }
 
+  void leadSectionWidget() {
+    if (totalMarketing.value) {
+      rawLeads.value = 2;
+      followUpLeads.value = 9;
+      pendingLeads.value = 4;
+      rawLeadsText.value = "Raw Leads";
+      followUpLeadsText.value = "Follow up Leads";
+      pendingLeadsText.value = "Pending Leads";
+    } else if (totalSales.value) {
+      rawLeads.value = 120;
+      followUpLeads.value = 80;
+      pendingLeads.value = 40;
+      rawLeadsText.value = "New Sales";
+      followUpLeadsText.value = "In- Progresss";
+      pendingLeadsText.value = "Sales Won";
+    } else {
+      rawLeads.value = 100;
+      followUpLeads.value = 80;
+      pendingLeads.value = 120;
+      rawLeadsText.value = "Pending";
+      followUpLeadsText.value = "Follow up";
+      pendingLeadsText.value = "Collected";
+    }
+  }
+
+  String totalCount(int num) {
+    if (num == 1) {
+      if (totalMarketing.value) {
+        return "Total Leads";
+      } else if (totalSales.value) {
+        return "Total Sales";
+      } else if (totalAccounts.value) {
+        return "Total Accounts";
+      }
+    } else if (num == 2) {
+      if (totalMarketing.value) {
+        return "98";
+      } else if (totalSales.value) {
+        return "₹ 2,45,000";
+      } else if (totalAccounts.value) {
+        return "₹ 2,45,000";
+      }
+    } else {
+      if (totalMarketing.value) {
+        return "+5.3%";
+      } else if (totalSales.value) {
+        return "+6.8%";
+      } else if (totalAccounts.value) {
+        return "+7.3%";
+      }
+    }
+    return "";
+  }
+
   void toggleCRMVRM(bool isCRM) {
     isCRMSelected.value = isCRM;
   }
@@ -60,17 +117,26 @@ class LeadDashController extends GetxController {
       totalMarketing.value = true;
       totalSales.value = false;
       totalAccounts.value = false;
-      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
+      // Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
     } else if (type == 'Sales') {
       totalMarketing.value = false;
       totalSales.value = true;
       totalAccounts.value = false;
-      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
+      // Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
     } else if (type == 'Accounts') {
       totalMarketing.value = false;
       totalSales.value = false;
       totalAccounts.value = true;
     }
+    leadSectionWidget();
+  }
+
+  void navigtionInLead() {
+    if (totalMarketing.value) {
+      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
+    } else if (totalSales.value) {
+      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
+    } else {}
   }
 
   final months = <String>[

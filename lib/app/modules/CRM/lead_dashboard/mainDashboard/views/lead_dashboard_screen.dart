@@ -103,78 +103,49 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0,
                               ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(14),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: MyColors.grayD4,
-                                      ),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(14),
+                              child: Obx(
+                                () => Column(
+                                  children: [
+                                    TotalCount(
+                                      title: controller.totalCount(1),
+                                      count: controller.totalCount(2),
+                                      percentage: controller.totalCount(3),
+                                      onTap: controller.navigtionInLead,
                                     ),
-                                    width: double.infinity,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Total Leads",
-                                                style: MyTexts.medium18,
-                                              ),
-                                              const Gap(11),
-                                              Text(
-                                                "98",
-                                                style: MyTexts.medium18,
-                                              ),
-                                              const Gap(11),
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 2,
-                                                    ),
-                                                decoration: BoxDecoration(
-                                                  color: const Color(
-                                                    0xFFE1FFD4,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(14),
-                                                ),
-                                                child: Text(
-                                                  "+5.2%",
-                                                  style: MyTexts.bold16
-                                                      .copyWith(
-                                                        color: const Color(
-                                                          0xFF4FB523,
-                                                        ),
-                                                      ),
-                                                ),
-                                              ),
-                                            ],
+                                    if (controller.totalAccounts.value)
+                                      Column(
+                                        children: [
+                                          const Gap(24),
+                                          TotalCount(
+                                            title: "Total Due",
+                                            count: "₹ 1,25,000",
+                                            percentage: controller.totalCount(
+                                              3,
+                                            ),
+                                            // onTap:controller.navigtionInLead,
                                           ),
-                                        ),
-                                        SvgPicture.asset(Asset.chartGreen),
-                                        const Gap(20),
-                                      ],
+                                        ],
+                                      )
+                                    else
+                                      const SizedBox.shrink(),
+                                    const Gap(24),
+                                    const LeadsSectionWidget(),
+                                    const Gap(24),
+                                    FunnelChartWidget(
+                                      funnelData: controller.funnelData,
                                     ),
-                                  ),
-                                  const Gap(24),
-                                  const LeadsSectionWidget(),
-                                  const Gap(24),
-                                  FunnelChartWidget(
-                                    funnelData: controller.funnelData,
-                                  ),
-                                  const Gap(24),
-                                  const ProductChartWidget(),
-                                  const Gap(24),
-                                  const ConversionRateChart(percentage: 78),
-                                  const Gap(24),
-                                ],
+                                    const Gap(24),
+                                    const ProductChartWidget(),
+                                    const Gap(24),
+                                    if (controller.totalMarketing.value)
+                                      const ConversionRateChart(percentage: 78)
+                                    else if (controller.totalSales.value)
+                                      const RevenueSummaryWidget()
+                                    else
+                                      const SizedBox.shrink(),
+                                    const Gap(24),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -186,6 +157,70 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class TotalCount extends StatelessWidget {
+  final String title;
+  final String count;
+  final String percentage;
+  final void Function()? onTap;
+
+  const TotalCount({
+    super.key,
+    required this.title,
+    required this.count,
+    required this.percentage,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          border: Border.all(color: MyColors.grayD4),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        width: double.infinity,
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: MyTexts.medium18),
+                  const Gap(11),
+                  Text(count, style: MyTexts.medium18),
+                  const Gap(11),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE1FFD4),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Text(
+                      percentage,
+                      style: MyTexts.bold16.copyWith(
+                        color: const Color(0xFF4FB523),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SvgPicture.asset(Asset.chartGreen),
+            const Gap(20),
+          ],
         ),
       ),
     );
@@ -220,4 +255,39 @@ Widget tabBar({
       ],
     ),
   );
+}
+
+class RevenueSummaryWidget extends StatelessWidget {
+  const RevenueSummaryWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Revenue Summary", style: MyTexts.bold20),
+          const Gap(15),
+          Text(
+            "Total Revenue : ₹ 12,50,000",
+            style: MyTexts.medium14,
+            textAlign: TextAlign.start,
+          ),
+          const Gap(15),
+          Text("This Month      : ₹ 50,000", style: MyTexts.medium14),
+          const Gap(15),
+          Text("Pending Payments : ₹ 45,000", style: MyTexts.medium14),
+          const Gap(15),
+          Text("Closed Deals  : ₹ 45", style: MyTexts.medium14),
+        ],
+      ),
+    );
+  }
 }
