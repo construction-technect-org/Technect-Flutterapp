@@ -562,201 +562,213 @@ class SaleItemCard extends StatelessWidget {
 
   void _openTeamBottomSheet(BuildContext context, TeamListData item) {
     Get.bottomSheet(
-      Container(
-        height: isDropdownOpen.value == true ? 270 : 230,
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        ),
-        child: GestureDetector(
-          onTap: hideKeyboard,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  const Gap(10),
-                  Text("Team", style: MyTexts.bold20),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: Get.back,
-                    child: const CircleAvatar(
-                      radius: 18,
-                      backgroundColor: MyColors.grayF7,
-                      child: Icon(Icons.close, color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: AlignmentGeometry.topCenter,
-                    end: AlignmentGeometry.bottomCenter,
-                    colors: [Colors.white, Color(0xFFFFFBCC)],
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: MyColors.grayD6),
-                ),
-                padding: const EdgeInsets.all(12),
-                child: Column(
+      Obx(
+        () => Container(
+          height: isDropdownOpen.value ? 365 : 240,
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+          ),
+          child: GestureDetector(
+            onTap: hideKeyboard,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(34),
-                          child: CachedNetworkImage(
-                            imageUrl: item.profilePhotoUrl ?? "",
-                            width: 65,
-                            height: 65,
-                            fit: BoxFit.cover,
-                            placeholder: (c, s) =>
-                                Container(color: Colors.grey.shade200, width: 65, height: 65),
-                            errorWidget: (c, s, e) => Container(
-                              color: Colors.grey.shade200,
-                              width: 65,
-                              height: 65,
-                              child: Image.asset(Asset.appLogo),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 3),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: 'Team : ',
-                                            style: MyTexts.regular14.copyWith(color: Colors.black),
-                                          ),
-                                          TextSpan(
-                                            text: "${item.firstName ?? ""} ${item.lastName ?? ""}",
-                                            style: MyTexts.medium14.copyWith(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    '${_formatTime(DateTime.parse(item.createdAt ?? ""))}, ${_formatDate(DateTime.parse(item.createdAt ?? ""))}',
-                                    style: MyTexts.regular12.copyWith(color: MyColors.black),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 3),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Team Id : ${item.id ?? ""}',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          'Designation : ${item.roleTitle}',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'Conversation Ration : 4/10 ',
-                                          style: MyTexts.regular13.copyWith(color: MyColors.black),
-                                        ),
-                                        const SizedBox(height: 6),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Gap(4),
-                    Row(
-                      children: [
-                        Obx(() {
-                          return GestureDetector(
-                            onTap: () => isDropdownOpen.value = true,
-                            child: PriorityDropdown(
-                              value: controller.selectedPriority.value,
-                              onChanged: (v) {
-                                controller.selectedPriority.value = v;
-                                isDropdownOpen.value = false;
-                              },
-                            ),
-                          );
-                        }),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                            Get.toNamed(
-                              Routes.SetReminder,
-                              arguments: {
-                                "leadID": "",
-                                "saleLeadID": lead.salesLeadId ?? "",
-                                "assignTo": item.id ?? "",
-                                "priority": controller.selectedPriority.value,
-                                "assignToSelf": false,
-                              },
-                            );
-                          },
-                          child: Stack(
-                            alignment: AlignmentGeometry.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadiusGeometry.circular(12),
-                                child: Image.asset(
-                                  Asset.explore,
-                                  width: 98,
-                                  height: 30,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    Asset.calendar,
-                                    colorFilter: const ColorFilter.mode(
-                                      Colors.white,
-                                      BlendMode.srcIn,
-                                    ),
-                                    height: 12,
-                                  ),
-                                  const Gap(4),
-                                  Text(
-                                    "Set Reminder",
-                                    style: MyTexts.medium12.copyWith(color: MyColors.white),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    const Gap(10),
+                    Text("Team", style: MyTexts.bold20),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: Get.back,
+                      child: const CircleAvatar(
+                        radius: 18,
+                        backgroundColor: MyColors.grayF7,
+                        child: Icon(Icons.close, color: Colors.black),
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: AlignmentGeometry.topCenter,
+                      end: AlignmentGeometry.bottomCenter,
+                      colors: [Colors.white, Color(0xFFFFFBCC)],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: MyColors.grayD6),
+                  ),
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(34),
+                            child: CachedNetworkImage(
+                              imageUrl: item.profilePhotoUrl ?? "",
+                              width: 65,
+                              height: 65,
+                              fit: BoxFit.cover,
+                              placeholder: (c, s) =>
+                                  Container(color: Colors.grey.shade200, width: 65, height: 65),
+                              errorWidget: (c, s, e) => Container(
+                                color: Colors.grey.shade200,
+                                width: 65,
+                                height: 65,
+                                child: Image.asset(Asset.appLogo),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 3),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: 'Team : ',
+                                              style: MyTexts.regular14.copyWith(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  "${item.firstName ?? ""} ${item.lastName ?? ""}",
+                                              style: MyTexts.medium14.copyWith(color: Colors.black),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      '${_formatTime(DateTime.parse(item.createdAt ?? ""))}, ${_formatDate(DateTime.parse(item.createdAt ?? ""))}',
+                                      style: MyTexts.regular12.copyWith(color: MyColors.black),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 3),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Team Id : ${item.id ?? ""}',
+                                            style: MyTexts.regular13.copyWith(
+                                              color: MyColors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 3),
+                                          Text(
+                                            'Designation : ${item.roleTitle}',
+                                            style: MyTexts.regular13.copyWith(
+                                              color: MyColors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Conversation Ration : 4/10 ',
+                                            style: MyTexts.regular13.copyWith(
+                                              color: MyColors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 6),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(4),
+                      Row(
+                        children: [
+                          Obx(() {
+                            return GestureDetector(
+                              onTap: () => isDropdownOpen.value = true,
+                              child: PriorityDropdown(
+                                value: controller.selectedPriority.value,
+                                onChanged: (v) {
+                                  controller.selectedPriority.value = v;
+                                  isDropdownOpen.value = false;
+                                },
+                                onMenuStateChange: (isOpen) => isDropdownOpen.value = isOpen,
+                              ),
+                            );
+                          }),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Get.back();
+                              Get.toNamed(
+                                Routes.SetReminder,
+                                arguments: {
+                                  "leadID": "",
+                                  "saleLeadID": lead.salesLeadId ?? "",
+                                  "assignTo": item.id ?? "",
+                                  "priority": controller.selectedPriority.value,
+                                  "assignToSelf": false,
+                                },
+                              );
+                            },
+                            child: Stack(
+                              alignment: AlignmentGeometry.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadiusGeometry.circular(12),
+                                  child: Image.asset(
+                                    Asset.explore,
+                                    width: 98,
+                                    height: 30,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      Asset.calendar,
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.srcIn,
+                                      ),
+                                      height: 12,
+                                    ),
+                                    const Gap(4),
+                                    Text(
+                                      "Set Reminder",
+                                      style: MyTexts.medium12.copyWith(color: MyColors.white),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
