@@ -19,21 +19,21 @@ class LeadsSectionWidget extends GetView<LeadDashController> {
           children: [
             Expanded(
               child: StatCardWidget(
-                title: 'Raw Leads',
+                title: controller.rawLeadsText.value,
                 value: controller.rawLeads.toString(),
               ),
             ),
             const Gap(12),
             Expanded(
               child: StatCardWidget(
-                title: 'Follow up Leads',
+                title: controller.followUpLeadsText.value,
                 value: controller.followUpLeads.toString(),
               ),
             ),
             const Gap(12),
             Expanded(
               child: StatCardWidget(
-                title: 'Pending Leads',
+                title: controller.pendingLeadsText.value,
                 value: controller.pendingLeads.toString(),
               ),
             ),

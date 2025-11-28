@@ -21,6 +21,9 @@ class LeadDashController extends GetxController {
   final rawLeads = 2.obs;
   final followUpLeads = 9.obs;
   final pendingLeads = 4.obs;
+  final rawLeadsText = "Raw Leads".obs;
+  final followUpLeadsText = "Follow up Leads".obs;
+  final pendingLeadsText = "Pending Leads".obs;
 
   final funnelData = [
     {'label': 'Lead Generated', 'count': 45, 'color': const Color(0xFFEF4444)},
@@ -48,6 +51,31 @@ class LeadDashController extends GetxController {
 
     if (filterTabs[index] == 'Requirement') {
       Get.toNamed(Routes.Add_New_Requ);
+    }
+  }
+
+  void leadSectionWidget() {
+    if (totalMarketing.value) {
+      rawLeads.value = 2;
+      followUpLeads.value = 9;
+      pendingLeads.value = 4;
+      rawLeadsText.value = "Raw Leads";
+      followUpLeadsText.value = "Follow up Leads";
+      pendingLeadsText.value = "Pending Leads";
+    } else if (totalSales.value) {
+      rawLeads.value = 120;
+      followUpLeads.value = 80;
+      pendingLeads.value = 40;
+      rawLeadsText.value = "New Sales";
+      followUpLeadsText.value = "In- Progresss";
+      pendingLeadsText.value = "Sales Won";
+    } else {
+      rawLeads.value = 100;
+      followUpLeads.value = 80;
+      pendingLeads.value = 120;
+      rawLeadsText.value = "Pending";
+      followUpLeadsText.value = "Follow up";
+      pendingLeadsText.value = "Collected";
     }
   }
 
@@ -100,6 +128,7 @@ class LeadDashController extends GetxController {
       totalSales.value = false;
       totalAccounts.value = true;
     }
+    leadSectionWidget();
   }
 
   void navigtionInLead() {
