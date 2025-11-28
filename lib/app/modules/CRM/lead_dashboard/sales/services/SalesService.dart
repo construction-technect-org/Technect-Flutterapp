@@ -1,19 +1,19 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/model/sales_model.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/addService/service/add_constrcution_Service.dart';
 
-class MarketingServices {
+class SalesServices {
   final ApiManager _apiManager = ApiManager();
 
-  Future<AllLeadModel> getAllLead({String? status, required bool isMarketing}) async {
+  Future<AllSalesModel> getAllLead({String? status}) async {
     try {
       // final data = {"status": status,};
-      final String url = isMarketing==true? APIConstants.crmLead:APIConstants.crmSalesLead;
+      const String url =APIConstants.crmSalesLead;
       debugPrint('Calling API: $url');
       // final response = await _apiManager.get(url: url, params: data);
       final response = await _apiManager.get(url: url);
       debugPrint('Response: $response');
-      return AllLeadModel.fromJson(response);
+      return AllSalesModel.fromJson(response);
     } catch (e, st) {
       debugPrint('Error: $e');
       debugPrint('StackTrace: $st');
@@ -21,8 +21,8 @@ class MarketingServices {
     }
   }
 
-  Future<ApiResponse> updateLeadStatus({
-    required String leadID,
+  Future<ApiResponse> updateSaleLeadStatus({
+    required String saleLeadID,
     String? assignTo,
     String? remindAt,
     String? status,
@@ -47,7 +47,7 @@ class MarketingServices {
         if (assignToMySelf == true) "assign_to_self": assignToMySelf,
       };
       final response = await _apiManager.putObject(
-        url: "${APIConstants.crmLead}/$leadID/status",
+        url: "${APIConstants.crmSalesLead}/$saleLeadID/status",
         body: body,
       );
 

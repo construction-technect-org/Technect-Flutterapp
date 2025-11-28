@@ -50,7 +50,7 @@ class LeadDashController extends GetxController {
     selectedFilterIndex.value = index;
 
     if (filterTabs[index] == 'Requirement') {
-      Get.toNamed(Routes.Add_New_Requ);
+      Get.toNamed(Routes.Add_New_REQUIREMENT);
     }
   }
 
@@ -135,7 +135,7 @@ class LeadDashController extends GetxController {
     if (totalMarketing.value) {
       Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
     } else if (totalSales.value) {
-      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
+      Get.toNamed(Routes.SALES, arguments: {"isMarketing": true});
     } else {}
   }
 

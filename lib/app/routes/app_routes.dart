@@ -82,17 +82,19 @@ abstract class Routes {
   static const ADD_SERVICES = _Paths.ADD_SERVICES;
   static const ADD_SERVICE_REQUIREMENT = _Paths.ADD_SERVICE_REQUIREMENT;
   static const LEAD_DETAIL = _Paths.LEAD_DETAIL;
+  static const SALE_LEAD_DETAIL = _Paths.SALE_LEAD_DETAIL;
 
   ///crm
   static const CRM_MAIN = _Paths.CRM_MAIN;
   static const ADD_LEAD = _Paths.ADD_LEAD;
   static const All_CHAT_LIST = _Paths.All_CHAT_LIST;
-  static const Add_New_Requ = _Paths.Add_New_REQUIREMENT;
+  static const Add_New_REQUIREMENT = _Paths.Add_New_REQUIREMENT;
   static const Requ_DetailS = _Paths.Requirement_DetailS;
   static const CONNECTOR_All_CHAT_LIST = _Paths.CONNECTOR_All_CHAT_LIST;
 
   static const Marketing = _Paths.MarketingScreen;
   static const SetReminder = _Paths.SetReminderScreen;
+  static const SALES = _Paths.SALES;
 }
 
 abstract class _Paths {
@@ -180,6 +182,7 @@ abstract class _Paths {
   static const CRM_MAIN = '/crm-mail';
   static const ADD_LEAD = '/add-lead';
   static const LEAD_DETAIL = '/lead-detail';
+  static const SALE_LEAD_DETAIL = '/sale-lead-detail';
   static const All_CHAT_LIST = '/all-chat-list';
   static const Add_New_REQUIREMENT = '/add_new_requirement';
   static const Requirement_DetailS = '/RequirementDetailScreen';
@@ -187,4 +190,5 @@ abstract class _Paths {
 
   static const MarketingScreen = "/MarketingScreen";
   static const SetReminderScreen = "/SetReminderScreen";
+  static const SALES = "/sales";
 }
