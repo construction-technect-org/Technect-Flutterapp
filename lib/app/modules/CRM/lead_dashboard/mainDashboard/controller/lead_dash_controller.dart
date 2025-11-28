@@ -51,6 +51,35 @@ class LeadDashController extends GetxController {
     }
   }
 
+  String totalCount(int num) {
+    if (num == 1) {
+      if (totalMarketing.value) {
+        return "Total Leads";
+      } else if (totalSales.value) {
+        return "Total Sales";
+      } else if (totalAccounts.value) {
+        return "Total Accounts";
+      }
+    } else if (num == 2) {
+      if (totalMarketing.value) {
+        return "98";
+      } else if (totalSales.value) {
+        return "₹ 2,45,000";
+      } else if (totalAccounts.value) {
+        return "₹ 2,45,000";
+      }
+    } else {
+      if (totalMarketing.value) {
+        return "+5.3%";
+      } else if (totalSales.value) {
+        return "+6.8%";
+      } else if (totalAccounts.value) {
+        return "+7.3%";
+      }
+    }
+    return "";
+  }
+
   void toggleCRMVRM(bool isCRM) {
     isCRMSelected.value = isCRM;
   }
@@ -60,17 +89,25 @@ class LeadDashController extends GetxController {
       totalMarketing.value = true;
       totalSales.value = false;
       totalAccounts.value = false;
-      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
+      // Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
     } else if (type == 'Sales') {
       totalMarketing.value = false;
       totalSales.value = true;
       totalAccounts.value = false;
-      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
+      // Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
     } else if (type == 'Accounts') {
       totalMarketing.value = false;
       totalSales.value = false;
       totalAccounts.value = true;
     }
+  }
+
+  void navigtionInLead() {
+    if (totalMarketing.value) {
+      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
+    } else if (totalSales.value) {
+      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
+    } else {}
   }
 
   final months = <String>[
