@@ -1,7 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/controller/accounts_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_status_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_item_Card.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_status_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/search_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/today_account_card.dart';
 
 class AccountLeadScreen extends GetView<AccountsController> {
@@ -13,7 +14,7 @@ class AccountLeadScreen extends GetView<AccountsController> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const TodayAccountCard(),
-        const SizedBox(height: 18),
+        const Gap(15),
         GestureDetector(
           onTap: () {
             // Get.toNamed(
@@ -45,6 +46,8 @@ class AccountLeadScreen extends GetView<AccountsController> {
           ),
         ),
         const Gap(8),
+        const SearchSortWidget(),
+        const Gap(20),
         const AccountLeadStatusWidget(),
         Obx(() {
           if (controller.filteredbills.isEmpty) {

@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/controller/accounts_controller.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_item_Card.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_status_view_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/search_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/today_account_card.dart';
 
 class AccountOutstandingScreen extends GetView<AccountsController> {
@@ -12,7 +13,7 @@ class AccountOutstandingScreen extends GetView<AccountsController> {
     return Column(
       children: [
         const TodayAccountCard(),
-        const SizedBox(height: 18),
+        const Gap(15),
         GestureDetector(
           onTap: () {
             // Get.toNamed(
@@ -44,6 +45,8 @@ class AccountOutstandingScreen extends GetView<AccountsController> {
           ),
         ),
         const Gap(8),
+        const SearchSortWidget(),
+        const Gap(20),
         const AccountStatusViewWidget(),
         Obx(
           () => Column(
