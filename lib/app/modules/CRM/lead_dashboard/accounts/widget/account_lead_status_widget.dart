@@ -16,10 +16,10 @@ class AccountLeadStatusWidget extends GetView<AccountsController> {
           return ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            itemCount: controller.leadStatus.length,
+            itemCount: controller.billStatus.length,
             separatorBuilder: (_, _) => const SizedBox(width: 20),
             itemBuilder: (context, index) {
-              final String label = controller.leadStatus[index];
+              final String label = controller.billStatus[index];
               final bool isActive = active == label;
               return Center(
                 child: GestureDetector(

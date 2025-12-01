@@ -15,10 +15,10 @@ class AccountStatusViewWidget extends GetView<AccountsController> {
           return ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            itemCount: controller.statusItems.length,
+            itemCount: controller.billStatus.length,
             separatorBuilder: (_, _) => const SizedBox(width: 20),
             itemBuilder: (context, index) {
-              final String label = controller.statusItems[index];
+              final String label = controller.billStatus[index];
               final bool isActive = active == label;
 
               return Center(

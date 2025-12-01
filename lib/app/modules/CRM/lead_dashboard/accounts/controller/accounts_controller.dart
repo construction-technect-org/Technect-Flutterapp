@@ -1,9 +1,9 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/model/accounts_model.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/services/AccountsService.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_followup_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_prospect_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_outstanding_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_collect_sreen.dart';
 
 class AccountsController extends GetxController {
   @override
@@ -25,13 +25,13 @@ class AccountsController extends GetxController {
   final items = ['Bill', 'Out Standing', 'Collect'];
   final filterScreens = {
     'Bill': const AccountLeadScreen(),
-    'Out Standing': const AccountFollowupScreen(),
-    'Collect': const AccountProspectScreen(),
+    'Out Standing': const AccountOutstandingScreen(),
+    'Collect': const AccountCollectScreen(),
   };
 
   RxInt todaysTotal = 0.obs;
 
-  final List<String> leadStatus = <String>["All", "Tax Bill", "Non Tax Bill"];
+  final List<String> billStatus = <String>["All", "Tax Bill", "Non Tax Bill"];
 
   List<AccountLeads> get filteredbills {
     if (activeLeadStatusFilter.value.toLowerCase() == "Tax Bill") {
@@ -43,7 +43,7 @@ class AccountsController extends GetxController {
     return allbillsList;
   }
 
-  final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
+  // final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
 
   List<AccountLeads> get filteredFollowups {
     print(activeFollowUpStatusFilter.value.toLowerCase());
