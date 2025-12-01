@@ -31,16 +31,16 @@ class AccountsController extends GetxController {
 
   RxInt todaysTotal = 0.obs;
 
-  final List<String> leadStatus = <String>["All", "Inbound", "Outbound"];
+  final List<String> leadStatus = <String>["All", "Tax Bill", "Non Tax Bill"];
 
-  List<AccountLeads> get filteredLead {
-    if (activeLeadStatusFilter.value.toLowerCase() == "inbound") {
-      return allLeadList.where((e) => e.isAutoCreated == true).toList();
+  List<AccountLeads> get filteredbills {
+    if (activeLeadStatusFilter.value.toLowerCase() == "Tax Bill") {
+      return allbillsList.where((e) => e.isAutoCreated == true).toList();
     }
-    if (activeLeadStatusFilter.value.toLowerCase() == "outbound") {
-      return allLeadList.where((e) => e.isAutoCreated == false).toList();
+    if (activeLeadStatusFilter.value.toLowerCase() == "Non Tax Bill") {
+      return allbillsList.where((e) => e.isAutoCreated == false).toList();
     }
-    return allLeadList;
+    return allbillsList;
   }
 
   final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
@@ -142,11 +142,11 @@ class AccountsController extends GetxController {
     }).toList();
 
     if (getFilterStatusName() == "lead") {
-      allLeadList
+      allbillsList
         ..clear()
         ..addAll(todaysLeads.where((e) => e.salesLeadsStage == "sales"));
 
-      todaysTotal.value = allLeadList.length;
+      todaysTotal.value = allbillsList.length;
     } else if (getFilterStatusName() == "follow_up") {
       allFollowUpList
         ..clear()
@@ -181,7 +181,7 @@ class AccountsController extends GetxController {
   }
 
   Rx<AllAccountsModel> allLeadModel = AllAccountsModel().obs;
-  RxList<AccountLeads> allLeadList = <AccountLeads>[].obs;
+  RxList<AccountLeads> allbillsList = <AccountLeads>[].obs;
   RxList<AccountLeads> allFollowUpList = <AccountLeads>[].obs;
   RxList<AccountLeads> allProspectList = <AccountLeads>[].obs;
   RxList<AccountLeads> allQualifiedList = <AccountLeads>[].obs;

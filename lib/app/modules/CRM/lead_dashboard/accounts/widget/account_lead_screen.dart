@@ -13,46 +13,46 @@ class AccountLeadScreen extends GetView<AccountsController> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const TodayAccountCard(),
-        // const SizedBox(height: 18),
-        // GestureDetector(
-        //   onTap: () {
-        //     Get.toNamed(
-        //       Routes.Add_New_REQUIREMENT,
-        //       arguments: {
-        //         "onLeadCreate": () {
-        //           controller.fetchAllLead();
-        //           Get.back();
-        //         },
-        //       },
-        //     );
-        //   },
-        //   child: Container(
-        //     margin: const EdgeInsets.symmetric(horizontal: 20),
-        //     padding: const EdgeInsets.symmetric(vertical: 11),
-        //     decoration: BoxDecoration(
-        //       color: Colors.white,
-        //       borderRadius: BorderRadius.circular(12),
-        //       border: Border.all(color: MyColors.grayEA),
-        //     ),
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         const Icon(Icons.add, size: 22),
-        //         const SizedBox(width: 8),
-        //         Text('Add New Requirement', style: MyTexts.medium14),
-        //       ],
-        //     ),
-        //   ),
-        // ),
+        const SizedBox(height: 18),
+        GestureDetector(
+          onTap: () {
+            // Get.toNamed(
+            //   Routes.Add_New_REQUIREMENT,
+            //   arguments: {
+            //     "onLeadCreate": () {
+            //       controller.fetchAllLead();
+            //       Get.back();
+            //     },
+            //   },
+            // );
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 11),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: MyColors.grayEA),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.add, size: 22),
+                const SizedBox(width: 8),
+                Text('Add New Bill', style: MyTexts.medium14),
+              ],
+            ),
+          ),
+        ),
         const Gap(8),
         const AccountLeadStatusWidget(),
         Obx(() {
-          if (controller.filteredLead.isEmpty) {
+          if (controller.filteredbills.isEmpty) {
             return Padding(
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
               child: Center(
                 child: Text(
-                  "No lead found",
+                  "No Bill found",
                   style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                 ),
               ),
@@ -60,7 +60,7 @@ class AccountLeadScreen extends GetView<AccountsController> {
           }
 
           return Column(
-            children: controller.filteredLead
+            children: controller.filteredbills
                 .map(
                   (l) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
