@@ -45,13 +45,11 @@ abstract class Routes {
   static const CONNECTOR_PRODUCT_DETAILS = _Paths.CONNECTOR_PRODUCT_DETAILS;
   static const CONNECTOR_SELECT_LOCATION = _Paths.CONNECTOR_SELECT_LOCATION;
   static const CONNECTOR_ADD_LOCATION = _Paths.CONNECTOR_ADD_LOCATION;
-  static const CONNECTOR_ADD_LOCATION_MANUALLY =
-      _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
+  static const CONNECTOR_ADD_LOCATION_MANUALLY = _Paths.CONNECTOR_ADD_LOCATION_MANUALLY;
   static const CONNECTOR_SITE_LOCATION = _Paths.CONNECTOR_SITE_LOCATION;
   static const CONNECTOR_FILTER = _Paths.CONNECTOR_FILTER;
   static const CONNECTOR_CONNECTION_INBOX = _Paths.CONNECTOR_CONNECTION_INBOX;
-  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET =
-      _Paths.CONNECTOR_CUSTOMER_SUPPORT_TICKET;
+  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET = _Paths.CONNECTOR_CUSTOMER_SUPPORT_TICKET;
   static const CONNECTOR_REQUEST_DEMO = _Paths.CONNECTOR_REQUEST_DEMO;
   static const WISH_LIST = _Paths.WISH_LIST;
   static const ON_BOARDING = _Paths.ON_BOARDING;
@@ -95,6 +93,7 @@ abstract class Routes {
   static const Marketing = _Paths.MarketingScreen;
   static const SetReminder = _Paths.SetReminderScreen;
   static const SALES = _Paths.SALES;
+  static const ACCOUNT_LEAD = _Paths.ACCOUNT_LEAD;
 }
 
 abstract class _Paths {
@@ -151,13 +150,11 @@ abstract class _Paths {
   static const CONNECTOR_PRODUCT_DETAILS = '/connector-product-details';
   static const CONNECTOR_SELECT_LOCATION = '/connector-select-location';
   static const CONNECTOR_ADD_LOCATION = '/connector-add-location';
-  static const CONNECTOR_ADD_LOCATION_MANUALLY =
-      '/connector-add-location-manually';
+  static const CONNECTOR_ADD_LOCATION_MANUALLY = '/connector-add-location-manually';
   static const CONNECTOR_SITE_LOCATION = '/connector-site-location';
   static const CONNECTOR_FILTER = '/connector-filter';
   static const CONNECTOR_CONNECTION_INBOX = '/connector-connection-inbox';
-  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET =
-      '/connector-customer-support-ticket';
+  static const CONNECTOR_CUSTOMER_SUPPORT_TICKET = '/connector-customer-support-ticket';
   static const CONNECTOR_REQUEST_DEMO = '/connector-request-demo';
   static const OTP_VERIFICATION_SCREEN = '/otp_verification';
   static const CONNECTOR_SUPPORT_REQUEST = '/connector-support-request';
@@ -191,4 +188,5 @@ abstract class _Paths {
   static const MarketingScreen = "/MarketingScreen";
   static const SetReminderScreen = "/SetReminderScreen";
   static const SALES = "/sales";
+  static const ACCOUNT_LEAD = "/account_lead";
 }

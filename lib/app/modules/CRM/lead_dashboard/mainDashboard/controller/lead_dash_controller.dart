@@ -136,7 +136,9 @@ class LeadDashController extends GetxController {
       Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
     } else if (totalSales.value) {
       Get.toNamed(Routes.SALES, arguments: {"isMarketing": true});
-    } else {}
+    } else {
+      Get.toNamed(Routes.ACCOUNT_LEAD, arguments: {"isMarketing": true});
+    }
   }
 
   final months = <String>[
@@ -154,34 +156,8 @@ class LeadDashController extends GetxController {
     'DEC',
   ];
 
-  final productA = <double>[
-    500,
-    850,
-    850,
-    480,
-    580,
-    720,
-    1100,
-    1020,
-    950,
-    980,
-    1100,
-    1050,
-  ].obs;
-  final productB = <double>[
-    200,
-    480,
-    700,
-    780,
-    720,
-    640,
-    660,
-    700,
-    850,
-    1150,
-    1200,
-    1100,
-  ].obs;
+  final productA = <double>[500, 850, 850, 480, 580, 720, 1100, 1020, 950, 980, 1100, 1050].obs;
+  final productB = <double>[200, 480, 700, 780, 720, 640, 660, 700, 850, 1150, 1200, 1100].obs;
   final showA = true.obs;
   final showB = true.obs;
 

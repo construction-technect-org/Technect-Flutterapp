@@ -21,10 +21,7 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.categoryBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
                 ),
               ),
               SafeArea(
@@ -49,50 +46,34 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                                 gradient: LinearGradient(
                                   begin: AlignmentGeometry.topCenter,
                                   end: AlignmentGeometry.bottomCenter,
-                                  colors: [
-                                    MyColors.custom("FFF9BD"),
-                                    Colors.white,
-                                  ],
+                                  colors: [MyColors.custom("FFF9BD"), Colors.white],
                                 ),
                               ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24.0,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
 
                               child: Obx(
                                 () => Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     tabBar(
-                                      onTap: () => controller
-                                          .toggleMarketingSalesAccounts(
-                                            "Marketing",
-                                          ),
+                                      onTap: () =>
+                                          controller.toggleMarketingSalesAccounts("Marketing"),
                                       icon: Asset.MM,
                                       name: 'Marketing',
-                                      isMarketPlace:
-                                          controller.totalMarketing.value,
+                                      isMarketPlace: controller.totalMarketing.value,
                                     ),
                                     tabBar(
-                                      onTap: () => controller
-                                          .toggleMarketingSalesAccounts(
-                                            "Sales",
-                                          ),
+                                      onTap: () => controller.toggleMarketingSalesAccounts("Sales"),
                                       icon: Asset.bar_chart,
                                       name: 'Sales',
-                                      isMarketPlace:
-                                          controller.totalSales.value,
+                                      isMarketPlace: controller.totalSales.value,
                                     ),
                                     tabBar(
-                                      onTap: () => controller
-                                          .toggleMarketingSalesAccounts(
-                                            "Accounts",
-                                          ),
+                                      onTap: () =>
+                                          controller.toggleMarketingSalesAccounts("Accounts"),
                                       icon: Asset.users,
                                       name: 'Accounts',
-                                      isMarketPlace:
-                                          controller.totalAccounts.value,
+                                      isMarketPlace: controller.totalAccounts.value,
                                     ),
                                   ],
                                 ),
@@ -100,9 +81,7 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                             ),
                             const Gap(24),
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Obx(
                                 () => Column(
                                   children: [
@@ -119,10 +98,8 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                                           TotalCount(
                                             title: "Total Due",
                                             count: "₹ 1,25,000",
-                                            percentage: controller.totalCount(
-                                              3,
-                                            ),
-                                            // onTap:controller.navigtionInLead,
+                                            percentage: controller.totalCount(3),
+                                            onTap: controller.navigtionInLead,
                                           ),
                                         ],
                                       )
@@ -131,9 +108,7 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                                     const Gap(24),
                                     const LeadsSectionWidget(),
                                     const Gap(24),
-                                    FunnelChartWidget(
-                                      funnelData: controller.funnelData,
-                                    ),
+                                    FunnelChartWidget(funnelData: controller.funnelData),
                                     const Gap(24),
                                     const ProductChartWidget(),
                                     const Gap(24),
@@ -200,19 +175,14 @@ class TotalCount extends StatelessWidget {
                   Text(count, style: MyTexts.medium18),
                   const Gap(11),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 2,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: const Color(0xFFE1FFD4),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Text(
                       percentage,
-                      style: MyTexts.bold16.copyWith(
-                        color: const Color(0xFF4FB523),
-                      ),
+                      style: MyTexts.bold16.copyWith(color: const Color(0xFF4FB523)),
                     ),
                   ),
                 ],
@@ -275,11 +245,7 @@ class RevenueSummaryWidget extends StatelessWidget {
         children: [
           Text("Revenue Summary", style: MyTexts.bold20),
           const Gap(15),
-          Text(
-            "Total Revenue : ₹ 12,50,000",
-            style: MyTexts.medium14,
-            textAlign: TextAlign.start,
-          ),
+          Text("Total Revenue : ₹ 12,50,000", style: MyTexts.medium14, textAlign: TextAlign.start),
           const Gap(15),
           Text("This Month      : ₹ 50,000", style: MyTexts.medium14),
           const Gap(15),
