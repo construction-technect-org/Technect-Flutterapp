@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/controller/accounts_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/controller/sales_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,7 +50,7 @@ class SetReminderController extends GetxController {
   Future<void> saveReminder() async {
     isLoading.value = true;
     if (Get.arguments["leadID"] == "") {
-      await Get.find<AccountsController>().updateStatusLeadToFollowUp(
+      await Get.find<SalesController>().updateStatusLeadToFollowUp(
         saleLeadID: Get.arguments["saleLeadID"].toString(),
         assignTo: Get.arguments["assignTo"].toString(),
         note: noteController.text,

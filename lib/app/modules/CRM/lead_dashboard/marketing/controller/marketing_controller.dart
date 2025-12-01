@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/services/MarketingService.dart';
@@ -86,6 +88,7 @@ class MarketingController extends GetxController {
           .where((e) => e.leadStage == "qualified" && e.status == "pending")
           .toList();
     }
+    log(allQualifiedList.length.toString());
     if (activeQualifiedStatusFilter.value.toLowerCase() == "qualified") {
       return allQualifiedList.where((e) => e.status == "qualified").toList();
     }
