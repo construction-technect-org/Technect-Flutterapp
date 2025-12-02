@@ -11,7 +11,7 @@ class AccountBillsStatusWidget extends GetView<AccountsController> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Obx(() {
-          final String active = controller.activeLeadStatusFilter.value;
+          final String active = controller.activeBillsStatusFilter.value;
 
           return ListView.separated(
             scrollDirection: Axis.horizontal,

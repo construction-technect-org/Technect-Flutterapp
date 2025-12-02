@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/controller/accounts_controller.dart';
 
-class AccountStatusViewWidget extends GetView<AccountsController> {
-  const AccountStatusViewWidget({super.key});
+class AccountOutStandingStatusWidget extends GetView<AccountsController> {
+  const AccountOutStandingStatusWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class AccountStatusViewWidget extends GetView<AccountsController> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Obx(() {
-          final String active = controller.activeFollowUpStatusFilter.value;
+          final String active = controller.activeOutStandingStatusFilter.value;
           return ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),

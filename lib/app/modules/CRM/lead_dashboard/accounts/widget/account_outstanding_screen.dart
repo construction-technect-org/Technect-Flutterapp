@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/controller/accounts_controller.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_item_Card.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_status_view_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_outstanding_status_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/search_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/today_account_card.dart';
 
@@ -47,10 +47,10 @@ class AccountOutstandingScreen extends GetView<AccountsController> {
         const Gap(8),
         const SearchSortWidget(),
         const Gap(20),
-        const AccountStatusViewWidget(),
+        const AccountOutStandingStatusWidget(),
         Obx(
           () => Column(
-            children: controller.filteredFollowups.isEmpty
+            children: controller.filteredOutStanding.isEmpty
                 ? [
                     Padding(
                       padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
@@ -60,7 +60,7 @@ class AccountOutstandingScreen extends GetView<AccountsController> {
                       ),
                     ),
                   ]
-                : controller.filteredFollowups
+                : controller.filteredOutStanding
                       .map(
                         (l) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),

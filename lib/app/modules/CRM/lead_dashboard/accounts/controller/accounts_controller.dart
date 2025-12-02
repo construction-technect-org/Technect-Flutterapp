@@ -16,10 +16,9 @@ class AccountsController extends GetxController {
 
   final isLoading = false.obs;
   RxString activeFilter = 'Bill'.obs;
-  RxString activeLeadStatusFilter = 'All'.obs;
-  RxString activeFollowUpStatusFilter = 'Pending'.obs;
-  RxString activeProspectStatusFilter = 'Sent'.obs;
-  RxString activeQualifiedStatusFilter = 'Pending'.obs;
+  RxString activeBillsStatusFilter = 'All'.obs;
+  RxString activeOutStandingStatusFilter = 'All'.obs;
+  RxString activeCollectStatusFilter = 'Sent'.obs;
   RxString selectedPriority = "High".obs;
 
   final items = ['Bill', 'Out Standing', 'Collect'];
@@ -34,61 +33,31 @@ class AccountsController extends GetxController {
   final List<String> billStatus = <String>["All", "Tax Bill", "Non Tax Bill"];
 
   List<AccountLeads> get filteredbills {
-    if (activeLeadStatusFilter.value.toLowerCase() == "Tax Bill") {
+    if (activeBillsStatusFilter.value.toLowerCase() == "Tax Bill") {
       return allbillsList.where((e) => e.isAutoCreated == true).toList();
     }
-    if (activeLeadStatusFilter.value.toLowerCase() == "Non Tax Bill") {
+    if (activeBillsStatusFilter.value.toLowerCase() == "Non Tax Bill") {
       return allbillsList.where((e) => e.isAutoCreated == false).toList();
     }
     return allbillsList;
   }
 
-  // final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
-
-  List<AccountLeads> get filteredFollowups {
-    print(activeFollowUpStatusFilter.value.toLowerCase());
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "pending") {
+  List<AccountLeads> get filteredOutStanding {
+    print(activeOutStandingStatusFilter.value.toLowerCase());
+    if (activeOutStandingStatusFilter.value.toLowerCase() == "pending") {
       return allFollowUpList.where((e) => e.status == "pending").toList();
     }
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "completed") {
+    if (activeOutStandingStatusFilter.value.toLowerCase() == "completed") {
       return allFollowUpList.where((e) => e.status == "sent").toList();
     }
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "missed") {
+    if (activeOutStandingStatusFilter.value.toLowerCase() == "missed") {
       return allFollowUpList.where((e) => e.status == "missed").toList();
     }
     return allFollowUpList;
   }
 
-  final List<String> statusProspectItems = <String>["Sent", "Accepted", "Negotiation"];
-
   List<AccountLeads> get filteredProspect {
-    if (activeProspectStatusFilter.value.toLowerCase() == "sent") {
-      return allProspectList.where((e) => e.status == "sent").toList();
-    }
-    if (activeProspectStatusFilter.value.toLowerCase() == "accepted") {
-      return allProspectList
-          .where((e) => e.salesLeadsStage == "closing" && e.status == "won")
-          .toList();
-    }
-    if (activeProspectStatusFilter.value.toLowerCase() == "negotiation") {
-      return allProspectList.where((e) => e.status == "negotiation").toList();
-    }
-    return allProspectList;
-  }
-
-  final List<String> qualifiedStatus = <String>["Pending", "Won", "Lost"];
-
-  List<AccountLeads> get filteredQualified {
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "pending") {
-      return allQualifiedList.where((e) => e.status == "pending").toList();
-    }
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "won") {
-      return allQualifiedList.where((e) => e.status == "won").toList();
-    }
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "lost") {
-      return allQualifiedList.where((e) => e.status == "lost").toList();
-    }
-    return allQualifiedList;
+    return allProspectList.where((e) => e.status == "All").toList();
   }
 
   void setFilter(String f) {
@@ -110,19 +79,11 @@ class AccountsController extends GetxController {
   }
 
   void setStatusFilter(String f) {
-    activeFollowUpStatusFilter.value = f;
-  }
-
-  void setStatusProspectFilter(String f) {
-    activeProspectStatusFilter.value = f;
-  }
-
-  void setStatusQualifiedFilter(String f) {
-    activeQualifiedStatusFilter.value = f;
+    activeOutStandingStatusFilter.value = f;
   }
 
   void setStatusLeadFilter(String f) {
-    activeLeadStatusFilter.value = f;
+    activeBillsStatusFilter.value = f;
   }
 
   void filterLead() {
