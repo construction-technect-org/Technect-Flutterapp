@@ -1,7 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/controller/accounts_controller.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_item_Card.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/search_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/today_account_card.dart';
 
 class AccountCollectScreen extends GetView<AccountsController> {
@@ -13,8 +12,8 @@ class AccountCollectScreen extends GetView<AccountsController> {
       children: [
         const TodayAccountCard(),
         const Gap(15),
-        const SearchSortWidget(),
-        const Gap(20),
+        // const SearchSortWidget(),
+        // const Gap(20),
         Obx(() {
           if (controller.filteredProspect.isEmpty) {
             return Padding(
