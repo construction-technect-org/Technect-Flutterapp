@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -12,7 +11,6 @@ class AddDeliveryAddressController extends GetxController {
   RxBool isLoading = false.obs;
 
   FocusNode googleFocusNode = FocusNode();
-  HomeController homeController = Get.find();
   final TextEditingController searchController = TextEditingController();
   final TextEditingController addressNameController = TextEditingController();
   final TextEditingController landmarkController = TextEditingController();
@@ -72,8 +70,7 @@ class AddDeliveryAddressController extends GetxController {
       final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         SnackBars.errorSnackBar(
-          content:
-              'Location services are disabled. Please enable location services.',
+          content: 'Location services are disabled. Please enable location services.',
         );
         return;
       }
@@ -88,16 +85,12 @@ class AddDeliveryAddressController extends GetxController {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        SnackBars.errorSnackBar(
-          content: 'Location permissions are permanently denied.',
-        );
+        SnackBars.errorSnackBar(content: 'Location permissions are permanently denied.');
         return;
       }
 
       final Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
 
       currentPosition.value = LatLng(position.latitude, position.longitude);
@@ -120,10 +113,7 @@ class AddDeliveryAddressController extends GetxController {
   void onCameraIdle() {
     if (isSearching.value == false) {
       searchController.clear();
-      _getAddressFromCoordinates(
-        currentPosition.value.latitude,
-        currentPosition.value.longitude,
-      );
+      _getAddressFromCoordinates(currentPosition.value.latitude, currentPosition.value.longitude);
     } else {
       isSearching.value = false;
     }
@@ -131,10 +121,7 @@ class AddDeliveryAddressController extends GetxController {
 
   Future<void> _getAddressFromCoordinates(double lat, double lng) async {
     try {
-      final List<Placemark> placemarks = await placemarkFromCoordinates(
-        lat,
-        lng,
-      );
+      final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks.isNotEmpty) {
         final Placemark place = placemarks[0];
         final String address =
@@ -176,10 +163,7 @@ class AddDeliveryAddressController extends GetxController {
       };
       log(deliveryAddress.toString());
       if (isEditMode.value) {
-        await DeliveryAddressService.updateDeliveryAddress(
-          editAddressId.value,
-          deliveryAddress,
-        );
+        await DeliveryAddressService.updateDeliveryAddress(editAddressId.value, deliveryAddress);
       } else {
         await DeliveryAddressService.submitDeliveryAddress(deliveryAddress);
       }
