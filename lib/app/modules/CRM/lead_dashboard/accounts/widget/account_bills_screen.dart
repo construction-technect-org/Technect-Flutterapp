@@ -1,12 +1,12 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/controller/accounts_controller.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_item_Card.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_status_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_bills_status_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/search_widget.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/today_account_card.dart';
 
-class AccountLeadScreen extends GetView<AccountsController> {
-  const AccountLeadScreen({super.key});
+class AccountBillsScreen extends GetView<AccountsController> {
+  const AccountBillsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,17 +16,7 @@ class AccountLeadScreen extends GetView<AccountsController> {
         const TodayAccountCard(),
         const Gap(15),
         GestureDetector(
-          onTap: () {
-            // Get.toNamed(
-            //   Routes.Add_New_REQUIREMENT,
-            //   arguments: {
-            //     "onLeadCreate": () {
-            //       controller.fetchAllLead();
-            //       Get.back();
-            //     },
-            //   },
-            // );
-          },
+          onTap: () {},
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(vertical: 11),
@@ -48,7 +38,7 @@ class AccountLeadScreen extends GetView<AccountsController> {
         const Gap(8),
         const SearchSortWidget(),
         const Gap(20),
-        const AccountLeadStatusWidget(),
+        const AccountBillsStatusWidget(),
         Obx(() {
           if (controller.filteredbills.isEmpty) {
             return Padding(

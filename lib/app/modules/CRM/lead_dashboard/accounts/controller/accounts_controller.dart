@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/model/accounts_model.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/services/AccountsService.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_bills_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_collect_sreen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_outstanding_screen.dart';
 
 class AccountsController extends GetxController {
@@ -24,7 +24,7 @@ class AccountsController extends GetxController {
 
   final items = ['Bill', 'Out Standing', 'Collect'];
   final filterScreens = {
-    'Bill': const AccountLeadScreen(),
+    'Bill': const AccountBillsScreen(),
     'Out Standing': const AccountOutstandingScreen(),
     'Collect': const AccountCollectScreen(),
   };
