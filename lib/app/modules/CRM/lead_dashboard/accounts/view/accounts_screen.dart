@@ -2,7 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/controller/accounts_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_bills_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_segment_filters_widget.dart';
 
 class AccountsScreen extends GetView<AccountsController> {
@@ -52,7 +52,7 @@ class AccountsScreen extends GetView<AccountsController> {
                           padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                           child: Obx(() {
                             return controller.filterScreens[controller.activeFilter.value] ??
-                                const AccountLeadScreen();
+                                const AccountBillsScreen();
                           }),
                         ),
                       ),

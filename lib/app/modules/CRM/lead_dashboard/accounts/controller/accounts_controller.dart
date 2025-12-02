@@ -1,9 +1,9 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/model/accounts_model.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/services/AccountsService.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_followup_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_lead_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_prospect_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_bills_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_collect_sreen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/widget/account_outstanding_screen.dart';
 
 class AccountsController extends GetxController {
   @override
@@ -16,79 +16,48 @@ class AccountsController extends GetxController {
 
   final isLoading = false.obs;
   RxString activeFilter = 'Bill'.obs;
-  RxString activeLeadStatusFilter = 'All'.obs;
-  RxString activeFollowUpStatusFilter = 'Pending'.obs;
-  RxString activeProspectStatusFilter = 'Sent'.obs;
-  RxString activeQualifiedStatusFilter = 'Pending'.obs;
+  RxString activeBillsStatusFilter = 'All'.obs;
+  RxString activeOutStandingStatusFilter = 'All'.obs;
+  RxString activeCollectStatusFilter = 'Sent'.obs;
   RxString selectedPriority = "High".obs;
 
   final items = ['Bill', 'Out Standing', 'Collect'];
   final filterScreens = {
-    'Bill': const AccountLeadScreen(),
-    'Out Standing': const AccountFollowupScreen(),
-    'Collect': const AccountProspectScreen(),
+    'Bill': const AccountBillsScreen(),
+    'Out Standing': const AccountOutstandingScreen(),
+    'Collect': const AccountCollectScreen(),
   };
 
   RxInt todaysTotal = 0.obs;
 
-  final List<String> leadStatus = <String>["All", "Inbound", "Outbound"];
+  final List<String> billStatus = <String>["All", "Tax Bill", "Non Tax Bill"];
 
-  List<AccountLeads> get filteredLead {
-    if (activeLeadStatusFilter.value.toLowerCase() == "inbound") {
-      return allLeadList.where((e) => e.isAutoCreated == true).toList();
+  List<AccountLeads> get filteredbills {
+    if (activeBillsStatusFilter.value.toLowerCase() == "Tax Bill") {
+      return allbillsList.where((e) => e.isAutoCreated == true).toList();
     }
-    if (activeLeadStatusFilter.value.toLowerCase() == "outbound") {
-      return allLeadList.where((e) => e.isAutoCreated == false).toList();
+    if (activeBillsStatusFilter.value.toLowerCase() == "Non Tax Bill") {
+      return allbillsList.where((e) => e.isAutoCreated == false).toList();
     }
-    return allLeadList;
+    return allbillsList;
   }
 
-  final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
-
-  List<AccountLeads> get filteredFollowups {
-    print(activeFollowUpStatusFilter.value.toLowerCase());
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "pending") {
+  List<AccountLeads> get filteredOutStanding {
+    print(activeOutStandingStatusFilter.value.toLowerCase());
+    if (activeOutStandingStatusFilter.value.toLowerCase() == "pending") {
       return allFollowUpList.where((e) => e.status == "pending").toList();
     }
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "completed") {
+    if (activeOutStandingStatusFilter.value.toLowerCase() == "completed") {
       return allFollowUpList.where((e) => e.status == "sent").toList();
     }
-    if (activeFollowUpStatusFilter.value.toLowerCase() == "missed") {
+    if (activeOutStandingStatusFilter.value.toLowerCase() == "missed") {
       return allFollowUpList.where((e) => e.status == "missed").toList();
     }
     return allFollowUpList;
   }
 
-  final List<String> statusProspectItems = <String>["Sent", "Accepted", "Negotiation"];
-
   List<AccountLeads> get filteredProspect {
-    if (activeProspectStatusFilter.value.toLowerCase() == "sent") {
-      return allProspectList.where((e) => e.status == "sent").toList();
-    }
-    if (activeProspectStatusFilter.value.toLowerCase() == "accepted") {
-      return allProspectList
-          .where((e) => e.salesLeadsStage == "closing" && e.status == "won")
-          .toList();
-    }
-    if (activeProspectStatusFilter.value.toLowerCase() == "negotiation") {
-      return allProspectList.where((e) => e.status == "negotiation").toList();
-    }
-    return allProspectList;
-  }
-
-  final List<String> qualifiedStatus = <String>["Pending", "Won", "Lost"];
-
-  List<AccountLeads> get filteredQualified {
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "pending") {
-      return allQualifiedList.where((e) => e.status == "pending").toList();
-    }
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "won") {
-      return allQualifiedList.where((e) => e.status == "won").toList();
-    }
-    if (activeQualifiedStatusFilter.value.toLowerCase() == "lost") {
-      return allQualifiedList.where((e) => e.status == "lost").toList();
-    }
-    return allQualifiedList;
+    return allProspectList.where((e) => e.status == "All").toList();
   }
 
   void setFilter(String f) {
@@ -110,19 +79,11 @@ class AccountsController extends GetxController {
   }
 
   void setStatusFilter(String f) {
-    activeFollowUpStatusFilter.value = f;
-  }
-
-  void setStatusProspectFilter(String f) {
-    activeProspectStatusFilter.value = f;
-  }
-
-  void setStatusQualifiedFilter(String f) {
-    activeQualifiedStatusFilter.value = f;
+    activeOutStandingStatusFilter.value = f;
   }
 
   void setStatusLeadFilter(String f) {
-    activeLeadStatusFilter.value = f;
+    activeBillsStatusFilter.value = f;
   }
 
   void filterLead() {
@@ -142,11 +103,11 @@ class AccountsController extends GetxController {
     }).toList();
 
     if (getFilterStatusName() == "lead") {
-      allLeadList
+      allbillsList
         ..clear()
         ..addAll(todaysLeads.where((e) => e.salesLeadsStage == "sales"));
 
-      todaysTotal.value = allLeadList.length;
+      todaysTotal.value = allbillsList.length;
     } else if (getFilterStatusName() == "follow_up") {
       allFollowUpList
         ..clear()
@@ -181,7 +142,7 @@ class AccountsController extends GetxController {
   }
 
   Rx<AllAccountsModel> allLeadModel = AllAccountsModel().obs;
-  RxList<AccountLeads> allLeadList = <AccountLeads>[].obs;
+  RxList<AccountLeads> allbillsList = <AccountLeads>[].obs;
   RxList<AccountLeads> allFollowUpList = <AccountLeads>[].obs;
   RxList<AccountLeads> allProspectList = <AccountLeads>[].obs;
   RxList<AccountLeads> allQualifiedList = <AccountLeads>[].obs;
