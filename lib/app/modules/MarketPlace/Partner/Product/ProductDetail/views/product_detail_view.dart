@@ -789,7 +789,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Explore out other Products', style: MyTexts.bold18),
+                              Text('Explore our other Products', style: MyTexts.bold18),
                               // const Icon(Icons.arrow_forward_ios, size: 20),
                             ],
                           ),
