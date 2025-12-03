@@ -93,10 +93,7 @@ class ProductCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          color: MyColors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+        decoration: BoxDecoration(color: MyColors.white, borderRadius: BorderRadius.circular(12)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -162,9 +159,7 @@ class ProductCard extends StatelessWidget {
           Expanded(
             child: Text(
               product.brand ?? 'Unknown Brand',
-              style: MyTexts.medium12.copyWith(
-                color: MyColors.custom('545454'),
-              ),
+              style: MyTexts.medium12.copyWith(color: MyColors.custom('545454')),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -192,20 +187,14 @@ class ProductCard extends StatelessWidget {
   Widget _buildPriceSection() => Container(
     decoration: BoxDecoration(
       gradient: LinearGradient(
-        colors: [
-          MyColors.custom('FFF9BD'),
-          MyColors.custom('FFF9BD').withValues(alpha: 0.1),
-        ],
+        colors: [MyColors.custom('FFF9BD'), MyColors.custom('FFF9BD').withValues(alpha: 0.1)],
       ),
     ),
     padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '₹ ',
-          style: MyTexts.medium14.copyWith(color: MyColors.custom('0B1429')),
-        ),
+        Text('₹ ', style: MyTexts.medium14.copyWith(color: MyColors.custom('0B1429'))),
         const SizedBox(width: 4),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,22 +203,15 @@ class ProductCard extends StatelessWidget {
               children: [
                 Text(
                   product.price ?? 'N/A',
-                  style: MyTexts.medium14.copyWith(
-                    color: MyColors.custom('0B1429'),
-                  ),
+                  style: MyTexts.medium14.copyWith(color: MyColors.custom('0B1429')),
                 ),
-                Text(
-                  '/ unit',
-                  style: MyTexts.medium12.copyWith(color: Colors.grey[600]),
-                ),
+                Text('/ unit', style: MyTexts.medium12.copyWith(color: Colors.grey[600])),
               ],
             ),
             const SizedBox(height: 2),
             Text(
               'Ex factory price',
-              style: MyTexts.medium12.copyWith(
-                color: MyColors.custom('545454'),
-              ),
+              style: MyTexts.medium12.copyWith(color: MyColors.custom('545454')),
             ),
           ],
         ),
@@ -267,13 +249,9 @@ class ProductImage extends StatelessWidget {
                     fit: BoxFit.contain,
                     width: double.infinity,
                     height: double.infinity,
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => const Icon(
-                      Icons.inventory_2,
-                      size: 40,
-                      color: Colors.grey,
-                    ),
+                    placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.inventory_2, size: 40, color: Colors.grey),
                   ),
                 )
               : const Icon(Icons.inventory_2, size: 40, color: Colors.grey),
@@ -282,10 +260,7 @@ class ProductImage extends StatelessWidget {
           const ColoredBox(
             color: Colors.black38,
             child: Center(
-              child: Text(
-                "Out of stock",
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Text("Out of stock", style: TextStyle(color: Colors.white)),
             ),
           ),
         _buildTopRow(),
@@ -311,13 +286,11 @@ class ProductImage extends StatelessWidget {
       // const Spacer(),
       if (myPref.role.val == "connector")
         if (isFromAdd == false && isFromConnector == true)
-          Expanded(
+          Flexible(
             child: GestureDetector(
               onTap: onWishlistTap,
               child: Icon(
-                (product.isInWishList ?? false)
-                    ? Icons.favorite
-                    : Icons.favorite_border,
+                (product.isInWishList ?? false) ? Icons.favorite : Icons.favorite_border,
                 size: 24,
                 color: (product.isInWishList ?? false)
                     ? MyColors.custom('E53D26')
