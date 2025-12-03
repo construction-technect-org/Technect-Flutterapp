@@ -7,16 +7,14 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/components/share_location_screen.dart';
+import 'package:construction_technect/app/modules/ChatSystem/widgets/audio_message_widget.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/chat_image_viewer.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/create_event_dialog.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/event_card_widget.dart';
-import 'package:construction_technect/app/modules/ChatSystem/widgets/audio_message_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ConnectorChatSystemView extends StatelessWidget {
-  final ConnectorChatSystemController controller = Get.put(
-    ConnectorChatSystemController(),
-  );
+  final ConnectorChatSystemController controller = Get.put(ConnectorChatSystemController());
 
   void _showAttachmentOptions(BuildContext context) {
     showModalBottomSheet(
@@ -101,10 +99,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                   color: MyColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.location_on_rounded,
-                  color: MyColors.primary,
-                ),
+                child: const Icon(Icons.location_on_rounded, color: MyColors.primary),
               ),
               title: const Text('Location'),
               subtitle: const Text('Share your current location'),
@@ -226,14 +221,19 @@ class ConnectorChatSystemView extends StatelessWidget {
                         style: MyTexts.regular12.copyWith(
                           color: controller.isOtherUserTyping.value
                               ? MyColors.primary
-                              : (controller.isUserOnline.value
-                                    ? Colors.green
-                                    : Colors.grey),
+                              : (controller.isUserOnline.value ? Colors.green : Colors.grey),
                         ),
                       ),
                     ),
                   ],
                 ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  final Uri smsLaunchUri = Uri(scheme: 'tel', path: controller.number);
+                  await launchUrl(smsLaunchUri);
+                },
+                child: const Icon(Icons.call, size: 20),
               ),
             ],
           ),
@@ -258,27 +258,21 @@ class ConnectorChatSystemView extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final messageIndex = messages.length - 1 - index;
                         final message = messages[messageIndex];
-                        final isMine =
-                            message.sentBy == controller.currentUser.id;
+                        final isMine = message.sentBy == controller.currentUser.id;
                         final isRead = message.status == MessageStatus.read;
 
                         return Align(
                           key: ValueKey('message_${message.id}'),
-                          alignment: isMine
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
+                          alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
                           child: ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxWidth:
-                                  MediaQuery.of(context).size.width * 0.75,
+                              maxWidth: MediaQuery.of(context).size.width * 0.75,
                             ),
                             child: Container(
                               margin: const EdgeInsets.symmetric(vertical: 4),
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: isMine
-                                    ? MyColors.primary
-                                    : MyColors.veryPaleBlue,
+                                color: isMine ? MyColors.primary : MyColors.veryPaleBlue,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Column(
@@ -289,10 +283,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () {
                                         final imageUrl =
-                                            (message.mediaUrl?.startsWith(
-                                                  'http',
-                                                ) ??
-                                                false)
+                                            (message.mediaUrl?.startsWith('http') ?? false)
                                             ? message.mediaUrl!
                                             : 'http://43.205.117.97${message.mediaUrl ?? ''}';
 
@@ -301,9 +292,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                           barrierColor: Colors.black,
                                           builder: (context) => ChatImageViewer(
                                             imageUrl: imageUrl,
-                                            senderName: isMine
-                                                ? 'You'
-                                                : controller.name,
+                                            senderName: isMine ? 'You' : controller.name,
                                             timestamp: message.createdAt,
                                           ),
                                         );
@@ -312,29 +301,18 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(10),
                                         child: ConstrainedBox(
                                           constraints: BoxConstraints(
-                                            maxWidth:
-                                                MediaQuery.of(
-                                                  context,
-                                                ).size.width *
-                                                0.65,
+                                            maxWidth: MediaQuery.of(context).size.width * 0.65,
                                             maxHeight: 300,
                                             minHeight: 150,
                                           ),
                                           child: AspectRatio(
                                             aspectRatio: 3 / 4,
                                             child: getImageView(
-                                              width:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.width *
-                                                  0.65,
+                                              width: MediaQuery.of(context).size.width * 0.65,
                                               height: 300,
                                               fit: BoxFit.cover,
                                               finalUrl:
-                                                  (message.mediaUrl?.startsWith(
-                                                        'http',
-                                                      ) ??
-                                                      false)
+                                                  (message.mediaUrl?.startsWith('http') ?? false)
                                                   ? message.mediaUrl!
                                                   : 'http://43.205.117.97${message.mediaUrl ?? ''}',
                                             ),
@@ -343,16 +321,13 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       ),
                                     ),
                                     if (message.message.isNotEmpty &&
-                                        message.message.toLowerCase() !=
-                                            'photo')
+                                        message.message.toLowerCase() != 'photo')
                                       Padding(
                                         padding: const EdgeInsets.only(top: 8),
                                         child: Text(
                                           message.message,
                                           style: MyTexts.bold14.copyWith(
-                                            color: isMine
-                                                ? Colors.white
-                                                : Colors.black,
+                                            color: isMine ? Colors.white : Colors.black,
                                           ),
                                         ),
                                       ),
@@ -360,10 +335,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () {
                                         final videoUrl =
-                                            (message.mediaUrl?.startsWith(
-                                                  'http',
-                                                ) ??
-                                                false)
+                                            (message.mediaUrl?.startsWith('http') ?? false)
                                             ? message.mediaUrl!
                                             : 'http://43.205.117.97${message.mediaUrl ?? ''}';
                                         ChatUtils.openFile(videoUrl);
@@ -372,13 +344,10 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         alignment: Alignment.center,
                                         children: [
                                           ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: ChatUtils.buildVideoThumbnailView(
+                                              message.mediaUrl,
                                             ),
-                                            child:
-                                                ChatUtils.buildVideoThumbnailView(
-                                                  message.mediaUrl,
-                                                ),
                                           ),
                                           const Icon(
                                             Icons.play_circle_fill,
@@ -389,39 +358,27 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       ),
                                     ),
                                     if (message.message.isNotEmpty &&
-                                        message.message.toLowerCase() !=
-                                            'video' &&
-                                        !ChatUtils.isVideoFileName(
-                                          message.message,
-                                        ))
+                                        message.message.toLowerCase() != 'video' &&
+                                        !ChatUtils.isVideoFileName(message.message))
                                       Padding(
                                         padding: const EdgeInsets.only(top: 8),
                                         child: Text(
                                           message.message,
                                           style: MyTexts.bold14.copyWith(
-                                            color: isMine
-                                                ? Colors.white
-                                                : Colors.black,
+                                            color: isMine ? Colors.white : Colors.black,
                                           ),
                                         ),
                                       ),
                                   ] else if (message.type == 'location') ...[
                                     Builder(
                                       builder: (context) {
-                                        final location = jsonDecode(
-                                          message.message,
-                                        );
-                                        final lat =
-                                            location['latitude'] as double?;
-                                        final lng =
-                                            location['longitude'] as double?;
-                                        final address =
-                                            location['address'] ?? '';
+                                        final location = jsonDecode(message.message);
+                                        final lat = location['latitude'] as double?;
+                                        final lng = location['longitude'] as double?;
+                                        final address = location['address'] ?? '';
 
                                         if (lat == null || lng == null) {
-                                          return const Text(
-                                            'Invalid location data',
-                                          );
+                                          return const Text('Invalid location data');
                                         }
 
                                         return Column(
@@ -433,13 +390,10 @@ class ConnectorChatSystemView extends StatelessWidget {
                                               onTap: () async {
                                                 final url =
                                                     "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
-                                                if (await canLaunchUrl(
-                                                  Uri.parse(url),
-                                                )) {
+                                                if (await canLaunchUrl(Uri.parse(url))) {
                                                   await launchUrl(
                                                     Uri.parse(url),
-                                                    mode: LaunchMode
-                                                        .externalApplication,
+                                                    mode: LaunchMode.externalApplication,
                                                   );
                                                 }
                                               },
@@ -447,51 +401,36 @@ class ConnectorChatSystemView extends StatelessWidget {
                                                 height: 180,
                                                 width: 300,
                                                 decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
+                                                  borderRadius: BorderRadius.circular(10),
                                                   color: Colors.grey[200],
                                                   border: Border.all(
-                                                    color: MyColors.primary
-                                                        .withValues(alpha: 0.2),
+                                                    color: MyColors.primary.withValues(alpha: 0.2),
                                                   ),
                                                 ),
                                                 clipBehavior: Clip.hardEdge,
                                                 child: GoogleMap(
-                                                  initialCameraPosition:
-                                                      CameraPosition(
-                                                        target: LatLng(
-                                                          lat,
-                                                          lng,
-                                                        ),
-                                                        zoom: 15,
-                                                      ),
+                                                  initialCameraPosition: CameraPosition(
+                                                    target: LatLng(lat, lng),
+                                                    zoom: 15,
+                                                  ),
                                                   markers: {
                                                     Marker(
-                                                      markerId: const MarkerId(
-                                                        'shared_location',
-                                                      ),
-                                                      position: LatLng(
-                                                        lat,
-                                                        lng,
-                                                      ),
+                                                      markerId: const MarkerId('shared_location'),
+                                                      position: LatLng(lat, lng),
                                                     ),
                                                   },
                                                   zoomControlsEnabled: false,
                                                   scrollGesturesEnabled: false,
                                                   tiltGesturesEnabled: false,
                                                   rotateGesturesEnabled: false,
-                                                  myLocationButtonEnabled:
-                                                      false,
+                                                  myLocationButtonEnabled: false,
                                                   onTap: (_) async {
                                                     final url =
                                                         "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
-                                                    if (await canLaunchUrl(
-                                                      Uri.parse(url),
-                                                    )) {
+                                                    if (await canLaunchUrl(Uri.parse(url))) {
                                                       await launchUrl(
                                                         Uri.parse(url),
-                                                        mode: LaunchMode
-                                                            .externalApplication,
+                                                        mode: LaunchMode.externalApplication,
                                                       );
                                                     }
                                                   },
@@ -499,15 +438,11 @@ class ConnectorChatSystemView extends StatelessWidget {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 8,
-                                              ),
+                                              padding: const EdgeInsets.only(top: 8),
                                               child: Text(
                                                 address,
                                                 style: MyTexts.bold14.copyWith(
-                                                  color: isMine
-                                                      ? Colors.white
-                                                      : Colors.black,
+                                                  color: isMine ? Colors.white : Colors.black,
                                                 ),
                                               ),
                                             ),
@@ -519,10 +454,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     GestureDetector(
                                       onTap: () {
                                         final fileUrl =
-                                            (message.mediaUrl?.startsWith(
-                                                  'http',
-                                                ) ??
-                                                false)
+                                            (message.mediaUrl?.startsWith('http') ?? false)
                                             ? message.mediaUrl!
                                             : 'http://43.205.117.97${message.mediaUrl ?? ''}';
                                         ChatUtils.openFile(fileUrl);
@@ -531,48 +463,35 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
                                           color: isMine
-                                              ? Colors.white.withValues(
-                                                  alpha: 0.2,
-                                                )
+                                              ? Colors.white.withValues(alpha: 0.2)
                                               : Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Icon(
                                               ChatUtils.getFileIcon(
-                                                message.mediaUrl
-                                                        ?.split('/')
-                                                        .last ??
+                                                message.mediaUrl?.split('/').last ??
                                                     message.message,
                                               ),
                                               size: 40,
-                                              color: isMine
-                                                  ? Colors.white
-                                                  : MyColors.primary,
+                                              color: isMine ? Colors.white : MyColors.primary,
                                             ),
                                             const SizedBox(width: 12),
                                             Flexible(
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     ChatUtils.extractFileName(
                                                       message.mediaUrl ?? '',
                                                     ),
-                                                    style: MyTexts.bold14
-                                                        .copyWith(
-                                                          color: isMine
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                        ),
+                                                    style: MyTexts.bold14.copyWith(
+                                                      color: isMine ? Colors.white : Colors.black,
+                                                    ),
                                                     maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
@@ -592,17 +511,13 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       ),
                                     ),
                                     if (message.message.isNotEmpty &&
-                                        !ChatUtils.isFileNameOnly(
-                                          message.message,
-                                        ))
+                                        !ChatUtils.isFileNameOnly(message.message))
                                       Padding(
                                         padding: const EdgeInsets.only(top: 8),
                                         child: Text(
                                           message.message,
                                           style: MyTexts.bold14.copyWith(
-                                            color: isMine
-                                                ? Colors.white
-                                                : Colors.black,
+                                            color: isMine ? Colors.white : Colors.black,
                                           ),
                                         ),
                                       ),
@@ -619,14 +534,11 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         eventData: message.message,
                                         isMine: isMine,
                                         isResponding:
-                                            controller
-                                                .respondingEventId
-                                                .value ==
+                                            controller.respondingEventId.value ==
                                             int.tryParse(message.id),
                                         onRespond: (response) {
                                           controller.respondToEvent(
-                                            messageId:
-                                                int.tryParse(message.id) ?? 0,
+                                            messageId: int.tryParse(message.id) ?? 0,
                                             response: response,
                                           );
                                         },
@@ -636,9 +548,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                     Text(
                                       message.message,
                                       style: MyTexts.bold16.copyWith(
-                                        color: isMine
-                                            ? Colors.white
-                                            : Colors.black,
+                                        color: isMine ? Colors.white : Colors.black,
                                       ),
                                     ),
                                   const SizedBox(height: 4),
@@ -650,9 +560,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         ChatUtils.formatTime(message.createdAt),
                                         style: TextStyle(
                                           fontSize: 11,
-                                          color: isMine
-                                              ? Colors.white70
-                                              : Colors.black54,
+                                          color: isMine ? Colors.white70 : Colors.black54,
                                         ),
                                       ),
                                       if (isMine) ...[
@@ -660,9 +568,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         Icon(
                                           isRead ? Icons.done_all : Icons.check,
                                           size: 14,
-                                          color: isRead
-                                              ? Colors.blue
-                                              : Colors.white70,
+                                          color: isRead ? Colors.blue : Colors.white70,
                                         ),
                                       ],
                                     ],
@@ -684,10 +590,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                         return GestureDetector(
                           onTap: controller.scrollToBottom,
                           child: Container(
-                            margin: const EdgeInsets.only(
-                              bottom: 20,
-                              right: 20,
-                            ),
+                            margin: const EdgeInsets.only(bottom: 20, right: 20),
                             decoration: BoxDecoration(
                               color: MyColors.primary,
                               shape: BoxShape.circle,
@@ -700,10 +603,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                               ],
                             ),
                             padding: const EdgeInsets.all(12),
-                            child: const Icon(
-                              Icons.arrow_downward_rounded,
-                              color: Colors.white,
-                            ),
+                            child: const Icon(Icons.arrow_downward_rounded, color: Colors.white),
                           ),
                         );
                       }),
@@ -714,10 +614,7 @@ class ConnectorChatSystemView extends StatelessWidget {
 
               Container(
                 color: MyColors.metricBackground,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 child: SafeArea(
                   top: false,
                   child: Row(
@@ -737,8 +634,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                               },
                               onHorizontalDragUpdate: (details) {
                                 // Accumulate horizontal drag for swipe to cancel
-                                controller.recordingDragOffset.value +=
-                                    details.delta.dx;
+                                controller.recordingDragOffset.value += details.delta.dx;
                               },
                               onHorizontalDragEnd: (details) {
                                 // If swiped left significantly, cancel recording
@@ -750,24 +646,15 @@ class ConnectorChatSystemView extends StatelessWidget {
                               },
                               child: Transform.translate(
                                 offset: Offset(
-                                  controller.recordingDragOffset.value.clamp(
-                                    -100.0,
-                                    0.0,
-                                  ),
+                                  controller.recordingDragOffset.value.clamp(-100.0, 0.0),
                                   0,
                                 ),
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 10,
-                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(25),
-                                    border: Border.all(
-                                      color: Colors.red,
-                                      width: 2,
-                                    ),
+                                    border: Border.all(color: Colors.red, width: 2),
                                   ),
                                   child: Row(
                                     children: [
@@ -781,8 +668,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 8),
                                       Obx(() {
-                                        final duration =
-                                            controller.recordingDuration.value;
+                                        final duration = controller.recordingDuration.value;
                                         final minutes = duration.inMinutes;
                                         final seconds = duration.inSeconds % 60;
                                         return Text(
@@ -797,18 +683,13 @@ class ConnectorChatSystemView extends StatelessWidget {
                                       const Spacer(),
                                       Obx(() {
                                         final shouldShowCancel =
-                                            controller
-                                                .recordingDragOffset
-                                                .value <
-                                            -50;
+                                            controller.recordingDragOffset.value < -50;
                                         return Text(
                                           shouldShowCancel
                                               ? 'Release to cancel'
                                               : 'Slide to cancel',
                                           style: TextStyle(
-                                            color: shouldShowCancel
-                                                ? Colors.red
-                                                : Colors.grey,
+                                            color: shouldShowCancel ? Colors.red : Colors.grey,
                                             fontSize: 14,
                                             fontWeight: shouldShowCancel
                                                 ? FontWeight.w600
@@ -825,8 +706,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                           return CommonTextField(
                             controller: controller.messageController,
                             hintText: "Type your message...",
-                            onChange: (text) =>
-                                controller.onTextChanged(text ?? ''),
+                            onChange: (text) => controller.onTextChanged(text ?? ''),
                           );
                         }),
                       ),
@@ -837,13 +717,9 @@ class ConnectorChatSystemView extends StatelessWidget {
                         if (hasText) {
                           // Show send button when text is entered
                           return IconButton(
-                            icon: const Icon(
-                              Icons.send,
-                              color: MyColors.primary,
-                            ),
+                            icon: const Icon(Icons.send, color: MyColors.primary),
                             onPressed: () {
-                              final text = controller.messageController.text
-                                  .trim();
+                              final text = controller.messageController.text.trim();
                               if (text.isNotEmpty) {
                                 controller.onSendTap(text);
                                 controller.messageController.clear();
@@ -855,16 +731,12 @@ class ConnectorChatSystemView extends StatelessWidget {
                         // Show microphone button for recording (WhatsApp style)
                         return GestureDetector(
                           onLongPressStart: (_) => controller.startRecording(),
-                          onLongPressEnd: (_) =>
-                              controller.stopRecording(send: true),
-                          onLongPressCancel: () =>
-                              controller.stopRecording(send: false),
+                          onLongPressEnd: (_) => controller.stopRecording(send: true),
+                          onLongPressCancel: () => controller.stopRecording(send: false),
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: isRecording
-                                  ? Colors.red
-                                  : MyColors.primary,
+                              color: isRecording ? Colors.red : MyColors.primary,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(

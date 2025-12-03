@@ -3,10 +3,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/controllers/controller_all_chat_list_controller.dart';
 import 'package:intl/intl.dart';
 
-class ConnectorAllChatListScreen
-    extends GetView<ConnectorAllChatListController> {
-  const ConnectorAllChatListScreen({super.key});
-
+class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,8 +14,7 @@ class ConnectorAllChatListScreen
           return const Center(child: CircularProgressIndicator());
         }
 
-        if ((controller.chatListModel.value.chats?.conversations ?? [])
-            .isEmpty) {
+        if ((controller.chatListModel.value.chats?.conversations ?? []).isEmpty) {
           return Center(
             child: Text(
               "No conversations yet",
@@ -29,14 +25,10 @@ class ConnectorAllChatListScreen
 
         return ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          itemCount: (controller.chatListModel.value.chats?.conversations ?? [])
-              .length,
-          separatorBuilder: (_, _) =>
-              const Divider(height: 1, color: MyColors.grayEA),
+          itemCount: (controller.chatListModel.value.chats?.conversations ?? []).length,
+          separatorBuilder: (_, _) => const Divider(height: 1, color: MyColors.grayEA),
           itemBuilder: (context, index) {
-            final chat =
-                (controller.chatListModel.value.chats?.conversations ??
-                [])[index];
+            final chat = (controller.chatListModel.value.chats?.conversations ?? [])[index];
             final int unreadCount = chat.chatInfo?.unreadCount ?? 0;
 
             return ListTile(
@@ -54,11 +46,7 @@ class ConnectorAllChatListScreen
               subtitle: Row(
                 children: [
                   if (_isImageMessage(chat.chatInfo?.lastMessage)) ...[
-                    const Icon(
-                      Icons.image,
-                      size: 16,
-                      color: MyColors.fontBlack,
-                    ),
+                    const Icon(Icons.image, size: 16, color: MyColors.fontBlack),
                     const SizedBox(width: 4),
                   ],
                   Expanded(
@@ -77,9 +65,7 @@ class ConnectorAllChatListScreen
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    formattedChatTime(
-                      DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? ''),
-                    ),
+                    formattedChatTime(DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? '')),
                     style: MyTexts.medium14.copyWith(color: MyColors.black),
                   ),
                   if (unreadCount > 0)

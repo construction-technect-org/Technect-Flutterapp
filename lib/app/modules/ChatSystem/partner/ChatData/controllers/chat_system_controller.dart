@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
+import 'package:construction_technect/app/core/utils/audio_manager.dart';
 import 'package:construction_technect/app/core/utils/chat_utils.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/core/utils/audio_manager.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/controllers/connector_chat_system_controller.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/ChatData/service/chat_service.dart';
@@ -13,10 +14,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:video_compress/video_compress.dart';
-import 'package:record/record.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ChatSystemController extends GetxController {
   Rx<ChatListModel> chatListModel = ChatListModel().obs;
@@ -32,6 +33,7 @@ class ChatSystemController extends GetxController {
   late final IO.Socket socket;
   int connectionId = 0;
   String name = "User";
+  String number = "";
   String image = "";
   int? otherUserId; // ID of the other user in the chat
   VoidCallback? onRefresh;
@@ -71,11 +73,10 @@ class ChatSystemController extends GetxController {
 
       if (chatData != null) {
         connectionId = chatData.connectionId ?? 0;
-        name =
-            "${chatData.connector?.firstName ?? ""} ${chatData.connector?.lastName ?? ""}"
-                .trim();
-        image =
-            APIConstants.bucketUrl + (chatData.connector?.profileImage ?? "");
+        number = chatData.connector.mobileNumber ?? '';
+        name = "${chatData.connector?.firstName ?? ""} ${chatData.connector?.lastName ?? ""}"
+            .trim();
+        image = APIConstants.bucketUrl + (chatData.connector?.profileImage ?? "");
         otherUserId = chatData.connector?.userId;
       }
 
@@ -107,8 +108,7 @@ class ChatSystemController extends GetxController {
     if (isUserOnline.value) {
       userStatusText.value = 'Online';
     } else if (lastSeenTime.value != null) {
-      userStatusText.value =
-          'Last seen ${_formatLastSeen(lastSeenTime.value!)}';
+      userStatusText.value = 'Last seen ${_formatLastSeen(lastSeenTime.value!)}';
     } else {
       userStatusText.value = 'Offline';
     }
@@ -169,24 +169,15 @@ class ChatSystemController extends GetxController {
       if (result.success == true) {
         chatListModel.value = result;
 
-        final firstMessage = result.chatData?.isNotEmpty == true
-            ? result.chatData!.first
-            : null;
+        final firstMessage = result.chatData?.isNotEmpty == true ? result.chatData!.first : null;
 
         if (firstMessage != null) {
-          final isSenderMe =
-              firstMessage.senderUserId == myPref.userModel.val["id"];
-          final otherId = isSenderMe
-              ? firstMessage.receiverUserId
-              : firstMessage.senderUserId;
+          final isSenderMe = firstMessage.senderUserId == myPref.userModel.val["id"];
+          final otherId = isSenderMe ? firstMessage.receiverUserId : firstMessage.senderUserId;
 
           otherUserId = otherId; // Store the other user's ID
 
-          supportUser = CustomUser(
-            id: otherId?.toString() ?? '',
-            name: name,
-            profilePhoto: image,
-          );
+          supportUser = CustomUser(id: otherId?.toString() ?? '', name: name, profilePhoto: image);
         }
 
         final fetchedMessages =
@@ -195,13 +186,9 @@ class ChatSystemController extends GetxController {
               return CustomMessage(
                 id: msg.id.toString(),
                 message: msg.messageText ?? '',
-                createdAt: DateTime.parse(
-                  msg.createdAt ?? DateTime.now().toIso8601String(),
-                ),
+                createdAt: DateTime.parse(msg.createdAt ?? DateTime.now().toIso8601String()),
                 sentBy: isSentByMe ? currentUser.id : supportUser.id,
-                status: msg.isRead == true
-                    ? MessageStatus.read
-                    : MessageStatus.delivered,
+                status: msg.isRead == true ? MessageStatus.read : MessageStatus.delivered,
                 type: msg.messageType,
                 mediaUrl: msg.messageMediaUrl,
               );
@@ -299,9 +286,7 @@ class ChatSystemController extends GetxController {
           final updatedMessageId = chatData.id.toString();
 
           // Find and update the message in the list
-          final messageIndex = messages.indexWhere(
-            (msg) => msg.id == updatedMessageId,
-          );
+          final messageIndex = messages.indexWhere((msg) => msg.id == updatedMessageId);
           if (messageIndex != -1) {
             final existingMessage = messages[messageIndex];
             final updatedMessage = existingMessage.copyWith(
@@ -347,13 +332,9 @@ class ChatSystemController extends GetxController {
         final newMessage = CustomMessage(
           id: chatData.id.toString(),
           message: chatData.messageText ?? '',
-          createdAt: DateTime.parse(
-            chatData.createdAt ?? DateTime.now().toIso8601String(),
-          ),
+          createdAt: DateTime.parse(chatData.createdAt ?? DateTime.now().toIso8601String()),
           sentBy: isSentByMe ? currentUser.id : supportUser.id,
-          status: chatData.isRead == true
-              ? MessageStatus.read
-              : MessageStatus.delivered,
+          status: chatData.isRead == true ? MessageStatus.read : MessageStatus.delivered,
           type: chatData.messageType,
           mediaUrl: chatData.messageMediaUrl,
         );
@@ -403,10 +384,7 @@ class ChatSystemController extends GetxController {
     // Stop typing indicator when sending message
     _stopTyping();
 
-    socket.emit('send_message', {
-      'connection_id': connectionId,
-      'message': message,
-    });
+    socket.emit('send_message', {'connection_id': connectionId, 'message': message});
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
     });
@@ -534,9 +512,7 @@ class ChatSystemController extends GetxController {
               final bytes = await compressedFile.readAsBytes();
               final fileSizeInMB = bytes.length / (1024 * 1024);
 
-              log(
-                "📊 Original size: ${(await File(filePath).length()) / (1024 * 1024)} MB",
-              );
+              log("📊 Original size: ${(await File(filePath).length()) / (1024 * 1024)} MB");
               log("📊 Compressed size: $fileSizeInMB MB");
 
               // Check if file is still too large (max 10MB)
@@ -581,9 +557,7 @@ class ChatSystemController extends GetxController {
                 'caption': caption.isEmpty ? null : caption,
               });
 
-              log(
-                "📤 Sent video from gallery via socket with caption: $caption",
-              );
+              log("📤 Sent video from gallery via socket with caption: $caption");
             } catch (e) {
               if (Get.isDialogOpen ?? false) {
                 Get.back(); // Close loading dialog
@@ -701,9 +675,7 @@ class ChatSystemController extends GetxController {
               final bytes = await compressedFile.readAsBytes();
               final fileSizeInMB = bytes.length / (1024 * 1024);
 
-              log(
-                "📊 Original size: ${(await File(filePath).length()) / (1024 * 1024)} MB",
-              );
+              log("📊 Original size: ${(await File(filePath).length()) / (1024 * 1024)} MB");
               log("📊 Compressed size: $fileSizeInMB MB");
 
               // Check if file is still too large (max 10MB)
@@ -748,9 +720,7 @@ class ChatSystemController extends GetxController {
                 'caption': caption.isEmpty ? null : caption,
               });
 
-              log(
-                "📤 Sent video from camera via socket with caption: $caption",
-              );
+              log("📤 Sent video from camera via socket with caption: $caption");
             } catch (e) {
               if (Get.isDialogOpen ?? false) {
                 Get.back(); // Close loading dialog
@@ -882,22 +852,18 @@ class ChatSystemController extends GetxController {
         case 'doc':
           mimeType = 'application/msword';
         case 'docx':
-          mimeType =
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+          mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
         case 'xls':
           mimeType = 'application/vnd.ms-excel';
         case 'xlsx':
-          mimeType =
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+          mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
         case 'txt':
           mimeType = 'text/plain';
         case 'zip':
           mimeType = 'application/zip';
       }
 
-      log(
-        "📄 File selected: $fileName (${(fileSize / 1024).toStringAsFixed(2)} KB)",
-      );
+      log("📄 File selected: $fileName (${(fileSize / 1024).toStringAsFixed(2)} KB)");
 
       // Show preview dialog with caption option
       Get.dialog(
@@ -981,14 +947,9 @@ class ChatSystemController extends GetxController {
   }) async {
     if (type == 'location') {
       String address = message?.trim() ?? '';
-      if ((address.isEmpty || address == '') &&
-          latitude != null &&
-          longitude != null) {
+      if ((address.isEmpty || address == '') && latitude != null && longitude != null) {
         try {
-          final List<Placemark> placemarks = await placemarkFromCoordinates(
-            latitude,
-            longitude,
-          );
+          final List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
           if (placemarks.isNotEmpty) {
             final p = placemarks.first;
             address = [
@@ -1006,11 +967,7 @@ class ChatSystemController extends GetxController {
         }
       }
 
-      final locationData = {
-        "latitude": latitude,
-        "longitude": longitude,
-        "address": address,
-      };
+      final locationData = {"latitude": latitude, "longitude": longitude, "address": address};
 
       socket.emit('send_message', {
         "connection_id": connectionId,
@@ -1040,11 +997,7 @@ class ChatSystemController extends GetxController {
         _currentRecordingPath = '${directory.path}/audio_$timestamp.m4a';
 
         await _audioRecorder.start(
-          const RecordConfig(
-            encoder: AudioEncoder.aacLc,
-            bitRate: 128000,
-            sampleRate: 44100,
-          ),
+          const RecordConfig(encoder: AudioEncoder.aacLc, bitRate: 128000, sampleRate: 44100),
           path: _currentRecordingPath!,
         );
 

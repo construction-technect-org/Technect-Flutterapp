@@ -28,6 +28,8 @@ import 'package:construction_technect/app/modules/CRM/reminder/view/set_reminder
 import 'package:construction_technect/app/modules/CRM/requirement/add/bindings/add_new_requ_binding.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/add/view/add_new_requirement.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/details/views/requirement_detail_screen.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/binding/connector_all_chat_list_binding.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/views/connector_all_chat_list.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/binding/connector_chat_system_binding.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/views/connector_chat_system_view.dart';
 import 'package:construction_technect/app/modules/ChatSystem/partner/AllChatList/binding/all_chat_list_binding.dart';
@@ -317,6 +319,11 @@ class AppPages {
 
     ///CRM
     GetPage(name: _Paths.CRM_MAIN, page: () => CRMBottomBarView(), binding: CRMBottomBinding()),
+    GetPage(
+      name: _Paths.CONNECTOR_All_CHAT_LIST,
+      page: () => ConnectorAllChatListScreen(),
+      binding: ConnectorAllChatListBinding(),
+    ),
 
     GetPage(name: _Paths.ADD_LEAD, page: () => const AddLeadScreen(), binding: AddLeadBinding()),
     GetPage(

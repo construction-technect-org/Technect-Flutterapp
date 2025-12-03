@@ -46,14 +46,10 @@ class ConnectorSelectedProductServices {
     try {
       const String url = APIConstants.notifyME;
       final Map<String, dynamic> body = {"merchant_product_id": mID};
-      debugPrint('Calling API: $url');
       final response = await apiManager.postObject(url: url, body: body);
-      debugPrint('Response: $response');
 
       return ConnectorSelectedProductModel.fromJson(response);
-    } catch (e, st) {
-      debugPrint('Error: $e');
-      debugPrint('StackTrace: $st');
+    } catch (e) {
       throw Exception('Error fetching products: $e');
     }
   }

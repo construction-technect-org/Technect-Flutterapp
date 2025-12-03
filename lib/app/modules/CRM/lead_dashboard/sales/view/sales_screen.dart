@@ -19,10 +19,7 @@ class SalesScreen extends GetView<SalesController> {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.categoryBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.categoryBg), fit: BoxFit.cover),
                 ),
               ),
               Column(
@@ -31,16 +28,12 @@ class SalesScreen extends GetView<SalesController> {
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
                     isCenter: false,
-                    title: const Text( "Sales"),
+                    title: const Text("Sales"),
                     leading: GestureDetector(
                       onTap: Get.back,
                       child: const Padding(
                         padding: EdgeInsets.zero,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_sharp,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
                   ),
@@ -56,11 +49,7 @@ class SalesScreen extends GetView<SalesController> {
                       child: SingleChildScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 16,
-                            right: 16,
-                            top: 16,
-                          ),
+                          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                           child: Obx(() {
                             return controller.filterScreens[controller.activeFilter.value] ??
                                 const SaleLeadScreen();
