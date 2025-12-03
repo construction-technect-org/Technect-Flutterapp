@@ -41,6 +41,7 @@ class Asset {
   static const String report = '${svg}report.svg';
   static const String setting = '${svg}setting.svg';
   static const String team = '${svg}team.svg';
+  static const String todo = '${svg}todo.svg';
   static const String edit = '${svg}edit.svg';
   static const String remove = '${svg}remove.svg';
   static const String moon = '${svg}moon.svg';
@@ -147,8 +148,7 @@ class Asset {
 
 class Constants {
   static const String privacyPolicy = 'http://43.205.117.97/privacy-policy';
-  static const String termsCondition =
-      'http://43.205.117.97/terms-and-conditions';
+  static const String termsCondition = 'http://43.205.117.97/terms-and-conditions';
   static const String aboutUS = 'http://43.205.117.97/about-us';
   static const String tutorial = 'https://www.youtube.com/watch?v=QI8dFfsZoC0';
 }
