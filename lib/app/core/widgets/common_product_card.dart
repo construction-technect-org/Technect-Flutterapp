@@ -340,6 +340,7 @@ class ProductActionButton extends StatelessWidget {
         fontColor: Colors.white,
         height: 32,
         borderRadius: 8,
+        style: MyTexts.medium14.copyWith(color: Colors.white),
       );
     }
     return RoundedButton(
@@ -349,6 +350,7 @@ class ProductActionButton extends StatelessWidget {
       onTap: onNotifyTap,
       height: 32,
       borderRadius: 8,
+      style: MyTexts.medium14.copyWith(color: Colors.white),
     );
   }
 
