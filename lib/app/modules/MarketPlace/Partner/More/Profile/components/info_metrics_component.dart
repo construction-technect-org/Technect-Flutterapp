@@ -18,10 +18,7 @@ class InfoMetricsComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Information',
-              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-            ),
+            Text('Information', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
             GestureDetector(
               onTap: () => Get.to(() => EditProfile()),
 
@@ -38,10 +35,7 @@ class InfoMetricsComponent extends StatelessWidget {
         SizedBox(height: 2.h),
         Row(
           children: [
-            Text(
-              'Business Metrics',
-              style: MyTexts.bold16.copyWith(color: MyColors.gray2E),
-            ),
+            Text('Business Metrics', style: MyTexts.bold16.copyWith(color: MyColors.gray2E)),
             const Spacer(),
             GestureDetector(
               onTap: () => Get.toNamed(Routes.EDIT_PROFILE),
@@ -132,19 +126,12 @@ class InfoMetricsComponent extends StatelessWidget {
                           const Gap(6),
                           buildRow(
                             title: "Mobile Number",
-                            data:
-                                "${userData?.countryCode} ${userData?.mobileNumber}",
+                            data: "${userData?.countryCode} ${userData?.mobileNumber}",
                           ),
                           const Gap(6),
-                          buildRow(
-                            title: "Email ID",
-                            data: "${userData?.email}",
-                          ),
+                          buildRow(title: "Email ID", data: "${userData?.email}"),
                           const Gap(6),
-                          buildRow(
-                            title: "Role",
-                            data: userData?.roleName ?? "-",
-                          ),
+                          buildRow(title: "Role", data: userData?.roleName ?? "-"),
                           SizedBox(height: 0.5.h),
                         ],
                       );
@@ -201,15 +188,12 @@ class InfoMetricsComponent extends StatelessWidget {
                 final name = controller.businessModel.value.businessName;
                 return buildRow(
                   title: "Company name",
-                  data: (name != null && name.isNotEmpty)
-                      ? name
-                      : (merchant?.businessName ?? "-"),
+                  data: (name != null && name.isNotEmpty) ? name : (merchant?.businessName ?? "-"),
                 );
               }),
               const Gap(6),
               Obx(() {
-                final modelGstin =
-                    controller.businessModel.value.gstinNumber ?? '';
+                final modelGstin = controller.businessModel.value.gstinNumber ?? '';
                 final userGstin = controller.userData?.gst ?? '-';
                 return buildRow(
                   title: "GSTIN",
@@ -219,13 +203,10 @@ class InfoMetricsComponent extends StatelessWidget {
               const Gap(6),
 
               Obx(() {
-                final contact =
-                    controller.businessModel.value.businessContactNumber ?? '';
+                final contact = controller.businessModel.value.businessContactNumber ?? '';
                 return buildRow(
                   title: "Mobile Number",
-                  data: contact.isNotEmpty
-                      ? contact
-                      : (merchant?.businessContactNumber ?? "-"),
+                  data: contact.isNotEmpty ? contact : (merchant?.businessContactNumber ?? "-"),
                 );
               }),
               const Gap(6),
@@ -233,32 +214,23 @@ class InfoMetricsComponent extends StatelessWidget {
                 final website = controller.businessModel.value.website ?? '';
                 return buildRow(
                   title: "Website",
-                  data: website.isNotEmpty
-                      ? website
-                      : (merchant?.website ?? "-"),
+                  data: website.isNotEmpty ? website : (merchant?.website ?? "-"),
                 );
               }),
               const Gap(6),
               Obx(() {
-                final email =
-                    controller.businessModel.value.businessEmail ?? '';
+                final email = controller.businessModel.value.businessEmail ?? '';
                 return buildRow(
                   title: "Email id",
-                  data: email.isNotEmpty
-                      ? email
-                      : (merchant?.businessEmail ?? "-"),
+                  data: email.isNotEmpty ? email : (merchant?.businessEmail ?? "-"),
                 );
               }),
               const Gap(6),
               Obx(() {
-                final alt =
-                    controller.businessModel.value.alternativeBusinessEmail ??
-                    '';
+                final alt = controller.businessModel.value.alternativeBusinessEmail ?? '';
                 return buildRow(
                   title: "Alternative number",
-                  data: alt.isNotEmpty
-                      ? alt
-                      : (merchant?.alternativeBusinessContactNumber ?? "-"),
+                  data: alt.isNotEmpty ? alt : (merchant?.alternativeBusinessContactNumber ?? "-"),
                 );
               }),
               const Gap(6),
@@ -266,9 +238,7 @@ class InfoMetricsComponent extends StatelessWidget {
                 final year = controller.businessModel.value.year ?? '';
                 return buildRow(
                   title: "Year of establish",
-                  data: year.isNotEmpty
-                      ? year
-                      : (merchant?.yearsInBusiness?.toString() ?? "-"),
+                  data: year.isNotEmpty ? year : (merchant?.yearsInBusiness?.toString() ?? "-"),
                 );
               }),
 
@@ -296,9 +266,7 @@ class InfoMetricsComponent extends StatelessWidget {
           style: MyTexts.medium16.copyWith(color: MyColors.gray54),
         );
       }
-      data.sort(
-        (a, b) => (a['day_of_week'] as int).compareTo(b['day_of_week'] as int),
-      );
+      data.sort((a, b) => (a['day_of_week'] as int).compareTo(b['day_of_week'] as int));
 
       final openDays = data.where((d) => d['is_open'] == true).toList();
       final closedDays = data.where((d) => d['is_open'] == false).toList();
@@ -322,10 +290,7 @@ class InfoMetricsComponent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Working Hours",
-              style: MyTexts.medium15.copyWith(color: MyColors.grayA5),
-            ),
+            Text("Working Hours", style: MyTexts.medium15.copyWith(color: MyColors.grayA5)),
             const Gap(12),
             Column(children: items),
           ],
@@ -334,10 +299,7 @@ class InfoMetricsComponent extends StatelessWidget {
     });
   }
 
-  Widget _buildBusinessHourItem(
-    List<Map<String, dynamic>> days, {
-    required bool isOpen,
-  }) {
+  Widget _buildBusinessHourItem(List<Map<String, dynamic>> days, {required bool isOpen}) {
     String dayLabel = "";
     if (days.length == 1) {
       dayLabel = days.first['day_name'];
@@ -353,9 +315,7 @@ class InfoMetricsComponent extends StatelessWidget {
       decoration: BoxDecoration(
         color: isOpen ? const Color(0xFFEAF0FF) : const Color(0xFFFFEEEE),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isOpen ? const Color(0xFFCAD6FF) : const Color(0xFFF5C8C8),
-        ),
+        border: Border.all(color: isOpen ? const Color(0xFFCAD6FF) : const Color(0xFFF5C8C8)),
       ),
       child: Column(
         children: [
@@ -426,19 +386,21 @@ class InfoMetricsComponent extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
-        const SizedBox(width: 20),
         Flexible(
+          child: Text(title, style: MyTexts.medium14.copyWith(color: MyColors.grayA5)),
+        ),
+        Flexible(
+          flex: 2,
           child: ReadMoreText(
             data ?? "",
             trimMode: TrimMode.Line,
             trimLines: 1,
             colorClickableText: const Color.fromRGBO(33, 150, 243, 1),
-            trimCollapsedText: '       ',
+            trimCollapsedText: 'View More',
             style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
             trimExpandedText: '  Show less',
             textAlign: TextAlign.right,
-            moreStyle: MyTexts.medium15.copyWith(color: MyColors.gray2E),
+            moreStyle: MyTexts.medium15.copyWith(color: const Color.fromRGBO(33, 150, 243, 1)),
           ),
         ),
       ],
