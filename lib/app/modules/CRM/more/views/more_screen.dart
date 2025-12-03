@@ -52,9 +52,7 @@ class CRMMoreScreen extends StatelessWidget {
               CommonContainer(
                 icon: Asset.setting,
                 title: "Setting",
-                onTap: () {
-                  // Get.toNamed(Routes.SETTING);
-                },
+                onTap: () => Get.toNamed(Routes.SETTING),
               ),
               const Gap(16),
               CommonContainer(
