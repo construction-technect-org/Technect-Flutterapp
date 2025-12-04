@@ -15,7 +15,7 @@ class MarketingController extends GetxController {
       isMarketing.value = Get.arguments["isMarketing"];
     }
     WidgetsBinding.instance.addPostFrameCallback((val) {
-        fetchAllLead(isLoad: true);
+      fetchAllLead(isLoad: true);
     });
     super.onInit();
   }
@@ -166,36 +166,45 @@ class MarketingController extends GetxController {
     if (getFilterStatusName() == "lead") {
       allLeadList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.leadStage == "lead"));
+        ..addAll(all.where((e) => e.leadStage == "lead"));
 
-      todaysTotal.value = allLeadList.length;
+      todaysTotal.value = todaysLeads.where((e) => e.leadStage == "lead").length;
     } else if (getFilterStatusName() == "follow_up") {
       allFollowUpList
         ..clear()
         ..addAll(
-          todaysLeads.where(
+          all.where(
             (e) => e.leadStage == "follow_up" || (e.leadStage == "prospect" && e.status == "fresh"),
           ),
         );
 
-      todaysTotal.value = allFollowUpList.length;
+      todaysTotal.value = todaysLeads
+          .where(
+            (e) => e.leadStage == "follow_up" || (e.leadStage == "prospect" && e.status == "fresh"),
+          )
+          .length;
     } else if (getFilterStatusName() == "prospect") {
       allProspectList
         ..clear()
         ..addAll(
-          todaysLeads.where(
+          all.where(
             (e) =>
                 e.leadStage == "prospect" || (e.status == "pending" && e.leadStage == "qualified"),
           ),
         );
 
-      todaysTotal.value = allProspectList.length;
+      todaysTotal.value = todaysLeads
+          .where(
+            (e) =>
+                e.leadStage == "prospect" || (e.status == "pending" && e.leadStage == "qualified"),
+          )
+          .length;
     } else if (getFilterStatusName() == "qualified") {
       allQualifiedList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.leadStage == "qualified"));
+        ..addAll(all.where((e) => e.leadStage == "qualified"));
 
-      todaysTotal.value = allQualifiedList.length;
+      todaysTotal.value = todaysLeads.where((e) => e.leadStage == "qualified").length;
     }
   }
 

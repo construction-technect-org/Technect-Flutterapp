@@ -45,7 +45,6 @@ class SalesController extends GetxController {
     return allLeadList;
   }
 
-
   final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
 
   List<SaleLeads> get filteredFollowups {
@@ -62,7 +61,7 @@ class SalesController extends GetxController {
     return allFollowUpList;
   }
 
-  final List<String> statusProspectItems = <String>[ "Sent","Accepted", "Negotiation",];
+  final List<String> statusProspectItems = <String>["Sent", "Accepted", "Negotiation"];
 
   List<SaleLeads> get filteredProspect {
     if (activeProspectStatusFilter.value.toLowerCase() == "sent") {
@@ -93,8 +92,6 @@ class SalesController extends GetxController {
     }
     return allQualifiedList;
   }
-
-
 
   void setFilter(String f) {
     activeFilter.value = f;
@@ -152,39 +149,51 @@ class SalesController extends GetxController {
     if (getFilterStatusName() == "lead") {
       allLeadList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.salesLeadsStage == "sales"));
+        ..addAll(all.where((e) => e.salesLeadsStage == "sales"));
 
-      todaysTotal.value = allLeadList.length;
+      todaysTotal.value = todaysLeads.where((e) => e.salesLeadsStage == "sales").length;
     } else if (getFilterStatusName() == "follow_up") {
       allFollowUpList
         ..clear()
         ..addAll(
-          todaysLeads.where(
+          all.where(
             (e) =>
                 e.salesLeadsStage == "follow_up" ||
                 (e.salesLeadsStage == "quote_sent" && e.status == "sent"),
           ),
         );
 
-      todaysTotal.value = allFollowUpList.length;
+      todaysTotal.value = todaysLeads
+          .where(
+            (e) =>
+                e.salesLeadsStage == "follow_up" ||
+                (e.salesLeadsStage == "quote_sent" && e.status == "sent"),
+          )
+          .length;
     } else if (getFilterStatusName() == "quote_sent") {
       allProspectList
         ..clear()
         ..addAll(
-          todaysLeads.where(
+          all.where(
             (e) =>
                 e.salesLeadsStage == "quote_sent" ||
                 (e.status == "pending" && e.salesLeadsStage == "closing"),
           ),
         );
 
-      todaysTotal.value = allProspectList.length;
+      todaysTotal.value = todaysLeads
+          .where(
+            (e) =>
+                e.salesLeadsStage == "quote_sent" ||
+                (e.status == "pending" && e.salesLeadsStage == "closing"),
+          )
+          .length;
     } else if (getFilterStatusName() == "closing") {
       allQualifiedList
         ..clear()
-        ..addAll(todaysLeads.where((e) => e.salesLeadsStage == "closing"));
+        ..addAll(all.where((e) => e.salesLeadsStage == "closing"));
 
-      todaysTotal.value = allQualifiedList.length;
+      todaysTotal.value = todaysLeads.where((e) => e.salesLeadsStage == "closing").length;
     }
   }
 
