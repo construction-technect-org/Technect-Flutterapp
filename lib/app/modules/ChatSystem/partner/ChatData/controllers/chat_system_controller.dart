@@ -207,7 +207,7 @@ class ChatSystemController extends GetxController {
 
   void _initSocket() {
     socket = IO.io(
-      'http://43.205.117.97',
+      'https://constructiontechnect.com',
       IO.OptionBuilder()
           .setTransports(['websocket', 'polling'])
           .disableAutoConnect()
