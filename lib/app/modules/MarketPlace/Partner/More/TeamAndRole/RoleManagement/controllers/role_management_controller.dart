@@ -1,6 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/controller/home_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddTeam/service/add_team_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/TeamStatsModel.dart';
@@ -15,7 +14,6 @@ class RoleManagementController extends GetxController {
 
   final Rx<TeamStatsModel?> teamStats = Rx<TeamStatsModel?>(null);
   AddTeamService addTeamService = AddTeamService();
-  HomeController homeController = Get.find();
   final isLoading = false.obs;
   final isLoadingTeam = false.obs;
   final isLoadingTeamStats = false.obs;
@@ -68,8 +66,8 @@ class RoleManagementController extends GetxController {
     try {
       isLoadingTeam.value = true;
       await addTeamService.deleteTeamMember(teamMemberId);
-      await  Get.find<CommonController>().refreshTeamList();
-      await  Get.find<CommonController>().fetchTeamList();
+      await Get.find<CommonController>().refreshTeamList();
+      await Get.find<CommonController>().fetchTeamList();
     } catch (e) {
       // ignore: avoid_print
     } finally {

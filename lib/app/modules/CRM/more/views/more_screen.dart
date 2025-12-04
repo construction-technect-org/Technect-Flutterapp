@@ -58,9 +58,7 @@ class CRMMoreScreen extends StatelessWidget {
               CommonContainer(
                 icon: Asset.team,
                 title: "Team",
-                onTap: () {
-                  //  Get.toNamed(Routes.ROLE_MANAGEMENT);
-                },
+                onTap: () => Get.toNamed(Routes.ROLE_MANAGEMENT),
               ),
               const Gap(16),
               CommonContainer(icon: Asset.news, title: "Task", onTap: () {}), //todo
