@@ -166,7 +166,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ROLE_MANAGEMENT,
-      page: () => RoleManagementView(),
+      page: () => const RoleManagementView(),
       binding: RoleManagementBinding(),
     ),
     GetPage(name: _Paths.ADD_ROLE, page: () => AddRoleView(), binding: AddRoleBinding()),
