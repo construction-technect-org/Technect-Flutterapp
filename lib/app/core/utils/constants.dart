@@ -147,8 +147,8 @@ class Asset {
 }
 
 class Constants {
-  static const String privacyPolicy = 'http://43.205.117.97/privacy-policy';
-  static const String termsCondition = 'http://43.205.117.97/terms-and-conditions';
-  static const String aboutUS = 'http://43.205.117.97/about-us';
+  static const String privacyPolicy = 'https://constructiontechnect.com/privacy-policy';
+  static const String termsCondition = 'https://constructiontechnect.com/terms-and-conditions';
+  static const String aboutUS = 'https://constructiontechnect.com/about-us';
   static const String tutorial = 'https://www.youtube.com/watch?v=QI8dFfsZoC0';
 }

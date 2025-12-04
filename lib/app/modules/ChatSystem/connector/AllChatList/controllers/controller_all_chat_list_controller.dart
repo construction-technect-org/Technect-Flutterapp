@@ -39,7 +39,7 @@ class ConnectorAllChatListController extends GetxController {
 
   void _initSocket() {
     socket = IO.io(
-      'http://43.205.117.97',
+      'https://constructiontechnect.com',
       IO.OptionBuilder()
           .setTransports(['websocket', 'polling'])
           .disableAutoConnect()
@@ -83,17 +83,14 @@ class ConnectorAllChatListController extends GetxController {
       final int? unreadCount = data['unread_count'];
 
       final conversations = chatListModel.value.chats?.conversations ?? [];
-      final index = conversations.indexWhere(
-        (conv) => conv.connectionId == connectionId,
-      );
+      final index = conversations.indexWhere((conv) => conv.connectionId == connectionId);
 
       if (index != -1) {
         final conversation = conversations[index];
 
         conversation.chatInfo = ChatInfo(
           lastMessage: lastMessage ?? conversation.chatInfo?.lastMessage,
-          lastMessageTime:
-              lastMessageTime ?? conversation.chatInfo?.lastMessageTime,
+          lastMessageTime: lastMessageTime ?? conversation.chatInfo?.lastMessageTime,
           unreadCount: unreadCount ?? conversation.chatInfo?.unreadCount ?? 0,
         );
 

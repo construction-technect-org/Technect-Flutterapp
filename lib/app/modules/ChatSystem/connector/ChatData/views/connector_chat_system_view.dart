@@ -285,7 +285,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         final imageUrl =
                                             (message.mediaUrl?.startsWith('http') ?? false)
                                             ? message.mediaUrl!
-                                            : 'http://43.205.117.97${message.mediaUrl ?? ''}';
+                                            : 'https://constructiontechnect.com${message.mediaUrl ?? ''}';
 
                                         showDialog(
                                           context: context,
@@ -314,7 +314,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                               finalUrl:
                                                   (message.mediaUrl?.startsWith('http') ?? false)
                                                   ? message.mediaUrl!
-                                                  : 'http://43.205.117.97${message.mediaUrl ?? ''}',
+                                                  : 'https://constructiontechnect.com${message.mediaUrl ?? ''}',
                                             ),
                                           ),
                                         ),
@@ -337,7 +337,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         final videoUrl =
                                             (message.mediaUrl?.startsWith('http') ?? false)
                                             ? message.mediaUrl!
-                                            : 'http://43.205.117.97${message.mediaUrl ?? ''}';
+                                            : 'https://constructiontechnect.com${message.mediaUrl ?? ''}';
                                         ChatUtils.openFile(videoUrl);
                                       },
                                       child: Stack(
@@ -456,7 +456,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                                         final fileUrl =
                                             (message.mediaUrl?.startsWith('http') ?? false)
                                             ? message.mediaUrl!
-                                            : 'http://43.205.117.97${message.mediaUrl ?? ''}';
+                                            : 'https://constructiontechnect.com${message.mediaUrl ?? ''}';
                                         ChatUtils.openFile(fileUrl);
                                       },
                                       child: Container(

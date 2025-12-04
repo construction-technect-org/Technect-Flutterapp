@@ -121,15 +121,7 @@ class ChatUtils {
 
   /// Check if message text is just a filename (not a caption)
   static bool isFileNameOnly(String message) {
-    final extensions = [
-      '.pdf',
-      '.doc',
-      '.docx',
-      '.xls',
-      '.xlsx',
-      '.txt',
-      '.zip',
-    ];
+    final extensions = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.txt', '.zip'];
     return extensions.any((ext) => message.toLowerCase().endsWith(ext));
   }
 
@@ -154,18 +146,12 @@ class ChatUtils {
         }
 
         // Generate thumbnail from local file
-        final thumbnailFile = await VideoCompress.getFileThumbnail(
-          localPath,
-          quality: 50,
-        );
+        final thumbnailFile = await VideoCompress.getFileThumbnail(localPath, quality: 50);
         return thumbnailFile.path;
       }
 
       // If it's a local file
-      final thumbnailFile = await VideoCompress.getFileThumbnail(
-        videoUrl,
-        quality: 50,
-      );
+      final thumbnailFile = await VideoCompress.getFileThumbnail(videoUrl, quality: 50);
       return thumbnailFile.path;
     } catch (e) {
       log("❌ Error generating thumbnail: $e");
@@ -175,16 +161,7 @@ class ChatUtils {
 
   /// Check if message text is a video filename (contains video extension or path)
   static bool isVideoFileName(String message) {
-    final videoExtensions = [
-      '.mp4',
-      '.mov',
-      '.avi',
-      '.mkv',
-      '.3gp',
-      '.m4v',
-      '.wmv',
-      '.flv',
-    ];
+    final videoExtensions = ['.mp4', '.mov', '.avi', '.mkv', '.3gp', '.m4v', '.wmv', '.flv'];
     final lowerMessage = message.toLowerCase();
     return videoExtensions.any((ext) => lowerMessage.endsWith(ext)) ||
         lowerMessage.contains('/') || // Contains path separator
@@ -195,33 +172,20 @@ class ChatUtils {
   static Widget buildVideoThumbnailView(String? url) {
     if (url == null || url.isEmpty) {
       return Container(
-        constraints: const BoxConstraints(
-          maxWidth: 250,
-          maxHeight: 200,
-          minHeight: 150,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.grey[800],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Center(
-          child: Icon(Icons.play_circle_outline, size: 60, color: Colors.white),
-        ),
+        constraints: const BoxConstraints(maxWidth: 250, maxHeight: 200, minHeight: 150),
+        decoration: BoxDecoration(color: Colors.grey[800], borderRadius: BorderRadius.circular(10)),
+        child: const Center(child: Icon(Icons.play_circle_outline, size: 60, color: Colors.white)),
       );
     }
 
     // Build full URL if it's a relative path
-    final videoUrl = url.startsWith('http') ? url : 'http://43.205.117.97$url';
+    final videoUrl = url.startsWith('http') ? url : 'https://constructiontechnect.com$url';
 
     return FutureBuilder<String?>(
       future: getVideoThumbnail(videoUrl),
       builder: (context, snapshot) {
         return Container(
-          constraints: const BoxConstraints(
-            maxWidth: 250,
-            maxHeight: 200,
-            minHeight: 150,
-          ),
+          constraints: const BoxConstraints(maxWidth: 250, maxHeight: 200, minHeight: 150),
           decoration: BoxDecoration(
             color: Colors.grey[800],
             borderRadius: BorderRadius.circular(10),
@@ -240,26 +204,17 @@ class ChatUtils {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return const Center(
-                        child: Icon(
-                          Icons.videocam,
-                          size: 50,
-                          color: Colors.white54,
-                        ),
+                        child: Icon(Icons.videocam, size: 50, color: Colors.white54),
                       );
                     },
                   ),
                 )
               else if (snapshot.connectionState == ConnectionState.waiting)
                 const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white54,
-                  ),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white54),
                 )
               else
-                const Center(
-                  child: Icon(Icons.videocam, size: 50, color: Colors.white54),
-                ),
+                const Center(child: Icon(Icons.videocam, size: 50, color: Colors.white54)),
 
               // Dark overlay for better play icon visibility
               Container(
@@ -270,13 +225,7 @@ class ChatUtils {
               ),
 
               // Play icon overlay
-              const Center(
-                child: Icon(
-                  Icons.play_circle_outline,
-                  size: 50,
-                  color: Colors.black,
-                ),
-              ),
+              const Center(child: Icon(Icons.play_circle_outline, size: 50, color: Colors.black)),
             ],
           ),
         );

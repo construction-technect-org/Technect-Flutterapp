@@ -90,7 +90,7 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
 
       final url = widget.audioUrl.startsWith('http')
           ? widget.audioUrl
-          : 'http://43.205.117.97${widget.audioUrl}';
+          : 'https://constructiontechnect.com${widget.audioUrl}';
 
       _currentUrl = url;
 
@@ -122,14 +122,12 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
       // Listen to buffering state for loading progress (when download starts)
       _audioPlayer.bufferedPositionStream.listen((bufferedPosition) {
         if (mounted && _totalDuration.inMilliseconds > 0) {
-          final progress =
-              bufferedPosition.inMilliseconds / _totalDuration.inMilliseconds;
+          final progress = bufferedPosition.inMilliseconds / _totalDuration.inMilliseconds;
           setState(() {
             _loadingProgress = progress.clamp(0.0, 1.0);
             // Consider loaded when buffered position is close to total duration
             if (progress >= 0.95 ||
-                bufferedPosition.inMilliseconds >=
-                    _totalDuration.inMilliseconds - 500) {
+                bufferedPosition.inMilliseconds >= _totalDuration.inMilliseconds - 500) {
               _isLoading = false;
               _isLoaded = true;
             }
@@ -389,9 +387,7 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
       width: 200,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: widget.isMine
-            ? Colors.white.withValues(alpha: 0.2)
-            : Colors.white,
+        color: widget.isMine ? Colors.white.withValues(alpha: 0.2) : Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -400,9 +396,7 @@ class _AudioMessageWidgetState extends State<AudioMessageWidget> {
           GestureDetector(
             onTap: _isLoading
                 ? null
-                : (_isLoaded
-                      ? _togglePlayPause
-                      : _downloadAudio), // Download first, then play
+                : (_isLoaded ? _togglePlayPause : _downloadAudio), // Download first, then play
             child: _isLoading
                 ? SizedBox(
                     width: 28,
