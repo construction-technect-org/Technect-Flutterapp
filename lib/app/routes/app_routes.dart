@@ -94,6 +94,7 @@ abstract class Routes {
   static const SetReminder = _Paths.SetReminderScreen;
   static const SALES = _Paths.SALES;
   static const ACCOUNT_LEAD = _Paths.ACCOUNT_LEAD;
+  static const CrmAnalysis = _Paths.crm_analysis;
 }
 
 abstract class _Paths {
@@ -189,4 +190,5 @@ abstract class _Paths {
   static const SetReminderScreen = "/SetReminderScreen";
   static const SALES = "/sales";
   static const ACCOUNT_LEAD = "/account_lead";
+  static const crm_analysis = "/crm_analysis";
 }
