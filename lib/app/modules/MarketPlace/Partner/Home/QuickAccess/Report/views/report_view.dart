@@ -24,19 +24,14 @@ class ReportView extends GetView<ReportController> {
               width: double.infinity,
               height: double.infinity,
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Asset.moreIBg),
-                  fit: BoxFit.cover,
-                ),
+                image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
               ),
             ),
             Column(
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: Text(
-                    controller.isReport.value ? 'Reports' : "Analysis",
-                  ),
+                  title: Text(controller.isReport.value ? 'Reports' : "Analysis"),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () {
@@ -44,11 +39,7 @@ class ReportView extends GetView<ReportController> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -60,7 +51,7 @@ class ReportView extends GetView<ReportController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(16),
-                          ReportTextWidget(controller: controller),
+                          ReportTextWidget(isReport: controller.isReport.value),
                           const Gap(20),
                           Row(
                             children: [
@@ -144,20 +135,12 @@ class ReportView extends GetView<ReportController> {
 
                                   title: "Total Users",
                                   value:
-                                      controller
-                                          .analysisModel
-                                          .value
-                                          .overallStatistics
-                                          ?.totalUsers
+                                      controller.analysisModel.value.overallStatistics?.totalUsers
                                           .toString() ??
                                       "",
                                   subtitle: "Active Users",
                                   subValue:
-                                      controller
-                                          .analysisModel
-                                          .value
-                                          .overallStatistics
-                                          ?.activeUsers
+                                      controller.analysisModel.value.overallStatistics?.activeUsers
                                           .toString() ??
                                       "",
                                 );
@@ -215,17 +198,11 @@ class ReportView extends GetView<ReportController> {
         Expanded(
           child: GestureDetector(
             onTap: () async {
-              final DateTime nowMonth = DateTime(
-                DateTime.now().year,
-                DateTime.now().month,
-              );
-              final DateTime startInitial =
-                  controller.startMonth.value ?? nowMonth;
+              final DateTime nowMonth = DateTime(DateTime.now().year, DateTime.now().month);
+              final DateTime startInitial = controller.startMonth.value ?? nowMonth;
               final picked = await showMonthPicker(
                 context: context,
-                initialDate: startInitial.isAfter(nowMonth)
-                    ? nowMonth
-                    : startInitial,
+                initialDate: startInitial.isAfter(nowMonth) ? nowMonth : startInitial,
                 firstDate: DateTime(2000),
                 lastDate: nowMonth,
                 monthPickerDialogSettings: const MonthPickerDialogSettings(
@@ -233,30 +210,20 @@ class ReportView extends GetView<ReportController> {
                     dialogRoundedCornersRadius: 20,
                     dialogBackgroundColor: Colors.white,
                   ),
-                  headerSettings: PickerHeaderSettings(
-                    headerBackgroundColor: MyColors.primary,
-                  ),
+                  headerSettings: PickerHeaderSettings(headerBackgroundColor: MyColors.primary),
                 ),
               );
               if (picked != null) {
-                controller.startMonth.value = DateTime(
-                  picked.year,
-                  picked.month,
-                );
+                controller.startMonth.value = DateTime(picked.year, picked.month);
                 // If previously selected end month is out of the 3-month window, reset it
                 if (controller.endMonth.value != null) {
                   final end = DateTime(
                     controller.endMonth.value!.year,
                     controller.endMonth.value!.month,
                   );
-                  final span = controller.inclusiveMonthSpan(
-                    controller.startMonth.value!,
-                    end,
-                  );
+                  final span = controller.inclusiveMonthSpan(controller.startMonth.value!, end);
                   final bool endInFuture = end.isAfter(nowMonth);
-                  if (span > 12 ||
-                      end.isBefore(controller.startMonth.value!) ||
-                      endInFuture) {
+                  if (span > 12 || end.isBefore(controller.startMonth.value!) || endInFuture) {
                     controller.endMonth.value = null;
                   }
                 }
@@ -271,14 +238,10 @@ class ReportView extends GetView<ReportController> {
               child: Obx(
                 () => Text(
                   controller.startMonth.value != null
-                      ? DateFormat(
-                          "MMM yyyy",
-                        ).format(controller.startMonth.value!)
+                      ? DateFormat("MMM yyyy").format(controller.startMonth.value!)
                       : "Start Month",
                   style: MyTexts.medium14.copyWith(
-                    color: controller.startMonth.value != null
-                        ? MyColors.gray2E
-                        : MyColors.grayA5,
+                    color: controller.startMonth.value != null ? MyColors.gray2E : MyColors.grayA5,
                   ),
                 ),
               ),
@@ -290,36 +253,24 @@ class ReportView extends GetView<ReportController> {
           child: GestureDetector(
             onTap: () async {
               if (controller.startMonth.value == null) {
-                Get.snackbar(
-                  "Select Start Month",
-                  "Please select a start month first",
-                );
+                Get.snackbar("Select Start Month", "Please select a start month first");
                 return;
               }
               final DateTime start = DateTime(
                 controller.startMonth.value!.year,
                 controller.startMonth.value!.month,
               );
-              final DateTime nowMonth = DateTime(
-                DateTime.now().year,
-                DateTime.now().month,
-              );
-              final DateTime lastAllowedRaw = controller.lastAllowedEndMonth(
-                start,
-              );
+              final DateTime nowMonth = DateTime(DateTime.now().year, DateTime.now().month);
+              final DateTime lastAllowedRaw = controller.lastAllowedEndMonth(start);
               final DateTime lastAllowed = lastAllowedRaw.isAfter(nowMonth)
                   ? nowMonth
                   : lastAllowedRaw;
               final DateTime initial = controller.endMonth.value != null
-                  ? DateTime(
-                      controller.endMonth.value!.year,
-                      controller.endMonth.value!.month,
-                    )
+                  ? DateTime(controller.endMonth.value!.year, controller.endMonth.value!.month)
                   : start;
               final picked = await showMonthPicker(
                 context: context,
-                initialDate:
-                    initial.isBefore(start) || initial.isAfter(lastAllowed)
+                initialDate: initial.isBefore(start) || initial.isAfter(lastAllowed)
                     ? start
                     : initial,
                 firstDate: start,
@@ -329,9 +280,7 @@ class ReportView extends GetView<ReportController> {
                     dialogRoundedCornersRadius: 20,
                     dialogBackgroundColor: Colors.white,
                   ),
-                  headerSettings: PickerHeaderSettings(
-                    headerBackgroundColor: MyColors.primary,
-                  ),
+                  headerSettings: PickerHeaderSettings(headerBackgroundColor: MyColors.primary),
                 ),
               );
               if (picked != null) {
@@ -348,14 +297,10 @@ class ReportView extends GetView<ReportController> {
               child: Obx(
                 () => Text(
                   controller.endMonth.value != null
-                      ? DateFormat(
-                          "MMM yyyy",
-                        ).format(controller.endMonth.value!)
+                      ? DateFormat("MMM yyyy").format(controller.endMonth.value!)
                       : "End Month",
                   style: MyTexts.medium14.copyWith(
-                    color: controller.endMonth.value != null
-                        ? MyColors.gray2E
-                        : MyColors.grayA5,
+                    color: controller.endMonth.value != null ? MyColors.gray2E : MyColors.grayA5,
                   ),
                 ),
               ),
@@ -379,23 +324,16 @@ class ReportView extends GetView<ReportController> {
           dropdownColor: Colors.white,
           isExpanded: true,
           underline: const SizedBox(),
-          value: controller.selectedPeriod.value.isEmpty
-              ? null
-              : controller.selectedPeriod.value,
+          value: controller.selectedPeriod.value.isEmpty ? null : controller.selectedPeriod.value,
           hint: Text(
             "Select Period",
-            style: MyTexts.medium14.copyWith(
-              color: MyColors.primary.withValues(alpha: 0.5),
-            ),
+            style: MyTexts.medium14.copyWith(color: MyColors.primary.withValues(alpha: 0.5)),
           ),
           items: controller.periodOptions
               .map(
                 (e) => DropdownMenuItem(
                   value: e,
-                  child: Text(
-                    e,
-                    style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
-                  ),
+                  child: Text(e, style: MyTexts.medium15.copyWith(color: MyColors.gray2E)),
                 ),
               )
               .toList(),
@@ -434,16 +372,8 @@ class ReportView extends GetView<ReportController> {
                             .map((e) => e.rejectedProducts ?? 0)
                             .toList(),
                       ],
-                      colors: const [
-                        MyColors.primary,
-                        MyColors.green,
-                        Colors.red,
-                      ],
-                      legends: const [
-                        "Products Added",
-                        "Active Products",
-                        "Rejected Products",
-                      ],
+                      colors: const [MyColors.primary, MyColors.green, Colors.red],
+                      legends: const ["Products Added", "Active Products", "Rejected Products"],
                     ),
                   const Gap(10),
                   if (analysis.serviceAnalytics != null)
@@ -463,16 +393,8 @@ class ReportView extends GetView<ReportController> {
                             .map((e) => e.rejectedServices ?? 0)
                             .toList(),
                       ],
-                      colors: const [
-                        MyColors.primary,
-                        MyColors.green,
-                        Colors.red,
-                      ],
-                      legends: const [
-                        "Services Added",
-                        "Active Services",
-                        "Rejected Services",
-                      ],
+                      colors: const [MyColors.primary, MyColors.green, Colors.red],
+                      legends: const ["Services Added", "Active Services", "Rejected Services"],
                     ),
                   const Gap(10),
                   if (analysis.teamAnalytics != null)
@@ -530,11 +452,7 @@ class ReportView extends GetView<ReportController> {
                             .toList(),
                       ],
                       colors: const [Colors.orange, Colors.red, MyColors.green],
-                      legends: const [
-                        "Open Tickets",
-                        "Closed Tickets",
-                        "Resoled Tickets",
-                      ],
+                      legends: const ["Open Tickets", "Closed Tickets", "Resoled Tickets"],
                     ),
                   const Gap(20),
                 ],
@@ -548,15 +466,9 @@ class ReportView extends GetView<ReportController> {
                           .map((e) => e.monthName!)
                           .toList(),
                       values: [
-                        analysis.wishlist!.monthlyBreakdown!
-                            .map((e) => e.itemsAdded ?? 0)
-                            .toList(),
+                        analysis.wishlist!.monthlyBreakdown!.map((e) => e.itemsAdded ?? 0).toList(),
                       ],
-                      colors: const [
-                        MyColors.primary,
-                        MyColors.green,
-                        Colors.red,
-                      ],
+                      colors: const [MyColors.primary, MyColors.green, Colors.red],
                       legends: const ["Item Added"],
                     ),
                   const Gap(10),
@@ -610,12 +522,7 @@ class ReportView extends GetView<ReportController> {
                             .map((e) => e.cancelledRequirements ?? 0)
                             .toList(),
                       ],
-                      colors: const [
-                        MyColors.primary,
-                        Colors.orange,
-                        MyColors.green,
-                        Colors.red,
-                      ],
+                      colors: const [MyColors.primary, Colors.orange, MyColors.green, Colors.red],
                       legends: const [
                         "Requirements Created",
                         "Pending Requirements",
@@ -644,12 +551,7 @@ class ReportView extends GetView<ReportController> {
                             .map((e) => e.cancelledRequirements ?? 0)
                             .toList(),
                       ],
-                      colors: const [
-                        MyColors.primary,
-                        Colors.orange,
-                        MyColors.green,
-                        Colors.red,
-                      ],
+                      colors: const [MyColors.primary, Colors.orange, MyColors.green, Colors.red],
                       legends: const [
                         "Requirements Created",
                         "Pending Requirements",
@@ -661,9 +563,7 @@ class ReportView extends GetView<ReportController> {
                   if (analysis.connectorSupportTickets != null)
                     ReportGraph(
                       title: "Support Ticket Analysis",
-                      labels: analysis
-                          .connectorSupportTickets!
-                          .monthlyBreakdown!
+                      labels: analysis.connectorSupportTickets!.monthlyBreakdown!
                           .map((e) => e.monthName!)
                           .toList(),
                       values: [
@@ -678,11 +578,7 @@ class ReportView extends GetView<ReportController> {
                             .toList(),
                       ],
                       colors: const [Colors.orange, Colors.red, MyColors.green],
-                      legends: const [
-                        "Open Tickets",
-                        "Closed Tickets",
-                        "Resolved Tickets",
-                      ],
+                      legends: const ["Open Tickets", "Closed Tickets", "Resolved Tickets"],
                     ),
 
                   const Gap(20),
@@ -737,10 +633,7 @@ class ProductStatCard extends StatelessWidget {
             ),
 
             const Gap(10),
-            Text(
-              subValue,
-              style: MyTexts.bold18.copyWith(color: MyColors.gray2E),
-            ),
+            Text(subValue, style: MyTexts.bold18.copyWith(color: MyColors.gray2E)),
             const Gap(2),
             Text(
               subtitle,
@@ -773,9 +666,7 @@ class ReportGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxY = values
-        .expand((list) => list)
-        .fold<int>(0, (prev, val) => val > prev ? val : prev);
+    final maxY = values.expand((list) => list).fold<int>(0, (prev, val) => val > prev ? val : prev);
 
     final double niceMax = _getNiceMax(maxY.toDouble());
 
@@ -805,16 +696,10 @@ class ReportGraph extends StatelessWidget {
                     Container(
                       width: 12,
                       height: 12,
-                      decoration: BoxDecoration(
-                        color: colors[i],
-                        shape: BoxShape.circle,
-                      ),
+                      decoration: BoxDecoration(color: colors[i], shape: BoxShape.circle),
                     ),
                     const Gap(6),
-                    Text(
-                      legends![i],
-                      style: MyTexts.medium13.copyWith(color: MyColors.gray54),
-                    ),
+                    Text(legends![i], style: MyTexts.medium13.copyWith(color: MyColors.gray54)),
                   ],
                 );
               }),
@@ -830,10 +715,7 @@ class ReportGraph extends StatelessWidget {
                   return BarChartGroupData(
                     x: i,
                     barRods: List.generate(values.length, (j) {
-                      return BarChartRodData(
-                        toY: values[j][i].toDouble(),
-                        color: colors[j],
-                      );
+                      return BarChartRodData(toY: values[j][i].toDouble(), color: colors[j]);
                     }),
                   );
                 }),
@@ -853,9 +735,7 @@ class ReportGraph extends StatelessWidget {
                             child: Text(
                               label.length > 3 ? label.substring(0, 3) : label,
                               textAlign: TextAlign.end,
-                              style: MyTexts.medium13.copyWith(
-                                color: MyColors.grayA5,
-                              ),
+                              style: MyTexts.medium13.copyWith(color: MyColors.grayA5),
                             ),
                           ),
                         );
@@ -870,19 +750,14 @@ class ReportGraph extends StatelessWidget {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           value.toInt().toString(),
-                          style: MyTexts.bold13.copyWith(
-                            color: MyColors.grayA5,
-                          ),
+                          style: MyTexts.bold13.copyWith(color: MyColors.grayA5),
                         );
                       },
                     ),
                   ),
                   rightTitles: const AxisTitles(),
                 ),
-                borderData: FlBorderData(
-                  show: true,
-                  border: Border.all(color: MyColors.grayD4),
-                ),
+                borderData: FlBorderData(show: true, border: Border.all(color: MyColors.grayD4)),
                 gridData: const FlGridData(show: false),
               ),
             ),

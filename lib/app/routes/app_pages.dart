@@ -23,6 +23,8 @@ import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/bindi
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/saleDetail/bindings/sale_detail_binding.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/saleDetail/views/sale_lead_detail_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/view/sales_screen.dart';
+import 'package:construction_technect/app/modules/CRM/more/analysis/bindings/analysis_binding.dart';
+import 'package:construction_technect/app/modules/CRM/more/analysis/views/analysis_screen.dart';
 import 'package:construction_technect/app/modules/CRM/reminder/bindings/reminder_bindings.dart';
 import 'package:construction_technect/app/modules/CRM/reminder/view/set_reminder_screen.dart';
 import 'package:construction_technect/app/modules/CRM/requirement/add/bindings/add_new_requ_binding.dart';
@@ -366,6 +368,11 @@ class AppPages {
       name: Routes.SetReminder,
       page: () => const SetReminderScreen(),
       binding: ReminderBindings(),
+    ),
+    GetPage(
+      name: Routes.CrmAnalysis,
+      page: () => const AnalysisScreen(),
+      binding: AnalysisBinding(),
     ),
   ];
 }
