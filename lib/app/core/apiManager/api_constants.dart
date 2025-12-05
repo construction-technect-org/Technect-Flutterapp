@@ -143,4 +143,5 @@ class APIConstants {
   static const String crmSalesLead = "crm/sales-lead";
   static const String crmAnalytics = "crm/analytics";
   static const String crmAnalyticsPdf = "crm/analytics/pdf";
+  static const String crmNotification = "crm/notification";
 }
