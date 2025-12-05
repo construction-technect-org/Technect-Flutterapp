@@ -13,8 +13,6 @@ class APIConstants {
 
   static const String notificationToggle = "notification-settings/toggle";
 
-  static const String crmAnalytics = "crm/analytics";
-
   static const String deactivateSendOtp = "auth/deactivate/send-otp";
   static const String deactivateVerifyOtp = "auth/deactivate/verify-otp";
   static const String deleteSendOtp = "auth/delete/send-otp";
@@ -143,4 +141,5 @@ class APIConstants {
   static const String autoFill = "crm/lead/auto-fill";
   static const String crmLead = "crm/lead";
   static const String crmSalesLead = "crm/sales-lead";
+  static const String crmAnalytics = "crm/analytics";
 }
