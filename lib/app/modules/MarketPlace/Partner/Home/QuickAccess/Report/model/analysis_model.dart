@@ -38,6 +38,11 @@ class Analysis {
   DateRange? dateRange;
   OverallStatistics? overallStatistics;
 
+  LeadAnalytics? leadAnalytics;
+  SalesLeadAnalytics? salesLeadAnalytics;
+  AccountLeadAnalytics? accountLeadAnalytics;
+  PerformanceAnalytics? performanceAnalytics;
+
   Analysis({
     this.productAnalytics,
     this.serviceAnalytics,
@@ -53,6 +58,10 @@ class Analysis {
     this.supportTicketAnalytics,
     this.generatedAt,
     this.dateRange,
+    this.leadAnalytics,
+    this.salesLeadAnalytics,
+    this.accountLeadAnalytics,
+    this.performanceAnalytics,
   });
 
   Analysis.fromJson(Map<String, dynamic> json) {
@@ -75,12 +84,8 @@ class Analysis {
     overallStatistics = json['overall_statistics'] != null
         ? OverallStatistics.fromJson(json['overall_statistics'])
         : null;
-    dateRange = json['date_range'] != null
-        ? DateRange.fromJson(json['date_range'])
-        : null;
-    wishlist = json['wishlist'] != null
-        ? WishlistAnalytics.fromJson(json['wishlist'])
-        : null;
+    dateRange = json['date_range'] != null ? DateRange.fromJson(json['date_range']) : null;
+    wishlist = json['wishlist'] != null ? WishlistAnalytics.fromJson(json['wishlist']) : null;
     productConnections = json['product_connections'] != null
         ? ProductConnectionsAnalytics.fromJson(json['product_connections'])
         : null;
@@ -95,6 +100,18 @@ class Analysis {
         : null;
     connectorSupportTickets = json['support_tickets'] != null
         ? ConnectorSupportTicketsAnalytics.fromJson(json['support_tickets'])
+        : null;
+    leadAnalytics = json['lead_analytics'] != null
+        ? LeadAnalytics.fromJson(json['lead_analytics'])
+        : null;
+    salesLeadAnalytics = json['sales_lead_analytics'] != null
+        ? SalesLeadAnalytics.fromJson(json['sales_lead_analytics'])
+        : null;
+    accountLeadAnalytics = json['account_lead_analytics'] != null
+        ? AccountLeadAnalytics.fromJson(json['account_lead_analytics'])
+        : null;
+    performanceAnalytics = json['performance_analytics'] != null
+        ? PerformanceAnalytics.fromJson(json['performance_analytics'])
         : null;
   }
 
@@ -139,6 +156,18 @@ class Analysis {
     data['generated_at'] = generatedAt;
     if (dateRange != null) {
       data['date_range'] = dateRange!.toJson();
+    }
+    if (leadAnalytics != null) {
+      data['lead_analytics'] = leadAnalytics!.toJson();
+    }
+    if (salesLeadAnalytics != null) {
+      data['sales_lead_analytics'] = salesLeadAnalytics!.toJson();
+    }
+    if (accountLeadAnalytics != null) {
+      data['account_lead_analytics'] = accountLeadAnalytics!.toJson();
+    }
+    if (performanceAnalytics != null) {
+      data['performance_analytics'] = performanceAnalytics!.toJson();
     }
     return data;
   }
@@ -198,6 +227,637 @@ class OverallStatistics {
   }
 }
 
+// ------------------- LEAD ANALYTICS -------------------
+class LeadAnalytics {
+  int? totalLeads;
+  int? leadsCreatedInPeriod;
+  List<StatusCount>? leadsByStatus;
+  List<SourceCount>? leadsBySource;
+  double? conversionToSalesRate;
+  List<LeadMonthlyBreakdown>? monthlyBreakdown;
+
+  LeadAnalytics({
+    this.totalLeads,
+    this.leadsCreatedInPeriod,
+    this.leadsByStatus,
+    this.leadsBySource,
+    this.conversionToSalesRate,
+    this.monthlyBreakdown,
+  });
+
+  LeadAnalytics.fromJson(Map<String, dynamic> json) {
+    totalLeads = json['total_leads'];
+    leadsCreatedInPeriod = json['leads_created_in_period'];
+    if (json['leads_by_status'] != null) {
+      leadsByStatus = <StatusCount>[];
+      json['leads_by_status'].forEach((v) {
+        leadsByStatus!.add(StatusCount.fromJson(v));
+      });
+    }
+    if (json['leads_by_source'] != null) {
+      leadsBySource = <SourceCount>[];
+      json['leads_by_source'].forEach((v) {
+        leadsBySource!.add(SourceCount.fromJson(v));
+      });
+    }
+    conversionToSalesRate = (json['conversion_to_sales_rate'] as num?)?.toDouble();
+    if (json['monthly_breakdown'] != null) {
+      monthlyBreakdown = <LeadMonthlyBreakdown>[];
+      json['monthly_breakdown'].forEach((v) {
+        monthlyBreakdown!.add(LeadMonthlyBreakdown.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_leads'] = totalLeads;
+    data['leads_created_in_period'] = leadsCreatedInPeriod;
+    if (leadsByStatus != null) {
+      data['leads_by_status'] = leadsByStatus!.map((v) => v.toJson()).toList();
+    }
+    if (leadsBySource != null) {
+      data['leads_by_source'] = leadsBySource!.map((v) => v.toJson()).toList();
+    }
+    data['conversion_to_sales_rate'] = conversionToSalesRate;
+    if (monthlyBreakdown != null) {
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class StatusCount {
+  String? status;
+  int? count;
+
+  StatusCount({this.status, this.count});
+
+  StatusCount.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    count = json['count'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['count'] = count;
+    return data;
+  }
+}
+
+class SourceCount {
+  String? source;
+  int? count;
+
+  SourceCount({this.source, this.count});
+
+  SourceCount.fromJson(Map<String, dynamic> json) {
+    source = json['source'];
+    count = json['count'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['source'] = source;
+    data['count'] = count;
+    return data;
+  }
+}
+
+class LeadMonthlyBreakdown {
+  int? monthNumber;
+  String? monthName;
+  int? year;
+  int? leadsCreated;
+  int? convertedToSales;
+
+  LeadMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.leadsCreated,
+    this.convertedToSales,
+  });
+
+  LeadMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
+    monthNumber = json['month_number'];
+    monthName = json['month_name'];
+    year = json['year'];
+    leadsCreated = json['leads_created'];
+    convertedToSales = json['converted_to_sales'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['month_number'] = monthNumber;
+    data['month_name'] = monthName;
+    data['year'] = year;
+    data['leads_created'] = leadsCreated;
+    data['converted_to_sales'] = convertedToSales;
+    return data;
+  }
+}
+
+// ------------------- SALES LEAD ANALYTICS -------------------
+class SalesLeadAnalytics {
+  int? totalSalesLeads;
+  int? salesLeadsCreatedInPeriod;
+  List<StageCount>? salesLeadsByStage;
+  List<StatusCount>? salesLeadsByStatus;
+  List<PipelineMetric>? pipelineMetrics;
+  double? winRate;
+  double? lossRate;
+  List<StageTime>? averageTimeInStage;
+  List<SalesLeadMonthlyBreakdown>? monthlyBreakdown;
+
+  SalesLeadAnalytics({
+    this.totalSalesLeads,
+    this.salesLeadsCreatedInPeriod,
+    this.salesLeadsByStage,
+    this.salesLeadsByStatus,
+    this.pipelineMetrics,
+    this.winRate,
+    this.lossRate,
+    this.averageTimeInStage,
+    this.monthlyBreakdown,
+  });
+
+  SalesLeadAnalytics.fromJson(Map<String, dynamic> json) {
+    totalSalesLeads = json['total_sales_leads'];
+    salesLeadsCreatedInPeriod = json['sales_leads_created_in_period'];
+    if (json['sales_leads_by_stage'] != null) {
+      salesLeadsByStage = <StageCount>[];
+      json['sales_leads_by_stage'].forEach((v) {
+        salesLeadsByStage!.add(StageCount.fromJson(v));
+      });
+    }
+    if (json['sales_leads_by_status'] != null) {
+      salesLeadsByStatus = <StatusCount>[];
+      json['sales_leads_by_status'].forEach((v) {
+        salesLeadsByStatus!.add(StatusCount.fromJson(v));
+      });
+    }
+    if (json['pipeline_metrics'] != null) {
+      pipelineMetrics = <PipelineMetric>[];
+      json['pipeline_metrics'].forEach((v) {
+        pipelineMetrics!.add(PipelineMetric.fromJson(v));
+      });
+    }
+    winRate = (json['win_rate'] as num?)?.toDouble();
+    lossRate = (json['loss_rate'] as num?)?.toDouble();
+    if (json['average_time_in_stage'] != null) {
+      averageTimeInStage = <StageTime>[];
+      json['average_time_in_stage'].forEach((v) {
+        averageTimeInStage!.add(StageTime.fromJson(v));
+      });
+    }
+    if (json['monthly_breakdown'] != null) {
+      monthlyBreakdown = <SalesLeadMonthlyBreakdown>[];
+      json['monthly_breakdown'].forEach((v) {
+        monthlyBreakdown!.add(SalesLeadMonthlyBreakdown.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_sales_leads'] = totalSalesLeads;
+    data['sales_leads_created_in_period'] = salesLeadsCreatedInPeriod;
+    if (salesLeadsByStage != null) {
+      data['sales_leads_by_stage'] = salesLeadsByStage!.map((v) => v.toJson()).toList();
+    }
+    if (salesLeadsByStatus != null) {
+      data['sales_leads_by_status'] = salesLeadsByStatus!.map((v) => v.toJson()).toList();
+    }
+    if (pipelineMetrics != null) {
+      data['pipeline_metrics'] = pipelineMetrics!.map((v) => v.toJson()).toList();
+    }
+    data['win_rate'] = winRate;
+    data['loss_rate'] = lossRate;
+    if (averageTimeInStage != null) {
+      data['average_time_in_stage'] = averageTimeInStage!.map((v) => v.toJson()).toList();
+    }
+    if (monthlyBreakdown != null) {
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class StageCount {
+  String? stage;
+  String? stageDisplay;
+  int? count;
+
+  StageCount({this.stage, this.stageDisplay, this.count});
+
+  StageCount.fromJson(Map<String, dynamic> json) {
+    stage = json['stage'];
+    stageDisplay = json['stage_display'];
+    count = json['count'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['stage'] = stage;
+    data['stage_display'] = stageDisplay;
+    data['count'] = count;
+    return data;
+  }
+}
+
+class PipelineMetric {
+  String? stage;
+  String? stageDisplay;
+  int? total;
+  int? won;
+  int? lost;
+  int? pending;
+  double? conversionRate;
+
+  PipelineMetric({
+    this.stage,
+    this.stageDisplay,
+    this.total,
+    this.won,
+    this.lost,
+    this.pending,
+    this.conversionRate,
+  });
+
+  PipelineMetric.fromJson(Map<String, dynamic> json) {
+    stage = json['stage'];
+    stageDisplay = json['stage_display'];
+    total = json['total'];
+    won = json['won'];
+    lost = json['lost'];
+    pending = json['pending'];
+    conversionRate = (json['conversion_rate'] as num?)?.toDouble();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['stage'] = stage;
+    data['stage_display'] = stageDisplay;
+    data['total'] = total;
+    data['won'] = won;
+    data['lost'] = lost;
+    data['pending'] = pending;
+    data['conversion_rate'] = conversionRate;
+    return data;
+  }
+}
+
+class StageTime {
+  String? stage;
+  String? stageDisplay;
+  double? averageDays;
+
+  StageTime({this.stage, this.stageDisplay, this.averageDays});
+
+  StageTime.fromJson(Map<String, dynamic> json) {
+    stage = json['stage'];
+    stageDisplay = json['stage_display'];
+    averageDays = (json['average_days'] as num?)?.toDouble();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['stage'] = stage;
+    data['stage_display'] = stageDisplay;
+    data['average_days'] = averageDays;
+    return data;
+  }
+}
+
+class SalesLeadMonthlyBreakdown {
+  int? monthNumber;
+  String? monthName;
+  int? year;
+  int? salesLeadsCreated;
+  int? won;
+  int? lost;
+  int? pending;
+
+  SalesLeadMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.salesLeadsCreated,
+    this.won,
+    this.lost,
+    this.pending,
+  });
+
+  SalesLeadMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
+    monthNumber = json['month_number'];
+    monthName = json['month_name'];
+    year = json['year'];
+    salesLeadsCreated = json['sales_leads_created'];
+    won = json['won'];
+    lost = json['lost'];
+    pending = json['pending'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['month_number'] = monthNumber;
+    data['month_name'] = monthName;
+    data['year'] = year;
+    data['sales_leads_created'] = salesLeadsCreated;
+    data['won'] = won;
+    data['lost'] = lost;
+    data['pending'] = pending;
+    return data;
+  }
+}
+
+// ------------------- ACCOUNT LEAD ANALYTICS -------------------
+class AccountLeadAnalytics {
+  int? totalAccountLeads;
+  int? accountLeadsCreatedInPeriod;
+  List<StageCount>? accountLeadsByStage;
+  List<StatusCount>? accountLeadsByStatus;
+  List<CollectionMetric>? collectionMetrics;
+  double? collectionRate;
+  List<AccountLeadMonthlyBreakdown>? monthlyBreakdown;
+
+  AccountLeadAnalytics({
+    this.totalAccountLeads,
+    this.accountLeadsCreatedInPeriod,
+    this.accountLeadsByStage,
+    this.accountLeadsByStatus,
+    this.collectionMetrics,
+    this.collectionRate,
+    this.monthlyBreakdown,
+  });
+
+  AccountLeadAnalytics.fromJson(Map<String, dynamic> json) {
+    totalAccountLeads = json['total_account_leads'];
+    accountLeadsCreatedInPeriod = json['account_leads_created_in_period'];
+    if (json['account_leads_by_stage'] != null) {
+      accountLeadsByStage = <StageCount>[];
+      json['account_leads_by_stage'].forEach((v) {
+        accountLeadsByStage!.add(StageCount.fromJson(v));
+      });
+    }
+    if (json['account_leads_by_status'] != null) {
+      accountLeadsByStatus = <StatusCount>[];
+      json['account_leads_by_status'].forEach((v) {
+        accountLeadsByStatus!.add(StatusCount.fromJson(v));
+      });
+    }
+    if (json['collection_metrics'] != null) {
+      collectionMetrics = <CollectionMetric>[];
+      json['collection_metrics'].forEach((v) {
+        collectionMetrics!.add(CollectionMetric.fromJson(v));
+      });
+    }
+    collectionRate = (json['collection_rate'] as num?)?.toDouble();
+    if (json['monthly_breakdown'] != null) {
+      monthlyBreakdown = <AccountLeadMonthlyBreakdown>[];
+      json['monthly_breakdown'].forEach((v) {
+        monthlyBreakdown!.add(AccountLeadMonthlyBreakdown.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_account_leads'] = totalAccountLeads;
+    data['account_leads_created_in_period'] = accountLeadsCreatedInPeriod;
+    if (accountLeadsByStage != null) {
+      data['account_leads_by_stage'] = accountLeadsByStage!.map((v) => v.toJson()).toList();
+    }
+    if (accountLeadsByStatus != null) {
+      data['account_leads_by_status'] = accountLeadsByStatus!.map((v) => v.toJson()).toList();
+    }
+    if (collectionMetrics != null) {
+      data['collection_metrics'] = collectionMetrics!.map((v) => v.toJson()).toList();
+    }
+    data['collection_rate'] = collectionRate;
+    if (monthlyBreakdown != null) {
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class CollectionMetric {
+  String? stage;
+  String? stageDisplay;
+  int? total;
+  int? collected;
+  int? pending;
+  double? collectionRate;
+
+  CollectionMetric({
+    this.stage,
+    this.stageDisplay,
+    this.total,
+    this.collected,
+    this.pending,
+    this.collectionRate,
+  });
+
+  CollectionMetric.fromJson(Map<String, dynamic> json) {
+    stage = json['stage'];
+    stageDisplay = json['stage_display'];
+    total = json['total'];
+    collected = json['collected'];
+    pending = json['pending'];
+    collectionRate = (json['collection_rate'] as num?)?.toDouble();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['stage'] = stage;
+    data['stage_display'] = stageDisplay;
+    data['total'] = total;
+    data['collected'] = collected;
+    data['pending'] = pending;
+    data['collection_rate'] = collectionRate;
+    return data;
+  }
+}
+
+class AccountLeadMonthlyBreakdown {
+  int? monthNumber;
+  String? monthName;
+  int? year;
+  int? accountLeadsCreated;
+  int? collected;
+  int? pending;
+
+  AccountLeadMonthlyBreakdown({
+    this.monthNumber,
+    this.monthName,
+    this.year,
+    this.accountLeadsCreated,
+    this.collected,
+    this.pending,
+  });
+
+  AccountLeadMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
+    monthNumber = json['month_number'];
+    monthName = json['month_name'];
+    year = json['year'];
+    accountLeadsCreated = json['account_leads_created'];
+    collected = json['collected'];
+    pending = json['pending'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['month_number'] = monthNumber;
+    data['month_name'] = monthName;
+    data['year'] = year;
+    data['account_leads_created'] = accountLeadsCreated;
+    data['collected'] = collected;
+    data['pending'] = pending;
+    return data;
+  }
+}
+
+// ------------------- PERFORMANCE ANALYTICS -------------------
+class PerformanceAnalytics {
+  List<UserPerformance>? byUser;
+  List<TeamMemberPerformance>? byTeamMember;
+
+  PerformanceAnalytics({this.byUser, this.byTeamMember});
+
+  PerformanceAnalytics.fromJson(Map<String, dynamic> json) {
+    if (json['by_user'] != null) {
+      byUser = <UserPerformance>[];
+      json['by_user'].forEach((v) {
+        byUser!.add(UserPerformance.fromJson(v));
+      });
+    }
+    if (json['by_team_member'] != null) {
+      byTeamMember = <TeamMemberPerformance>[];
+      json['by_team_member'].forEach((v) {
+        byTeamMember!.add(TeamMemberPerformance.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (byUser != null) {
+      data['by_user'] = byUser!.map((v) => v.toJson()).toList();
+    }
+    if (byTeamMember != null) {
+      data['by_team_member'] = byTeamMember!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class UserPerformance {
+  int? userId;
+  String? userName;
+  int? totalLeads;
+  int? totalSalesLeads;
+  int? totalAccountLeads;
+  int? wonSalesLeads;
+  int? collectedAccountLeads;
+  double? winRate;
+  double? collectionRate;
+
+  UserPerformance({
+    this.userId,
+    this.userName,
+    this.totalLeads,
+    this.totalSalesLeads,
+    this.totalAccountLeads,
+    this.wonSalesLeads,
+    this.collectedAccountLeads,
+    this.winRate,
+    this.collectionRate,
+  });
+
+  UserPerformance.fromJson(Map<String, dynamic> json) {
+    userId = json['user_id'];
+    userName = json['user_name'];
+    totalLeads = json['total_leads'];
+    totalSalesLeads = json['total_sales_leads'];
+    totalAccountLeads = json['total_account_leads'];
+    wonSalesLeads = json['won_sales_leads'];
+    collectedAccountLeads = json['collected_account_leads'];
+    winRate = (json['win_rate'] as num?)?.toDouble();
+    collectionRate = (json['collection_rate'] as num?)?.toDouble();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['user_id'] = userId;
+    data['user_name'] = userName;
+    data['total_leads'] = totalLeads;
+    data['total_sales_leads'] = totalSalesLeads;
+    data['total_account_leads'] = totalAccountLeads;
+    data['won_sales_leads'] = wonSalesLeads;
+    data['collected_account_leads'] = collectedAccountLeads;
+    data['win_rate'] = winRate;
+    data['collection_rate'] = collectionRate;
+    return data;
+  }
+}
+
+class TeamMemberPerformance {
+  int? teamMemberId;
+  String? teamMemberName;
+  String? roleTitle;
+  int? totalAssigned;
+  int? totalSalesLeads;
+  int? totalAccountLeads;
+  int? wonSalesLeads;
+  int? collectedAccountLeads;
+  double? winRate;
+  double? collectionRate;
+
+  TeamMemberPerformance({
+    this.teamMemberId,
+    this.teamMemberName,
+    this.roleTitle,
+    this.totalAssigned,
+    this.totalSalesLeads,
+    this.totalAccountLeads,
+    this.wonSalesLeads,
+    this.collectedAccountLeads,
+    this.winRate,
+    this.collectionRate,
+  });
+
+  TeamMemberPerformance.fromJson(Map<String, dynamic> json) {
+    teamMemberId = json['team_member_id'];
+    teamMemberName = json['team_member_name'];
+    roleTitle = json['role_title'];
+    totalAssigned = json['total_assigned'];
+    totalSalesLeads = json['total_sales_leads'];
+    totalAccountLeads = json['total_account_leads'];
+    wonSalesLeads = json['won_sales_leads'];
+    collectedAccountLeads = json['collected_account_leads'];
+    winRate = (json['win_rate'] as num?)?.toDouble();
+    collectionRate = (json['collection_rate'] as num?)?.toDouble();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['team_member_id'] = teamMemberId;
+    data['team_member_name'] = teamMemberName;
+    data['role_title'] = roleTitle;
+    data['total_assigned'] = totalAssigned;
+    data['total_sales_leads'] = totalSalesLeads;
+    data['total_account_leads'] = totalAccountLeads;
+    data['won_sales_leads'] = wonSalesLeads;
+    data['collected_account_leads'] = collectedAccountLeads;
+    data['win_rate'] = winRate;
+    data['collection_rate'] = collectionRate;
+    return data;
+  }
+}
+
 // ------------------- SERVICE -------------------
 class ServiceAnalytics {
   int? totalServices;
@@ -238,9 +898,7 @@ class ServiceAnalytics {
     data['active_services'] = activeServices;
     data['rejected_services'] = rejectedServices;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -328,9 +986,7 @@ class ProductAnalytics {
     data['active_products'] = activeProducts;
     data['rejected_products'] = rejectedProducts;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -410,9 +1066,7 @@ class TeamAnalytics {
     data['team_members_added'] = teamMembersAdded;
     data['available_team_members'] = availableTeamMembers;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -492,14 +1146,10 @@ class RoleAnalytics {
     data['roles_created'] = rolesCreated;
     data['active_roles'] = activeRoles;
     if (roleDistribution != null) {
-      data['role_distribution'] = roleDistribution!
-          .map((v) => v.toJson())
-          .toList();
+      data['role_distribution'] = roleDistribution!.map((v) => v.toJson()).toList();
     }
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -598,9 +1248,7 @@ class SupportTicketAnalytics {
     data['closed_tickets'] = closedTickets;
     data['resolved_tickets'] = resolvedTickets;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -673,11 +1321,7 @@ class WishlistAnalytics {
   int? itemsAddedInPeriod;
   List<WishlistMonthlyBreakdown>? monthlyBreakdown;
 
-  WishlistAnalytics({
-    this.totalItems,
-    this.itemsAddedInPeriod,
-    this.monthlyBreakdown,
-  });
+  WishlistAnalytics({this.totalItems, this.itemsAddedInPeriod, this.monthlyBreakdown});
 
   WishlistAnalytics.fromJson(Map<String, dynamic> json) {
     totalItems = json['total_items'];
@@ -695,9 +1339,7 @@ class WishlistAnalytics {
     data['total_items'] = totalItems;
     data['items_added_in_period'] = itemsAddedInPeriod;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -709,12 +1351,7 @@ class WishlistMonthlyBreakdown {
   int? year;
   int? itemsAdded;
 
-  WishlistMonthlyBreakdown({
-    this.monthNumber,
-    this.monthName,
-    this.year,
-    this.itemsAdded,
-  });
+  WishlistMonthlyBreakdown({this.monthNumber, this.monthName, this.year, this.itemsAdded});
 
   WishlistMonthlyBreakdown.fromJson(Map<String, dynamic> json) {
     monthNumber = json['month_number'];
@@ -761,9 +1398,7 @@ class ProductConnectionsAnalytics {
     data['total_connections'] = totalConnections;
     data['connections_created_in_period'] = connectionsCreatedInPeriod;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -813,8 +1448,7 @@ class ServiceConnectionsAnalytics {
 
   ServiceConnectionsAnalytics.fromJson(Map<String, dynamic> json) {
     totalServiceConnections = json['total_service_connections'];
-    serviceConnectionsCreatedInPeriod =
-        json['service_connections_created_in_period'];
+    serviceConnectionsCreatedInPeriod = json['service_connections_created_in_period'];
     if (json['monthly_breakdown'] != null) {
       monthlyBreakdown = <ServiceConnectionsMonthlyBreakdown>[];
       json['monthly_breakdown'].forEach((v) {
@@ -826,12 +1460,9 @@ class ServiceConnectionsAnalytics {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['total_service_connections'] = totalServiceConnections;
-    data['service_connections_created_in_period'] =
-        serviceConnectionsCreatedInPeriod;
+    data['service_connections_created_in_period'] = serviceConnectionsCreatedInPeriod;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -907,9 +1538,7 @@ class ServiceRequirementsAnalytics {
     data['fulfilled_requirements'] = fulfilledRequirements;
     data['cancelled_requirements'] = cancelledRequirements;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -997,9 +1626,7 @@ class ProductRequirementsAnalytics {
     data['fulfilled_requirements'] = fulfilledRequirements;
     data['cancelled_requirements'] = cancelledRequirements;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -1074,9 +1701,7 @@ class ConnectorSupportTicketsAnalytics {
     if (json['monthly_breakdown'] != null) {
       monthlyBreakdown = <ConnectorSupportTicketsMonthlyBreakdown>[];
       json['monthly_breakdown'].forEach((v) {
-        monthlyBreakdown!.add(
-          ConnectorSupportTicketsMonthlyBreakdown.fromJson(v),
-        );
+        monthlyBreakdown!.add(ConnectorSupportTicketsMonthlyBreakdown.fromJson(v));
       });
     }
   }
@@ -1089,9 +1714,7 @@ class ConnectorSupportTicketsAnalytics {
     data['closed_tickets'] = closedTickets;
     data['resolved_tickets'] = resolvedTickets;
     if (monthlyBreakdown != null) {
-      data['monthly_breakdown'] = monthlyBreakdown!
-          .map((v) => v.toJson())
-          .toList();
+      data['monthly_breakdown'] = monthlyBreakdown!.map((v) => v.toJson()).toList();
     }
     return data;
   }

@@ -53,6 +53,42 @@ class AnalysisService {
     return null;
   }
 
+  Future<AnalysisModel?> fetchAllCRMAnalysis({
+    required String startMonth,
+    required String startYear,
+    required String endMonth,
+    required String endYear,
+  }) async {
+    try {
+      final par = {
+        "startMonth": startMonth,
+        "startYear": startYear,
+        "endMonth": endMonth,
+        "endYear": endYear,
+      };
+      final response = await _apiManager.get(url: APIConstants.crmAnalytics, params: par);
+      if (response != null) {
+        return AnalysisModel.fromJson(response);
+      }
+    } catch (e) {
+      log("Error fetching analysis: $e");
+    }
+    return null;
+  }
+
+  Future<AnalysisModel?> fetchAllCRMAnalysisByPeriod({required String period}) async {
+    try {
+      final par = {"period": period};
+      final response = await _apiManager.get(url: APIConstants.crmAnalytics, params: par);
+      if (response != null) {
+        return AnalysisModel.fromJson(response);
+      }
+    } catch (e) {
+      log("Error fetching analysis: $e");
+    }
+    return null;
+  }
+
   Future<Uint8List?> fetchReportPdfByPeriod({
     String? period,
     required String token,

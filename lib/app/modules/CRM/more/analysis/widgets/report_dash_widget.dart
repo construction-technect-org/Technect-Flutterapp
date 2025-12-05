@@ -11,63 +11,41 @@ class ReportDashWidget extends GetView<AnalysisController> {
       children: [
         Row(
           children: [
-            if (myPref.role.val == "connector")
-              Obx(() {
-                return ProductStatCard(
-                  iconAsset: Asset.totalProduct,
-                  title: "Total Merchants",
-                  value:
-                      controller.analysisModel.value.overallStatistics?.totalMerchant.toString() ??
-                      "98",
-                  subtitle: "Active Merchants",
-                  subValue:
-                      controller.analysisModel.value.overallStatistics?.activeMerchant.toString() ??
-                      "98",
-                );
-              }),
-            if (myPref.role.val == "partner")
-              Obx(() {
-                return ProductStatCard(
-                  iconAsset: Asset.totalProduct,
-                  title: "Total Connectors",
-                  value:
-                      controller.analysisModel.value.overallStatistics?.totalConnectors
-                          .toString() ??
-                      "98",
-                  subtitle: "Active Connectors",
-                  subValue:
-                      controller.analysisModel.value.overallStatistics?.activeConnectors
-                          .toString() ??
-                      "",
-                );
-              }),
-
-            const Gap(5),
             Obx(() {
               return ProductStatCard(
                 iconAsset: Asset.totalProduct,
-                title: "Total Products",
-                value:
-                    controller.analysisModel.value.overallStatistics?.totalProducts.toString() ??
-                    "98",
-                subtitle: "Active Products",
+                title: "Total Leads",
+                value: controller.analysisModel.value.leadAnalytics?.totalLeads.toString() ?? "0",
+                subtitle: "Conversion Rate",
                 subValue:
-                    controller.analysisModel.value.overallStatistics?.activeProducts.toString() ??
-                    "98",
+                    "${controller.analysisModel.value.leadAnalytics?.conversionToSalesRate?.toStringAsFixed(1) ?? "0"}%",
               );
             }),
             const Gap(5),
             Obx(() {
               return ProductStatCard(
                 iconAsset: Asset.totalProduct,
-
-                title: "Total Users",
+                title: "Sales Leads",
                 value:
-                    controller.analysisModel.value.overallStatistics?.totalUsers.toString() ?? "98",
-                subtitle: "Active Users",
+                    controller.analysisModel.value.salesLeadAnalytics?.totalSalesLeads.toString() ??
+                    "0",
+                subtitle: "Win Rate",
                 subValue:
-                    controller.analysisModel.value.overallStatistics?.activeUsers.toString() ??
-                    "98",
+                    "${controller.analysisModel.value.salesLeadAnalytics?.winRate?.toStringAsFixed(1) ?? "0"}%",
+              );
+            }),
+            const Gap(5),
+            Obx(() {
+              return ProductStatCard(
+                iconAsset: Asset.totalProduct,
+                title: "Account Leads",
+                value:
+                    controller.analysisModel.value.accountLeadAnalytics?.totalAccountLeads
+                        .toString() ??
+                    "0",
+                subtitle: "Collection Rate",
+                subValue:
+                    "${controller.analysisModel.value.accountLeadAnalytics?.collectionRate?.toStringAsFixed(1) ?? "0"}%",
               );
             }),
           ],
