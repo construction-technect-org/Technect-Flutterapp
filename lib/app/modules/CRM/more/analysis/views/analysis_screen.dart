@@ -22,7 +22,7 @@ class AnalysisScreen extends GetView<AnalysisController> {
             children: [
               CommonAppBar(
                 backgroundColor: Colors.transparent,
-                title: const Text("Analysis"),
+                title: Text(controller.isReport.value ? "Report" : "Analysis"),
                 isCenter: false,
                 leading: GestureDetector(
                   onTap: () {
@@ -72,9 +72,9 @@ class AnalysisScreen extends GetView<AnalysisController> {
                   buttonName: "Download PDF",
                   onTap: () {
                     if (controller.selectedPeriod.value.isEmpty) {
-                      controller.downloadReportPdf(isPeriod: false);
+                      controller.fetchCRMReportPdfByPeriod(isPeriod: false);
                     } else {
-                      controller.downloadReportPdf(isPeriod: true);
+                      controller.fetchCRMReportPdfByPeriod(isPeriod: true);
                     }
                   },
                   width: 150,

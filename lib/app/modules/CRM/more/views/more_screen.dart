@@ -36,15 +36,13 @@ class CRMMoreScreen extends StatelessWidget {
               CommonContainer(
                 icon: Asset.report,
                 title: "Report",
-                onTap: () {
-                  // Get.toNamed(Routes.REPORT, arguments: {"isReport": true});
-                },
+                onTap: () => Get.toNamed(Routes.CrmAnalysis, arguments: {"isReport": true}),
               ),
               const Gap(16),
               CommonContainer(
                 icon: Asset.analysis,
                 title: "Analysis",
-                onTap: () => Get.toNamed(Routes.CrmAnalysis),
+                onTap: () => Get.toNamed(Routes.CrmAnalysis, arguments: {"isReport": false}),
               ),
               const Gap(16),
               CommonContainer(
