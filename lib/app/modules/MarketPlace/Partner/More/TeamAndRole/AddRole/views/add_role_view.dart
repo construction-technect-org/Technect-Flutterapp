@@ -17,10 +17,7 @@ class AddRoleView extends GetView<AddRoleController> {
               width: double.infinity,
               height: double.infinity,
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Asset.moreIBg),
-                  fit: BoxFit.cover,
-                ),
+                image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
               ),
             ),
 
@@ -28,9 +25,7 @@ class AddRoleView extends GetView<AddRoleController> {
               children: [
                 CommonAppBar(
                   backgroundColor: Colors.transparent,
-                  title: Text(
-                    controller.isEdit.value ? "Edit Role" : "Add  Role",
-                  ),
+                  title: Text(controller.isEdit.value ? "Edit Role" : "Add  Role"),
                   isCenter: false,
                   leading: GestureDetector(
                     onTap: () {
@@ -38,11 +33,7 @@ class AddRoleView extends GetView<AddRoleController> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -82,34 +73,18 @@ class AddRoleView extends GetView<AddRoleController> {
                             SizedBox(height: 2.h),
                             Text(
                               'Functionalities',
-                              style: MyTexts.medium15.copyWith(
-                                color: MyColors.gray2E,
-                              ),
+                              style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                             ),
                             SizedBox(height: 1.2.h),
                             Wrap(
-                              spacing: 16,
-                              runSpacing: 16,
-                              children: [
-                                _buildChip(
-                                  label: "Approvals",
-                                  assetImage: Asset.approvals,
-                                  color: MyColors.green,
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: controller.functionalities.map((functionality) {
+                                return _buildFunctionalityChip(
+                                  label: functionality,
                                   controller: controller,
-                                ),
-                                _buildChip(
-                                  label: "Management",
-                                  assetImage: Asset.management,
-                                  color: MyColors.warning,
-                                  controller: controller,
-                                ),
-                                _buildChip(
-                                  label: "Operations",
-                                  assetImage: Asset.operations,
-                                  color: MyColors.red,
-                                  controller: controller,
-                                ),
-                              ],
+                                );
+                              }).toList(),
                             ),
                           ],
                         ),
@@ -140,54 +115,49 @@ class AddRoleView extends GetView<AddRoleController> {
     );
   }
 
-  Widget _buildChip({
-    required String label,
-    required String assetImage,
-    required Color color,
-    required AddRoleController controller,
-  }) {
+  Widget _buildFunctionalityChip({required String label, required AddRoleController controller}) {
     return Obx(() {
-      final isSelected = controller.selectedFunctionalities.value == label;
-      const Color defaultColor = MyColors.darkSilver;
+      final isSelected = controller.isFunctionalitySelected(label);
 
-      final bool isEditMode = controller.isEdit.value;
+      final backgroundColor = isSelected ? const Color(0xFFE1FFD4) : const Color(0xFFF7F7F7);
+      final borderColor = isSelected ? const Color(0xFFC3E7C2) : const Color(0xFFEAEAEA);
+      const textColor = Color(0xFF2E2E2E);
 
-      return InkWell(
-        onTap: isEditMode
-            ? null
-            : () => controller.selectedFunctionalities.value = label,
-        borderRadius: BorderRadius.circular(30),
+      return GestureDetector(
+        onTap: () => controller.selectFunctionality(label),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           decoration: BoxDecoration(
-            color: isSelected
-                ? (isEditMode
-                      ? color.withValues(alpha: 0.05)
-                      : color.withValues(alpha: 0.1))
-                : Colors.transparent,
-            border: Border.all(
-              color: isSelected
-                  ? (isEditMode ? color.withValues(alpha: 0.5) : color)
-                  : defaultColor,
-            ),
-            borderRadius: BorderRadius.circular(30),
+            color: backgroundColor,
+            border: Border.all(color: borderColor),
+            borderRadius: BorderRadius.circular(8),
           ),
-
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                assetImage,
-                height: 20,
-                width: 20,
-                color: isSelected ? color : defaultColor,
-              ),
-              const SizedBox(width: 8),
+              if (isSelected)
+                const Icon(Icons.check, size: 12, color: Color(0xFF000000))
+              else
+                Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              const SizedBox(width: 5),
               Text(
                 label,
                 style: MyTexts.medium15.copyWith(
-                  color: isSelected ? color : defaultColor,
+                  color: textColor,
+                  fontFamily: MyTexts.SpaceGrotesk,
+                  fontWeight: FontWeight.w500,
+                  height: 1.2,
                 ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),

@@ -9,11 +9,38 @@ class AddRoleController extends GetxController {
   final roleController = TextEditingController();
   final roleDescription = TextEditingController();
   final selectedFunctionalities = ''.obs;
+  final selectedFunctionality = ''.obs;
   final isLoading = false.obs;
   Rx<GetAllRole> dataModel = GetAllRole().obs;
 
   int? roleId;
   RxBool isEdit = false.obs;
+
+  // Comprehensive functionalities list
+  final List<String> functionalities = [
+    'Report',
+    'Analysis',
+    'Add Team',
+    'Lead Management',
+    'Sales Management',
+    'Accounts Management',
+    'Task Management',
+    'Settings',
+    'Chat System',
+    'Download',
+    'Add Lead',
+    'Edit Lead',
+    'Delete Lead',
+    'Add Sale',
+    'Edit Sale',
+    'Delete Sale',
+    'Add Account',
+    'Edit Account',
+    'Delete Account',
+    'Add steps',
+    'Edit steps',
+    'Delete steps',
+  ];
 
   @override
   void onInit() {
@@ -35,14 +62,39 @@ class AddRoleController extends GetxController {
     roleController.text = role.roleTitle ?? '';
     roleDescription.text = role.roleDescription ?? '';
 
-    selectedFunctionalities.value = role.functionalities ?? '';
+    final functionalityValue = role.functionalities ?? '';
+
+    // Check if the value exists in functionalities list (case-insensitive)
+    String found;
+    try {
+      found = functionalities.firstWhere(
+        (func) => func.toLowerCase() == functionalityValue.toLowerCase(),
+      );
+    } catch (e) {
+      found = functionalityValue;
+    }
+
+    selectedFunctionality.value = found;
+    selectedFunctionalities.value = found;
+  }
+
+  void selectFunctionality(String label) {
+    selectedFunctionality.value = label;
+    selectedFunctionalities.value = label;
+  }
+
+  bool isFunctionalitySelected(String label) {
+    return selectedFunctionality.value == label;
   }
 
   Future<void> saveRole() async {
-    if (selectedFunctionalities.value.isEmpty) {
-      Get.snackbar("Error", "Please select functionality");
+    if (selectedFunctionality.value.isEmpty) {
+      Get.snackbar("Error", "Please select a functionality");
       return;
     }
+
+    // Ensure functionality is set for API
+    selectedFunctionalities.value = selectedFunctionality.value;
 
     isLoading.value = true;
 

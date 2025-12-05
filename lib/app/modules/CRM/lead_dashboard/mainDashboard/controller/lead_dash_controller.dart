@@ -1,7 +1,44 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/services/dashboard_service.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/model/dashboard_model.dart';
 
 class LeadDashController extends GetxController {
+  final DashboardService _dashboardService = DashboardService();
   final isLoading = false.obs;
+
+  // Dashboard data - stores all three dashboard types
+  final allDashboardData = Rxn<AllDashboardData>();
+
+  // Helper to get current dashboard data based on selected tab
+  DashboardData? get currentDashboardData {
+    if (allDashboardData.value == null) return null;
+    if (totalMarketing.value) {
+      return allDashboardData.value!.marketing;
+    } else if (totalSales.value) {
+      return allDashboardData.value!.sales;
+    } else {
+      return allDashboardData.value!.account;
+    }
+  }
+
+  // Get conversion rate for marketing dashboard
+  double get conversionRate {
+    final data = allDashboardData.value?.marketing;
+    return data?.conversionRate ?? 78.0;
+  }
+
+  // Get revenue summary for sales dashboard
+  RevenueSummary? get revenueSummary {
+    final data = allDashboardData.value?.sales;
+    return data?.revenueSummary;
+  }
+
+  // Get total due for account dashboard
+  TotalCount? get totalDue {
+    final data = allDashboardData.value?.account;
+    return data?.totalDue;
+  }
+
   final selectedFilterIndex = 0.obs;
   final filterTabs = [
     'Leads',
@@ -55,40 +92,72 @@ class LeadDashController extends GetxController {
   }
 
   void leadSectionWidget() {
-    if (totalMarketing.value) {
-      rawLeads.value = 2;
-      followUpLeads.value = 9;
-      pendingLeads.value = 4;
-      rawLeadsText.value = "Raw Leads";
-      followUpLeadsText.value = "Follow up Leads";
-      pendingLeadsText.value = "Pending Leads";
-    } else if (totalSales.value) {
-      rawLeads.value = 120;
-      followUpLeads.value = 80;
-      pendingLeads.value = 40;
-      rawLeadsText.value = "New Sales";
-      followUpLeadsText.value = "In- Progresss";
-      pendingLeadsText.value = "Sales Won";
+    final data = currentDashboardData;
+
+    if (data != null && data.statCards.isNotEmpty) {
+      // Use API data
+      rawLeads.value = data.statCards[0].value;
+      rawLeadsText.value = data.statCards[0].title;
+
+      if (data.statCards.length > 1) {
+        followUpLeads.value = data.statCards[1].value;
+        followUpLeadsText.value = data.statCards[1].title;
+      }
+
+      if (data.statCards.length > 2) {
+        pendingLeads.value = data.statCards[2].value;
+        pendingLeadsText.value = data.statCards[2].title;
+      }
     } else {
-      rawLeads.value = 100;
-      followUpLeads.value = 80;
-      pendingLeads.value = 120;
-      rawLeadsText.value = "Pending";
-      followUpLeadsText.value = "Follow up";
-      pendingLeadsText.value = "Collected";
+      // Fallback to hardcoded values
+      if (totalMarketing.value) {
+        rawLeads.value = 2;
+        followUpLeads.value = 9;
+        pendingLeads.value = 4;
+        rawLeadsText.value = "Raw Leads";
+        followUpLeadsText.value = "Follow up Leads";
+        pendingLeadsText.value = "Pending Leads";
+      } else if (totalSales.value) {
+        rawLeads.value = 120;
+        followUpLeads.value = 80;
+        pendingLeads.value = 40;
+        rawLeadsText.value = "New Sales";
+        followUpLeadsText.value = "In- Progresss";
+        pendingLeadsText.value = "Sales Won";
+      } else {
+        rawLeads.value = 100;
+        followUpLeads.value = 80;
+        pendingLeads.value = 120;
+        rawLeadsText.value = "Pending";
+        followUpLeadsText.value = "Follow up";
+        pendingLeadsText.value = "Collected";
+      }
     }
   }
 
   String totalCount(int num) {
+    final data = currentDashboardData;
+
     if (num == 1) {
-      if (totalMarketing.value) {
-        return "Total Leads";
-      } else if (totalSales.value) {
-        return "Total Sales";
-      } else if (totalAccounts.value) {
-        return "Total Accounts";
-      }
+      // Return title
+      return data?.totalCount.title ??
+          (totalMarketing.value
+              ? "Total Leads"
+              : totalSales.value
+              ? "Total Sales"
+              : "Total Accounts");
     } else if (num == 2) {
+      // Return count (formatted)
+      if (data?.totalCount != null) {
+        final count = data!.totalCount.count;
+        if (totalMarketing.value) {
+          return count.toString();
+        } else {
+          // Format as currency for sales and account
+          return "₹ ${_formatCurrency(count)}";
+        }
+      }
+      // Fallback to hardcoded values
       if (totalMarketing.value) {
         return "98";
       } else if (totalSales.value) {
@@ -97,6 +166,13 @@ class LeadDashController extends GetxController {
         return "₹ 2,45,000";
       }
     } else {
+      // Return percentage change
+      if (data?.totalCount != null) {
+        final change = data!.totalCount.percentageChange;
+        final sign = change >= 0 ? "+" : "";
+        return "$sign${change.toStringAsFixed(1)}%";
+      }
+      // Fallback to hardcoded values
       if (totalMarketing.value) {
         return "+5.3%";
       } else if (totalSales.value) {
@@ -108,6 +184,18 @@ class LeadDashController extends GetxController {
     return "";
   }
 
+  String _formatCurrency(int amount) {
+    if (amount >= 100000) {
+      return "${(amount / 100000).toStringAsFixed(2)}L";
+    } else if (amount >= 1000) {
+      return "${(amount / 1000).toStringAsFixed(0)}K";
+    }
+    return amount.toString();
+  }
+
+  // Expose formatCurrency for use in views
+  String formatCurrency(int amount) => _formatCurrency(amount);
+
   void toggleCRMVRM(bool isCRM) {
     isCRMSelected.value = isCRM;
   }
@@ -117,18 +205,102 @@ class LeadDashController extends GetxController {
       totalMarketing.value = true;
       totalSales.value = false;
       totalAccounts.value = false;
-      // Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
     } else if (type == 'Sales') {
       totalMarketing.value = false;
       totalSales.value = true;
       totalAccounts.value = false;
-      // Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
     } else if (type == 'Accounts') {
       totalMarketing.value = false;
       totalSales.value = false;
       totalAccounts.value = true;
     }
+    // Update UI with cached data (no API call needed)
+    updateDashboardUI();
     leadSectionWidget();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchDashboardData();
+  }
+
+  Future<void> fetchDashboardData() async {
+    try {
+      isLoading.value = true;
+
+      // Fetch all three dashboard types in one API call
+      final response = await _dashboardService.getDashboard();
+      allDashboardData.value = response.data;
+
+      // Update UI with current tab's data
+      updateDashboardUI();
+    } catch (e) {
+      debugPrint('Error fetching dashboard: $e');
+      // Keep existing hardcoded values on error
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Refresh dashboard data (for pull-to-refresh)
+  Future<void> refreshDashboard() async {
+    await fetchDashboardData();
+  }
+
+  void updateDashboardUI() {
+    final data = currentDashboardData;
+    if (data == null) return;
+    // Update total count
+    if (data.totalCount != null) {
+      // The totalCount method will use dashboardData
+    }
+
+    // Update stat cards
+    if (data.statCards.isNotEmpty) {
+      rawLeads.value = data.statCards[0].value;
+      rawLeadsText.value = data.statCards[0].title;
+
+      if (data.statCards.length > 1) {
+        followUpLeads.value = data.statCards[1].value;
+        followUpLeadsText.value = data.statCards[1].title;
+      }
+
+      if (data.statCards.length > 2) {
+        pendingLeads.value = data.statCards[2].value;
+        pendingLeadsText.value = data.statCards[2].title;
+      }
+    }
+
+    // Update funnel data
+    if (data.funnelData.isNotEmpty) {
+      funnelData.value = data.funnelData
+          .map(
+            (f) => {
+              'label': f.label,
+              'count': f.count,
+              'color': _parseColor(f.color),
+            },
+          )
+          .toList();
+    }
+
+    // Update product chart
+    if (data.productChart.isNotEmpty) {
+      productA.value = data.productChart
+          .map((p) => p.productA.toDouble())
+          .toList();
+      productB.value = data.productChart
+          .map((p) => p.productB.toDouble())
+          .toList();
+    }
+  }
+
+  Color _parseColor(String colorString) {
+    // Remove # if present
+    final hex = colorString.replaceAll('#', '');
+    // Parse hex to Color
+    return Color(int.parse('FF$hex', radix: 16));
   }
 
   void navigtionInLead() {
@@ -156,8 +328,34 @@ class LeadDashController extends GetxController {
     'DEC',
   ];
 
-  final productA = <double>[500, 850, 850, 480, 580, 720, 1100, 1020, 950, 980, 1100, 1050].obs;
-  final productB = <double>[200, 480, 700, 780, 720, 640, 660, 700, 850, 1150, 1200, 1100].obs;
+  final productA = <double>[
+    500,
+    850,
+    850,
+    480,
+    580,
+    720,
+    1100,
+    1020,
+    950,
+    980,
+    1100,
+    1050,
+  ].obs;
+  final productB = <double>[
+    200,
+    480,
+    700,
+    780,
+    720,
+    640,
+    660,
+    700,
+    850,
+    1150,
+    1200,
+    1100,
+  ].obs;
   final showA = true.obs;
   final showB = true.obs;
 

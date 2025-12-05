@@ -16,12 +16,7 @@ class RoleCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: MyColors.white,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: MyColors.grayEA.withValues(alpha: 0.32),
-                blurRadius: 4,
-              ),
-            ],
+            boxShadow: [BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4)],
           ),
           child: Column(
             children: [
@@ -39,9 +34,7 @@ class RoleCard extends StatelessWidget {
                             children: [
                               Text(
                                 role.roleTitle?.capitalizeFirst ?? '',
-                                style: MyTexts.medium16.copyWith(
-                                  color: MyColors.gray2E,
-                                ),
+                                style: MyTexts.medium16.copyWith(color: MyColors.gray2E),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
@@ -49,9 +42,7 @@ class RoleCard extends StatelessWidget {
                               const Gap(2),
                               Text(
                                 role.roleDescription ?? '',
-                                style: MyTexts.medium14.copyWith(
-                                  color: MyColors.gray54,
-                                ),
+                                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -61,10 +52,7 @@ class RoleCard extends StatelessWidget {
                         const Gap(20),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(
-                              Routes.ADD_ROLE,
-                              arguments: {"isEdit": true, "data": role},
-                            );
+                            Get.toNamed(Routes.ADD_ROLE, arguments: {"isEdit": true, "data": role});
                           },
                           behavior: HitTestBehavior.translucent,
                           child: SvgPicture.asset(Asset.edit),
@@ -74,9 +62,7 @@ class RoleCard extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             DeleteRoleDialog.showDeleteRoleDialog(context, () {
-                              Get.find<RoleManagementController>().deleteRole(
-                                role.id!,
-                              );
+                              Get.find<RoleManagementController>().deleteRole(role.id!);
                             });
                           },
                           behavior: HitTestBehavior.translucent,
@@ -86,10 +72,7 @@ class RoleCard extends StatelessWidget {
                     ),
                     const Gap(12),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: MyColors.grayEA),
@@ -97,9 +80,7 @@ class RoleCard extends StatelessWidget {
                       ),
                       child: Text(
                         role.functionalities ?? '',
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.gray2E,
-                        ),
+                        style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                       ),
                     ),
                   ],
@@ -109,10 +90,7 @@ class RoleCard extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 13,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
                   decoration: const BoxDecoration(
                     color: Color(0xFFE6F5E6),
                     borderRadius: BorderRadius.only(
