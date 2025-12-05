@@ -14,6 +14,7 @@ class APIConstants {
   static const String notificationToggle = "notification-settings/toggle";
 
   static const String crmAnalytics = "crm/analytics";
+  static const String crmAnalyticsPdf = "crm/analytics/pdf";
 
   static const String deactivateSendOtp = "auth/deactivate/send-otp";
   static const String deactivateVerifyOtp = "auth/deactivate/verify-otp";

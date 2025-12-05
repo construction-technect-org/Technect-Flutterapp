@@ -128,4 +128,41 @@ class AnalysisService {
     }
     return null;
   }
+
+  Future<Uint8List?> fetchCRMReportPdfByPeriod({
+    String? period,
+    required String token,
+    required bool isPeriod,
+    String? startMonth,
+    String? startYear,
+    String? endMonth,
+    String? endYear,
+  }) async {
+    try {
+      final uri = Uri.parse("${ApiManager.baseUrl}${APIConstants.crmAnalyticsPdf}").replace(
+        queryParameters: isPeriod
+            ? {"period": period ?? ""}
+            : {
+                "startMonth": startMonth ?? "",
+                "startYear": startYear ?? "",
+                "endMonth": endMonth ?? "",
+                "endYear": endYear ?? "",
+              },
+      );
+
+      final response = await http.get(
+        uri,
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
+      );
+
+      if (response.statusCode == 200) {
+        return response.bodyBytes;
+      } else {
+        log("Failed to fetch PDF. Status: ${response.statusCode}");
+      }
+    } catch (e) {
+      log("Error fetching PDF: $e");
+    }
+    return null;
+  }
 }
