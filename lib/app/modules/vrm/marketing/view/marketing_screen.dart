@@ -29,7 +29,7 @@ class MarketingScreen extends GetView<MarketingController> {
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
                     isCenter: false,
-                    title: Text(c.isMarketing.value ? "Marketing" : "Sales"),
+                    title: Text(c.isMarketing.value ? "Enquiry" : "Purchase"),
                     leading: GestureDetector(
                       onTap: Get.back,
                       child: const Padding(

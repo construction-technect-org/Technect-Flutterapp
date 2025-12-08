@@ -29,7 +29,7 @@ class CRMDashboardScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Gap(25),
-                  const CrmHeader(),
+                  const CrmHeader(inScreen: false),
                   const Gap(10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),

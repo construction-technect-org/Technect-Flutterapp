@@ -3,7 +3,8 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 
 class CrmHeader extends StatelessWidget {
-  const CrmHeader({super.key});
+  final bool inScreen;
+  const CrmHeader({super.key, required this.inScreen});
 
   @override
   Widget build(BuildContext context) {
@@ -104,12 +105,15 @@ class CrmHeader extends StatelessWidget {
           ),
           const Gap(10),
           GestureDetector(
-            onTap: () {},
+            onTap: () => commonController.toggleIsCrm(inScreen),
             child: Stack(
               alignment: AlignmentGeometry.center,
               children: [
                 Image.asset(Asset.explore, width: 18.w),
-                Text("Switch", style: MyTexts.medium14.copyWith(color: MyColors.white)),
+                Text(
+                  commonController.isCrm.value ? "VRM" : "CRM",
+                  style: MyTexts.medium14.copyWith(color: MyColors.white),
+                ),
               ],
             ),
           ),

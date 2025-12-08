@@ -28,7 +28,7 @@ class LeadDashboardScreen extends GetView<LeadDashController> {
                 child: Column(
                   children: [
                     // const DashboardHeaderWidget(),
-                    const CrmHeader(),
+                    const CrmHeader(inScreen: true),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(

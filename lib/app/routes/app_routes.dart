@@ -96,6 +96,9 @@ abstract class Routes {
   static const ACCOUNT_LEAD = _Paths.ACCOUNT_LEAD;
   static const CrmAnalysis = _Paths.crm_analysis;
   static const CRM_INBOX = _Paths.CRM_INBOX;
+  static const VRM_MAIN = _Paths.VRM_MAIN;
+  static const VRM_leadDashboard = _Paths.VRM_leadDashboard;
+  static const Crm_leadDashboard = _Paths.Crm_leadDashboard;
 }
 
 abstract class _Paths {
@@ -193,4 +196,7 @@ abstract class _Paths {
   static const ACCOUNT_LEAD = "/account_lead";
   static const crm_analysis = "/crm_analysis";
   static const CRM_INBOX = "/crm-inbox";
+  static const VRM_MAIN = '/vrm-bottom';
+  static const VRM_leadDashboard = '/vrm-lead-dashboard';
+  static const Crm_leadDashboard = '/Crm-lead-dashboard';
 }

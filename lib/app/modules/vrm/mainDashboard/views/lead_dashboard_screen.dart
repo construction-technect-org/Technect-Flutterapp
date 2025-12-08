@@ -1,6 +1,6 @@
-import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/widget/crm_header.dart';
 import 'package:construction_technect/app/modules/vrm/mainDashboard/controller/lead_dash_controller.dart';
 import 'package:construction_technect/app/modules/vrm/mainDashboard/views/widget/analysis_section_widget.dart';
 import 'package:construction_technect/app/modules/vrm/mainDashboard/views/widget/lead_conversation_section_widget.dart';
@@ -28,13 +28,7 @@ class VrmLeadDashboardScreen extends GetView<VrmLeadDashController> {
                 child: Column(
                   children: [
                     // const DashboardHeaderWidget(),
-                    const CommonAppBar(
-                      isCenter: false,
-                      leading: SizedBox(),
-                      leadingWidth: 0,
-                      title: Text("Lead Dashboard"),
-                      backgroundColor: Colors.transparent,
-                    ),
+                    const CrmHeader(inScreen: true),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(

@@ -82,9 +82,9 @@ class VrmLeadDashController extends GetxController {
   String totalCount(int num) {
     if (num == 1) {
       if (totalMarketing.value) {
-        return "Total Leads";
+        return "Total Enquiry";
       } else if (totalSales.value) {
-        return "Total Sales";
+        return "Total Purchase";
       } else if (totalAccounts.value) {
         return "Total Accounts";
       }
