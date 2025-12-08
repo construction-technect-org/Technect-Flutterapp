@@ -53,13 +53,13 @@ class VrmLeadDashboardScreen extends GetView<VrmLeadDashController> {
                                       onTap: () =>
                                           controller.toggleMarketingSalesAccounts("Marketing"),
                                       icon: Asset.MM,
-                                      name: 'Marketing',
+                                      name: 'Enquiry',
                                       isMarketPlace: controller.totalMarketing.value,
                                     ),
                                     tabBar(
                                       onTap: () => controller.toggleMarketingSalesAccounts("Sales"),
                                       icon: Asset.bar_chart,
-                                      name: 'Sales',
+                                      name: 'Purchase',
                                       isMarketPlace: controller.totalSales.value,
                                     ),
                                     tabBar(
