@@ -1,19 +1,61 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/services/ConstructionLineServices.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/ProfileModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetTeamListModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/services/GetAllRoleService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/models/SupportMyTicketsModel.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/ConstructionService/services/ConstructionLineServices.dart';
-import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/AddDeliveryAddress/services/delivery_address_service.dart';
+import 'package:construction_technect/app/modules/vrm/bottom/controllers/bottom_controller.dart';
 
 class CommonController extends GetxController {
   final hasProfileComplete = false.obs;
   final isLoading = false.obs;
   Rx<ProfileModel> profileData = ProfileModel().obs;
+  RxBool isCrm = true.obs;
+
+  void toggleIsCrm(bool inScreen) {
+    isCrm.value = !isCrm.value;
+    log('Switching to ${isCrm.value ? "CRM" : "VRM"}');
+    switchToCrm(inScreen);
+  }
+
+  void switchToCrm(bool inScreen) {
+    if (isCrm.value) {
+      Get.offAllNamed(Routes.CRM_MAIN);
+      if (inScreen) {
+        Get.lazyPut(() => CRMBottomController());
+        Get.find<CRMBottomController>().changeTab(1);
+      }
+      log('Navigated to CRM Main');
+    } else {
+      Get.offAllNamed(Routes.VRM_MAIN);
+
+      if (inScreen) {
+        Get.lazyPut(() => VrmBottomController());
+        Get.find<VrmBottomController>().changeTab(1);
+      }
+      log('Navigated to VRM Main');
+    }
+  }
+
+  void switchToCrmMain() {
+    if (isCrm.value) {
+      Get.lazyPut(() => CRMBottomController());
+
+      Get.find<CRMBottomController>().changeTab(1);
+      log('Navigated to CRM Screen');
+    } else {
+      Get.lazyPut(() => VrmBottomController());
+      Get.find<VrmBottomController>().changeTab(1);
+      log('Navigated to VRM Screen');
+    }
+  }
 
   RxString getCurrentAddress() {
     if (myPref.role.val == "partner") {

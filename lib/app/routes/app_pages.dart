@@ -17,6 +17,7 @@ import 'package:construction_technect/app/modules/CRM/lead/leadDetail/bindings/l
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/views/lead_detail_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/bindings/accounts_bindings.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/view/accounts_screen.dart';
+import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/lead_dashboard_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/bindings/marketing_bindings.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/view/marketing_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/bindings/sales_bindings.dart';
@@ -123,6 +124,9 @@ import 'package:construction_technect/app/modules/OnBoarding/bindings/on_boardin
 import 'package:construction_technect/app/modules/OnBoarding/view/on_boarding_screen.dart';
 import 'package:construction_technect/app/modules/splash/bindings/splash_binding.dart';
 import 'package:construction_technect/app/modules/splash/views/splash_view.dart';
+import 'package:construction_technect/app/modules/vrm/bottom/bindings/bottom_binding.dart';
+import 'package:construction_technect/app/modules/vrm/bottom/views/bottom_view.dart';
+import 'package:construction_technect/app/modules/vrm/mainDashboard/views/lead_dashboard_screen.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -377,5 +381,17 @@ class AppPages {
       binding: AnalysisBinding(),
     ),
     GetPage(name: Routes.CRM_INBOX, page: () => CrmInboxView(), binding: CrmInboxBinding()),
+    //Vrm
+    GetPage(name: Routes.VRM_MAIN, page: () => VrmBottomBarView(), binding: VrmBottomBinding()),
+    GetPage(
+      name: Routes.VRM_leadDashboard,
+      page: () => const VrmLeadDashboardScreen(),
+      // binding: VrmLeadDashboardBinding(),
+    ),
+    GetPage(
+      name: Routes.Crm_leadDashboard,
+      page: () => const LeadDashboardScreen(),
+      // binding: CrmLeadDashboardBinding(),
+    ),
   ];
 }
