@@ -27,9 +27,7 @@ class RequestDemoView extends StatelessWidget {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   onPressed: () {
@@ -38,10 +36,7 @@ class RequestDemoView extends StatelessWidget {
                     controller.phoneNumberController.text = "";
                     formKey.currentState?.reset();
                   },
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(color: Colors.black),
-                  ),
+                  child: const Text("Cancel", style: TextStyle(color: Colors.black)),
                 ),
               ),
               const SizedBox(width: 12),
@@ -49,9 +44,7 @@ class RequestDemoView extends StatelessWidget {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MyColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   onPressed: () {
@@ -67,10 +60,7 @@ class RequestDemoView extends StatelessWidget {
                       }
                     }
                   },
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(color: MyColors.white),
-                  ),
+                  child: Text("Submit", style: TextStyle(color: MyColors.white)),
                 ),
               ),
             ],
@@ -91,11 +81,7 @@ class RequestDemoView extends StatelessWidget {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -146,8 +132,8 @@ class RequestDemoView extends StatelessWidget {
                               controller: controller.phoneNumberController,
                               focusNode: FocusNode(),
                               isValid: controller.isValid,
-                              onCountryCodeChanged: (code) =>
-                                  controller.countryCode.value = code,
+                              customErrorMessage: controller.numberError,
+                              onCountryCodeChanged: (code) => controller.countryCode.value = code,
                             ),
                             SizedBox(height: 2.h),
                             CommonTextField(
@@ -155,8 +141,7 @@ class RequestDemoView extends StatelessWidget {
                                 LengthLimitingTextInputFormatter(50),
                                 EmailInputFormatter(),
                               ],
-                              validator: (value) =>
-                                  Validate.validateEmail(value),
+                              validator: (value) => Validate.validateEmail(value),
                               controller: controller.emilaController,
                               headerText: 'Email',
                               hintText: "Enter your email address",
