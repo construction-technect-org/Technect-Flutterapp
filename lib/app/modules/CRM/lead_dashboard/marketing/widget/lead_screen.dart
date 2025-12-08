@@ -33,9 +33,7 @@ class LeadScreen extends GetView<MarketingController> {
         Obx(() {
           if (controller.filteredLead.isEmpty) {
             return Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height / 5,
-              ),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
               child: Center(
                 child: Text(
                   "No lead found",

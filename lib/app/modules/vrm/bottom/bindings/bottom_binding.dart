@@ -3,10 +3,10 @@ import 'package:construction_technect/app/modules/vrm/bottom/controllers/bottom_
 import 'package:construction_technect/app/modules/vrm/mainDashboard/controller/lead_dash_controller.dart';
 import 'package:get/get.dart';
 
-class VrmBottomBinding extends Bindings {
+class VRMBottomBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<VrmBottomController>(() => VrmBottomController());
+    Get.lazyPut<VRMBottomController>(() => VRMBottomController());
     Get.lazyPut<VrmLeadDashController>(() => VrmLeadDashController());
     Get.lazyPut<CommonController>(() => CommonController());
   }

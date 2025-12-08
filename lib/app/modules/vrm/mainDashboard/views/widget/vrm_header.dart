@@ -2,9 +2,9 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 
-class CrmHeader extends StatelessWidget {
+class VrmHeader extends StatelessWidget {
   final bool inScreen;
-  const CrmHeader({super.key, required this.inScreen});
+  const VrmHeader({super.key, required this.inScreen});
 
   @override
   Widget build(BuildContext context) {

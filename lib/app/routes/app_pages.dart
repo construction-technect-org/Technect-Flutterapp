@@ -382,7 +382,7 @@ class AppPages {
     ),
     GetPage(name: Routes.CRM_INBOX, page: () => CrmInboxView(), binding: CrmInboxBinding()),
     //Vrm
-    GetPage(name: Routes.VRM_MAIN, page: () => VrmBottomBarView(), binding: VrmBottomBinding()),
+    GetPage(name: Routes.VRM_MAIN, page: () => VRMBottomBarView(), binding: VRMBottomBinding()),
     GetPage(
       name: Routes.VRM_leadDashboard,
       page: () => const VrmLeadDashboardScreen(),

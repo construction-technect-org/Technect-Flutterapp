@@ -1,16 +1,15 @@
 import 'dart:developer';
+
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/views/crm_dashboard.dart';
-import 'package:construction_technect/app/modules/CRM/more/views/more_screen.dart';
-import 'package:construction_technect/app/modules/CRM/task/views/task_screen.dart';
 import 'package:construction_technect/app/modules/vrm/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/vrm/mainDashboard/views/lead_dashboard_screen.dart';
+import 'package:construction_technect/app/modules/vrm/task/views/vrm_task_screen.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
 
-class VrmBottomBarView extends GetView<VrmBottomController> {
+class VRMBottomBarView extends GetView<VRMBottomController> {
   final CommonController commonController = Get.put(CommonController());
 
   @override
@@ -76,15 +75,17 @@ class VrmBottomBarView extends GetView<VrmBottomController> {
   Widget _getCurrentScreen() {
     switch (controller.currentIndex.value) {
       case 0:
-        return CRMDashboardScreen(); //TODO: Change to VRM Task Screen
+        return _comingSoon();
       case 1:
         return const VrmLeadDashboardScreen();
       case 2:
-        return CRMTaskScreen(); //TODO: Change to VRM Task Screen
+        return const VrmTaskScreen();
       case 3:
-        return CRMMoreScreen(); //TODO: Change to VRM Task Screen
+        return _comingSoon();
+      case 4:
+        return _comingSoon();
       default:
-        return CRMMoreScreen(); //TODO: Change to VRM Task Screen
+        return _comingSoon();
     }
   }
 
@@ -124,12 +125,6 @@ class VrmBottomBarView extends GetView<VrmBottomController> {
                 index: 1,
               ),
               bottomBar(
-                Asset.add,
-                Asset.add,
-                myPref.role.val != "connector" ? "Lead" : 'Lead',
-                onTap: onSellTap,
-              ),
-              bottomBar(
                 Asset.task,
                 Asset.task1,
                 'Task',
@@ -139,13 +134,22 @@ class VrmBottomBarView extends GetView<VrmBottomController> {
                 index: 2,
               ),
               bottomBar(
-                Asset.more,
-                Asset.more1,
-                'More',
+                Asset.chat,
+                Asset.chat,
+                'Chat',
                 onTap: () {
                   controller.currentIndex.value = 3;
                 },
                 index: 3,
+              ),
+              bottomBar(
+                Asset.more,
+                Asset.more1,
+                'More',
+                onTap: () {
+                  controller.currentIndex.value = 4;
+                },
+                index: 4,
               ),
             ],
           ),
@@ -362,6 +366,13 @@ class VrmBottomBarView extends GetView<VrmBottomController> {
           Text(name, style: MyTexts.medium14),
         ],
       ),
+    );
+  }
+
+  Widget _comingSoon() {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(child: Image.asset(Asset.comingSoon, height: 316, fit: BoxFit.cover)),
     );
   }
 }

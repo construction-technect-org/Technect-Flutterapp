@@ -37,8 +37,8 @@ class CommonController extends GetxController {
       Get.offAllNamed(Routes.VRM_MAIN);
 
       if (inScreen) {
-        Get.lazyPut(() => VrmBottomController());
-        Get.find<VrmBottomController>().changeTab(1);
+        Get.lazyPut(() => VRMBottomController());
+        Get.find<VRMBottomController>().changeTab(1);
       }
       log('Navigated to VRM Main');
     }
@@ -51,8 +51,8 @@ class CommonController extends GetxController {
       Get.find<CRMBottomController>().changeTab(1);
       log('Navigated to CRM Screen');
     } else {
-      Get.lazyPut(() => VrmBottomController());
-      Get.find<VrmBottomController>().changeTab(1);
+      Get.lazyPut(() => VRMBottomController());
+      Get.find<VRMBottomController>().changeTab(1);
       log('Navigated to VRM Screen');
     }
   }
