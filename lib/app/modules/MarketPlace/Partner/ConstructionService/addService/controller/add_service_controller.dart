@@ -143,9 +143,13 @@ class AddServiceController extends GetxController {
         return;
       }
 
-      final List<XFile>? results = await ImagePicker().pickMultiImage(limit: remainingSlots);
+      final List<XFile> results = await ImagePicker().pickMultiImage(limit: remainingSlots);
+      if (results.length > remainingSlots) {
+        SnackBars.errorSnackBar(content: "You can only upload up to $remainingSlots images");
+        return;
+      }
 
-      if (results != null && results.isNotEmpty) {
+      if (results.isNotEmpty) {
         pickedFilePathList.addAll(results.map((e) => e.path));
       }
     } catch (e) {
