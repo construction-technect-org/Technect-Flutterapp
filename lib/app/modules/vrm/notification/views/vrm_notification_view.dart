@@ -118,7 +118,7 @@ class VrmNotificationView extends GetView<VrmNotificationController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(12),
-                          HeaderText(text: "Notifications"),
+                          const HeaderText(text: "Notifications"),
                           Obx(() {
                             final list = controller.filteredNotifications;
                             if (list.isEmpty) {

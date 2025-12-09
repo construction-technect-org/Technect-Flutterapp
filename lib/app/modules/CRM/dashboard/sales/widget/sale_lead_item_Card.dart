@@ -558,7 +558,7 @@ class SaleItemCard extends StatelessWidget {
     );
   }
 
-  RxBool isDropdownOpen = false.obs;
+  final RxBool isDropdownOpen = false.obs;
 
   void _openTeamBottomSheet(BuildContext context, TeamListData item) {
     Get.bottomSheet(

@@ -118,7 +118,7 @@ class CrmInboxView extends GetView<CrmInboxController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(12),
-                          HeaderText(text: "Inbox"),
+                          const HeaderText(text: "Inbox"),
                           Obx(() {
                             final list = controller.filteredInbox;
                             if (list.isEmpty) {

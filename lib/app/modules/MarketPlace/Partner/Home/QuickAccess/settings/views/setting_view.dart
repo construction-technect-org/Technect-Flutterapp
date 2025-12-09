@@ -30,11 +30,7 @@ class SettingView extends GetView<SettingController> {
                   },
                   child: const Padding(
                     padding: EdgeInsets.zero,
-                    child: Icon(
-                      Icons.arrow_back_ios_new_sharp,
-                      color: Colors.black,
-                      size: 20,
-                    ),
+                    child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                   ),
                 ),
               ),
@@ -48,20 +44,12 @@ class SettingView extends GetView<SettingController> {
                       decoration: BoxDecoration(
                         color: MyColors.white,
                         boxShadow: [
-                          BoxShadow(
-                            color: MyColors.grayEA.withValues(alpha: 0.32),
-                            blurRadius: 4,
-                          ),
+                          BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4),
                         ],
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: MyColors.grayEA.withValues(alpha: 0.32),
-                        ),
+                        border: Border.all(color: MyColors.grayEA.withValues(alpha: 0.32)),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 13,
-                        horizontal: 16,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -69,9 +57,7 @@ class SettingView extends GetView<SettingController> {
                             children: [
                               Text(
                                 "Notifications",
-                                style: MyTexts.medium15.copyWith(
-                                  color: MyColors.gray2E,
-                                ),
+                                style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                               ),
                               const Spacer(),
                               Obx(() {
@@ -81,8 +67,7 @@ class SettingView extends GetView<SettingController> {
                                   onChanged: (val) {
                                     controller.isNotification.value = val;
                                     controller.notificationToggle(
-                                      isNotification:
-                                          controller.isNotification.value,
+                                      isNotification: controller.isNotification.value,
                                     );
                                   },
                                 );
@@ -93,7 +78,7 @@ class SettingView extends GetView<SettingController> {
                       ),
                     ),
                     const Gap(24),
-                    HeaderText(text: "Account"),
+                    const HeaderText(text: "Account"),
                     const Gap(16),
                     _buildSettingAction(
                       context,
@@ -127,10 +112,7 @@ class SettingView extends GetView<SettingController> {
                           confirmText: "Deactivate",
                           onConfirm: () {
                             Get.back();
-                            Get.to(
-                              () =>
-                                  AccountActionScreen(actionType: "deactivate"),
-                            );
+                            Get.to(() => AccountActionScreen(actionType: "deactivate"));
                           },
                         );
                       },
@@ -151,9 +133,7 @@ class SettingView extends GetView<SettingController> {
                           confirmText: "Delete",
                           onConfirm: () {
                             Get.back();
-                            Get.to(
-                              () => AccountActionScreen(actionType: "delete"),
-                            );
+                            Get.to(() => AccountActionScreen(actionType: "delete"));
                           },
                         );
                       },
@@ -164,7 +144,7 @@ class SettingView extends GetView<SettingController> {
                         children: [
                           const Divider(),
                           const Gap(5),
-                          HeaderText(text: "Theme"),
+                          const HeaderText(text: "Theme"),
                           const Gap(3),
                           Row(
                             children: [
@@ -182,8 +162,7 @@ class SettingView extends GetView<SettingController> {
                                   value: controller.isDarkMode.value,
                                   onChanged: (val) {
                                     controller.isDarkMode.value = val;
-                                    controller.isLightMode.value =
-                                        !controller.isLightMode.value;
+                                    controller.isLightMode.value = !controller.isLightMode.value;
                                   },
                                 );
                               }),
@@ -205,8 +184,7 @@ class SettingView extends GetView<SettingController> {
                                   value: controller.isLightMode.value,
                                   onChanged: (val) {
                                     controller.isLightMode.value = val;
-                                    controller.isDarkMode.value =
-                                        !controller.isDarkMode.value;
+                                    controller.isDarkMode.value = !controller.isDarkMode.value;
                                   },
                                 );
                               }),
@@ -240,12 +218,7 @@ class SettingView extends GetView<SettingController> {
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 19),
           decoration: BoxDecoration(
             color: MyColors.white,
-            boxShadow: [
-              BoxShadow(
-                color: MyColors.grayEA.withValues(alpha: 0.32),
-                blurRadius: 4,
-              ),
-            ],
+            boxShadow: [BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4)],
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: MyColors.grayEA.withValues(alpha: 0.32)),
           ),
@@ -362,19 +335,14 @@ class AccountActionScreen extends StatelessWidget {
                 width: double.infinity,
                 height: double.infinity,
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.moreIBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
                 ),
               ),
               Column(
                 children: [
                   CommonAppBar(
                     backgroundColor: Colors.transparent,
-                    title: Text(
-                      isDelete ? "Delete Account" : "Deactivate Account",
-                    ),
+                    title: Text(isDelete ? "Delete Account" : "Deactivate Account"),
                     isCenter: false,
                     leading: GestureDetector(
                       onTap: () {
@@ -382,11 +350,7 @@ class AccountActionScreen extends StatelessWidget {
                       },
                       child: const Padding(
                         padding: EdgeInsets.zero,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_sharp,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                        child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
                   ),
@@ -402,8 +366,7 @@ class AccountActionScreen extends StatelessWidget {
                             controller: controller.mobileController,
                             focusNode: FocusNode(),
                             isValid: controller.isValid,
-                            onCountryCodeChanged: (code) =>
-                                controller.countryCode.value = code,
+                            onCountryCodeChanged: (code) => controller.countryCode.value = code,
                           ),
                           const SizedBox(height: 16),
                           CommonTextField(
@@ -434,9 +397,7 @@ class AccountActionScreen extends StatelessWidget {
                                   isDelete
                                       ? "Deleting your account will remove all stored data and connections permanently."
                                       : "Deactivating will disable your account temporarily. You can log back in to reactivate.",
-                                  style: MyTexts.regular14.copyWith(
-                                    color: MyColors.red,
-                                  ),
+                                  style: MyTexts.regular14.copyWith(color: MyColors.red),
                                 ),
                               ),
                             ],
@@ -454,13 +415,8 @@ class AccountActionScreen extends StatelessWidget {
             child: RoundedButton(
               onTap: controller.isLoading.value
                   ? () {}
-                  : () => controller.requestOtp(
-                      isDeactivate: !isDelete,
-                      actionType: actionType,
-                    ),
-              buttonName: isDelete
-                  ? "Request OTP for Deletion"
-                  : "Request OTP for Deactivation",
+                  : () => controller.requestOtp(isDeactivate: !isDelete, actionType: actionType),
+              buttonName: isDelete ? "Request OTP for Deletion" : "Request OTP for Deactivation",
             ),
           ),
         ),
@@ -470,7 +426,7 @@ class AccountActionScreen extends StatelessWidget {
 }
 
 class SuccessAction extends StatelessWidget {
-   final String actionType;
+  final String actionType;
 
   const SuccessAction({super.key, required this.actionType});
 
@@ -487,10 +443,7 @@ class SuccessAction extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Asset.loginBg),
-                fit: BoxFit.cover,
-              ),
+              image: DecorationImage(image: AssetImage(Asset.loginBg), fit: BoxFit.cover),
             ),
           ),
           Container(
@@ -503,8 +456,7 @@ class SuccessAction extends StatelessWidget {
               border: Border.all(color: const Color(0xffF9D0CB)),
             ),
             child: Text(
-              actionType=="delete"?
-              "Your account is deleted":"Your account is deactivated",
+              actionType == "delete" ? "Your account is deleted" : "Your account is deactivated",
               style: MyTexts.bold18.copyWith(color: Colors.black),
               textAlign: TextAlign.center,
             ),

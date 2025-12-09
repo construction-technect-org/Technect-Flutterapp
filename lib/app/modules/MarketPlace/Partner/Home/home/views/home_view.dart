@@ -43,7 +43,7 @@ class HomeView extends StatelessWidget {
                           },
                           icon: Asset.MM,
                           name: 'Material\nMarketplace',
-                          isMarketPlace:  Get.find<CommonController>().marketPlace.value == 0,
+                          isMarketPlace: Get.find<CommonController>().marketPlace.value == 0,
                         ),
                         tabBar(
                           onTap: () {
@@ -51,7 +51,7 @@ class HomeView extends StatelessWidget {
                           },
                           icon: Asset.CM,
                           name: 'Construction line\nMarketplace',
-                          isMarketPlace:  Get.find<CommonController>().marketPlace.value == 1,
+                          isMarketPlace: Get.find<CommonController>().marketPlace.value == 1,
                         ),
                         tabBar(
                           onTap: () {
@@ -210,7 +210,8 @@ class HomeView extends StatelessWidget {
         GestureDetector(
           onTap: () {
             if (myPref.role.val == "connector") {
-              if ((Get.find<CommonController>().profileData.value.data?.siteLocations ?? []).isEmpty) {
+              if ((Get.find<CommonController>().profileData.value.data?.siteLocations ?? [])
+                  .isEmpty) {
                 _showAddAddressDialog();
                 return;
               }
@@ -254,7 +255,8 @@ class HomeView extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     if (myPref.role.val == "connector") {
-                      if ((Get.find<CommonController>().profileData.value.data?.siteLocations ?? []).isEmpty) {
+                      if ((Get.find<CommonController>().profileData.value.data?.siteLocations ?? [])
+                          .isEmpty) {
                         _showAddAddressDialog();
                         return;
                       }
@@ -369,20 +371,15 @@ class HomeView extends StatelessWidget {
   }
 }
 
-class HeaderText extends StatefulWidget {
-  String text;
+class HeaderText extends StatelessWidget {
+  final String text;
 
-  HeaderText({super.key, required this.text});
+  const HeaderText({required this.text});
 
-  @override
-  State<HeaderText> createState() => _HeaderTextState();
-}
-
-class _HeaderTextState extends State<HeaderText> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      widget.text,
+      text,
       style: MyTexts.medium17.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }

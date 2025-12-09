@@ -102,7 +102,7 @@ class AddCertificate extends StatelessWidget {
                                           ],
                                         )
                                       : FileIconWidget(
-                                          fileName: controller.filePath.value!,
+                                          fileName: controller.filePath.value,
                                           showFileName: true,
                                         ),
                                 ),

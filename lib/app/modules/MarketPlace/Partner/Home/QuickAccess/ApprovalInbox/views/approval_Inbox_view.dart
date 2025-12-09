@@ -22,12 +22,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
             decoration: BoxDecoration(
               color: iconColor,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: MyColors.grayEA.withValues(alpha: 0.32),
-                  blurRadius: 4,
-                ),
-              ],
+              boxShadow: [BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4)],
             ),
             child: Padding(
               padding: const EdgeInsets.all(14),
@@ -39,12 +34,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          message,
-                          style: MyTexts.medium14.copyWith(
-                            color: MyColors.black,
-                          ),
-                        ),
+                        Text(message, style: MyTexts.medium14.copyWith(color: MyColors.black)),
                         const SizedBox(height: 6),
                         Row(
                           children: [
@@ -102,10 +92,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
               width: double.infinity,
               height: double.infinity,
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Asset.moreIBg),
-                  fit: BoxFit.cover,
-                ),
+                image: DecorationImage(image: AssetImage(Asset.moreIBg), fit: BoxFit.cover),
               ),
             ),
             Column(
@@ -121,11 +108,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                     },
                     child: const Padding(
                       padding: EdgeInsets.zero,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_sharp,
-                        color: Colors.black,
-                        size: 20,
-                      ),
+                      child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                     ),
                   ),
                 ),
@@ -137,7 +120,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(12),
-                          HeaderText(text: "Statistics"),
+                          const HeaderText(text: "Statistics"),
                           const Gap(24),
                           Obx(() {
                             return IntrinsicHeight(
@@ -199,7 +182,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                             );
                           }),
                           const Gap(32),
-                          HeaderText(text: "Inbox"),
+                          const HeaderText(text: "Inbox"),
                           Obx(() {
                             final list = controller.filteredInbox;
                             if (list.isEmpty) {
@@ -210,9 +193,7 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
                                 child: Center(
                                   child: Text(
                                     "No data found",
-                                    style: MyTexts.medium16.copyWith(
-                                      color: MyColors.darkGray,
-                                    ),
+                                    style: MyTexts.medium16.copyWith(color: MyColors.darkGray),
                                   ),
                                 ),
                               );
@@ -275,19 +256,12 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isSelected
-                  ? MyColors.primary.withValues(alpha: 0.5)
-                  : Colors.transparent,
+              color: isSelected ? MyColors.primary.withValues(alpha: 0.5) : Colors.transparent,
             ),
 
             borderRadius: BorderRadius.circular(8),
             color: MyColors.white,
-            boxShadow: [
-              BoxShadow(
-                color: MyColors.grayEA.withValues(alpha: 0.32),
-                blurRadius: 4,
-              ),
-            ],
+            boxShadow: [BoxShadow(color: MyColors.grayEA.withValues(alpha: 0.32), blurRadius: 4)],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,15 +269,9 @@ class ApprovalInboxView extends GetView<ApprovalInboxController> {
             children: [
               Image.asset(image, height: 27, width: 28, fit: BoxFit.cover),
               const Gap(4),
-              Text(
-                data,
-                style: MyTexts.extraBold18.copyWith(color: MyColors.black),
-              ),
+              Text(data, style: MyTexts.extraBold18.copyWith(color: MyColors.black)),
               const Gap(4),
-              Text(
-                title,
-                style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-              ),
+              Text(title, style: MyTexts.medium14.copyWith(color: MyColors.gray54)),
             ],
           ),
         ),

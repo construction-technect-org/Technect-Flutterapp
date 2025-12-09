@@ -47,7 +47,7 @@ class AnalysisScreen extends GetView<AnalysisController> {
                         const Gap(20),
                         const ReportDashWidget(),
                         const Gap(20),
-                        HeaderText(text: "Select month and download report"),
+                        const HeaderText(text: "Select month and download report"),
                         const Gap(20),
                         const MonthReport(),
                         const Gap(10),
