@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/menu_view.dart';
 import 'package:construction_technect/app/modules/vrm/more/controller/more_controller.dart';
@@ -82,17 +83,13 @@ class VrmMoreScreen extends GetView<VrmMoreController> {
               CommonContainer(
                 icon: Asset.privacy,
                 title: "Privacy Policy",
-                onTap: () {
-                  // openUrl(url: Constants.privacyPolicy);
-                },
+                onTap: () => openUrl(url: Constants.privacyPolicy),
               ),
               const Gap(16),
               CommonContainer(
                 icon: Asset.tc,
                 title: "Terms & conditions",
-                onTap: () {
-                  // openUrl(url: Constants.termsCondition);
-                },
+                onTap: () => openUrl(url: Constants.termsCondition),
               ),
               const Gap(16),
               CommonContainer(
