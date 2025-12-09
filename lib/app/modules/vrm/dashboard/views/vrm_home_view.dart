@@ -2,13 +2,11 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/controller/crm_dashboard_controller.dart';
 
-class CRMHomeView extends StatelessWidget {
-  CRMHomeView({super.key});
+class VRMHomeView extends StatelessWidget {
+  VRMHomeView({super.key});
 
   final commonController = Get.find<CommonController>();
-  final controller = Get.put<CRMDashboardController>(CRMDashboardController());
 
   @override
   Widget build(BuildContext context) {

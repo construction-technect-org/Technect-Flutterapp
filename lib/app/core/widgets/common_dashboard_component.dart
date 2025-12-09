@@ -169,7 +169,7 @@ class CommonDashboardController extends GetxController {
       case "marketplace":
         Get.offAllNamed(Routes.MAIN);
       case "crm":
-        Get.find<CommonController>().switchToCrmMain();
+        Get.offAllNamed(Routes.CRM_MAIN);
       default:
         Get.snackbar("Coming Soon", "This feature is not yet available");
     }
