@@ -15,9 +15,11 @@ class VrmLeadScreen extends GetView<VrmTaskController> {
         totalCount: controller.todaysTotal.value,
         leads: controller.filteredLead,
         emptyMessage: "No lead found",
-        addButton: VrmAddNewLeadButton(
+        addButton: VrmAddNewRequirementButton(
           onTap: () {
-            // TODO: Add navigation to add lead screen
+            Get.toNamed(Routes.ADD_REQUIREMENT)?.then((value) {
+              controller.fetchAllLeads(isLoad: true);
+            });
           },
         ),
         statusWidget: VrmCommonStatusWidget(

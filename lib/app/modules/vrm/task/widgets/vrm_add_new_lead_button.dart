@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
-class VrmAddNewLeadButton extends StatelessWidget {
+class VrmAddNewRequirementButton extends StatelessWidget {
   final VoidCallback onTap;
-  const VrmAddNewLeadButton({required this.onTap, super.key});
+  const VrmAddNewRequirementButton({required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class VrmAddNewLeadButton extends StatelessWidget {
           children: [
             const Icon(Icons.add, size: 22),
             const SizedBox(width: 8),
-            Text('Add New Lead', style: MyTexts.medium14),
+            Text('Add New Requirement', style: MyTexts.medium14),
           ],
         ),
       ),
