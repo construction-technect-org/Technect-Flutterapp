@@ -28,10 +28,7 @@ class InventoryView extends GetView<InventoryController> {
                     color: MyColors.grayF7,
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 12,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Obx(() {
                     return Row(
                       mainAxisSize: MainAxisSize.min,
@@ -50,23 +47,17 @@ class InventoryView extends GetView<InventoryController> {
                             duration: const Duration(milliseconds: 250),
                             curve: Curves.easeInOut,
                             decoration: BoxDecoration(
-                              color:
-                                  controller.selectedStatus.value == "product"
-                                  ? Colors.white
-                                  : Colors.transparent,
+                              color: Colors.white.withAlpha(
+                                controller.selectedStatus.value == "product" ? 255 : 0,
+                              ),
                               borderRadius: BorderRadius.circular(24),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 6,
-                                horizontal: 20,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                               child: Center(
                                 child: Text(
                                   "Product",
-                                  style: MyTexts.medium15.copyWith(
-                                    color: MyColors.gray2E,
-                                  ),
+                                  style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                 ),
                               ),
                             ),
@@ -86,23 +77,17 @@ class InventoryView extends GetView<InventoryController> {
                             duration: const Duration(milliseconds: 250),
                             curve: Curves.easeInOut,
                             decoration: BoxDecoration(
-                              color:
-                                  controller.selectedStatus.value == "service"
-                                  ? Colors.white
-                                  : Colors.transparent,
+                              color: Colors.white.withAlpha(
+                                controller.selectedStatus.value == "service" ? 255 : 0,
+                              ),
                               borderRadius: BorderRadius.circular(24),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 6,
-                                horizontal: 20,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
                               child: Center(
                                 child: Text(
                                   "Service",
-                                  style: MyTexts.medium15.copyWith(
-                                    color: MyColors.gray2E,
-                                  ),
+                                  style: MyTexts.medium15.copyWith(color: MyColors.gray2E),
                                 ),
                               ),
                             ),
@@ -125,11 +110,7 @@ class InventoryView extends GetView<InventoryController> {
                   },
                   borderRadius: 22,
                   hintText: 'Search',
-                  prefixIcon: SvgPicture.asset(
-                    Asset.searchIcon,
-                    height: 16,
-                    width: 16,
-                  ),
+                  prefixIcon: SvgPicture.asset(Asset.searchIcon, height: 16, width: 16),
                 ),
               ),
 
@@ -145,9 +126,7 @@ class InventoryView extends GetView<InventoryController> {
                     child: Center(
                       child: Text(
                         'No ${isProduct ? "inventory" : "service"} found',
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.dustyGray,
-                        ),
+                        style: MyTexts.medium14.copyWith(color: MyColors.dustyGray),
                       ),
                     ),
                   );
@@ -156,9 +135,7 @@ class InventoryView extends GetView<InventoryController> {
                     child: Center(
                       child: Text(
                         'No ${isProduct ? "inventory" : "service"} available',
-                        style: MyTexts.medium14.copyWith(
-                          color: MyColors.dustyGray,
-                        ),
+                        style: MyTexts.medium14.copyWith(color: MyColors.dustyGray),
                       ),
                     ),
                   );
@@ -169,32 +146,27 @@ class InventoryView extends GetView<InventoryController> {
                     if (controller.selectedStatus.value == "product") {
                       return GridView.builder(
                         padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.6,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                            ),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.6,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
                         itemCount: controller.filteredProducts.length,
                         itemBuilder: (context, index) {
                           final item = controller.filteredProducts[index];
-                          return ProductCard(
-                            product: item,
-                            onApiCall: controller.fetchProducts,
-                          );
+                          return ProductCard(product: item, onApiCall: controller.fetchProducts);
                         },
                       );
                     } else {
                       return GridView.builder(
                         padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.6,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                            ),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.6,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
                         itemCount: controller.filteredService.length,
                         itemBuilder: (context, index) {
                           final service = controller.filteredService[index];
