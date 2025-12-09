@@ -28,85 +28,90 @@ class VRMDashboardScreen extends GetView<VRMDashboardController> {
                   children: [
                     const VrmHeader(inScreen: true),
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Gap(8),
-                            Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: AlignmentGeometry.topCenter,
-                                  end: AlignmentGeometry.bottomCenter,
-                                  colors: [MyColors.custom("FFF9BD"), Colors.white],
+                      child: RefreshIndicator(
+                        onRefresh: controller.fetchDashboard,
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Gap(8),
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: AlignmentGeometry.topCenter,
+                                    end: AlignmentGeometry.bottomCenter,
+                                    colors: [MyColors.custom("FFF9BD"), Colors.white],
+                                  ),
                                 ),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 24.0),
 
-                              child: Obx(
-                                () => Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    tabBar(
-                                      onTap: () =>
-                                          controller.toggleMarketingSalesAccounts("Marketing"),
-                                      icon: Asset.MM,
-                                      name: 'Enquiry',
-                                      isMarketPlace: controller.totalMarketing.value,
-                                    ),
-                                    tabBar(
-                                      onTap: () => controller.toggleMarketingSalesAccounts("Sales"),
-                                      icon: Asset.bar_chart,
-                                      name: 'Purchase',
-                                      isMarketPlace: controller.totalSales.value,
-                                    ),
-                                    tabBar(
-                                      onTap: () =>
-                                          controller.toggleMarketingSalesAccounts("Accounts"),
-                                      icon: Asset.users,
-                                      name: 'Accounts',
-                                      isMarketPlace: controller.totalAccounts.value,
-                                    ),
-                                  ],
+                                child: Obx(
+                                  () => Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      tabBar(
+                                        onTap: () =>
+                                            controller.toggleMarketingSalesAccounts("Marketing"),
+                                        icon: Asset.MM,
+                                        name: 'Enquiry',
+                                        isMarketPlace: controller.totalMarketing.value,
+                                      ),
+                                      tabBar(
+                                        onTap: () =>
+                                            controller.toggleMarketingSalesAccounts("Sales"),
+                                        icon: Asset.bar_chart,
+                                        name: 'Purchase',
+                                        isMarketPlace: controller.totalSales.value,
+                                      ),
+                                      tabBar(
+                                        onTap: () =>
+                                            controller.toggleMarketingSalesAccounts("Accounts"),
+                                        icon: Asset.users,
+                                        name: 'Accounts',
+                                        isMarketPlace: controller.totalAccounts.value,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            const Gap(24),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Obx(
-                                () => Column(
-                                  children: [
-                                    TotalCount(
-                                      title: controller.totalCount(1),
-                                      count: controller.totalCount(2),
-                                      percentage: controller.totalCount(3),
-                                    ),
-                                    if (controller.totalAccounts.value)
-                                      Column(
-                                        children: [
-                                          const Gap(24),
-                                          TotalCount(
-                                            title: "Total Due",
-                                            count: "₹ 1,25,000",
-                                            percentage: controller.totalCount(3),
-                                          ),
-                                        ],
-                                      )
-                                    else
-                                      const SizedBox.shrink(),
-                                    const Gap(24),
-                                    const LeadsSectionWidget(),
-                                    const Gap(24),
-                                    FunnelChartWidget(funnelData: controller.funnelData),
-                                    const Gap(24),
-                                    const ConversionRateChart(percentage: 78),
-                                    const Gap(24),
-                                  ],
+                              const Gap(24),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                child: Obx(
+                                  () => Column(
+                                    children: [
+                                      TotalCount(
+                                        title: controller.totalCount(1),
+                                        count: controller.totalCount(2),
+                                        percentage: controller.totalCount(3),
+                                      ),
+                                      if (controller.totalAccounts.value)
+                                        Column(
+                                          children: [
+                                            const Gap(24),
+                                            TotalCount(
+                                              title: "Total Due",
+                                              count: "₹ 1,25,000",
+                                              percentage: controller.totalCount(3),
+                                            ),
+                                          ],
+                                        )
+                                      else
+                                        const SizedBox.shrink(),
+                                      const Gap(24),
+                                      const LeadsSectionWidget(),
+                                      const Gap(24),
+                                      FunnelChartWidget(funnelData: controller.funnelData),
+                                      const Gap(24),
+                                      const ConversionRateChart(percentage: 78),
+                                      const Gap(24),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

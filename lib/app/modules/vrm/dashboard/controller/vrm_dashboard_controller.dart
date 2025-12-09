@@ -1,4 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/model/vrm_dashboard_model.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/services/vrm_dashboard_service.dart';
 
 class VRMDashboardController extends GetxController {
   final isLoading = false.obs;
@@ -18,24 +20,27 @@ class VRMDashboardController extends GetxController {
   final totalSales = false.obs;
   final totalAccounts = false.obs;
 
-  // Default (Enquiry) summary
-  final rawLeads = 45.obs;
-  final followUpLeads = 30.obs;
-  final pendingLeads = 20.obs;
+  final _service = VRMDashboardService();
+
+  // UI reactive fields
+  final rawLeads = 0.obs;
+  final followUpLeads = 0.obs;
+  final pendingLeads = 0.obs;
   final rawLeadsText = "Request".obs;
   final followUpLeadsText = "Follow up".obs;
   final pendingLeadsText = "Qualified".obs;
 
-  final funnelData = [
-    {'label': 'Lead', 'count': 45, 'color': const Color(0xFFEF4444)},
-    {'label': 'Reached out', 'count': 30, 'color': const Color(0xFFF97316)},
-    {'label': 'On hold', 'count': 15, 'color': const Color(0xFF22C55E)},
-    {'label': 'Missed', 'count': 23, 'color': const Color(0xFF3B82F6)},
-    {'label': 'Pending', 'count': 14, 'color': const Color(0xFFEAB308)},
-    {'label': 'Follow up', 'count': 15, 'color': const Color(0xFF06B6D4)},
-    {'label': 'Qualified', 'count': 20, 'color': const Color(0xFF10B981)},
-    {'label': 'Unqualified', 'count': 5, 'color': const Color(0xFF6366F1)},
-  ].obs;
+  final totalTitle = "Total Enquiry".obs;
+  final totalCountValue = "0".obs;
+  final totalPercent = "0%".obs;
+  final conversionPercent = 0.0.obs;
+
+  final funnelData = <Map<String, dynamic>>[].obs;
+
+  StageData? _enquiryData;
+  StageData? _purchaseData;
+  StageData? _accountsData;
+  List<AnalysisItem> _combinedAnalysis = const [];
 
   final leadConversations = [
     {'location': 'Rp nagar', 'product': 'Manufacture sand', 'id': '47'},
@@ -47,6 +52,26 @@ class VRMDashboardController extends GetxController {
   final alertNotificationCount = 2.obs;
   final bellNotificationCount = 2.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    fetchDashboard();
+  }
+
+  Future<void> fetchDashboard() async {
+    try {
+      isLoading.value = true;
+      final resp = await _service.fetchDashboard();
+      _enquiryData = resp?.enquiry;
+      _purchaseData = resp?.purchase;
+      _accountsData = resp?.accounts;
+      _combinedAnalysis = resp?.combinedAnalysis ?? const [];
+      leadSectionWidget();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void onFilterTabChanged(int index) {
     selectedFilterIndex.value = index;
 
@@ -57,56 +82,18 @@ class VRMDashboardController extends GetxController {
 
   void leadSectionWidget() {
     if (totalMarketing.value) {
-      rawLeads.value = 45;
-      followUpLeads.value = 30;
-      pendingLeads.value = 20;
-      rawLeadsText.value = "Request";
-      followUpLeadsText.value = "Follow up";
-      pendingLeadsText.value = "Qualified";
+      _applyStageData(_enquiryData);
     } else if (totalSales.value) {
-      rawLeads.value = 120;
-      followUpLeads.value = 80;
-      pendingLeads.value = 40;
-      rawLeadsText.value = "Requirement";
-      followUpLeadsText.value = "Follow up";
-      pendingLeadsText.value = "Quote";
+      _applyStageData(_purchaseData);
     } else {
-      rawLeads.value = 100;
-      followUpLeads.value = 80;
-      pendingLeads.value = 120;
-      rawLeadsText.value = "Bill";
-      followUpLeadsText.value = "Out Standing";
-      pendingLeadsText.value = "Collect";
+      _applyStageData(_accountsData);
     }
   }
 
   String totalCount(int num) {
-    if (num == 1) {
-      if (totalMarketing.value) {
-        return "Total Enquiry";
-      } else if (totalSales.value) {
-        return "Total Purchase";
-      } else if (totalAccounts.value) {
-        return "Total Accounts";
-      }
-    } else if (num == 2) {
-      if (totalMarketing.value) {
-        return "45";
-      } else if (totalSales.value) {
-        return "₹ 2,45,000";
-      } else if (totalAccounts.value) {
-        return "₹ 2,45,000";
-      }
-    } else {
-      if (totalMarketing.value) {
-        return "+5.3%";
-      } else if (totalSales.value) {
-        return "+6.8%";
-      } else if (totalAccounts.value) {
-        return "+7.3%";
-      }
-    }
-    return "";
+    if (num == 1) return totalTitle.value;
+    if (num == 2) return totalCountValue.value;
+    return totalPercent.value;
   }
 
   void toggleCRMVRM(bool isCRM) {
@@ -118,12 +105,10 @@ class VRMDashboardController extends GetxController {
       totalMarketing.value = true;
       totalSales.value = false;
       totalAccounts.value = false;
-      // Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
     } else if (type == 'Sales') {
       totalMarketing.value = false;
       totalSales.value = true;
       totalAccounts.value = false;
-      // Get.toNamed(Routes.Marketing, arguments: {"isMarketing": false});
     } else if (type == 'Accounts') {
       totalMarketing.value = false;
       totalSales.value = false;
@@ -132,46 +117,62 @@ class VRMDashboardController extends GetxController {
     leadSectionWidget();
   }
 
-  void navigtionInLead() {
-    if (totalMarketing.value) {
-      Get.toNamed(Routes.Marketing, arguments: {"isMarketing": true});
-    } else if (totalSales.value) {
-      Get.toNamed(Routes.SALES, arguments: {"isMarketing": true});
-    } else {
-      Get.toNamed(Routes.ACCOUNT_LEAD, arguments: {"isMarketing": true});
+  void _applyStageData(StageData? data) {
+    if (data == null) {
+      rawLeads.value = 0;
+      followUpLeads.value = 0;
+      pendingLeads.value = 0;
+      totalTitle.value = "";
+      totalCountValue.value = "0";
+      totalPercent.value = "0%";
+      conversionPercent.value = 0;
+      funnelData.assignAll([]);
+      return;
     }
+
+    totalTitle.value = data.totalCount?.title ?? "";
+    totalCountValue.value = (data.totalCount?.count ?? 0).toString();
+    final pct = data.totalCount?.percentageChange ?? 0;
+    totalPercent.value = "${pct.toString()}%";
+    conversionPercent.value = (data.orderedRatio ?? 0).toDouble();
+
+    final cards = data.statCards;
+    rawLeads.value = cards.isNotEmpty ? (cards[0].value ?? 0) : 0;
+    followUpLeads.value = cards.length > 1 ? (cards[1].value ?? 0) : 0;
+    pendingLeads.value = cards.length > 2 ? (cards[2].value ?? 0) : 0;
+    rawLeadsText.value = cards.isNotEmpty
+        ? (cards[0].title ?? rawLeadsText.value)
+        : rawLeadsText.value;
+    followUpLeadsText.value = cards.length > 1
+        ? (cards[1].title ?? followUpLeadsText.value)
+        : followUpLeadsText.value;
+    pendingLeadsText.value = cards.length > 2
+        ? (cards[2].title ?? pendingLeadsText.value)
+        : pendingLeadsText.value;
+
+    final analysisSource = _combinedAnalysis.isNotEmpty ? _combinedAnalysis : data.analysis;
+
+    funnelData.assignAll(
+      analysisSource.map((e) {
+        final label = e.label ?? e.salesLeadsStage ?? e.accountLeadsStage ?? '';
+        return {'label': label, 'count': e.count ?? 0, 'color': _colorForLabel(label)};
+      }).toList(),
+    );
   }
 
-  final months = <String>[
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC',
-  ];
-
-  final productA = <double>[500, 850, 850, 480, 580, 720, 1100, 1020, 950, 980, 1100, 1050].obs;
-  final productB = <double>[200, 480, 700, 780, 720, 640, 660, 700, 850, 1150, 1200, 1100].obs;
-  final showA = true.obs;
-  final showB = true.obs;
-
-  void updateProductA(List<double> newValues) {
-    productA.assignAll(newValues);
-    update();
+  Color _colorForLabel(String label) {
+    final key = label.toLowerCase();
+    if (key.contains('lead')) return const Color(0xFFEF4444);
+    if (key.contains('reach')) return const Color(0xFFF97316);
+    if (key.contains('hold')) return const Color(0xFF22C55E);
+    if (key.contains('miss')) return const Color(0xFF3B82F6);
+    if (key.contains('pending')) return const Color(0xFFEAB308);
+    if (key.contains('follow')) return const Color(0xFF06B6D4);
+    if (key.contains('qual')) return const Color(0xFF10B981);
+    if (key.contains('unqual') || key.contains('lost')) return const Color(0xFF6366F1);
+    if (key.contains('closing')) return const Color(0xFF6366F1); // reuse CRM purple
+    if (key.contains('sales')) return const Color(0xFF3B82F6); // reuse CRM blue
+    if (key.contains('bill')) return const Color(0xFFEAB308); // reuse CRM yellow
+    return MyColors.primary;
   }
-
-  void updateProductB(List<double> newValues) {
-    productB.assignAll(newValues);
-    update();
-  }
-
-  void toggleA() => showA.toggle();
-  void toggleB() => showB.toggle();
 }
