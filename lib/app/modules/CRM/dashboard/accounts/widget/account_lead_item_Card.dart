@@ -10,11 +10,12 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamA
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class AccountItemCard extends StatelessWidget {
   final AccountLeads lead;
   final AccountsController controller;
 
-  AccountItemCard({super.key, required this.lead, required this.controller});
+  AccountItemCard({required this.lead, required this.controller});
 
   @override
   Widget build(BuildContext context) {
