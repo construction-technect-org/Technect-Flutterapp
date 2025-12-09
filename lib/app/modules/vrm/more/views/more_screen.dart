@@ -2,6 +2,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/menu/menu_view.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/Support/CustomerSupport/views/customer_support_view.dart';
 import 'package:construction_technect/app/modules/vrm/more/controller/more_controller.dart';
 
 class VrmMoreScreen extends GetView<VrmMoreController> {
@@ -40,15 +41,7 @@ class VrmMoreScreen extends GetView<VrmMoreController> {
                 icon: Asset.cs,
                 title: "Customer support",
                 onTap: () {
-                  // Get.to(() => CustomerSupportView());
-                },
-              ),
-              const Gap(16),
-              CommonContainer(
-                icon: Asset.tutorial,
-                title: "Tutorials",
-                onTap: () {
-                  // openUrl(url: Constants.tutorial);
+                  Get.to(() => CustomerSupportView());
                 },
               ),
               const Gap(16),
@@ -56,7 +49,7 @@ class VrmMoreScreen extends GetView<VrmMoreController> {
                 icon: Asset.notification,
                 title: "Notification",
                 onTap: () {
-                  // Get.toNamed(Routes.NOTIFICATIONS);
+                  Get.toNamed(Routes.VRM_NOTIFICATION);
                 },
               ),
               const Gap(16),
@@ -76,7 +69,7 @@ class VrmMoreScreen extends GetView<VrmMoreController> {
                 icon: Asset.faq,
                 title: "F.A.Q’S",
                 onTap: () {
-                  // Get.toNamed(Routes.FAQ);
+                  Get.toNamed(Routes.FAQ);
                 },
               ),
               const Gap(16),
@@ -96,7 +89,7 @@ class VrmMoreScreen extends GetView<VrmMoreController> {
                 icon: Asset.message,
                 title: "Feedback",
                 onTap: () {
-                  // openUrl(url: Constants.aboutUS);
+                  Get.toNamed(Routes.FEEDBACK_VIEW);
                 },
               ),
               const Gap(16),
