@@ -145,66 +145,46 @@ class VrmHeader extends StatelessWidget {
 
   void _showCrmVrmSwitchSheet(BuildContext context, CommonController commonController) {
     Get.bottomSheet(
-      Obx(() {
-        final isCrm = commonController.isCrm.value;
-        return Container(
-          padding: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 60,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 60,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              const Text(
-                'Switch Workspace',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 16),
-              _switchTile(
-                title: 'CRM',
-                subtitle: 'Go to CRM dashboard',
-                asset: Asset.role1,
-                selected: isCrm,
-                onTap: () {
-                  if (!isCrm) {
-                    commonController.isCrm.value = true;
-                    commonController.switchToCrm(inScreen);
-                  }
-                  Get.back();
-                },
-              ),
-              const SizedBox(height: 12),
-              _switchTile(
-                title: 'VRM',
-                subtitle: 'Go to VRM dashboard',
-                asset: Asset.contractor,
-                selected: !isCrm,
-                onTap: () {
-                  if (isCrm) {
-                    commonController.isCrm.value = false;
-                    commonController.switchToCrm(inScreen);
-                  }
-                  Get.back();
-                },
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        );
-      }),
+            ),
+            const Text(
+              'Switch to CRM',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 16),
+            _switchTile(
+              title: 'CRM',
+              subtitle: 'Go to CRM dashboard',
+              asset: Asset.role1,
+              onTap: () {
+                Get.offAllNamed(Routes.CRM_MAIN);
+                Get.back();
+              },
+            ),
+
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
     );
   }
 
@@ -212,7 +192,6 @@ class VrmHeader extends StatelessWidget {
     required String title,
     required String subtitle,
     required String asset,
-    required bool selected,
     required VoidCallback onTap,
   }) {
     return GestureDetector(
@@ -220,8 +199,8 @@ class VrmHeader extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: selected ? MyColors.primary.withOpacity(0.05) : Colors.white,
-          border: Border.all(color: selected ? MyColors.primary : MyColors.custom('EAEAEA')),
+          color: Colors.white,
+          border: Border.all(color: MyColors.custom('EAEAEA')),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -244,10 +223,6 @@ class VrmHeader extends StatelessWidget {
                   Text(subtitle, style: MyTexts.regular12.copyWith(color: MyColors.grey)),
                 ],
               ),
-            ),
-            Icon(
-              selected ? Icons.check_circle : Icons.radio_button_unchecked,
-              color: selected ? MyColors.primary : MyColors.custom('C7C7C7'),
             ),
           ],
         ),

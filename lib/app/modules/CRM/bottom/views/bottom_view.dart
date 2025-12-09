@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
-import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/views/crm_dashboard.dart';
 import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/lead_dashboard_screen.dart';
@@ -11,8 +10,6 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
 
 class CRMBottomBarView extends GetView<CRMBottomController> {
-  final CommonController commonController = Get.put(CommonController());
-
   @override
   Widget build(BuildContext context) {
     log('Token ~~~>> ${myPref.getToken()}');
@@ -43,13 +40,6 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
             } else if (connected && controller.isBottomSheetOpen.value) {
               controller.isBottomSheetOpen.value = false;
               Get.back();
-
-              WidgetsBinding.instance.addPostFrameCallback((val) async {
-                // await Get.find<HomeController>().fetchProfileData();
-                // await Get.find<HomeController>().fetchCategoryHierarchy();
-                // await Get.find<HomeController>()
-                //     .fetchCategoryServiceHierarchy();
-              });
             }
 
             return child;
@@ -162,186 +152,6 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
           Get.back();
         },
       },
-    );
-  }
-
-  void _showProfileIncompleteDialog() {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          "Complete Your Profile",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        content: const Text(
-          "To add a product, please complete your business profile first.",
-          style: TextStyle(fontSize: 14),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              Get.toNamed(Routes.PROFILE);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            child: const Text("Complete Now"),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
-  }
-
-  void _showAddAddressDialog() {
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          "Add Your Address",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        content: const Text(
-          "To add a product, please add your address first.",
-          style: TextStyle(fontSize: 14),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              Get.toNamed(Routes.MANUFACTURER_ADDRESS);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            child: const Text("Add Address"),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
-  }
-
-  void _showProductOptions() {
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sheetHandle(),
-            const Text(
-              "Select an Option",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            ListTile(
-              leading: SvgPicture.asset(Asset.add),
-              title: const Text("Add New Product"),
-              onTap: () {
-                Get.back();
-                Get.toNamed(Routes.ADD_PRODUCT);
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: SvgPicture.asset(Asset.inventory),
-              title: const Text("Manage Products"),
-              onTap: () {
-                Get.back();
-                Get.toNamed(Routes.INVENTORY);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showServiceOptions() {
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sheetHandle(),
-            const Text(
-              "Select an Option",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            ListTile(
-              leading: SvgPicture.asset(Asset.add),
-              title: const Text("Add New Service"),
-              onTap: () {
-                Get.back();
-                Get.toNamed(Routes.ADD_SERVICES);
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: SvgPicture.asset(Asset.inventory),
-              title: const Text("Manage Services"),
-              onTap: () {
-                Get.back();
-                Get.toNamed(Routes.INVENTORY);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showComingSoonSheet() {
-    showModalBottomSheet(
-      context: Get.context!,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return Container(
-          height: 316,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Center(child: Image.asset(Asset.comingSoon, height: 316, fit: BoxFit.cover)),
-        );
-      },
-    );
-  }
-
-  Widget _sheetHandle() {
-    return Center(
-      child: Container(
-        width: 50,
-        height: 5,
-        margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(5)),
-      ),
     );
   }
 

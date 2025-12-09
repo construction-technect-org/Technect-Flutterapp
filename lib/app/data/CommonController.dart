@@ -19,12 +19,6 @@ class CommonController extends GetxController {
   Rx<ProfileModel> profileData = ProfileModel().obs;
   RxBool isCrm = true.obs;
 
-  void toggleIsCrm(bool inScreen) {
-    isCrm.value = !isCrm.value;
-    log('Switching to ${isCrm.value ? "CRM" : "VRM"}');
-    switchToCrm(inScreen);
-  }
-
   void switchToCrm(bool inScreen) {
     if (isCrm.value) {
       Get.offAllNamed(Routes.CRM_MAIN);
@@ -98,7 +92,7 @@ class CommonController extends GetxController {
 
       return '${address?.fullAddress}, ${address?.landmark ?? ''}'.obs;
     }
-    return 'No address found'.obs;
+    return 'No manufacturer address found'.obs;
   }
 
   HomeService homeService = HomeService();
