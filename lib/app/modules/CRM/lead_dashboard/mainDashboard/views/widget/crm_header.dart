@@ -80,7 +80,7 @@ class CrmHeader extends StatelessWidget {
                             text: TextSpan(
                               style: MyTexts.medium14.copyWith(color: MyColors.custom('545454')),
                               children: [
-                                TextSpan(text: commonController.getCurrentAddress().value),
+                                TextSpan(text: commonController.getManufacturerAddress().value),
                                 const WidgetSpan(
                                   alignment: PlaceholderAlignment.middle,
                                   child: Padding(

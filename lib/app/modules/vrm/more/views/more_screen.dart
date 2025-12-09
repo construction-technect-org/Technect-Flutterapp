@@ -29,11 +29,7 @@ class VrmMoreScreen extends GetView<VrmMoreController> {
                 icon: Asset.person,
                 title: "My Account",
                 onTap: () {
-                  // if (myPref.role.val == "connector".toLowerCase()) {
-                  //   Get.toNamed(Routes.CONNECTOR_PROFILE);
-                  // } else {
-                  //   Get.toNamed(Routes.PROFILE);
-                  // }
+                  Get.toNamed(Routes.PROFILE);
                 },
               ),
               const Gap(16),
@@ -57,11 +53,7 @@ class VrmMoreScreen extends GetView<VrmMoreController> {
                 icon: Asset.location,
                 title: "Delivery location",
                 onTap: () {
-                  // if (myPref.role.val == "partner") {
-                  //   Get.toNamed(Routes.MANUFACTURER_ADDRESS);
-                  // } else {
-                  //   Get.toNamed(Routes.DELIVERY_LOCATION);
-                  // }
+                  Get.toNamed(Routes.DELIVERY_LOCATION);
                 },
               ),
               const Gap(16),

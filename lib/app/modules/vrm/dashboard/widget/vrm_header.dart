@@ -74,7 +74,7 @@ class VrmHeader extends StatelessWidget {
                             text: TextSpan(
                               style: MyTexts.medium14.copyWith(color: MyColors.custom('545454')),
                               children: [
-                                TextSpan(text: commonController.getCurrentAddress().value),
+                                TextSpan(text: commonController.getDeliveryLocation().value),
                                 const WidgetSpan(
                                   alignment: PlaceholderAlignment.middle,
                                   child: Padding(
