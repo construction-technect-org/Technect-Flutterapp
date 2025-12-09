@@ -145,7 +145,7 @@ class APIConstants {
   static const String crmAnalyticsPdf = "crm/analytics/pdf";
   static const String crmNotification = "crm/notification";
   static const String crmDashboard = "crm/dashboard";
-  // Connector leads (VRM task)
-  static const String connectorLead = "connector/lead";
-  static const String vrmNotification = "connector/vrm-notification";
+  // VRM
+  static const String vrmLead = "vrm/lead";
+  static const String vrmNotification = "vrm/notification";
 }

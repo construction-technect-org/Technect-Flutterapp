@@ -18,22 +18,23 @@ class VRMDashboardController extends GetxController {
   final totalSales = false.obs;
   final totalAccounts = false.obs;
 
-  final rawLeads = 2.obs;
-  final followUpLeads = 9.obs;
-  final pendingLeads = 4.obs;
-  final rawLeadsText = "Raw Leads".obs;
-  final followUpLeadsText = "Follow up Leads".obs;
-  final pendingLeadsText = "Pending Leads".obs;
+  // Default (Enquiry) summary
+  final rawLeads = 45.obs;
+  final followUpLeads = 30.obs;
+  final pendingLeads = 20.obs;
+  final rawLeadsText = "Request".obs;
+  final followUpLeadsText = "Follow up".obs;
+  final pendingLeadsText = "Qualified".obs;
 
   final funnelData = [
-    {'label': 'Lead Generated', 'count': 45, 'color': const Color(0xFFEF4444)},
-    {'label': 'Contacted', 'count': 30, 'color': const Color(0xFFF97316)},
-    {'label': 'Requirement', 'count': 15, 'color': const Color(0xFF22C55E)},
-    {'label': 'Quote Sent', 'count': 23, 'color': const Color(0xFF3B82F6)},
-    {'label': 'Negotiation', 'count': 14, 'color': const Color(0xFFEAB308)},
+    {'label': 'Lead', 'count': 45, 'color': const Color(0xFFEF4444)},
+    {'label': 'Reached out', 'count': 30, 'color': const Color(0xFFF97316)},
+    {'label': 'On hold', 'count': 15, 'color': const Color(0xFF22C55E)},
+    {'label': 'Missed', 'count': 23, 'color': const Color(0xFF3B82F6)},
+    {'label': 'Pending', 'count': 14, 'color': const Color(0xFFEAB308)},
     {'label': 'Follow up', 'count': 15, 'color': const Color(0xFF06B6D4)},
-    {'label': 'Deal Won', 'count': 20, 'color': const Color(0xFF10B981)},
-    {'label': 'Deal Lost', 'count': 5, 'color': const Color(0xFF6366F1)},
+    {'label': 'Qualified', 'count': 20, 'color': const Color(0xFF10B981)},
+    {'label': 'Unqualified', 'count': 5, 'color': const Color(0xFF6366F1)},
   ].obs;
 
   final leadConversations = [
@@ -56,26 +57,26 @@ class VRMDashboardController extends GetxController {
 
   void leadSectionWidget() {
     if (totalMarketing.value) {
-      rawLeads.value = 2;
-      followUpLeads.value = 9;
-      pendingLeads.value = 4;
-      rawLeadsText.value = "Raw Leads";
-      followUpLeadsText.value = "Follow up Leads";
-      pendingLeadsText.value = "Pending Leads";
+      rawLeads.value = 45;
+      followUpLeads.value = 30;
+      pendingLeads.value = 20;
+      rawLeadsText.value = "Request";
+      followUpLeadsText.value = "Follow up";
+      pendingLeadsText.value = "Qualified";
     } else if (totalSales.value) {
       rawLeads.value = 120;
       followUpLeads.value = 80;
       pendingLeads.value = 40;
-      rawLeadsText.value = "New Sales";
-      followUpLeadsText.value = "In- Progresss";
-      pendingLeadsText.value = "Sales Won";
+      rawLeadsText.value = "Requirement";
+      followUpLeadsText.value = "Follow up";
+      pendingLeadsText.value = "Quote";
     } else {
       rawLeads.value = 100;
       followUpLeads.value = 80;
       pendingLeads.value = 120;
-      rawLeadsText.value = "Pending";
-      followUpLeadsText.value = "Follow up";
-      pendingLeadsText.value = "Collected";
+      rawLeadsText.value = "Bill";
+      followUpLeadsText.value = "Out Standing";
+      pendingLeadsText.value = "Collect";
     }
   }
 
@@ -90,7 +91,7 @@ class VRMDashboardController extends GetxController {
       }
     } else if (num == 2) {
       if (totalMarketing.value) {
-        return "98";
+        return "45";
       } else if (totalSales.value) {
         return "₹ 2,45,000";
       } else if (totalAccounts.value) {
