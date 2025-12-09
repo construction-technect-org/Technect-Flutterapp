@@ -56,13 +56,7 @@ class VrmHeader extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    if (myPref.role.val == "partner") {
-                      Get.toNamed(Routes.MANUFACTURER_ADDRESS);
-                    } else {
-                      Get.toNamed(Routes.DELIVERY_LOCATION);
-                    }
-                  },
+                  onTap: () => Get.toNamed(Routes.DELIVERY_LOCATION),
                   child: Row(
                     children: [
                       SvgPicture.asset(
@@ -132,7 +126,7 @@ class VrmHeader extends StatelessWidget {
           const Gap(10),
           GestureDetector(
             onTap: () {
-              Get.toNamed(Routes.NOTIFICATIONS);
+              Get.toNamed(Routes.VRM_NOTIFICATION);
             },
             child: Container(
               padding: const EdgeInsets.all(6),

@@ -7,8 +7,8 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAcco
 import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAccount/switch_account_controller.dart';
 
 class Dashboard extends StatelessWidget {
-  final DashBoardController controller =Get.put(DashBoardController());
-  final CommonController commonController =Get.find<CommonController>();
+  final DashBoardController controller = Get.put(DashBoardController());
+  final CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -37,7 +37,8 @@ class Dashboard extends StatelessWidget {
                           },
                           behavior: HitTestBehavior.translucent,
                           child: Obx(() {
-                            return (commonController.profileData.value.data?.user?.image ?? "").isEmpty
+                            return (commonController.profileData.value.data?.user?.image ?? "")
+                                    .isEmpty
                                 ? const Icon(
                                     Icons.account_circle_sharp,
                                     color: Colors.black,
@@ -107,7 +108,9 @@ class Dashboard extends StatelessWidget {
                                               color: MyColors.custom('545454'),
                                             ),
                                             children: [
-                                              TextSpan(text: commonController.getCurrentAddress().value),
+                                              TextSpan(
+                                                text: commonController.getCurrentAddress().value,
+                                              ),
                                               const WidgetSpan(
                                                 alignment: PlaceholderAlignment.middle,
                                                 child: Padding(
@@ -181,28 +184,7 @@ class Dashboard extends StatelessWidget {
                       ],
                     ),
                     const Gap(24),
-                    Obx(() {
-                      return CommonDashboard(
-                        totalMerchant:
-                            commonController
-                                .profileData
-                                .value
-                                .data
-                                ?.statistics
-                                ?.totalMerchantProfilesCreated
-                                ?.toString() ??
-                            "0",
-                        totalConnector:
-                            commonController
-                                .profileData
-                                .value
-                                .data
-                                ?.statistics
-                                ?.totalConnectorProfilesCreated
-                                ?.toString() ??
-                            "0",
-                      );
-                    }),
+                    CommonDashboard(),
                   ],
                 ),
               ),

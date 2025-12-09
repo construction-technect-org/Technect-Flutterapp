@@ -147,4 +147,5 @@ class APIConstants {
   static const String crmDashboard = "crm/dashboard";
   // Connector leads (VRM task)
   static const String connectorLead = "connector/lead";
+  static const String vrmNotification = "connector/vrm-notification";
 }

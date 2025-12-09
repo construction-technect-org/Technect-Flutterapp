@@ -126,7 +126,9 @@ import 'package:construction_technect/app/modules/splash/bindings/splash_binding
 import 'package:construction_technect/app/modules/splash/views/splash_view.dart';
 import 'package:construction_technect/app/modules/vrm/bottom/bindings/bottom_binding.dart';
 import 'package:construction_technect/app/modules/vrm/bottom/views/bottom_view.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/views/lead_dashboard_screen.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/views/lead_dashboard_screen.dart';
+import 'package:construction_technect/app/modules/vrm/notification/bindings/vrm_notification_bindings.dart';
+import 'package:construction_technect/app/modules/vrm/notification/views/vrm_notification_view.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -381,6 +383,11 @@ class AppPages {
       binding: AnalysisBinding(),
     ),
     GetPage(name: Routes.CRM_INBOX, page: () => CrmInboxView(), binding: CrmInboxBinding()),
+    GetPage(
+      name: Routes.VRM_NOTIFICATION,
+      page: () => VrmNotificationView(),
+      binding: VrmNotificationBinding(),
+    ),
     //Vrm
     GetPage(name: Routes.VRM_MAIN, page: () => VRMBottomBarView(), binding: VRMBottomBinding()),
     GetPage(

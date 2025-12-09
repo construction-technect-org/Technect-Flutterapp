@@ -1,11 +1,11 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/controller/lead_dash_controller.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/views/widget/analysis_section_widget.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/views/widget/lead_conversation_section_widget.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/views/widget/leads_section_widget.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/views/widget/product_chart_widget.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/views/widget/vrm_header.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/analysis_section_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/lead_conversation_section_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/leads_section_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/product_chart_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/vrm_header.dart';
 
 class VrmLeadDashboardScreen extends GetView<VrmLeadDashController> {
   const VrmLeadDashboardScreen({super.key});

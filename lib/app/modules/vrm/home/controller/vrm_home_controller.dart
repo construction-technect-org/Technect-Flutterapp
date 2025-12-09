@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
-class VRMDashboardController extends GetxController {
+class VRMHomeController extends GetxController {
   // final isLoading = false.obs;
   // Rx<ProfileModel> profileData = ProfileModel().obs;
   //

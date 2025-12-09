@@ -2,18 +2,10 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/bottom/controllers/bottom_controller.dart';
 
-class CommonDashboard extends StatefulWidget {
-  String totalMerchant;
-  String totalConnector;
-  CommonDashboard({super.key, required this.totalMerchant, required this.totalConnector});
-
-  @override
-  State<CommonDashboard> createState() => _CommonDashboardState();
-}
-
-class _CommonDashboardState extends State<CommonDashboard> {
-  final controller = Get.put<CommonDashboardController>(CommonDashboardController());
-
+class CommonDashboard extends StatelessWidget {
+  CommonDashboard({super.key});
+  final CommonDashboardController controller = Get.put(CommonDashboardController());
+  final CommonController commonController = Get.find<CommonController>();
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -71,10 +63,34 @@ class _CommonDashboardState extends State<CommonDashboard> {
             SizedBox(height: 1.h),
             Row(
               children: [
-                Expanded(child: _buildStatCard("Merchant", widget.totalMerchant, Asset.role1)),
+                Expanded(
+                  child: _buildStatCard(
+                    "Merchant",
+                    commonController
+                            .profileData
+                            .value
+                            .data
+                            ?.statistics
+                            ?.totalMerchantProfilesCreated
+                            ?.toString() ??
+                        "0",
+                    Asset.role1,
+                  ),
+                ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _buildStatCard("Connectors", widget.totalConnector, Asset.contractor),
+                  child: _buildStatCard(
+                    "Connectors",
+                    commonController
+                            .profileData
+                            .value
+                            .data
+                            ?.statistics
+                            ?.totalConnectorProfilesCreated
+                            ?.toString() ??
+                        "0",
+                    Asset.contractor,
+                  ),
                 ),
               ],
             ),
