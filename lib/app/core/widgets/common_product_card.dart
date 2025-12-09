@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Product/ProductManagement/model/product_model.dart';
 
+// ignore: must_be_immutable
 class ProductCard extends StatelessWidget {
   final Product product;
   final VoidCallback? onWishlistTap;
@@ -14,7 +15,6 @@ class ProductCard extends StatelessWidget {
   final bool isListView;
 
   ProductCard({
-    super.key,
     required this.product,
     this.onWishlistTap,
     this.onNotifyTap,
