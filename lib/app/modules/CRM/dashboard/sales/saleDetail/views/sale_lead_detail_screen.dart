@@ -1,11 +1,11 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead/leadDetail/components/pipeline_widget.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/marketing/widget/priority_dropdown.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/controller/sales_controller.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/model/sales_model.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/saleDetail/controller/sale_lead_detail_controller.dart';
+import 'package:construction_technect/app/modules/CRM/lead/leadDetail/components/pipeline_widget.dart';
 import 'package:intl/intl.dart';
 
 class SaleLeadDetailScreen extends GetView<SaleLeadDetailController> {

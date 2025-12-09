@@ -1,11 +1,11 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/CRM/lead/leadDetail/components/pipeline_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead/leadDetail/controller/lead_detail_controller.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/marketing/controller/marketing_controller.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/marketing/widget/priority_dropdown.dart';
+import 'package:construction_technect/app/modules/CRM/lead/leadDetail/components/pipeline_widget.dart';
+import 'package:construction_technect/app/modules/CRM/lead/leadDetail/controller/lead_detail_controller.dart';
 import 'package:intl/intl.dart';
 
 class LeadDetailScreen extends GetView<LeadDetailController> {

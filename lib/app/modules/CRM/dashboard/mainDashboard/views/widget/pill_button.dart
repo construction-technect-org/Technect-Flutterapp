@@ -1,16 +1,10 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:flutter/material.dart';
 
 class PillButton extends StatelessWidget {
   final String title;
   final bool isSelected;
   final VoidCallback onTap;
-  const PillButton({
-    super.key,
-    required this.title,
-    required this.isSelected,
-    required this.onTap,
-  });
+  const PillButton({super.key, required this.title, required this.isSelected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +49,15 @@ class PillButtonWithOuter extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? MyColors.primary: const Color(0xFFF3F4F8),
+          color: isSelected ? MyColors.primary : const Color(0xFFF3F4F8),
           borderRadius: BorderRadius.circular(40),
         ),
         child: Center(
           child: Text(
             title,
-            style: MyTexts.medium16.copyWith(color: isSelected ? Colors.white : const Color(0xFF1E305C),)
+            style: MyTexts.medium16.copyWith(
+              color: isSelected ? Colors.white : const Color(0xFF1E305C),
+            ),
           ),
         ),
       ),

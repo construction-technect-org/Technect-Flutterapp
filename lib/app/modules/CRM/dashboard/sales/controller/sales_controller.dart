@@ -1,10 +1,10 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/model/sales_model.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/services/SalesService.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_prospect_screen.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_qualified_screen.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_followup_screen.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_lead_screen.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_prospect_screen.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_qualified_screen.dart';
 
 class SalesController extends GetxController {
   @override
@@ -48,7 +48,6 @@ class SalesController extends GetxController {
   final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
 
   List<SaleLeads> get filteredFollowups {
-    print(activeFollowUpStatusFilter.value.toLowerCase());
     if (activeFollowUpStatusFilter.value.toLowerCase() == "pending") {
       return allFollowUpList.where((e) => e.status == "pending").toList();
     }

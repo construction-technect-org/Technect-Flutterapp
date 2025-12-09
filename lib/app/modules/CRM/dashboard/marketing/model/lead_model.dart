@@ -35,9 +35,7 @@ class AllLeads {
         leads!.add(Leads.fromJson(v));
       });
     }
-    pagination = json['pagination'] != null
-        ? Pagination.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? Pagination.fromJson(json['pagination']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -214,7 +212,6 @@ class Leads {
     lastConversation = json["last_conversation"];
     nextConversation = json["next_conversation"];
 
-
     salesLeadStage = json["sales_leads_stage"];
 
     assignedTeamMember = json["assigned_team_member"] != null
@@ -375,13 +372,14 @@ class Pagination {
   bool? hasNext;
   bool? hasPrev;
 
-  Pagination(
-      {this.currentPage,
-        this.totalPages,
-        this.totalLeads,
-        this.limit,
-        this.hasNext,
-        this.hasPrev});
+  Pagination({
+    this.currentPage,
+    this.totalPages,
+    this.totalLeads,
+    this.limit,
+    this.hasNext,
+    this.hasPrev,
+  });
 
   Pagination.fromJson(Map<String, dynamic> json) {
     currentPage = json['currentPage'];
@@ -403,4 +401,3 @@ class Pagination {
     return data;
   }
 }
-

@@ -36,8 +36,7 @@ class AddServiceController extends GetxController {
       if (lastFeature.headerController.text.trim().isEmpty ||
           lastFeature.descController.text.trim().isEmpty) {
         SnackBars.errorSnackBar(
-          content:
-              "Please fill both header and description before adding another feature.",
+          content: "Please fill both header and description before adding another feature.",
         );
         return;
       }
@@ -51,14 +50,10 @@ class AddServiceController extends GetxController {
   }
 
   RxList<ServiceCategoryData> mainCategories = <ServiceCategoryData>[].obs;
-  Rx<ServiceCategoryData?> selectedMainCategory = Rx<ServiceCategoryData?>(
-    null,
-  );
+  Rx<ServiceCategoryData?> selectedMainCategory = Rx<ServiceCategoryData?>(null);
 
   RxList<ServicesSubCategories> subCategories = <ServicesSubCategories>[].obs;
-  Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(
-    null,
-  );
+  Rx<ServicesSubCategories?> selectedSubCategory = Rx<ServicesSubCategories?>(null);
   RxList<String> pickedFilePathList = <String>[].obs;
 
   RxList<ServiceCategories> serviceCategories = <ServiceCategories>[].obs;
@@ -103,9 +98,7 @@ class AddServiceController extends GetxController {
         final toRemove = <String>[];
         removedImages.forEach((key, value) {
           final index = int.parse(key.split('_').last) - 1;
-          if (index >= 0 &&
-              index < imageSlots.length &&
-              imageSlots[index] != null) {
+          if (index >= 0 && index < imageSlots.length && imageSlots[index] != null) {
             toRemove.add(key);
           }
         });
@@ -121,15 +114,11 @@ class AddServiceController extends GetxController {
             break;
           }
         }
-        final hasAnyImage = imageSlots.any(
-          (e) => e != null && e.toString().isNotEmpty,
-        );
+        final hasAnyImage = imageSlots.any((e) => e != null && e.toString().isNotEmpty);
         if (hasAnyImage) {
           removedImages.removeWhere((key, value) {
             final index = int.parse(key.split('_').last) - 1;
-            return index >= 0 &&
-                index < imageSlots.length &&
-                imageSlots[index] != null;
+            return index >= 0 && index < imageSlots.length && imageSlots[index] != null;
           });
         }
       }
@@ -142,9 +131,7 @@ class AddServiceController extends GetxController {
     if (videoPlayerController != null) {
       final size = videoPlayerController!.value.size;
       isVideoPortrait.value = size.height > size.width;
-      log(
-        'Video Size: ${size.width}x${size.height}, Is Portrait: ${isVideoPortrait.value}',
-      );
+      log('Video Size: ${size.width}x${size.height}, Is Portrait: ${isVideoPortrait.value}');
     }
   }
 
@@ -156,9 +143,7 @@ class AddServiceController extends GetxController {
         return;
       }
 
-      final List<XFile>? results = await ImagePicker().pickMultiImage(
-        limit: remainingSlots,
-      );
+      final List<XFile>? results = await ImagePicker().pickMultiImage(limit: remainingSlots);
 
       if (results != null && results.isNotEmpty) {
         pickedFilePathList.addAll(results.map((e) => e.path));
@@ -189,9 +174,7 @@ class AddServiceController extends GetxController {
         if (serviceRef.value.referenceType == "video") {
           refVideoPlayerController?.dispose();
           refVideoPlayerController = VideoPlayerController.networkUrl(
-            Uri.parse(
-              APIConstants.bucketUrl + (serviceRef.value.referenceS3Key ?? ""),
-            ),
+            Uri.parse(APIConstants.bucketUrl + (serviceRef.value.referenceS3Key ?? "")),
           );
           WidgetsBinding.instance.addPostFrameCallback((val) async {
             await refVideoPlayerController!.initialize();
@@ -214,17 +197,13 @@ class AddServiceController extends GetxController {
       );
 
       if (selectedMainCategory.value != null) {
-        subCategories.assignAll(
-          selectedMainCategory.value?.subCategories ?? [],
-        );
+        subCategories.assignAll(selectedMainCategory.value?.subCategories ?? []);
         selectedSubCategory.value = subCategories.firstWhereOrNull(
           (e) => e.id == service.subCategoryId,
         );
 
         if (selectedSubCategory.value != null) {
-          serviceCategories.assignAll(
-            selectedSubCategory.value?.serviceCategories ?? [],
-          );
+          serviceCategories.assignAll(selectedSubCategory.value?.serviceCategories ?? []);
           selectedServiceCategory.value = serviceCategories.firstWhereOrNull(
             (e) => e.id == service.serviceCategoryId,
           );
@@ -255,8 +234,7 @@ class AddServiceController extends GetxController {
       imageSlots.value = List<String?>.filled(5, null);
       final existingImages = service.images ?? [];
       for (int i = 0; i < existingImages.length && i < 5; i++) {
-        imageSlots[i] =
-            "${APIConstants.bucketUrl}${existingImages[i].mediaS3Key!}";
+        imageSlots[i] = "${APIConstants.bucketUrl}${existingImages[i].mediaS3Key!}";
       }
 
       final existingVideo = serviceVid.value;
@@ -264,9 +242,7 @@ class AddServiceController extends GetxController {
         selectedVideo.value = File("abc");
         videoPlayerController?.dispose();
         videoPlayerController = VideoPlayerController.networkUrl(
-          Uri.parse(
-            APIConstants.bucketUrl + existingVideo.mediaS3Key.toString(),
-          ),
+          Uri.parse(APIConstants.bucketUrl + existingVideo.mediaS3Key.toString()),
         );
         await videoPlayerController!.initialize();
         videoPlayerController!.setLooping(false);
@@ -284,8 +260,7 @@ class AddServiceController extends GetxController {
 
       final cachedCategoryHierarchy = myPref.getServiceCategoryHierarchyModel();
       final categoryHierarchy =
-          cachedCategoryHierarchy ??
-          await HomeService().getCategoryServiceHierarchy();
+          cachedCategoryHierarchy ?? await HomeService().getCategoryServiceHierarchy();
 
       mainCategories.assignAll(categoryHierarchy.data ?? []);
     } catch (e) {
@@ -296,9 +271,7 @@ class AddServiceController extends GetxController {
   }
 
   void onMainCategorySelected(String? value) {
-    selectedMainCategory.value = mainCategories.firstWhereOrNull(
-      (e) => e.name == value,
-    );
+    selectedMainCategory.value = mainCategories.firstWhereOrNull((e) => e.name == value);
 
     subCategories.assignAll(selectedMainCategory.value?.subCategories ?? []);
 
@@ -308,28 +281,20 @@ class AddServiceController extends GetxController {
   }
 
   void onSubCategorySelected(String? value) {
-    selectedSubCategory.value = subCategories.firstWhereOrNull(
-      (e) => e.name == value,
-    );
+    selectedSubCategory.value = subCategories.firstWhereOrNull((e) => e.name == value);
 
-    serviceCategories.assignAll(
-      selectedSubCategory.value?.serviceCategories ?? [],
-    );
+    serviceCategories.assignAll(selectedSubCategory.value?.serviceCategories ?? []);
 
     selectedServiceCategory.value = null;
   }
 
   void onServiceCategorySelected(String? value) {
-    selectedServiceCategory.value = serviceCategories.firstWhereOrNull(
-      (e) => e.name == value,
-    );
+    selectedServiceCategory.value = serviceCategories.firstWhereOrNull((e) => e.name == value);
   }
 
   void gstCalculate() {
     final double amount =
-        double.parse(
-          priceController.text.isEmpty ? '0.0' : priceController.text,
-        ) *
+        double.parse(priceController.text.isEmpty ? '0.0' : priceController.text) *
         double.parse(
           selectedGST.value.toString().replaceAll("%", "").isEmpty
               ? '0.0'
@@ -337,8 +302,7 @@ class AddServiceController extends GetxController {
         ) /
         100;
     gstPriceController.text = amount.toStringAsFixed(2);
-    amountController.text = (amount + double.parse(priceController.text))
-        .toStringAsFixed(2);
+    amountController.text = (amount + double.parse(priceController.text)).toStringAsFixed(2);
   }
 
   final RxBool isVideoPortrait = false.obs;
@@ -425,9 +389,7 @@ class AddServiceController extends GetxController {
             "details": f.descController.text.trim(),
           },
         )
-        .where(
-          (item) => item["feature"]!.isNotEmpty && item["details"]!.isNotEmpty,
-        )
+        .where((item) => item["feature"]!.isNotEmpty && item["details"]!.isNotEmpty)
         .toList();
 
     final String featuresJson = jsonEncode(featureData);
@@ -458,16 +420,12 @@ class AddServiceController extends GetxController {
       "description": descriptionController.text,
       "note": noteController.text,
       if (featureList.isNotEmpty) "features": featuresJson,
-      if (refUrlController.text.isNotEmpty)
-        "service_reference_url": refUrlController.text,
+      if (refUrlController.text.isNotEmpty) "service_reference_url": refUrlController.text,
       if (referenceFile.value != null) 'reference_type': referenceFileUrl.value,
     };
 
     try {
-      final res = await _service.createService(
-        fields: fields,
-        files: selectedFiles,
-      );
+      final res = await _service.createService(fields: fields, files: selectedFiles);
       if (res.success) {
         Get.to(
           () => SuccessScreen(
@@ -499,9 +457,7 @@ class AddServiceController extends GetxController {
             "details": f.descController.text.trim(),
           },
         )
-        .where(
-          (item) => item["feature"]!.isNotEmpty && item["details"]!.isNotEmpty,
-        )
+        .where((item) => item["feature"]!.isNotEmpty && item["details"]!.isNotEmpty)
         .toList();
 
     final String featuresJson = jsonEncode(featureData);
@@ -715,11 +671,7 @@ class AddServiceController extends GetxController {
                                       ),
                                     ],
                                   ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
+                                  child: const Icon(Icons.close, color: Colors.white, size: 20),
                                 ),
                               ),
                             ),

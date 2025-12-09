@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/marketing/controller/marketing_controller.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/marketing/widget/prospect_status_widget.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/marketing/widget/lead_item_Card.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/marketing/widget/prospect_status_widget.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/marketing/widget/todays_leads_card.dart';
 
 class ProspectScreen extends GetView<MarketingController> {

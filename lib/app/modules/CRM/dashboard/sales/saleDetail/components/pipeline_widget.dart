@@ -108,8 +108,7 @@ class PipelineView extends StatelessWidget {
                         itemCount: stage.subStages.length,
                         itemBuilder: (context, j) {
                           final highlight =
-                              (i < currentStage) ||
-                                  (i == currentStage && j == currentSubStage);
+                              (i < currentStage) || (i == currentStage && j == currentSubStage);
 
                           return Row(
                             children: [
@@ -136,7 +135,6 @@ class PipelineView extends StatelessWidget {
                                           color: highlight
                                               ? stage.color.withValues(alpha: .5)
                                               : stage.color.withValues(alpha: .2),
-                                          width: 1,
                                         ),
                                       ),
                                     ),

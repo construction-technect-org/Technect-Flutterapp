@@ -1,7 +1,7 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/controller/sales_controller.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_qualified_status_widget.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_lead_item_Card.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_qualified_status_widget.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/today_sale_card.dart';
 
 class SaleQualifiedScreen extends GetView<SalesController> {

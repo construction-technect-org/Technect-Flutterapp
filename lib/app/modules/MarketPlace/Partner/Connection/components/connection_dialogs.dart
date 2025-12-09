@@ -353,7 +353,7 @@ class ConnectionDialogs {
     bool? isFromIn = false,
     void Function(String note, String date, String raduis)? onTap,
   }) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final TextEditingController messageController = TextEditingController();
     final TextEditingController radiusController = TextEditingController();
     final TextEditingController dateController = TextEditingController();
@@ -370,9 +370,12 @@ class ConnectionDialogs {
             onTap: hideKeyboard,
             child: Container(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: Colors.white),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+              ),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -479,7 +482,7 @@ class ConnectionDialogs {
                         Expanded(
                           child: RoundedButton(
                             onTap: () {
-                              if (_formKey.currentState!.validate()) {
+                              if (formKey.currentState!.validate()) {
                                 if (onTap != null) {
                                   onTap(
                                     messageController.text,
