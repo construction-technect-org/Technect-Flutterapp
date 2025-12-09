@@ -132,6 +132,7 @@ class RequestDemoView extends StatelessWidget {
                               controller: controller.phoneNumberController,
                               focusNode: FocusNode(),
                               isValid: controller.isValid,
+                              customErrorMessage: controller.numberError,
                               onCountryCodeChanged: (code) => controller.countryCode.value = code,
                             ),
                             SizedBox(height: 2.h),

@@ -15,6 +15,7 @@ class RequestDemoController extends GetxController {
   ];
   RxInt isValid = (-1).obs;
   RxString countryCode = "".obs;
+  RxString numberError = "".obs;
 
   RxString selectedMainCategory = "".obs;
   bool isEdit = false;
