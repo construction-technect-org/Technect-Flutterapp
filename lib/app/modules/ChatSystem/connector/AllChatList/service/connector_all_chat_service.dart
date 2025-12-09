@@ -10,7 +10,7 @@ class ConnectorAllChatListServices {
       final response = await apiManager.get(url: url);
 
       return ConnectorAllChatListModel.fromJson(response);
-    } catch (e, st) {
+    } catch (e) {
       throw Exception('Error fetching chat: $e');
     }
   }

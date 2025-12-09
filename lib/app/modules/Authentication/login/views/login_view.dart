@@ -11,7 +11,7 @@ import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
 
 class LoginView extends GetView<LoginController> {
-   LoginView({super.key});
+  LoginView({super.key});
   bool _isBottomSheetOpen = false;
 
   @override
@@ -37,8 +37,7 @@ class LoginView extends GetView<LoginController> {
                 ),
                 builder: (_) => PopScope(
                   canPop: false,
-                  onPopInvokedWithResult: (didPop, result) {
-                  },
+                  onPopInvokedWithResult: (didPop, result) {},
                   child: NoInternetBottomSheet(),
                 ),
               ).whenComplete(() {
@@ -79,10 +78,7 @@ class LoginView extends GetView<LoginController> {
               Container(
                 margin: const EdgeInsets.only(top: 25),
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Asset.loginBg),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: AssetImage(Asset.loginBg), fit: BoxFit.cover),
                 ),
               ),
               Padding(
@@ -108,9 +104,7 @@ class LoginView extends GetView<LoginController> {
                         Center(
                           child: Text(
                             'India’s Fastest Growing\nConstruction Network',
-                            style: MyTexts.medium18.copyWith(
-                              color: Colors.black,
-                            ),
+                            style: MyTexts.medium18.copyWith(color: Colors.black),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -119,9 +113,7 @@ class LoginView extends GetView<LoginController> {
                           alignment: Alignment.topLeft,
                           child: Text(
                             'Login',
-                            style: MyTexts.medium20.copyWith(
-                              color: Colors.black,
-                            ),
+                            style: MyTexts.medium20.copyWith(color: Colors.black),
                           ),
                         ),
                         const Gap(16),
@@ -137,9 +129,7 @@ class LoginView extends GetView<LoginController> {
                             controller.countryCode.value = code;
                           },
                           onSubmitted: (val) {
-                            FocusScope.of(
-                              context,
-                            ).requestFocus(controller.passwordFocusNode);
+                            FocusScope.of(context).requestFocus(controller.passwordFocusNode);
                           },
                         ),
                         const Gap(16),
@@ -161,8 +151,7 @@ class LoginView extends GetView<LoginController> {
                             },
                             showDivider: true,
                             suffixIcon: GestureDetector(
-                              onTap: () =>
-                                  controller.togglePasswordVisibility(),
+                              onTap: () => controller.togglePasswordVisibility(),
                               child: Icon(
                                 controller.isPasswordVisible.value
                                     ? Icons.visibility
@@ -179,12 +168,10 @@ class LoginView extends GetView<LoginController> {
                           children: [
                             SavePassWidget(
                               state: controller.rememberMe,
-                              onChanged: (val) =>
-                                  controller.rememberMe.value = val,
+                              onChanged: (val) => controller.rememberMe.value = val,
                             ),
                             TextButton(
-                              onPressed: () =>
-                                  Get.toNamed(Routes.FORGOT_PASSWORD),
+                              onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
                               child: Text(
                                 'Forgot Password?',
                                 style: MyTexts.medium14.copyWith(
@@ -207,34 +194,26 @@ class LoginView extends GetView<LoginController> {
                                     controller.loginError.value = "";
                                     controller.mobileValidationError.value = "";
                                     controller.isValid.value = -1;
-                                    if (!controller.formKey.currentState!
-                                        .validate()) {
+                                    if (!controller.formKey.currentState!.validate()) {
                                       return;
                                     }
 
-                                    final mobileNumber = controller
-                                        .mobileController
-                                        .text
-                                        .trim();
+                                    final mobileNumber = controller.mobileController.text.trim();
                                     if (mobileNumber.isEmpty) {
                                       controller.isValid.value = 0;
                                       return;
                                     }
 
-                                    final mobileError =
-                                        ValidationUtils.validateMobileNumber(
-                                          mobileNumber,
-                                        );
+                                    final mobileError = ValidationUtils.validateMobileNumber(
+                                      mobileNumber,
+                                    );
                                     if (mobileError != null) {
-                                      controller.mobileValidationError.value =
-                                          mobileError;
+                                      controller.mobileValidationError.value = mobileError;
                                       controller.isValid.value = 1;
                                       return;
                                     }
 
-                                    if (controller.formKey.currentState
-                                            ?.validate() ??
-                                        false) {
+                                    if (controller.formKey.currentState?.validate() ?? false) {
                                       hideKeyboard();
                                       controller.login();
                                     }
@@ -247,11 +226,7 @@ class LoginView extends GetView<LoginController> {
                         Row(
                           children: [
                             Expanded(
-                              child: Divider(
-                                color: MyColors.grayD4,
-                                indent: 10.sw,
-                                thickness: 1,
-                              ),
+                              child: Divider(color: MyColors.grayD4, indent: 10.sw, thickness: 1),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 2.w),
@@ -292,20 +267,16 @@ class LoginView extends GetView<LoginController> {
                               ),
                               onTap: () async {
                                 try {
-                                  final user =
-                                      await GoogleSignInService.signInWithGoogle();
+                                  final user = await GoogleSignInService.signInWithGoogle();
                                   if (user != null) {
                                     await controller.callSocialLoginAPI(user);
                                   } else {
                                     SnackBars.errorSnackBar(
-                                      content:
-                                          'Google Sign-In was cancelled by user',
+                                      content: 'Google Sign-In was cancelled by user',
                                     );
                                   }
                                 } catch (e) {
-                                  SnackBars.errorSnackBar(
-                                    content: 'Google Sign-In failed: $e',
-                                  );
+                                  SnackBars.errorSnackBar(content: 'Google Sign-In failed: $e');
                                 }
                               },
                             ),
@@ -337,9 +308,7 @@ class LoginView extends GetView<LoginController> {
                             children: [
                               Text(
                                 "Don't have an account? ",
-                                style: MyTexts.regular16.copyWith(
-                                  fontFamily: MyTexts.SpaceGrotesk,
-                                ),
+                                style: MyTexts.regular16.copyWith(fontFamily: MyTexts.SpaceGrotesk),
                               ),
                               Text(
                                 "Sign-up",
