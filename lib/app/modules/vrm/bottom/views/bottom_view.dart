@@ -4,6 +4,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/vrm/bottom/controllers/bottom_controller.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/views/vrm_home_view.dart';
 import 'package:construction_technect/app/modules/vrm/mainDashboard/views/lead_dashboard_screen.dart';
 import 'package:construction_technect/app/modules/vrm/task/views/vrm_task_screen.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -75,7 +76,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
   Widget _getCurrentScreen() {
     switch (controller.currentIndex.value) {
       case 0:
-        return _comingSoon();
+        return VRMHomeView();
       case 1:
         return const VrmLeadDashboardScreen();
       case 2:
@@ -85,7 +86,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
       case 4:
         return _comingSoon();
       default:
-        return _comingSoon();
+        return VRMHomeView();
     }
   }
 

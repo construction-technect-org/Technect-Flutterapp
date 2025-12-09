@@ -23,14 +23,14 @@ class VrmTaskController extends GetxController {
   final accountLeads = <VrmLead>[].obs;
 
   // Marketing/Enquiry filters
-  RxString activeFilter = 'Lead'.obs;
+  RxString activeFilter = 'Request'.obs;
   RxString activeLeadStatusFilter = 'All'.obs;
   RxString activeFollowUpStatusFilter = 'Pending'.obs;
   RxString activeProspectStatusFilter = 'Fresh'.obs;
   RxString activeQualifiedStatusFilter = 'Pending'.obs;
   RxString selectedPriority = "High".obs;
 
-  final items = ['Lead', 'Follow Up', 'Prospect', 'Qualified'];
+  final items = ['Request', 'Follow Up', 'Prospect', 'Qualified'];
   final leadStatus = <String>["All", "Inbound", "Outbound"];
   final List<String> statusItems = <String>["Pending", "Completed", "Missed"];
   final List<String> statusProspectItems = <String>["Fresh", "Reached Out", "Converted", "On Hold"];
@@ -39,6 +39,11 @@ class VrmTaskController extends GetxController {
   RxInt todaysTotal = 0.obs;
   RxInt salesTodaysTotal = 0.obs;
   RxInt accountTodaysTotal = 0.obs;
+
+  // Total counts for all Enquiry, Purchase, and Account leads
+  RxInt totalEnquiry = 0.obs;
+  RxInt totalPurchase = 0.obs;
+  RxInt totalAccount = 0.obs;
 
   // Accounts filters
   RxString activeAccountFilter = 'Bill'.obs;
@@ -56,13 +61,13 @@ class VrmTaskController extends GetxController {
   RxList<VrmLead> accountAllCollectList = <VrmLead>[].obs;
 
   // Sales/Purchase filters
-  RxString activeSalesFilter = 'Lead'.obs;
+  RxString activeSalesFilter = 'Requirement'.obs;
   RxString activeSalesLeadStatusFilter = 'All'.obs;
   RxString activeSalesFollowUpStatusFilter = 'Pending'.obs;
   RxString activeSalesProspectStatusFilter = 'Sent'.obs;
   RxString activeSalesQualifiedStatusFilter = 'Pending'.obs;
 
-  final salesItems = ['Lead', 'Follow Up', 'Quote Sent', 'Closing'];
+  final salesItems = ['Requirement', 'Follow Up', 'Quote', 'Closed'];
   final salesLeadStatus = <String>["All", "Inbound", "Outbound"];
   final List<String> salesStatusItems = <String>["Pending", "Completed", "Missed"];
   final List<String> salesStatusProspectItems = <String>["Sent", "Accepted", "Negotiation"];
@@ -76,7 +81,7 @@ class VrmTaskController extends GetxController {
   // Lazy load filter screens to avoid circular dependencies
   Widget getFilterScreen(String filter) {
     switch (filter) {
-      case 'Lead':
+      case 'Request':
         return const VrmLeadScreen();
       case 'Follow Up':
         return const VrmFollowupScreen();
@@ -91,13 +96,13 @@ class VrmTaskController extends GetxController {
 
   Widget getSalesFilterScreen(String filter) {
     switch (filter) {
-      case 'Lead':
+      case 'Requirement':
         return const VrmSaleLeadScreen();
       case 'Follow Up':
         return const VrmSaleFollowupScreen();
-      case 'Quote Sent':
+      case 'Quote':
         return const VrmSaleProspectScreen();
-      case 'Closing':
+      case 'Closed':
         return const VrmSaleQualifiedScreen();
       default:
         return const VrmSaleLeadScreen();
@@ -135,13 +140,19 @@ class VrmTaskController extends GetxController {
 
   List<VrmLead> get filteredFollowups {
     if (activeFollowUpStatusFilter.value.toLowerCase() == "pending") {
-      return allFollowUpList.where((e) => (e.status ?? '').toLowerCase() == "pending").toList();
+      return allFollowUpList
+          .where((e) => (e.currentStatus ?? '').toLowerCase() == "pending")
+          .toList();
     }
     if (activeFollowUpStatusFilter.value.toLowerCase() == "completed") {
-      return allFollowUpList.where((e) => (e.status ?? '').toLowerCase() == "fresh").toList();
+      return allFollowUpList
+          .where((e) => (e.currentStatus ?? '').toLowerCase() == "fresh")
+          .toList();
     }
     if (activeFollowUpStatusFilter.value.toLowerCase() == "missed") {
-      return allFollowUpList.where((e) => (e.status ?? '').toLowerCase() == "missed").toList();
+      return allFollowUpList
+          .where((e) => (e.currentStatus ?? '').toLowerCase() == "missed")
+          .toList();
     }
     return allFollowUpList.toList();
   }
@@ -149,20 +160,29 @@ class VrmTaskController extends GetxController {
   List<VrmLead> get filteredProspect {
     final status = activeProspectStatusFilter.value.toLowerCase();
     if (status == "fresh") {
-      return allProspectList.where((e) => (e.status ?? '').toLowerCase() == "fresh").toList();
+      return allProspectList.where((e) {
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        return stat == "fresh";
+      }).toList();
     }
     if (status == "reached out") {
-      return allProspectList.where((e) => (e.status ?? '').toLowerCase() == "reached_out").toList();
+      return allProspectList.where((e) {
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        return stat == "reached_out";
+      }).toList();
     }
     if (status == "converted") {
       return allProspectList.where((e) {
-        final stage = (e.leadStage ?? '').toLowerCase();
-        final stat = (e.status ?? '').toLowerCase();
+        final stage = (e.currentStage ?? '').toLowerCase();
+        final stat = (e.currentStatus ?? '').toLowerCase();
         return stage == "qualified" && stat == "pending";
       }).toList();
     }
     if (status == "on hold") {
-      return allProspectList.where((e) => (e.status ?? '').toLowerCase() == "on_hold").toList();
+      return allProspectList.where((e) {
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        return stat == "on_hold";
+      }).toList();
     }
     return allProspectList.toList();
   }
@@ -171,16 +191,25 @@ class VrmTaskController extends GetxController {
     final status = activeQualifiedStatusFilter.value.toLowerCase();
     if (status == "pending") {
       return allQualifiedList.where((e) {
-        final stage = (e.leadStage ?? '').toLowerCase();
-        final stat = (e.status ?? '').toLowerCase();
+        final stage = (e.currentStage ?? '').toLowerCase();
+        final stat = (e.currentStatus ?? '').toLowerCase();
         return stage == "qualified" && stat == "pending";
       }).toList();
     }
     if (status == "qualified") {
-      return allQualifiedList.where((e) => (e.status ?? '').toLowerCase() == "qualified").toList();
+      return allQualifiedList.where((e) {
+        final mainStage = (e.mainStage ?? '').toLowerCase();
+        final currentStage = (e.currentStage ?? '').toLowerCase();
+        final currentStatus = (e.currentStatus ?? '').toLowerCase();
+        // Include qualified status OR Purchase leads with sales/new
+        return currentStatus == "qualified" ||
+            (mainStage == "purchase" && currentStage == "sales" && currentStatus == "new");
+      }).toList();
     }
     if (status == "lost") {
-      return allQualifiedList.where((e) => (e.status ?? '').toLowerCase() == "lost").toList();
+      return allQualifiedList
+          .where((e) => (e.currentStatus ?? '').toLowerCase() == "lost")
+          .toList();
     }
     return allQualifiedList.toList();
   }
@@ -204,10 +233,18 @@ class VrmTaskController extends GetxController {
       leads.assignAll(
         list.where((e) {
           final mainStage = e.mainStage ?? '';
-          final hasSalesData = e.salesLeadsStage != null || e.salesLeadStatus != null;
-          final hasAccountData = e.accountLeadsStage != null || e.accountLeadStatus != null;
+          final currentStage = (e.currentStage ?? '').toLowerCase();
+          final currentStatus = (e.currentStatus ?? '').toLowerCase();
+          final hasSalesData =
+              e.salesLeadId != null || e.salesId != null || mainStage == 'Purchase';
+          final hasAccountData =
+              e.accountLeadId != null ||
+              e.accountId != null ||
+              (mainStage == 'Account' && (e.currentStage != null || e.currentStatus != null));
           // Include if main_stage is Enquiry, or has lead_stage/status but no sales/account data
+          // Also include Purchase leads with current_stage: "sales" and current_status: "new" in Enquiry
           return mainStage == 'Enquiry' ||
+              (mainStage == 'Purchase' && currentStage == 'sales' && currentStatus == 'new') ||
               (mainStage != 'Purchase' &&
                   mainStage != 'Account' &&
                   !hasSalesData &&
@@ -217,19 +254,33 @@ class VrmTaskController extends GetxController {
       salesLeads.assignAll(
         list.where((e) {
           final mainStage = e.mainStage ?? '';
-          final hasSalesData = e.salesLeadsStage != null || e.salesLeadStatus != null;
+          final currentStage = (e.currentStage ?? '').toLowerCase();
+          final currentStatus = (e.currentStatus ?? '').toLowerCase();
+          final hasSalesData =
+              e.salesLeadId != null || e.salesId != null || mainStage == 'Purchase';
           // Include if main_stage is Purchase OR has sales data
-          return mainStage == 'Purchase' || hasSalesData;
+          // Also include Account leads with bill/pending for Closed > Won
+          return mainStage == 'Purchase' ||
+              hasSalesData ||
+              (mainStage == 'Account' && currentStage == 'bill' && currentStatus == 'pending');
         }).toList(),
       );
       accountLeads.assignAll(
         list.where((e) {
           final mainStage = e.mainStage ?? '';
-          final hasAccountData = e.accountLeadsStage != null || e.accountLeadStatus != null;
+          final hasAccountData =
+              e.accountLeadId != null ||
+              e.accountId != null ||
+              (mainStage == 'Account' && (e.currentStage != null || e.currentStatus != null));
           // Include if main_stage is Account OR has account data
           return mainStage == 'Account' || hasAccountData;
         }).toList(),
       );
+
+      // Calculate total counts for Enquiry, Purchase, and Account
+      totalEnquiry.value = leads.length;
+      totalPurchase.value = salesLeads.length;
+      totalAccount.value = accountLeads.length;
 
       // Apply filters
       filterLead();
@@ -248,13 +299,13 @@ class VrmTaskController extends GetxController {
 
   void setTab(int index) {
     currentTab.value = index;
-    // Ensure Enquiry tab always starts on Lead view
+    // Ensure Enquiry tab always starts on Request view
     if (index == 0) {
-      activeFilter.value = 'Lead';
+      activeFilter.value = 'Request';
     }
-    // Ensure Purchase tab always starts on Lead view
+    // Ensure Purchase tab always starts on Requirement view
     if (index == 1) {
-      activeSalesFilter.value = 'Lead';
+      activeSalesFilter.value = 'Requirement';
     }
     // Ensure Accounts tab always starts on Bill view
     if (index == 2) {
@@ -268,7 +319,7 @@ class VrmTaskController extends GetxController {
   }
 
   String getFilterStatusName() {
-    if (activeFilter.value == "Lead") {
+    if (activeFilter.value == "Request") {
       return "lead";
     }
     if (activeFilter.value == "Follow Up") {
@@ -300,87 +351,99 @@ class VrmTaskController extends GetxController {
   }
 
   void filterLead() {
-    final DateTime today = DateTime.now();
-    final String todayStr =
-        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
-
     final List<VrmLead> all = leads.toList();
-
-    final List<VrmLead> todaysLeads = all.where((e) {
-      if (e.createdAt == null) return false;
-      try {
-        final DateTime d = DateTime.parse(e.createdAt!);
-        final String dateStr =
-            "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
-        return dateStr == todayStr;
-      } catch (e) {
-        return false;
-      }
-    }).toList();
 
     if (getFilterStatusName() == "lead") {
       allLeadList
         ..clear()
         ..addAll(
           all.where((e) {
-            final stage = (e.leadStage ?? '').toLowerCase();
-            final stat = (e.status ?? '').toLowerCase();
-            return stage == "lead" || stat == "lead";
+            // For Enquiry, use current_stage and current_status (same as CRM lead_stage and status)
+            final stage = (e.currentStage ?? '').toLowerCase();
+            return stage == "lead";
           }),
         );
 
-      todaysTotal.value = todaysLeads.where((e) {
-        final stage = (e.leadStage ?? '').toLowerCase();
-        final stat = (e.status ?? '').toLowerCase();
-        return stage == "lead" || stat == "lead";
+      // Count all leads matching the current status filter
+      todaysTotal.value = allLeadList.where((e) {
+        final filterStatus = activeLeadStatusFilter.value.toLowerCase();
+        if (filterStatus == "inbound") return e.isAutoCreated == true;
+        if (filterStatus == "outbound") return e.isAutoCreated == false;
+        return true;
       }).length;
     } else if (getFilterStatusName() == "follow_up") {
       allFollowUpList
         ..clear()
         ..addAll(
           all.where((e) {
-            final stage = (e.leadStage ?? '').toLowerCase();
-            final stat = (e.status ?? '').toLowerCase();
+            // For Enquiry, use current_stage and current_status
+            final stage = (e.currentStage ?? '').toLowerCase();
+            final stat = (e.currentStatus ?? '').toLowerCase();
             return stage == "follow_up" || (stage == "prospect" && stat == "fresh");
           }),
         );
 
-      todaysTotal.value = todaysLeads.where((e) {
-        final stage = (e.leadStage ?? '').toLowerCase();
-        final stat = (e.status ?? '').toLowerCase();
-        return stage == "follow_up" || (stage == "prospect" && stat == "fresh");
+      // Count all leads matching the current status filter
+      todaysTotal.value = allFollowUpList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final filterStatus = activeFollowUpStatusFilter.value.toLowerCase();
+        if (filterStatus == "pending") return status == "pending";
+        if (filterStatus == "completed") return status == "completed";
+        if (filterStatus == "missed") return status == "missed";
+        return true;
       }).length;
     } else if (getFilterStatusName() == "prospect") {
       allProspectList
         ..clear()
         ..addAll(
           all.where((e) {
-            final stage = (e.leadStage ?? '').toLowerCase();
-            final stat = (e.status ?? '').toLowerCase();
+            // For Enquiry, use current_stage and current_status
+            final stage = (e.currentStage ?? '').toLowerCase();
+            final stat = (e.currentStatus ?? '').toLowerCase();
             return stage == "prospect" || (stat == "pending" && stage == "qualified");
           }),
         );
 
-      todaysTotal.value = todaysLeads.where((e) {
-        final stage = (e.leadStage ?? '').toLowerCase();
-        final stat = (e.status ?? '').toLowerCase();
-        return stage == "prospect" || (stat == "pending" && stage == "qualified");
+      // Count all leads matching the current status filter
+      todaysTotal.value = allProspectList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final filterStatus = activeProspectStatusFilter.value.toLowerCase();
+        if (filterStatus == "fresh") return status == "fresh";
+        if (filterStatus == "reached out") return status == "reached_out";
+        if (filterStatus == "converted") return status == "converted";
+        if (filterStatus == "on hold") return status == "on_hold";
+        return true;
       }).length;
     } else if (getFilterStatusName() == "qualified") {
       allQualifiedList
         ..clear()
         ..addAll(
           all.where((e) {
-            final stage = (e.leadStage ?? '').toLowerCase();
-            final stat = (e.status ?? '').toLowerCase();
-            return stage == "qualified" || stat == "qualified";
+            // For Enquiry, use current_stage and current_status
+            final stage = (e.currentStage ?? '').toLowerCase();
+            final mainStage = (e.mainStage ?? '').toLowerCase();
+            // Include qualified stage OR Purchase leads with sales stage and new status
+            return stage == "qualified" ||
+                (mainStage == "purchase" &&
+                    stage == "sales" &&
+                    (e.currentStatus ?? '').toLowerCase() == "new");
           }),
         );
 
-      todaysTotal.value = todaysLeads.where((e) {
-        final stage = (e.leadStage ?? '').toLowerCase();
-        final stat = (e.status ?? '').toLowerCase();
-        return stage == "qualified" || stat == "qualified";
+      // Count all leads matching the current status filter
+      todaysTotal.value = allQualifiedList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final filterStatus = activeQualifiedStatusFilter.value.toLowerCase();
+        final mainStage = (e.mainStage ?? '').toLowerCase();
+        final stage = (e.currentStage ?? '').toLowerCase();
+        // For Purchase leads with sales/new, treat as "qualified" status
+        if (mainStage == "purchase" && stage == "sales" && status == "new") {
+          return filterStatus == "qualified";
+        }
+        if (filterStatus == "pending") return status == "pending";
+        if (filterStatus == "qualified") return status == "qualified";
+        if (filterStatus == "lost") return status == "lost";
+        return true;
       }).length;
     }
   }
@@ -398,19 +461,24 @@ class VrmTaskController extends GetxController {
 
   List<VrmLead> get filteredSalesFollowups {
     if (activeSalesFollowUpStatusFilter.value.toLowerCase() == "pending") {
-      return salesAllFollowUpList
-          .where((e) => (e.salesLeadStatus ?? '').toLowerCase() == "pending")
-          .toList();
+      return salesAllFollowUpList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "pending";
+      }).toList();
     }
     if (activeSalesFollowUpStatusFilter.value.toLowerCase() == "completed") {
-      return salesAllFollowUpList
-          .where((e) => (e.salesLeadStatus ?? '').toLowerCase() == "sent")
-          .toList();
+      return salesAllFollowUpList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final stage = (e.currentStage ?? '').toLowerCase();
+        // Include completed status OR quote_sent stage with sent status
+        return status == "completed" || (stage == "quote_sent" && status == "sent");
+      }).toList();
     }
     if (activeSalesFollowUpStatusFilter.value.toLowerCase() == "missed") {
-      return salesAllFollowUpList
-          .where((e) => (e.salesLeadStatus ?? '').toLowerCase() == "missed")
-          .toList();
+      return salesAllFollowUpList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "missed";
+      }).toList();
     }
     return salesAllFollowUpList.toList();
   }
@@ -418,21 +486,24 @@ class VrmTaskController extends GetxController {
   List<VrmLead> get filteredSalesProspect {
     final status = activeSalesProspectStatusFilter.value.toLowerCase();
     if (status == "sent") {
-      return salesAllProspectList
-          .where((e) => (e.salesLeadStatus ?? '').toLowerCase() == "sent")
-          .toList();
+      return salesAllProspectList.where((e) {
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        return stat == "sent";
+      }).toList();
     }
     if (status == "accepted") {
       return salesAllProspectList.where((e) {
-        final stage = (e.salesLeadsStage ?? '').toLowerCase();
-        final stat = (e.salesLeadStatus ?? '').toLowerCase();
-        return stage == "closing" && stat == "won";
+        final stage = (e.currentStage ?? '').toLowerCase();
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        // Include closing stage with won status OR closing stage with pending status
+        return (stage == "closing" && stat == "won") || (stage == "closing" && stat == "pending");
       }).toList();
     }
     if (status == "negotiation") {
-      return salesAllProspectList
-          .where((e) => (e.salesLeadStatus ?? '').toLowerCase() == "negotiation")
-          .toList();
+      return salesAllProspectList.where((e) {
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        return stat == "negotiation";
+      }).toList();
     }
     return salesAllProspectList.toList();
   }
@@ -440,19 +511,25 @@ class VrmTaskController extends GetxController {
   List<VrmLead> get filteredSalesQualified {
     final status = activeSalesQualifiedStatusFilter.value.toLowerCase();
     if (status == "pending") {
-      return salesAllQualifiedList
-          .where((e) => (e.salesLeadStatus ?? '').toLowerCase() == "pending")
-          .toList();
+      return salesAllQualifiedList.where((e) {
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        return stat == "pending";
+      }).toList();
     }
     if (status == "won") {
-      return salesAllQualifiedList
-          .where((e) => (e.salesLeadStatus ?? '').toLowerCase() == "won")
-          .toList();
+      return salesAllQualifiedList.where((e) {
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        final stage = (e.currentStage ?? '').toLowerCase();
+        final mainStage = (e.mainStage ?? '').toLowerCase();
+        // Include won status OR Account leads with bill/pending
+        return stat == "won" || (mainStage == "account" && stage == "bill" && stat == "pending");
+      }).toList();
     }
     if (status == "lost") {
-      return salesAllQualifiedList
-          .where((e) => (e.salesLeadStatus ?? '').toLowerCase() == "lost")
-          .toList();
+      return salesAllQualifiedList.where((e) {
+        final stat = (e.currentStatus ?? '').toLowerCase();
+        return stat == "lost";
+      }).toList();
     }
     return salesAllQualifiedList.toList();
   }
@@ -463,16 +540,16 @@ class VrmTaskController extends GetxController {
   }
 
   String getSalesFilterStatusName() {
-    if (activeSalesFilter.value == "Lead") {
+    if (activeSalesFilter.value == "Requirement") {
       return "sales";
     }
     if (activeSalesFilter.value == "Follow Up") {
       return "follow_up";
     }
-    if (activeSalesFilter.value == "Quote Sent") {
+    if (activeSalesFilter.value == "Quote") {
       return "quote_sent";
     }
-    if (activeSalesFilter.value == "Closing") {
+    if (activeSalesFilter.value == "Closed") {
       return "closing";
     }
     return "sales";
@@ -495,82 +572,104 @@ class VrmTaskController extends GetxController {
   }
 
   void filterSalesLead() {
-    final DateTime today = DateTime.now();
-    final String todayStr =
-        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
-
     final List<VrmLead> all = salesLeads.toList();
-
-    final List<VrmLead> todaysLeads = all.where((e) {
-      if (e.createdAt == null) return false;
-      try {
-        final DateTime d = DateTime.parse(e.createdAt!);
-        final String dateStr2 =
-            "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
-        return dateStr2 == todayStr;
-      } catch (e) {
-        return false;
-      }
-    }).toList();
 
     if (getSalesFilterStatusName() == "sales") {
       salesAllLeadList
         ..clear()
         ..addAll(
-          all.where(
-            (e) =>
-                (e.salesLeadStatus ?? '').toLowerCase() == "new" ||
-                (e.salesLeadsStage ?? '').toLowerCase() == "sales",
-          ),
+          all.where((e) {
+            final status = (e.currentStatus ?? '').toLowerCase();
+            final stage = (e.currentStage ?? '').toLowerCase();
+            return status == "new" || stage == "sales";
+          }),
         );
 
-      salesTodaysTotal.value = todaysLeads
-          .where(
-            (e) =>
-                (e.salesLeadStatus ?? '').toLowerCase() == "new" ||
-                (e.salesLeadsStage ?? '').toLowerCase() == "sales",
-          )
-          .length;
+      // Count all leads matching the current status filter
+      salesTodaysTotal.value = salesAllLeadList.where((e) {
+        final filterStatus = activeSalesLeadStatusFilter.value.toLowerCase();
+        if (filterStatus == "inbound") return e.isAutoCreated == true;
+        if (filterStatus == "outbound") return e.isAutoCreated == false;
+        return true;
+      }).length;
     } else if (getSalesFilterStatusName() == "follow_up") {
       salesAllFollowUpList
         ..clear()
         ..addAll(
           all.where((e) {
-            final stage = (e.salesLeadsStage ?? '').toLowerCase();
-            final stat = (e.salesLeadStatus ?? '').toLowerCase();
+            final stage = (e.currentStage ?? '').toLowerCase();
+            final stat = (e.currentStatus ?? '').toLowerCase();
             return stage == "follow_up" || (stage == "quote_sent" && stat == "sent");
           }),
         );
 
-      salesTodaysTotal.value = todaysLeads.where((e) {
-        final stage = (e.salesLeadsStage ?? '').toLowerCase();
-        final stat = (e.salesLeadStatus ?? '').toLowerCase();
-        return stage == "follow_up" || (stage == "quote_sent" && stat == "sent");
+      // Count all leads matching the current status filter
+      salesTodaysTotal.value = salesAllFollowUpList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final stage = (e.currentStage ?? '').toLowerCase();
+        final filterStatus = activeSalesFollowUpStatusFilter.value.toLowerCase();
+        if (filterStatus == "pending") return status == "pending";
+        if (filterStatus == "completed") {
+          // Include completed status OR quote_sent stage with sent status
+          return status == "completed" || (stage == "quote_sent" && status == "sent");
+        }
+        if (filterStatus == "missed") return status == "missed";
+        return true;
       }).length;
     } else if (getSalesFilterStatusName() == "quote_sent") {
       salesAllProspectList
         ..clear()
         ..addAll(
           all.where((e) {
-            final stage = (e.salesLeadsStage ?? '').toLowerCase();
-            final stat = (e.salesLeadStatus ?? '').toLowerCase();
+            final stage = (e.currentStage ?? '').toLowerCase();
+            final stat = (e.currentStatus ?? '').toLowerCase();
             return stage == "quote_sent" || (stat == "pending" && stage == "closing");
           }),
         );
 
-      salesTodaysTotal.value = todaysLeads.where((e) {
-        final stage = (e.salesLeadsStage ?? '').toLowerCase();
-        final stat = (e.salesLeadStatus ?? '').toLowerCase();
-        return stage == "quote_sent" || (stat == "pending" && stage == "closing");
+      // Count all leads matching the current status filter
+      salesTodaysTotal.value = salesAllProspectList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final stage = (e.currentStage ?? '').toLowerCase();
+        final filterStatus = activeSalesProspectStatusFilter.value.toLowerCase();
+        if (filterStatus == "sent") return status == "sent";
+        if (filterStatus == "accepted") {
+          // Include closing stage with won status OR closing stage with pending status
+          return (stage == "closing" && status == "won") ||
+              (stage == "closing" && status == "pending");
+        }
+        if (filterStatus == "negotiation") return status == "negotiation";
+        return true;
       }).length;
     } else if (getSalesFilterStatusName() == "closing") {
       salesAllQualifiedList
         ..clear()
-        ..addAll(all.where((e) => (e.salesLeadsStage ?? '').toLowerCase() == "closing"));
+        ..addAll(
+          all.where((e) {
+            final stage = (e.currentStage ?? '').toLowerCase();
+            final mainStage = (e.mainStage ?? '').toLowerCase();
+            final status = (e.currentStatus ?? '').toLowerCase();
+            // Include closing stage OR Account leads with bill/pending
+            return stage == "closing" ||
+                (mainStage == "account" && stage == "bill" && status == "pending");
+          }),
+        );
 
-      salesTodaysTotal.value = todaysLeads
-          .where((e) => (e.salesLeadsStage ?? '').toLowerCase() == "closing")
-          .length;
+      // Count all leads matching the current status filter
+      salesTodaysTotal.value = salesAllQualifiedList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final stage = (e.currentStage ?? '').toLowerCase();
+        final mainStage = (e.mainStage ?? '').toLowerCase();
+        final filterStatus = activeSalesQualifiedStatusFilter.value.toLowerCase();
+        if (filterStatus == "pending") return status == "pending";
+        if (filterStatus == "won") {
+          // Include won status OR Account leads with bill/pending
+          return status == "won" ||
+              (mainStage == "account" && stage == "bill" && status == "pending");
+        }
+        if (filterStatus == "lost") return status == "lost";
+        return true;
+      }).length;
     }
   }
 
@@ -585,9 +684,10 @@ class VrmTaskController extends GetxController {
   // Account filtered getters
   List<VrmLead> get filteredAccountBills {
     if (activeBillsStatusFilter.value.toLowerCase() == "pending") {
-      return accountAllBillList
-          .where((e) => (e.accountLeadStatus ?? '').toLowerCase() == "pending")
-          .toList();
+      return accountAllBillList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "pending";
+      }).toList();
     }
     if (activeBillsStatusFilter.value.toLowerCase() == "tax bill") {
       return accountAllBillList.where((e) => e.isAutoCreated == true).toList();
@@ -600,38 +700,44 @@ class VrmTaskController extends GetxController {
 
   List<VrmLead> get filteredAccountOutStanding {
     if (activeOutStandingStatusFilter.value.toLowerCase() == "pending") {
-      return accountAllOutStandingList
-          .where((e) => (e.accountLeadStatus ?? '').toLowerCase() == "pending")
-          .toList();
+      return accountAllOutStandingList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "pending";
+      }).toList();
     }
     if (activeOutStandingStatusFilter.value.toLowerCase() == "completed") {
-      return accountAllOutStandingList
-          .where((e) => (e.accountLeadStatus ?? '').toLowerCase() == "completed")
-          .toList();
+      return accountAllOutStandingList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "completed";
+      }).toList();
     }
     if (activeOutStandingStatusFilter.value.toLowerCase() == "missed") {
-      return accountAllOutStandingList
-          .where((e) => (e.accountLeadStatus ?? '').toLowerCase() == "missed")
-          .toList();
+      return accountAllOutStandingList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "missed";
+      }).toList();
     }
     return accountAllOutStandingList.toList();
   }
 
   List<VrmLead> get filteredAccountCollect {
     if (activeCollectStatusFilter.value.toLowerCase() == "pending") {
-      return accountAllCollectList
-          .where((e) => (e.accountLeadStatus ?? '').toLowerCase() == "pending")
-          .toList();
+      return accountAllCollectList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "pending";
+      }).toList();
     }
     if (activeCollectStatusFilter.value.toLowerCase() == "completed") {
-      return accountAllCollectList
-          .where((e) => (e.accountLeadStatus ?? '').toLowerCase() == "completed")
-          .toList();
+      return accountAllCollectList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "completed";
+      }).toList();
     }
     if (activeCollectStatusFilter.value.toLowerCase() == "missed") {
-      return accountAllCollectList
-          .where((e) => (e.accountLeadStatus ?? '').toLowerCase() == "missed")
-          .toList();
+      return accountAllCollectList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        return status == "missed";
+      }).toList();
     }
     return accountAllCollectList.toList();
   }
@@ -667,48 +773,70 @@ class VrmTaskController extends GetxController {
   }
 
   void filterAccountLead() {
-    final DateTime today = DateTime.now();
-    final String todayStr =
-        "${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
-
     final List<VrmLead> all = accountLeads.toList();
-
-    final List<VrmLead> todaysLeads = all.where((e) {
-      if (e.createdAt == null) return false;
-      try {
-        final DateTime d = DateTime.parse(e.createdAt!);
-        final String dateStr2 =
-            "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
-        return dateStr2 == todayStr;
-      } catch (e) {
-        return false;
-      }
-    }).toList();
 
     if (getAccountFilterStatusName() == "bill") {
       accountAllBillList
         ..clear()
-        ..addAll(all.where((e) => (e.accountLeadsStage ?? '').toLowerCase() == "bill"));
+        ..addAll(
+          all.where((e) {
+            final stage = (e.currentStage ?? '').toLowerCase();
+            return stage == "bill";
+          }),
+        );
 
-      accountTodaysTotal.value = todaysLeads
-          .where((e) => (e.accountLeadsStage ?? '').toLowerCase() == "bill")
-          .length;
+      // Count all leads matching the current status filter
+      accountTodaysTotal.value = accountAllBillList.where((e) {
+        if (activeBillsStatusFilter.value.toLowerCase() == "pending") {
+          final status = (e.currentStatus ?? '').toLowerCase();
+          return status == "pending";
+        }
+        if (activeBillsStatusFilter.value.toLowerCase() == "tax bill") {
+          return e.isAutoCreated == true;
+        }
+        if (activeBillsStatusFilter.value.toLowerCase() == "non tax bill") {
+          return e.isAutoCreated == false;
+        }
+        return true;
+      }).length;
     } else if (getAccountFilterStatusName() == "outstanding") {
       accountAllOutStandingList
         ..clear()
-        ..addAll(all.where((e) => (e.accountLeadsStage ?? '').toLowerCase() == "outstanding"));
+        ..addAll(
+          all.where((e) {
+            final stage = (e.currentStage ?? '').toLowerCase();
+            return stage == "outstanding";
+          }),
+        );
 
-      accountTodaysTotal.value = todaysLeads
-          .where((e) => (e.accountLeadsStage ?? '').toLowerCase() == "outstanding")
-          .length;
+      // Count all leads matching the current status filter
+      accountTodaysTotal.value = accountAllOutStandingList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final filterStatus = activeOutStandingStatusFilter.value.toLowerCase();
+        if (filterStatus == "pending") return status == "pending";
+        if (filterStatus == "completed") return status == "completed";
+        if (filterStatus == "missed") return status == "missed";
+        return true;
+      }).length;
     } else if (getAccountFilterStatusName() == "collect") {
       accountAllCollectList
         ..clear()
-        ..addAll(all.where((e) => (e.accountLeadsStage ?? '').toLowerCase() == "collect"));
+        ..addAll(
+          all.where((e) {
+            final stage = (e.currentStage ?? '').toLowerCase();
+            return stage == "collect";
+          }),
+        );
 
-      accountTodaysTotal.value = todaysLeads
-          .where((e) => (e.accountLeadsStage ?? '').toLowerCase() == "collect")
-          .length;
+      // Count all leads matching the current status filter
+      accountTodaysTotal.value = accountAllCollectList.where((e) {
+        final status = (e.currentStatus ?? '').toLowerCase();
+        final filterStatus = activeCollectStatusFilter.value.toLowerCase();
+        if (filterStatus == "pending") return status == "pending";
+        if (filterStatus == "completed") return status == "completed";
+        if (filterStatus == "missed") return status == "missed";
+        return true;
+      }).length;
     }
   }
 

@@ -2,7 +2,6 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/vrm/task/controller/vrm_task_controller.dart';
 import 'package:construction_technect/app/modules/vrm/task/widgets/common/vrm_common_lead_screen.dart';
 import 'package:construction_technect/app/modules/vrm/task/widgets/common/vrm_common_status_widget.dart';
-import 'package:construction_technect/app/modules/vrm/task/widgets/common/vrm_common_today_card.dart';
 
 class VrmAccountBillsScreen extends GetView<VrmTaskController> {
   const VrmAccountBillsScreen({super.key});
@@ -15,12 +14,10 @@ class VrmAccountBillsScreen extends GetView<VrmTaskController> {
         totalCount: controller.accountTodaysTotal.value,
         leads: controller.filteredAccountBills,
         emptyMessage: "No Bill found",
-        todayCard: VrmCommonTodayCard(
-          filterName: controller.activeAccountFilter.value,
-          totalCount: controller.accountTodaysTotal.value,
-        ),
         addButton: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.snackbar("Coming Soon", "This feature is not yet available");
+          },
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(vertical: 11),

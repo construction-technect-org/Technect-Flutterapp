@@ -9,30 +9,16 @@ class VrmLeadItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainStage = lead.mainStage ?? '';
-    final isPurchase = mainStage == 'Purchase';
-    final isAccount = mainStage == 'Account';
-
-    final leadId = isPurchase
-        ? (lead.salesId ?? lead.leadId ?? '')
-        : isAccount
-        ? (lead.accountId ?? lead.leadId ?? '')
-        : (lead.leadId ?? '');
-    final connector = lead.connectorName ?? '';
+    final baseLeadId = lead.leadId ?? '';
+    final salesId = lead.salesId ?? '';
+    final accountId = lead.accountId ?? '';
+    final merchant = lead.merchantName ?? '';
     final product = lead.productName ?? '';
     final location = lead.siteLocation ?? '';
-    final status = isPurchase
-        ? (lead.salesLeadStatus ?? '')
-        : isAccount
-        ? (lead.accountLeadStatus ?? '')
-        : (lead.status ?? '');
-    final stage = isPurchase
-        ? (lead.salesLeadsStage ?? '')
-        : isAccount
-        ? (lead.accountLeadsStage ?? '')
-        : (lead.leadStage ?? '');
+    final status = lead.currentStatus ?? '';
+    final stage = lead.currentStage ?? '';
     final createdAt = lead.createdAt ?? '';
-    final connectorImg = lead.connectorProfileImage ?? '';
+    final merchantImg = lead.merchantProfileImageUrl ?? '';
 
     return Container(
       decoration: BoxDecoration(
@@ -51,9 +37,7 @@ class VrmLeadItemCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: CachedNetworkImage(
-              imageUrl: connectorImg.isNotEmpty
-                  ? "${APIConstants.bucketUrl}$connectorImg"
-                  : (lead.merchantProfileImageUrl ?? ''),
+              imageUrl: merchantImg.isNotEmpty ? merchantImg : '',
               width: 80,
               height: 97,
               fit: BoxFit.cover,
@@ -84,20 +68,33 @@ class VrmLeadItemCard extends StatelessWidget {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: 'Connector - ',
+                                  text: 'Merchant - ',
                                   style: MyTexts.regular14.copyWith(color: Colors.black),
                                 ),
                                 TextSpan(
-                                  text: connector,
+                                  text: merchant,
                                   style: MyTexts.medium14.copyWith(color: Colors.black),
                                 ),
                               ],
                             ),
                           ),
                           const SizedBox(height: 3),
-                          Text(
-                            'Lead Id - $leadId',
-                            style: MyTexts.regular13.copyWith(color: MyColors.black),
+                          Builder(
+                            builder: (context) {
+                              final List<String> ids = [];
+                              if (baseLeadId.isNotEmpty) ids.add(baseLeadId);
+                              if (salesId.isNotEmpty) ids.add(salesId);
+                              if (accountId.isNotEmpty) ids.add(accountId);
+
+                              if (ids.isEmpty) {
+                                return const SizedBox(height: 3);
+                              }
+
+                              return Text(
+                                ids.join(' / '),
+                                style: MyTexts.regular13.copyWith(color: MyColors.black),
+                              );
+                            },
                           ),
                           const SizedBox(height: 3),
                           if (product.isNotEmpty)

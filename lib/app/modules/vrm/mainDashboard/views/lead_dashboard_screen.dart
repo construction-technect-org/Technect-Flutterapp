@@ -82,7 +82,6 @@ class VrmLeadDashboardScreen extends GetView<VrmLeadDashController> {
                                       title: controller.totalCount(1),
                                       count: controller.totalCount(2),
                                       percentage: controller.totalCount(3),
-                                      onTap: controller.navigtionInLead,
                                     ),
                                     if (controller.totalAccounts.value)
                                       Column(
@@ -92,7 +91,6 @@ class VrmLeadDashboardScreen extends GetView<VrmLeadDashController> {
                                             title: "Total Due",
                                             count: "₹ 1,25,000",
                                             percentage: controller.totalCount(3),
-                                            onTap: controller.navigtionInLead,
                                           ),
                                         ],
                                       )

@@ -91,6 +91,7 @@ class VrmLead {
   String? teamMemberPriority;
   String? lastConversation;
   String? nextConversation;
+  int? merchantUserId;
   int? merchantProfileId;
   String? merchantName;
   String? merchantProfileImageUrl;
@@ -103,14 +104,13 @@ class VrmLead {
   // Sales fields
   int? salesLeadId;
   String? salesId;
-  String? salesLeadsStage;
-  String? salesLeadStatus;
 
   // Account fields
   int? accountLeadId;
   String? accountId;
-  String? accountLeadsStage;
-  String? accountLeadStatus;
+
+  // Additional fields
+  int? leadMerchantStatusId;
 
   VrmLead({
     this.id,
@@ -153,6 +153,7 @@ class VrmLead {
     this.teamMemberPriority,
     this.lastConversation,
     this.nextConversation,
+    this.merchantUserId,
     this.merchantProfileId,
     this.merchantName,
     this.merchantProfileImageUrl,
@@ -161,12 +162,9 @@ class VrmLead {
     this.currentStatus,
     this.salesLeadId,
     this.salesId,
-    this.salesLeadsStage,
-    this.salesLeadStatus,
     this.accountLeadId,
     this.accountId,
-    this.accountLeadsStage,
-    this.accountLeadStatus,
+    this.leadMerchantStatusId,
   });
 
   VrmLead.fromJson(Map<String, dynamic> json) {
@@ -210,6 +208,7 @@ class VrmLead {
     teamMemberPriority = json['team_member_priority'];
     lastConversation = json['last_conversation'];
     nextConversation = json['next_conversation'];
+    merchantUserId = json['merchant_user_id'];
     merchantProfileId = json['merchant_profile_id'];
     merchantName = json['merchant_name'];
     merchantProfileImageUrl = json['merchant_profile_image_url'];
@@ -218,12 +217,9 @@ class VrmLead {
     currentStatus = json['current_status'];
     salesLeadId = json['sales_lead_id'];
     salesId = json['sales_id'];
-    salesLeadsStage = json['sales_leads_stage'];
-    salesLeadStatus = json['sales_lead_status'];
     accountLeadId = json['account_lead_id'];
     accountId = json['account_id'];
-    accountLeadsStage = json['account_leads_stage'];
-    accountLeadStatus = json['account_lead_status'];
+    leadMerchantStatusId = json['lead_merchant_status_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -268,6 +264,7 @@ class VrmLead {
     data['team_member_priority'] = teamMemberPriority;
     data['last_conversation'] = lastConversation;
     data['next_conversation'] = nextConversation;
+    data['merchant_user_id'] = merchantUserId;
     data['merchant_profile_id'] = merchantProfileId;
     data['merchant_name'] = merchantName;
     data['merchant_profile_image_url'] = merchantProfileImageUrl;
@@ -276,12 +273,9 @@ class VrmLead {
     data['current_status'] = currentStatus;
     data['sales_lead_id'] = salesLeadId;
     data['sales_id'] = salesId;
-    data['sales_leads_stage'] = salesLeadsStage;
-    data['sales_lead_status'] = salesLeadStatus;
     data['account_lead_id'] = accountLeadId;
     data['account_id'] = accountId;
-    data['account_leads_stage'] = accountLeadsStage;
-    data['account_lead_status'] = accountLeadStatus;
+    data['lead_merchant_status_id'] = leadMerchantStatusId;
     return data;
   }
 }

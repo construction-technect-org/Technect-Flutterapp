@@ -6,7 +6,7 @@ import 'package:construction_technect/app/data/CommonController.dart';
 class VRMHomeView extends StatelessWidget {
   VRMHomeView({super.key});
 
-  final CommonController commonController = Get.find<CommonController>();
+  final commonController = Get.find<CommonController>();
 
   @override
   Widget build(BuildContext context) {
