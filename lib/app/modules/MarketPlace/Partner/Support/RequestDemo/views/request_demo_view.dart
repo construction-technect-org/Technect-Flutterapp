@@ -106,7 +106,7 @@ class RequestDemoView extends StatelessWidget {
                             ),
                             SizedBox(height: 3.h),
                             CommonDropdown<String>(
-                              headerText: 'Request Demo for',
+                              headerText: 'Request Demo For',
                               borderColor: MyColors.primary,
                               hintText: "Select from here",
                               items: controller.mainCategories,
