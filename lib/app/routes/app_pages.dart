@@ -11,21 +11,21 @@ import 'package:construction_technect/app/modules/Authentication/login/bindings/
 import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/bindings/bottom_binding.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/views/bottom_view.dart';
+import 'package:construction_technect/app/modules/CRM/inbox/bindings/crm_inbox_bindings.dart';
+import 'package:construction_technect/app/modules/CRM/inbox/views/crm_inbox_view.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/views/add_lead_screen.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/bindings/lead_detail_binding.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/views/lead_detail_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/bindings/accounts_bindings.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/accounts/view/accounts_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/lead_dashboard_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/bindings/marketing_bindings.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/view/marketing_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/bindings/sales_bindings.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/saleDetail/bindings/sale_detail_binding.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/saleDetail/views/sale_lead_detail_screen.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/view/sales_screen.dart';
-import 'package:construction_technect/app/modules/CRM/inbox/bindings/crm_inbox_bindings.dart';
-import 'package:construction_technect/app/modules/CRM/inbox/views/crm_inbox_view.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/accounts/bindings/accounts_bindings.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/accounts/view/accounts_screen.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/crm_dashboard_screen.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/marketing/bindings/marketing_bindings.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/marketing/view/marketing_screen.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/bindings/sales_bindings.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/saleDetail/bindings/sale_detail_binding.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/saleDetail/views/sale_lead_detail_screen.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/view/sales_screen.dart';
 import 'package:construction_technect/app/modules/CRM/more/analysis/bindings/analysis_binding.dart';
 import 'package:construction_technect/app/modules/CRM/more/analysis/views/analysis_screen.dart';
 import 'package:construction_technect/app/modules/CRM/reminder/bindings/reminder_bindings.dart';
@@ -397,7 +397,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.Crm_leadDashboard,
-      page: () => const LeadDashboardScreen(),
+      page: () => const CRMDashboardScreen(),
       // binding: CrmLeadDashboardBinding(),
     ),
   ];

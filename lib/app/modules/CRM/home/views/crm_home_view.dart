@@ -2,12 +2,15 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/common_dashboard_component.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/widget/vrm_header.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/controller/crm_dashboard_controller.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/crm_header.dart';
 
-class VRMHomeView extends StatelessWidget {
-  VRMHomeView({super.key});
+class CRMHomeView extends StatelessWidget {
+  CRMHomeView({super.key});
 
-  final CommonController commonController = Get.find<CommonController>();
+  final commonController = Get.find<CommonController>();
+  final controller = Get.put<CRMDashboardController>(CRMDashboardController());
+
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -26,7 +29,7 @@ class VRMHomeView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: MediaQuery.of(context).padding.top + 10),
-                  VrmHeader(),
+                  CrmHeader(),
                   const Gap(16),
                   CommonDashboard(),
                 ],

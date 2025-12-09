@@ -1,5 +1,5 @@
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/marketing/controller/marketing_controller.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/sales/controller/sales_controller.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/marketing/controller/marketing_controller.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/controller/sales_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

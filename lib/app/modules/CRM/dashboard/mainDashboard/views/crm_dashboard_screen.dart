@@ -1,12 +1,14 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/controller/vrm_dashboard_controller.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/widget/analysis_section_widget.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/widget/lead_conversation_section_widget.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/widget/leads_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/controller/crm_dashboard_controller.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/model/dashboard_model.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/analysis_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/lead_conversation_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/leads_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/product_chart_widget.dart';
 
-class VRMDashboardScreen extends GetView<VRMDashboardController> {
-  const VRMDashboardScreen({super.key});
+class CRMDashboardScreen extends GetView<CRMDashboardController> {
+  const CRMDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,12 @@ class VRMDashboardScreen extends GetView<VRMDashboardController> {
               SafeArea(
                 child: Column(
                   children: [
+                    // const DashboardHeaderWidget(),
                     Expanded(
                       child: RefreshIndicator(
-                        onRefresh: controller.fetchDashboard,
+                        onRefresh: () async {
+                          await controller.refreshDashboard();
+                        },
                         child: SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
@@ -52,14 +57,14 @@ class VRMDashboardScreen extends GetView<VRMDashboardController> {
                                         onTap: () =>
                                             controller.toggleMarketingSalesAccounts("Marketing"),
                                         icon: Asset.MM,
-                                        name: 'Enquiry',
+                                        name: 'Marketing',
                                         isMarketPlace: controller.totalMarketing.value,
                                       ),
                                       tabBar(
                                         onTap: () =>
                                             controller.toggleMarketingSalesAccounts("Sales"),
                                         icon: Asset.bar_chart,
-                                        name: 'Purchase',
+                                        name: 'Sales',
                                         isMarketPlace: controller.totalSales.value,
                                       ),
                                       tabBar(
@@ -83,18 +88,27 @@ class VRMDashboardScreen extends GetView<VRMDashboardController> {
                                         title: controller.totalCount(1),
                                         count: controller.totalCount(2),
                                         percentage: controller.totalCount(3),
+                                        onTap: controller.navigtionInLead,
                                       ),
                                       if (controller.totalAccounts.value)
-                                        Column(
-                                          children: [
-                                            const Gap(24),
-                                            TotalCount(
-                                              title: "Total Due",
-                                              count: "₹ 1,25,000",
-                                              percentage: controller.totalCount(3),
-                                            ),
-                                          ],
-                                        )
+                                        Obx(() {
+                                          final totalDue = controller.totalDue;
+                                          return Column(
+                                            children: [
+                                              const Gap(24),
+                                              TotalCount(
+                                                title: totalDue?.title ?? "Total Due",
+                                                count: totalDue != null
+                                                    ? "₹ ${controller.formatCurrency(totalDue.count)}"
+                                                    : "₹ 1,25,000",
+                                                percentage: totalDue != null
+                                                    ? "${totalDue.percentageChange >= 0 ? "+" : ""}${totalDue.percentageChange.toStringAsFixed(1)}%"
+                                                    : controller.totalCount(3),
+                                                onTap: controller.navigtionInLead,
+                                              ),
+                                            ],
+                                          );
+                                        })
                                       else
                                         const SizedBox.shrink(),
                                       const Gap(24),
@@ -102,7 +116,22 @@ class VRMDashboardScreen extends GetView<VRMDashboardController> {
                                       const Gap(24),
                                       FunnelChartWidget(funnelData: controller.funnelData),
                                       const Gap(24),
-                                      const ConversionRateChart(percentage: 78),
+                                      const ProductChartWidget(),
+                                      const Gap(24),
+                                      if (controller.totalMarketing.value)
+                                        Obx(
+                                          () => ConversionRateChart(
+                                            percentage: controller.conversionRate,
+                                          ),
+                                        )
+                                      else if (controller.totalSales.value)
+                                        Obx(
+                                          () => RevenueSummaryWidget(
+                                            revenueSummary: controller.revenueSummary,
+                                          ),
+                                        )
+                                      else
+                                        const SizedBox.shrink(),
                                       const Gap(24),
                                     ],
                                   ),
@@ -214,10 +243,22 @@ Widget tabBar({
 }
 
 class RevenueSummaryWidget extends StatelessWidget {
-  const RevenueSummaryWidget({super.key});
+  final RevenueSummary? revenueSummary;
+
+  const RevenueSummaryWidget({super.key, this.revenueSummary});
+
+  String _formatCurrency(int amount) {
+    if (amount >= 100000) {
+      return "${(amount / 100000).toStringAsFixed(2)}L";
+    } else if (amount >= 1000) {
+      return "${(amount / 1000).toStringAsFixed(0)}K";
+    }
+    return amount.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final summary = revenueSummary;
     return Container(
       padding: const EdgeInsets.all(20),
       width: double.infinity,
@@ -231,13 +272,26 @@ class RevenueSummaryWidget extends StatelessWidget {
         children: [
           Text("Revenue Summary", style: MyTexts.bold20),
           const Gap(15),
-          Text("Total Revenue : ₹ 12,50,000", style: MyTexts.medium14, textAlign: TextAlign.start),
+          Text(
+            "Total Revenue : ₹ ${summary != null ? _formatCurrency(summary.totalRevenue) : "12,50,000"}",
+            style: MyTexts.medium14,
+            textAlign: TextAlign.start,
+          ),
           const Gap(15),
-          Text("This Month      : ₹ 50,000", style: MyTexts.medium14),
+          Text(
+            "This Month      : ₹ ${summary != null ? _formatCurrency(summary.thisMonth) : "50,000"}",
+            style: MyTexts.medium14,
+          ),
           const Gap(15),
-          Text("Pending Payments : ₹ 45,000", style: MyTexts.medium14),
+          Text(
+            "Pending Payments : ₹ ${summary != null ? _formatCurrency(summary.pendingPayments) : "45,000"}",
+            style: MyTexts.medium14,
+          ),
           const Gap(15),
-          Text("Closed Deals  : ₹ 45", style: MyTexts.medium14),
+          Text(
+            "Closed Deals  : ${summary != null ? summary.closedDeals.toString() : "45"}",
+            style: MyTexts.medium14,
+          ),
         ],
       ),
     );

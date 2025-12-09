@@ -2,14 +2,14 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/lead/leadDetail/components/pipeline_widget.dart';
-import 'package:construction_technect/app/modules/CRM/lead/leadDetail/controller/lead_detail_controller.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/marketing/controller/marketing_controller.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/marketing/model/lead_model.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/marketing/widget/priority_dropdown.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/controller/sales_controller.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/model/sales_model.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/sales/saleDetail/controller/sale_lead_detail_controller.dart';
 import 'package:intl/intl.dart';
 
-class LeadDetailScreen extends GetView<LeadDetailController> {
-  const LeadDetailScreen({super.key});
+class SaleLeadDetailScreen extends GetView<SaleLeadDetailController> {
+  const SaleLeadDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                         children: [
                           _topLeadCard(),
                           if (controller.lead.assignedToSelf == false &&
-                              controller.lead.leadStage != "lead") ...[
+                              controller.lead.salesLeadsStage != "sales") ...[
                             const Gap(16),
                             _topTeamMemberCard(),
                           ],
@@ -71,7 +71,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    Get.find<MarketingController>().activeFilter.value,
+                                    Get.find<SalesController>().activeFilter.value,
                                     style: MyTexts.medium15.copyWith(color: Colors.black),
                                   ),
                                 ),
@@ -199,7 +199,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                     SvgPicture.asset(Asset.location, height: 14, width: 14),
                     const SizedBox(width: 3),
                     Text(
-                      '${(controller.lead.distanceKM ?? 0.0).toStringAsFixed(2)} km away',
+                      '${controller.lead.radius ?? ""} km away',
                       style: MyTexts.regular13.copyWith(color: MyColors.black),
                     ),
                   ],
@@ -301,7 +301,7 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
                               ),
                               const SizedBox(height: 3),
                               Text(
-                                'Designation : ${controller.lead.assignedTeamMember?.roleTitle}',
+                                'Designation : ${controller.lead.assignedTeamMember?.roleTitle ?? ""}',
                                 style: MyTexts.regular13.copyWith(color: MyColors.black),
                               ),
                               const SizedBox(height: 4),
@@ -489,8 +489,8 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
     return DateFormat('MMM d').format(d);
   }
 
-  int getCurrentPipelineStage(Leads lead) {
-    switch (lead.leadStage) {
+  int getCurrentPipelineStage(SaleLeads lead) {
+    switch (lead.salesLeadsStage) {
       case "lead":
         return 0;
       case "follow_up":
@@ -504,8 +504,8 @@ class LeadDetailScreen extends GetView<LeadDetailController> {
     }
   }
 
-  int getCurrentPipelineSubStage(Leads lead) {
-    switch (lead.leadStage) {
+  int getCurrentPipelineSubStage(SaleLeads lead) {
+    switch (lead.salesLeadsStage) {
       case "lead":
         if (lead.status == "new") return 0;
         return 0;

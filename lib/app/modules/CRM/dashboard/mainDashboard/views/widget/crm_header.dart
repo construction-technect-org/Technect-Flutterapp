@@ -2,7 +2,7 @@ import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 
-class VrmHeader extends StatelessWidget {
+class CrmHeader extends StatelessWidget {
   final commonController = Get.find<CommonController>();
 
   @override
@@ -51,7 +51,7 @@ class VrmHeader extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () => Get.toNamed(Routes.DELIVERY_LOCATION),
+                onTap: () => Get.toNamed(Routes.MANUFACTURER_ADDRESS),
                 child: Row(
                   children: [
                     SvgPicture.asset(
@@ -69,7 +69,7 @@ class VrmHeader extends StatelessWidget {
                           text: TextSpan(
                             style: MyTexts.medium14.copyWith(color: MyColors.custom('545454')),
                             children: [
-                              TextSpan(text: commonController.getDeliveryLocation().value),
+                              TextSpan(text: commonController.getManufacturerAddress().value),
                               const WidgetSpan(
                                 alignment: PlaceholderAlignment.middle,
                                 child: Padding(
@@ -121,7 +121,7 @@ class VrmHeader extends StatelessWidget {
         const Gap(10),
         GestureDetector(
           onTap: () {
-            Get.toNamed(Routes.VRM_NOTIFICATION);
+            Get.toNamed(Routes.NOTIFICATIONS);
           },
           child: Container(
             padding: const EdgeInsets.all(6),
@@ -161,20 +161,19 @@ class VrmHeader extends StatelessWidget {
               ),
             ),
             const Text(
-              'Switch to CRM',
+              'Switch to VRM',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 16),
             _switchTile(
-              title: 'CRM',
-              subtitle: 'Go to CRM dashboard',
-              asset: Asset.role1,
+              title: 'VRM',
+              subtitle: 'Go to VRM dashboard',
+              asset: Asset.contractor,
               onTap: () {
-                Get.offAllNamed(Routes.CRM_MAIN);
                 Get.back();
+                Get.offAllNamed(Routes.VRM_MAIN);
               },
             ),
-
             const SizedBox(height: 20),
           ],
         ),

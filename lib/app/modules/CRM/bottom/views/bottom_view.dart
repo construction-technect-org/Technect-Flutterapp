@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
-import 'package:construction_technect/app/modules/CRM/dashboard/views/crm_dashboard.dart';
-import 'package:construction_technect/app/modules/CRM/lead_dashboard/mainDashboard/views/lead_dashboard_screen.dart';
+import 'package:construction_technect/app/modules/CRM/home/views/crm_home_view.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/crm_dashboard_screen.dart';
 import 'package:construction_technect/app/modules/CRM/more/views/more_screen.dart';
 import 'package:construction_technect/app/modules/CRM/task/views/task_screen.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -68,7 +68,7 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
       case 0:
         return CRMHomeView();
       case 1:
-        return const LeadDashboardScreen();
+        return const CRMDashboardScreen();
       case 2:
         return CRMTaskScreen();
       case 3:
