@@ -246,7 +246,7 @@ class ProductImage extends StatelessWidget {
               ? Center(
                   child: CachedNetworkImage(
                     imageUrl: imageUrl,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fill,
                     width: double.infinity,
                     height: double.infinity,
                     placeholder: (context, url) => const Center(child: CircularProgressIndicator()),

@@ -7,19 +7,13 @@ class ServiceCard extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onConnectTap;
 
-  const ServiceCard({
-    super.key,
-    required this.service,
-    this.onTap,
-    this.onConnectTap,
-  });
+  const ServiceCard({super.key, required this.service, this.onTap, this.onConnectTap});
 
   @override
   Widget build(BuildContext context) {
     String? imageUrl;
     if (service.images != null && service.images!.isNotEmpty) {
-      imageUrl =
-          APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? '');
+      imageUrl = APIConstants.bucketUrl + (service.images?.first.mediaS3Key ?? '');
     }
     return GestureDetector(
       onTap: onTap,
@@ -32,32 +26,19 @@ class ServiceCard extends StatelessWidget {
             child: Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(4),
-                  ),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                   child: imageUrl != null
                       ? CachedNetworkImage(
                           imageUrl: imageUrl,
-                          fit: BoxFit.contain,
+                          fit: BoxFit.fill,
                           width: double.infinity,
                           height: double.infinity,
                           placeholder: (context, url) =>
                               const Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) => const Center(
-                            child: Icon(
-                              Icons.build,
-                              color: Colors.grey,
-                              size: 40,
-                            ),
-                          ),
+                          errorWidget: (context, url, error) =>
+                              const Center(child: Icon(Icons.build, color: Colors.grey, size: 40)),
                         )
-                      : const Center(
-                          child: Icon(
-                            Icons.build,
-                            color: Colors.grey,
-                            size: 40,
-                          ),
-                        ),
+                      : const Center(child: Icon(Icons.build, color: Colors.grey, size: 40)),
                 ),
                 // Distance overlay (top left)
                 if (myPref.role.val == "connector")
@@ -69,10 +50,7 @@ class ServiceCard extends StatelessWidget {
                         // decoration: BoxDecoration(
                         //   borderRadius: BorderRadius.circular(20)
                         // ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         color: Colors.white,
                         child: Text(
                           "${service.distanceKm!.toStringAsFixed(1)} km",
@@ -114,21 +92,14 @@ class ServiceCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '₹ ',
-                  style: MyTexts.medium14.copyWith(
-                    color: MyColors.custom('0B1429'),
-                  ),
-                ),
+                Text('₹ ', style: MyTexts.medium14.copyWith(color: MyColors.custom('0B1429'))),
                 const SizedBox(width: 4),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       service.price?.toString() ?? 'N/A',
-                      style: MyTexts.medium14.copyWith(
-                        color: MyColors.custom('0B1429'),
-                      ),
+                      style: MyTexts.medium14.copyWith(color: MyColors.custom('0B1429')),
                     ),
                     Text(
                       "(${service.gstPercentage ?? 0}% GST)",
@@ -140,10 +111,7 @@ class ServiceCard extends StatelessWidget {
             ),
           ),
           // Connect Button (only for connector role)
-          if (myPref.role.val == "connector") ...[
-            const Gap(8),
-            _buildConnectButton(context),
-          ],
+          if (myPref.role.val == "connector") ...[const Gap(8), _buildConnectButton(context)],
         ],
       ),
     );
