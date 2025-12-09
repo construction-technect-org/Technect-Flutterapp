@@ -10,6 +10,7 @@ import 'package:construction_technect/app/modules/Authentication/login/controlle
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
 
+// ignore: must_be_immutable
 class LoginView extends GetView<LoginController> {
   LoginView({super.key});
   bool _isBottomSheetOpen = false;
