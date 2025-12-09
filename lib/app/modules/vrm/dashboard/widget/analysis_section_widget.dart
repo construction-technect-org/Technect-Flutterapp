@@ -1,13 +1,10 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+
 class FunnelChartWidget extends StatelessWidget {
   final List<Map<String, dynamic>> funnelData;
   final double minWidthFactor;
 
-  const FunnelChartWidget({
-    super.key,
-    required this.funnelData,
-    this.minWidthFactor = 0.28,
-  });
+  const FunnelChartWidget({super.key, required this.funnelData, this.minWidthFactor = 0.28});
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +20,14 @@ class FunnelChartWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: const Color(0xFFE0E0E0))
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Text(
-            "Analysis",
-            style: MyTexts.bold17
-          ),
+          Text("Analysis", style: MyTexts.bold17),
           const SizedBox(height: 18),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,9 +41,7 @@ class FunnelChartWidget extends StatelessWidget {
                     final widthFactor = 1.0 - t * (1.0 - minWidthFactor);
 
                     return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: index < n - 1 ? 12 : 0,
-                      ),
+                      padding: EdgeInsets.only(bottom: index < n - 1 ? 12 : 0),
                       child: FractionallySizedBox(
                         widthFactor: widthFactor.clamp(minWidthFactor, 1.0),
                         child: CustomPaint(
@@ -87,9 +79,7 @@ class FunnelChartWidget extends StatelessWidget {
                             Container(
                               width: 12,
                               height: 8,
-                              decoration: BoxDecoration(
-                                color: step['color'] as Color,
-                              ),
+                              decoration: BoxDecoration(color: step['color'] as Color),
                             ),
                             const SizedBox(width: 12),
                             Expanded(

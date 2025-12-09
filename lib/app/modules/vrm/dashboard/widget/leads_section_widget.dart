@@ -1,8 +1,8 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/controller/lead_dash_controller.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/stat_card_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/controller/vrm_dashboard_controller.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/widget/stat_card_widget.dart';
 
-class LeadsSectionWidget extends GetView<VrmLeadDashController> {
+class LeadsSectionWidget extends GetView<VRMDashboardController> {
   const LeadsSectionWidget({super.key});
 
   @override

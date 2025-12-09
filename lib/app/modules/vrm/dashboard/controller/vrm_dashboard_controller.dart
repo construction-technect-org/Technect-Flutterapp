@@ -1,6 +1,6 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
 
-class VrmLeadDashController extends GetxController {
+class VRMDashboardController extends GetxController {
   final isLoading = false.obs;
   final selectedFilterIndex = 0.obs;
   final filterTabs = [

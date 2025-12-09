@@ -4,8 +4,8 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/vrm/bottom/controllers/bottom_controller.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/views/vrm_dashboard_screen.dart';
 import 'package:construction_technect/app/modules/vrm/home/views/vrm_home_view.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/views/lead_dashboard_screen.dart';
 import 'package:construction_technect/app/modules/vrm/more/views/more_screen.dart';
 import 'package:construction_technect/app/modules/vrm/task/views/vrm_task_screen.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -79,7 +79,7 @@ class VRMBottomBarView extends GetView<VRMBottomController> {
       case 0:
         return VRMHomeView();
       case 1:
-        return const VrmLeadDashboardScreen();
+        return const VRMDashboardScreen();
       case 2:
         return const VrmTaskScreen();
       case 3:

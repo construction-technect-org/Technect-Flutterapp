@@ -1,14 +1,13 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/controller/lead_dash_controller.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/analysis_section_widget.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/lead_conversation_section_widget.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/leads_section_widget.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/product_chart_widget.dart';
-import 'package:construction_technect/app/modules/vrm/dashboard/views/widget/vrm_header.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/controller/vrm_dashboard_controller.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/widget/analysis_section_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/widget/lead_conversation_section_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/widget/leads_section_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/widget/vrm_header.dart';
 
-class VrmLeadDashboardScreen extends GetView<VrmLeadDashController> {
-  const VrmLeadDashboardScreen({super.key});
+class VRMDashboardScreen extends GetView<VRMDashboardController> {
+  const VRMDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -101,14 +100,7 @@ class VrmLeadDashboardScreen extends GetView<VrmLeadDashController> {
                                     const Gap(24),
                                     FunnelChartWidget(funnelData: controller.funnelData),
                                     const Gap(24),
-                                    const ProductChartWidget(),
-                                    const Gap(24),
-                                    if (controller.totalMarketing.value)
-                                      const ConversionRateChart(percentage: 78)
-                                    else if (controller.totalSales.value)
-                                      const RevenueSummaryWidget()
-                                    else
-                                      const SizedBox.shrink(),
+                                    const ConversionRateChart(percentage: 78),
                                     const Gap(24),
                                   ],
                                 ),
