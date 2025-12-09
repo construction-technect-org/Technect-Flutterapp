@@ -1,5 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/vrm/mainDashboard/controller/lead_dash_controller.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/controller/lead_dash_controller.dart';
 
 class FilterTabsWidget extends GetView<VrmLeadDashController> {
   const FilterTabsWidget({super.key});
