@@ -100,6 +100,7 @@ abstract class Routes {
   static const VRM_MAIN = _Paths.VRM_MAIN;
   static const VRM_leadDashboard = _Paths.VRM_leadDashboard;
   static const Crm_leadDashboard = _Paths.Crm_leadDashboard;
+  static const VRM_CHAT_LIST = _Paths.VRM_CHAT_LIST;
 }
 
 abstract class _Paths {
@@ -201,4 +202,5 @@ abstract class _Paths {
   static const VRM_MAIN = '/vrm-bottom';
   static const VRM_leadDashboard = '/vrm-lead-dashboard';
   static const Crm_leadDashboard = '/Crm-lead-dashboard';
+  static const VRM_CHAT_LIST = '/vrm-chat-list';
 }
