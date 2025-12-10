@@ -40,6 +40,8 @@ class Connection {
   dynamic responseMessage;
   DateTime? connectedAt;
   String? connectorName;
+  String? connectorAddress;
+  String? merchantAddress;
   String? connectorProfileImageUrl;
   String? merchantName;
   String? merchantProfileImageUrl;
@@ -70,6 +72,8 @@ class Connection {
     this.itemType,
     this.createdAt,
     this.updatedAt,
+    this.connectorAddress,
+    this.merchantAddress,
     this.statistics,
   });
 
@@ -91,6 +95,8 @@ class Connection {
     productName: json["product_name"],
     serviceId: json["service_id"],
     serviceName: json["service_name"],
+    connectorAddress: json["connector_address"],
+    merchantAddress: json["merchant_address"],
     itemType: json["item_type"],
     createdAt: json["created_at"] == null
         ? null
@@ -119,6 +125,8 @@ class Connection {
     "product_name": productName,
     "service_id": serviceId,
     "service_name": serviceName,
+    "connector_address": connectorAddress,
+    "merchant_address": merchantAddress,
     "item_type": itemType,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),

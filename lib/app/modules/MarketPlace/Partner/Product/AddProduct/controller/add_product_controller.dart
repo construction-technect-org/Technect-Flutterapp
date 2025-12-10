@@ -825,7 +825,6 @@ class AddProductController extends GetxController {
 
       if (res.success) {
         onApiCall?.call();
-
         Get.back();
         Get.back();
       } else {

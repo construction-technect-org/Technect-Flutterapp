@@ -35,90 +35,90 @@ class ConnectionInboxView extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 18.0, right: 18.0),
-                    child: Obx(
-                      () => Container(
-                        decoration: BoxDecoration(
-                          color: MyColors.grayEA,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () => controller.onTabChanged(0),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  decoration: BoxDecoration(
-                                    color: controller.selectedTabIndex.value == 0
-                                        ? MyColors.primary
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    'All',
-                                    textAlign: TextAlign.center,
-                                    style: MyTexts.medium14.copyWith(
-                                      color: controller.selectedTabIndex.value == 0
-                                          ? Colors.white
-                                          : MyColors.gray54,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () => controller.onTabChanged(1),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  decoration: BoxDecoration(
-                                    color: controller.selectedTabIndex.value == 1
-                                        ? MyColors.primary
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    'Product',
-                                    textAlign: TextAlign.center,
-                                    style: MyTexts.medium14.copyWith(
-                                      color: controller.selectedTabIndex.value == 1
-                                          ? Colors.white
-                                          : MyColors.gray54,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () => controller.onTabChanged(2),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  decoration: BoxDecoration(
-                                    color: controller.selectedTabIndex.value == 2
-                                        ? MyColors.primary
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    'Services',
-                                    textAlign: TextAlign.center,
-                                    style: MyTexts.medium14.copyWith(
-                                      color: controller.selectedTabIndex.value == 2
-                                          ? Colors.white
-                                          : MyColors.gray54,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 8.0, left: 18.0, right: 18.0),
+                  //   child: Obx(
+                  //     () => Container(
+                  //       decoration: BoxDecoration(
+                  //         color: MyColors.grayEA,
+                  //         borderRadius: BorderRadius.circular(12),
+                  //       ),
+                  //       child: Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: GestureDetector(
+                  //               onTap: () => controller.onTabChanged(0),
+                  //               child: Container(
+                  //                 padding: const EdgeInsets.symmetric(vertical: 12),
+                  //                 decoration: BoxDecoration(
+                  //                   color: controller.selectedTabIndex.value == 0
+                  //                       ? MyColors.primary
+                  //                       : Colors.transparent,
+                  //                   borderRadius: BorderRadius.circular(12),
+                  //                 ),
+                  //                 child: Text(
+                  //                   'All',
+                  //                   textAlign: TextAlign.center,
+                  //                   style: MyTexts.medium14.copyWith(
+                  //                     color: controller.selectedTabIndex.value == 0
+                  //                         ? Colors.white
+                  //                         : MyColors.gray54,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           Expanded(
+                  //             child: GestureDetector(
+                  //               onTap: () => controller.onTabChanged(1),
+                  //               child: Container(
+                  //                 padding: const EdgeInsets.symmetric(vertical: 12),
+                  //                 decoration: BoxDecoration(
+                  //                   color: controller.selectedTabIndex.value == 1
+                  //                       ? MyColors.primary
+                  //                       : Colors.transparent,
+                  //                   borderRadius: BorderRadius.circular(12),
+                  //                 ),
+                  //                 child: Text(
+                  //                   'Product',
+                  //                   textAlign: TextAlign.center,
+                  //                   style: MyTexts.medium14.copyWith(
+                  //                     color: controller.selectedTabIndex.value == 1
+                  //                         ? Colors.white
+                  //                         : MyColors.gray54,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           Expanded(
+                  //             child: GestureDetector(
+                  //               onTap: () => controller.onTabChanged(2),
+                  //               child: Container(
+                  //                 padding: const EdgeInsets.symmetric(vertical: 12),
+                  //                 decoration: BoxDecoration(
+                  //                   color: controller.selectedTabIndex.value == 2
+                  //                       ? MyColors.primary
+                  //                       : Colors.transparent,
+                  //                   borderRadius: BorderRadius.circular(12),
+                  //                 ),
+                  //                 child: Text(
+                  //                   'Services',
+                  //                   textAlign: TextAlign.center,
+                  //                   style: MyTexts.medium14.copyWith(
+                  //                     color: controller.selectedTabIndex.value == 2
+                  //                         ? Colors.white
+                  //                         : MyColors.gray54,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 1.h),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -261,9 +261,8 @@ class ConnectionInboxView extends StatelessWidget {
                         ),
                         const Gap(2),
                         Text(
-                          connection.productName != null
-                              ? connection.productName ?? 'Unknown'
-                              : connection.serviceName ?? 'Unknown',
+                          connection.merchantAddress ?? "Unknown",
+
                           maxLines: 2,
                           style: MyTexts.medium13.copyWith(
                             color: MyColors.gra54,
@@ -328,32 +327,6 @@ class ConnectionInboxView extends StatelessWidget {
               SizedBox(height: 1.h),
             ],
           ),
-        ),
-        Obx(
-          () => controller.selectedTabIndex.value == 0
-              ? Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color:
-                          ((connection.itemType?.toLowerCase() == 'service')
-                                  ? MyColors.primary
-                                  : MyColors.greenBtn)
-                              .withValues(alpha: 0.1),
-                      borderRadius: const BorderRadius.only(topRight: Radius.circular(6)),
-                    ),
-                    child: Text(
-                      (connection.itemType?.toLowerCase() == 'service') ? 'Service' : 'Product',
-                      style: MyTexts.medium12.copyWith(
-                        color: Colors.black,
-                        fontFamily: MyTexts.SpaceGrotesk,
-                      ),
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
         ),
         if (connection.status?.toLowerCase() == "accepted")
           Container(
@@ -464,9 +437,7 @@ class ConnectionInboxView extends StatelessWidget {
                         const Gap(4),
                         Expanded(
                           child: Text(
-                            connection.productName != null
-                                ? connection.productName ?? 'Unknown'
-                                : connection.serviceName ?? 'Unknown',
+                            connection.connectorAddress ?? "",
                             maxLines: 2,
                             style: MyTexts.medium13.copyWith(
                               color: MyColors.gra54,
@@ -576,32 +547,6 @@ class ConnectionInboxView extends StatelessWidget {
                 ),
             ],
           ),
-        ),
-        Obx(
-          () => controller.selectedTabIndex.value == 0
-              ? Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color:
-                          ((connection.itemType?.toLowerCase() == 'service')
-                                  ? MyColors.primary
-                                  : MyColors.greenBtn)
-                              .withValues(alpha: 0.1),
-                      borderRadius: const BorderRadius.only(topRight: Radius.circular(6)),
-                    ),
-                    child: Text(
-                      (connection.itemType?.toLowerCase() == 'service') ? 'Service' : 'Product',
-                      style: MyTexts.medium12.copyWith(
-                        color: Colors.black,
-                        fontFamily: MyTexts.SpaceGrotesk,
-                      ),
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
         ),
         if (connection.status?.toLowerCase() == "accepted")
           Container(
