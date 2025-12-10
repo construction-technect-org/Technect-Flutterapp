@@ -589,10 +589,13 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
             arguments: {
               'service': service,
               "onConnectTap": () {
+                final bool isConnect =
+                    service.leadCreated == true && service.connectionStatus != null;
                 ConnectionDialogs.showSendServiceConnectionDialog(
                   context,
                   service,
                   isFromIn: true,
+                  isConnect: isConnect,
                   onTap: (message, date, radius) async {
                     await Get.find<CommonController>().addServiceToConnectApi(
                       mID: service.merchantProfileId ?? 0,
@@ -690,16 +693,51 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                       if (myPref.role.val == "connector") const SizedBox(height: 4),
                       if (myPref.role.val == "connector")
                         () {
-                          final connectionStatus = service.connectionRequestStatus ?? '';
-                          if (connectionStatus.isEmpty) {
+                          if (service.connectionRequestStatus==null && service.leadCreated==false) {
                             return RoundedButton(
                               buttonName: 'Connect',
                               color: MyColors.primary,
                               fontColor: Colors.white,
                               onTap: () {
+                                final bool isConnect =
+                                    service.leadCreated == true && service.connectionStatus != null;
                                 ConnectionDialogs.showSendServiceConnectionDialog(
                                   context,
                                   service,
+                                  isFromIn: true,
+                                  isConnect: isConnect,
+                                  onTap: (message, date, radius) async {
+                                    await controller.addServiceToConnect(
+                                      merchantProfileId: service.merchantProfileId ?? 0,
+                                      serviceId: service.id ?? 0,
+                                      message: message,
+                                      radius: radius,
+                                      date: date,
+                                      onSuccess: () async {
+                                        await controller.fetchServicesFromApi(isLoading: false);
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                              height: 28,
+                              borderRadius: 6,
+                              verticalPadding: 0,
+                              style: MyTexts.medium14.copyWith(color: Colors.white),
+                            );
+                          }
+                          else  if (service.connectionRequestStatus!=null && service.leadCreated==false) {
+                            return RoundedButton(
+                              buttonName: 'Requirement',
+                              color: MyColors.primary,
+                              fontColor: Colors.white,
+                              onTap: () {
+                                final bool isConnect =
+                                    service.leadCreated == true && service.connectionStatus != null;
+                                ConnectionDialogs.showSendServiceConnectionDialog(
+                                  context,
+                                  service,
+                                  isConnect: isConnect,
                                   isFromIn: true,
                                   onTap: (message, date, radius) async {
                                     await controller.addServiceToConnect(
@@ -720,34 +758,15 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                               verticalPadding: 0,
                               style: MyTexts.medium14.copyWith(color: Colors.white),
                             );
-                          } else if (connectionStatus == 'pending') {
-                            return RoundedButton(
+                          }
+                          else  if (service.connectionRequestStatus!=null && service.leadCreated==true) {
+                              return RoundedButton(
                               color: MyColors.pendingBtn,
-                              buttonName: 'Pending',
+                              buttonName: 'Send',
                               height: 28,
                               horizontalPadding: 20,
                               borderRadius: 6,
                               verticalPadding: 0,
-                              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-                            );
-                          } else if (connectionStatus == 'accepted') {
-                            return RoundedButton(
-                              color: MyColors.grayEA,
-                              buttonName: 'Connected',
-                              height: 28,
-                              borderRadius: 6,
-                              verticalPadding: 0,
-                              horizontalPadding: 20,
-                              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-                            );
-                          } else if (connectionStatus == 'rejected') {
-                            return RoundedButton(
-                              color: MyColors.rejectBtn,
-                              buttonName: 'Rejected',
-                              height: 28,
-                              borderRadius: 6,
-                              verticalPadding: 0,
-                              horizontalPadding: 20,
                               style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                             );
                           }
@@ -763,6 +782,7 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
       },
     );
   }
+
 
   Widget _buildServicesList(BuildContext context) {
     final controller = Get.find<ConstructionServiceController>();
@@ -784,10 +804,13 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
               'service': service,
 
               "onConnectTap": () {
+                final bool isConnect =
+                    service.leadCreated == true && service.connectionStatus != null;
                 ConnectionDialogs.showSendServiceConnectionDialog(
                   context,
                   service,
                   isFromIn: true,
+                  isConnect: isConnect,
                   onTap: (message, date, radius) async {
                     await Get.find<CommonController>().addServiceToConnectApi(
                       mID: service.merchantProfileId ?? 0,
@@ -896,17 +919,52 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                       if (myPref.role.val == "connector") const SizedBox(height: 8),
 
                       if (myPref.role.val == "connector")
-                        () {
-                          final connectionStatus = service.connectionRequestStatus ?? '';
-                          if (connectionStatus.isEmpty) {
+                            () {
+                          if (service.connectionRequestStatus==null && service.leadCreated==false) {
                             return RoundedButton(
                               buttonName: 'Connect',
                               color: MyColors.primary,
                               fontColor: Colors.white,
                               onTap: () {
+                                final bool isConnect =
+                                    service.leadCreated == true && service.connectionStatus != null;
                                 ConnectionDialogs.showSendServiceConnectionDialog(
                                   context,
                                   service,
+                                  isFromIn: true,
+                                  isConnect: isConnect,
+                                  onTap: (message, date, radius) async {
+                                    await controller.addServiceToConnect(
+                                      merchantProfileId: service.merchantProfileId ?? 0,
+                                      serviceId: service.id ?? 0,
+                                      message: message,
+                                      radius: radius,
+                                      date: date,
+                                      onSuccess: () async {
+                                        await controller.fetchServicesFromApi(isLoading: false);
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                              height: 28,
+                              borderRadius: 6,
+                              verticalPadding: 0,
+                              style: MyTexts.medium14.copyWith(color: Colors.white),
+                            );
+                          }
+                          else  if (service.connectionRequestStatus!=null && service.leadCreated==false) {
+                            return RoundedButton(
+                              buttonName: 'Requirement',
+                              color: MyColors.primary,
+                              fontColor: Colors.white,
+                              onTap: () {
+                                final bool isConnect =
+                                    service.leadCreated == true && service.connectionStatus != null;
+                                ConnectionDialogs.showSendServiceConnectionDialog(
+                                  context,
+                                  service,
+                                  isConnect: isConnect,
                                   isFromIn: true,
                                   onTap: (message, date, radius) async {
                                     await controller.addServiceToConnect(
@@ -927,34 +985,15 @@ class ConstructionServiceView extends GetView<ConstructionServiceController> {
                               verticalPadding: 0,
                               style: MyTexts.medium14.copyWith(color: Colors.white),
                             );
-                          } else if (connectionStatus == 'pending') {
+                          }
+                          else  if (service.connectionRequestStatus!=null && service.leadCreated==true) {
                             return RoundedButton(
                               color: MyColors.pendingBtn,
-                              buttonName: 'Pending',
+                              buttonName: 'Send',
                               height: 28,
                               horizontalPadding: 20,
                               borderRadius: 6,
                               verticalPadding: 0,
-                              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-                            );
-                          } else if (connectionStatus == 'accepted') {
-                            return RoundedButton(
-                              color: MyColors.grayEA,
-                              buttonName: 'Connected',
-                              height: 28,
-                              borderRadius: 6,
-                              verticalPadding: 0,
-                              horizontalPadding: 20,
-                              style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-                            );
-                          } else if (connectionStatus == 'rejected') {
-                            return RoundedButton(
-                              color: MyColors.rejectBtn,
-                              buttonName: 'Rejected',
-                              height: 28,
-                              borderRadius: 6,
-                              verticalPadding: 0,
-                              horizontalPadding: 20,
                               style: MyTexts.medium14.copyWith(color: MyColors.gray54),
                             );
                           }

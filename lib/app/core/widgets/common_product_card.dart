@@ -306,12 +306,16 @@ class ProductActionButton extends StatelessWidget {
   final Product product;
   final VoidCallback? onNotifyTap;
   final VoidCallback? onConnectTap;
+  final VoidCallback? onRequirementTap;
+  final double? height;
 
   const ProductActionButton({
     super.key,
     required this.product,
     this.onNotifyTap,
     this.onConnectTap,
+    this.onRequirementTap,
+    this.height = 32,
   });
 
   @override
@@ -320,16 +324,26 @@ class ProductActionButton extends StatelessWidget {
       return _buildNotifyButton();
     }
 
-    switch (product.status) {
-      case 'pending':
-        return _buildStaticButton('Pending', MyColors.pendingBtn);
-      case 'accepted':
-        return _buildStaticButton('Connected', MyColors.grayEA);
-      case 'rejected':
-        return _buildStaticButton('Rejected', MyColors.rejectBtn);
-      default:
-        return _buildConnectButton(context);
+    if (product.status == null && product.leadCreated == false) {
+      return _buildConnectButton(context);
+    } else if (product.status != null && product.leadCreated == false) {
+      return _buildRequirementButton(context);
+    } else if (product.status != null && product.leadCreated == true) {
+      return _buildStaticButton('Send', MyColors.pendingBtn);
     }
+    return Container();
+    // switch (product.status) {
+    //   case 'pending':
+    //     return _buildStaticButton('Pending', MyColors.pendingBtn);
+    //   case 'accepted':
+    //     return _buildStaticButton('Connected', MyColors.grayEA);
+    //   case 'rejected':
+    //     return _buildStaticButton('Rejected', MyColors.rejectBtn);
+    //   case null:
+    //     return _buildConnectButton(context);
+    //   default:
+    //     return _buildConnectButton(context);
+    // }
   }
 
   Widget _buildNotifyButton() {
@@ -338,7 +352,7 @@ class ProductActionButton extends StatelessWidget {
         buttonName: 'Notified',
         color: Colors.grey[400],
         fontColor: Colors.white,
-        height: 32,
+        height: height,
         borderRadius: 8,
         style: MyTexts.medium14.copyWith(color: Colors.white),
       );
@@ -348,7 +362,7 @@ class ProductActionButton extends StatelessWidget {
       color: MyColors.primary,
       fontColor: Colors.white,
       onTap: onNotifyTap,
-      height: 32,
+      height: height,
       borderRadius: 8,
       style: MyTexts.medium14.copyWith(color: Colors.white),
     );
@@ -359,7 +373,7 @@ class ProductActionButton extends StatelessWidget {
       buttonName: text,
       color: color,
       borderRadius: 8,
-      height: 32,
+      height: height,
       style: MyTexts.medium14.copyWith(color: MyColors.gray54),
     );
   }
@@ -370,7 +384,20 @@ class ProductActionButton extends StatelessWidget {
       color: MyColors.primary,
       fontColor: Colors.white,
       onTap: onConnectTap,
-      height: 32,
+      height: height,
+      borderRadius: 8,
+      verticalPadding: 0,
+      style: MyTexts.medium14.copyWith(color: Colors.white),
+    );
+  }
+
+  Widget _buildRequirementButton(BuildContext context) {
+    return RoundedButton(
+      buttonName: 'Requirement',
+      color: MyColors.primary,
+      fontColor: Colors.white,
+      onTap: onConnectTap,
+      height: height,
       borderRadius: 8,
       verticalPadding: 0,
       style: MyTexts.medium14.copyWith(color: Colors.white),

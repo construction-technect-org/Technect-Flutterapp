@@ -92,7 +92,6 @@ class ConnectionDialogs {
   static void showRejectConnectionDialog(BuildContext context, Connection connection) {
     final TextEditingController messageController = TextEditingController();
     messageController.text = "Not interested at this time";
-
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -176,6 +175,7 @@ class ConnectionDialogs {
     BuildContext context,
     Product product, {
     bool? isFromIn = false,
+    bool? isConnect = true,
     void Function(String note, String date, String raduis)? onTap,
   }) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -187,6 +187,7 @@ class ConnectionDialogs {
     // messageController.text =
     // "Hi, I would like to connect with you for business opportunities.";
 
+    final String word = isConnect == true ? "Connect" : "Requirement";
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -207,7 +208,7 @@ class ConnectionDialogs {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Connect to CRM!",
+                      "$word to CRM!",
                       style: MyTexts.bold18.copyWith(color: MyColors.primary),
                       textAlign: TextAlign.center,
                     ),
@@ -223,7 +224,7 @@ class ConnectionDialogs {
                         border: Border.all(color: const Color(0xFFFDEBC8)),
                       ),
                       child: Text(
-                        "To proceed with your request, please connect to CRM.",
+                        "To proceed with your request, please ${word.toLowerCase()} to to CRM.",
                         style: MyTexts.medium14.copyWith(color: MyColors.black),
                         textAlign: TextAlign.center,
                       ),
@@ -328,7 +329,7 @@ class ConnectionDialogs {
                                 }
                               }
                             },
-                            buttonName: 'Connect',
+                            buttonName: word,
                             borderRadius: 12,
                             verticalPadding: 0,
                             height: 45,
@@ -351,6 +352,8 @@ class ConnectionDialogs {
     BuildContext context,
     dynamic service, {
     bool? isFromIn = false,
+    bool? isConnect = true,
+
     void Function(String note, String date, String raduis)? onTap,
   }) {
     final formKey = GlobalKey<FormState>();
@@ -359,6 +362,7 @@ class ConnectionDialogs {
     final TextEditingController dateController = TextEditingController();
     // messageController.text =
     // "Hi, I would like to connect with you for business opportunities.";
+    final String word = isConnect == true ? "Connect" : "Requirement";
 
     showDialog(
       context: context,
@@ -380,7 +384,7 @@ class ConnectionDialogs {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Connect to CRM!",
+                      "$word to CRM!",
                       style: MyTexts.bold18.copyWith(color: MyColors.primary),
                       textAlign: TextAlign.center,
                     ),
@@ -394,7 +398,7 @@ class ConnectionDialogs {
                         border: Border.all(color: const Color(0xFFFDEBC8)),
                       ),
                       child: Text(
-                        "To proceed with your request, please connect to CRM.",
+                        "To proceed with your request, please ${word.toLowerCase()} to CRM.",
                         style: MyTexts.medium14.copyWith(color: MyColors.black),
                         textAlign: TextAlign.center,
                       ),
@@ -493,7 +497,7 @@ class ConnectionDialogs {
                                 Navigator.of(context).pop();
                               }
                             },
-                            buttonName: 'Connect',
+                            buttonName: word,
                             borderRadius: 12,
                             verticalPadding: 0,
                             height: 45,

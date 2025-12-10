@@ -100,6 +100,7 @@ class Product {
   final bool? outOfStock;
   final bool? isActive;
   final bool? isNotify;
+  final bool? leadCreated;
   final String? status;
   bool? isInWishList;
   final String? approvalStatus;
@@ -140,6 +141,7 @@ class Product {
     this.merchantPhone,
     this.merchantGstNumber,
     this.uom,
+    this.leadCreated,
     this.packageType,
     this.merchantLogo,
     this.address,
@@ -197,6 +199,7 @@ class Product {
       shape: json["shape"],
       texture: json["texture"],
       colour: json["colour"],
+      leadCreated: json["lead_created"],
       size: json["size"],
       distanceKm: json["distance_km"] != null
           ? json["distance_km"].toString()
@@ -265,6 +268,7 @@ class Product {
     "warehouse_type": warehouseType,
     "merchant_phone": merchantPhone,
     "uom": uom,
+    "lead_created": leadCreated,
     "package_type": packageType,
     "merchant_website": merchantWebsite,
     "package_size": packageSize,

@@ -40,6 +40,7 @@ class Service {
   String? totalAmount;
   String? description;
   bool? isActive;
+  bool? leadCreated;
   String? approvalStatus;
   int? approvedBy;
   String? approvedAt;
@@ -149,6 +150,7 @@ class Service {
     updatedAt = json['updated_at'];
     serviceReferenceUrl = json['service_reference_url'];
     note = json['note'];
+    leadCreated = json['lead_created'];
     mainCategoryName = json['main_category_name'];
     subCategoryName = json['sub_category_name'];
     serviceCategoryName = json['service_category_name'];
@@ -224,6 +226,7 @@ class Service {
     data['total_amount'] = totalAmount;
     data['description'] = description;
     data['is_active'] = isActive;
+    data['lead_created'] = leadCreated;
     data['approval_status'] = approvalStatus;
     data['approved_by'] = approvedBy;
     data['approved_at'] = approvedAt;

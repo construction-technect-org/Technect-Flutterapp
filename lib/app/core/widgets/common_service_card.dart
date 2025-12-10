@@ -20,7 +20,6 @@ class ServiceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // IMAGE
           Expanded(
             flex: 3,
             child: Stack(
@@ -78,7 +77,6 @@ class ServiceCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           const Gap(8),
-          // PRICE + GST
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -110,7 +108,6 @@ class ServiceCard extends StatelessWidget {
               ],
             ),
           ),
-          // Connect Button (only for connector role)
           if (myPref.role.val == "connector") ...[const Gap(8), _buildConnectButton(context)],
         ],
       ),
@@ -118,51 +115,72 @@ class ServiceCard extends StatelessWidget {
   }
 
   Widget _buildConnectButton(BuildContext context) {
-    final connectionStatus = service.connectionRequestStatus ?? '';
-
-    if (connectionStatus.isEmpty) {
-      return RoundedButton(
-        buttonName: 'Connect',
-        color: MyColors.primary,
-        fontColor: Colors.white,
-        onTap: onConnectTap,
-        height: 32,
-        borderRadius: 8,
-        verticalPadding: 0,
-        style: MyTexts.medium14.copyWith(color: Colors.white),
-      );
-    } else if (connectionStatus == 'pending') {
-      return RoundedButton(
-        color: MyColors.pendingBtn,
-        buttonName: 'Pending',
-        height: 32,
-        horizontalPadding: 20,
-        borderRadius: 8,
-        verticalPadding: 0,
-        style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-      );
-    } else if (connectionStatus == 'accepted') {
-      return RoundedButton(
-        color: MyColors.grayEA,
-        buttonName: 'Connected',
-        height: 32,
-        borderRadius: 8,
-        verticalPadding: 0,
-        horizontalPadding: 20,
-        style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-      );
-    } else if (connectionStatus == 'rejected') {
-      return RoundedButton(
-        color: MyColors.rejectBtn,
-        buttonName: 'Rejected',
-        height: 32,
-        borderRadius: 8,
-        verticalPadding: 0,
-        horizontalPadding: 20,
-        style: MyTexts.medium14.copyWith(color: MyColors.gray54),
-      );
+    if (service.connectionRequestStatus == null && service.leadCreated == false) {
+      return _buildConnectServiceButton(context);
+    } else if (service.connectionRequestStatus != null && service.leadCreated == false) {
+      return _buildRequirementButton(context);
+    } else if (service.connectionRequestStatus != null && service.leadCreated == true) {
+      return _buildStaticButton('Send', MyColors.pendingBtn);
     }
 
     return const SizedBox.shrink();
+  }
+
+  Widget _buildRequirementButton(BuildContext context) {
+    return RoundedButton(
+      buttonName: 'Requirement',
+      color: MyColors.primary,
+      fontColor: Colors.white,
+      onTap: onConnectTap,
+      height: 32,
+      borderRadius: 8,
+      verticalPadding: 0,
+      style: MyTexts.medium14.copyWith(color: Colors.white),
+    );
+  }
+
+  Widget _buildConnectServiceButton(BuildContext context) {
+    final connectionStatus = service.connectionRequestStatus ?? '';
+
+    switch (connectionStatus) {
+      case '':
+        return RoundedButton(
+          buttonName: 'Connect',
+          color: MyColors.primary,
+          fontColor: Colors.white,
+          onTap: onConnectTap,
+          height: 32,
+          borderRadius: 8,
+          verticalPadding: 0,
+          style: MyTexts.medium14.copyWith(color: Colors.white),
+        );
+
+      case 'pending':
+        return _buildStaticButton('Pending', MyColors.pendingBtn);
+
+      case 'accepted':
+        return _buildStaticButton('Connected', MyColors.grayEA);
+
+      case 'rejected':
+        return _buildStaticButton('Rejected', MyColors.rejectBtn);
+
+      default:
+        return _buildStaticButton(
+          connectionStatus.capitalizeFirst ?? connectionStatus,
+          MyColors.grayEA,
+        );
+    }
+  }
+
+  Widget _buildStaticButton(String text, Color color) {
+    return RoundedButton(
+      buttonName: text,
+      color: color,
+      borderRadius: 8,
+      height: 32,
+      horizontalPadding: 20,
+      verticalPadding: 0,
+      style: MyTexts.medium14.copyWith(color: MyColors.gray54),
+    );
   }
 }

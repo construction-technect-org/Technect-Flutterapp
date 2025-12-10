@@ -139,9 +139,12 @@ class SearchServiceView extends GetView<SearchServiceController> {
                             arguments: {
                               "service": service,
                               "onConnectTap": () {
+                                final bool isConnect =
+                                    service.leadCreated == true && service.connectionStatus != null;
                                 ConnectionDialogs.showSendServiceConnectionDialog(
                                   context,
                                   service,
+                                  isConnect: isConnect,
                                   isFromIn: true,
                                    onTap: (message,date,radius) async {
                                     await Get.find<CommonController>().addServiceToConnectApi(
@@ -166,10 +169,14 @@ class SearchServiceView extends GetView<SearchServiceController> {
                         },
                         onConnectTap: myPref.role.val == "connector"
                             ? () {
-                                ConnectionDialogs.showSendServiceConnectionDialog(
+                          final bool isConnect =
+                              service.leadCreated == true && service.connectionStatus != null;
+
+                          ConnectionDialogs.showSendServiceConnectionDialog(
                                   context,
                                   service,
                                   isFromIn: true,
+                                   isConnect: isConnect,
                                    onTap: (message,date,radius) async {
                                     await Get.find<CommonController>().addServiceToConnectApi(
                                       mID: service.merchantProfileId ?? 0,

@@ -222,10 +222,13 @@ class CartListView extends GetView<CartListController> {
                                         controller.isLoading.value = false;
                                       },
                                       onConnectTap: () {
+                                        final bool isConnect =
+                                            item.leadCreated == true && item.status != null;
                                         ConnectionDialogs.showSendConnectionDialog(
                                           context,
                                           item,
                                           isFromIn: true,
+                                          isConnect: isConnect,
                                           onTap: (message, date, radius) async {
                                             Get.back();
                                             controller.isLoading.value = true;
@@ -325,10 +328,13 @@ class CartListView extends GetView<CartListController> {
                                         );
                                       },
                                       onConnectTap: () {
+                                        final bool isConnect =
+                                            service.leadCreated == true && service.connectionStatus != null;
                                         ConnectionDialogs.showSendServiceConnectionDialog(
                                           context,
                                           service,
                                           isFromIn: true,
+                                          isConnect: isConnect,
                                           onTap: (message, date, radius) async {
                                             Get.back();
                                             controller.isLoading.value = true;

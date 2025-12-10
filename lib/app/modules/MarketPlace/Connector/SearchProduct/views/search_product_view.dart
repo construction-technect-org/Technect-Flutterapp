@@ -146,11 +146,12 @@ class SearchProductView extends GetView<SearchProductController> {
                           );
                         },
                         onConnectTap: () {
+                          final bool isConnect = item.leadCreated==true && item.status!=null;
                           ConnectionDialogs.showSendConnectionDialog(
                             context,
                             item,
                             isFromIn: true,
-
+                            isConnect: isConnect,
                             onTap: (message, date, radius) async {
                               Get.back();
                               await commonController.addToConnectApi(

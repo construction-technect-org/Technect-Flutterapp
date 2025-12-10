@@ -146,16 +146,19 @@ class WishListView extends GetView<WishListController> {
                                       controller.isLoaderWrapper.value = false;
                                     },
                                     onConnectTap: () {
+                                      final bool isConnect =
+                                          item.leadCreated == true && item.status != null;
+
                                       ConnectionDialogs.showSendConnectionDialog(
                                         context,
                                         item,
                                         isFromIn: true,
-
+                                        isConnect: isConnect,
                                         onTap: (message, date, radius) async {
                                           Get.back();
                                           controller.isLoaderWrapper.value = true;
                                           await Get.find<CommonController>().addToConnectApi(
-                                            uom: item.filterValues?["uom"]["value"]??"",
+                                            uom: item.filterValues?["uom"]["value"] ?? "",
                                             quantity: item.stockQty.toString(),
                                             mID: item.merchantProfileId ?? 0,
                                             message: message,
