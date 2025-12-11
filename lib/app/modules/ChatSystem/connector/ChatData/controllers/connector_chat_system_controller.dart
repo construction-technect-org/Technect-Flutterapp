@@ -235,7 +235,7 @@ class ConnectorChatSystemController extends GetxController {
 
     socket.on('joined_group', (data) {
       if (kDebugMode) log('🟢 Joined Group: $data');
-      // socket.emit('mark_messages_read', {"connection_id": groupId});
+      socket.emit('mark_messages_read', {"group_id": groupId});
       //   // Check online status after joining
       //   if (otherUserId != null) {
       //     socket.emit('check_user_online', {'user_id': otherUserId});

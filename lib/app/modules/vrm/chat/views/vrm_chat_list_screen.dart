@@ -12,7 +12,9 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
       backgroundColor: MyColors.white,
       appBar: const CommonAppBar(title: Text("Chats"), automaticallyImplyLeading: false),
       body: RefreshIndicator(
-        onRefresh: ()async{},
+        onRefresh: ()async{
+          await controller.fetchChatList();
+        },
         child: Obx(() {
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
