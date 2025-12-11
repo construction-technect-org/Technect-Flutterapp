@@ -35,7 +35,7 @@ class ConnectorChatSystemController extends GetxController {
   String name = "User";
   String number = "";
   String image = "";
-  int? otherUserId;
+  String? myUserId;
   bool? isVrm;
   VoidCallback? onRefresh;
 
@@ -80,7 +80,7 @@ class ConnectorChatSystemController extends GetxController {
             (isVrm == true
                 ? (chatData.merchantLogo ?? "")
                 : (chatData.connectorProfileImage ?? ""));
-        // otherUserId = chatData.merchant?.userId;
+        myUserId =(isVrm == true? chatData.connectorId : chatData.merchantUserId).toString();
       }
 
       currentUser = CustomUser(
@@ -215,7 +215,6 @@ class ConnectorChatSystemController extends GetxController {
       //     socket.emit('check_user_online', {'user_id': otherUserId});
       //   }
     });
-    // socket.on('new_message', (data) => {if (kDebugMode) log('🟢 New msg: $data')});
     // socket.on('messages_marked_read', (data) {
     //   if (kDebugMode) log('🟢 messages marked as read: $data');
     // });
@@ -239,66 +238,100 @@ class ConnectorChatSystemController extends GetxController {
     // // Listen for typing indicators
     socket.on('user_typing', (data) {
         if (kDebugMode) log('🟢 user typing: $data');
-      if (data != null && data['group_id'] == groupId) {
+      if (data != null && data['group_id'] == groupId && data["user_id"].toString()!=myUserId) {
         isOtherUserTyping.value = true;
       }
     });
     //
     socket.on('user_stopped_typing', (data) {
       if (kDebugMode) log('🟢 user stop typing: $data');
-      if (data["success"]==true && data["group_id"] == groupId) {
+      if (data != null && data['group_id'] == groupId && data["user_id"].toString()!=myUserId) {
         isOtherUserTyping.value = false;
       }
     });
     //
-    // socket.on('typing_error', (error) {
-    //   log('❌ Typing indicator error: ${error['message']}');
-    // });
-    //
-    // // Listen for event updates
-    // socket.on('event_updated', (data) {
-    //   log('📅 Event updated: $data');
-    //   if (data != null && data['success'] == true && data['data'] != null) {
-    //     try {
-    //       final chatData = ChatData.fromJson(data['data']);
-    //       final updatedMessageId = chatData.id.toString();
-    //
-    //       // Find and update the message in the list
-    //       final messageIndex = messages.indexWhere((msg) => msg.id == updatedMessageId);
-    //       if (messageIndex != -1) {
-    //         final existingMessage = messages[messageIndex];
-    //         final updatedMessage = existingMessage.copyWith(
-    //           message: chatData.messageText ?? existingMessage.message,
-    //         );
-    //         messages[messageIndex] = updatedMessage;
-    //       }
-    //
-    //       // Clear responding state
-    //       if (respondingEventId.value == chatData.id) {
-    //         respondingEventId.value = 0;
-    //       }
-    //     } catch (e) {
-    //       log('❌ Error parsing event update: $e');
-    //     }
-    //   }
-    // });
-    //
-    // socket.on('event_response_ack', (data) {
-    //   log('✅ Event response ack: $data');
-    //   respondingEventId.value = 0;
-    // });
-    //
-    // socket.on('event_response_error', (error) {
-    //   log('❌ Event response error: $error');
-    //   Get.snackbar(
-    //     'Error',
-    //     error['message'] ?? 'Failed to update event status',
-    //     backgroundColor: Colors.red,
-    //     colorText: Colors.white,
-    //   );
-    //   respondingEventId.value = 0;
-    // });
-    //
+
+    socket.on('typing_error', (error) {
+      log('❌ Typing indicator error: ${error['message']}');
+    });
+
+// Listen for event updates
+    socket.on('event_updated', (data) {
+      log('📅 Event updated: $data');
+      if (data != null && data['success'] == true && data['data'] != null) {
+        try {
+          final chatData = ChatData.fromJson(data['data']);
+          final updatedMessageId = chatData.id.toString();
+
+          // Find and update the message in the list
+          final messageIndex = messages.indexWhere((msg) => msg.id == updatedMessageId);
+          if (messageIndex != -1) {
+            final existingMessage = messages[messageIndex];
+            final updatedMessage = existingMessage.copyWith(
+              message: chatData.messageText ?? existingMessage.message,
+            );
+            messages[messageIndex] = updatedMessage;
+          }
+
+          // Clear responding state
+          if (respondingEventId.value == chatData.id) {
+            respondingEventId.value = 0;
+          }
+        } catch (e) {
+          log('❌ Error parsing event update: $e');
+        }
+      }
+    });
+
+    socket.on('typing_error', (error) {
+      log('❌ Typing indicator error: ${error['message']}');
+    });
+
+// Listen for event updates
+    socket.on('event_updated', (data) {
+      log('📅 Event updated: $data');
+      if (data != null && data['success'] == true && data['data'] != null) {
+        try {
+          final chatData = ChatData.fromJson(data['data']);
+          final updatedMessageId = chatData.id.toString();
+
+          // Find and update the message in the list
+          final messageIndex = messages.indexWhere((msg) => msg.id == updatedMessageId);
+          if (messageIndex != -1) {
+            final existingMessage = messages[messageIndex];
+            final updatedMessage = existingMessage.copyWith(
+              message: chatData.messageText ?? existingMessage.message,
+            );
+            messages[messageIndex] = updatedMessage;
+          }
+
+          // Clear responding state
+          if (respondingEventId.value == chatData.id) {
+            respondingEventId.value = 0;
+          }
+        } catch (e) {
+          log('❌ Error parsing event update: $e');
+        }
+      }
+    });
+
+    socket.on('event_response_ack', (data) {
+      log('✅ Event response ack: $data');
+      respondingEventId.value = 0;
+    });
+
+    socket.on('event_response_error', (error) {
+      log('❌ Event response error: $error');
+      Get.snackbar(
+        'Error',
+        error['message'] ?? 'Failed to update event status',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      respondingEventId.value = 0;
+    });
+
+
     socket.on('new_message', (data) {
       log("📩 New Message Received: $data");
       try {
