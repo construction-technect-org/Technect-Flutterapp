@@ -269,11 +269,11 @@ class ConnectorChatSystemController extends GetxController {
     //   }
     // });
     //
-    // socket.on('user_stopped_typing', (data) {
-    //   if (data != null && data['user_id'] == otherUserId) {
-    //     isOtherUserTyping.value = false;
-    //   }
-    // });
+    socket.on('user_stopped_typing', (data) {
+      if (data["success"]==true && data["group_id"] == groupId) {
+        isOtherUserTyping.value = false;
+      }
+    });
     //
     // socket.on('typing_error', (error) {
     //   log('❌ Typing indicator error: ${error['message']}');
@@ -394,7 +394,7 @@ class ConnectorChatSystemController extends GetxController {
   }
 
   /// Handle text field changes to emit typing indicator
-  void onTextChanged(String text) {
+  void  onTextChanged(String text) {
     if (text.trim().isEmpty) {
       _stopTyping();
       return;
