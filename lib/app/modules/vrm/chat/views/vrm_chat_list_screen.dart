@@ -12,6 +12,8 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
       backgroundColor: MyColors.white,
       appBar: const CommonAppBar(title: Text("Chats"), automaticallyImplyLeading: false),
       body: RefreshIndicator(
+        backgroundColor: MyColors.primary,
+        color: Colors.white,
         onRefresh: ()async{
           await controller.fetchChatList();
         },
