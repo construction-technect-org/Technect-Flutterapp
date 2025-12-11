@@ -297,42 +297,6 @@ class ConnectionInboxView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // if (connection.status == "accepted") const Gap(12),
-                  // if (connection.status == "accepted")
-                  //   GestureDetector(
-                  //     onTap: () {
-                  //       Get.toNamed(Routes.CONNECTOR_All_CHAT_LIST);
-                  //
-                  //       // showModalBottomSheet(
-                  //       //   context: context,
-                  //       //   isScrollControlled: true,
-                  //       //   backgroundColor: Colors.white,
-                  //       //   shape: const RoundedRectangleBorder(
-                  //       //     borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                  //       //   ),
-                  //       //   builder: (_) => ChatBottomSheet(connection: connection),
-                  //       // );
-                  //     },
-                  //     child: Container(
-                  //       margin: const EdgeInsets.only(top: 12),
-                  //       height: 36,
-                  //       width: 36,
-                  //       decoration: BoxDecoration(
-                  //         shape: BoxShape.circle,
-                  //         color: MyColors.white,
-                  //         boxShadow: [
-                  //           BoxShadow(
-                  //             color: MyColors.grayEA.withValues(alpha: 0.32),
-                  //             blurRadius: 4,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.all(6.0),
-                  //         child: SvgPicture.asset(Asset.chat),
-                  //       ),
-                  //     ),
-                  //   ),
                 ],
               ),
               SizedBox(height: 1.h),
@@ -514,48 +478,6 @@ class ConnectionInboxView extends StatelessWidget {
                   ],
                 ),
               ),
-              // if (connection.status == "accepted") const Gap(12),
-              // if (connection.status == "accepted")
-              //   Column(
-              //     children: [
-              //       const Gap(12),
-              //       GestureDetector(
-              //         onTap: () {
-              //           Get.toNamed(Routes.All_CHAT_LIST);
-              //           // showModalBottomSheet(
-              //           //   context: context,
-              //           //   isScrollControlled: true,
-              //           //   backgroundColor: Colors.white,
-              //           //   shape: const RoundedRectangleBorder(
-              //           //     borderRadius: BorderRadius.vertical(
-              //           //       top: Radius.circular(24),
-              //           //     ),
-              //           //   ),
-              //           //   builder: (_) =>
-              //           //       ChatBottomSheet(connection: connection),
-              //           // );
-              //         },
-              //         child: Container(
-              //           height: 36,
-              //           width: 36,
-              //           decoration: BoxDecoration(
-              //             shape: BoxShape.circle,
-              //             color: MyColors.white,
-              //             boxShadow: [
-              //               BoxShadow(
-              //                 color: MyColors.grayEA.withValues(alpha: 0.32),
-              //                 blurRadius: 4,
-              //               ),
-              //             ],
-              //           ),
-              //           child: Padding(
-              //             padding: const EdgeInsets.all(6.0),
-              //             child: SvgPicture.asset(Asset.chat),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
             ],
           ),
         ),
