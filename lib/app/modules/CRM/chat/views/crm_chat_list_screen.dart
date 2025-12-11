@@ -15,7 +15,6 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
         if ((controller.chatListModel.value.data?.groups ?? []).isEmpty) {
           return Center(
             child: Text(
@@ -24,7 +23,6 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
             ),
           );
         }
-
         return ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           itemCount: (controller.chatListModel.value.data?.groups ?? []).length,
@@ -32,7 +30,6 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
           itemBuilder: (context, index) {
             final chat = (controller.chatListModel.value.data?.groups ?? [])[index];
             final int unreadCount = chat.unreadCount ?? 0;
-
             return ListTile(
               contentPadding: const EdgeInsets.symmetric(vertical: 6),
               leading: CircleAvatar(
@@ -89,6 +86,7 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
                 Get.toNamed(
                   Routes.CONNECTOR_CHAT_SYSTEM,
                   arguments: {
+                    "isVrm": false,
                     "chatData": chat,
                     "onRefresh": () {
                       controller.fetchChatList();

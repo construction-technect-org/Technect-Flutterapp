@@ -1,14 +1,14 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
-import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/model/all_chat_list_model.dart';
+import 'package:construction_technect/app/modules/CRM/chat/model/crm_chat_list_model.dart';
 import 'package:construction_technect/app/modules/vrm/chat/service/vrm_chat_list_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class VRMChatListController extends GetxController {
   late final IO.Socket socket;
 
-  Rx<ConnectorAllChatListModel> chatListModel = ConnectorAllChatListModel().obs;
+  Rx<AllCRMGroupChatListModel> chatListModel = AllCRMGroupChatListModel().obs;
   RxBool isLoading = false.obs;
 
   @override
@@ -74,40 +74,40 @@ class VRMChatListController extends GetxController {
     try {
       if (data == null) return;
 
-      final int connectionId = data['connection_id'];
-      final String? lastMessage = data['last_message'];
-      final String? lastMessageTime = data['last_message_time'];
-      final int? unreadCount = data['unread_count'];
+      // final int connectionId = data['connection_id'];
+      // final String? lastMessage = data['last_message'];
+      // final String? lastMessageTime = data['last_message_time'];
+      // final int? unreadCount = data['unread_count'];
 
-      final conversations = chatListModel.value.chats?.conversations ?? [];
-      final index = conversations.indexWhere((conv) => conv.connectionId == connectionId);
-
-      if (index != -1) {
-        final conversation = conversations[index];
-
-        conversation.chatInfo = ChatInfo(
-          lastMessage: lastMessage ?? conversation.chatInfo?.lastMessage,
-          lastMessageTime: lastMessageTime ?? conversation.chatInfo?.lastMessageTime,
-          unreadCount: unreadCount ?? conversation.chatInfo?.unreadCount ?? 0,
-        );
-
-        conversations.removeAt(index);
-        conversations.insert(0, conversation);
-
-        chatListModel.value = ConnectorAllChatListModel(
-          success: chatListModel.value.success,
-          chats: Chats(
-            conversations: conversations,
-            totalConversations: chatListModel.value.chats?.totalConversations,
-            enabledChats: chatListModel.value.chats?.enabledChats,
-          ),
-          message: chatListModel.value.message,
-        );
-
-        if (kDebugMode) {
-          log('✅ VRM Updated conversation $connectionId - Unread: $unreadCount');
-        }
-      }
+      // final conversations = chatListModel.value.chats?.conversations ?? [];
+      // final index = conversations.indexWhere((conv) => conv.connectionId == connectionId);
+      //
+      // if (index != -1) {
+      //   final conversation = conversations[index];
+      //
+      //   conversation.chatInfo = ChatInfo(
+      //     lastMessage: lastMessage ?? conversation.chatInfo?.lastMessage,
+      //     lastMessageTime: lastMessageTime ?? conversation.chatInfo?.lastMessageTime,
+      //     unreadCount: unreadCount ?? conversation.chatInfo?.unreadCount ?? 0,
+      //   );
+      //
+      //   conversations.removeAt(index);
+      //   conversations.insert(0, conversation);
+      //
+      //   chatListModel.value = ConnectorAllChatListModel(
+      //     success: chatListModel.value.success,
+      //     chats: Chats(
+      //       conversations: conversations,
+      //       totalConversations: chatListModel.value.chats?.totalConversations,
+      //       enabledChats: chatListModel.value.chats?.enabledChats,
+      //     ),
+      //     message: chatListModel.value.message,
+      //   );
+      //
+      //   if (kDebugMode) {
+      //     log('✅ VRM Updated conversation $connectionId - Unread: $unreadCount');
+      //   }
+      // }
     } catch (e, st) {
       log('❌ Error updating VRM conversation: $e');
       log(st.toString());

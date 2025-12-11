@@ -150,4 +150,5 @@ class APIConstants {
   static const String vrmLead = "vrm/lead";
   static const String vrmNotification = "vrm/notification";
   static const String vrmDashboard = "vrm/dashboard";
+  static const String vrmGroupChat = "vrm/group-chat";
 }

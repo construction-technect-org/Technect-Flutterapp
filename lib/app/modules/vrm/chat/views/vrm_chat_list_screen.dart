@@ -16,7 +16,7 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if ((controller.chatListModel.value.chats?.conversations ?? []).isEmpty) {
+        if ((controller.chatListModel.value.data?.groups ?? []).isEmpty) {
           return Center(
             child: Text(
               "No conversations yet",
@@ -27,33 +27,33 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
 
         return ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          itemCount: (controller.chatListModel.value.chats?.conversations ?? []).length,
+          itemCount: (controller.chatListModel.value.data?.groups ?? []).length,
           separatorBuilder: (_, _) => const Divider(height: 1, color: MyColors.grayEA),
           itemBuilder: (context, index) {
-            final chat = (controller.chatListModel.value.chats?.conversations ?? [])[index];
-            final int unreadCount = chat.chatInfo?.unreadCount ?? 0;
+            final chat = (controller.chatListModel.value.data?.groups ?? [])[index];
+            final int unreadCount = chat.unreadCount ?? 0;
 
             return ListTile(
               contentPadding: const EdgeInsets.symmetric(vertical: 6),
               leading: CircleAvatar(
                 radius: 24,
                 backgroundImage: NetworkImage(
-                  APIConstants.bucketUrl + (chat.merchant?.profileImage ?? ""),
+                  APIConstants.bucketUrl + (chat.merchantLogo ?? ""),
                 ),
               ),
               title: Text(
-                "${chat.merchant?.firstName ?? ""} ${chat.merchant?.lastName ?? ""}",
+                chat.groupName ?? "",
                 style: MyTexts.bold16.copyWith(color: MyColors.primary),
               ),
               subtitle: Row(
                 children: [
-                  if (_isImageMessage(chat.chatInfo?.lastMessage)) ...[
+                  if (_isImageMessage(chat.lastMessage)) ...[
                     const Icon(Icons.image, size: 16, color: MyColors.fontBlack),
                     const SizedBox(width: 4),
                   ],
                   Expanded(
                     child: Text(
-                      _getDisplayMessage(chat.chatInfo?.lastMessage),
+                      _getDisplayMessage(chat.lastMessage),
                       style: MyTexts.medium14.copyWith(
                         color: MyColors.fontBlack.withValues(alpha: 0.7),
                       ),
@@ -67,7 +67,7 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    formattedChatTime(DateTime.tryParse(chat.chatInfo?.lastMessageTime ?? '')),
+                    formattedChatTime(DateTime.tryParse(chat.lastMessageTime ?? '')),
                     style: MyTexts.medium14.copyWith(color: MyColors.black),
                   ),
                   if (unreadCount > 0)
@@ -90,6 +90,7 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
                   Routes.CONNECTOR_CHAT_SYSTEM,
                   arguments: {
                     "chatData": chat,
+                    "isVrm": true,
                     "onRefresh": () {
                       controller.fetchChatList();
                     },

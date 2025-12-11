@@ -36,6 +36,7 @@ class ConnectorChatSystemController extends GetxController {
   String number = "";
   String image = "";
   int? otherUserId;
+  bool? isVrm;
   VoidCallback? onRefresh;
 
   // Online status tracking
@@ -70,13 +71,17 @@ class ConnectorChatSystemController extends GetxController {
     if (Get.arguments != null) {
       final chatData = Get.arguments["chatData"];
       onRefresh = Get.arguments["onRefresh"];
-
+      isVrm = Get.arguments["isVrm"];
       if (chatData != null) {
-        connectionId = chatData.connectionId ?? 0;
-        number = chatData.merchant.mobileNumber ?? 0;
-        name = "${chatData.merchant?.firstName ?? ""} ${chatData.merchant?.lastName ?? ""}".trim();
-        image = APIConstants.bucketUrl + (chatData.merchant?.profileImage ?? "");
-        otherUserId = chatData.merchant?.userId;
+        connectionId = chatData.groupId ?? 0;
+        // number = chatData.mobileNumber ?? 0;
+        name = chatData.groupName??"";
+        image =
+            APIConstants.bucketUrl +
+            (isVrm == true
+                ? (chatData.merchantLogo ?? "")
+                : (chatData.connectorProfileImage ?? ""));
+        // otherUserId = chatData.merchant?.userId;
       }
 
       currentUser = CustomUser(
