@@ -237,11 +237,11 @@ class ConnectorChatSystemController extends GetxController {
     // });
     //
     // // Listen for typing indicators
-    // socket.on('user_typing', (data) {
-    //   if (data != null && data['user_id'] == otherUserId) {
-    //     isOtherUserTyping.value = true;
-    //   }
-    // });
+    socket.on('user_typing', (data) {
+      if (data != null && data['group_id'] == groupId) {
+        isOtherUserTyping.value = true;
+      }
+    });
     //
     socket.on('user_stopped_typing', (data) {
       if (data["success"]==true && data["group_id"] == groupId) {
