@@ -260,68 +260,79 @@ class ConnectionInboxView extends StatelessWidget {
                           ),
                         ),
                         const Gap(2),
-                        Text(
-                          connection.merchantAddress ?? "Unknown",
-
-                          maxLines: 2,
-                          style: MyTexts.medium13.copyWith(
-                            color: MyColors.gra54,
-                            fontFamily: MyTexts.SpaceGrotesk,
-                          ),
-                        ),
-                        const Gap(8),
-                        GestureDetector(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
-                            decoration: BoxDecoration(
-                              color: getStatusColor(status: connection.status ?? ""),
-                              borderRadius: BorderRadius.circular(8),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              Asset.location,
+                              colorFilter: const ColorFilter.mode(MyColors.gra54, BlendMode.srcIn),
+                              height: 14,
+                              width: 14,
                             ),
-                            child: Text(
-                              connection.status?.capitalizeFirst ?? "",
-                              style: MyTexts.medium13.copyWith(color: MyColors.gra54),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (connection.status == "accepted") const Gap(12),
-                  if (connection.status == "accepted")
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.CONNECTOR_All_CHAT_LIST);
-
-                        // showModalBottomSheet(
-                        //   context: context,
-                        //   isScrollControlled: true,
-                        //   backgroundColor: Colors.white,
-                        //   shape: const RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                        //   ),
-                        //   builder: (_) => ChatBottomSheet(connection: connection),
-                        // );
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 12),
-                        height: 36,
-                        width: 36,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: MyColors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: MyColors.grayEA.withValues(alpha: 0.32),
-                              blurRadius: 4,
+                            const Gap(4),
+                            Expanded(
+                              child: Text(
+                                connection.merchantAddress ?? "Unknown",
+                                maxLines: 2,
+                                style: MyTexts.medium13.copyWith(
+                                  color: MyColors.gra54,
+                                  fontFamily: MyTexts.SpaceGrotesk,
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: SvgPicture.asset(Asset.chat),
+                        const Gap(8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+                          decoration: BoxDecoration(
+                            color: getStatusColor(status: connection.status ?? ""),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            connection.status?.capitalizeFirst ?? "",
+                            style: MyTexts.medium13.copyWith(color: MyColors.gra54),
+                          ),
                         ),
-                      ),
+                        const Gap(10),
+                      ],
                     ),
+                  ),
+                  // if (connection.status == "accepted") const Gap(12),
+                  // if (connection.status == "accepted")
+                  //   GestureDetector(
+                  //     onTap: () {
+                  //       Get.toNamed(Routes.CONNECTOR_All_CHAT_LIST);
+                  //
+                  //       // showModalBottomSheet(
+                  //       //   context: context,
+                  //       //   isScrollControlled: true,
+                  //       //   backgroundColor: Colors.white,
+                  //       //   shape: const RoundedRectangleBorder(
+                  //       //     borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                  //       //   ),
+                  //       //   builder: (_) => ChatBottomSheet(connection: connection),
+                  //       // );
+                  //     },
+                  //     child: Container(
+                  //       margin: const EdgeInsets.only(top: 12),
+                  //       height: 36,
+                  //       width: 36,
+                  //       decoration: BoxDecoration(
+                  //         shape: BoxShape.circle,
+                  //         color: MyColors.white,
+                  //         boxShadow: [
+                  //           BoxShadow(
+                  //             color: MyColors.grayEA.withValues(alpha: 0.32),
+                  //             blurRadius: 4,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.all(6.0),
+                  //         child: SvgPicture.asset(Asset.chat),
+                  //       ),
+                  //     ),
+                  //   ),
                 ],
               ),
               SizedBox(height: 1.h),
@@ -503,48 +514,48 @@ class ConnectionInboxView extends StatelessWidget {
                   ],
                 ),
               ),
-              if (connection.status == "accepted") const Gap(12),
-              if (connection.status == "accepted")
-                Column(
-                  children: [
-                    const Gap(12),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.All_CHAT_LIST);
-                        // showModalBottomSheet(
-                        //   context: context,
-                        //   isScrollControlled: true,
-                        //   backgroundColor: Colors.white,
-                        //   shape: const RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.vertical(
-                        //       top: Radius.circular(24),
-                        //     ),
-                        //   ),
-                        //   builder: (_) =>
-                        //       ChatBottomSheet(connection: connection),
-                        // );
-                      },
-                      child: Container(
-                        height: 36,
-                        width: 36,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: MyColors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: MyColors.grayEA.withValues(alpha: 0.32),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: SvgPicture.asset(Asset.chat),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              // if (connection.status == "accepted") const Gap(12),
+              // if (connection.status == "accepted")
+              //   Column(
+              //     children: [
+              //       const Gap(12),
+              //       GestureDetector(
+              //         onTap: () {
+              //           Get.toNamed(Routes.All_CHAT_LIST);
+              //           // showModalBottomSheet(
+              //           //   context: context,
+              //           //   isScrollControlled: true,
+              //           //   backgroundColor: Colors.white,
+              //           //   shape: const RoundedRectangleBorder(
+              //           //     borderRadius: BorderRadius.vertical(
+              //           //       top: Radius.circular(24),
+              //           //     ),
+              //           //   ),
+              //           //   builder: (_) =>
+              //           //       ChatBottomSheet(connection: connection),
+              //           // );
+              //         },
+              //         child: Container(
+              //           height: 36,
+              //           width: 36,
+              //           decoration: BoxDecoration(
+              //             shape: BoxShape.circle,
+              //             color: MyColors.white,
+              //             boxShadow: [
+              //               BoxShadow(
+              //                 color: MyColors.grayEA.withValues(alpha: 0.32),
+              //                 blurRadius: 4,
+              //               ),
+              //             ],
+              //           ),
+              //           child: Padding(
+              //             padding: const EdgeInsets.all(6.0),
+              //             child: SvgPicture.asset(Asset.chat),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
             ],
           ),
         ),
