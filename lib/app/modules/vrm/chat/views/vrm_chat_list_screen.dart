@@ -44,6 +44,9 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
               title: Text(
                 chat.groupName ?? "",
                 style: MyTexts.bold16.copyWith(color: MyColors.primary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
               ),
               subtitle: Row(
                 children: [

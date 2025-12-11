@@ -218,14 +218,14 @@ class ConnectorChatSystemView extends StatelessWidget {
                     children: [
                       Text(
                         controller.name,
-                        style: MyTexts.medium18.copyWith(color: MyColors.black),
+                        style: MyTexts.medium17.copyWith(color: MyColors.black),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Obx(
                         () => Text(
                           controller.isOtherUserTyping.value
                               ? 'Typing...'
-                              : controller.userStatusText.value,
+                              : "",
                           style: MyTexts.regular12.copyWith(
                             color: controller.isOtherUserTyping.value
                                 ? MyColors.primary
@@ -236,13 +236,13 @@ class ConnectorChatSystemView extends StatelessWidget {
                     ],
                   ),
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    final Uri smsLaunchUri = Uri(scheme: 'tel', path: controller.number);
-                    await launchUrl(smsLaunchUri);
-                  },
-                  child: const Icon(Icons.call, size: 20),
-                ),
+                // GestureDetector(
+                //   onTap: () async {
+                //     final Uri smsLaunchUri = Uri(scheme: 'tel', path: controller.number);
+                //     await launchUrl(smsLaunchUri);
+                //   },
+                //   child: const Icon(Icons.call, size: 20),
+                // ),
               ],
             ),
           ),
