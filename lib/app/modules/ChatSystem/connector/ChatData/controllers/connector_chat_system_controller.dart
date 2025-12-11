@@ -74,7 +74,7 @@ class ConnectorChatSystemController extends GetxController {
       isVrm = Get.arguments["isVrm"];
       if (chatData != null) {
         groupId = chatData.groupId ?? 0;
-        name = chatData.groupName??"";
+        name = chatData.groupName ?? "";
         image =
             APIConstants.bucketUrl +
             (isVrm == true
@@ -222,7 +222,7 @@ class ConnectorChatSystemController extends GetxController {
 
     socket.onConnect((_) {
       log('✅ Connected to socket server - ID: ${socket.id}');
-      socket.emit('join_connection', {"connection_id": groupId});
+      socket.emit('join_group', {"group_id": groupId});
     });
 
     socket.onConnectError((data) {
@@ -233,96 +233,96 @@ class ConnectorChatSystemController extends GetxController {
       log('🔌 Socket Disconnected: $reason');
     });
 
-    socket.on('joined_connection', (data) {
-      if (kDebugMode) log('🟢 Joined Connection: $data');
-      socket.emit('mark_messages_read', {"connection_id": groupId});
-
-      // Check online status after joining
-      if (otherUserId != null) {
-        socket.emit('check_user_online', {'user_id': otherUserId});
-      }
+    socket.on('joined_group', (data) {
+      if (kDebugMode) log('🟢 Joined Group: $data');
+      // socket.emit('mark_messages_read', {"connection_id": groupId});
+      //   // Check online status after joining
+      //   if (otherUserId != null) {
+      //     socket.emit('check_user_online', {'user_id': otherUserId});
+      //   }
     });
-    socket.on('messages_marked_read', (data) {
-      if (kDebugMode) log('🟢 messages marked as read: $data');
-    });
-
-    socket.on('messages_read', (data) {
-      if (kDebugMode) log('🟢 Your messages were read: $data');
-
-      _markAllMessagesAsRead();
-    });
-
-    // Listen for initial online status when joining connection
-    socket.on('user_online_status', (data) {
-      _handleOnlineStatusUpdate(data);
-    });
-
-    // Listen for real-time status changes
-    socket.on('user_status_changed', (data) {
-      _handleOnlineStatusUpdate(data);
-    });
-
-    // Listen for typing indicators
-    socket.on('user_typing', (data) {
-      if (data != null && data['user_id'] == otherUserId) {
-        isOtherUserTyping.value = true;
-      }
-    });
-
-    socket.on('user_stopped_typing', (data) {
-      if (data != null && data['user_id'] == otherUserId) {
-        isOtherUserTyping.value = false;
-      }
-    });
-
-    socket.on('typing_error', (error) {
-      log('❌ Typing indicator error: ${error['message']}');
-    });
-
-    // Listen for event updates
-    socket.on('event_updated', (data) {
-      log('📅 Event updated: $data');
-      if (data != null && data['success'] == true && data['data'] != null) {
-        try {
-          final chatData = ChatData.fromJson(data['data']);
-          final updatedMessageId = chatData.id.toString();
-
-          // Find and update the message in the list
-          final messageIndex = messages.indexWhere((msg) => msg.id == updatedMessageId);
-          if (messageIndex != -1) {
-            final existingMessage = messages[messageIndex];
-            final updatedMessage = existingMessage.copyWith(
-              message: chatData.messageText ?? existingMessage.message,
-            );
-            messages[messageIndex] = updatedMessage;
-          }
-
-          // Clear responding state
-          if (respondingEventId.value == chatData.id) {
-            respondingEventId.value = 0;
-          }
-        } catch (e) {
-          log('❌ Error parsing event update: $e');
-        }
-      }
-    });
-
-    socket.on('event_response_ack', (data) {
-      log('✅ Event response ack: $data');
-      respondingEventId.value = 0;
-    });
-
-    socket.on('event_response_error', (error) {
-      log('❌ Event response error: $error');
-      Get.snackbar(
-        'Error',
-        error['message'] ?? 'Failed to update event status',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      respondingEventId.value = 0;
-    });
-
+    // socket.on('new_message', (data) => {if (kDebugMode) log('🟢 New msg: $data')});
+    // socket.on('messages_marked_read', (data) {
+    //   if (kDebugMode) log('🟢 messages marked as read: $data');
+    // });
+    //
+    // socket.on('messages_read', (data) {
+    //   if (kDebugMode) log('🟢 Your messages were read: $data');
+    //
+    //   _markAllMessagesAsRead();
+    // });
+    //
+    // // Listen for initial online status when joining connection
+    // socket.on('user_online_status', (data) {
+    //   _handleOnlineStatusUpdate(data);
+    // });
+    //
+    // // Listen for real-time status changes
+    // socket.on('user_status_changed', (data) {
+    //   _handleOnlineStatusUpdate(data);
+    // });
+    //
+    // // Listen for typing indicators
+    // socket.on('user_typing', (data) {
+    //   if (data != null && data['user_id'] == otherUserId) {
+    //     isOtherUserTyping.value = true;
+    //   }
+    // });
+    //
+    // socket.on('user_stopped_typing', (data) {
+    //   if (data != null && data['user_id'] == otherUserId) {
+    //     isOtherUserTyping.value = false;
+    //   }
+    // });
+    //
+    // socket.on('typing_error', (error) {
+    //   log('❌ Typing indicator error: ${error['message']}');
+    // });
+    //
+    // // Listen for event updates
+    // socket.on('event_updated', (data) {
+    //   log('📅 Event updated: $data');
+    //   if (data != null && data['success'] == true && data['data'] != null) {
+    //     try {
+    //       final chatData = ChatData.fromJson(data['data']);
+    //       final updatedMessageId = chatData.id.toString();
+    //
+    //       // Find and update the message in the list
+    //       final messageIndex = messages.indexWhere((msg) => msg.id == updatedMessageId);
+    //       if (messageIndex != -1) {
+    //         final existingMessage = messages[messageIndex];
+    //         final updatedMessage = existingMessage.copyWith(
+    //           message: chatData.messageText ?? existingMessage.message,
+    //         );
+    //         messages[messageIndex] = updatedMessage;
+    //       }
+    //
+    //       // Clear responding state
+    //       if (respondingEventId.value == chatData.id) {
+    //         respondingEventId.value = 0;
+    //       }
+    //     } catch (e) {
+    //       log('❌ Error parsing event update: $e');
+    //     }
+    //   }
+    // });
+    //
+    // socket.on('event_response_ack', (data) {
+    //   log('✅ Event response ack: $data');
+    //   respondingEventId.value = 0;
+    // });
+    //
+    // socket.on('event_response_error', (error) {
+    //   log('❌ Event response error: $error');
+    //   Get.snackbar(
+    //     'Error',
+    //     error['message'] ?? 'Failed to update event status',
+    //     backgroundColor: Colors.red,
+    //     colorText: Colors.white,
+    //   );
+    //   respondingEventId.value = 0;
+    // });
+    //
     socket.on('new_message', (data) {
       log("📩 New Message Received: $data");
       try {
@@ -343,7 +343,7 @@ class ConnectorChatSystemController extends GetxController {
 
         messages.add(newMessage);
         _scrollToBottom();
-        socket.emit('mark_messages_read', {"connection_id": groupId});
+        // socket.emit('mark_messages_read', {"group_id": groupId});
       } catch (e, st) {
         log('❌ Error parsing new message: $e');
         log(st.toString());
@@ -386,7 +386,7 @@ class ConnectorChatSystemController extends GetxController {
     // Stop typing indicator when sending message
     _stopTyping();
 
-    socket.emit('send_message', {'connection_id': groupId, 'message': message});
+    socket.emit('send_message', {'group_id': groupId, 'message': message});
 
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
@@ -403,7 +403,7 @@ class ConnectorChatSystemController extends GetxController {
     // Emit typing event if not already typing
     if (!_isTyping) {
       _isTyping = true;
-      socket.emit('user_typing', {'connection_id': groupId});
+      socket.emit('user_typing', {'group_id': groupId});
     }
 
     // Cancel existing timer
@@ -420,7 +420,7 @@ class ConnectorChatSystemController extends GetxController {
     if (_isTyping) {
       _isTyping = false;
       _typingTimer?.cancel();
-      socket.emit('user_stopped_typing', {'connection_id': groupId});
+      socket.emit('user_stopped_typing', {'group_id': groupId});
     }
   }
 
@@ -552,7 +552,7 @@ class ConnectorChatSystemController extends GetxController {
               Get.back(); // Close loading dialog
 
               socket.emit('send_message', {
-                'connection_id': groupId,
+                'group_id': groupId,
                 'message_type': 'video',
                 'media_base64': base64Video,
                 'media_mime_type': mimeType,
@@ -715,7 +715,7 @@ class ConnectorChatSystemController extends GetxController {
               Get.back(); // Close loading dialog
 
               socket.emit('send_message', {
-                'connection_id': groupId,
+                'group_id': groupId,
                 'message_type': 'video',
                 'media_base64': base64Video,
                 'media_mime_type': mimeType,
@@ -773,7 +773,7 @@ class ConnectorChatSystemController extends GetxController {
             final base64Image = base64Encode(bytes);
 
             socket.emit('send_message', {
-              'connection_id': groupId,
+              'group_id': groupId,
               "message_type": "image",
               'message': caption.isEmpty ? "Photo" : caption,
               "media_base64": base64Image,
@@ -811,7 +811,7 @@ class ConnectorChatSystemController extends GetxController {
             final base64Image = base64Encode(bytes);
 
             socket.emit('send_message', {
-              'connection_id': groupId,
+              'group_id': groupId,
               "message_type": "image",
               'message': caption.isEmpty ? "Photo" : caption,
               "media_base64": base64Image,
@@ -882,7 +882,7 @@ class ConnectorChatSystemController extends GetxController {
             final base64File = base64Encode(bytes);
 
             socket.emit('send_message', {
-              'connection_id': groupId,
+              'group_id': groupId,
               'message_type': 'file',
               'media_base64': base64File,
               'media_mime_type': mimeType,
@@ -906,7 +906,7 @@ class ConnectorChatSystemController extends GetxController {
     String? description,
   }) {
     socket.emit('send_message', {
-      'connection_id': groupId,
+      'group_id': groupId,
       'message_type': 'event',
       'event_title': title,
       'event_description': description ?? '',
@@ -935,7 +935,7 @@ class ConnectorChatSystemController extends GetxController {
     respondingEventId.value = messageId;
 
     socket.emit('respond_event', {
-      'connection_id': groupId,
+      'group_id': groupId,
       'message_id': messageId,
       'response': response,
     });
@@ -974,7 +974,7 @@ class ConnectorChatSystemController extends GetxController {
       final locationData = {"latitude": latitude, "longitude": longitude, "address": address};
 
       socket.emit('send_message', {
-        "connection_id": groupId,
+        "group_id": groupId,
         "message_type": 'location',
         "message": jsonEncode(locationData),
       });
@@ -982,7 +982,7 @@ class ConnectorChatSystemController extends GetxController {
       debugPrint("📍 Location sent: $locationData");
     } else {
       socket.emit('send_message', {
-        "connection_id": groupId,
+        "group_id": groupId,
         "message_type": type,
         "message": message ?? '',
       });
@@ -1112,7 +1112,7 @@ class ConnectorChatSystemController extends GetxController {
           '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 
       socket.emit('send_message', {
-        'connection_id': groupId,
+        'group_id': groupId,
         'message_type': 'audio',
         'media_base64': base64Audio,
         'media_mime_type': 'audio/m4a',
@@ -1150,7 +1150,7 @@ class ConnectorChatSystemController extends GetxController {
     _audioRecorder.dispose();
     // Stop all audio playback when screen closes
     AudioManager().stopAll();
-    socket.emit('leave_connection', {"connection_id": groupId});
+    socket.emit('leave_connection', {"group_id": groupId});
     socket.dispose();
     super.onClose();
   }
