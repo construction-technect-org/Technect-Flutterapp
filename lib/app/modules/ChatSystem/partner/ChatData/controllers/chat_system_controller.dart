@@ -72,7 +72,7 @@ class ChatSystemController extends GetxController {
       onRefresh = Get.arguments["onRefresh"];
 
       if (chatData != null) {
-        connectionId = chatData.connectionId ?? 0;
+        connectionId = chatData.groupId ?? 0;
         number = chatData.connector.mobileNumber ?? '';
         name = "${chatData.connector?.firstName ?? ""} ${chatData.connector?.lastName ?? ""}"
             .trim();

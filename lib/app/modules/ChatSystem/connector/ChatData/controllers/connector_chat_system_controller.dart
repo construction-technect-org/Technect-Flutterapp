@@ -31,7 +31,7 @@ class ConnectorChatSystemController extends GetxController {
 
   final ImagePicker picker = ImagePicker();
   late final IO.Socket socket;
-  int connectionId = 0;
+  int groupId = 0;
   String name = "User";
   String number = "";
   String image = "";
@@ -73,8 +73,7 @@ class ConnectorChatSystemController extends GetxController {
       onRefresh = Get.arguments["onRefresh"];
       isVrm = Get.arguments["isVrm"];
       if (chatData != null) {
-        connectionId = chatData.groupId ?? 0;
-        // number = chatData.mobileNumber ?? 0;
+        groupId = chatData.groupId ?? 0;
         name = chatData.groupName??"";
         image =
             APIConstants.bucketUrl +
@@ -169,7 +168,7 @@ class ConnectorChatSystemController extends GetxController {
     try {
       isLoading.value = isLoad ?? true;
 
-      final result = await ConnectorChatServices().allChatList(cId: connectionId);
+      final result = await ConnectorChatServices().allChatList(cId: groupId);
 
       if (result.success == true) {
         chatListModel.value = result;
@@ -223,7 +222,7 @@ class ConnectorChatSystemController extends GetxController {
 
     socket.onConnect((_) {
       log('✅ Connected to socket server - ID: ${socket.id}');
-      socket.emit('join_connection', {"connection_id": connectionId});
+      socket.emit('join_connection', {"connection_id": groupId});
     });
 
     socket.onConnectError((data) {
@@ -236,7 +235,7 @@ class ConnectorChatSystemController extends GetxController {
 
     socket.on('joined_connection', (data) {
       if (kDebugMode) log('🟢 Joined Connection: $data');
-      socket.emit('mark_messages_read', {"connection_id": connectionId});
+      socket.emit('mark_messages_read', {"connection_id": groupId});
 
       // Check online status after joining
       if (otherUserId != null) {
@@ -344,7 +343,7 @@ class ConnectorChatSystemController extends GetxController {
 
         messages.add(newMessage);
         _scrollToBottom();
-        socket.emit('mark_messages_read', {"connection_id": connectionId});
+        socket.emit('mark_messages_read', {"connection_id": groupId});
       } catch (e, st) {
         log('❌ Error parsing new message: $e');
         log(st.toString());
@@ -387,7 +386,7 @@ class ConnectorChatSystemController extends GetxController {
     // Stop typing indicator when sending message
     _stopTyping();
 
-    socket.emit('send_message', {'connection_id': connectionId, 'message': message});
+    socket.emit('send_message', {'connection_id': groupId, 'message': message});
 
     Future.delayed(const Duration(milliseconds: 100), () {
       _scrollToBottom();
@@ -404,7 +403,7 @@ class ConnectorChatSystemController extends GetxController {
     // Emit typing event if not already typing
     if (!_isTyping) {
       _isTyping = true;
-      socket.emit('user_typing', {'connection_id': connectionId});
+      socket.emit('user_typing', {'connection_id': groupId});
     }
 
     // Cancel existing timer
@@ -421,7 +420,7 @@ class ConnectorChatSystemController extends GetxController {
     if (_isTyping) {
       _isTyping = false;
       _typingTimer?.cancel();
-      socket.emit('user_stopped_typing', {'connection_id': connectionId});
+      socket.emit('user_stopped_typing', {'connection_id': groupId});
     }
   }
 
@@ -553,7 +552,7 @@ class ConnectorChatSystemController extends GetxController {
               Get.back(); // Close loading dialog
 
               socket.emit('send_message', {
-                'connection_id': connectionId,
+                'connection_id': groupId,
                 'message_type': 'video',
                 'media_base64': base64Video,
                 'media_mime_type': mimeType,
@@ -716,7 +715,7 @@ class ConnectorChatSystemController extends GetxController {
               Get.back(); // Close loading dialog
 
               socket.emit('send_message', {
-                'connection_id': connectionId,
+                'connection_id': groupId,
                 'message_type': 'video',
                 'media_base64': base64Video,
                 'media_mime_type': mimeType,
@@ -774,7 +773,7 @@ class ConnectorChatSystemController extends GetxController {
             final base64Image = base64Encode(bytes);
 
             socket.emit('send_message', {
-              'connection_id': connectionId,
+              'connection_id': groupId,
               "message_type": "image",
               'message': caption.isEmpty ? "Photo" : caption,
               "media_base64": base64Image,
@@ -812,7 +811,7 @@ class ConnectorChatSystemController extends GetxController {
             final base64Image = base64Encode(bytes);
 
             socket.emit('send_message', {
-              'connection_id': connectionId,
+              'connection_id': groupId,
               "message_type": "image",
               'message': caption.isEmpty ? "Photo" : caption,
               "media_base64": base64Image,
@@ -883,7 +882,7 @@ class ConnectorChatSystemController extends GetxController {
             final base64File = base64Encode(bytes);
 
             socket.emit('send_message', {
-              'connection_id': connectionId,
+              'connection_id': groupId,
               'message_type': 'file',
               'media_base64': base64File,
               'media_mime_type': mimeType,
@@ -907,7 +906,7 @@ class ConnectorChatSystemController extends GetxController {
     String? description,
   }) {
     socket.emit('send_message', {
-      'connection_id': connectionId,
+      'connection_id': groupId,
       'message_type': 'event',
       'event_title': title,
       'event_description': description ?? '',
@@ -936,7 +935,7 @@ class ConnectorChatSystemController extends GetxController {
     respondingEventId.value = messageId;
 
     socket.emit('respond_event', {
-      'connection_id': connectionId,
+      'connection_id': groupId,
       'message_id': messageId,
       'response': response,
     });
@@ -975,7 +974,7 @@ class ConnectorChatSystemController extends GetxController {
       final locationData = {"latitude": latitude, "longitude": longitude, "address": address};
 
       socket.emit('send_message', {
-        "connection_id": connectionId,
+        "connection_id": groupId,
         "message_type": 'location',
         "message": jsonEncode(locationData),
       });
@@ -983,7 +982,7 @@ class ConnectorChatSystemController extends GetxController {
       debugPrint("📍 Location sent: $locationData");
     } else {
       socket.emit('send_message', {
-        "connection_id": connectionId,
+        "connection_id": groupId,
         "message_type": type,
         "message": message ?? '',
       });
@@ -1113,7 +1112,7 @@ class ConnectorChatSystemController extends GetxController {
           '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 
       socket.emit('send_message', {
-        'connection_id': connectionId,
+        'connection_id': groupId,
         'message_type': 'audio',
         'media_base64': base64Audio,
         'media_mime_type': 'audio/m4a',
@@ -1151,7 +1150,7 @@ class ConnectorChatSystemController extends GetxController {
     _audioRecorder.dispose();
     // Stop all audio playback when screen closes
     AudioManager().stopAll();
-    socket.emit('leave_connection', {"connection_id": connectionId});
+    socket.emit('leave_connection', {"connection_id": groupId});
     socket.dispose();
     super.onClose();
   }
