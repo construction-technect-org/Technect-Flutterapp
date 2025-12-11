@@ -74,40 +74,29 @@ class CRMChatListController extends GetxController {
     try {
       if (data == null) return;
 
-      final int connectionId = data['group_id'];
-      // final String? lastMessage = data['last_message'];
-      // final String? lastMessageTime = data['last_message_time'];
+      final int groupId = data['group_id'];
+      final String? lastMessage = data['last_message'];
+      final String? lastMessageTime = data['last_message_time'];
       final int? unreadCount = data['unread_count'];
 
+
       final conversations = chatListModel.value.data?.groups ?? [];
-      final index = conversations.indexWhere((conv) => conv.groupId == connectionId);
+      final index = conversations.indexWhere((conv) => conv.groupId == groupId);
 
       if (index != -1) {
-        // final conversation = conversations[index];
-
-        // conversation. = ChatInfo(
-        //   lastMessage: lastMessage ?? conversation.chatInfo?.lastMessage,
-        //   lastMessageTime: lastMessageTime ?? conversation.chatInfo?.lastMessageTime,
-        //   unreadCount: unreadCount ?? conversation.chatInfo?.unreadCount ?? 0,
-        // );
-        //
-        // conversations.removeAt(index);
-        // conversations.insert(0, conversation);
-        //
-        // chatListModel.value = ConnectorAllChatListModel(
-        //   success: chatListModel.value.success,
-        //   chats: Chats(
-        //     conversations: conversations,
-        //     totalConversations: chatListModel.value.data?.totalGroups,
-        //     enabledChats: chatListModel.value.chats?.enabledChats,
-        //   ),
-        //   message: chatListModel.value.message,
-        // );
-
+        final conversation = conversations[index];
+        conversation.lastMessage= lastMessage;
+        conversation.lastMessageTime= lastMessageTime;
+        conversation.lastMessage= lastMessage;
+        conversation.unreadCount= unreadCount;
+        conversations.removeAt(index);
+        conversations.insert(0, conversation);
+        chatListModel.refresh();
         if (kDebugMode) {
-          log('✅ VRM Updated conversation $connectionId - Unread: $unreadCount');
+          log('✅ VRM Updated conversation $groupId - Unread: $unreadCount');
         }
       }
+
     } catch (e, st) {
       log('❌ Error updating VRM conversation: $e');
       log(st.toString());
