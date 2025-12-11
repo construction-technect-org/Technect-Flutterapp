@@ -215,15 +215,18 @@ class ConnectorChatSystemController extends GetxController {
       //     socket.emit('check_user_online', {'user_id': otherUserId});
       //   }
     });
-    // socket.on('messages_marked_read', (data) {
-    //   if (kDebugMode) log('🟢 messages marked as read: $data');
-    // });
-    //
-    // socket.on('messages_read', (data) {
-    //   if (kDebugMode) log('🟢 Your messages were read: $data');
-    //
-    //   _markAllMessagesAsRead();
-    // });
+    socket.on('messages_marked_read', (data) {
+      if (kDebugMode) log('🟢 messages marked as read: $data');
+    });
+
+    socket.on('messages_read', (data) {
+      if (kDebugMode) log('🟢 Your messages were read: $data');
+
+      _markAllMessagesAsRead();
+    });
+    socket.on('read_error', (error) => {
+    log('Error marking messages as read:, ${error.message}')
+    });
     //
     // // Listen for initial online status when joining connection
     // socket.on('user_online_status', (data) {
@@ -352,7 +355,7 @@ class ConnectorChatSystemController extends GetxController {
 
         messages.add(newMessage);
         _scrollToBottom();
-        // socket.emit('mark_messages_read', {"group_id": groupId});
+        socket.emit('mark_messages_read', {"group_id": groupId});
       } catch (e, st) {
         log('❌ Error parsing new message: $e');
         log(st.toString());
