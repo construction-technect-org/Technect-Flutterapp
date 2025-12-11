@@ -227,9 +227,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                               ? 'Typing...'
                               : "",
                           style: MyTexts.regular12.copyWith(
-                            color: controller.isOtherUserTyping.value
-                                ? MyColors.primary
-                                : (controller.isUserOnline.value ? Colors.green : Colors.grey),
+                            color: MyColors.primary,
                           ),
                         ),
                       ),
