@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/widgets/no_network.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
-import 'package:construction_technect/app/modules/CRM/home/views/crm_home_view.dart';
+import 'package:construction_technect/app/modules/CRM/chat/views/crm_chat_list_screen.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/crm_dashboard_screen.dart';
+import 'package:construction_technect/app/modules/CRM/home/views/crm_home_view.dart';
 import 'package:construction_technect/app/modules/CRM/more/views/more_screen.dart';
-import 'package:construction_technect/app/modules/CRM/task/views/task_screen.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -70,9 +70,9 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
       case 1:
         return const CRMDashboardScreen();
       case 2:
-        return CRMTaskScreen();
+        return const CRMChatListScreen();
       case 3:
-        return CRMMoreScreen();
+        return  CRMMoreScreen();
       default:
         return CRMMoreScreen();
     }
@@ -120,9 +120,9 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                 onTap: onSellTap,
               ),
               bottomBar(
-                Asset.task,
-                Asset.task1,
-                'Task',
+                Asset.chat,
+                Asset.chat,
+                'Chat',
                 onTap: () {
                   controller.currentIndex.value = 2;
                 },

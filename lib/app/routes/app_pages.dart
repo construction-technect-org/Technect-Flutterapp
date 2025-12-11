@@ -11,6 +11,8 @@ import 'package:construction_technect/app/modules/Authentication/login/bindings/
 import 'package:construction_technect/app/modules/Authentication/login/views/login_view.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/bindings/bottom_binding.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/views/bottom_view.dart';
+import 'package:construction_technect/app/modules/CRM/chat/bindings/crm_chat_list_binding.dart';
+import 'package:construction_technect/app/modules/CRM/chat/views/crm_chat_list_screen.dart';
 import 'package:construction_technect/app/modules/CRM/inbox/bindings/crm_inbox_bindings.dart';
 import 'package:construction_technect/app/modules/CRM/inbox/views/crm_inbox_view.dart';
 import 'package:construction_technect/app/modules/CRM/lead/addLead/bindings/add_lead_binding.dart';
@@ -394,6 +396,10 @@ class AppPages {
       name: Routes.VRM_CHAT_LIST,
       page: () => const VRMChatListScreen(),
       binding: VRMChatListBinding(),
+    ),  GetPage(
+      name: Routes.CRM_CHAT_LIST,
+      page: () => const CRMChatListScreen(),
+      binding: CRMChatListBinding(),
     ),
     //Vrm
     GetPage(name: Routes.VRM_MAIN, page: () => VRMBottomBarView(), binding: VRMBottomBinding()),
