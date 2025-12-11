@@ -137,32 +137,6 @@ class ConnectorChatSystemController extends GetxController {
     }
   }
 
-  /// Handle online status updates from socket
-  void _handleOnlineStatusUpdate(dynamic data) {
-    try {
-      if (data == null || data['user_id'] == null) return;
-
-      final userId = data['user_id'];
-      final isOnline = data['is_online'] == true;
-      final lastSeenStr = data['last_seen'];
-
-      // Only update if this is the user we're chatting with
-      if (userId == otherUserId) {
-        isUserOnline.value = isOnline;
-
-        if (lastSeenStr != null && !isOnline) {
-          lastSeenTime.value = DateTime.parse(lastSeenStr);
-        } else {
-          lastSeenTime.value = null;
-        }
-
-        _updateStatusText();
-      }
-    } catch (e) {
-      log('❌ Error handling online status: $e');
-    }
-  }
-
   /// Fetch chat history
   Future<void> fetchChatList({bool? isLoad}) async {
     try {
