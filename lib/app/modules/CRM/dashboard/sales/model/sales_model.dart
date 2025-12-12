@@ -70,38 +70,54 @@ class SaleLeads {
   String? nextConversation;
   String? salesLeadCreatedAt;
   String? salesLeadUpdatedAt;
+
   int? id;
   String? leadId;
   int? createdUserId;
+
   String? connectorName;
   String? connectorType;
   String? saleStatus;
   String? connectorId;
   String? connectorPhone;
   String? connectorProfileImage;
+
   String? productName;
   String? productCode;
   String? unitOfMeasure;
   String? quantity;
   String? estimateDeliveryDate;
   String? radius;
+
   String? companyPhone;
   String? source;
   String? reference;
   String? referralPhone;
+
   String? siteLocation;
   String? siteLatitude;
   String? siteLongitude;
+
   String? companyName;
   String? gstNumber;
   String? companyAddress;
+
   bool? isAutoCreated;
   String? notes;
   String? createdAt;
-  double? distanceKm;
   String? updatedAt;
+  double? distanceKm;
+
   String? salesLeadsStageDisplay;
   AssignedTeamMember? assignedTeamMember;
+
+  // NEW FIELDS ADDED
+  int? productId;
+  int? serviceId;
+  int? groupId;
+  String? groupName;
+  String? merchantLogo;
+  int? merchantUserId;
 
   SaleLeads({
     this.salesLeadId,
@@ -132,9 +148,9 @@ class SaleLeads {
     this.connectorProfileImage,
     this.productName,
     this.productCode,
-    this.distanceKm,
     this.unitOfMeasure,
     this.quantity,
+    this.distanceKm,
     this.estimateDeliveryDate,
     this.radius,
     this.companyPhone,
@@ -153,6 +169,14 @@ class SaleLeads {
     this.updatedAt,
     this.salesLeadsStageDisplay,
     this.assignedTeamMember,
+
+    // NEW
+    this.productId,
+    this.serviceId,
+    this.groupId,
+    this.groupName,
+    this.merchantLogo,
+    this.merchantUserId,
   });
 
   SaleLeads.fromJson(Map<String, dynamic> json) {
@@ -173,20 +197,21 @@ class SaleLeads {
     nextConversation = json['next_conversation'];
     salesLeadCreatedAt = json['sales_lead_created_at'];
     salesLeadUpdatedAt = json['sales_lead_updated_at'];
+
     id = json['id'];
     leadId = json['lead_id'];
     createdUserId = json['created_user_id'];
+
     connectorName = json['connector_name'];
     connectorType = json['connector_type'];
     connectorId = json['connector_id'];
     connectorPhone = json['connector_phone'];
     connectorProfileImage = json['connector_profile_image'];
+
     productName = json['product_name'];
     productCode = json['product_code'];
     unitOfMeasure = json['unit_of_measure'];
     quantity = json['quantity'];
-    distanceKm = json['distance_km'];
-    saleStatus = json['sales_status'];
     estimateDeliveryDate = json['estimate_delivery_date'];
     radius = json['radius'];
     companyPhone = json['company_phone'];
@@ -199,19 +224,32 @@ class SaleLeads {
     companyName = json['company_name'];
     gstNumber = json['gst_number'];
     companyAddress = json['company_address'];
+
     isAutoCreated = json['is_auto_created'];
     notes = json['notes'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+
+    saleStatus = json['sales_status'];
+    distanceKm = (json['distance_km'] ?? 0).toDouble();
     salesLeadsStageDisplay = json['sales_leads_stage_display'];
 
     assignedTeamMember = json["assigned_team_member"] != null
         ? AssignedTeamMember.fromJson(json["assigned_team_member"])
         : null;
+
+    // NEW FIELDS
+    productId = json["product_id"];
+    serviceId = json["service_id"];
+    groupId = json["group_id"];
+    groupName = json["group_name"];
+    merchantLogo = json["merchant_logo"];
+    merchantUserId = json["merchant_user_id"];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
+
     data['sales_lead_id'] = salesLeadId;
     data['sales_id'] = salesId;
     data['lead_id_string'] = leadIdString;
@@ -229,16 +267,18 @@ class SaleLeads {
     data['next_conversation'] = nextConversation;
     data['sales_lead_created_at'] = salesLeadCreatedAt;
     data['sales_lead_updated_at'] = salesLeadUpdatedAt;
+
     data['id'] = id;
     data['lead_id'] = leadId;
     data['created_user_id'] = createdUserId;
+
     data['connector_name'] = connectorName;
     data['connector_type'] = connectorType;
     data['connector_id'] = connectorId;
     data['connector_phone'] = connectorPhone;
     data['connector_profile_image'] = connectorProfileImage;
+
     data['product_name'] = productName;
-    data['distance_km'] = distanceKm;
     data['product_code'] = productCode;
     data['unit_of_measure'] = unitOfMeasure;
     data['quantity'] = quantity;
@@ -254,13 +294,24 @@ class SaleLeads {
     data['company_name'] = companyName;
     data['gst_number'] = gstNumber;
     data['company_address'] = companyAddress;
+
     data['is_auto_created'] = isAutoCreated;
     data['notes'] = notes;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['sales_status'] = saleStatus;
+    data['distance_km'] = distanceKm;
+
     data['sales_leads_stage_display'] = salesLeadsStageDisplay;
-    data["assigned_team_member"] = assignedTeamMember?.toJson();
+    data['assigned_team_member'] = assignedTeamMember?.toJson();
+
+    // NEW FIELDS
+    data["product_id"] = productId;
+    data["service_id"] = serviceId;
+    data["group_id"] = groupId;
+    data["group_name"] = groupName;
+    data["merchant_logo"] = merchantLogo;
+    data["merchant_user_id"] = merchantUserId;
 
     return data;
   }

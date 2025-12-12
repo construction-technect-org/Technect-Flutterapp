@@ -41,8 +41,8 @@ class VrmLeadItemCard extends StatelessWidget {
               width: 80,
               height: 97,
               fit: BoxFit.cover,
-              placeholder: (_, __) => Container(width: 80, height: 97, color: Colors.grey.shade200),
-              errorWidget: (_, __, ___) => Container(
+              placeholder: (_, _) => Container(width: 80, height: 97, color: Colors.grey.shade200),
+              errorWidget: (_, _, _) => Container(
                 width: 80,
                 height: 97,
                 color: Colors.grey.shade200,
@@ -141,7 +141,28 @@ class VrmLeadItemCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _pill(stage.capitalizeFirst ?? stage, MyColors.primary),
+                    const Gap(16),
                     _pill(status.capitalizeFirst ?? status, MyColors.gray2E),
+                    const Spacer(),
+                    GestureDetector(onTap: () {
+                      Get.toNamed(
+                        Routes.CONNECTOR_CHAT_SYSTEM,
+                        arguments: {
+                          "groupId": lead.groupId ?? 0,
+                          "groupName": lead.groupName ?? "Unknown",
+                          "groupImage": lead.merchantLogo ?? "Unknown",
+                          "myUserID": lead.connectorId ?? 0,
+                        },
+                      );
+                    }, child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: SvgPicture.asset(Asset.chat, height: 18),
+                    ),),
+                    const Gap(16),
                   ],
                 ),
               ],
@@ -157,8 +178,8 @@ class VrmLeadItemCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: color.withOpacity(0.1),
-        border: Border.all(color: color.withOpacity(0.3)),
+        color: color.withValues(alpha: 0.1),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Text(text, style: MyTexts.medium13.copyWith(color: color)),
     );

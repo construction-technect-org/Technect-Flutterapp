@@ -4,6 +4,7 @@ import 'package:construction_technect/app/modules/vrm/dashboard/controller/vrm_d
 import 'package:construction_technect/app/modules/vrm/dashboard/widget/analysis_section_widget.dart';
 import 'package:construction_technect/app/modules/vrm/dashboard/widget/lead_conversation_section_widget.dart';
 import 'package:construction_technect/app/modules/vrm/dashboard/widget/leads_section_widget.dart';
+import 'package:construction_technect/app/modules/vrm/dashboard/widget/vrm_header.dart';
 
 class VRMDashboardScreen extends GetView<VRMDashboardController> {
   const VRMDashboardScreen({super.key});
@@ -25,8 +26,14 @@ class VRMDashboardScreen extends GetView<VRMDashboardController> {
               SafeArea(
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 10),
+                      child: VrmHeader(),
+                    ),
                     Expanded(
                       child: RefreshIndicator(
+                        backgroundColor: MyColors.primary,
+                        color: Colors.white,
                         onRefresh: controller.fetchDashboard,
                         child: SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),

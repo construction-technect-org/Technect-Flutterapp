@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/controller/sales_controller.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_lead_screen.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/sales/widget/sale_segment_filters_widget.dart';
@@ -36,6 +37,59 @@ class SalesScreen extends GetView<SalesController> {
                         child: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.black, size: 20),
                       ),
                     ),
+                    action: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                          Get.find<CRMBottomController>().changeTab(2);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: MyColors.white,
+                            border: Border.all(color: MyColors.custom('EAEAEA')),
+                            shape: BoxShape.circle,
+                          ),
+                          child: SvgPicture.asset(Asset.chat, width: 24, height: 24,
+                            colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                          ),
+                        ),
+                      ),
+                      const Gap(10),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.NEWS);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: MyColors.white,
+                            border: Border.all(color: MyColors.custom('EAEAEA')),
+                            shape: BoxShape.circle,
+                          ),
+                          child: SvgPicture.asset(Asset.info, width: 24, height: 24,
+                            colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                          ),
+                        ),
+                      ),
+                      const Gap(10),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.NOTIFICATIONS);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: MyColors.white,
+                            border: Border.all(color: MyColors.custom('EAEAEA')),
+                            shape: BoxShape.circle,
+                          ),
+                          child: SvgPicture.asset(Asset.notification, width: 24, height: 24),
+                        ),
+                      ),
+                      const Gap(10),
+
+                    ],
                   ),
                   // const TopBarHeader(),
                   const SaleSegmentFiltersWidget(),

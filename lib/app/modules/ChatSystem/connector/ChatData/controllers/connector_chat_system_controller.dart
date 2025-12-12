@@ -36,8 +36,6 @@ class ConnectorChatSystemController extends GetxController {
   String number = "";
   String image = "";
   String? myUserId;
-  bool? isVrm;
-  VoidCallback? onRefresh;
 
   // Online status tracking
   RxBool isUserOnline = false.obs;
@@ -69,20 +67,12 @@ class ConnectorChatSystemController extends GetxController {
     super.onInit();
 
     if (Get.arguments != null) {
-      final chatData = Get.arguments["chatData"];
-      onRefresh = Get.arguments["onRefresh"];
-      isVrm = Get.arguments["isVrm"];
-      if (chatData != null) {
-        groupId = chatData.groupId ?? 0;
-        name = chatData.groupName ?? "";
-        image =
-            APIConstants.bucketUrl +
-            (isVrm == true
-                ? (chatData.merchantLogo ?? "")
-                : (chatData.connectorProfileImage ?? ""));
-        myUserId =(isVrm == true? chatData.connectorId : chatData.merchantUserId).toString();
-      }
-
+      groupId = Get.arguments["groupId"];
+      name = Get.arguments["groupName"];
+      image =
+          APIConstants.bucketUrl +
+              Get.arguments["groupImage"];
+      myUserId =Get.arguments["myUserID"].toString();
       currentUser = CustomUser(
         id: myPref.userModel.val["id"].toString(),
         name: name,

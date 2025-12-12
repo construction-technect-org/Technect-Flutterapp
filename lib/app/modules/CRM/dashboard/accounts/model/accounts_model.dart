@@ -101,7 +101,16 @@ class AccountLeads {
   double? distanceKm;
   String? updatedAt;
   String? salesLeadsStageDisplay;
+
   AssignedTeamMember? assignedTeamMember;
+
+  // ✅ Newly Added Fields
+  int? productId;
+  int? serviceId;
+  int? groupId;
+  String? groupName;
+  String? merchantLogo;
+  int? merchantUserId;
 
   AccountLeads({
     this.salesLeadId,
@@ -132,7 +141,6 @@ class AccountLeads {
     this.connectorProfileImage,
     this.productName,
     this.productCode,
-    this.distanceKm,
     this.unitOfMeasure,
     this.quantity,
     this.estimateDeliveryDate,
@@ -151,8 +159,17 @@ class AccountLeads {
     this.notes,
     this.createdAt,
     this.updatedAt,
+    this.distanceKm,
     this.salesLeadsStageDisplay,
     this.assignedTeamMember,
+
+    // Newly Added fields
+    this.productId,
+    this.serviceId,
+    this.groupId,
+    this.groupName,
+    this.merchantLogo,
+    this.merchantUserId,
   });
 
   AccountLeads.fromJson(Map<String, dynamic> json) {
@@ -185,7 +202,6 @@ class AccountLeads {
     productCode = json['product_code'];
     unitOfMeasure = json['unit_of_measure'];
     quantity = json['quantity'];
-    distanceKm = json['distance_km'];
     saleStatus = json['sales_status'];
     estimateDeliveryDate = json['estimate_delivery_date'];
     radius = json['radius'];
@@ -203,15 +219,25 @@ class AccountLeads {
     notes = json['notes'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    distanceKm = json['distance_km'];
     salesLeadsStageDisplay = json['sales_leads_stage_display'];
 
     assignedTeamMember = json["assigned_team_member"] != null
         ? AssignedTeamMember.fromJson(json["assigned_team_member"])
         : null;
+
+    // ✅ Newly added fields
+    productId = json['product_id'];
+    serviceId = json['service_id'];
+    groupId = json['group_id'];
+    groupName = json['group_name'];
+    merchantLogo = json['merchant_logo'];
+    merchantUserId = json['merchant_user_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+
     data['sales_lead_id'] = salesLeadId;
     data['sales_id'] = salesId;
     data['lead_id_string'] = leadIdString;
@@ -238,7 +264,6 @@ class AccountLeads {
     data['connector_phone'] = connectorPhone;
     data['connector_profile_image'] = connectorProfileImage;
     data['product_name'] = productName;
-    data['distance_km'] = distanceKm;
     data['product_code'] = productCode;
     data['unit_of_measure'] = unitOfMeasure;
     data['quantity'] = quantity;
@@ -258,9 +283,18 @@ class AccountLeads {
     data['notes'] = notes;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+    data['distance_km'] = distanceKm;
     data['sales_status'] = saleStatus;
     data['sales_leads_stage_display'] = salesLeadsStageDisplay;
     data["assigned_team_member"] = assignedTeamMember?.toJson();
+
+    // ✅ Newly added fields
+    data['product_id'] = productId;
+    data['service_id'] = serviceId;
+    data['group_id'] = groupId;
+    data['group_name'] = groupName;
+    data['merchant_logo'] = merchantLogo;
+    data['merchant_user_id'] = merchantUserId;
 
     return data;
   }

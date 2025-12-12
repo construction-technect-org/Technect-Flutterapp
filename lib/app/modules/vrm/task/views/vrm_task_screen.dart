@@ -21,7 +21,7 @@ class VrmTaskScreen extends GetView<VrmTaskController> {
                 gradient: LinearGradient(
                   begin: AlignmentGeometry.topCenter,
                   end: AlignmentGeometry.bottomCenter,
-                  colors: [MyColors.custom("FFF9BD"), Colors.white],
+                  colors: [MyColors.custom("FFF9BD"), MyColors.custom("FFF9BD")],
                 ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
@@ -70,25 +70,41 @@ class VrmTaskScreen extends GetView<VrmTaskController> {
     required String name,
     required bool isSelected,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            icon,
-            height: 24,
-            width: 24,
-            color: isSelected ? MyColors.primary : MyColors.gray2E,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            name,
-            style: MyTexts.medium14.copyWith(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        boxShadow: isSelected == true
+            ? [
+                BoxShadow(
+                  color: Colors.white.withValues(alpha: 0.8),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                ),
+              ]
+            : [],
+        borderRadius: BorderRadius.circular(10),
+      ),
+
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              icon,
+              height: 24,
+              width: 24,
               color: isSelected ? MyColors.primary : MyColors.gray2E,
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              name,
+              style: MyTexts.medium14.copyWith(
+                color: isSelected ? MyColors.primary : MyColors.gray2E,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

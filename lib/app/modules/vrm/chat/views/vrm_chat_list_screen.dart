@@ -10,7 +10,7 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: const CommonAppBar(title: Text("Chats"), automaticallyImplyLeading: false),
+      appBar: const CommonAppBar(title: Text("Chats"),isCenter: false,leadingWidth: 0,leading: SizedBox(), ),
       body: RefreshIndicator(
         backgroundColor: MyColors.primary,
         color: Colors.white,
@@ -98,11 +98,10 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
                   Get.toNamed(
                     Routes.CONNECTOR_CHAT_SYSTEM,
                     arguments: {
-                      "chatData": chat,
-                      "isVrm": true,
-                      "onRefresh": () {
-                        controller.fetchChatList();
-                      },
+                      "groupId": chat.groupId ?? 0,
+                      "groupName": chat.groupName ?? "Unknown",
+                      "groupImage": chat.merchantLogo ?? "Unknown",
+                      "myUserID": chat.connectorId ?? 0,
                     },
                   );
                 },

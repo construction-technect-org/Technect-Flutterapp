@@ -110,6 +110,14 @@ class Leads {
 
   String? salesLeadStage;
 
+  // NEW FIELDS ADDED
+  int? productId;
+  int? serviceId;
+  int? groupId;
+  String? groupName;
+  String? merchantLogo;
+  int? merchantUserId;
+
   Leads({
     this.id,
     this.leadId,
@@ -156,6 +164,14 @@ class Leads {
     this.assignedTeamMember,
     this.salesLeadStage,
     this.assignedUser,
+
+    // NEW
+    this.productId,
+    this.serviceId,
+    this.groupId,
+    this.groupName,
+    this.merchantLogo,
+    this.merchantUserId,
   });
 
   Leads.fromJson(Map<String, dynamic> json) {
@@ -176,7 +192,7 @@ class Leads {
     quantity = json["quantity"];
     estimateDeliveryDate = json["estimate_delivery_date"];
     radius = json["radius"];
-    distanceKM = json["distance_km"];
+    distanceKM = (json["distance_km"] ?? 0).toDouble();
 
     leadStage = json["lead_stage"];
     companyPhone = json["company_phone"];
@@ -221,6 +237,14 @@ class Leads {
     assignedUser = json["assigned_user"] != null
         ? AssignedUser.fromJson(json["assigned_user"])
         : null;
+
+    // NEW FIELDS
+    productId = json["product_id"];
+    serviceId = json["service_id"];
+    groupId = json["group_id"];
+    groupName = json["group_name"];
+    merchantLogo = json["merchant_logo"];
+    merchantUserId = json["merchant_user_id"];
   }
 
   Map<String, dynamic> toJson() {
@@ -268,6 +292,15 @@ class Leads {
       "next_conversation": nextConversation,
       "assigned_team_member": assignedTeamMember?.toJson(),
       "assigned_user": assignedUser?.toJson(),
+      "sales_leads_stage": salesLeadStage,
+
+      // NEW FIELDS
+      "product_id": productId,
+      "service_id": serviceId,
+      "group_id": groupId,
+      "group_name": groupName,
+      "merchant_logo": merchantLogo,
+      "merchant_user_id": merchantUserId,
     };
   }
 }

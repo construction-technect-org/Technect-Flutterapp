@@ -293,6 +293,26 @@ class SaleItemCard extends StatelessWidget {
                             style: MyTexts.medium13.copyWith(color: Colors.black),
                           ),
                         ),
+                        const Spacer(),
+                        GestureDetector(onTap: () {
+                          Get.toNamed(
+                            Routes.CONNECTOR_CHAT_SYSTEM,
+                            arguments: {
+                              "groupId": lead.groupId ?? 0,
+                              "groupName": lead.groupName ?? "Unknown",
+                              "groupImage": lead.connectorProfileImage ?? "Unknown",
+                              "myUserID": lead.merchantUserId ?? 0,
+                            },
+                          );
+                        }, child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(4),
+                          child: SvgPicture.asset(Asset.chat, height: 18),
+                        ),),
+                        const Gap(16),
                         GestureDetector(
                           onTapDown: (details) {
                             openAssignPopupMenu(
@@ -343,6 +363,26 @@ class SaleItemCard extends StatelessWidget {
                             style: MyTexts.medium13.copyWith(color: Colors.black),
                           ),
                         ),
+                        const Spacer(),
+                        GestureDetector(onTap: () {
+                          Get.toNamed(
+                            Routes.CONNECTOR_CHAT_SYSTEM,
+                            arguments: {
+                              "groupId": lead.groupId ?? 0,
+                              "groupName": lead.groupName ?? "Unknown",
+                              "groupImage": lead.connectorProfileImage ?? "Unknown",
+                              "myUserID": lead.merchantUserId ?? 0,
+                            },
+                          );
+                        }, child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(4),
+                          child: SvgPicture.asset(Asset.chat, height: 18),
+                        ),),
+                        const Gap(16),
                         GestureDetector(
                           onTapDown: (details) {
                             _openConversationMenu(context, details.globalPosition, lead);
@@ -388,6 +428,25 @@ class SaleItemCard extends StatelessWidget {
                             style: MyTexts.medium13.copyWith(color: Colors.black),
                           ),
                         ),
+                        const Spacer(),
+                        GestureDetector(onTap: () {
+                          Get.toNamed(
+                            Routes.CONNECTOR_CHAT_SYSTEM,
+                            arguments: {
+                              "groupId": lead.groupId ?? 0,
+                              "groupName": lead.groupName ?? "Unknown",
+                              "groupImage": lead.connectorProfileImage ?? "Unknown",
+                              "myUserID": lead.merchantUserId ?? 0,
+                            },
+                          );
+                        }, child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(4),
+                          child: SvgPicture.asset(Asset.chat, height: 18),
+                        ),),
                       ],
                     ),
                   ] else if (controller.activeFilter.value == "Closing") ...[
@@ -409,14 +468,25 @@ class SaleItemCard extends StatelessWidget {
                             style: MyTexts.medium13.copyWith(color: Colors.white),
                           ),
                         ),
-                        Container(
+                        const Spacer(),
+                        GestureDetector(onTap: () {
+                          Get.toNamed(
+                            Routes.CONNECTOR_CHAT_SYSTEM,
+                            arguments: {
+                              "groupId": lead.groupId ?? 0,
+                              "groupName": lead.groupName ?? "Unknown",
+                              "groupImage": lead.connectorProfileImage ?? "Unknown",
+                              "myUserID": lead.merchantUserId ?? 0,
+                            },
+                          );
+                        }, child: Container(
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(4),
                           child: SvgPicture.asset(Asset.chat, height: 18),
-                        ),
+                        ),),
                       ],
                     ),
                   ],

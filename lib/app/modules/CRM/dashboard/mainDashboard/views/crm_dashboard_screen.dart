@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/controller/crm_dashboard_controller.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/model/dashboard_model.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/analysis_section_widget.dart';
+import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/crm_header.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/lead_conversation_section_widget.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/leads_section_widget.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/product_chart_widget.dart';
@@ -27,7 +28,10 @@ class CRMDashboardScreen extends GetView<CRMDashboardController> {
               SafeArea(
                 child: Column(
                   children: [
-                    // const DashboardHeaderWidget(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 10),
+                      child:  CrmHeader(),
+                    ),
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {

@@ -10,11 +10,11 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: const CommonAppBar(title: Text("Chats"), automaticallyImplyLeading: false),
+      appBar: const CommonAppBar(title: Text("Chats"),isCenter: false,leadingWidth: 0,leading: SizedBox(), ),
       body: RefreshIndicator(
         backgroundColor: MyColors.primary,
         color: Colors.white,
-        onRefresh: ()async{
+        onRefresh: () async {
           await controller.fetchChatList();
         },
         child: Obx(() {
@@ -94,11 +94,10 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
                   Get.toNamed(
                     Routes.CONNECTOR_CHAT_SYSTEM,
                     arguments: {
-                      "isVrm": false,
-                      "chatData": chat,
-                      "onRefresh": () {
-                        controller.fetchChatList();
-                      },
+                      "groupId": chat.groupId ?? 0,
+                      "groupName": chat.groupName ?? "Unknown",
+                      "groupImage": chat.connectorProfileImage ?? "Unknown",
+                      "myUserID": chat.merchantUserId ?? 0,
                     },
                   );
                 },

@@ -112,6 +112,13 @@ class VrmLead {
   // Additional fields
   int? leadMerchantStatusId;
 
+  // ✅ Newly added fields
+  int? productId;
+  int? serviceId;
+  int? groupId;
+  String? groupName;
+  String? merchantLogo;
+
   VrmLead({
     this.id,
     this.leadId,
@@ -165,6 +172,13 @@ class VrmLead {
     this.accountLeadId,
     this.accountId,
     this.leadMerchantStatusId,
+
+    // New fields
+    this.productId,
+    this.serviceId,
+    this.groupId,
+    this.groupName,
+    this.merchantLogo,
   });
 
   VrmLead.fromJson(Map<String, dynamic> json) {
@@ -220,10 +234,18 @@ class VrmLead {
     accountLeadId = json['account_lead_id'];
     accountId = json['account_id'];
     leadMerchantStatusId = json['lead_merchant_status_id'];
+
+    // ✅ New fields
+    productId = json['product_id'];
+    serviceId = json['service_id'];
+    groupId = json['group_id'];
+    groupName = json['group_name'];
+    merchantLogo = json['merchant_logo'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+
     data['id'] = id;
     data['lead_id'] = leadId;
     data['created_user_id'] = createdUserId;
@@ -276,6 +298,14 @@ class VrmLead {
     data['account_lead_id'] = accountLeadId;
     data['account_id'] = accountId;
     data['lead_merchant_status_id'] = leadMerchantStatusId;
+
+    // ✅ New fields
+    data['product_id'] = productId;
+    data['service_id'] = serviceId;
+    data['group_id'] = groupId;
+    data['group_name'] = groupName;
+    data['merchant_logo'] = merchantLogo;
+
     return data;
   }
 }
