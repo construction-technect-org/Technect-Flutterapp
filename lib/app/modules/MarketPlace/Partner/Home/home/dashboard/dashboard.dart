@@ -154,6 +154,23 @@ class Dashboard extends StatelessWidget {
                         const Gap(10),
                         GestureDetector(
                           onTap: () {
+                            Get.toNamed(Routes.NEWS);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: MyColors.white,
+                              border: Border.all(color: MyColors.custom('EAEAEA')),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(Asset.info, width: 24, height: 24,
+                            colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                            ),
+                          ),
+                        ),
+                        const Gap(10),
+                        GestureDetector(
+                          onTap: () {
                             Get.toNamed(Routes.NOTIFICATIONS);
                           },
                           child: Container(
@@ -166,21 +183,7 @@ class Dashboard extends StatelessWidget {
                             child: SvgPicture.asset(Asset.notification, width: 24, height: 24),
                           ),
                         ),
-                        const Gap(10),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.NEWS);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: MyColors.white,
-                              border: Border.all(color: MyColors.custom('EAEAEA')),
-                              shape: BoxShape.circle,
-                            ),
-                            child: SvgPicture.asset(Asset.news, width: 24, height: 24),
-                          ),
-                        ),
+
                       ],
                     ),
                     const Gap(24),
