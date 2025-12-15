@@ -221,6 +221,16 @@ class LoginView extends GetView<LoginController> {
                                   },
                           ),
                         ),
+                        const Gap(12),
+                        RoundedButton(
+                          color: Colors.white,
+                          fontColor: MyColors.primary,
+                          borderColor: MyColors.primary,
+                          buttonName: 'Login as team member',
+                          onTap: () {
+                            controller.openPhoneNumberBottomSheet();
+                          },
+                        ),
 
                         const Gap(24),
 

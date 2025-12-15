@@ -1,10 +1,16 @@
+import 'dart:developer';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/validate.dart';
+import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
+import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/services/LoginService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:timer_count_down/timer_controller.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -183,4 +189,240 @@ class LoginController extends GetxController {
       loginError.value = "Something went wrong";
     }
   }
+
+  final mobileNumberController = TextEditingController();
+  RxInt isValidd = (-1).obs;
+  RxString countryCodee = "+91".obs;
+  RxString numberError = "".obs;
+  void openPhoneNumberBottomSheet() {
+    final formKey = GlobalKey<FormState>();
+    isValidd.value = -1;
+    numberError.value = "";
+
+    Get.bottomSheet(
+      Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(12),
+              Center(
+                child: Container(
+                  height: 5,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const Gap(24),
+              Text(
+                "Mobile Number",
+                style: MyTexts.medium20.copyWith(color: Colors.black),
+              ),
+              const Gap(5),
+              CommonPhoneField(
+                controller: mobileNumberController,
+                focusNode: FocusNode(),
+                isValid: isValidd,
+                customErrorMessage: numberError,
+                onCountryCodeChanged: (code) {
+                  countryCodee.value = code;
+                },
+              ),
+              const Gap(15),
+              RoundedButton(
+                buttonName: "Continue",
+                onTap: () async {
+                  isValidd.value = -1;
+                  numberError.value = "";
+
+                  if (!formKey.currentState!.validate()) return;
+
+                  // final mobileNumber = mobileNumberController.text.trim();
+                  // final mobileError = await Validate.validateMobileNumberAsync(
+                  //   mobileNumber,
+                  //   countryCode: countryCode.value,
+                  // );
+                  //
+                  // if (mobileError != null && mobileError.isNotEmpty) {
+                  //   numberError.value = mobileError;
+                  //   isValid.value = 1;
+                  //   return;
+                  // }
+
+                  hideKeyboard();
+
+                  try {
+                    resetOtpState();
+                    final sent = await verifyMobileNumber();
+                    if (!sent) return;
+
+                    if (Get.isBottomSheetOpen == true) {
+                      Get.back();
+                    }
+
+                    // Use named route to avoid duplicates
+                    resetOtpState();
+                    await Get.offNamed(Routes.OTP_Verification);
+                  } finally {}
+                },
+              ),
+              const Gap(10),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+    ).whenComplete(() {
+      FocusManager.instance.primaryFocus?.unfocus();
+    });
+  }
+
+  final countdownController = CountdownController(autoStart: true);
+
+  Future<String?> validateNumberAvailability(String number) async {
+    return await Validate.validateMobileNumberAsync(
+      number,
+      countryCode: countryCode.value,
+    );
+  }
+  Future<bool> verifyMobileNumber() async {
+    try {
+      // final availabilityError = await validateNumberAvailability(
+      //   mobileNumberController.text,
+      // );
+      // if (availabilityError != null && availabilityError.isNotEmpty) {
+      //   numberError.value = availabilityError;
+      //   return false;
+      // }
+
+      // Send OTP if mobile number is available
+      if (!otpSend.value) {
+        // final otpResponse = await SignUpService().sendOtp(
+        //   mobileNumber: mobileNumberController.text,
+        // );
+        //
+        // if (otpResponse.success == true) {
+          SnackBars.successSnackBar(
+            content: 'OTP sent successfully to ${mobileNumberController.text}',
+          );
+          otpSend.value = true;
+          return true;
+        // } else {
+        //   SnackBars.errorSnackBar(
+        //     content: otpResponse.message ?? 'Failed to send OTP',
+        //   );
+        //   return false;
+        // }
+      } else {
+        await sendOtp();
+        return true;
+      }
+    } catch (e) {
+      SnackBars.errorSnackBar(content: 'Error sending OTP: $e');
+      log("verifyMobileNumber: $e");
+      return false;
+    }
+  }
+  void startTimer() {
+    isResendVisible.value = false;
+    countdownController.restart();
+  }
+  Future<void> sendOtp() async {
+    try {
+      // final otpResponse = await SignUpService().resendOtp(
+      //   mobileNumber: mobileNumberController.text,
+      //   code: countryCode.value,
+      // );
+      //
+      // if (otpResponse.success == true) {
+        SnackBars.successSnackBar(
+          content: 'OTP resent successfully to ${mobileNumberController.text}',
+        );
+      // } else {
+      //   SnackBars.errorSnackBar(
+      //     content: otpResponse.message ?? 'Failed to resend OTP',
+      //   );
+      //   otpSend.value = false;
+      // }
+      startTimer();
+    } catch (e) {
+      otpSend.value = false;
+    }
+  }
+
+
+  void resetOtpState() {
+    try {
+      otpSend.value = false;
+      otpVerify.value = false;
+      isResendVisible.value = false;
+      otpController.text = '';
+      // Safely stop/reset countdown if supported
+      try {
+        countdownController.restart();
+      } catch (_) {}
+    } catch (_) {}
+  }
+  final otpController = TextEditingController();
+
+
+  Future<void> proceedToPassword() async {
+    await verifyOtp();
+  }
+  final otpSend = false.obs;
+  final otpVerify = false.obs;
+  RxBool isVerified = false.obs;
+  RxBool isResendVisible = false.obs;
+
+  // Verify OTP method
+  Future<void> verifyOtp() async {
+    try {
+      final otpResponse = await SignUpService().verifyOtp(
+        mobileNumber: mobileNumberController.text,
+        otp: otpController.text,
+      );
+
+      if (otpResponse.success == true) {
+        if (otpResponse.data?.verified == true) {
+          otpVerify.value = true;
+          SnackBars.successSnackBar(content: 'OTP verified successfully!');
+          Get.back();
+          Get.offAll(
+                () => SuccessScreen(
+              title: "Success!",
+              header: "Thanks for Connecting !",
+              onTap: () {
+                Get.find<CommonController>().fetchProfileData();
+                Get.find<CommonController>().loadTeamFromStorage();
+                Get.offAllNamed(Routes.MAIN);
+              },
+            ),
+          );
+        } else {
+          SnackBars.errorSnackBar(
+            content: 'OTP verification failed. Please try again.',
+          );
+        }
+      } else {
+        SnackBars.errorSnackBar(
+          content: otpResponse.message ?? 'Failed to verify OTP',
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
 }
