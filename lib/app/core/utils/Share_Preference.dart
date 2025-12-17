@@ -159,7 +159,9 @@ class AppSharedPreference {
   void logout() {
     token.val = '';
     role.val = '';
+    permissions.val = '';
     isOffice.val = false;
+    isTeamLogin.val = false;
     userModel.val = {};
     addressData.val = {};
     profileData.val = {};

@@ -21,14 +21,8 @@ class BottomBarView extends GetView<BottomController> {
     return OfflineBuilder(
       child: _buildUpgradeAlert(context),
       connectivityBuilder:
-          (
-            BuildContext context,
-            List<ConnectivityResult> connectivity,
-            Widget child,
-          ) {
-            final bool connected = !connectivity.contains(
-              ConnectivityResult.none,
-            );
+          (BuildContext context, List<ConnectivityResult> connectivity, Widget child) {
+            final bool connected = !connectivity.contains(ConnectivityResult.none);
 
             if (!connected && !controller.isBottomSheetOpen.value) {
               controller.isBottomSheetOpen.value = true;
@@ -40,12 +34,9 @@ class BottomBarView extends GetView<BottomController> {
                   isScrollControlled: true,
                   backgroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16.0),
-                    ),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
                   ),
-                  builder: (_) =>
-                      PopScope(canPop: false, child: NoInternetBottomSheet()),
+                  builder: (_) => PopScope(canPop: false, child: NoInternetBottomSheet()),
                 ).whenComplete(() {
                   controller.isBottomSheetOpen.value = false;
                 });
@@ -57,8 +48,7 @@ class BottomBarView extends GetView<BottomController> {
               WidgetsBinding.instance.addPostFrameCallback((val) async {
                 await Get.find<CommonController>().fetchProfileData();
                 await Get.find<HomeController>().fetchCategoryHierarchy();
-                await Get.find<HomeController>()
-                    .fetchCategoryServiceHierarchy();
+                await Get.find<HomeController>().fetchCategoryServiceHierarchy();
               });
             }
 
@@ -109,11 +99,7 @@ class BottomBarView extends GetView<BottomController> {
             borderRadius: BorderRadius.circular(100),
             color: Colors.white,
             boxShadow: const [
-              BoxShadow(
-                color: Color(0x19000000),
-                blurRadius: 30,
-                offset: Offset(5, 0),
-              ),
+              BoxShadow(color: Color(0x19000000), blurRadius: 30, offset: Offset(5, 0)),
             ],
           ),
           child: Row(
@@ -139,20 +125,21 @@ class BottomBarView extends GetView<BottomController> {
               ),
               if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
                 bottomBar(
-                Asset.add,
-                Asset.add,
-                myPref.role.val != "connector" ? "Sell" : 'Request',
-                onTap: onSellTap,
-              ),
-              bottomBar(
-                Asset.connection,
-                Asset.connection1,
-                'Connection',
-                onTap: () {
-                  controller.currentIndex.value = 2;
-                },
-                index: 2,
-              ),
+                  Asset.add,
+                  Asset.add,
+                  myPref.role.val != "connector" ? "Sell" : 'Request',
+                  onTap: onSellTap,
+                ),
+              if (PermissionLabelUtils.canShow(PermissionKeys.connectionManager))
+                bottomBar(
+                  Asset.connection,
+                  Asset.connection1,
+                  'Connection',
+                  onTap: () {
+                    controller.currentIndex.value = 2;
+                  },
+                  index: 2,
+                ),
               bottomBar(
                 Asset.more,
                 Asset.more1,
@@ -174,13 +161,7 @@ class BottomBarView extends GetView<BottomController> {
       if (myPref.role.val != "connector") {
         if (!commonController.hasProfileComplete.value) {
           _showProfileIncompleteDialog();
-        } else if ((Get.find<CommonController>()
-                    .profileData
-                    .value
-                    .data
-                    ?.addresses ??
-                [])
-            .isEmpty) {
+        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
           _showAddAddressDialog();
         } else {
           _showProductOptions();
@@ -192,13 +173,7 @@ class BottomBarView extends GetView<BottomController> {
       if (myPref.role.val != "connector") {
         if (!commonController.hasProfileComplete.value) {
           _showProfileIncompleteDialog();
-        } else if ((Get.find<CommonController>()
-                    .profileData
-                    .value
-                    .data
-                    ?.addresses ??
-                [])
-            .isEmpty) {
+        } else if ((Get.find<CommonController>().profileData.value.data?.addresses ?? []).isEmpty) {
           _showAddAddressDialog();
         } else {
           _showServiceOptions();
@@ -235,9 +210,7 @@ class BottomBarView extends GetView<BottomController> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: const Text("Complete Now"),
           ),
@@ -271,9 +244,7 @@ class BottomBarView extends GetView<BottomController> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: const Text("Add Address"),
           ),
@@ -378,13 +349,7 @@ class BottomBarView extends GetView<BottomController> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           padding: const EdgeInsets.all(16),
-          child: Center(
-            child: Image.asset(
-              Asset.comingSoon,
-              height: 316,
-              fit: BoxFit.cover,
-            ),
-          ),
+          child: Center(child: Image.asset(Asset.comingSoon, height: 316, fit: BoxFit.cover)),
         );
       },
     );
@@ -396,21 +361,12 @@ class BottomBarView extends GetView<BottomController> {
         width: 50,
         height: 5,
         margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(5),
-        ),
+        decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(5)),
       ),
     );
   }
 
-  Widget bottomBar(
-    String icon,
-    String icon2,
-    String name, {
-    void Function()? onTap,
-    int? index,
-  }) {
+  Widget bottomBar(String icon, String icon2, String name, {void Function()? onTap, int? index}) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
@@ -443,10 +399,7 @@ class HearderText extends StatelessWidget {
       text,
       style:
           textStyle ??
-          MyTexts.medium18.copyWith(
-            color: MyColors.black,
-            fontFamily: MyTexts.SpaceGrotesk,
-          ),
+          MyTexts.medium18.copyWith(color: MyColors.black, fontFamily: MyTexts.SpaceGrotesk),
     );
   }
 }
