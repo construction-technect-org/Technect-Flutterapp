@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/components/explore_view.dart';
 
 class MenuView extends StatelessWidget {
@@ -129,7 +130,13 @@ class MenuView extends StatelessWidget {
                     icon: Asset.team,
                     title: "Team",
                     onTap: () {
-                      Get.toNamed(Routes.ROLE_MANAGEMENT);
+                      if (!Get.find<CommonController>().hasProfileComplete.value) {
+                        _showProfileIncompleteDialog();
+                      }
+                      else{
+                        Get.toNamed(Routes.ROLE_MANAGEMENT);
+
+                      }
                     },
                   ),
                 if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager)) const Gap(16),
@@ -172,6 +179,39 @@ class MenuView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+  void _showProfileIncompleteDialog() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          "Complete Your Profile",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        content: const Text(
+          "To add a team member, please complete your business profile first.",
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              Get.toNamed(Routes.PROFILE);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: const Text("Complete Now"),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
     );
   }
 }
