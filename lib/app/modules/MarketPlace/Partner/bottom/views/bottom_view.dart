@@ -137,7 +137,8 @@ class BottomBarView extends GetView<BottomController> {
                 },
                 index: 1,
               ),
-              bottomBar(
+              if (PermissionLabelUtils.canShow(PermissionKeys.catalogManager))
+                bottomBar(
                 Asset.add,
                 Asset.add,
                 myPref.role.val != "connector" ? "Sell" : 'Request',

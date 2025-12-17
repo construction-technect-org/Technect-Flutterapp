@@ -6,6 +6,8 @@ import 'package:construction_technect/app/core/widgets/commom_phone_field.dart';
 import 'package:construction_technect/app/core/widgets/success_screen.dart';
 import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/Authentication/SignUp/SignUpDetails/SignUpService/SignUpService.dart';
+import 'package:construction_technect/app/modules/Authentication/forgotPassword/views/otp_verification_view.dart';
+import 'package:construction_technect/app/modules/Authentication/login/models/LoginModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/services/LoginService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/services/HomeService.dart';
@@ -88,7 +90,8 @@ class LoginController extends GetxController {
       );
 
       if (loginResponse.success == true) {
-        loginError.value = ""; // Clear error on success
+        myPref.setIsTeamLogin(false);
+        loginError.value = "";
         if (loginResponse.data?.token != null) {
           myPref.setToken(loginResponse.data?.token ?? '');
         }
@@ -97,17 +100,13 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
-        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() ==
-            "partner") {
+        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() == "partner") {
           myPref.setRole("partner");
         } else {
           myPref.setRole("connector");
         }
         if (rememberMe.value) {
-          myPref.saveCredentials(
-            mobileController.text,
-            passwordController.text,
-          );
+          myPref.saveCredentials(mobileController.text, passwordController.text);
         } else {
           myPref.clearCredentials();
         }
@@ -123,8 +122,7 @@ class LoginController extends GetxController {
           ),
         );
       } else {
-        loginError.value =
-            loginResponse.message ?? 'Invalid mobile number or password';
+        loginError.value = loginResponse.message ?? 'Invalid mobile number or password';
       }
     } catch (e) {
       loginError.value = "Invalid mobile number or password";
@@ -149,6 +147,8 @@ class LoginController extends GetxController {
         roleName: 'Merchant',
       );
       if (loginResponse.success == true) {
+        myPref.setIsTeamLogin(false);
+
         if (loginResponse.data?.token != null) {
           myPref.setToken(loginResponse.data?.token ?? '');
         }
@@ -157,17 +157,13 @@ class LoginController extends GetxController {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
 
-        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
-            "partner") {
+        if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() != "partner") {
           myPref.setRole("partner");
         } else {
           myPref.setRole("connector");
         }
         if (rememberMe.value) {
-          myPref.saveCredentials(
-            mobileController.text,
-            passwordController.text,
-          );
+          myPref.saveCredentials(mobileController.text, passwordController.text);
         } else {
           myPref.clearCredentials();
         }
@@ -194,6 +190,11 @@ class LoginController extends GetxController {
   RxInt isValidd = (-1).obs;
   RxString countryCodee = "+91".obs;
   RxString numberError = "".obs;
+
+  void onCountdownFinish() {
+    isResendVisible.value = true;
+  }
+
   void openPhoneNumberBottomSheet() {
     final formKey = GlobalKey<FormState>();
     isValidd.value = -1;
@@ -220,10 +221,7 @@ class LoginController extends GetxController {
                 ),
               ),
               const Gap(24),
-              Text(
-                "Mobile Number",
-                style: MyTexts.medium20.copyWith(color: Colors.black),
-              ),
+              Text("Mobile Number", style: MyTexts.medium20.copyWith(color: Colors.black)),
               const Gap(5),
               CommonPhoneField(
                 controller: mobileNumberController,
@@ -268,7 +266,27 @@ class LoginController extends GetxController {
 
                     // Use named route to avoid duplicates
                     resetOtpState();
-                    await Get.offNamed(Routes.OTP_Verification);
+                    Get.to(
+                      () => OtpVerificationView(
+                        isLoading: isLoading,
+                        onTap: () async {
+                          await sendOtp().then((val) {
+                            startTimer();
+                          });
+                        },
+                        countdownController: countdownController,
+                        isResendVisible: isResendVisible,
+                        otpController: otpController,
+                        onCompleted: (value) {
+                          verifyOtp();
+                        },
+                        onFinished: () {
+                          onCountdownFinish();
+                        },
+                      ),
+                    );
+                    startTimer();
+                    // await Get.offNamed(Routes.OTP_Verification);
                   } finally {}
                 },
               ),
@@ -290,11 +308,9 @@ class LoginController extends GetxController {
   final countdownController = CountdownController(autoStart: true);
 
   Future<String?> validateNumberAvailability(String number) async {
-    return await Validate.validateMobileNumberAsync(
-      number,
-      countryCode: countryCode.value,
-    );
+    return await Validate.validateMobileNumberAsync(number, countryCode: countryCode.value);
   }
+
   Future<bool> verifyMobileNumber() async {
     try {
       // final availabilityError = await validateNumberAvailability(
@@ -307,22 +323,20 @@ class LoginController extends GetxController {
 
       // Send OTP if mobile number is available
       if (!otpSend.value) {
-        // final otpResponse = await SignUpService().sendOtp(
-        //   mobileNumber: mobileNumberController.text,
-        // );
-        //
-        // if (otpResponse.success == true) {
+        final otpResponse = await SignUpService().teamSendOtp(
+          mobileNumber: mobileNumberController.text,
+        );
+
+        if (otpResponse.success == true) {
           SnackBars.successSnackBar(
             content: 'OTP sent successfully to ${mobileNumberController.text}',
           );
           otpSend.value = true;
           return true;
-        // } else {
-        //   SnackBars.errorSnackBar(
-        //     content: otpResponse.message ?? 'Failed to send OTP',
-        //   );
-        //   return false;
-        // }
+        } else {
+          SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to send OTP');
+          return false;
+        }
       } else {
         await sendOtp();
         return true;
@@ -333,33 +347,31 @@ class LoginController extends GetxController {
       return false;
     }
   }
+
   void startTimer() {
     isResendVisible.value = false;
     countdownController.restart();
   }
+
   Future<void> sendOtp() async {
     try {
-      // final otpResponse = await SignUpService().resendOtp(
-      //   mobileNumber: mobileNumberController.text,
-      //   code: countryCode.value,
-      // );
-      //
-      // if (otpResponse.success == true) {
+      final otpResponse = await SignUpService().teamResendOtp(
+        mobileNumber: mobileNumberController.text,
+      );
+
+      if (otpResponse.success == true) {
         SnackBars.successSnackBar(
           content: 'OTP resent successfully to ${mobileNumberController.text}',
         );
-      // } else {
-      //   SnackBars.errorSnackBar(
-      //     content: otpResponse.message ?? 'Failed to resend OTP',
-      //   );
-      //   otpSend.value = false;
-      // }
+      } else {
+        SnackBars.errorSnackBar(content: otpResponse.message ?? 'Failed to resend OTP');
+        otpSend.value = false;
+      }
       startTimer();
     } catch (e) {
       otpSend.value = false;
     }
   }
-
 
   void resetOtpState() {
     try {
@@ -373,12 +385,9 @@ class LoginController extends GetxController {
       } catch (_) {}
     } catch (_) {}
   }
+
   final otpController = TextEditingController();
 
-
-  Future<void> proceedToPassword() async {
-    await verifyOtp();
-  }
   final otpSend = false.obs;
   final otpVerify = false.obs;
   RxBool isVerified = false.obs;
@@ -387,36 +396,56 @@ class LoginController extends GetxController {
   // Verify OTP method
   Future<void> verifyOtp() async {
     try {
-      final otpResponse = await SignUpService().verifyOtp(
+      final loginResponse = await LoginService().teamLogin(
         mobileNumber: mobileNumberController.text,
         otp: otpController.text,
       );
 
-      if (otpResponse.success == true) {
-        if (otpResponse.data?.verified == true) {
-          otpVerify.value = true;
-          SnackBars.successSnackBar(content: 'OTP verified successfully!');
-          Get.back();
-          Get.offAll(
-                () => SuccessScreen(
-              title: "Success!",
-              header: "Thanks for Connecting !",
-              onTap: () {
-                Get.find<CommonController>().fetchProfileData();
-                Get.find<CommonController>().loadTeamFromStorage();
-                Get.offAllNamed(Routes.MAIN);
-              },
-            ),
-          );
-        } else {
-          SnackBars.errorSnackBar(
-            content: 'OTP verification failed. Please try again.',
-          );
+      if (loginResponse.success == true) {
+        otpVerify.value = true;
+        SnackBars.successSnackBar(content: 'OTP verified successfully!');
+        Get.back();
+        myPref.setIsTeamLogin(true);
+        myPref.setDashboard("marketplace");
+        myPref.setDashboard("marketplace");
+        myPref.setRole("partner");
+        if (loginResponse.data?.token != null) {
+          myPref.setToken(loginResponse.data?.token ?? '');
         }
-      } else {
-        SnackBars.errorSnackBar(
-          content: otpResponse.message ?? 'Failed to verify OTP',
+
+        if (loginResponse.data?.user != null) {
+          myPref.setUserModel(loginResponse.data?.user ?? UserModel());
+        }
+        final permissionsValue = extractPermissions(loginResponse.data);
+        myPref.setPermissions(permissionsValue);
+        //
+        // if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
+        //     "partner") {
+        //   myPref.setRole("partner");
+        // } else {
+        //   myPref.setRole("connector");
+        // }
+        // if (rememberMe.value) {
+        //   myPref.saveCredentials(
+        //     mobileController.text,
+        //     passwordController.text,
+        //   );
+        // } else {
+        //   myPref.clearCredentials();
+        // }
+        Get.offAll(
+          () => SuccessScreen(
+            title: "Success!",
+            header: "Thanks for Connecting !",
+            onTap: () {
+              // Get.find<CommonController>().fetchProfileData();
+              // Get.find<CommonController>().loadTeamFromStorage();
+              Get.offAllNamed(Routes.MAIN);
+            },
+          ),
         );
+      } else {
+        SnackBars.errorSnackBar(content: loginResponse.message ?? 'Failed to verify OTP');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -425,4 +454,17 @@ class LoginController extends GetxController {
     }
   }
 
+  String extractPermissions(LoginData? data) {
+    if (data == null) return '';
+
+    if (data.isTeamLogin == true) {
+      return data.teamMember?.roles
+              ?.map((r) => r.functionalities ?? '')
+              .where((e) => e.isNotEmpty)
+              .join(',') ??
+          '';
+    }
+
+    return '';
+  }
 }

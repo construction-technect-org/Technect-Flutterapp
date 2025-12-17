@@ -5,6 +5,7 @@ export 'package:construction_technect/app/core/utils/colors.dart';
 export 'package:construction_technect/app/core/utils/common_button.dart';
 export 'package:construction_technect/app/core/utils/constants.dart';
 export 'package:construction_technect/app/core/utils/custom_snackbar.dart';
+export 'package:construction_technect/app/core/utils/permission_utils.dart';
 export 'package:construction_technect/app/core/utils/text_theme.dart';
 export 'package:construction_technect/app/core/widgets/delete_confirmation_dialog.dart';
 export 'package:construction_technect/app/core/widgets/loader_wrapper.dart';

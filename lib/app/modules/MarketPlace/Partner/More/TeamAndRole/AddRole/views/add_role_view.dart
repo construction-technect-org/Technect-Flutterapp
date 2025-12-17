@@ -79,12 +79,14 @@ class AddRoleView extends GetView<AddRoleController> {
                             Wrap(
                               spacing: 8,
                               runSpacing: 8,
-                              children: controller.functionalities.map((functionality) {
+                              children: controller.functionalities.map((item) {
                                 return _buildFunctionalityChip(
-                                  label: functionality,
+                                  label: item.label,
+                                  keyValue: item.key,
                                   controller: controller,
                                 );
                               }).toList(),
+
                             ),
                           ],
                         ),
@@ -115,16 +117,19 @@ class AddRoleView extends GetView<AddRoleController> {
     );
   }
 
-  Widget _buildFunctionalityChip({required String label, required AddRoleController controller}) {
+  Widget _buildFunctionalityChip({
+    required String label,
+    required String keyValue,
+    required AddRoleController controller,
+  }) {
     return Obx(() {
-      final isSelected = controller.isFunctionalitySelected(label);
+      final isSelected = controller.isFunctionalitySelected(keyValue);
 
       final backgroundColor = isSelected ? const Color(0xFFE1FFD4) : const Color(0xFFF7F7F7);
       final borderColor = isSelected ? const Color(0xFFC3E7C2) : const Color(0xFFEAEAEA);
-      const textColor = Color(0xFF2E2E2E);
 
       return GestureDetector(
-        onTap: () => controller.selectFunctionality(label),
+        onTap: () => controller.toggleFunctionality(keyValue),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           decoration: BoxDecoration(
@@ -133,31 +138,19 @@ class AddRoleView extends GetView<AddRoleController> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (isSelected)
-                const Icon(Icons.check, size: 12, color: Color(0xFF000000))
-              else
-                Container(
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              const SizedBox(width: 5),
+              Icon(
+                isSelected ? Icons.check : Icons.circle_outlined,
+                size: 12,
+                color: Colors.black,
+              ),
+              const SizedBox(width: 6),
               Text(
                 label,
                 style: MyTexts.medium15.copyWith(
-                  color: textColor,
-                  fontFamily: MyTexts.SpaceGrotesk,
                   fontWeight: FontWeight.w500,
-                  height: 1.2,
                 ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),

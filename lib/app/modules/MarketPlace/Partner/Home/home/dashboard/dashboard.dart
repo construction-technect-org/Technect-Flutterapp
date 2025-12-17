@@ -134,6 +134,7 @@ class Dashboard extends StatelessWidget {
                           ),
                         ),
                         const Gap(10),
+                        if(myPref.getIsTeamLogin()==false)
                         GestureDetector(
                           onTap: () {
                             Get.put<SwitchAccountController>(SwitchAccountController());

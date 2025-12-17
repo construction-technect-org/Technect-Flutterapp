@@ -93,6 +93,7 @@ class CrmHeader extends StatelessWidget {
           ),
         ),
         const Gap(10),
+        if(myPref.getIsTeamLogin()==false)
         GestureDetector(
           onTap: () => _showCrmVrmSwitchSheet(context, commonController),
           child: Stack(

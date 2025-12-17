@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/utils/permission_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/components/delete_team_dialog.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
@@ -72,16 +73,17 @@ class RoleCard extends StatelessWidget {
                     ),
                     const Gap(12),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: MyColors.grayEA),
                         color: MyColors.grayF7,
                       ),
                       child: Text(
-                        role.functionalities ?? '',
+                        PermissionLabelUtils.format(role.functionalities),
                         style: MyTexts.medium14.copyWith(color: MyColors.gray2E),
                       ),
+
                     ),
                   ],
                 ),

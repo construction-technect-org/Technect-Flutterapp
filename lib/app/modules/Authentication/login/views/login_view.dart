@@ -92,7 +92,7 @@ class LoginView extends GetView<LoginController> {
                       children: [
                         const Gap(50),
                         Container(
-                          height: 193,
+                          height: 180,
                           width: 234,
                           decoration: const BoxDecoration(
                             image: DecorationImage(

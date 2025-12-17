@@ -82,6 +82,18 @@ class SignUpService {
     }
   }
 
+  Future<OtpModel> teamSendOtp({required String mobileNumber}) async {
+    try {
+      final response = await apiManager.postObject(
+        url: APIConstants.teamSendOtp,
+        body: { "mobileNumber": mobileNumber},
+      );
+      return OtpModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in sendOtp: $e , $st');
+    }
+  }
+
   Future<OtpModel> resendOtp({
     required String mobileNumber,
     String? code,
@@ -97,6 +109,21 @@ class SignUpService {
     }
   }
 
+
+  Future<OtpModel> teamResendOtp({
+    required String mobileNumber,
+    String? code,
+  }) async {
+    try {
+      final response = await apiManager.postObject(
+        url: APIConstants.teamResendOtp,
+        body: { "mobileNumber": mobileNumber},
+      );
+      return OtpModel.fromJson(response);
+    } catch (e, st) {
+      throw Exception('Error in resendOtp: $e , $st');
+    }
+  }
   Future<OtpModel> verifyOtp({
     required String mobileNumber,
     required String otp,

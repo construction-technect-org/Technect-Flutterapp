@@ -28,13 +28,71 @@ class LoginModel {
 class LoginData {
   String? token;
   UserModel? user;
+  TeamMemberModel? teamMember;
+  bool? isTeamLogin;
 
-  LoginData({this.token, this.user});
 
+  LoginData({
+    this.token,
+    this.user,
+    this.teamMember,
+    this.isTeamLogin,
+  });
   factory LoginData.fromJson(Map<String, dynamic> json) => LoginData(
     token: json["token"],
     user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
+    teamMember: json["teamMember"] == null
+        ? null
+        : TeamMemberModel.fromJson(json["teamMember"]),
+    isTeamLogin: json["isTeamLogin"],
   );
 
   Map<String, dynamic> toJson() => {"token": token, "user": user?.toJson()};
 }
+
+class TeamMemberModel {
+  int? id;
+  String? firstName;
+  String? lastName;
+  List<RoleModel>? roles;
+
+  TeamMemberModel({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.roles,
+  });
+
+  factory TeamMemberModel.fromJson(Map<String, dynamic> json) =>
+      TeamMemberModel(
+        id: json["id"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        roles: json["roles"] == null
+            ? []
+            : List<RoleModel>.from(
+          json["roles"].map((x) => RoleModel.fromJson(x)),
+        ),
+      );
+}
+class RoleModel {
+  int? id;
+  String? title;
+  String? description;
+  String? functionalities;
+
+  RoleModel({
+    this.id,
+    this.title,
+    this.description,
+    this.functionalities,
+  });
+
+  factory RoleModel.fromJson(Map<String, dynamic> json) => RoleModel(
+    id: json["id"],
+    title: json["title"],
+    description: json["description"],
+    functionalities: json["functionalities"],
+  );
+}
+

@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/core/utils/permission_utils.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/AddRole/service/AddRoleService.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/controllers/role_management_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/TeamAndRole/RoleManagement/models/GetAllRoleModel.dart';
@@ -8,39 +9,15 @@ class AddRoleController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final roleController = TextEditingController();
   final roleDescription = TextEditingController();
-  final selectedFunctionalities = ''.obs;
-  final selectedFunctionality = ''.obs;
+  final RxList<String> selectedFunctionalities = <String>[].obs;
   final isLoading = false.obs;
   Rx<GetAllRole> dataModel = GetAllRole().obs;
 
   int? roleId;
   RxBool isEdit = false.obs;
+  final List<PermissionItem> functionalities =
+      PermissionLabelUtils.permissionItems;
 
-  // Comprehensive functionalities list
-  final List<String> functionalities = [
-    'Report',
-    'Analysis',
-    'Add Team',
-    'Lead Management',
-    'Sales Management',
-    'Accounts Management',
-    'Task Management',
-    'Settings',
-    'Chat System',
-    'Download',
-    'Add Lead',
-    'Edit Lead',
-    'Delete Lead',
-    'Add Sale',
-    'Edit Sale',
-    'Delete Sale',
-    'Add Account',
-    'Edit Account',
-    'Delete Account',
-    'Add steps',
-    'Edit steps',
-    'Delete steps',
-  ];
 
   @override
   void onInit() {
@@ -64,37 +41,28 @@ class AddRoleController extends GetxController {
 
     final functionalityValue = role.functionalities ?? '';
 
-    // Check if the value exists in functionalities list (case-insensitive)
-    String found;
-    try {
-      found = functionalities.firstWhere(
-        (func) => func.toLowerCase() == functionalityValue.toLowerCase(),
-      );
-    } catch (e) {
-      found = functionalityValue;
+    selectedFunctionalities.value = functionalityValue
+        .split(',')
+        .map((e) => e.trim())
+        .toList();
+  }
+  void toggleFunctionality(String key) {
+    if (selectedFunctionalities.contains(key)) {
+      selectedFunctionalities.remove(key);
+    } else {
+      selectedFunctionalities.add(key);
     }
-
-    selectedFunctionality.value = found;
-    selectedFunctionalities.value = found;
+  }
+  bool isFunctionalitySelected(String key) {
+    return selectedFunctionalities.contains(key);
   }
 
-  void selectFunctionality(String label) {
-    selectedFunctionality.value = label;
-    selectedFunctionalities.value = label;
-  }
-
-  bool isFunctionalitySelected(String label) {
-    return selectedFunctionality.value == label;
-  }
 
   Future<void> saveRole() async {
-    if (selectedFunctionality.value.isEmpty) {
+    if (selectedFunctionalities.isEmpty) {
       Get.snackbar("Error", "Please select a functionality");
       return;
     }
-
-    // Ensure functionality is set for API
-    selectedFunctionalities.value = selectedFunctionality.value;
 
     isLoading.value = true;
 
@@ -104,7 +72,7 @@ class AddRoleController extends GetxController {
           roleId: roleId!,
           roleTitle: roleController.text,
           roleDescription: roleDescription.text,
-          functionalities: selectedFunctionalities.value,
+          functionalities: selectedFunctionalities.join(','),
           isActive: true,
         );
 
@@ -116,7 +84,7 @@ class AddRoleController extends GetxController {
         final result = await RoleService.createRole(
           roleTitle: roleController.text,
           roleDescription: roleDescription.text,
-          functionalities: selectedFunctionalities.value,
+          functionalities: selectedFunctionalities.join(','),
           isActive: true,
         );
 

@@ -32,7 +32,9 @@ class AppSharedPreference {
   final token = ''.val('token');
   final dashboard = ''.val('dashboard');
   final isOffice = true.val('isOffice');
+  final isTeamLogin = false.val('isTeamLogin');
   final role = ''.val('role');
+  final permissions = ''.val('permissions');
   final userModel = <String, dynamic>{}.val('userModel');
   final savedMobileNumber = ''.val('savedMobileNumber');
   final savedPassword = ''.val('savedPassword');
@@ -70,6 +72,7 @@ class AppSharedPreference {
     return token.val;
   }
 
+
   void setDashboard(String dashValue) {
     dashboard.val = dashValue;
   }
@@ -84,6 +87,27 @@ class AppSharedPreference {
 
   String getRole() {
     return role.val;
+  }
+  void setPermissions(String value) {
+    permissions.val = value;
+  }
+
+  String getPermissions() {
+    return permissions.val;
+  }
+
+  List<String> getPermissionList() {
+    if (permissions.val.isEmpty) return [];
+    return permissions.val.split(',').map((e) => e.trim()).toList();
+  }
+
+
+  void setIsTeamLogin(bool isTeamLogined) {
+    isTeamLogin.val = isTeamLogined;
+  }
+
+  bool getIsTeamLogin() {
+    return isTeamLogin.val;
   }
 
   void setDefaultAdd(bool isDefaultOffice) {
