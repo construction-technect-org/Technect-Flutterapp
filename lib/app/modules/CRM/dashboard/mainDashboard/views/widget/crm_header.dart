@@ -79,7 +79,7 @@ class CrmHeader extends StatelessWidget {
                 );
               }),
               GestureDetector(
-                onTap: () => Get.toNamed(Routes.MANUFACTURER_ADDRESS),
+                onTap:myPref.getIsTeamLogin()? null: () => Get.toNamed(Routes.MANUFACTURER_ADDRESS),
                 child: Row(
                   children: [
                     SvgPicture.asset(

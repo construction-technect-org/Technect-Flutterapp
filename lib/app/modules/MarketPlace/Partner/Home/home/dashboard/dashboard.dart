@@ -104,7 +104,8 @@ class Dashboard extends StatelessWidget {
                               }),
 
                               GestureDetector(
-                                onTap: () {
+                                onTap:myPref.getIsTeamLogin()? null: () {
+
                                   if (myPref.role.val == "partner") {
                                     Get.toNamed(Routes.MANUFACTURER_ADDRESS);
                                   } else {
