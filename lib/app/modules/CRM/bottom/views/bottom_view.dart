@@ -72,7 +72,7 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
       case 2:
         return const CRMChatListScreen();
       case 3:
-        return  CRMMoreScreen();
+        return CRMMoreScreen();
       default:
         return CRMMoreScreen();
     }
@@ -113,12 +113,13 @@ class CRMBottomBarView extends GetView<CRMBottomController> {
                 },
                 index: 1,
               ),
-              bottomBar(
-                Asset.add,
-                Asset.add,
-                myPref.role.val != "connector" ? "Lead" : 'Lead',
-                onTap: onSellTap,
-              ),
+              if (PermissionLabelUtils.canShow(PermissionKeys.crmAddLead))
+                bottomBar(
+                  Asset.add,
+                  Asset.add,
+                  myPref.role.val != "connector" ? "Lead" : 'Lead',
+                  onTap: onSellTap,
+                ),
               bottomBar(
                 Asset.chat,
                 Asset.chat,

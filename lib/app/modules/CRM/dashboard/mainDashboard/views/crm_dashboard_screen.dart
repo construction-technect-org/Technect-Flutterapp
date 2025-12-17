@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/core/widgets/no_permission_widget.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/controller/crm_dashboard_controller.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/model/dashboard_model.dart';
 import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/views/widget/analysis_section_widget.dart';
@@ -10,6 +11,8 @@ import 'package:construction_technect/app/modules/CRM/dashboard/mainDashboard/vi
 
 class CRMDashboardScreen extends GetView<CRMDashboardController> {
   const CRMDashboardScreen({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,62 +86,74 @@ class CRMDashboardScreen extends GetView<CRMDashboardController> {
                                 ),
                               ),
                               const Gap(24),
+
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                 child: Obx(
-                                  () => Column(
-                                    children: [
-                                      TotalCount(
-                                        title: controller.totalCount(1),
-                                        count: controller.totalCount(2),
-                                        percentage: controller.totalCount(3),
-                                        onTap: controller.navigtionInLead,
-                                      ),
-                                      if (controller.totalAccounts.value)
-                                        Obx(() {
-                                          final totalDue = controller.totalDue;
-                                          return Column(
-                                            children: [
-                                              const Gap(24),
-                                              TotalCount(
-                                                title: totalDue?.title ?? "Total Due",
-                                                count: totalDue != null
-                                                    ? "₹ ${controller.formatCurrency(totalDue.count)}"
-                                                    : "₹ 1,25,000",
-                                                percentage: totalDue != null
-                                                    ? "${totalDue.percentageChange >= 0 ? "+" : ""}${totalDue.percentageChange.toStringAsFixed(1)}%"
-                                                    : controller.totalCount(3),
-                                                onTap: controller.navigtionInLead,
-                                              ),
-                                            ],
-                                          );
-                                        })
-                                      else
-                                        const SizedBox.shrink(),
-                                      const Gap(24),
-                                      const LeadsSectionWidget(),
-                                      const Gap(24),
-                                      FunnelChartWidget(funnelData: controller.funnelData),
-                                      const Gap(24),
-                                      const ProductChartWidget(),
-                                      const Gap(24),
-                                      if (controller.totalMarketing.value)
-                                        Obx(
-                                          () => ConversionRateChart(
-                                            percentage: controller.conversionRate,
-                                          ),
-                                        )
-                                      else if (controller.totalSales.value)
-                                        Obx(
-                                          () => RevenueSummaryWidget(
-                                            revenueSummary: controller.revenueSummary,
-                                          ),
-                                        )
-                                      else
-                                        const SizedBox.shrink(),
-                                      const Gap(24),
-                                    ],
-                                  ),
+                                  () {
+                                    if (!controller.canShowCurrentTab(controller)) {
+                                      return  Padding(
+                                        padding: EdgeInsets.symmetric(vertical:MediaQuery.of(context).size.height/4),
+                                        child: const NoPermissionWidget(
+                                          message: 'No permission for this section',
+                                        ),
+                                      );
+                                    }
+
+                                    return Column(
+                                      children: [
+                                        TotalCount(
+                                          title: controller.totalCount(1),
+                                          count: controller.totalCount(2),
+                                          percentage: controller.totalCount(3),
+                                          onTap: controller.navigtionInLead,
+                                        ),
+                                        if (controller.totalAccounts.value)
+                                          Obx(() {
+                                            final totalDue = controller.totalDue;
+                                            return Column(
+                                              children: [
+                                                const Gap(24),
+                                                TotalCount(
+                                                  title: totalDue?.title ?? "Total Due",
+                                                  count: totalDue != null
+                                                      ? "₹ ${controller.formatCurrency(totalDue.count)}"
+                                                      : "₹ 1,25,000",
+                                                  percentage: totalDue != null
+                                                      ? "${totalDue.percentageChange >= 0 ? "+" : ""}${totalDue.percentageChange.toStringAsFixed(1)}%"
+                                                      : controller.totalCount(3),
+                                                  onTap: controller.navigtionInLead,
+                                                ),
+                                              ],
+                                            );
+                                          })
+                                        else
+                                          const SizedBox.shrink(),
+                                        const Gap(24),
+                                        const LeadsSectionWidget(),
+                                        const Gap(24),
+                                        FunnelChartWidget(funnelData: controller.funnelData),
+                                        const Gap(24),
+                                        const ProductChartWidget(),
+                                        const Gap(24),
+                                        if (controller.totalMarketing.value)
+                                          Obx(
+                                                () => ConversionRateChart(
+                                              percentage: controller.conversionRate,
+                                            ),
+                                          )
+                                        else if (controller.totalSales.value)
+                                          Obx(
+                                                () => RevenueSummaryWidget(
+                                              revenueSummary: controller.revenueSummary,
+                                            ),
+                                          )
+                                        else
+                                          const SizedBox.shrink(),
+                                        const Gap(24),
+                                      ],
+                                    );
+                                  },
                                 ),
                               ),
                             ],

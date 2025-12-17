@@ -3,6 +3,7 @@ import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/core/utils/input_field.dart';
+import 'package:construction_technect/app/core/widgets/no_permission_widget.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/components/connection_dialogs.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/controllers/connection_inbox_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Connection/model/connectionModel.dart';
@@ -26,7 +27,7 @@ class ConnectionInboxView extends StatelessWidget {
             leadingWidth: 0,
             title: Text("Connection Inbox"),
           ),
-          body: Stack(
+          body:   (PermissionLabelUtils.canShow(PermissionKeys.connectionManager)) ? Stack(
             children: [
               Container(
                 decoration: const BoxDecoration(
@@ -124,6 +125,11 @@ class ConnectionInboxView extends StatelessWidget {
                 ],
               ),
             ],
+          ):
+          const Center(
+            child:  NoPermissionWidget(
+              message: 'No permission for this section',
+            ),
           ),
         ),
       ),

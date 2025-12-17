@@ -6,6 +6,7 @@ class PermissionKeys {
   static const String marketingLeadManager = 'marketing_lead_manager';
   static const String salesLeadManager = 'sales_lead_manager';
   static const String accountLeadManager = 'account_lead_manager';
+  static const String crmAddLead = 'crm_add_lead';
 
   static const List<String> all = [
     catalogManager,
@@ -13,6 +14,7 @@ class PermissionKeys {
     marketingLeadManager,
     salesLeadManager,
     accountLeadManager,
+    crmAddLead
   ];
 }
 
@@ -23,6 +25,7 @@ class PermissionLabelUtils {
     PermissionKeys.marketingLeadManager: 'Marketing Lead Manager',
     PermissionKeys.salesLeadManager: 'Sales Lead Manager',
     PermissionKeys.accountLeadManager: 'Account Lead Manager',
+    PermissionKeys.crmAddLead: 'CRM Add Lead',
   };
 
   static List<PermissionItem> get permissionItems =>

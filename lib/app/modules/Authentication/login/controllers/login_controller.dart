@@ -438,7 +438,7 @@ class LoginController extends GetxController {
             title: "Success!",
             header: "Thanks for Connecting !",
             onTap: () {
-              // Get.find<CommonController>().fetchProfileData();
+              Get.find<CommonController>().fetchProfileData();
               // Get.find<CommonController>().loadTeamFromStorage();
               Get.offAllNamed(Routes.MAIN);
             },

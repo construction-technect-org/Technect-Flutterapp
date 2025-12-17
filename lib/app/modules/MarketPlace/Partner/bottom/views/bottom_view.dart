@@ -130,7 +130,6 @@ class BottomBarView extends GetView<BottomController> {
                   myPref.role.val != "connector" ? "Sell" : 'Request',
                   onTap: onSellTap,
                 ),
-              if (PermissionLabelUtils.canShow(PermissionKeys.connectionManager))
                 bottomBar(
                   Asset.connection,
                   Asset.connection1,

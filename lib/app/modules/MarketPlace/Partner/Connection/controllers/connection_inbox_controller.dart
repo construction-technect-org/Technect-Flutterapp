@@ -16,7 +16,9 @@ class ConnectionInboxController extends GetxController {
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.microtask(() async {
-        await fetchConnections(isLoad: false);
+        if(PermissionLabelUtils.canShow(PermissionKeys.connectionManager)){
+          await fetchConnections(isLoad: false);
+        }
         isLoading.value = false;
       });
     });
