@@ -407,7 +407,6 @@ class LoginController extends GetxController {
         Get.back();
         myPref.setIsTeamLogin(true);
         myPref.setDashboard("marketplace");
-        myPref.setDashboard("marketplace");
         myPref.setRole("partner");
         if (loginResponse.data?.token != null) {
           myPref.setToken(loginResponse.data?.token ?? '');
@@ -416,7 +415,7 @@ class LoginController extends GetxController {
         if (loginResponse.data?.user != null) {
           myPref.setUserModel(loginResponse.data?.user ?? UserModel());
         }
-        final permissionsValue = extractPermissions(loginResponse.data);
+        final permissionsValue = extractPermissions(loginResponse.data?.teamMember);
         myPref.setPermissions(permissionsValue);
         //
         // if ((loginResponse.data?.user?.marketPlaceRole ?? "").toLowerCase() !=
@@ -454,17 +453,14 @@ class LoginController extends GetxController {
     }
   }
 
-  String extractPermissions(LoginData? data) {
-    if (data == null) return '';
 
-    if (data.isTeamLogin == true) {
-      return data.teamMember?.roles
-              ?.map((r) => r.functionalities ?? '')
-              .where((e) => e.isNotEmpty)
-              .join(',') ??
-          '';
-    }
+}
+String extractPermissions(TeamMemberModel? data) {
+  if (data == null) return '';
+   return data.roles
+        ?.map((r) => r.functionalities ?? '')
+        .where((e) => e.isNotEmpty)
+        .join(',') ??
+        '';
 
-    return '';
-  }
 }

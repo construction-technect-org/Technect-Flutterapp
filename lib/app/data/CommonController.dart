@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/Authentication/login/controllers/login_controller.dart';
 import 'package:construction_technect/app/modules/CRM/bottom/controllers/bottom_controller.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/ConnectorSelectedProduct/services/ConnectorSelectedProductServices.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Connector/WishList/services/WishListService.dart';
@@ -106,13 +107,19 @@ class CommonController extends GetxController {
         profileData.value = profileResponse;
         myPref.setProfileData(profileResponse.toJson());
         myPref.setUserModel(profileResponse.data!.user!);
-
+        if(profileData.value.data?.isTeamLogin==true){
+          myPref.setIsTeamLogin(true);
+          final permissionsValue = extractPermissions(profileResponse.data?.teamMember);
+          myPref.setPermissions(permissionsValue);
+        }
         if ((profileData.value.data?.merchantProfile?.website ?? "").isNotEmpty) {
           Get.find<CommonController>().hasProfileComplete.value = true;
         } else {
           Get.find<CommonController>().hasProfileComplete.value = false;
         }
-        loadTeamFromStorage();
+        // if(myPref.getIsTeamLogin()==false){
+          loadTeamFromStorage();
+        // }
       }
     } catch (e) {
       Get.printError(info: 'Error fetching profile: $e');
@@ -360,7 +367,9 @@ class CommonController extends GetxController {
     final savedToken = myPref.getToken();
     if (savedToken.isNotEmpty) {
       fetchProfileData();
-      loadTeamFromStorage();
+      // if(myPref.getIsTeamLogin()==false){
+        loadTeamFromStorage();
+      // }
     }
   }
 }

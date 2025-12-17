@@ -315,10 +315,21 @@ class SaleItemCard extends StatelessWidget {
                         const Gap(16),
                         GestureDetector(
                           onTapDown: (details) {
+                            final allTeams = Get.find<CommonController>().teamList;
+
+                            final saleTeams = allTeams.where((team) {
+                              final funcs = team.functionalities;
+                              if (funcs == null || funcs.isEmpty) return false;
+
+                              return funcs
+                                  .split(',')
+                                  .map((e) => e.trim())
+                                  .contains(PermissionKeys.salesLeadManager);
+                            }).toList();
                             openAssignPopupMenu(
                               context,
                               details.globalPosition,
-                              Get.find<CommonController>().teamList,
+                              saleTeams,
                               () {},
                             );
                           },

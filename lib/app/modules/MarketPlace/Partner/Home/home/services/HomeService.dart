@@ -1,5 +1,6 @@
 import 'package:construction_technect/app/core/apiManager/api_constants.dart';
 import 'package:construction_technect/app/core/apiManager/api_manager.dart';
+import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/AddressModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/CategoryModel.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/Home/home/models/DashboardModel.dart';
@@ -12,7 +13,7 @@ class HomeService {
 
   Future<ProfileModel> getProfile() async {
     try {
-      final response = await _apiManager.get(url: APIConstants.profile);
+      final response = await _apiManager.get(url: myPref.isTeamLogin.val==true ?APIConstants.teamProfile : APIConstants.profile);
 
       return ProfileModel.fromJson(response);
     } catch (e) {

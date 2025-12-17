@@ -1,3 +1,4 @@
+import 'package:construction_technect/app/modules/Authentication/login/models/LoginModel.dart';
 import 'package:construction_technect/app/modules/Authentication/login/models/UserModel.dart';
 
 class ProfileModel {
@@ -22,6 +23,8 @@ class Data {
   List<ManufacturerAddress>? addresses;
   List<SiteLocation>? siteLocations;
   StatisticsMC? statistics;
+  TeamMemberModel? teamMember;
+  bool? isTeamLogin;
 
   Data({
     this.user,
@@ -31,6 +34,8 @@ class Data {
     this.siteLocations,
     this.addresses,
     this.statistics,
+    this.teamMember,
+    this.isTeamLogin,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -57,6 +62,10 @@ class Data {
     statistics: json["statistics"] == null
         ? null
         : StatisticsMC.fromJson(json["statistics"]),
+    teamMember: json["teamMember"] == null
+        ? null
+        : TeamMemberModel.fromJson(json["teamMember"]),
+    isTeamLogin: json["isTeamLogin"],
   );
 
   Map<String, dynamic> toJson() => {

@@ -315,11 +315,23 @@ class AccountItemCard extends StatelessWidget {
                         ),),
                         const Gap(16),
                         GestureDetector(
+
                           onTapDown: (details) {
+                            final allTeams = Get.find<CommonController>().teamList;
+
+                            final accountTeams = allTeams.where((team) {
+                              final funcs = team.functionalities;
+                              if (funcs == null || funcs.isEmpty) return false;
+
+                              return funcs
+                                  .split(',')
+                                  .map((e) => e.trim())
+                                  .contains(PermissionKeys.accountLeadManager);
+                            }).toList();
                             openAssignPopupMenu(
                               context,
                               details.globalPosition,
-                              Get.find<CommonController>().teamList,
+                              accountTeams,
                               () {},
                             );
                           },

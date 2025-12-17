@@ -39,13 +39,13 @@ class ApiManager {
   /// Handle token expiry by clearing data and redirecting to login
   void _handleTokenExpiry() {
     // Clear user data and token
-    // myPref.logout();
+    myPref.logout();
 
     // Show message to user
-    // SnackBars.errorSnackBar(content: 'Session expired. Please login again.');
+    SnackBars.errorSnackBar(content: 'Session expired. Please login again.');
 
     // Navigate to login screen
-    // Get.offAllNamed(Routes.LOGIN);
+    Get.offAllNamed(Routes.LOGIN);
   }
 
   /// GET method for requests with authorization header
