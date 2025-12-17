@@ -9,6 +9,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/switchAcco
 class Dashboard extends StatelessWidget {
   final DashBoardController controller = Get.put(DashBoardController());
   final CommonController commonController = Get.find<CommonController>();
+
   @override
   Widget build(BuildContext context) {
     return LoaderWrapper(
@@ -37,41 +38,61 @@ class Dashboard extends StatelessWidget {
                           },
                           behavior: HitTestBehavior.translucent,
                           child: Obx(() {
-                            return (commonController.profileData.value.data?.user?.image ?? "")
-                                    .isEmpty
-                                ? const Icon(
-                                    Icons.account_circle_sharp,
-                                    color: Colors.black,
-                                    size: 48,
-                                  )
-                                : ClipOval(
-                                    child: getImageView(
-                                      finalUrl:
-                                          "${APIConstants.bucketUrl}${commonController.profileData.value.data?.user?.image ?? ""}",
-                                      fit: BoxFit.cover,
-                                      height: 48,
-                                      width: 48,
-                                    ),
-                                  );
+                            final isTeamLogin = myPref.getIsTeamLogin();
+
+                            final profileImage = isTeamLogin
+                                ? Get.find<CommonController>()
+                                          .profileData
+                                          .value
+                                          .data
+                                          ?.teamMember
+                                          ?.profilePhoto ??
+                                      ''
+                                : commonController.profileData.value.data?.user?.image ?? '';
+
+                            if (profileImage.isEmpty) {
+                              return const Icon(
+                                Icons.account_circle_sharp,
+                                color: Colors.black,
+                                size: 48,
+                              );
+                            }
+
+                            return ClipOval(
+                              child: getImageView(
+                                finalUrl: "${APIConstants.bucketUrl}$profileImage",
+                                fit: BoxFit.cover,
+                                height: 48,
+                                width: 48,
+                              ),
+                            );
                           }),
                         ),
+
                         SizedBox(width: 1.h),
                         Flexible(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Obx(
-                                () => RichText(
+                              Obx(() {
+                                final isTeamLogin = myPref.getIsTeamLogin();
+
+                                final firstName = isTeamLogin
+                                    ? commonController.profileData.value.data?.teamMember?.firstName ?? ''
+                                    : commonController.profileData.value.data?.user?.firstName ?? '';
+
+                                final lastName = isTeamLogin
+                                    ? commonController.profileData.value.data?.teamMember?.lastName ?? ''
+                                    : commonController.profileData.value.data?.user?.lastName ?? '';
+
+                                return RichText(
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   text: TextSpan(
-                                    style: MyTexts.medium14.copyWith(
-                                      color: MyColors.custom('545454'),
-                                    ),
                                     children: [
                                       TextSpan(
                                         text:
-                                            '${(commonController.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(commonController.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                                        '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}!',
                                         style: MyTexts.medium16.copyWith(
                                           color: MyColors.fontBlack,
                                           fontFamily: MyTexts.SpaceGrotesk,
@@ -79,8 +100,9 @@ class Dashboard extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
+
                               GestureDetector(
                                 onTap: () {
                                   if (myPref.role.val == "partner") {
@@ -134,24 +156,24 @@ class Dashboard extends StatelessWidget {
                           ),
                         ),
                         const Gap(10),
-                        if(myPref.getIsTeamLogin()==false)
-                        GestureDetector(
-                          onTap: () {
-                            Get.put<SwitchAccountController>(SwitchAccountController());
-                            showSwitchAccountBottomSheet();
-                            // Get.to(() => const ExploreView());
-                          },
-                          child: Stack(
-                            alignment: AlignmentGeometry.center,
-                            children: [
-                              Image.asset(Asset.explore, width: 18.w),
-                              Text(
-                                "Switch",
-                                style: MyTexts.medium14.copyWith(color: MyColors.white),
-                              ),
-                            ],
+                        if (myPref.getIsTeamLogin() == false)
+                          GestureDetector(
+                            onTap: () {
+                              Get.put<SwitchAccountController>(SwitchAccountController());
+                              showSwitchAccountBottomSheet();
+                              // Get.to(() => const ExploreView());
+                            },
+                            child: Stack(
+                              alignment: AlignmentGeometry.center,
+                              children: [
+                                Image.asset(Asset.explore, width: 18.w),
+                                Text(
+                                  "Switch",
+                                  style: MyTexts.medium14.copyWith(color: MyColors.white),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
                         const Gap(10),
                         GestureDetector(
                           onTap: () {
@@ -164,8 +186,11 @@ class Dashboard extends StatelessWidget {
                               border: Border.all(color: MyColors.custom('EAEAEA')),
                               shape: BoxShape.circle,
                             ),
-                            child: SvgPicture.asset(Asset.info, width: 24, height: 24,
-                            colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
+                            child: SvgPicture.asset(
+                              Asset.info,
+                              width: 24,
+                              height: 24,
+                              colorFilter: ColorFilter.mode(MyColors.black, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -184,7 +209,6 @@ class Dashboard extends StatelessWidget {
                             child: SvgPicture.asset(Asset.notification, width: 24, height: 24),
                           ),
                         ),
-
                       ],
                     ),
                     const Gap(24),

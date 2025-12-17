@@ -117,6 +117,7 @@ class CommonController extends GetxController {
         } else {
           Get.find<CommonController>().hasProfileComplete.value = false;
         }
+        print(profileData.value );
         // if(myPref.getIsTeamLogin()==false){
           loadTeamFromStorage();
         // }

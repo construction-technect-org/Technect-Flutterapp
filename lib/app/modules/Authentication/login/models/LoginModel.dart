@@ -54,26 +54,39 @@ class TeamMemberModel {
   int? id;
   String? firstName;
   String? lastName;
+  String? email;
+  String? mobileNumber;
+  String? profilePhoto;
+  int? merchantProfileId;
   List<RoleModel>? roles;
 
   TeamMemberModel({
     this.id,
     this.firstName,
     this.lastName,
+    this.email,
+    this.mobileNumber,
+    this.profilePhoto,
+    this.merchantProfileId,
     this.roles,
   });
 
-  factory TeamMemberModel.fromJson(Map<String, dynamic> json) =>
-      TeamMemberModel(
-        id: json["id"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        roles: json["roles"] == null
-            ? []
-            : List<RoleModel>.from(
-          json["roles"].map((x) => RoleModel.fromJson(x)),
-        ),
-      );
+  factory TeamMemberModel.fromJson(Map<String, dynamic> json) {
+    return TeamMemberModel(
+      id: json['id'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      email: json['email'],
+      profilePhoto: json['profilePhoto'],
+      mobileNumber: json['mobileNumber'],
+      merchantProfileId: json['merchantProfileId'],
+      roles: json['roles'] == null
+          ? []
+          : List<RoleModel>.from(
+        json['roles'].map((x) => RoleModel.fromJson(x)),
+      ),
+    );
+  }
 }
 class RoleModel {
   int? id;

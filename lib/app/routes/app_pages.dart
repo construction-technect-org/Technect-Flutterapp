@@ -95,6 +95,7 @@ import 'package:construction_technect/app/modules/MarketPlace/Partner/More/News/
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/bindings/business_hours_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/BusinessHours/views/business_hours_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/bindings/profile_binding.dart';
+import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/components/team_edit_profile.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/bindings/edit_profile_bindings.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/editProfile/views/edit_profile_view.dart';
 import 'package:construction_technect/app/modules/MarketPlace/Partner/More/Profile/views/profile_view.dart';
@@ -268,6 +269,7 @@ class AppPages {
       binding: AddServiceRequirementBinding(),
     ),
     GetPage(name: Routes.WISH_LIST, page: () => WishListView(), binding: WishListBinding()),
+    GetPage(name: Routes.TEAM_EDIT, page: () => TeamEditProfile()),
     GetPage(
       name: Routes.ON_BOARDING,
       page: () => const OnBoardingScreen(),

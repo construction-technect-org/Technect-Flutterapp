@@ -10,20 +10,39 @@ class CrmHeader extends StatelessWidget {
     return Row(
       children: [
         GestureDetector(
-          onTap: () => Get.toNamed(Routes.ACCOUNT),
+          onTap: () {
+            Get.toNamed(Routes.ACCOUNT);
+          },
           behavior: HitTestBehavior.translucent,
           child: Obx(() {
-            return (commonController.profileData.value.data?.user?.image ?? "").isEmpty
-                ? const Icon(Icons.account_circle_sharp, color: Colors.black, size: 48)
-                : ClipOval(
-                    child: getImageView(
-                      finalUrl:
-                          "${APIConstants.bucketUrl}${commonController.profileData.value.data?.user?.image ?? ""}",
-                      fit: BoxFit.cover,
-                      height: 48,
-                      width: 48,
-                    ),
-                  );
+            final isTeamLogin = myPref.getIsTeamLogin();
+
+            final profileImage = isTeamLogin
+                ? Get.find<CommonController>()
+                .profileData
+                .value
+                .data
+                ?.teamMember
+                ?.profilePhoto ??
+                ''
+                : commonController.profileData.value.data?.user?.image ?? '';
+
+            if (profileImage.isEmpty) {
+              return const Icon(
+                Icons.account_circle_sharp,
+                color: Colors.black,
+                size: 48,
+              );
+            }
+
+            return ClipOval(
+              child: getImageView(
+                finalUrl: "${APIConstants.bucketUrl}$profileImage",
+                fit: BoxFit.cover,
+                height: 48,
+                width: 48,
+              ),
+            );
           }),
         ),
         SizedBox(width: 1.h),
@@ -31,16 +50,25 @@ class CrmHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Obx(
-                () => RichText(
+              Obx(() {
+                final isTeamLogin = myPref.getIsTeamLogin();
+
+                final firstName = isTeamLogin
+                    ? commonController.profileData.value.data?.teamMember?.firstName ?? ''
+                    : commonController.profileData.value.data?.user?.firstName ?? '';
+
+                final lastName = isTeamLogin
+                    ? commonController.profileData.value.data?.teamMember?.lastName ?? ''
+                    : commonController.profileData.value.data?.user?.lastName ?? '';
+
+                return RichText(
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   text: TextSpan(
-                    style: MyTexts.medium14.copyWith(color: MyColors.custom('545454')),
                     children: [
                       TextSpan(
                         text:
-                            '${(commonController.profileData.value.data?.user?.firstName ?? "").capitalizeFirst} ${(commonController.profileData.value.data?.user?.lastName ?? "").capitalizeFirst}!',
+                        '${firstName.capitalizeFirst} ${lastName.capitalizeFirst}!',
                         style: MyTexts.medium16.copyWith(
                           color: MyColors.fontBlack,
                           fontFamily: MyTexts.SpaceGrotesk,
@@ -48,8 +76,8 @@ class CrmHeader extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-              ),
+                );
+              }),
               GestureDetector(
                 onTap: () => Get.toNamed(Routes.MANUFACTURER_ADDRESS),
                 child: Row(

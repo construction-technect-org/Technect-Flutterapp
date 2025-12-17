@@ -102,6 +102,7 @@ abstract class Routes {
   static const Crm_leadDashboard = _Paths.Crm_leadDashboard;
   static const VRM_CHAT_LIST = _Paths.VRM_CHAT_LIST;
   static const CRM_CHAT_LIST = _Paths.CRM_CHAT_LIST;
+  static const TEAM_EDIT = _Paths.TEAM_EDIT;
 }
 
 abstract class _Paths {
@@ -205,4 +206,5 @@ abstract class _Paths {
   static const Crm_leadDashboard = '/Crm-lead-dashboard';
   static const VRM_CHAT_LIST = '/vrm-chat-list';
   static const CRM_CHAT_LIST = '/crm-chat-list';
+  static const TEAM_EDIT = '/team-edit';
 }

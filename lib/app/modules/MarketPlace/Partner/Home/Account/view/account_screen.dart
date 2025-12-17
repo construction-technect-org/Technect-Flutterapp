@@ -43,57 +43,12 @@ class AccountScreen extends GetView<AccountController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Visibility(
-                        visible: false,
-                        child: Column(
-                          children: [
-                            SizedBox(height: 1.h),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(24),
-                                color: const Color(
-                                  0xFFFFED29,
-                                ).withValues(alpha: 0.5),
-                              ),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(Asset.gift),
-                                  const Gap(13),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Get Couples for Every Referral",
-                                        style: MyTexts.medium16.copyWith(
-                                          fontFamily: MyTexts.SpaceGrotesk,
-                                          color: MyColors.primary,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Refer your business friends now!",
-                                        style: MyTexts.regular14.copyWith(
-                                          fontFamily: MyTexts.SpaceGrotesk,
-                                          color: MyColors.gray5D,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                       Gap(1.h),
                       CommonContainer(
                         icon: Asset.person,
                         title: "My Account",
                         onTap: () {
+
                           if (myPref.getIsTeamLogin() == false){
                             if (myPref.role.val == "connector".toLowerCase()) {
                               Get.toNamed(Routes.CONNECTOR_PROFILE);
@@ -102,9 +57,8 @@ class AccountScreen extends GetView<AccountController> {
                             }
                           }
                           else{
-
+                            Get.toNamed(Routes.TEAM_EDIT);
                           }
-
                         },
                       ),
                       const Gap(16),
