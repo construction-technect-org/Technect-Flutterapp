@@ -131,6 +131,8 @@ class CommonController extends GetxController {
   RxList<TeamListData> teamList = <TeamListData>[].obs;
 
   Future<void> loadTeamFromStorage() async {
+    // await fetchTeamList();
+
     final cachedTeamModel = myPref.getTeamModelData();
     if (cachedTeamModel != null &&
         cachedTeamModel.data != null &&
