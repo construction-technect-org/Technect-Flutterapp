@@ -37,7 +37,7 @@ class VrmLeadItemCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: CachedNetworkImage(
-              imageUrl: merchantImg.isNotEmpty ? merchantImg : '',
+              imageUrl: merchantImg.isNotEmpty ? "${APIConstants.bucketUrl}$merchantImg" : '',
               width: 80,
               height: 97,
               fit: BoxFit.cover,
@@ -144,24 +144,27 @@ class VrmLeadItemCard extends StatelessWidget {
                     const Gap(16),
                     _pill(status.capitalizeFirst ?? status, MyColors.gray2E),
                     const Spacer(),
-                    GestureDetector(onTap: () {
-                      Get.toNamed(
-                        Routes.CONNECTOR_CHAT_SYSTEM,
-                        arguments: {
-                          "groupId": lead.groupId ?? 0,
-                          "groupName": lead.groupName ?? "Unknown",
-                          "groupImage": lead.merchantLogo ?? "Unknown",
-                          "myUserID": lead.connectorId ?? 0,
-                        },
-                      );
-                    }, child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(
+                          Routes.CONNECTOR_CHAT_SYSTEM,
+                          arguments: {
+                            "groupId": lead.groupId ?? 0,
+                            "groupName": lead.groupName ?? "Unknown",
+                            "groupImage": lead.merchantLogo ?? "Unknown",
+                            "myUserID": lead.connectorId ?? 0,
+                          },
+                        );
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        child: SvgPicture.asset(Asset.chat, height: 18),
                       ),
-                      padding: const EdgeInsets.all(4),
-                      child: SvgPicture.asset(Asset.chat, height: 18),
-                    ),),
+                    ),
                     const Gap(16),
                   ],
                 ),
