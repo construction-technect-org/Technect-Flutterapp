@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/AllChatList/controllers/controller_all_chat_list_controller.dart';
 import 'package:intl/intl.dart';
@@ -33,11 +34,9 @@ class ConnectorAllChatListScreen extends GetView<ConnectorAllChatListController>
 
             return ListTile(
               contentPadding: const EdgeInsets.symmetric(vertical: 6),
-              leading: CircleAvatar(
-                radius: 24,
-                backgroundImage: NetworkImage(
-                  APIConstants.bucketUrl + (chat.merchant?.profileImage ?? ""),
-                ),
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: getImageView(finalUrl: APIConstants.bucketUrl + (chat.merchant?.profileImage ?? ""),),
               ),
               title: Text(
                 "${chat.merchant?.firstName ?? ""} ${chat.merchant?.lastName ?? ""}",

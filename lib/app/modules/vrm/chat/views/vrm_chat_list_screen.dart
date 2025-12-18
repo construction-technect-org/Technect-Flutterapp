@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/vrm/chat/controllers/vrm_chat_list_controller.dart';
 import 'package:intl/intl.dart';
@@ -41,11 +42,9 @@ class VRMChatListScreen extends GetView<VRMChatListController> {
 
               return ListTile(
                 contentPadding: const EdgeInsets.symmetric(vertical: 6),
-                leading: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: NetworkImage(
-                    APIConstants.bucketUrl + (chat.merchantLogo ?? ""),
-                  ),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: getImageView(finalUrl: APIConstants.bucketUrl + (chat.merchantLogo ?? ""),),
                 ),
                 title: Text(
                   chat.groupName ?? "",

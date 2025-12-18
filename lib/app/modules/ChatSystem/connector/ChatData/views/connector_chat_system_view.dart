@@ -209,7 +209,10 @@ class ConnectorChatSystemView extends StatelessWidget {
             backgroundColor: MyColors.custom("FFF9BE"),
             title: Row(
               children: [
-                CircleAvatar(backgroundImage: NetworkImage(controller.image)),
+               ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: getImageView(finalUrl:  controller.image ?? "",height: 24,width: 24,fit: BoxFit.contain),
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(

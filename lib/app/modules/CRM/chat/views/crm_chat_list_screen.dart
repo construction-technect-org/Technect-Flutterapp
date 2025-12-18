@@ -1,4 +1,5 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
+import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
 import 'package:construction_technect/app/modules/CRM/chat/controllers/crm_chat_list_controller.dart';
 import 'package:intl/intl.dart';
@@ -38,11 +39,9 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
               final int unreadCount = chat.unreadCount ?? 0;
               return ListTile(
                 contentPadding: const EdgeInsets.symmetric(vertical: 6),
-                leading: CircleAvatar(
-                  radius: 24,
-                  backgroundImage: NetworkImage(
-                    APIConstants.bucketUrl + (chat.connectorProfileImage ?? ""),
-                  ),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: getImageView(finalUrl: APIConstants.bucketUrl + (chat.connectorProfileImage ?? ""),),
                 ),
                 title: Text(
                   chat.groupName ?? "",

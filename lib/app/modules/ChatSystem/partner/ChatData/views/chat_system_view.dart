@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:construction_technect/app/core/utils/chat_utils.dart';
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
@@ -204,7 +203,10 @@ class ChatSystemView extends StatelessWidget {
           backgroundColor: MyColors.white,
           title: Row(
             children: [
-              CircleAvatar(backgroundImage: NetworkImage(controller.image)),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: getImageView(finalUrl:  controller.image ?? "",height: 24,width: 24,fit: BoxFit.contain),
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
