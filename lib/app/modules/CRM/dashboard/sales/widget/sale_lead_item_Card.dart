@@ -301,7 +301,7 @@ class SaleItemCard extends StatelessWidget {
                               "groupId": lead.groupId ?? 0,
                               "groupName": lead.groupName ?? "Unknown",
                               "groupImage": lead.connectorProfileImage ?? "Unknown",
-                              "myUserID": lead.merchantUserId ?? 0,
+                              "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (lead.merchantUserId ?? 0),
                             },
                           );
                         }, child: Container(
@@ -382,7 +382,7 @@ class SaleItemCard extends StatelessWidget {
                               "groupId": lead.groupId ?? 0,
                               "groupName": lead.groupName ?? "Unknown",
                               "groupImage": lead.connectorProfileImage ?? "Unknown",
-                              "myUserID": lead.merchantUserId ?? 0,
+                              "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (lead.merchantUserId ?? 0),
                             },
                           );
                         }, child: Container(
@@ -447,7 +447,8 @@ class SaleItemCard extends StatelessWidget {
                               "groupId": lead.groupId ?? 0,
                               "groupName": lead.groupName ?? "Unknown",
                               "groupImage": lead.connectorProfileImage ?? "Unknown",
-                              "myUserID": lead.merchantUserId ?? 0,
+                              "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (lead.merchantUserId ?? 0),
+
                             },
                           );
                         }, child: Container(
@@ -487,7 +488,7 @@ class SaleItemCard extends StatelessWidget {
                               "groupId": lead.groupId ?? 0,
                               "groupName": lead.groupName ?? "Unknown",
                               "groupImage": lead.connectorProfileImage ?? "Unknown",
-                              "myUserID": lead.merchantUserId ?? 0,
+                              "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (lead.merchantUserId ?? 0),
                             },
                           );
                         }, child: Container(

@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:construction_technect/app/core/utils/audio_manager.dart';
 import 'package:construction_technect/app/core/utils/chat_utils.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/modules/CRM/chat/service/crm_chat_list_service.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/connector_chat_model.dart';
+import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/model/group_chat_info_model.dart';
 import 'package:construction_technect/app/modules/ChatSystem/connector/ChatData/service/connector_chat_service.dart';
 import 'package:construction_technect/app/modules/ChatSystem/widgets/media_preview_dialog.dart';
 import 'package:file_picker/file_picker.dart';
@@ -23,7 +25,6 @@ class ConnectorChatSystemController extends GetxController {
   final TextEditingController messageController = TextEditingController();
 
   late CustomUser currentUser;
-  late CustomUser supportUser;
 
   final RxList<CustomMessage> messages = <CustomMessage>[].obs;
   final ScrollController scrollController = ScrollController();
@@ -61,6 +62,14 @@ class ConnectorChatSystemController extends GetxController {
   RxBool hasText = false.obs;
   RxDouble recordingDragOffset = 0.0.obs; // For swipe to cancel
 
+  bool isMyMessage(CustomMessage message) {
+    if (myPref.getIsTeamLogin()) {
+      return message.senderTeamMemberId == myUserId;
+    } else {
+      return message.senderTeamMemberId == null && message.senderUserId == myUserId;
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -68,18 +77,10 @@ class ConnectorChatSystemController extends GetxController {
     if (Get.arguments != null) {
       groupId = Get.arguments["groupId"];
       name = Get.arguments["groupName"];
-      image =
-          APIConstants.bucketUrl +
-              Get.arguments["groupImage"];
-      myUserId =Get.arguments["myUserID"].toString();
-      currentUser = CustomUser(
-        id:myPref.getIsTeamLogin()? Get.arguments["myUserID"].toString(): myPref.userModel.val["id"].toString(),
-        name: name,
-        profilePhoto: image,
-      );
+      image = APIConstants.bucketUrl + Get.arguments["groupImage"];
+      myUserId = Get.arguments["myUserID"].toString();
+      currentUser = CustomUser(id: myUserId.toString(), name: name, profilePhoto: image);
     }
-
-    supportUser = const CustomUser(id: '', name: '', profilePhoto: '');
     scrollController.addListener(_onScrollChanged);
     messageController.addListener(_onMessageChanged);
     initCalled();
@@ -132,27 +133,17 @@ class ConnectorChatSystemController extends GetxController {
       isLoading.value = isLoad ?? true;
 
       final result = await ConnectorChatServices().allChatList(cId: groupId);
-
+      await fetchGroupInfoList();
       if (result.success == true) {
         chatListModel.value = result;
-
-        final firstMessage = result.chatData?.isNotEmpty == true ? result.chatData!.first : null;
-
-        if (firstMessage != null) {
-          final isSenderMe = firstMessage.senderUserId ==(myPref.getIsTeamLogin()? Get.arguments["myUserID"]: myPref.userModel.val["id"]);
-          final otherId = isSenderMe ? firstMessage.receiverUserId : firstMessage.senderUserId;
-
-          supportUser = CustomUser(id: otherId?.toString() ?? '', name: name, profilePhoto: image);
-        }
-
         final fetchedMessages =
             result.chatData?.map((msg) {
-              final isSentByMe = (myPref.getIsTeamLogin()? msg.senderTeamMemberId : msg.senderUserId) == (myPref.getIsTeamLogin()? Get.arguments["myUserID"]: myPref.userModel.val["id"]);
               return CustomMessage(
                 id: msg.id.toString(),
                 message: msg.messageText ?? '',
-                createdAt: DateTime.parse(msg.createdAt ?? DateTime.now().toIso8601String()),
-                sentBy: isSentByMe ? currentUser.id : supportUser.id,
+                createdAt: DateTime.parse(msg.createdAt!),
+                senderUserId: msg.senderUserId?.toString(),
+                senderTeamMemberId: msg.senderTeamMemberId?.toString(),
                 status: msg.isRead == true ? MessageStatus.read : MessageStatus.delivered,
                 type: msg.messageType,
                 mediaUrl: msg.messageMediaUrl,
@@ -213,9 +204,7 @@ class ConnectorChatSystemController extends GetxController {
 
       _markAllMessagesAsRead();
     });
-    socket.on('read_error', (error) => {
-    log('Error marking messages as read:, ${error.message}')
-    });
+    socket.on('read_error', (error) => {log('Error marking messages as read:, ${error.message}')});
     //
     // // Listen for initial online status when joining connection
     // socket.on('user_online_status', (data) {
@@ -229,15 +218,15 @@ class ConnectorChatSystemController extends GetxController {
     //
     // // Listen for typing indicators
     socket.on('user_typing', (data) {
-        if (kDebugMode) log('🟢 user typing: $data');
-      if (data != null && data['group_id'] == groupId && data["user_id"].toString()!=myUserId) {
+      if (kDebugMode) log('🟢 user typing: $data');
+      if (data != null && data['group_id'] == groupId && data["user_id"].toString() != myUserId) {
         isOtherUserTyping.value = true;
       }
     });
     //
     socket.on('user_stopped_typing', (data) {
       if (kDebugMode) log('🟢 user stop typing: $data');
-      if (data != null && data['group_id'] == groupId && data["user_id"].toString()!=myUserId) {
+      if (data != null && data['group_id'] == groupId && data["user_id"].toString() != myUserId) {
         isOtherUserTyping.value = false;
       }
     });
@@ -247,7 +236,7 @@ class ConnectorChatSystemController extends GetxController {
       log('❌ Typing indicator error: ${error['message']}');
     });
 
-// Listen for event updates
+    // Listen for event updates
     socket.on('event_updated', (data) {
       log('📅 Event updated: $data');
       if (data != null && data['success'] == true && data['data'] != null) {
@@ -279,7 +268,7 @@ class ConnectorChatSystemController extends GetxController {
       log('❌ Typing indicator error: ${error['message']}');
     });
 
-// Listen for event updates
+    // Listen for event updates
     socket.on('event_updated', (data) {
       log('📅 Event updated: $data');
       if (data != null && data['success'] == true && data['data'] != null) {
@@ -323,25 +312,23 @@ class ConnectorChatSystemController extends GetxController {
       respondingEventId.value = 0;
     });
 
-
     socket.on('new_message', (data) {
       log("📩 New Message Received: $data");
       try {
         if (data == null || data['data'] == null) return;
 
         final chatData = ChatData.fromJson(data['data']);
-        final isSentByMe = (myPref.getIsTeamLogin()? chatData.senderTeamMemberId :chatData.senderUserId) == (myPref.getIsTeamLogin()? Get.arguments["myUserID"]: myPref.userModel.val["id"]);
 
         final newMessage = CustomMessage(
           id: chatData.id.toString(),
           message: chatData.messageText ?? '',
-          createdAt: DateTime.parse(chatData.createdAt ?? DateTime.now().toIso8601String()),
-          sentBy: isSentByMe ? currentUser.id : supportUser.id,
+          createdAt: DateTime.parse(chatData.createdAt!),
+          senderUserId: chatData.senderUserId?.toString(),
+          senderTeamMemberId: chatData.senderTeamMemberId?.toString(),
           status: chatData.isRead == true ? MessageStatus.read : MessageStatus.delivered,
           type: chatData.messageType,
           mediaUrl: chatData.messageMediaUrl,
         );
-
         messages.add(newMessage);
         _scrollToBottom();
         socket.emit('mark_messages_read', {"group_id": groupId});
@@ -395,7 +382,7 @@ class ConnectorChatSystemController extends GetxController {
   }
 
   /// Handle text field changes to emit typing indicator
-  void  onTextChanged(String text) {
+  void onTextChanged(String text) {
     if (text.trim().isEmpty) {
       _stopTyping();
       return;
@@ -1165,6 +1152,22 @@ class ConnectorChatSystemController extends GetxController {
       showScrollToBottom.value = shouldShow;
     }
   }
+
+  Rx<GroupChatInfoModel> groupChatInfoModel = GroupChatInfoModel().obs;
+
+  Future<void> fetchGroupInfoList({bool? isLoad}) async {
+    try {
+      isLoading.value = isLoad ?? false;
+      final result = await CRMChatListServices().groupChatInfo(gId: groupId);
+      if (result.success == true) {
+        groupChatInfoModel.value = result;
+      }
+    } catch (e) {
+      if (kDebugMode) log('Error fetching VRM chat list: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }
 
 class CustomUser {
@@ -1180,30 +1183,39 @@ enum MessageStatus { sending, sent, delivered, read }
 class CustomMessage {
   final String id;
   final String message;
-  final String sentBy;
+  final String? sentBy;
+  final String? senderUserId;
+  final String? senderTeamMemberId;
   final DateTime createdAt;
   final MessageStatus status;
   final String? type;
   final String? mediaUrl;
+  final String? image;
 
   CustomMessage({
     required this.id,
     required this.message,
-    required this.sentBy,
+    this.sentBy,
+    this.senderUserId,
+    this.senderTeamMemberId,
     required this.createdAt,
     this.status = MessageStatus.sent,
     this.type = 'text',
     this.mediaUrl,
+    this.image,
   });
 
   CustomMessage copyWith({
     String? id,
     String? message,
     String? sentBy,
+    String? senderUserId,
+    String? senderTeamMemberId,
     DateTime? createdAt,
     MessageStatus? status,
     String? type,
     String? mediaUrl,
+    String? image,
   }) {
     return CustomMessage(
       id: id ?? this.id,
@@ -1213,6 +1225,9 @@ class CustomMessage {
       status: status ?? this.status,
       type: type ?? this.type,
       mediaUrl: mediaUrl ?? this.mediaUrl,
+      senderTeamMemberId: senderTeamMemberId ?? this.senderTeamMemberId,
+      senderUserId: senderUserId ?? this.senderUserId,
+      image: image ?? this.image,
     );
   }
 }
