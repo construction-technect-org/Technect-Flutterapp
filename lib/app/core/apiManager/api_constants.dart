@@ -153,11 +153,10 @@ class APIConstants {
   static const String vrmDashboard = "vrm/dashboard";
   static const String vrmGroupChat = "vrm/group-chat";
 
-
   ///Team-login
 
   static const String teamSendOtp = "team-member/auth/send-otp";
   static const String teamResendOtp = "team-member/auth/resend-otp";
-  static const String teamLogIn= "team-member/auth/login";
-  static const String teamProfile= "team-member/auth/profile";
+  static const String teamLogIn = "team-member/auth/login";
+  static const String teamProfile = "team-member/auth/profile";
 }
