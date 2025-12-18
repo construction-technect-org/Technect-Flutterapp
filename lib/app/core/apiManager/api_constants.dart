@@ -146,6 +146,7 @@ class APIConstants {
   static const String crmNotification = "crm/notification";
   static const String crmDashboard = "crm/dashboard";
   static const String crmGroupChat = "crm/group-chat";
+
   // VRM
   static const String vrmLead = "vrm/lead";
   static const String vrmNotification = "vrm/notification";

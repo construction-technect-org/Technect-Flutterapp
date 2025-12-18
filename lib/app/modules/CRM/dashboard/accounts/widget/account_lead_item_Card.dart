@@ -35,6 +35,9 @@ class AccountItemCard extends StatelessWidget {
         ? Slidable(
             key: UniqueKey(),
             startActionPane: ActionPane(
+
+
+
               motion: const BehindMotion(),
               extentRatio: 0.25,
               dragDismissible: false,
@@ -302,7 +305,7 @@ class AccountItemCard extends StatelessWidget {
                               "groupId": lead.groupId ?? 0,
                               "groupName": lead.groupName ?? "Unknown",
                               "groupImage": lead.connectorProfileImage ?? "Unknown",
-                              "myUserID": lead.merchantUserId ?? 0,
+                              "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (lead.merchantUserId ?? 0),
                             },
                           );
                         }, child: Container(
@@ -384,7 +387,7 @@ class AccountItemCard extends StatelessWidget {
                               "groupId": lead.groupId ?? 0,
                               "groupName": lead.groupName ?? "Unknown",
                               "groupImage": lead.connectorProfileImage ?? "Unknown",
-                              "myUserID": lead.merchantUserId ?? 0,
+                              "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (lead.merchantUserId ?? 0),
                             },
                           );
                         }, child: Container(
@@ -449,7 +452,7 @@ class AccountItemCard extends StatelessWidget {
                               "groupId": lead.groupId ?? 0,
                               "groupName": lead.groupName ?? "Unknown",
                               "groupImage": lead.connectorProfileImage ?? "Unknown",
-                              "myUserID": lead.merchantUserId ?? 0,
+                              "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (lead.merchantUserId ?? 0),
                             },
                           );
                         }, child: Container(
@@ -489,7 +492,7 @@ class AccountItemCard extends StatelessWidget {
                               "groupId": lead.groupId ?? 0,
                               "groupName": lead.groupName ?? "Unknown",
                               "groupImage": lead.connectorProfileImage ?? "Unknown",
-                              "myUserID": lead.merchantUserId ?? 0,
+                              "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (lead.merchantUserId ?? 0),
                             },
                           );
                         }, child: Container(

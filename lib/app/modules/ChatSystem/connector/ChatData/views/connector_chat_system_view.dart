@@ -267,7 +267,7 @@ class ConnectorChatSystemView extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final messageIndex = messages.length - 1 - index;
                           final message = messages[messageIndex];
-                          final isMine = message.sentBy == controller.currentUser.id;
+                          final isMine = controller.isMyMessage(message);
                           final isRead = message.status == MessageStatus.read;
 
                           return Align(
