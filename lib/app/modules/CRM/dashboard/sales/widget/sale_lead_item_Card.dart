@@ -561,6 +561,7 @@ class SaleItemCard extends StatelessWidget {
                                   "leadID": "",
                                   "saleLeadID": lead.salesLeadId ?? "",
                                   "assignTo": 0,
+
                                   "assignToSelf": true,
                                   "priority": "",
                                 },
