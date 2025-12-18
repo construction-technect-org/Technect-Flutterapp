@@ -74,7 +74,7 @@ class FunnelChartWidget extends StatelessWidget {
 
               const SizedBox(width: 24),
               Expanded(
-                flex: 3,
+                flex: 4,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: sorted.map((step) {

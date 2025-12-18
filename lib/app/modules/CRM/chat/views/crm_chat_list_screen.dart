@@ -1,6 +1,7 @@
 import 'package:construction_technect/app/core/utils/common_appbar.dart';
 import 'package:construction_technect/app/core/utils/common_fun.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
+import 'package:construction_technect/app/data/CommonController.dart';
 import 'package:construction_technect/app/modules/CRM/chat/controllers/crm_chat_list_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -41,7 +42,7 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
                 contentPadding: const EdgeInsets.symmetric(vertical: 6),
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(24),
-                  child: getImageView(finalUrl: APIConstants.bucketUrl + (chat.connectorProfileImage ?? ""),),
+                  child: getImageView(finalUrl: APIConstants.bucketUrl + (chat.connectorProfileImage ?? "")),
                 ),
                 title: Text(
                   chat.groupName ?? "",
@@ -96,7 +97,7 @@ class CRMChatListScreen extends GetView<CRMChatListController> {
                       "groupId": chat.groupId ?? 0,
                       "groupName": chat.groupName ?? "Unknown",
                       "groupImage": chat.connectorProfileImage ?? "Unknown",
-                      "myUserID": chat.merchantUserId ?? 0,
+                      "myUserID": myPref.getIsTeamLogin()?( Get.find<CommonController>().profileData.value.data?.teamMember?.id??0) : (chat.merchantUserId ?? 0),
                     },
                   );
                 },

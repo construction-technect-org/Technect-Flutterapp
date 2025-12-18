@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:construction_technect/app/core/utils/audio_manager.dart';
 import 'package:construction_technect/app/core/utils/chat_utils.dart';
 import 'package:construction_technect/app/core/utils/imports.dart';
@@ -74,7 +73,7 @@ class ConnectorChatSystemController extends GetxController {
               Get.arguments["groupImage"];
       myUserId =Get.arguments["myUserID"].toString();
       currentUser = CustomUser(
-        id: myPref.userModel.val["id"].toString(),
+        id:myPref.getIsTeamLogin()? Get.arguments["myUserID"].toString(): myPref.userModel.val["id"].toString(),
         name: name,
         profilePhoto: image,
       );
@@ -140,7 +139,7 @@ class ConnectorChatSystemController extends GetxController {
         final firstMessage = result.chatData?.isNotEmpty == true ? result.chatData!.first : null;
 
         if (firstMessage != null) {
-          final isSenderMe = firstMessage.senderUserId == myPref.userModel.val["id"];
+          final isSenderMe = firstMessage.senderUserId ==(myPref.getIsTeamLogin()? Get.arguments["myUserID"]: myPref.userModel.val["id"]);
           final otherId = isSenderMe ? firstMessage.receiverUserId : firstMessage.senderUserId;
 
           supportUser = CustomUser(id: otherId?.toString() ?? '', name: name, profilePhoto: image);
@@ -148,7 +147,7 @@ class ConnectorChatSystemController extends GetxController {
 
         final fetchedMessages =
             result.chatData?.map((msg) {
-              final isSentByMe = msg.senderUserId == myPref.userModel.val["id"];
+              final isSentByMe = (myPref.getIsTeamLogin()? msg.senderTeamMemberId : msg.senderUserId) == (myPref.getIsTeamLogin()? Get.arguments["myUserID"]: myPref.userModel.val["id"]);
               return CustomMessage(
                 id: msg.id.toString(),
                 message: msg.messageText ?? '',
@@ -331,7 +330,7 @@ class ConnectorChatSystemController extends GetxController {
         if (data == null || data['data'] == null) return;
 
         final chatData = ChatData.fromJson(data['data']);
-        final isSentByMe = chatData.senderUserId == myPref.userModel.val["id"];
+        final isSentByMe = (myPref.getIsTeamLogin()? chatData.senderTeamMemberId :chatData.senderUserId) == (myPref.getIsTeamLogin()? Get.arguments["myUserID"]: myPref.userModel.val["id"]);
 
         final newMessage = CustomMessage(
           id: chatData.id.toString(),
