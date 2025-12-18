@@ -27,6 +27,7 @@ class ApiManager {
       // Check for exact message "Invalid or expired token" or similar variations
       if (success == false &&
           (message == "Invalid or expired token" ||
+              message == "Invalid token" ||
               message?.toLowerCase().contains("invalid") == true &&
                   message?.toLowerCase().contains("expired") == true &&
                   message?.toLowerCase().contains("token") == true)) {
@@ -479,6 +480,7 @@ class ApiManager {
 
         // Check for token expiry on 401 status
         if (message == "Invalid or expired token" ||
+            message == "Invalid token" ||
             (message?.toLowerCase().contains("invalid") == true &&
                 message?.toLowerCase().contains("expired") == true &&
                 message?.toLowerCase().contains("token") == true)) {
